@@ -60,15 +60,16 @@ function App() {
   useEffect(() => {
     initializeApp();
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then((registration) => {
-          console.log('SW registered:', registration);
-        })
-        .catch((error) => {
-          console.log('SW registration failed:', error);
-        });
-    }
+    // Disabled service worker for now to avoid issues in development
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.register('/sw.js')
+    //     .then((registration) => {
+    //       console.log('SW registered:', registration);
+    //     })
+    //     .catch((error) => {
+    //       console.log('SW registration failed:', error);
+    //     });
+    // }
   }, []);
 
   return (
