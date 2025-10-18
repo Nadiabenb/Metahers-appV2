@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Sparkles, Lock, Calendar, BookOpen } from "lucide-react";
-import heroImage from "@assets/generated_images/luxury_spa_hero_background_db0e9fc1.png";
+import heroImage from "@assets/generated_images/Luxury_spa_hero_background_8444d20c.png";
 
 export default function LandingPage() {
   const handleLogin = () => {

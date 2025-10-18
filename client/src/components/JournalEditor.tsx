@@ -2,29 +2,32 @@ import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { Save } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { LocalStorage } from "@/lib/storage";
+import { useJournal } from "@/hooks/useJournal";
 
 interface JournalEditorProps {
   onStreakUpdate?: (streak: number) => void;
 }
 
 export function JournalEditor({ onStreakUpdate }: JournalEditorProps) {
+  const { content: savedContent, streak, saveJournal, isSaving, lastSaved } = useJournal();
   const [content, setContent] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-  const [lastSaved, setLastSaved] = useState<string | null>(null);
   const initialContentRef = useRef<string>("");
   const isInitialLoadRef = useRef(true);
-  const { toast} = useToast();
+  const { toast } = useToast();
 
   useEffect(() => {
-    const saved = LocalStorage.getJournalEntry();
-    if (saved) {
-      setContent(saved.content || "");
-      setLastSaved(saved.lastSaved || null);
-      initialContentRef.current = saved.content || "";
+    if (savedContent) {
+      setContent(savedContent);
+      initialContentRef.current = savedContent;
     }
     isInitialLoadRef.current = false;
-  }, []);
+  }, [savedContent]);
+
+  useEffect(() => {
+    if (onStreakUpdate && streak) {
+      onStreakUpdate(streak);
+    }
+  }, [streak, onStreakUpdate]);
 
   useEffect(() => {
     if (isInitialLoadRef.current) {
@@ -37,28 +40,21 @@ export function JournalEditor({ onStreakUpdate }: JournalEditorProps) {
 
     const timer = setTimeout(() => {
       if (content.trim() !== "") {
-        saveJournal();
+        handleSave();
       }
     }, 1000);
 
     return () => clearTimeout(timer);
   }, [content]);
 
-  const saveJournal = () => {
+  const handleSave = async () => {
     if (content.trim() === "") return;
     if (content === initialContentRef.current) return;
 
-    setIsSaving(true);
-    
-    const newStreak = LocalStorage.saveJournalWithStreak(content);
-    const now = new Date().toISOString();
-    
-    setLastSaved(now);
+    await saveJournal(content);
     initialContentRef.current = content;
-    onStreakUpdate?.(newStreak);
-    
+
     setTimeout(() => {
-      setIsSaving(false);
       toast({
         description: (
           <div className="flex items-center gap-2">

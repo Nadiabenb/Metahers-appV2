@@ -1,31 +1,12 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { User, Settings, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { LocalStorage } from "@/lib/storage";
+import { useStats } from "@/hooks/useStats";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AccountPage() {
-  const [stats, setStats] = useState({
-    completedRituals: 0,
-    journalEntries: 0,
-    streak: 0,
-  });
-
-  useEffect(() => {
-    const loadStats = () => {
-      const data = LocalStorage.getStats();
-      setStats({
-        completedRituals: data.completedRituals,
-        journalEntries: data.journalEntries,
-        streak: data.streak,
-      });
-    };
-
-    loadStats();
-
-    const interval = setInterval(loadStats, 5000);
-    return () => clearInterval(interval);
-  }, []);
+  const { data: stats, isLoading } = useStats();
+  const { user } = useAuth();
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-champagne">
@@ -59,40 +40,53 @@ export default function AccountPage() {
                 </div>
                 <div className="flex-1">
                   <h2 className="font-serif text-2xl font-semibold text-onyx mb-1">
-                    Welcome Back
+                    {user?.firstName && user?.lastName 
+                      ? `${user.firstName} ${user.lastName}` 
+                      : user?.firstName || 'Welcome Back'}
                   </h2>
                   <p className="text-foreground/70">
-                    Your MetaHers journey continues
+                    {user?.email || 'Your MetaHers journey continues'}
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white/40 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-onyx mb-1" data-testid="text-completed-rituals">
-                    {stats.completedRituals}
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="bg-white/40 rounded-xl p-4 animate-pulse">
+                      <div className="h-8 bg-muted rounded mb-2" />
+                      <div className="h-4 bg-muted rounded" />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-white/40 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-bold text-onyx mb-1" data-testid="text-completed-rituals">
+                      {stats?.completedRituals || 0}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Rituals Started
+                    </div>
                   </div>
-                  <div className="text-sm text-muted-foreground">
-                    Rituals Started
+                  <div className="bg-white/40 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-bold text-onyx mb-1" data-testid="text-journal-entries">
+                      {stats?.journalEntries || 0}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Journal Entries
+                    </div>
+                  </div>
+                  <div className="bg-white/40 rounded-xl p-4 text-center">
+                    <div className="text-3xl font-bold text-onyx mb-1" data-testid="text-streak-days">
+                      {stats?.streak || 0}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Day Streak
+                    </div>
                   </div>
                 </div>
-                <div className="bg-white/40 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-onyx mb-1" data-testid="text-journal-entries">
-                    {stats.journalEntries}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Journal Entries
-                  </div>
-                </div>
-                <div className="bg-white/40 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-onyx mb-1" data-testid="text-streak-days">
-                    {stats.streak}
-                  </div>
-                  <div className="text-sm text-muted-foreground">
-                    Day Streak
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
 
             <div className="glass-card rounded-2xl p-8 shadow-md">
@@ -102,38 +96,40 @@ export default function AccountPage() {
                     Subscription Status
                   </h3>
                   <p className="text-foreground/70">
-                    Free Plan - Access to 1 ritual
+                    {user?.isPro ? 'Pro Plan - Access to all rituals' : 'Free Plan - Access to 1 ritual'}
                   </p>
                 </div>
-                <div className="glass-card px-3 py-1 rounded-full text-sm font-medium">
-                  Free
+                <div className={`glass-card px-3 py-1 rounded-full text-sm font-medium ${user?.isPro ? 'bg-gold/20 text-gold' : ''}`}>
+                  {user?.isPro ? 'Pro' : 'Free'}
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 rounded-xl p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
-                    <Crown className="w-6 h-6 text-gold" />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-serif text-lg font-semibold text-onyx mb-2">
-                      Upgrade to Pro
-                    </h4>
-                    <p className="text-sm text-foreground/70 mb-4">
-                      Unlock all 5 rituals, exclusive content, and MetaMuse AI Squad access. 
-                      Available with any Ritual Bag purchase.
-                    </p>
-                    <Button
-                      onClick={() => window.location.href = "/shop"}
-                      className="gap-2"
-                      data-testid="button-upgrade"
-                    >
-                      <Crown className="w-4 h-4" />
-                      View Shop
-                    </Button>
+              {!user?.isPro && (
+                <div className="bg-gradient-to-br from-gold/10 to-gold/5 border border-gold/30 rounded-xl p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center flex-shrink-0">
+                      <Crown className="w-6 h-6 text-gold" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-serif text-lg font-semibold text-onyx mb-2">
+                        Upgrade to Pro
+                      </h4>
+                      <p className="text-sm text-foreground/70 mb-4">
+                        Unlock all 5 rituals, exclusive content, and MetaMuse AI Squad access. 
+                        Available with any Ritual Bag purchase.
+                      </p>
+                      <Button
+                        onClick={() => window.location.href = "/shop"}
+                        className="gap-2"
+                        data-testid="button-upgrade"
+                      >
+                        <Crown className="w-4 h-4" />
+                        View Shop
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
 
             <div className="glass-card rounded-2xl p-8 shadow-md">

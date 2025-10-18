@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Check, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useRitualProgress } from "@/hooks/useRitualProgress";
 
 interface RitualStepperProps {
   steps: string[];
@@ -16,20 +17,8 @@ export function RitualStepper({
   isPro,
   onStepComplete 
 }: RitualStepperProps) {
-  const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const { completedSteps, updateProgress, isLoading } = useRitualProgress(ritualSlug);
   const [showPaywall, setShowPaywall] = useState(false);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(`ritual_${ritualSlug}`);
-    if (saved) {
-      try {
-        const data = JSON.parse(saved);
-        setCompletedSteps(data.completedSteps || []);
-      } catch (e) {
-        console.error("Failed to parse saved ritual progress:", e);
-      }
-    }
-  }, [ritualSlug]);
 
   useEffect(() => {
     if (completedSteps.length > 0) {
@@ -54,17 +43,26 @@ export function RitualStepper({
       ? completedSteps.filter(i => i !== index)
       : [...completedSteps, index];
 
-    setCompletedSteps(newCompletedSteps);
-
-    localStorage.setItem(`ritual_${ritualSlug}`, JSON.stringify({
-      completedSteps: newCompletedSteps,
-      lastUpdated: new Date().toISOString(),
-    }));
-
+    updateProgress(newCompletedSteps);
     onStepComplete?.(index, !completedSteps.includes(index));
   };
 
   const shouldBlur = (index: number) => isPro || index >= 2;
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4" data-testid="ritual-stepper">
+        {steps.map((_, index) => (
+          <div
+            key={index}
+            className="glass-card rounded-2xl p-6 animate-pulse"
+          >
+            <div className="h-10 bg-muted rounded" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4" data-testid="ritual-stepper">

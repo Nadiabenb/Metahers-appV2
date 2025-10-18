@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useRoute, useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { ArrowLeft, Clock } from "lucide-react";
@@ -7,28 +6,18 @@ import { RitualStepper } from "@/components/RitualStepper";
 import { PlanBadge } from "@/components/PlanBadge";
 import { ProgressRing } from "@/components/ProgressRing";
 import { Button } from "@/components/ui/button";
+import { useRitualProgress } from "@/hooks/useRitualProgress";
 
 export default function RitualDetailPage() {
   const [, params] = useRoute("/rituals/:slug");
   const [, setLocation] = useLocation();
-  const [progress, setProgress] = useState(0);
 
   const ritual = rituals.find(r => r.slug === params?.slug);
+  const { completedSteps, isLoading } = useRitualProgress(ritual?.slug || "");
 
-  useEffect(() => {
-    if (!ritual) return;
-
-    const saved = localStorage.getItem(`ritual_${ritual.slug}`);
-    if (saved) {
-      try {
-        const data = JSON.parse(saved);
-        const completed = data.completedSteps?.length || 0;
-        setProgress((completed / ritual.steps.length) * 100);
-      } catch (e) {
-        console.error("Failed to load ritual progress:", e);
-      }
-    }
-  }, [ritual]);
+  const progress = ritual 
+    ? (completedSteps.length / ritual.steps.length) * 100 
+    : 0;
 
   if (!ritual) {
     return (
@@ -44,19 +33,6 @@ export default function RitualDetailPage() {
       </div>
     );
   }
-
-  const handleStepComplete = () => {
-    const saved = localStorage.getItem(`ritual_${ritual.slug}`);
-    if (saved) {
-      try {
-        const data = JSON.parse(saved);
-        const completed = data.completedSteps?.length || 0;
-        setProgress((completed / ritual.steps.length) * 100);
-      } catch (e) {
-        console.error("Failed to update progress:", e);
-      }
-    }
-  };
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-champagne">
@@ -109,22 +85,17 @@ export default function RitualDetailPage() {
               </div>
 
               <div className="flex flex-col items-center gap-4">
-                <ProgressRing progress={progress} />
+                {isLoading ? (
+                  <div className="w-32 h-32 rounded-full bg-muted animate-pulse" />
+                ) : (
+                  <ProgressRing progress={progress} />
+                )}
                 <div className="text-center">
                   <div className="text-sm text-muted-foreground uppercase tracking-wide mb-1">
                     Progress
                   </div>
                   <div className="font-semibold text-onyx" data-testid="text-progress">
-                    {ritual.steps.filter((_, i) => {
-                      const saved = localStorage.getItem(`ritual_${ritual.slug}`);
-                      if (!saved) return false;
-                      try {
-                        const data = JSON.parse(saved);
-                        return data.completedSteps?.includes(i);
-                      } catch {
-                        return false;
-                      }
-                    }).length} of {ritual.steps.length} steps
+                    {completedSteps.length} of {ritual.steps.length} steps
                   </div>
                 </div>
               </div>
@@ -139,7 +110,6 @@ export default function RitualDetailPage() {
               steps={ritual.steps}
               ritualSlug={ritual.slug}
               isPro={ritual.tier === "pro"}
-              onStepComplete={handleStepComplete}
             />
           </div>
 

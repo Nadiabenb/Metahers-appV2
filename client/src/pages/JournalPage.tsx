@@ -1,20 +1,10 @@
-import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Flame } from "lucide-react";
 import { JournalEditor } from "@/components/JournalEditor";
-import { LocalStorage } from "@/lib/storage";
+import { useJournal } from "@/hooks/useJournal";
 
 export default function JournalPage() {
-  const [streak, setStreak] = useState(0);
-
-  useEffect(() => {
-    const stats = LocalStorage.getStats();
-    setStreak(stats.streak);
-  }, []);
-
-  const handleStreakUpdate = (newStreak: number) => {
-    setStreak(newStreak);
-  };
+  const { streak } = useJournal();
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-champagne">
@@ -67,7 +57,7 @@ export default function JournalPage() {
             </div>
           </div>
 
-          <JournalEditor onStreakUpdate={handleStreakUpdate} />
+          <JournalEditor />
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -75,7 +65,7 @@ export default function JournalPage() {
             transition={{ delay: 0.3 }}
             className="mt-8 text-center text-sm text-muted-foreground"
           >
-            <p>Your journal entries are saved locally and private to you.</p>
+            <p>Your journal entries are securely saved to your account.</p>
           </motion.div>
         </motion.div>
       </div>
