@@ -32,13 +32,16 @@ export function RitualStepper({
   }, [ritualSlug]);
 
   useEffect(() => {
-    if (isPro && completedSteps.some(step => step >= 2)) {
-      setShowPaywall(true);
+    if (completedSteps.length > 0) {
+      const hasLockedSteps = completedSteps.some(step => isStepLocked(step));
+      if (hasLockedSteps) {
+        setShowPaywall(true);
+      }
     }
-  }, [isPro, completedSteps]);
+  }, [completedSteps, isPro]);
 
   const isStepLocked = (index: number): boolean => {
-    return isPro && index >= 2;
+    return isPro || index >= 2;
   };
 
   const toggleStep = (index: number) => {
@@ -61,7 +64,7 @@ export function RitualStepper({
     onStepComplete?.(index, !completedSteps.includes(index));
   };
 
-  const shouldBlur = (index: number) => isPro && index >= 2;
+  const shouldBlur = (index: number) => isPro || index >= 2;
 
   return (
     <div className="space-y-4" data-testid="ritual-stepper">
@@ -87,7 +90,7 @@ export function RitualStepper({
               data-testid={`step-${index}`}
             >
               <button
-                onClick={() => !isLocked && toggleStep(index)}
+                onClick={() => toggleStep(index)}
                 disabled={isLocked}
                 className={`flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
                   isLocked
@@ -124,7 +127,7 @@ export function RitualStepper({
               )}
             </div>
 
-            {isBlurred && index === 2 && (
+            {isBlurred && (isPro ? index === 0 : index === 2) && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -145,7 +148,7 @@ export function RitualStepper({
         );
       })}
 
-      {showPaywall && isPro && (
+      {showPaywall && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
