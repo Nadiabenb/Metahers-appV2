@@ -1,0 +1,164 @@
+You are a senior full-stack engineer. Build a production-ready **installable PWA** called **MetaHers Mind Spa** as a **Next.js 14 (App Router) + TypeScript** web app. Mobile-first. Calm spa × tech-lux UI. Ship a working MVP inside this Repl.
+
+## Stack
+- Next.js 14, TypeScript, TailwindCSS
+- State: Zustand
+- Forms/validation: React Hook Form + Zod
+- Animations: Framer Motion
+- Content: MDX or inline JSON seed
+- PWA: manifest.json + service worker + install prompt
+- Analytics (optional): PostHog client
+- No server DB for MVP. Persist minimal state in localStorage.
+
+## Create project
+1) Run:
+npx create-next-app@latest metahers-mind-spa --ts --app --tailwind --eslint
+cd metahers-mind-spa
+npm i framer-motion zustand zod @hookform/resolvers react-hook-form next-mdx-remote posthog-js
+2) Set Replit run command: in .replit set
+run = "npm run dev -- --port 3000"
+
+## Brand system
+- Colors: blush #F6E8EA, champagne #F3EDE2, mint #E8F4EF, onyx #0D0D0F, gold accent rgba(255,215,0,0.6)
+- Typography via next/font: Headings Playfair Display, Body Inter
+- Components: rounded-2xl cards, soft shadows, glassmorphism overlays, subtle gradients, motion 150–250ms
+
+## Routes
+Public:
+- `/` Lobby hero + CTA
+- `/rituals` grid of rituals
+- `/rituals/[slug]` ritual detail with stepper
+- `/news` placeholder page
+- `/shop` Ritual Bags product grid + bundle
+- `/events` Calendly embed (https://calendly.com/nadia-metahers/discovery-call)
+Member:
+- `/journal` localStorage journal + streak placeholder
+- `/metamuse` page with button to open MetaMuse GPT:
+  https://chatgpt.com/g/g-676873de461c8191a95b58d1361b6fb6-metamuse-drop-one
+Account (stub):
+- `/account` profile stub
+
+## PWA
+- `public/manifest.json` with name “MetaHers Mind Spa”, start_url “/”, display “standalone”, theme_color #0D0D0F, background_color #F3EDE2, icons including 512x512.
+- `public/sw.js` basic register + claim.
+- Register SW + link manifest in `app/layout.tsx`.
+- Add simple “InstallPrompt” component that shows when `beforeinstallprompt` fires.
+
+## Seed data
+Use a JSON seed for rituals:
+[
+  {
+    "slug": "ai-glow-up-facial",
+    "title": "AI Glow-Up Facial",
+    "tier": "free",
+    "duration_min": 60,
+    "summary": "Prompting, daily automations, 1 task off your plate.",
+    "steps": ["Cleanse intent","Prompting 101","Automate one task","Reflect & journal","Set weekly trigger"]
+  },
+  {
+    "slug": "blockchain-detox-ritual",
+    "title": "Blockchain Detox Ritual",
+    "tier": "pro",
+    "duration_min": 60,
+    "summary": "Wallet setup, self-custody, safety.",
+    "steps": ["Visualize trust","Create wallet","Self-custody basics","Testnet transfer","Journal"]
+  },
+  {
+    "slug": "crypto-confidence-bath",
+    "title": "Crypto Confidence Bath",
+    "tier": "pro",
+    "duration_min": 75,
+    "summary": "BTC/ETH/stablecoins in plain language.",
+    "steps": ["Tea ritual","BTC & ETH basics","Stablecoins","Use cases","Journal"]
+  },
+  {
+    "slug": "nft-radiance-wrap",
+    "title": "NFT Radiance Wrap",
+    "tier": "pro",
+    "duration_min": 90,
+    "summary": "Design and mint a first NFT (testnet).",
+    "steps": ["Inspiration","Prompt art","Mint on testnet","List draft","Story share"]
+  },
+  {
+    "slug": "metaverse-meditation",
+    "title": "Metaverse Meditation",
+    "tier": "pro",
+    "duration_min": 90,
+    "summary": "Avatar, space, brand presence.",
+    "steps": ["Visualize","Avatar setup","Space design","Brand ritual","Journal"]
+  }
+]
+
+## Shop products
+Show three Ritual Bags at **$199** each and a Trio Bundle at **$499**:
+- Sheikha Ritual Bag — scent: Oud • Musk • Amber
+- Serenity Ritual Bag — scent: Lavender • Lime • Lemon
+- Floral Ritual Bag — scent: White Rose • Red Rose • Jasmine
+Each card: short blurb “6-piece set + QR → MetaMuse 001”, “rare crown candle unlocks full AI Squad”.
+Buttons link to Gumroad:
+https://metahers.gumroad.com/l/metahers
+Bundle card with $499 to same link for MVP.
+
+## Copy blocks
+Hero:
+- H1: “Luxury meets literacy.”
+- Sub: “Learn AI + Web3 in a calm, guided ritual.”
+- CTA button: “Start your AI Glow-Up (Free)”
+Rituals page header: “Rituals”
+Journal header: “Daily Journal”
+Shop hero: “Unwrap your ritual. Each MetaHers bag blends beauty, scent, and AI intelligence.”
+
+## Components to implement
+- `MenuCard` for rituals and shop items
+- `ProgressRing` (simple CSS ring or SVG)
+- `RitualStepper` list with numbered steps and completion state (localStorage)
+- `JournalEditor` textarea with autosave to localStorage
+- `InstallPrompt` for PWA
+- `CTAButton`, `PlanBadge`, `Toast` (minimal)
+- Simple paywall banner for tier === "pro" on ritual detail (“Unlock Pro to access full ritual”)
+
+## Minimal gating
+- If ritual.tier === "pro`, show all meta info but blur steps 3–5 with an overlay and a “Unlock Pro” button (no payments yet). For MVP the button links to Gumroad product.
+
+## Files to add/modify
+- app/layout.tsx: fonts via next/font, theme colors, SW registration, global container
+- app/page.tsx: lobby
+- app/rituals/page.tsx: grid
+- app/rituals/[slug]/page.tsx: detail + stepper
+- app/journal/page.tsx
+- app/metamuse/page.tsx
+- app/events/page.tsx (Calendly iframe)
+- app/shop/page.tsx (three bags + bundle)
+- public/manifest.json, public/sw.js, public/icon-512.png (placeholder)
+- lib/seed.ts (rituals JSON)
+- lib/storage.ts (get/set localStorage helpers)
+- components/* listed above
+- styles: add CSS variables for brand colors in globals.css
+
+## Styling rules
+- Backgrounds: blush/champagne/mint gradients
+- Cards: white/70 with soft shadow, rounded-2xl
+- Headings Playfair, body Inter
+- Motion: small fade/slide on cards
+
+## QA checklist (agent must verify)
+- App runs on port 3000 in Replit
+- `/` shows hero and CTA
+- `/rituals` lists 5 rituals with tiers and durations
+- `/rituals/ai-glow-up-facial` renders steps and allows marking as complete (localStorage)
+- Pro rituals show paywall overlay on later steps
+- `/journal` persists text after refresh
+- `/metamuse` shows external link button
+- `/events` loads Calendly iframe
+- `/shop` shows 3 bags at $199, bundle at $499, buttons point to Gumroad link
+- PWA: manifest is linked, service worker registers, “Add to Home Screen” works in mobile browser
+- Lighthouse target: Performance > 80, PWA installable
+
+## Deliverables
+- Complete Next.js project in this Repl with files created and code compiled
+- Clear README: run, build, and deploy steps for Replit
+- Short note in README on how to change ritual JSON and shop links
+
+## After build, run:
+- Open the app, click through all routes, confirm behaviors
+- Return the repo tree and key code snippets for verification
