@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Check, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRitualProgress } from "@/hooks/useRitualProgress";
+import { useAuth } from "@/hooks/useAuth";
 
 interface RitualStepperProps {
   steps: string[];
@@ -18,7 +19,10 @@ export function RitualStepper({
   onStepComplete 
 }: RitualStepperProps) {
   const { completedSteps, updateProgress, isLoading } = useRitualProgress(ritualSlug);
+  const { user } = useAuth();
   const [showPaywall, setShowPaywall] = useState(false);
+  
+  const userIsPro = user?.isPro || false;
 
   useEffect(() => {
     if (completedSteps.length > 0) {
@@ -27,9 +31,12 @@ export function RitualStepper({
         setShowPaywall(true);
       }
     }
-  }, [completedSteps, isPro]);
+  }, [completedSteps, isPro, userIsPro]);
 
   const isStepLocked = (index: number): boolean => {
+    if (userIsPro) {
+      return false;
+    }
     return isPro || index >= 2;
   };
 
@@ -47,7 +54,12 @@ export function RitualStepper({
     onStepComplete?.(index, !completedSteps.includes(index));
   };
 
-  const shouldBlur = (index: number) => isPro || index >= 2;
+  const shouldBlur = (index: number) => {
+    if (userIsPro) {
+      return false;
+    }
+    return isPro || index >= 2;
+  };
 
   if (isLoading) {
     return (
@@ -134,7 +146,7 @@ export function RitualStepper({
                 <Button
                   size="lg"
                   className="gap-2 shadow-lg"
-                  onClick={() => window.open("https://metahers.gumroad.com/l/metahers", "_blank")}
+                  onClick={() => window.location.href = "/subscribe"}
                   data-testid="button-unlock-pro"
                 >
                   <Lock className="w-5 h-5" />
@@ -157,14 +169,14 @@ export function RitualStepper({
             Upgrade to unlock all steps
           </h3>
           <p className="text-foreground/70 mb-4">
-            Complete this ritual by purchasing any Ritual Bag and gaining Pro access.
+            Subscribe to Pro for $19.99/month to unlock all rituals and premium features.
           </p>
           <Button
-            onClick={() => window.open("https://metahers.gumroad.com/l/metahers", "_blank")}
+            onClick={() => window.location.href = "/subscribe"}
             className="gap-2"
             data-testid="button-upgrade-paywall"
           >
-            View Ritual Bags
+            Subscribe to Pro
           </Button>
         </motion.div>
       )}

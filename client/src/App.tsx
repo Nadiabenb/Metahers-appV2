@@ -17,6 +17,7 @@ import JournalPage from "@/pages/JournalPage";
 import MetaMusePage from "@/pages/MetaMusePage";
 import EventsPage from "@/pages/EventsPage";
 import AccountPage from "@/pages/AccountPage";
+import SubscribePage from "@/pages/SubscribePage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -47,6 +48,7 @@ function Router() {
           <Route path="/metamuse" component={MetaMusePage} />
           <Route path="/events" component={EventsPage} />
           <Route path="/account" component={AccountPage} />
+          <Route path="/subscribe" component={SubscribePage} />
         </>
       )}
       <Route component={NotFound} />

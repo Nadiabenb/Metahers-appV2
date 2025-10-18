@@ -118,14 +118,24 @@ export default function AccountPage() {
                         Unlock all 5 rituals, exclusive content, and MetaMuse AI Squad access. 
                         Available with any Ritual Bag purchase.
                       </p>
-                      <Button
-                        onClick={() => window.location.href = "/shop"}
-                        className="gap-2"
-                        data-testid="button-upgrade"
-                      >
-                        <Crown className="w-4 h-4" />
-                        View Shop
-                      </Button>
+                      <div className="flex gap-3">
+                        <Button
+                          onClick={() => window.location.href = "/subscribe"}
+                          className="gap-2"
+                          data-testid="button-upgrade"
+                        >
+                          <Crown className="w-4 h-4" />
+                          Subscribe Now
+                        </Button>
+                        <Button
+                          onClick={() => window.location.href = "/shop"}
+                          variant="outline"
+                          className="gap-2"
+                          data-testid="button-view-shop"
+                        >
+                          View Shop
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>

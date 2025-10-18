@@ -4,7 +4,7 @@
 
 MetaHers Mind Spa is a Progressive Web App (PWA) that combines luxury spa aesthetics with technology education, specifically focusing on AI and Web3 topics. The application provides guided learning experiences called "rituals" that teach users about AI prompting, blockchain, cryptocurrency, NFTs, and the metaverse in a calm, spa-like environment.
 
-The app features a freemium model with one free ritual and four Pro rituals, a shop selling ritual product bundles, a personal journal with streak tracking, and integration with external services for AI assistance (MetaMuse GPT) and booking (Calendly).
+The app features a subscription model with Pro tier ($19.99/month) that unlocks all 5 rituals and premium features. Free users can access the first ritual. The app includes a personal journal with streak tracking, Stripe payment processing, and integration with external services for AI assistance (MetaMuse GPT) and booking (Calendly).
 
 ## User Preferences
 
@@ -50,19 +50,19 @@ Preferred communication style: Simple, everyday language.
 
 ### Data Storage
 
-**Client-Side Storage**: All application data is stored in browser localStorage:
-- Ritual progress tracking (completed steps per ritual)
-- Journal entries with auto-save functionality
-- Install prompt dismissal state
-- User statistics (streak counts, completion metrics)
+**Database Storage**: All user data is persisted in PostgreSQL database:
+- **users table**: User profiles with Replit Auth integration (id, email, firstName, lastName, isPro status)
+- **ritual_progress table**: Tracks completed steps per ritual per user
+- **journal_entries table**: Stores journal content with streak calculation
+- **subscriptions table**: Stripe subscription data (customer ID, subscription ID, status, billing period)
+- **sessions table**: Session storage for Replit Auth
 
-**Database Configuration**: Drizzle ORM is configured with PostgreSQL support through `@neondatabase/serverless`, but no database schema or tables are currently defined beyond a basic User type in `shared/schema.ts`. The database is not actively used in the current implementation.
-
-**Data Models**: Zod schemas define the shape of data:
-- `Ritual`: Defines learning experiences with steps, duration, and tier (free/pro)
-- `ShopProduct`: Product catalog for ritual bags and bundles
-- `RitualProgress`: Tracks user completion of ritual steps
-- `JournalEntry`: Stores journal content and streak information
+**Data Models**: 
+- **Database (Drizzle)**: TypeScript schema in `shared/schema.ts` with tables for users, rituals, journal, subscriptions
+- **Client (Zod)**: Validation schemas for API requests/responses
+  - `Ritual`: Defines learning experiences with steps, duration, and tier (free/pro)
+  - `RitualProgress`: Tracks user completion of ritual steps (synced with database)
+  - `JournalEntry`: Journal content and streak information (synced with database)
 
 ### Content Management
 
@@ -72,7 +72,16 @@ Preferred communication style: Simple, everyday language.
 
 ### External Integrations
 
-**Gumroad**: Shop checkout redirects to a Gumroad product page for payment processing. No backend payment handling is implemented.
+**Stripe**: Payment processing for Pro tier subscriptions ($19.99/month):
+- Subscription creation endpoint: `POST /api/create-subscription`
+- Webhook handler: `POST /api/webhooks/stripe` for subscription lifecycle events
+- Frontend checkout flow: `/subscribe` page with Stripe Elements
+- Automatic Pro status updates on subscription changes
+
+**Replit Auth**: OpenID Connect authentication with PostgreSQL session storage:
+- Login/logout endpoints with passport.js
+- User profile stored in database
+- Protected API routes using `isAuthenticated` middleware
 
 **Calendly**: Events page embeds a Calendly widget using an iframe for scheduling discovery calls.
 
