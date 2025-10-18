@@ -146,7 +146,7 @@ export function RitualStepper({
                 <Button
                   size="lg"
                   className="gap-2 shadow-lg"
-                  onClick={() => window.location.href = "/subscribe"}
+                  onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
                   data-testid="button-unlock-pro"
                 >
                   <Lock className="w-5 h-5" />
@@ -172,11 +172,11 @@ export function RitualStepper({
             Subscribe to Pro for $19.99/month to unlock all rituals and premium features.
           </p>
           <Button
-            onClick={() => window.location.href = "/subscribe"}
+            onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
             className="gap-2"
             data-testid="button-upgrade-paywall"
           >
-            Subscribe to Pro
+            Subscribe to Pro - $19.99/mo
           </Button>
         </motion.div>
       )}

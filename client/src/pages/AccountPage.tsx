@@ -120,12 +120,12 @@ export default function AccountPage() {
                       </p>
                       <div className="flex gap-3">
                         <Button
-                          onClick={() => window.location.href = "/subscribe"}
+                          onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
                           className="gap-2"
                           data-testid="button-upgrade"
                         >
                           <Crown className="w-4 h-4" />
-                          Subscribe Now
+                          Subscribe Now - $19.99/mo
                         </Button>
                         <Button
                           onClick={() => window.location.href = "/shop"}
