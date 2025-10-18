@@ -1,4 +1,100 @@
 import { z } from "zod";
+import { sql } from 'drizzle-orm';
+import {
+  index,
+  integer,
+  jsonb,
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+  boolean,
+} from "drizzle-orm/pg-core";
+import { createInsertSchema } from "drizzle-zod";
+
+// ===== DRIZZLE DATABASE TABLES =====
+
+// Session storage table (required for Replit Auth)
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// User storage table (required for Replit Auth)
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
+  isPro: boolean("is_pro").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type UpsertUser = typeof users.$inferInsert;
+export type User = typeof users.$inferSelect;
+
+// Ritual progress tracking table
+export const ritualProgress = pgTable("ritual_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  ritualSlug: varchar("ritual_slug").notNull(),
+  completedSteps: jsonb("completed_steps").$type<number[]>().notNull().default(sql`'[]'::jsonb`),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_ritual_progress_user").on(table.userId),
+  index("idx_ritual_progress_slug").on(table.ritualSlug),
+]);
+
+export const insertRitualProgressSchema = createInsertSchema(ritualProgress).omit({ id: true, createdAt: true });
+export type InsertRitualProgress = z.infer<typeof insertRitualProgressSchema>;
+export type RitualProgressDB = typeof ritualProgress.$inferSelect;
+
+// Journal entries table
+export const journalEntries = pgTable("journal_entries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  content: text("content").notNull(),
+  streak: integer("streak").default(0).notNull(),
+  lastSaved: timestamp("last_saved").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_journal_user").on(table.userId),
+]);
+
+export const insertJournalEntrySchema = createInsertSchema(journalEntries).omit({ id: true, createdAt: true });
+export type InsertJournalEntry = z.infer<typeof insertJournalEntrySchema>;
+export type JournalEntryDB = typeof journalEntries.$inferSelect;
+
+// Subscriptions table (for Pro tier)
+export const subscriptions = pgTable("subscriptions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  stripeCustomerId: varchar("stripe_customer_id").unique(),
+  stripeSubscriptionId: varchar("stripe_subscription_id").unique(),
+  stripePriceId: varchar("stripe_price_id"),
+  status: varchar("status").notNull(),
+  currentPeriodEnd: timestamp("current_period_end"),
+  cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_subscription_user").on(table.userId),
+  index("idx_subscription_stripe_customer").on(table.stripeCustomerId),
+]);
+
+export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
+export type SubscriptionDB = typeof subscriptions.$inferSelect;
+
+// ===== ZOD SCHEMAS (for frontend/client data) =====
 
 export const ritualSchema = z.object({
   slug: z.string(),
@@ -38,6 +134,8 @@ export const journalEntrySchema = z.object({
 });
 
 export type JournalEntry = z.infer<typeof journalEntrySchema>;
+
+// ===== STATIC DATA =====
 
 export const rituals: Ritual[] = [
   {
