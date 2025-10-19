@@ -31,7 +31,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'First Steps',
     description: 'Write your first journal entry',
     icon: BookOpen,
-    color: 'text-blue-500',
+    color: 'text-[hsl(var(--aurora-teal))]',
     requirement: '1 entry',
   },
   {
@@ -39,7 +39,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Building Momentum',
     description: 'Maintain a 3-day writing streak',
     icon: Flame,
-    color: 'text-orange-500',
+    color: 'text-[hsl(var(--cyber-fuchsia))]',
     requirement: '3 day streak',
   },
   {
@@ -47,7 +47,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Week Warrior',
     description: 'Maintain a 7-day writing streak',
     icon: Star,
-    color: 'text-yellow-500',
+    color: 'text-[hsl(var(--liquid-gold))]',
     requirement: '7 day streak',
   },
   {
@@ -63,7 +63,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Word Warrior',
     description: 'Write 1,000 total words',
     icon: Target,
-    color: 'text-green-500',
+    color: 'text-[hsl(var(--aurora-teal))]',
     requirement: '1,000 words',
   },
   {
@@ -71,7 +71,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Prolific Writer',
     description: 'Write 5,000 total words',
     icon: Zap,
-    color: 'text-purple-500',
+    color: 'text-[hsl(var(--hyper-violet))]',
     requirement: '5,000 words',
   },
   {
@@ -79,7 +79,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Emotional Explorer',
     description: 'Record all 5 different moods',
     icon: Heart,
-    color: 'text-pink-500',
+    color: 'text-[hsl(var(--magenta-quartz))]',
     requirement: '5 moods tracked',
   },
   {
@@ -87,7 +87,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Tag Master',
     description: 'Use 10 different tags',
     icon: TagIcon,
-    color: 'text-indigo-500',
+    color: 'text-[hsl(var(--hyper-violet))]',
     requirement: '10 unique tags',
   },
   {
@@ -95,7 +95,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Dedicated Journaler',
     description: 'Write 10 journal entries',
     icon: Award,
-    color: 'text-teal-500',
+    color: 'text-[hsl(var(--aurora-teal))]',
     requirement: '10 entries',
   },
 ];

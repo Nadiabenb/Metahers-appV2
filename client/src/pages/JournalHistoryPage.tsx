@@ -11,10 +11,10 @@ import { AchievementsBadges } from "@/components/AchievementsBadges";
 
 const MOOD_OPTIONS = [
   { value: "all", label: "All Moods" },
-  { value: "joyful", label: "Joyful", color: "text-pink-500" },
-  { value: "peaceful", label: "Peaceful", color: "text-blue-500" },
-  { value: "reflective", label: "Reflective", color: "text-purple-500" },
-  { value: "challenged", label: "Challenged", color: "text-amber-500" },
+  { value: "joyful", label: "Joyful", color: "text-[hsl(var(--magenta-quartz))]" },
+  { value: "peaceful", label: "Peaceful", color: "text-[hsl(var(--aurora-teal))]" },
+  { value: "reflective", label: "Reflective", color: "text-[hsl(var(--hyper-violet))]" },
+  { value: "challenged", label: "Challenged", color: "text-[hsl(var(--cyber-fuchsia))]" },
   { value: "energized", label: "Energized", color: "text-[hsl(var(--liquid-gold))]" },
 ];
 

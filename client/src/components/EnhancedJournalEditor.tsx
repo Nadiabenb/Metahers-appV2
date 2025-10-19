@@ -14,7 +14,7 @@ const MOODS = [
   { value: "joyful", label: "Joyful", icon: Heart, color: "text-[hsl(var(--magenta-quartz))]" },
   { value: "peaceful", label: "Peaceful", icon: Smile, color: "text-[hsl(var(--aurora-teal))]" },
   { value: "reflective", label: "Reflective", icon: Meh, color: "text-[hsl(var(--hyper-violet))]" },
-  { value: "challenged", label: "Challenged", icon: Frown, color: "text-amber-500" },
+  { value: "challenged", label: "Challenged", icon: Frown, color: "text-[hsl(var(--cyber-fuchsia))]" },
   { value: "energized", label: "Energized", icon: Zap, color: "text-[hsl(var(--liquid-gold))]" },
 ];
 
