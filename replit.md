@@ -4,7 +4,12 @@
 
 MetaHers Mind Spa is a Progressive Web App (PWA) that combines luxury spa aesthetics with technology education, specifically focusing on AI and Web3 topics. The application provides guided learning experiences called "rituals" that teach users about AI prompting, blockchain, cryptocurrency, NFTs, and the metaverse in a calm, spa-like environment.
 
-The app features a subscription model with Pro tier ($19.99/month) that unlocks all 5 rituals and premium features. Free users can access the first ritual. The app includes a personal journal with streak tracking, Stripe payment processing, and integration with external services for AI assistance (MetaMuse GPT) and booking (Calendly).
+The app features a subscription model with Pro tier ($19.99/month) that unlocks all 5 rituals and premium features. Free users can access the first ritual. The app includes:
+- **AI-Powered Personal Journal**: Write entries with mood tracking, AI-generated insights, and a conversational AI coach
+- **Journal Analytics**: Comprehensive analytics dashboard with writing calendar (28-day mood visualization), tag cloud, mood distribution charts, and key metrics
+- **Achievements System**: Gamified milestones with 9 different achievement types, animated badge unlocking, and progress tracking
+- **Stripe Payment Integration**: Subscription processing for Pro tier access
+- **External Integrations**: MetaMuse GPT (AI assistance) and Calendly (scheduling)
 
 ## User Preferences
 
@@ -44,7 +49,12 @@ Preferred communication style: Simple, everyday language.
 
 **Production Mode**: Static files are served from the `dist/public` directory after Vite builds the client application.
 
-**API Structure**: The application is set up to support API routes (prefixed with `/api`), though currently no API endpoints are implemented. The routing infrastructure exists in `server/routes.ts`.
+**API Structure**: RESTful API routes (prefixed with `/api`) implemented in `server/routes.ts`:
+- Journal endpoints: CRUD operations, AI insights, AI coach chat
+- Analytics endpoints: Journal stats with mood distribution, tag frequencies, entry history
+- Achievements endpoints: Check/unlock achievements, fetch user progress
+- Subscription endpoints: Stripe checkout, webhook handling
+- Auth endpoints: Replit Auth login/logout
 
 **Session Management**: The app includes `connect-pg-simple` for PostgreSQL session storage, though sessions are not currently utilized in the codebase.
 
@@ -53,7 +63,8 @@ Preferred communication style: Simple, everyday language.
 **Database Storage**: All user data is persisted in PostgreSQL database:
 - **users table**: User profiles with Replit Auth integration (id, email, firstName, lastName, isPro status)
 - **ritual_progress table**: Tracks completed steps per ritual per user
-- **journal_entries table**: Stores journal content with streak calculation
+- **journal_entries table**: Stores journal content, mood, tags, AI insights, word count, and streak calculation
+- **achievements table**: Tracks unlocked achievements with timestamps (first_entry, streak milestones, word counts, mood/tag exploration)
 - **subscriptions table**: Stripe subscription data (customer ID, subscription ID, status, billing period)
 - **sessions table**: Session storage for Replit Auth
 
@@ -78,6 +89,12 @@ Preferred communication style: Simple, everyday language.
 - Frontend checkout flow: `/subscribe` page with Stripe Elements
 - Automatic Pro status updates on subscription changes
 
+**OpenAI**: Direct API integration using user's API key (OPENAI_API_KEY secret):
+- AI-powered journal insights generation (3 personalized insights per entry)
+- Conversational AI coach for journaling support
+- Server-side API calls via `server/aiService.ts`
+- Uses GPT-4 model for high-quality responses
+
 **Replit Auth**: OpenID Connect authentication with PostgreSQL session storage:
 - Login/logout endpoints with passport.js
 - User profile stored in database
@@ -91,8 +108,8 @@ Preferred communication style: Simple, everyday language.
 
 **Client-Side Routing**: Wouter provides declarative routing with URL pattern matching. Routes are defined in `App.tsx`:
 - Public routes: home, rituals list, ritual detail, shop
-- Member routes: journal, metamuse, events
-- Account routes: account settings (stub)
+- Member routes: journal, journal history (analytics), metamuse, events
+- Account routes: account settings (stub), subscribe (Stripe checkout)
 
 **Server-Side Routing**: Express catches all non-API routes and serves the React SPA, allowing client-side routing to take over.
 
@@ -158,13 +175,14 @@ Preferred communication style: Simple, everyday language.
 
 ### Data Fetching
 
-- **@tanstack/react-query**: Server state management (configured but not actively used)
+- **@tanstack/react-query**: Server state management for API data fetching and caching
+- **date-fns**: Date formatting and parsing for journal entries and analytics
 
-### Database (Configured but Unused)
+### Database
 
-- **Drizzle ORM**: TypeScript ORM for SQL databases
+- **Drizzle ORM**: TypeScript ORM for SQL databases with schema definitions in `shared/schema.ts`
 - **@neondatabase/serverless**: PostgreSQL client for Neon serverless databases
-- **drizzle-zod**: Generate Zod schemas from Drizzle tables
+- **drizzle-zod**: Generate Zod schemas from Drizzle tables for validation
 
 ### Development Tools
 
@@ -180,7 +198,36 @@ Preferred communication style: Simple, everyday language.
 
 ### Third-Party Services
 
+- **OpenAI API**: GPT-4 for journal insights and AI coach chat
+- **Stripe**: Payment processing for Pro subscriptions ($19.99/month)
 - **Gumroad**: E-commerce platform for product sales (external redirect)
 - **Calendly**: Scheduling platform for discovery calls (iframe embed)
 - **ChatGPT (MetaMuse)**: Custom GPT instance for AI assistance (external link)
 - **Google Fonts**: Typography assets (Playfair Display, Inter)
+
+## Recent Changes (October 2025)
+
+### Journal Analytics & Achievements System
+- **Database Migration**: Added achievements table for tracking user milestones
+- **Analytics API**: New `/api/journal/stats` endpoint providing comprehensive journal analytics:
+  - Total entries, word count, current streak, unique tags
+  - Mood distribution with percentages
+  - All journal entries with metadata for visualization
+- **Achievements API**: `/api/achievements` and `/api/achievements/check` endpoints:
+  - 9 achievement types: first_entry, streak_3/7/30, word_warrior_1k/5k, mood_master, tag_explorer, consistent_writer
+  - Automatic achievement checking and unlocking
+  - Progress tracking for each milestone
+
+### Journal History Page (`/journal/history`)
+- **Key Metrics Dashboard**: 4 stat cards showing entries, words, streak, tags
+- **Writing Calendar**: 28-day grid with mood-based background colors (pink=joyful, blue=peaceful, purple=reflective, amber=challenged, yellow=energized)
+- **Tag Cloud**: Frequency-based tag visualization with interactive filtering
+- **Mood Distribution**: Percentage breakdown with progress bars
+- **Entry Search & Filters**: Search by text, filter by mood, filter by tags
+- **Achievements Display**: Animated badge reveals with framer-motion, toast notifications for new unlocks
+
+### AI Integration
+- Migrated from Replit AI to direct OpenAI API integration
+- AI-powered journal insights (3 personalized insights per entry)
+- Conversational AI coach for journaling support
+- Server-side API calls via `server/aiService.ts`
