@@ -67,7 +67,7 @@ export function RitualStepper({
         {steps.map((_, index) => (
           <div
             key={index}
-            className="glass-card rounded-2xl p-6 animate-pulse"
+            className="editorial-card p-6 animate-pulse"
           >
             <div className="h-10 bg-muted rounded" />
           </div>
@@ -88,14 +88,14 @@ export function RitualStepper({
             key={index}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.1, duration: 0.15 }}
+            transition={{ delay: index * 0.1, duration: 0.3 }}
             className="relative"
           >
             <div
-              className={`flex items-start gap-4 glass-card rounded-2xl p-6 transition-all duration-200 ${
+              className={`flex items-start gap-4 editorial-card p-6 transition-all duration-300 ${
                 isBlurred ? "blur-sm pointer-events-none" : ""
               } ${
-                isCompleted && !isLocked ? "bg-mint/20" : ""
+                isCompleted && !isLocked ? "bg-[hsl(var(--aurora-teal))]/10 border-[hsl(var(--aurora-teal))]/30" : ""
               }`}
               data-testid={`step-${index}`}
             >
@@ -106,8 +106,8 @@ export function RitualStepper({
                   isLocked
                     ? "bg-muted border-muted text-muted-foreground cursor-not-allowed"
                     : isCompleted
-                    ? "bg-mint border-mint text-onyx"
-                    : "border-champagne hover:border-mint cursor-pointer hover-elevate active-elevate-2"
+                    ? "bg-[hsl(var(--aurora-teal))] border-[hsl(var(--aurora-teal))] text-background"
+                    : "border-border hover:border-[hsl(var(--aurora-teal))] cursor-pointer hover-elevate active-elevate-2"
                 }`}
                 data-testid={`button-step-${index}`}
                 aria-label={isLocked ? `Step ${index + 1} locked` : `Toggle step ${index + 1}`}
@@ -117,14 +117,14 @@ export function RitualStepper({
                 ) : isCompleted ? (
                   <Check className="w-5 h-5" />
                 ) : (
-                  <span className="text-sm font-semibold text-onyx">
+                  <span className="text-sm font-semibold text-foreground">
                     {index + 1}
                   </span>
                 )}
               </button>
 
               <div className="flex-1">
-                <h4 className="font-serif text-lg font-semibold text-onyx mb-1">
+                <h4 className="font-serif text-lg font-semibold text-foreground mb-1">
                   {step}
                 </h4>
                 <p className="text-sm text-muted-foreground">
@@ -133,7 +133,7 @@ export function RitualStepper({
               </div>
 
               {!isBlurred && !isLocked && index < steps.length - 1 && (
-                <div className="absolute left-9 top-20 w-0.5 h-8 bg-champagne" />
+                <div className="absolute left-9 top-20 w-0.5 h-8 bg-border" />
               )}
             </div>
 
@@ -141,11 +141,11 @@ export function RitualStepper({
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-blush/90 via-blush/60 to-transparent rounded-2xl"
+                className="absolute inset-0 flex items-center justify-center bg-gradient-to-t from-background/95 via-background/70 to-transparent rounded-2xl"
               >
                 <Button
                   size="lg"
-                  className="gap-2 shadow-lg"
+                  className="gap-2 shadow-lg bg-[hsl(var(--liquid-gold))] text-background"
                   onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
                   data-testid="button-unlock-pro"
                 >
@@ -162,22 +162,26 @@ export function RitualStepper({
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card rounded-2xl p-6 bg-gold/10 border-2 border-gold/30 shadow-md"
+          className="editorial-card p-6 bg-[hsl(var(--liquid-gold))]/10 border-[hsl(var(--liquid-gold))]/30 relative overflow-hidden"
           data-testid="paywall-message"
         >
-          <h3 className="font-serif text-xl font-semibold text-onyx mb-2">
-            Upgrade to unlock all steps
-          </h3>
-          <p className="text-foreground/70 mb-4">
-            Subscribe to Pro for $19.99/month to unlock all rituals and premium features.
-          </p>
-          <Button
-            onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
-            className="gap-2"
-            data-testid="button-upgrade-paywall"
-          >
-            Subscribe to Pro - $19.99/mo
-          </Button>
+          <div className="absolute inset-0 gradient-teal-gold opacity-5" />
+          <div className="relative z-10">
+            <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
+              Upgrade to unlock all steps
+            </h3>
+            <p className="text-foreground/80 mb-4">
+              Subscribe to Pro for $19.99/month to unlock all rituals and premium features.
+            </p>
+            <Button
+              onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
+              className="gap-2"
+              data-testid="button-upgrade-paywall"
+            >
+              <Lock className="w-4 h-4" />
+              Upgrade to Pro
+            </Button>
+          </div>
         </motion.div>
       )}
     </div>

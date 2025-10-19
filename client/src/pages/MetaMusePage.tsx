@@ -12,26 +12,26 @@ export default function MetaMusePage() {
   };
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-champagne">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.3 }}
           className="text-center"
         >
-          <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6 shadow-md">
-            <MessageSquare className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium text-onyx">
+          <div className="inline-flex items-center gap-2 glass-card px-6 py-3 rounded-full mb-6 neon-glow-violet">
+            <MessageSquare className="w-5 h-5 text-primary" />
+            <span className="text-sm font-medium tracking-wide uppercase">
               AI-Powered Guidance
             </span>
           </div>
 
-          <h1 className="font-serif text-5xl sm:text-6xl font-bold text-onyx mb-6" data-testid="text-page-title">
+          <h1 className="font-serif text-5xl sm:text-6xl font-bold text-gradient-gold mb-6" data-testid="text-page-title">
             MetaMuse
           </h1>
 
-          <p className="text-xl text-foreground/70 max-w-2xl mx-auto mb-12 leading-relaxed">
+          <p className="text-xl text-foreground/80 max-w-2xl mx-auto mb-12 leading-relaxed">
             Your personal AI guide for all things Web3, AI, and beyond. 
             Get instant answers, personalized guidance, and creative inspiration.
           </p>
@@ -60,7 +60,7 @@ export default function MetaMusePage() {
             <CTAButton
               onClick={handleOpenMetaMuse}
               size="lg"
-              className="text-lg px-8 py-6"
+              className="text-lg px-8 py-6 bg-[hsl(var(--liquid-gold))] text-background"
               dataTestId="button-open-metamuse"
             >
               <MessageSquare className="mr-2 w-5 h-5" />
@@ -75,16 +75,19 @@ export default function MetaMusePage() {
                 icon: <Sparkles className="w-6 h-6" />,
                 title: "Personalized",
                 description: "Tailored guidance based on your learning journey",
+                gradient: "gradient-violet-magenta",
               },
               {
                 icon: <MessageSquare className="w-6 h-6" />,
                 title: "Always Available",
                 description: "24/7 access to AI-powered insights and support",
+                gradient: "gradient-magenta-fuchsia",
               },
               {
                 icon: <ExternalLink className="w-6 h-6" />,
                 title: "Deeply Integrated",
                 description: "Connected to your rituals and journal entries",
+                gradient: "gradient-teal-gold",
               },
             ].map((feature, index) => (
               <motion.div
@@ -92,17 +95,20 @@ export default function MetaMusePage() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.1 }}
-                className="glass-card rounded-2xl p-6 text-center shadow-md"
+                className="editorial-card p-6 text-center relative overflow-hidden group hover-elevate"
               >
-                <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-mint/30 to-mint/10 mb-4 text-mint-foreground">
-                  {feature.icon}
+                <div className={`absolute inset-0 ${feature.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
+                <div className="relative z-10">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[hsl(var(--aurora-teal))]/20 mb-4 text-[hsl(var(--aurora-teal))]">
+                    {feature.icon}
+                  </div>
+                  <h3 className="font-serif text-lg font-semibold text-foreground mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-foreground/80">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="font-serif text-lg font-semibold text-onyx mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-sm text-foreground/70">
-                  {feature.description}
-                </p>
               </motion.div>
             ))}
           </div>

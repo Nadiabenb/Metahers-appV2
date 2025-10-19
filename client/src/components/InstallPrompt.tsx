@@ -57,34 +57,37 @@ export function InstallPrompt() {
           className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:max-w-md z-50"
           data-testid="install-prompt"
         >
-          <div className="glass-card rounded-2xl p-6 shadow-2xl border-2 border-white/40">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex-1">
-                <h3 className="font-serif text-lg font-semibold text-onyx mb-2">
-                  Install MetaHers Mind Spa
-                </h3>
-                <p className="text-sm text-foreground/70">
-                  Add to your home screen for quick access to your rituals and journal.
-                </p>
+          <div className="editorial-card p-6 shadow-2xl neon-glow-violet relative overflow-hidden">
+            <div className="absolute inset-0 gradient-violet-magenta opacity-5" />
+            <div className="relative z-10">
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex-1">
+                  <h3 className="font-serif text-lg font-semibold text-foreground mb-2">
+                    Install MetaHers Mind Spa
+                  </h3>
+                  <p className="text-sm text-foreground/80">
+                    Add to your home screen for quick access to your rituals and journal.
+                  </p>
+                </div>
+                <button
+                  onClick={handleDismiss}
+                  className="ml-2 p-1 hover-elevate rounded-full"
+                  data-testid="button-dismiss-install"
+                >
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
               </div>
-              <button
-                onClick={handleDismiss}
-                className="ml-2 p-1 hover-elevate rounded-full"
-                data-testid="button-dismiss-install"
-              >
-                <X className="w-5 h-5 text-muted-foreground" />
-              </button>
-            </div>
 
-            <Button
-              onClick={handleInstall}
-              className="w-full gap-2"
-              size="lg"
-              data-testid="button-install-app"
-            >
-              <Download className="w-5 h-5" />
-              Install App
-            </Button>
+              <Button
+                onClick={handleInstall}
+                className="w-full gap-2"
+                size="lg"
+                data-testid="button-install-app"
+              >
+                <Download className="w-5 h-5" />
+                Install App
+              </Button>
+            </div>
           </div>
         </motion.div>
       )}
