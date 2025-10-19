@@ -1,29 +1,29 @@
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
-import heroBackground from "@assets/generated_images/Luxury_spa_hero_background_8444d20c.png";
+import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-background">
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroBackground})` }}
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-blush/60 via-champagne/40 to-champagne" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, delay: 0.1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
             className="inline-block"
           >
-            <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6 shadow-md">
-              <Sparkles className="w-4 h-4 text-gold" />
-              <span className="text-sm font-medium text-onyx">
+            <div className="inline-flex items-center gap-2 glass-card px-6 py-3 rounded-full mb-8 neon-glow-violet">
+              <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
+              <span className="text-sm font-medium tracking-wider uppercase">
                 Welcome to MetaHers Mind Spa
               </span>
             </div>
@@ -32,8 +32,8 @@ export default function HomePage() {
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, delay: 0.15 }}
-            className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold text-onyx mb-6 leading-tight"
+            transition={{ duration: 0.3, delay: 0.15 }}
+            className="font-serif text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-gradient-violet"
             data-testid="text-hero-title"
           >
             Luxury meets literacy.
@@ -42,21 +42,21 @@ export default function HomePage() {
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, delay: 0.2 }}
-            className="text-xl sm:text-2xl text-foreground/80 mb-12 max-w-2xl mx-auto leading-relaxed"
+            transition={{ duration: 0.3, delay: 0.2 }}
+            className="text-xl sm:text-2xl text-foreground/90 mb-12 max-w-2xl mx-auto leading-relaxed"
           >
-            Learn AI + Web3 in a calm, guided ritual.
+            Learn AI + Web3 in a calm, guided ritual designed for the modern woman.
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.25, delay: 0.25 }}
+            transition={{ duration: 0.3, delay: 0.25 }}
           >
             <CTAButton
               href="/rituals/ai-glow-up-facial"
               size="lg"
-              className="text-lg px-8 py-6"
+              className="text-lg px-10 py-6 bg-[hsl(var(--liquid-gold))] text-background hover:neon-glow-violet font-semibold"
               dataTestId="button-cta-start"
             >
               Start your AI Glow-Up (Free)
@@ -67,29 +67,29 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.25, delay: 0.3 }}
-            className="mt-12 text-sm text-muted-foreground"
+            transition={{ duration: 0.3, delay: 0.3 }}
+            className="mt-12 text-sm text-muted-foreground tracking-wide"
           >
             <p>No credit card required • Free ritual included</p>
           </motion.div>
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-champagne to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
 
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-champagne">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.3 }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold text-onyx mb-6">
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
               Your journey begins here
             </h2>
-            <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
               Explore our curated rituals designed to make technology accessible, 
               empowering, and beautifully simple.
             </p>
@@ -99,18 +99,18 @@ export default function HomePage() {
             {[
               {
                 title: "Guided Rituals",
-                description: "Step-by-step experiences that blend spa serenity with tech education",
-                icon: "✨",
+                description: "Step-by-step experiences that blend futuristic luxury with tech education",
+                gradient: "gradient-violet-magenta",
               },
               {
                 title: "Luxury Products",
                 description: "Beautifully crafted ritual bags with AI-powered experiences",
-                icon: "🎁",
+                gradient: "gradient-magenta-fuchsia",
               },
               {
                 title: "Personal Growth",
-                description: "Journal your journey and track your progress with MetaMuse AI",
-                icon: "📖",
+                description: "Journal your journey and track your progress with AI insights",
+                gradient: "gradient-teal-gold",
               },
             ].map((feature, index) => (
               <motion.div
@@ -118,16 +118,18 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.2, delay: index * 0.1 }}
-                className="glass-card rounded-2xl p-8 text-center shadow-md hover:shadow-lg transition-shadow duration-200"
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="editorial-card p-8 text-center hover-elevate transition-all duration-300 relative overflow-hidden group"
               >
-                <div className="text-5xl mb-4">{feature.icon}</div>
-                <h3 className="font-serif text-xl font-semibold text-onyx mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-foreground/70">
-                  {feature.description}
-                </p>
+                <div className={`absolute inset-0 ${feature.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
+                <div className="relative z-10">
+                  <h3 className="font-serif text-2xl font-semibold mb-4 text-primary">
+                    {feature.title}
+                  </h3>
+                  <p className="text-foreground/80 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>
