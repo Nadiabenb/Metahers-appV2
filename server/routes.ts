@@ -1,15 +1,10 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { setupAuth, isAuthenticated, hashPassword, verifyPassword } from "./auth";
 import Stripe from "stripe";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach } from "./aiService";
 import { z } from "zod";
-
-// Extend Express Request to include user claims
-interface AuthRequest extends Request {
-  user?: any;
-}
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -22,9 +17,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
   await setupAuth(app);
 
   // ===== AUTH ROUTES =====
-  app.get('/api/auth/user', isAuthenticated, async (req: AuthRequest, res) => {
+  
+  // Signup endpoint
+  app.post('/api/auth/signup', async (req, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const { email, password, firstName, lastName } = req.body;
+      
+      // Validate input
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+      
+      if (password.length < 8) {
+        return res.status(400).json({ message: "Password must be at least 8 characters" });
+      }
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(409).json({ message: "User with this email already exists" });
+      }
+      
+      // Hash password and create user
+      const passwordHash = await hashPassword(password);
+      const user = await storage.createUser({
+        email,
+        passwordHash,
+        firstName: firstName || null,
+        lastName: lastName || null,
+      });
+      
+      // Set up session
+      req.session!.userId = user.id;
+      
+      res.status(201).json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+    } catch (error) {
+      console.error("Error during signup:", error);
+      res.status(500).json({ message: "Failed to create account" });
+    }
+  });
+  
+  // Login endpoint
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Verify password
+      const isValid = await verifyPassword(password, user.passwordHash);
+      if (!isValid) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+      
+      // Set up session
+      req.session!.userId = user.id;
+      
+      res.json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+    } catch (error) {
+      console.error("Error during login:", error);
+      res.status(500).json({ message: "Login failed" });
+    }
+  });
+  
+  // Logout endpoint
+  app.post('/api/auth/logout', async (req, res) => {
+    req.session?.destroy((err) => {
+      if (err) {
+        console.error("Error during logout:", error);
+        return res.status(500).json({ message: "Logout failed" });
+      }
+      res.clearCookie('connect.sid');
+      res.json({ success: true });
+    });
+  });
+  
+  app.get('/api/auth/user', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId;
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -39,7 +117,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Mark onboarding as completed
   app.post('/api/auth/complete-onboarding', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       await storage.completeOnboarding(userId);
       res.json({ success: true });
     } catch (error) {
@@ -51,7 +129,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== RITUAL PROGRESS ROUTES =====
   app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const { slug } = req.params;
       
       const progress = await storage.getRitualProgress(userId, slug);
@@ -73,7 +151,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/rituals/:slug/progress', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const { slug } = req.params;
       const { completedSteps } = req.body;
 
@@ -97,7 +175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== JOURNAL ROUTES =====
   app.get('/api/journal', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const entry = await storage.getLatestJournalEntry(userId);
       
       if (!entry) {
@@ -130,7 +208,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/journal', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       
       // Validate request body
       const bodySchema = z.object({
@@ -197,7 +275,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI Journal Prompt Generation (Pro only)
   app.get('/api/journal/prompt', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const user = await storage.getUser(userId);
       
       if (!user?.isPro) {
@@ -221,7 +299,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI Journal Analysis (Pro only)
   app.post('/api/journal/analyze', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const user = await storage.getUser(userId);
       
       if (!user?.isPro) {
@@ -252,7 +330,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI Journal Coach Chat (Pro only)
   app.post('/api/journal/chat', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const user = await storage.getUser(userId);
       
       if (!user?.isPro) {
@@ -280,7 +358,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all journal entries
   app.get('/api/journal/entries', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const limit = parseInt(req.query.limit as string) || 30;
       const mood = req.query.mood as string | undefined;
       
@@ -306,7 +384,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== STATS ROUTE =====
   app.get('/api/stats', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       
       const allProgress = await storage.getAllUserRitualProgress(userId);
       const journalEntry = await storage.getLatestJournalEntry(userId);
@@ -331,7 +409,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== JOURNAL ANALYTICS ROUTES =====
   app.get('/api/journal/stats', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const stats = await storage.getJournalStats(userId);
       res.json(stats);
     } catch (error) {
@@ -343,7 +421,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== ACHIEVEMENTS ROUTES =====
   app.get('/api/achievements', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const achievements = await storage.getUserAchievements(userId);
       res.json(achievements);
     } catch (error) {
@@ -354,7 +432,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/achievements/check', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       
       // Get journal stats to check achievements
       const stats = await storage.getJournalStats(userId);
@@ -397,7 +475,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== STRIPE SUBSCRIPTION ROUTES =====
   app.post('/api/create-subscription', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const userId = req.user!.claims.sub;
+      const userId = req.session!.userId;
       const user = await storage.getUser(userId);
       
       if (!user) {
