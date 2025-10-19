@@ -112,8 +112,9 @@ export async function setupAuth(app: Express) {
 
   app.get("/api/login", (req, res, next) => {
     const strategyName = getStrategyName(req.hostname);
+    // Removed "consent" from prompt to reduce friction - consent is only shown on first login
+    // This eliminates the multiple approval screens that were frustrating users
     passport.authenticate(strategyName, {
-      prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
     })(req, res, next);
   });

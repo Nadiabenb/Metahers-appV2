@@ -1,9 +1,36 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
+import { WelcomeModal } from "@/components/WelcomeModal";
+import { useAuth } from "@/hooks/useAuth";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function HomePage() {
+  const { user } = useAuth();
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    // Show welcome modal for first-time users
+    if (user && !user.onboardingCompleted) {
+      setShowWelcome(true);
+    }
+  }, [user]);
+
+  const handleCompleteOnboarding = async () => {
+    try {
+      await apiRequest('POST', '/api/auth/complete-onboarding', {});
+      // Invalidate user query to refresh data
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      setShowWelcome(false);
+    } catch (error) {
+      console.error('Error completing onboarding:', error);
+      // Still close modal on error to not block user
+      setShowWelcome(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
@@ -76,6 +103,13 @@ export default function HomePage() {
 
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
+
+      {showWelcome && (
+        <WelcomeModal 
+          onComplete={handleCompleteOnboarding}
+          userName={user?.firstName || undefined}
+        />
+      )}
 
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="max-w-7xl mx-auto">

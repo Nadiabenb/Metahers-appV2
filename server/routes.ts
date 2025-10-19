@@ -36,6 +36,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Mark onboarding as completed
+  app.post('/api/auth/complete-onboarding', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user!.claims.sub;
+      await storage.completeOnboarding(userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error completing onboarding:", error);
+      res.status(500).json({ message: "Failed to complete onboarding" });
+    }
+  });
+
   // ===== RITUAL PROGRESS ROUTES =====
   app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: AuthRequest, res) => {
     try {

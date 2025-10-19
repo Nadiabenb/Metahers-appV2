@@ -22,6 +22,7 @@ export interface IStorage {
   // User operations (required for Replit Auth)
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  completeOnboarding(userId: string): Promise<void>;
   
   // Ritual progress operations
   getRitualProgress(userId: string, ritualSlug: string): Promise<RitualProgressDB | undefined>;
@@ -68,6 +69,13 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  async completeOnboarding(userId: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ onboardingCompleted: true, updatedAt: new Date() })
+      .where(eq(users.id, userId));
   }
 
   // Ritual progress operations
