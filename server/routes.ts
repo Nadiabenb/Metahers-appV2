@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import Stripe from "stripe";
+import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach } from "./aiService";
 
 // Extend Express Request to include user claims
 interface AuthRequest extends Request {
@@ -104,22 +105,127 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/journal', isAuthenticated, async (req: AuthRequest, res) => {
     try {
       const userId = req.user!.claims.sub;
-      const { content, streak } = req.body;
+      const { content, streak, mood, tags, aiPrompt } = req.body;
+
+      // Calculate word count
+      const wordCount = content.trim().split(/\s+/).length;
+
+      // Generate AI insights if content is substantial
+      let aiInsights = undefined;
+      if (content.trim().length > 50) {
+        try {
+          aiInsights = await analyzeJournalEntry(content);
+        } catch (error) {
+          console.error("Error generating AI insights:", error);
+        }
+      }
 
       const entry = await storage.upsertJournalEntry({
         userId,
         content,
         streak: streak || 0,
+        mood,
+        tags,
+        wordCount,
+        aiInsights,
+        aiPrompt,
       });
 
       res.json({
         content: entry.content,
         lastSaved: entry.lastSaved?.toISOString(),
         streak: entry.streak,
+        mood: entry.mood,
+        tags: entry.tags,
+        wordCount: entry.wordCount,
+        aiInsights: entry.aiInsights,
       });
     } catch (error) {
       console.error("Error saving journal entry:", error);
       res.status(500).json({ message: "Failed to save journal entry" });
+    }
+  });
+
+  // AI Journal Prompt Generation
+  app.get('/api/journal/prompt', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user!.claims.sub;
+      const ritualContext = req.query.ritual as string | undefined;
+      
+      // Get recent entries for context
+      const recentEntries = await storage.getRecentJournalEntries(userId, 3);
+      const previousEntries = recentEntries.map((e: { content: string }) => e.content.substring(0, 100));
+      
+      const prompt = await generateJournalPrompt(ritualContext, previousEntries);
+      res.json({ prompt });
+    } catch (error) {
+      console.error("Error generating prompt:", error);
+      res.status(500).json({ message: "Failed to generate prompt" });
+    }
+  });
+
+  // AI Journal Analysis
+  app.post('/api/journal/analyze', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const { content } = req.body;
+      
+      if (!content || content.trim().length < 20) {
+        return res.status(400).json({ message: "Content too short for analysis" });
+      }
+
+      const insights = await analyzeJournalEntry(content);
+      res.json(insights);
+    } catch (error) {
+      console.error("Error analyzing journal:", error);
+      res.status(500).json({ message: "Failed to analyze journal entry" });
+    }
+  });
+
+  // AI Journal Coach Chat
+  app.post('/api/journal/chat', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user!.claims.sub;
+      const { message } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ message: "Message required" });
+      }
+
+      // Get recent entries for context
+      const recentEntries = await storage.getRecentJournalEntries(userId, 3);
+      const journalHistory = recentEntries.map((e: { content: string }) => e.content);
+      
+      const response = await chatWithJournalCoach(message, journalHistory);
+      res.json({ response });
+    } catch (error) {
+      console.error("Error in journal chat:", error);
+      res.status(500).json({ message: "Failed to get coach response" });
+    }
+  });
+
+  // Get all journal entries
+  app.get('/api/journal/entries', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user!.claims.sub;
+      const limit = parseInt(req.query.limit as string) || 30;
+      const mood = req.query.mood as string | undefined;
+      
+      const entries = await storage.getAllJournalEntries(userId, limit, mood);
+      
+      res.json(entries.map((entry: any) => ({
+        id: entry.id,
+        content: entry.content,
+        mood: entry.mood,
+        tags: entry.tags,
+        wordCount: entry.wordCount,
+        aiInsights: entry.aiInsights,
+        streak: entry.streak,
+        createdAt: entry.createdAt?.toISOString(),
+        lastSaved: entry.lastSaved?.toISOString(),
+      })));
+    } catch (error) {
+      console.error("Error fetching journal entries:", error);
+      res.status(500).json({ message: "Failed to fetch journal entries" });
     }
   });
 

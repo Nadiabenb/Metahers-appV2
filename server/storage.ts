@@ -121,6 +121,11 @@ export class DatabaseStorage implements IStorage {
         .update(journalEntries)
         .set({
           content: entryData.content,
+          mood: entryData.mood,
+          tags: entryData.tags ? sql`${JSON.stringify(entryData.tags)}::jsonb` : undefined,
+          wordCount: entryData.wordCount,
+          aiInsights: entryData.aiInsights ? sql`${JSON.stringify(entryData.aiInsights)}::jsonb` : undefined,
+          aiPrompt: entryData.aiPrompt,
           streak: entryData.streak,
           lastSaved: new Date(),
         })
@@ -130,10 +135,37 @@ export class DatabaseStorage implements IStorage {
     } else {
       const [created] = await db
         .insert(journalEntries)
-        .values(entryData)
+        .values({
+          ...entryData,
+          tags: entryData.tags ? sql`${JSON.stringify(entryData.tags)}::jsonb` : sql`'[]'::jsonb`,
+          aiInsights: entryData.aiInsights ? sql`${JSON.stringify(entryData.aiInsights)}::jsonb` : undefined,
+        })
         .returning();
       return created;
     }
+  }
+
+  async getRecentJournalEntries(userId: string, limit: number = 10): Promise<JournalEntryDB[]> {
+    return await db
+      .select()
+      .from(journalEntries)
+      .where(eq(journalEntries.userId, userId))
+      .orderBy(desc(journalEntries.createdAt))
+      .limit(limit);
+  }
+
+  async getAllJournalEntries(userId: string, limit: number = 30, mood?: string): Promise<JournalEntryDB[]> {
+    const conditions = [eq(journalEntries.userId, userId)];
+    if (mood) {
+      conditions.push(eq(journalEntries.mood, mood));
+    }
+    
+    return await db
+      .select()
+      .from(journalEntries)
+      .where(and(...conditions))
+      .orderBy(desc(journalEntries.createdAt))
+      .limit(limit);
   }
 
   // Subscription operations

@@ -62,11 +62,17 @@ export const journalEntries = pgTable("journal_entries", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
+  mood: varchar("mood"),
+  tags: jsonb("tags").$type<string[]>().default(sql`'[]'::jsonb`),
+  wordCount: integer("word_count").default(0).notNull(),
+  aiInsights: jsonb("ai_insights").$type<{ summary?: string; sentiment?: string; themes?: string[]; encouragement?: string }>(),
+  aiPrompt: text("ai_prompt"),
   streak: integer("streak").default(0).notNull(),
   lastSaved: timestamp("last_saved").defaultNow(),
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => [
   index("idx_journal_user").on(table.userId),
+  index("idx_journal_created").on(table.createdAt),
 ]);
 
 export const insertJournalEntrySchema = createInsertSchema(journalEntries).omit({ id: true, createdAt: true });
