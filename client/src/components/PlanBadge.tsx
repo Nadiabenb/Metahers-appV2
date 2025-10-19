@@ -9,7 +9,7 @@ export function PlanBadge({ tier }: PlanBadgeProps) {
   if (tier === "free") {
     return (
       <Badge 
-        className="bg-mint text-mint-foreground gap-1" 
+        className="bg-[hsl(var(--aurora-teal))] text-background gap-1" 
         data-testid="badge-free"
       >
         <Sparkles className="w-3 h-3" />
@@ -20,7 +20,7 @@ export function PlanBadge({ tier }: PlanBadgeProps) {
 
   return (
     <Badge 
-      className="bg-gold/60 text-onyx gap-1 animate-shimmer bg-gradient-to-r from-gold via-gold/80 to-gold bg-[length:200%_100%]"
+      className="bg-gradient-to-r from-[hsl(var(--liquid-gold))] via-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] text-background gap-1 animate-shimmer bg-[length:200%_100%]"
       data-testid="badge-pro"
     >
       <Crown className="w-3 h-3" />

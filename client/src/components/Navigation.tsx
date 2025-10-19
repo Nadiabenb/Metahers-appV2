@@ -26,12 +26,12 @@ export function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full glass-card border-b border-white/40 shadow-md">
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-xl bg-background/80 border-b border-border shadow-lg neon-glow-subtle">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <button
             onClick={() => setLocation("/")}
-            className="text-2xl font-serif font-semibold text-onyx cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md"
+            className="text-2xl font-serif font-bold text-gradient-violet cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md"
             data-testid="link-home"
           >
             MetaHers Mind Spa
@@ -48,7 +48,7 @@ export function Navigation() {
                   <Button
                     key={item.path}
                     onClick={() => setLocation(item.path)}
-                    variant={isActive ? "secondary" : "ghost"}
+                    variant={isActive ? "default" : "ghost"}
                     size="sm"
                     className="gap-2"
                     data-testid={`link-${item.label.toLowerCase()}`}
@@ -89,7 +89,7 @@ export function Navigation() {
           {isAuthenticated && (
             <div className="md:hidden flex items-center">
               <select 
-                className="glass-card rounded-md px-3 py-2 text-sm border border-white/40 text-onyx"
+                className="backdrop-blur-md bg-card/50 rounded-md px-3 py-2 text-sm border border-border text-foreground"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 data-testid="select-mobile-nav"
