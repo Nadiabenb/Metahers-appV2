@@ -144,9 +144,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ? 0 
         : content.trim().split(/\s+/).filter(w => w.length > 0).length;
 
-      // Generate AI insights if content is substantial
+      // Generate AI insights if content is substantial (Pro only)
       let aiInsights = undefined;
-      if (content.trim().length > 50) {
+      const user = await storage.getUser(userId);
+      if (content.trim().length > 50 && user?.isPro) {
         try {
           aiInsights = await analyzeJournalEntry(content);
         } catch (error) {
@@ -181,10 +182,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI Journal Prompt Generation
+  // AI Journal Prompt Generation (Pro only)
   app.get('/api/journal/prompt', isAuthenticated, async (req: AuthRequest, res) => {
     try {
       const userId = req.user!.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "This feature requires a Pro subscription" });
+      }
+      
       const ritualContext = req.query.ritual as string | undefined;
       
       // Get recent entries for context
@@ -199,9 +206,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI Journal Analysis
+  // AI Journal Analysis (Pro only)
   app.post('/api/journal/analyze', isAuthenticated, async (req: AuthRequest, res) => {
     try {
+      const userId = req.user!.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "AI insights require a Pro subscription" });
+      }
+      
       // Validate request body
       const bodySchema = z.object({
         content: z.string().min(20, "Content must be at least 20 characters"),
@@ -223,10 +237,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // AI Journal Coach Chat
+  // AI Journal Coach Chat (Pro only)
   app.post('/api/journal/chat', isAuthenticated, async (req: AuthRequest, res) => {
     try {
       const userId = req.user!.claims.sub;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "AI Journal Coach is a Pro feature" });
+      }
+      
       const { message } = req.body;
       
       if (!message) {
