@@ -92,7 +92,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/logout', async (req, res) => {
     req.session?.destroy((err) => {
       if (err) {
-        console.error("Error during logout:", error);
+        console.error("Error during logout:", err);
         return res.status(500).json({ message: "Logout failed" });
       }
       res.clearCookie('connect.sid');
@@ -102,7 +102,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get('/api/auth/user', isAuthenticated, async (req, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
+      if (!userId) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -115,9 +118,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Mark onboarding as completed
-  app.post('/api/auth/complete-onboarding', isAuthenticated, async (req: AuthRequest, res) => {
+  app.post('/api/auth/complete-onboarding', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       await storage.completeOnboarding(userId);
       res.json({ success: true });
     } catch (error) {
@@ -127,9 +130,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== RITUAL PROGRESS ROUTES =====
-  app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: AuthRequest, res) => {
+  app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const { slug } = req.params;
       
       const progress = await storage.getRitualProgress(userId, slug);
@@ -149,9 +152,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/rituals/:slug/progress', isAuthenticated, async (req: AuthRequest, res) => {
+  app.post('/api/rituals/:slug/progress', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const { slug } = req.params;
       const { completedSteps } = req.body;
 
@@ -173,9 +176,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== JOURNAL ROUTES =====
-  app.get('/api/journal', isAuthenticated, async (req: AuthRequest, res) => {
+  app.get('/api/journal', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const entry = await storage.getLatestJournalEntry(userId);
       
       if (!entry) {
@@ -206,9 +209,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/journal', isAuthenticated, async (req: AuthRequest, res) => {
+  app.post('/api/journal', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       
       // Validate request body
       const bodySchema = z.object({
@@ -273,9 +276,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI Journal Prompt Generation (Pro only)
-  app.get('/api/journal/prompt', isAuthenticated, async (req: AuthRequest, res) => {
+  app.get('/api/journal/prompt', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
       
       if (!user?.isPro) {
@@ -297,9 +300,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI Journal Analysis (Pro only)
-  app.post('/api/journal/analyze', isAuthenticated, async (req: AuthRequest, res) => {
+  app.post('/api/journal/analyze', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
       
       if (!user?.isPro) {
@@ -328,9 +331,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // AI Journal Coach Chat (Pro only)
-  app.post('/api/journal/chat', isAuthenticated, async (req: AuthRequest, res) => {
+  app.post('/api/journal/chat', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
       
       if (!user?.isPro) {
@@ -356,9 +359,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get all journal entries
-  app.get('/api/journal/entries', isAuthenticated, async (req: AuthRequest, res) => {
+  app.get('/api/journal/entries', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const limit = parseInt(req.query.limit as string) || 30;
       const mood = req.query.mood as string | undefined;
       
@@ -382,9 +385,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== STATS ROUTE =====
-  app.get('/api/stats', isAuthenticated, async (req: AuthRequest, res) => {
+  app.get('/api/stats', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       
       const allProgress = await storage.getAllUserRitualProgress(userId);
       const journalEntry = await storage.getLatestJournalEntry(userId);
@@ -407,9 +410,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== JOURNAL ANALYTICS ROUTES =====
-  app.get('/api/journal/stats', isAuthenticated, async (req: AuthRequest, res) => {
+  app.get('/api/journal/stats', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const stats = await storage.getJournalStats(userId);
       res.json(stats);
     } catch (error) {
@@ -419,9 +422,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== ACHIEVEMENTS ROUTES =====
-  app.get('/api/achievements', isAuthenticated, async (req: AuthRequest, res) => {
+  app.get('/api/achievements', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const achievements = await storage.getUserAchievements(userId);
       res.json(achievements);
     } catch (error) {
@@ -430,9 +433,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/achievements/check', isAuthenticated, async (req: AuthRequest, res) => {
+  app.post('/api/achievements/check', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       
       // Get journal stats to check achievements
       const stats = await storage.getJournalStats(userId);
@@ -473,9 +476,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== STRIPE SUBSCRIPTION ROUTES =====
-  app.post('/api/create-subscription', isAuthenticated, async (req: AuthRequest, res) => {
+  app.post('/api/create-subscription', isAuthenticated, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId;
+      const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
       
       if (!user) {
