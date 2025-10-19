@@ -18,12 +18,23 @@ export function Navigation() {
     { path: "/account", label: "Account", icon: User },
   ];
 
-  const handleAuth = () => {
-    if (isAuthenticated) {
-      window.location.href = "/api/logout";
-    } else {
-      window.location.href = "/api/login";
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      
+      if (response.ok) {
+        window.location.href = "/";
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
     }
+  };
+
+  const handleLogin = () => {
+    window.location.href = "/login";
   };
 
   return (
@@ -60,7 +71,7 @@ export function Navigation() {
                 );
               })}
               <Button
-                onClick={handleAuth}
+                onClick={handleLogout}
                 variant="ghost"
                 size="sm"
                 className="gap-2 ml-2"
@@ -75,7 +86,7 @@ export function Navigation() {
           {!isAuthenticated && !isLoading && (
             <div className="hidden md:flex items-center">
               <Button
-                onClick={handleAuth}
+                onClick={handleLogin}
                 variant="default"
                 size="sm"
                 className="gap-2"

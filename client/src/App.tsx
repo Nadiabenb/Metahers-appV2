@@ -9,6 +9,8 @@ import { Navigation } from "@/components/Navigation";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { initializeApp } from "@/lib/storage";
 import LandingPage from "@/pages/LandingPage";
+import LoginPage from "@/pages/LoginPage";
+import SignupPage from "@/pages/SignupPage";
 import HomePage from "@/pages/HomePage";
 import RitualsPage from "@/pages/RitualsPage";
 import RitualDetailPage from "@/pages/RitualDetailPage";
@@ -37,6 +39,9 @@ function Router() {
 
   return (
     <Switch>
+      <Route path="/login" component={LoginPage} />
+      <Route path="/signup" component={SignupPage} />
+      
       {!isAuthenticated ? (
         <Route path="/" component={LandingPage} />
       ) : (

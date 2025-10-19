@@ -3,8 +3,12 @@ import { Sparkles, Lock, Calendar, BookOpen } from "lucide-react";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function LandingPage() {
+  const handleSignup = () => {
+    window.location.href = "/signup";
+  };
+
   const handleLogin = () => {
-    window.location.href = "/api/login";
+    window.location.href = "/login";
   };
 
   return (
@@ -40,16 +44,16 @@ export default function LandingPage() {
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
               <button
-                onClick={handleLogin}
+                onClick={handleSignup}
                 className="w-full sm:w-auto rounded-full bg-[hsl(var(--liquid-gold))] text-background px-8 py-4 font-semibold text-lg hover-elevate active-elevate-2 transition-all duration-200 shadow-xl"
-                data-testid="button-login"
+                data-testid="button-signup"
               >
                 Begin Your Journey
               </button>
               <button
                 onClick={handleLogin}
                 className="w-full sm:w-auto rounded-full backdrop-blur-xl bg-card/30 border-2 border-border text-foreground px-8 py-4 font-semibold text-lg hover-elevate active-elevate-2 transition-all duration-200 shadow-xl"
-                data-testid="button-signup"
+                data-testid="button-login"
               >
                 Sign In
               </button>
