@@ -55,7 +55,7 @@ const ACHIEVEMENT_DEFINITIONS = [
     title: 'Consistency Champion',
     description: 'Maintain a 30-day writing streak',
     icon: Trophy,
-    color: 'text-gold',
+    color: 'text-[hsl(var(--liquid-gold))]',
     requirement: '30 day streak',
   },
   {
@@ -212,7 +212,7 @@ export function AchievementsBadges() {
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <Badge variant="default" className="bg-gold text-onyx">
+                      <Badge variant="default" className="bg-[hsl(var(--liquid-gold))] text-background">
                         NEW!
                       </Badge>
                     </motion.div>
@@ -253,11 +253,11 @@ export function AchievementsBadges() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-6 p-4 bg-gold/10 border-2 border-gold rounded-lg text-center"
+            className="mt-6 p-4 bg-[hsl(var(--liquid-gold))]/10 border-2 border-[hsl(var(--liquid-gold))]/30 rounded-lg text-center"
             data-testid="all-achievements-unlocked"
           >
-            <Trophy className="w-12 h-12 mx-auto mb-2 text-gold" />
-            <h3 className="text-lg font-bold text-gold mb-1">
+            <Trophy className="w-12 h-12 mx-auto mb-2 text-[hsl(var(--liquid-gold))]" />
+            <h3 className="text-lg font-bold text-[hsl(var(--liquid-gold))] mb-1">
               Achievement Master!
             </h3>
             <p className="text-sm text-muted-foreground">

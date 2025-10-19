@@ -15,7 +15,7 @@ const MOOD_OPTIONS = [
   { value: "peaceful", label: "Peaceful", color: "text-blue-500" },
   { value: "reflective", label: "Reflective", color: "text-purple-500" },
   { value: "challenged", label: "Challenged", color: "text-amber-500" },
-  { value: "energized", label: "Energized", color: "text-gold" },
+  { value: "energized", label: "Energized", color: "text-[hsl(var(--liquid-gold))]" },
 ];
 
 interface JournalEntry {

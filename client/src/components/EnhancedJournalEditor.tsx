@@ -211,10 +211,11 @@ export function EnhancedJournalEditor() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card rounded-2xl p-4 border border-gold/20 bg-gradient-to-r from-gold/5 to-gold/10"
+          className="editorial-card p-4 border-[hsl(var(--liquid-gold))]/30 bg-gradient-to-r from-[hsl(var(--liquid-gold))]/5 to-[hsl(var(--cyber-fuchsia))]/10 relative overflow-hidden"
         >
-          <div className="flex items-start gap-3">
-            <Sparkles className="w-5 h-5 text-gold mt-0.5" />
+          <div className="absolute inset-0 gradient-teal-gold opacity-5" />
+          <div className="relative z-10 flex items-start gap-3">
+            <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))] mt-0.5" />
             <div className="flex-1">
               <p className="text-sm font-medium text-foreground/90 mb-1">AI Prompt</p>
               <p className="text-sm text-foreground/70 italic">{aiPrompt}</p>
@@ -242,14 +243,14 @@ export function EnhancedJournalEditor() {
               {wordCount} {wordCount === 1 ? 'word' : 'words'}
             </span>
             {isSaving && (
-              <span className="text-mint flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-mint animate-pulse" />
+              <span className="text-[hsl(var(--aurora-teal))] flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-[hsl(var(--aurora-teal))] animate-pulse" />
                 Saving...
               </span>
             )}
             {lastSaved && !isSaving && (
               <span className="text-muted-foreground flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-mint" data-testid="indicator-saved" />
+                <div className="w-2 h-2 rounded-full bg-[hsl(var(--aurora-teal))]" data-testid="indicator-saved" />
                 Saved {new Date(lastSaved).toLocaleTimeString()}
               </span>
             )}
