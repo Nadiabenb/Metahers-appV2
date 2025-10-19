@@ -1,14 +1,17 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Save, Sparkles, MessageCircle, X, Plus, Tag as TagIcon, Heart, Smile, Meh, Frown, Zap } from "lucide-react";
+import { Save, Sparkles, MessageCircle, X, Plus, Tag as TagIcon, Heart, Smile, Meh, Frown, Zap, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useJournal } from "@/hooks/useJournal";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { UpgradePrompt } from "@/components/UpgradePrompt";
+import { Link } from "wouter";
 
 const MOODS = [
   { value: "joyful", label: "Joyful", icon: Heart, color: "text-[hsl(var(--magenta-quartz))]" },
@@ -19,6 +22,9 @@ const MOODS = [
 ];
 
 export function EnhancedJournalEditor() {
+  const { user } = useAuth();
+  const isPro = user?.isPro || false;
+  
   const { 
     content: savedContent, 
     mood: savedMood, 
@@ -50,17 +56,18 @@ export function EnhancedJournalEditor() {
 
   const wordCount = content.trim().split(/\s+/).filter(w => w.length > 0).length;
 
-  // Load AI prompt on mount
+  // Load AI prompt on mount (Pro only)
   const { data: promptData } = useQuery<{ prompt: string }>({
     queryKey: ['/api/journal/prompt'],
     staleTime: 300000, // 5 minutes
+    enabled: isPro, // Only fetch if user is Pro
   });
 
   useEffect(() => {
-    if (promptData?.prompt && !aiPrompt) {
+    if (promptData?.prompt && !aiPrompt && isPro) {
       setAiPrompt(promptData.prompt);
     }
-  }, [promptData, aiPrompt]);
+  }, [promptData, aiPrompt, isPro]);
 
   // Hydrate saved data on mount
   useEffect(() => {
@@ -121,8 +128,8 @@ export function EnhancedJournalEditor() {
     initialMoodRef.current = mood;
     initialTagsRef.current = tags;
 
-    // Get AI insights for substantial content
-    if (content.trim().length > 50) {
+    // Get AI insights for substantial content (Pro only)
+    if (content.trim().length > 50 && isPro) {
       try {
         const res = await apiRequest('POST', '/api/journal/analyze', { content });
         const insights = await res.json();
@@ -155,7 +162,7 @@ export function EnhancedJournalEditor() {
   };
 
   const handleSendCoachMessage = async () => {
-    if (!coachMessage.trim()) return;
+    if (!coachMessage.trim() || !isPro) return;
     
     const userMessage = coachMessage;
     setCoachMessage("");
@@ -177,6 +184,17 @@ export function EnhancedJournalEditor() {
     } finally {
       setIsCoachLoading(false);
     }
+  };
+
+  const handleAiCoachClick = () => {
+    if (!isPro) {
+      toast({
+        title: "Pro Feature",
+        description: "AI Journal Coach requires a Pro subscription",
+      });
+      return;
+    }
+    setShowAiCoach(!showAiCoach);
   };
 
   return (
@@ -206,8 +224,8 @@ export function EnhancedJournalEditor() {
         </div>
       </Card>
 
-      {/* AI Prompt Suggestion */}
-      {aiPrompt && !content && (
+      {/* AI Prompt Suggestion (Pro only) */}
+      {isPro && aiPrompt && !content && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -258,13 +276,14 @@ export function EnhancedJournalEditor() {
 
           <Button
             size="sm"
-            variant="outline"
-            onClick={() => setShowAiCoach(!showAiCoach)}
-            className="hover-elevate"
+            variant={isPro ? "outline" : "default"}
+            onClick={handleAiCoachClick}
+            className={isPro ? "hover-elevate" : "gap-2"}
             data-testid="button-ai-coach"
           >
+            {!isPro && <Crown className="w-3 h-3" />}
             <MessageCircle className="w-4 h-4 mr-2" />
-            AI Coach
+            AI Coach {!isPro && "- Pro"}
           </Button>
         </div>
       </div>
@@ -321,17 +340,17 @@ export function EnhancedJournalEditor() {
         </div>
       </Card>
 
-      {/* AI Insights */}
-      {aiInsights && (
+      {/* AI Insights (Pro only) */}
+      {isPro && aiInsights && (
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          <Card className="p-6 bg-gradient-to-br from-mint/5 to-mint/10 border-mint/20">
+          <Card className="p-6 bg-gradient-to-br from-[hsl(var(--aurora-teal))]/5 to-[hsl(var(--aurora-teal))]/10 border-[hsl(var(--aurora-teal))]/20">
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-mint" />
+                <Sparkles className="w-5 h-5 text-[hsl(var(--aurora-teal))]" />
                 <h3 className="font-semibold text-foreground">AI Insights</h3>
               </div>
               
@@ -369,6 +388,14 @@ export function EnhancedJournalEditor() {
           </Card>
         </motion.div>
       )}
+      
+      {/* Upgrade prompt for AI Insights */}
+      {!isPro && content.trim().length > 100 && !aiInsights && (
+        <UpgradePrompt 
+          feature="AI-Powered Insights"
+          description="Get personalized insights, sentiment analysis, and encouragement from our AI as you journal your thoughts."
+        />
+      )}
 
       {/* AI Coach Sidebar */}
       <AnimatePresence>
@@ -397,14 +424,20 @@ export function EnhancedJournalEditor() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {coachHistory.length === 0 && (
+                {!isPro ? (
+                  <UpgradePrompt 
+                    feature="AI Journal Coach"
+                    description="Get personalized guidance and support from our AI coach as you explore your thoughts and learning journey."
+                    compact
+                  />
+                ) : coachHistory.length === 0 ? (
                   <div className="text-center py-8">
-                    <Sparkles className="w-12 h-12 text-mint mx-auto mb-4" />
+                    <Sparkles className="w-12 h-12 text-[hsl(var(--aurora-teal))] mx-auto mb-4" />
                     <p className="text-sm text-muted-foreground">
                       Ask me anything about your journal entries or get guidance on your learning journey.
                     </p>
                   </div>
-                )}
+                ) : null}
 
                 {coachHistory.map((msg, i) => (
                   <div
@@ -436,27 +469,29 @@ export function EnhancedJournalEditor() {
                 )}
               </div>
 
-              <div className="p-4 border-t border-border">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={coachMessage}
-                    onChange={(e) => setCoachMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && !isCoachLoading && handleSendCoachMessage()}
-                    placeholder="Ask your coach..."
-                    className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg outline-none focus:border-mint text-sm"
-                    data-testid="input-coach-message"
-                  />
-                  <Button
-                    size="sm"
-                    onClick={handleSendCoachMessage}
-                    disabled={!coachMessage.trim() || isCoachLoading}
-                    data-testid="button-send-coach-message"
-                  >
-                    Send
-                  </Button>
+              {isPro && (
+                <div className="p-4 border-t border-border">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={coachMessage}
+                      onChange={(e) => setCoachMessage(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && !isCoachLoading && handleSendCoachMessage()}
+                      placeholder="Ask your coach..."
+                      className="flex-1 px-3 py-2 bg-muted border border-border rounded-lg outline-none focus:border-[hsl(var(--aurora-teal))] text-sm"
+                      data-testid="input-coach-message"
+                    />
+                    <Button
+                      size="sm"
+                      onClick={handleSendCoachMessage}
+                      disabled={!coachMessage.trim() || isCoachLoading}
+                      data-testid="button-send-coach-message"
+                    >
+                      Send
+                    </Button>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </motion.div>
         )}
