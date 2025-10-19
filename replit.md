@@ -29,9 +29,10 @@ Preferred communication style: Simple, everyday language.
 
 **Styling Approach**: 
 - Tailwind CSS for utility-first styling
-- Custom CSS variables for theme colors (blush, champagne, mint, onyx, gold)
-- Glassmorphism effects achieved through backdrop-blur utilities
-- Design system emphasizes luxury spa aesthetics with rounded corners, soft shadows, and subtle animations
+- Custom CSS variables for jewel-tone neon palette
+- Editorial card patterns with gradient overlays
+- Neon glow effects and metallic text gradients
+- Design system emphasizes Forbes-meets-Vogue luxury with bold typography, vivid accents, and sophisticated animations
 
 **Animation**: Framer Motion is used for transitions and micro-interactions, with durations typically between 150-250ms for a calm, smooth experience.
 
@@ -126,14 +127,15 @@ Preferred communication style: Simple, everyday language.
 
 ### Design System Implementation
 
-**Typography**: Two Google Fonts are loaded:
-- Playfair Display for headings (serif, luxury aesthetic)
-- Inter for body text (sans-serif, readability)
+**Typography**: Editorial font pairing for Forbes-meets-Vogue aesthetic:
+- Cormorant Garamond for headings (serif, Vogue-inspired luxury)
+- Sora for body text (geometric sans, modern readability)
 
-**Color System**: HSL-based color variables enable opacity modifications and theme flexibility:
-- Primary palette: blush (soft pink), champagne (neutral beige), mint (success green)
-- Accent: gold for premium elements and highlights
-- Text: onyx (near-black) for high contrast
+**Color System**: Jewel-toned neon-on-onyx palette for futuristic luxury:
+- Background: Obsidian (0 0% 6%), Satin Charcoal (260 20% 16%)
+- Primary: Hyper Violet (275 85% 62%), Magenta Quartz (320 82% 64%)
+- Accents: Cyber Fuchsia, Aurora Teal, Liquid Gold
+- Text: Soft Halo (330 35% 92%) for premium contrast
 
 **Component Patterns**:
 - Cards use glassmorphism with `backdrop-blur-md`
@@ -231,3 +233,17 @@ Preferred communication style: Simple, everyday language.
 - AI-powered journal insights (3 personalized insights per entry)
 - Conversational AI coach for journaling support
 - Server-side API calls via `server/aiService.ts`
+
+### Forbes Meets Vogue Design Overhaul
+- **Complete Design System Redesign**: Transformed from calm spa aesthetic to vivid luxury editorial
+- **Jewel-Toned Neon Palette**: Deep obsidian backgrounds with vivid accents:
+  - Hyper Violet (275 85% 62%) - Primary brand color
+  - Magenta Quartz (320 82% 64%) - Secondary actions
+  - Cyber Fuchsia (325 92% 55%) - Premium highlights
+  - Aurora Teal (175 78% 55%) - Success states
+  - Liquid Gold (48 94% 56%) - Pro tier features
+- **Editorial Typography**: Cormorant Garamond (serifs) + Sora (geometric sans) for Vogue-inspired luxury
+- **Visual Effects**: Neon glow effects, gradient animations, metallic text shimmers, editorial card patterns
+- **New Hero Assets**: Generated 3 futuristic abstract images with jewel tones and light trails
+- **Accessibility**: Added prefers-reduced-motion support for animations
+- **Documentation**: Completely rewrote design_guidelines.md with new luxury aesthetic guidance
