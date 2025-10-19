@@ -58,7 +58,7 @@ export function JournalEditor({ onStreakUpdate }: JournalEditorProps) {
       toast({
         description: (
           <div className="flex items-center gap-2">
-            <Save className="w-4 h-4 text-mint" />
+            <Save className="w-4 h-4 text-[hsl(var(--aurora-teal))]" />
             <span>Journal saved</span>
           </div>
         ),
@@ -69,14 +69,17 @@ export function JournalEditor({ onStreakUpdate }: JournalEditorProps) {
 
   return (
     <div className="space-y-4">
-      <div className="glass-card rounded-2xl p-8 shadow-md min-h-[500px]">
-        <textarea
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          placeholder="What's on your mind today? Write your thoughts, reflections, and insights here..."
-          className="w-full h-[450px] bg-transparent border-none outline-none resize-none text-base leading-relaxed text-foreground placeholder:text-muted-foreground"
-          data-testid="textarea-journal"
-        />
+      <div className="editorial-card p-8 min-h-[500px] relative overflow-hidden">
+        <div className="absolute inset-0 gradient-violet-magenta opacity-5" />
+        <div className="relative z-10">
+          <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="What's on your mind today? Write your thoughts, reflections, and insights here..."
+            className="w-full h-[450px] bg-transparent border-none outline-none resize-none text-base leading-relaxed text-foreground placeholder:text-muted-foreground"
+            data-testid="textarea-journal"
+          />
+        </div>
       </div>
 
       {lastSaved && (
@@ -86,10 +89,10 @@ export function JournalEditor({ onStreakUpdate }: JournalEditorProps) {
           className="flex items-center justify-end gap-2 text-sm text-muted-foreground"
         >
           {isSaving ? (
-            <span className="text-mint">Saving...</span>
+            <span className="text-[hsl(var(--aurora-teal))]">Saving...</span>
           ) : (
             <>
-              <div className="w-2 h-2 rounded-full bg-mint" data-testid="indicator-saved" />
+              <div className="w-2 h-2 rounded-full bg-[hsl(var(--aurora-teal))]" data-testid="indicator-saved" />
               <span>Last saved {new Date(lastSaved).toLocaleTimeString()}</span>
             </>
           )}

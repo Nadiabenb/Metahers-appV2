@@ -11,11 +11,11 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
 const MOODS = [
-  { value: "joyful", label: "Joyful", icon: Heart, color: "text-pink-500" },
-  { value: "peaceful", label: "Peaceful", icon: Smile, color: "text-mint" },
-  { value: "reflective", label: "Reflective", icon: Meh, color: "text-blue-400" },
+  { value: "joyful", label: "Joyful", icon: Heart, color: "text-[hsl(var(--magenta-quartz))]" },
+  { value: "peaceful", label: "Peaceful", icon: Smile, color: "text-[hsl(var(--aurora-teal))]" },
+  { value: "reflective", label: "Reflective", icon: Meh, color: "text-[hsl(var(--hyper-violet))]" },
   { value: "challenged", label: "Challenged", icon: Frown, color: "text-amber-500" },
-  { value: "energized", label: "Energized", icon: Zap, color: "text-gold" },
+  { value: "energized", label: "Energized", icon: Zap, color: "text-[hsl(var(--liquid-gold))]" },
 ];
 
 export function EnhancedJournalEditor() {
@@ -135,7 +135,7 @@ export function EnhancedJournalEditor() {
     toast({
       description: (
         <div className="flex items-center gap-2">
-          <Save className="w-4 h-4 text-mint" />
+          <Save className="w-4 h-4 text-[hsl(var(--aurora-teal))]" />
           <span>Journal saved</span>
         </div>
       ),
