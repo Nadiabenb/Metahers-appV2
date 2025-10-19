@@ -140,6 +140,25 @@ export const shopProductSchema = z.object({
 
 export type ShopProduct = z.infer<typeof shopProductSchema>;
 
+export const blogArticleSchema = z.object({
+  slug: z.string(),
+  title: z.string(),
+  subtitle: z.string(),
+  category: z.enum(["AI", "Web3", "Crypto", "NFT", "Metaverse", "Blockchain"]),
+  author: z.string(),
+  publishDate: z.string(),
+  readTime: z.number(),
+  featured: z.boolean(),
+  image: z.string(),
+  content: z.array(z.object({
+    type: z.enum(["paragraph", "heading", "quote", "list"]),
+    text: z.string(),
+    items: z.array(z.string()).optional(),
+  })),
+});
+
+export type BlogArticle = z.infer<typeof blogArticleSchema>;
+
 export const ritualProgressSchema = z.object({
   slug: z.string(),
   completedSteps: z.array(z.number()),
@@ -277,5 +296,188 @@ export const shopProducts: ShopProduct[] = [
     scents: [],
     description: "All three Ritual Bags in one luxurious collection. Save $98.",
     image: "bundle"
+  }
+];
+
+export const blogArticles: BlogArticle[] = [
+  {
+    slug: "ai-your-personal-stylist",
+    title: "Think of AI as Your Personal Stylist—But for Everything",
+    subtitle: "How generative AI is becoming the ultimate creative partner for modern women",
+    category: "AI",
+    author: "MetaHers Editorial",
+    publishDate: "2025-10-19",
+    readTime: 5,
+    featured: true,
+    image: "ai-stylist",
+    content: [
+      { type: "paragraph", text: "Remember the last time you had a personal stylist? Someone who just got you, understood your vibe, and could pull together the perfect look in minutes? Now imagine that same energy, but for your entire creative and professional life. That's generative AI in 2025." },
+      { type: "paragraph", text: "Whether you're drafting emails, designing presentations, or brainstorming your next big idea, AI tools like ChatGPT, Claude, and Midjourney are like having a brilliant assistant who never sleeps, never judges, and always has fresh ideas." },
+      { type: "heading", text: "The Secret Sauce: Prompting" },
+      { type: "paragraph", text: "Here's the thing most people miss: AI is only as good as your conversation with it. Think of prompting like explaining your vision to a makeup artist—the more specific you are ('dewy skin, bold lip, soft eye') the better the result." },
+      { type: "paragraph", text: "Instead of asking 'write me an email,' try 'write a warm but professional email to a potential client, introducing our new wellness retreat with a Forbes-meets-Vogue tone.' See the difference? Specificity is your superpower." },
+      { type: "heading", text: "Your First AI Ritual" },
+      { type: "list", text: "Start small and build from there:", items: [
+        "Choose one repetitive task (scheduling, email responses, content creation)",
+        "Spend 10 minutes crafting the perfect prompt",
+        "Save your best prompts like recipes—you'll use them again",
+        "Iterate and refine based on results"
+      ]},
+      { type: "paragraph", text: "The women who will thrive in this new era aren't the ones who resist AI—they're the ones who treat it like the powerful tool it is, using it to amplify their unique voice and vision, not replace it." },
+      { type: "quote", text: "AI doesn't replace your creativity—it multiplies it. You're still the visionary; AI is just your incredibly efficient assistant." }
+    ]
+  },
+  {
+    slug: "crypto-wallet-closet-metaphor",
+    title: "Your Crypto Wallet is Like a Designer Closet for Digital Assets",
+    subtitle: "Understanding digital wallets without the tech jargon",
+    category: "Crypto",
+    author: "MetaHers Editorial",
+    publishDate: "2025-10-18",
+    readTime: 6,
+    featured: true,
+    image: "crypto-wallet",
+    content: [
+      { type: "paragraph", text: "Let's talk about crypto wallets the way we'd talk about organizing your closet. Because honestly? The concept is remarkably similar—and way less intimidating than the tech bros make it sound." },
+      { type: "paragraph", text: "A crypto wallet is your personal vault for digital assets. Just like your closet holds your designer bags, vintage finds, and everyday essentials, your crypto wallet holds your Bitcoin, Ethereum, NFTs, and other digital treasures." },
+      { type: "heading", text: "Hot Wallet vs. Cold Wallet: The Everyday Bag vs. The Safe" },
+      { type: "paragraph", text: "Think of a hot wallet (like MetaMask or Coinbase Wallet) as your everyday bag—always accessible, perfect for daily transactions, but you wouldn't keep your entire life savings in it. It's connected to the internet, which makes it convenient but slightly more vulnerable." },
+      { type: "paragraph", text: "A cold wallet (like Ledger or Trezor) is your home safe—offline, ultra-secure, perfect for storing significant value. You wouldn't carry it around, but you know your most precious items are protected." },
+      { type: "heading", text: "Self-Custody: You Hold The Keys" },
+      { type: "paragraph", text: "Here's where crypto gets revolutionary: self-custody means YOU control your assets. No bank. No middleman. You have the keys (literally, a 12-24 word phrase) that unlock your digital vault." },
+      { type: "paragraph", text: "It's like having the only key to a safety deposit box. Empowering? Absolutely. Responsibility? Also absolutely. This is why writing down your seed phrase and storing it securely is non-negotiable—lose it, and even you can't access your assets." },
+      { type: "heading", text: "Getting Started: Your First Wallet" },
+      { type: "list", text: "Here's your simple action plan:", items: [
+        "Download MetaMask (it's free and beginner-friendly)",
+        "Create your wallet and write down your seed phrase BY HAND",
+        "Store that phrase somewhere fire-proof and private (not on your computer!)",
+        "Start with small amounts while you learn",
+        "Practice sending and receiving on a testnet first"
+      ]},
+      { type: "quote", text: "Your wallet, your keys, your future. Financial independence looks different for everyone—crypto is one powerful path to explore." }
+    ]
+  },
+  {
+    slug: "nfts-digital-art-gallery",
+    title: "NFTs Are Your Personal Digital Art Gallery—Here's Why That Matters",
+    subtitle: "Moving beyond the hype to understand real ownership in the digital age",
+    category: "NFT",
+    author: "MetaHers Editorial",
+    publishDate: "2025-10-17",
+    readTime: 7,
+    featured: false,
+    image: "nft-gallery",
+    content: [
+      { type: "paragraph", text: "Forget the monkey jpegs drama. Let's talk about what NFTs actually are—and why they represent something profound for women building digital legacies." },
+      { type: "paragraph", text: "An NFT (Non-Fungible Token) is proof of ownership for a unique digital item. Think of it as a certificate of authenticity for digital art, music, writing, or collectibles. It's blockchain technology saying 'this specific piece belongs to you.'" },
+      { type: "heading", text: "Why This Changes Everything for Creators" },
+      { type: "paragraph", text: "For generations, artists—especially women artists—have struggled with attribution and compensation. Their work gets shared, screenshot, and reproduced without credit or payment." },
+      { type: "paragraph", text: "NFTs flip this script. When you create an NFT, you can program royalties directly into it—meaning every time your work is resold, you automatically receive a percentage. It's like getting a commission every time someone resells a painting you created, in perpetuity." },
+      { type: "heading", text: "Real-World Applications Beyond Art" },
+      { type: "list", text: "NFT technology is powering:", items: [
+        "Event tickets (no more scalping, transferrable with proof)",
+        "Digital fashion (dress your avatar in exclusive designer pieces)",
+        "Membership passes (think exclusive communities with provable access)",
+        "Certifications and credentials (immutable proof of your achievements)",
+        "Music and royalties (artists keeping control of their work)"
+      ]},
+      { type: "paragraph", text: "The most exciting part? Women are leading innovation in this space. From digital fashion designers creating virtual couture to artists building supportive NFT communities, we're shaping this technology's future." },
+      { type: "heading", text: "Start Exploring (No Investment Needed)" },
+      { type: "paragraph", text: "You don't need to spend thousands to understand NFTs. Browse galleries like Foundation, Objkt, or OpenSea. Follow women NFT artists on Twitter. Join Discord communities. The education is free and invaluable." },
+      { type: "quote", text: "NFTs aren't just about owning digital art—they're about creators finally controlling their narrative and their income." }
+    ]
+  },
+  {
+    slug: "metaverse-second-home",
+    title: "The Metaverse: Your Second Home in the Digital Universe",
+    subtitle: "Why virtual spaces are becoming the new frontier for community and commerce",
+    category: "Metaverse",
+    author: "MetaHers Editorial",
+    publishDate: "2025-10-16",
+    readTime: 6,
+    featured: false,
+    image: "metaverse-home",
+    content: [
+      { type: "paragraph", text: "Close your eyes and imagine: a space that's entirely yours, designed exactly to your vision, where distance doesn't exist and your community can gather instantly. Welcome to the metaverse." },
+      { type: "paragraph", text: "The metaverse isn't one single place—it's a collection of interconnected virtual worlds where you can work, play, create, and connect. Think of it as the internet evolved from 2D screens to 3D immersive experiences." },
+      { type: "heading", text: "Why Women Entrepreneurs Are Taking Notice" },
+      { type: "paragraph", text: "Smart businesswomen are already staking claims in virtual real estate. Why? Because the metaverse removes traditional barriers to entry." },
+      { type: "paragraph", text: "Want to host a global conference? No venue rental, no travel costs, no geographic limitations. Want to open a boutique showcasing your designs? No lease, no overhead, infinite inventory possibilities. Want to teach a wellness class to 1,000 people simultaneously? Simple." },
+      { type: "heading", text: "Popular Metaverse Platforms Right Now" },
+      { type: "list", text: "Each offers unique opportunities:", items: [
+        "Decentraland: Own virtual land, build experiences, host events",
+        "The Sandbox: Create games and interactive spaces",
+        "Spatial: Professional meetings and gallery spaces",
+        "Horizon Worlds: Social experiences and community building",
+        "Roblox: Massive youth audience, creator economy"
+      ]},
+      { type: "paragraph", text: "The metaverse is still being built—which means right now is the frontier moment. Early adopters aren't just participating; they're shaping the culture and economy of these digital spaces." },
+      { type: "heading", text: "Your Avatar: Digital Self-Expression" },
+      { type: "paragraph", text: "Creating your avatar is like designing your ideal self-presentation. Some women choose realistic representations; others embrace creative freedom with fantastical designs. There's no wrong answer—it's YOUR digital identity." },
+      { type: "quote", text: "The metaverse isn't about escaping reality—it's about expanding what's possible." }
+    ]
+  },
+  {
+    slug: "blockchain-trust-network",
+    title: "Blockchain: The Trust Network That Doesn't Need Trust",
+    subtitle: "Understanding the technology revolutionizing everything from finance to fashion",
+    category: "Blockchain",
+    author: "MetaHers Editorial",
+    publishDate: "2025-10-15",
+    readTime: 8,
+    featured: false,
+    image: "blockchain-network",
+    content: [
+      { type: "paragraph", text: "Imagine a notebook that everyone can read, but no one can erase. Every transaction, every agreement, every record is written in permanent ink, verified by thousands of witnesses. That's blockchain." },
+      { type: "paragraph", text: "At its core, blockchain is a digital ledger—a record-keeping system that's distributed across many computers rather than controlled by one central authority. This simple shift creates something revolutionary: trust without intermediaries." },
+      { type: "heading", text: "Why This Matters for Your Daily Life" },
+      { type: "paragraph", text: "Right now, we trust banks to manage our money, governments to verify our identities, and corporations to honor their promises. Blockchain technology creates systems where the code itself enforces these guarantees—no trust required." },
+      { type: "paragraph", text: "This isn't theoretical. Supply chains use blockchain to verify authentic luxury goods (goodbye, counterfeits). Healthcare systems use it to secure patient records. Artists use it to protect their intellectual property. Real estate transactions are being streamlined with smart contracts." },
+      { type: "heading", text: "Smart Contracts: Agreements That Execute Themselves" },
+      { type: "paragraph", text: "Think of a smart contract like a vending machine. You insert money (your condition), the machine verifies it, and automatically delivers your snack (the outcome). No cashier needed, no room for disputes." },
+      { type: "paragraph", text: "Smart contracts on blockchain work the same way but for anything: rental agreements, freelance payments, royalty distributions, equity transfers. When conditions are met, the contract executes automatically—no lawyers, no delays, no arguing." },
+      { type: "heading", text: "The Female-Friendly Revolution" },
+      { type: "list", text: "Blockchain particularly empowers women by:", items: [
+        "Enabling financial independence without traditional banking barriers",
+        "Creating transparent supply chains for ethical fashion and beauty",
+        "Protecting creative work and ensuring fair compensation",
+        "Building decentralized communities governed by members, not corporations",
+        "Providing immutable proof of credentials and achievements"
+      ]},
+      { type: "paragraph", text: "We're still in the early chapters of blockchain's story. The technology has rough edges, and the ecosystem needs more diverse voices—specifically, more women—helping shape its development and application." },
+      { type: "quote", text: "Blockchain isn't just about technology—it's about reimagining systems to be more transparent, accessible, and fair." }
+    ]
+  },
+  {
+    slug: "web3-internet-upgrade",
+    title: "Web3: The Internet's Glow-Up Is Here",
+    subtitle: "From passive consumption to active ownership—the web is evolving",
+    category: "Web3",
+    author: "MetaHers Editorial",
+    publishDate: "2025-10-14",
+    readTime: 7,
+    featured: true,
+    image: "web3-evolution",
+    content: [
+      { type: "paragraph", text: "The internet has gone through major transformations before. Web1 was the read-only era (think basic websites, no interaction). Web2 brought us social media, apps, and user-generated content (read AND write). Now Web3 is emerging with a radical promise: read, write, and OWN." },
+      { type: "paragraph", text: "In Web2, you create content on platforms—Instagram posts, TikTok videos, tweets—but the platform owns that data and profits from it. In Web3, you own your content, your data, and your digital identity. It's the difference between renting and owning." },
+      { type: "heading", text: "What Changes in Web3?" },
+      { type: "paragraph", text: "Imagine logging into any website with one universal identity you control—no more creating accounts and remembering passwords. Imagine your social media following actually belonging to you, portable across platforms. Imagine getting paid directly for your content and attention, not the platform." },
+      { type: "paragraph", text: "That's Web3's vision: an internet where users have power, not just platforms." },
+      { type: "heading", text: "The Building Blocks" },
+      { type: "list", text: "Web3 runs on several key technologies:", items: [
+        "Blockchain: The foundation for ownership and verification",
+        "Cryptocurrency: Native digital money for the decentralized web",
+        "Smart contracts: Self-executing agreements coded into blockchain",
+        "NFTs: Proof of ownership for unique digital items",
+        "DAOs: Community-governed organizations without CEOs",
+        "Decentralized storage: Your data on distributed networks, not corporate servers"
+      ]},
+      { type: "paragraph", text: "This sounds complex because it is—Web3 is still being built. But so was Web2 in the early 2000s. Remember when 'social media influencer' wasn't a career? Web3 will create jobs and opportunities we can't even imagine yet." },
+      { type: "heading", text: "Why Women Need to Be Part of This" },
+      { type: "paragraph", text: "Here's the uncomfortable truth: technology has historically been built by and for men, leading to products and platforms that don't always serve women well. Web3 is young enough that we can still shape its development." },
+      { type: "paragraph", text: "Women in Web3 are founding protocols, creating DAOs focused on female empowerment, building communities, and designing the user experiences that will make this technology accessible to everyone—not just crypto enthusiasts." },
+      { type: "quote", text: "Web3 isn't perfect, and it's not a utopia. But it's a rare chance to help build the next version of the internet with intention and inclusivity from the start." }
+    ]
   }
 ];
