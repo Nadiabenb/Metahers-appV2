@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated } from "./replitAuth";
 import Stripe from "stripe";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach } from "./aiService";
+import { z } from "zod";
 
 // Extend Express Request to include user claims
 interface AuthRequest extends Request {
@@ -88,13 +89,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const entry = await storage.getLatestJournalEntry(userId);
       
       if (!entry) {
-        return res.json({ content: "", lastSaved: new Date().toISOString(), streak: 0 });
+        return res.json({ 
+          content: "", 
+          lastSaved: new Date().toISOString(), 
+          streak: 0,
+          mood: null,
+          tags: [],
+          wordCount: 0,
+          aiInsights: null,
+        });
       }
       
       res.json({
         content: entry.content,
-        lastSaved: entry.lastSaved?.toISOString(),
+        mood: entry.mood,
+        tags: entry.tags || [],
+        wordCount: entry.wordCount || 0,
+        aiInsights: entry.aiInsights,
+        aiPrompt: entry.aiPrompt,
         streak: entry.streak,
+        lastSaved: entry.lastSaved?.toISOString(),
       });
     } catch (error) {
       console.error("Error fetching journal entry:", error);
@@ -105,10 +119,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/journal', isAuthenticated, async (req: AuthRequest, res) => {
     try {
       const userId = req.user!.claims.sub;
-      const { content, streak, mood, tags, aiPrompt } = req.body;
+      
+      // Validate request body
+      const bodySchema = z.object({
+        content: z.string(),
+        streak: z.number().optional(),
+        mood: z.string().nullable().optional(),
+        tags: z.array(z.string()).max(10).optional(),
+        aiPrompt: z.string().optional(),
+      });
 
-      // Calculate word count
-      const wordCount = content.trim().split(/\s+/).length;
+      const validation = bodySchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({ 
+          message: "Invalid request body",
+          errors: validation.error.errors 
+        });
+      }
+
+      const { content, streak, mood, tags, aiPrompt } = validation.data;
+
+      // Calculate word count (filter empty tokens)
+      const wordCount = content.trim() === "" 
+        ? 0 
+        : content.trim().split(/\s+/).filter(w => w.length > 0).length;
 
       // Generate AI insights if content is substantial
       let aiInsights = undefined;
@@ -133,12 +167,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         content: entry.content,
-        lastSaved: entry.lastSaved?.toISOString(),
-        streak: entry.streak,
         mood: entry.mood,
-        tags: entry.tags,
-        wordCount: entry.wordCount,
+        tags: entry.tags || [],
+        wordCount: entry.wordCount || 0,
         aiInsights: entry.aiInsights,
+        aiPrompt: entry.aiPrompt,
+        streak: entry.streak,
+        lastSaved: entry.lastSaved?.toISOString(),
       });
     } catch (error) {
       console.error("Error saving journal entry:", error);
@@ -167,12 +202,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // AI Journal Analysis
   app.post('/api/journal/analyze', isAuthenticated, async (req: AuthRequest, res) => {
     try {
-      const { content } = req.body;
-      
-      if (!content || content.trim().length < 20) {
-        return res.status(400).json({ message: "Content too short for analysis" });
+      // Validate request body
+      const bodySchema = z.object({
+        content: z.string().min(20, "Content must be at least 20 characters"),
+      });
+
+      const validation = bodySchema.safeParse(req.body);
+      if (!validation.success) {
+        return res.status(400).json({ 
+          message: validation.error.errors[0]?.message || "Invalid request body" 
+        });
       }
 
+      const { content } = validation.data;
       const insights = await analyzeJournalEntry(content);
       res.json(insights);
     } catch (error) {

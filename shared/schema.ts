@@ -135,8 +135,18 @@ export type RitualProgress = z.infer<typeof ritualProgressSchema>;
 
 export const journalEntrySchema = z.object({
   content: z.string(),
-  lastSaved: z.string(),
+  mood: z.string().optional().nullable(),
+  tags: z.array(z.string()).optional(),
+  wordCount: z.number().optional(),
+  aiInsights: z.object({
+    summary: z.string().optional(),
+    sentiment: z.string().optional(),
+    themes: z.array(z.string()).optional(),
+    encouragement: z.string().optional(),
+  }).optional().nullable(),
+  aiPrompt: z.string().optional().nullable(),
   streak: z.number().default(0),
+  lastSaved: z.string(),
 });
 
 export type JournalEntry = z.infer<typeof journalEntrySchema>;
