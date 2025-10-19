@@ -296,6 +296,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== JOURNAL ANALYTICS ROUTES =====
+  app.get('/api/journal/stats', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user!.claims.sub;
+      const stats = await storage.getJournalStats(userId);
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching journal stats:", error);
+      res.status(500).json({ message: "Failed to fetch journal stats" });
+    }
+  });
+
+  // ===== ACHIEVEMENTS ROUTES =====
+  app.get('/api/achievements', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user!.claims.sub;
+      const achievements = await storage.getUserAchievements(userId);
+      res.json(achievements);
+    } catch (error) {
+      console.error("Error fetching achievements:", error);
+      res.status(500).json({ message: "Failed to fetch achievements" });
+    }
+  });
+
+  app.post('/api/achievements/check', isAuthenticated, async (req: AuthRequest, res) => {
+    try {
+      const userId = req.user!.claims.sub;
+      
+      // Get journal stats to check achievements
+      const stats = await storage.getJournalStats(userId);
+      const newlyUnlocked: any[] = [];
+      
+      // Check and unlock achievements based on stats
+      const achievementsToCheck = [
+        { key: 'first_entry', condition: stats.totalEntries >= 1 },
+        { key: 'streak_3', condition: stats.currentStreak >= 3 },
+        { key: 'streak_7', condition: stats.currentStreak >= 7 },
+        { key: 'streak_30', condition: stats.currentStreak >= 30 },
+        { key: 'word_warrior_1k', condition: stats.totalWords >= 1000 },
+        { key: 'word_warrior_5k', condition: stats.totalWords >= 5000 },
+        { key: 'mood_master', condition: Object.keys(stats.moodDistribution).length >= 5 },
+        { key: 'tag_explorer', condition: stats.allTags.length >= 10 },
+        { key: 'consistent_writer', condition: stats.totalEntries >= 10 },
+      ];
+      
+      for (const achievement of achievementsToCheck) {
+        if (achievement.condition) {
+          const unlocked = await storage.unlockAchievement(userId, achievement.key);
+          if (unlocked) {
+            newlyUnlocked.push(unlocked);
+          }
+        }
+      }
+      
+      res.json({ 
+        newlyUnlocked,
+        message: newlyUnlocked.length > 0 
+          ? `Unlocked ${newlyUnlocked.length} new achievement(s)!`
+          : 'No new achievements'
+      });
+    } catch (error) {
+      console.error("Error checking achievements:", error);
+      res.status(500).json({ message: "Failed to check achievements" });
+    }
+  });
+
   // ===== STRIPE SUBSCRIPTION ROUTES =====
   app.post('/api/create-subscription', isAuthenticated, async (req: AuthRequest, res) => {
     try {

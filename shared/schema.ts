@@ -100,6 +100,21 @@ export const insertSubscriptionSchema = createInsertSchema(subscriptions).omit({
 export type InsertSubscription = z.infer<typeof insertSubscriptionSchema>;
 export type SubscriptionDB = typeof subscriptions.$inferSelect;
 
+// Achievements table (for gamification)
+export const achievements = pgTable("achievements", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  achievementKey: varchar("achievement_key").notNull(), // e.g., "first_entry", "streak_7", etc.
+  unlockedAt: timestamp("unlocked_at").defaultNow(),
+}, (table) => [
+  index("idx_achievement_user").on(table.userId),
+  index("idx_achievement_key").on(table.achievementKey),
+]);
+
+export const insertAchievementSchema = createInsertSchema(achievements).omit({ id: true, unlockedAt: true });
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
+export type AchievementDB = typeof achievements.$inferSelect;
+
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
 export const ritualSchema = z.object({

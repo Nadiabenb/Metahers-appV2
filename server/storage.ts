@@ -3,6 +3,7 @@ import {
   ritualProgress,
   journalEntries,
   subscriptions,
+  achievements,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -11,9 +12,11 @@ import {
   type InsertJournalEntry,
   type SubscriptionDB,
   type InsertSubscription,
+  type AchievementDB,
+  type InsertAchievement,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, sql } from "drizzle-orm";
+import { eq, and, desc, sql, count } from "drizzle-orm";
 
 export interface IStorage {
   // User operations (required for Replit Auth)
@@ -34,6 +37,15 @@ export interface IStorage {
   getSubscriptionByStripeCustomerId(stripeCustomerId: string): Promise<SubscriptionDB | undefined>;
   upsertSubscription(subscription: InsertSubscription): Promise<SubscriptionDB>;
   updateUserProStatus(userId: string, isPro: boolean): Promise<User>;
+  
+  // Journal analytics operations
+  getJournalStats(userId: string): Promise<any>;
+  getAllJournalEntries(userId: string, limit: number, mood?: string): Promise<JournalEntryDB[]>;
+  
+  // Achievement operations
+  getUserAchievements(userId: string): Promise<AchievementDB[]>;
+  unlockAchievement(userId: string, achievementKey: string): Promise<AchievementDB | null>;
+  checkAchievementUnlocked(userId: string, achievementKey: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -216,6 +228,91 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return user;
+  }
+
+  // Journal analytics operations
+  async getJournalStats(userId: string): Promise<any> {
+    const entries = await db
+      .select()
+      .from(journalEntries)
+      .where(eq(journalEntries.userId, userId));
+    
+    const totalEntries = entries.length;
+    const totalWords = entries.reduce((sum, entry) => sum + (entry.wordCount || 0), 0);
+    const currentStreak = entries.length > 0 ? entries[0].streak : 0;
+    
+    // Mood distribution
+    const moodCounts: Record<string, number> = {};
+    entries.forEach(entry => {
+      if (entry.mood) {
+        moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
+      }
+    });
+    
+    // All unique tags
+    const allTags = new Set<string>();
+    entries.forEach(entry => {
+      if (entry.tags && Array.isArray(entry.tags)) {
+        entry.tags.forEach(tag => allTags.add(tag));
+      }
+    });
+    
+    return {
+      totalEntries,
+      totalWords,
+      currentStreak,
+      moodDistribution: moodCounts,
+      allTags: Array.from(allTags),
+      entries: entries.map(e => ({
+        id: e.id,
+        createdAt: e.createdAt,
+        mood: e.mood,
+        tags: e.tags,
+        wordCount: e.wordCount,
+        content: e.content.substring(0, 200), // Preview only
+      })),
+    };
+  }
+
+  // Achievement operations
+  async getUserAchievements(userId: string): Promise<AchievementDB[]> {
+    return await db
+      .select()
+      .from(achievements)
+      .where(eq(achievements.userId, userId))
+      .orderBy(desc(achievements.unlockedAt));
+  }
+
+  async unlockAchievement(userId: string, achievementKey: string): Promise<AchievementDB | null> {
+    // Check if already unlocked
+    const isUnlocked = await this.checkAchievementUnlocked(userId, achievementKey);
+    if (isUnlocked) {
+      return null;
+    }
+    
+    // Unlock the achievement
+    const [achievement] = await db
+      .insert(achievements)
+      .values({
+        userId,
+        achievementKey,
+      })
+      .returning();
+    
+    return achievement;
+  }
+
+  async checkAchievementUnlocked(userId: string, achievementKey: string): Promise<boolean> {
+    const [achievement] = await db
+      .select()
+      .from(achievements)
+      .where(and(
+        eq(achievements.userId, userId),
+        eq(achievements.achievementKey, achievementKey)
+      ))
+      .limit(1);
+    
+    return !!achievement;
   }
 }
 
