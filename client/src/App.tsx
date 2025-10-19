@@ -18,6 +18,7 @@ import JournalHistoryPage from "@/pages/JournalHistoryPage";
 import MetaMusePage from "@/pages/MetaMusePage";
 import EventsPage from "@/pages/EventsPage";
 import AccountPage from "@/pages/AccountPage";
+import BlogPage from "@/pages/BlogPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -46,6 +47,7 @@ function Router() {
           <Route path="/shop" component={ShopPage} />
           <Route path="/journal" component={JournalPage} />
           <Route path="/journal/history" component={JournalHistoryPage} />
+          <Route path="/blog" component={BlogPage} />
           <Route path="/metamuse" component={MetaMusePage} />
           <Route path="/events" component={EventsPage} />
           <Route path="/account" component={AccountPage} />

@@ -1,5 +1,5 @@
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -12,6 +12,7 @@ export function Navigation() {
     { path: "/rituals", label: "Rituals", icon: Sparkles },
     { path: "/shop", label: "Shop", icon: ShoppingBag },
     { path: "/journal", label: "Journal", icon: BookOpen },
+    { path: "/blog", label: "Blog", icon: Newspaper },
     { path: "/metamuse", label: "MetaMuse", icon: MessageSquare },
     { path: "/events", label: "Events", icon: Calendar },
     { path: "/account", label: "Account", icon: User },
