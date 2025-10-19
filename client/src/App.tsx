@@ -14,6 +14,7 @@ import RitualsPage from "@/pages/RitualsPage";
 import RitualDetailPage from "@/pages/RitualDetailPage";
 import ShopPage from "@/pages/ShopPage";
 import JournalPage from "@/pages/JournalPage";
+import JournalHistoryPage from "@/pages/JournalHistoryPage";
 import MetaMusePage from "@/pages/MetaMusePage";
 import EventsPage from "@/pages/EventsPage";
 import AccountPage from "@/pages/AccountPage";
@@ -44,6 +45,7 @@ function Router() {
           <Route path="/rituals/:slug" component={RitualDetailPage} />
           <Route path="/shop" component={ShopPage} />
           <Route path="/journal" component={JournalPage} />
+          <Route path="/journal/history" component={JournalHistoryPage} />
           <Route path="/metamuse" component={MetaMusePage} />
           <Route path="/events" component={EventsPage} />
           <Route path="/account" component={AccountPage} />

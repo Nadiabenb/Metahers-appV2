@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
-import { BookOpen, Flame } from "lucide-react";
+import { BookOpen, Flame, History, TrendingUp } from "lucide-react";
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
 import { EnhancedJournalEditor } from "@/components/EnhancedJournalEditor";
 import { useJournal } from "@/hooks/useJournal";
 
@@ -25,9 +27,17 @@ export default function JournalPage() {
             <h1 className="font-serif text-5xl font-bold text-onyx mb-4" data-testid="text-page-title">
               Daily Journal
             </h1>
-            <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            <p className="text-lg text-foreground/70 max-w-2xl mx-auto mb-4">
               Capture your thoughts, reflections, and insights as you journey through rituals.
             </p>
+            <div className="flex gap-3 justify-center">
+              <Link href="/journal/history">
+                <Button variant="outline" data-testid="button-view-history">
+                  <History className="w-4 h-4 mr-2" />
+                  View History
+                </Button>
+              </Link>
+            </div>
           </div>
 
           <div className="glass-card rounded-2xl p-6 shadow-md mb-8">
