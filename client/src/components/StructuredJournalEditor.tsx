@@ -263,15 +263,18 @@ ${fitnessTracking ? `\nFitness: ${fitnessTracking}` : ''}
   // Event functions
   const addEvent = () => {
     if (newEventTitle.trim()) {
-      setEvents([
-        ...events,
-        {
-          id: Date.now().toString(),
-          title: newEventTitle.trim(),
-          time: newEventTime,
-          notes: "",
-        },
-      ]);
+      const newEvent: JournalEvent = {
+        id: Date.now().toString(),
+        title: newEventTitle.trim(),
+        notes: "",
+      };
+      
+      // Only include time if it was provided
+      if (newEventTime) {
+        newEvent.time = newEventTime;
+      }
+      
+      setEvents([...events, newEvent]);
       setNewEventTitle("");
       setNewEventTime("");
     }
