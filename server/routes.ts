@@ -184,6 +184,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!entry) {
         return res.json({ 
           content: "", 
+          structuredContent: null,
           lastSaved: new Date().toISOString(), 
           streak: 0,
           mood: null,
@@ -195,6 +196,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.json({
         content: entry.content,
+        structuredContent: entry.structuredContent,
         mood: entry.mood,
         tags: entry.tags || [],
         wordCount: entry.wordCount || 0,
@@ -215,7 +217,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Validate request body
       const bodySchema = z.object({
-        content: z.string(),
+        content: z.string().optional(),
+        structuredContent: z.any().optional(),
         streak: z.number().optional(),
         mood: z.string().nullable().optional(),
         tags: z.array(z.string()).max(10).optional(),
@@ -230,19 +233,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const { content, streak, mood, tags, aiPrompt } = validation.data;
+      const { content, structuredContent, streak, mood, tags, aiPrompt } = validation.data;
+
+      // For backwards compatibility, support both content and structuredContent
+      const finalContent = content || "";
 
       // Calculate word count (filter empty tokens)
-      const wordCount = content.trim() === "" 
+      const wordCount = finalContent.trim() === "" 
         ? 0 
-        : content.trim().split(/\s+/).filter(w => w.length > 0).length;
+        : finalContent.trim().split(/\s+/).filter(w => w.length > 0).length;
 
       // Generate AI insights if content is substantial (Pro only)
       let aiInsights = undefined;
       const user = await storage.getUser(userId);
-      if (content.trim().length > 50 && user?.isPro) {
+      if (finalContent.trim().length > 50 && user?.isPro) {
         try {
-          aiInsights = await analyzeJournalEntry(content);
+          aiInsights = await analyzeJournalEntry(finalContent);
         } catch (error) {
           console.error("Error generating AI insights:", error);
         }
@@ -250,7 +256,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const entry = await storage.upsertJournalEntry({
         userId,
-        content,
+        content: finalContent,
+        structuredContent,
         streak: streak || 0,
         mood,
         tags,
@@ -261,6 +268,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json({
         content: entry.content,
+        structuredContent: entry.structuredContent,
         mood: entry.mood,
         tags: entry.tags || [],
         wordCount: entry.wordCount || 0,
