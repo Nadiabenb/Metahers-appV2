@@ -118,9 +118,10 @@ export function DailyCalendar({ className = "" }: DailyCalendarProps) {
   const { toast } = useToast();
 
   // Get quote index based on day of year (cycling through quotes)
+  // Use proper modulo to handle negative numbers when navigating to previous years
   const dayOfYear = differenceInDays(currentDate, startOfYear(currentDate));
-  const quoteIndex = dayOfYear % DAILY_QUOTES.length;
-  const currentQuote = DAILY_QUOTES[quoteIndex];
+  const quoteIndex = ((dayOfYear % DAILY_QUOTES.length) + DAILY_QUOTES.length) % DAILY_QUOTES.length;
+  const currentQuote = DAILY_QUOTES[quoteIndex] || DAILY_QUOTES[0]; // Fallback to first quote
 
   // Load favorites from localStorage
   useEffect(() => {
