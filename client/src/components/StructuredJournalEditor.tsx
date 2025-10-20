@@ -60,18 +60,22 @@ export function StructuredJournalEditor() {
 
   // Load data when fetched
   useEffect(() => {
-    if (journalData && typeof journalData === 'object' && 'structuredContent' in journalData && journalData.structuredContent) {
-      const data = journalData.structuredContent as StructuredJournalContent;
-      setTodos(data.todos || []);
-      setGratitude(data.gratitude || []);
-      setReminders(data.reminders || []);
-      setHighlights(data.highlights || "");
-      setWins(data.wins || []);
-      setEvents(data.events || []);
-      setWaterIntake(data.waterIntake || 0);
-      setFitnessGoals(data.fitnessGoals || "");
-      setFitnessTracking(data.fitnessTracking || "");
-      setFreeformNotes(data.freeformNotes || "");
+    if (journalData && typeof journalData === 'object') {
+      // Load structured content if it exists
+      if ('structuredContent' in journalData && journalData.structuredContent) {
+        const data = journalData.structuredContent as StructuredJournalContent;
+        setTodos(data.todos || []);
+        setGratitude(data.gratitude || []);
+        setReminders(data.reminders || []);
+        setHighlights(data.highlights || "");
+        setWins(data.wins || []);
+        setEvents(data.events || []);
+        setWaterIntake(data.waterIntake || 0);
+        setFitnessGoals(data.fitnessGoals || "");
+        setFitnessTracking(data.fitnessTracking || "");
+        setFreeformNotes(data.freeformNotes || "");
+      }
+      // Always mark initial load as complete after first fetch
       isInitialLoad.current = false;
     }
   }, [journalData]);
