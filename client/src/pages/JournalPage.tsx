@@ -3,6 +3,7 @@ import { BookOpen, Flame, History } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { EnhancedJournalEditor } from "@/components/EnhancedJournalEditor";
+import { DailyCalendar } from "@/components/DailyCalendar";
 import { useJournal } from "@/hooks/useJournal";
 
 export default function JournalPage() {
@@ -69,6 +70,8 @@ export default function JournalPage() {
               </div>
             </div>
           </div>
+
+          <DailyCalendar className="mb-8" />
 
           <EnhancedJournalEditor />
 
