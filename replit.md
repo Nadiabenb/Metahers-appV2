@@ -8,6 +8,24 @@ MetaHers Mind Spa is a Progressive Web App (PWA) that merges luxury spa aestheti
 
 Preferred communication style: Simple, everyday language.
 
+### Image Aesthetic Guidelines
+
+**CRITICAL: All images must feature women in the MetaHers aesthetic:**
+- **Style**: Forbes-meets-Vogue editorial photography, world-class luxury quality
+- **Subject**: Women (diverse representation) in futuristic, high-fashion settings
+- **Aesthetic**: Feminine, bold, futuristic, high-end professional photography
+- **Setting**: Digital world, tech-forward, luxury tech environments
+- **Colors**: Jewel-toned neon palette (hyper violet, magenta quartz, cyber fuchsia, aurora teal, liquid gold)
+- **Quality**: Vogue/Forbes magazine cover quality, sharp professional focus
+- **Tone**: Confident, powerful, empowered feminine energy
+
+**For blog articles specifically:**
+- Feature diverse women in tech/digital environments
+- High-fashion editorial quality (like Vogue covers)
+- Incorporate tech elements (AI interfaces, blockchain visualizations, digital art, virtual spaces)
+- Maintain luxury aesthetic with jewel-tone lighting
+- Never use generic tech stock photos or images featuring men
+
 ## System Architecture
 
 ### Frontend
@@ -16,7 +34,16 @@ The frontend is built with React and TypeScript, utilizing Wouter for client-sid
 
 ### Backend
 
-The backend is an Express.js server, serving the React application. It provides RESTful API routes for journal operations (CRUD, AI insights, AI coach chat), analytics, achievements, subscriptions, and Replit Auth. PostgreSQL is used for data persistence, storing user profiles, ritual progress, journal entries, achievements, and subscription data. Static content like ritual and shop product data is defined as JSON in `shared/schema.ts`.
+The backend is an Express.js server, serving the React application. It provides RESTful API routes for journal operations (CRUD, AI insights, AI coach chat), analytics, achievements, subscriptions, and custom email/password authentication. PostgreSQL is used for data persistence, storing user profiles, ritual progress, journal entries, achievements, and subscription data. Static content like ritual and shop product data is defined as JSON in `shared/schema.ts`.
+
+### Authentication
+
+The app uses custom email/password authentication (replaced Replit Auth for better ad campaign conversion):
+- **Password Security**: Bcrypt hashing with 12 salt rounds
+- **Session Management**: Database-backed sessions using connect-pg-simple
+- **Validation**: Minimum 8 characters for passwords, email uniqueness checks
+- **Endpoints**: `/api/auth/signup`, `/api/auth/login`, `/api/auth/logout`, `/api/auth/user`
+- **Session Middleware**: `isAuthenticated` middleware protects all user-specific routes
 
 ### Data Storage
 
@@ -30,7 +57,7 @@ The app features a "Forbes-meets-Vogue" luxury editorial design. Typography comb
 
 -   **OpenAI API**: For AI-powered journal insights, conversational AI coach, and AI-generated writing prompts.
 -   **Stripe**: Payment processing for Pro tier subscriptions.
--   **Replit Auth**: For user authentication and session management.
+-   **bcrypt**: For secure password hashing in custom authentication system.
 -   **Calendly**: Embedded via iframe for scheduling discovery calls.
 -   **MetaMuse GPT**: External link to a custom ChatGPT instance for AI assistance.
 -   **React**: UI library.

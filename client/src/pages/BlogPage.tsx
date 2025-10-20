@@ -7,12 +7,12 @@ import { Calendar, Clock, Sparkles, BookOpen } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { motion } from "framer-motion";
 
-import aiStylistImg from "@assets/stock_images/futuristic_woman_usi_b7a41b6e.jpg";
-import cryptoWalletImg from "@assets/stock_images/luxury_cryptocurrenc_60a8add4.jpg";
-import nftGalleryImg from "@assets/stock_images/digital_art_nft_gall_79f4badb.jpg";
-import metaverseHomeImg from "@assets/stock_images/metaverse_virtual_re_204c3344.jpg";
-import blockchainNetworkImg from "@assets/stock_images/blockchain_network_t_68d25fd8.jpg";
-import web3EvolutionImg from "@assets/stock_images/web3_internet_techno_506b17d7.jpg";
+import aiStylistImg from "@assets/generated_images/Woman_AI_Stylist_Editorial_b38cb15d.png";
+import cryptoWalletImg from "@assets/generated_images/Woman_Crypto_Wallet_Luxury_64773c22.png";
+import nftGalleryImg from "@assets/generated_images/Woman_NFT_Gallery_Fashion_58da388a.png";
+import metaverseHomeImg from "@assets/generated_images/Woman_Metaverse_Virtual_Space_45ef040a.png";
+import blockchainNetworkImg from "@assets/generated_images/Woman_Blockchain_Network_Tech_ea561a21.png";
+import web3EvolutionImg from "@assets/generated_images/Woman_Web3_Future_Tech_a7d9fd8d.png";
 
 const IMAGE_MAP: Record<string, string> = {
   "ai-stylist": aiStylistImg,
