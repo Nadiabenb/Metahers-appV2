@@ -33,6 +33,7 @@ export interface IStorage {
   
   // Journal operations
   getLatestJournalEntry(userId: string): Promise<JournalEntryDB | undefined>;
+  getJournalEntryByDate(userId: string, date: string): Promise<JournalEntryDB | undefined>;
   upsertJournalEntry(entry: InsertJournalEntry): Promise<JournalEntryDB>;
   
   // Subscription operations
@@ -148,8 +149,22 @@ export class DatabaseStorage implements IStorage {
     return entry;
   }
 
+  async getJournalEntryByDate(userId: string, date: string): Promise<JournalEntryDB | undefined> {
+    const [entry] = await db
+      .select()
+      .from(journalEntries)
+      .where(and(
+        eq(journalEntries.userId, userId),
+        eq(journalEntries.date, date)
+      ))
+      .limit(1);
+    return entry;
+  }
+
   async upsertJournalEntry(entryData: InsertJournalEntry): Promise<JournalEntryDB> {
-    const existing = await this.getLatestJournalEntry(entryData.userId);
+    // Use the date from entryData, or default to today's date
+    const journalDate = entryData.date || new Date().toISOString().split('T')[0];
+    const existing = await this.getJournalEntryByDate(entryData.userId, journalDate);
     
     if (existing) {
       const [updated] = await db
@@ -173,6 +188,7 @@ export class DatabaseStorage implements IStorage {
         .insert(journalEntries)
         .values({
           ...entryData,
+          date: journalDate,
           tags: entryData.tags ? sql`${JSON.stringify(entryData.tags)}::jsonb` : sql`'[]'::jsonb`,
           aiInsights: entryData.aiInsights ? sql`${JSON.stringify(entryData.aiInsights)}::jsonb` : undefined,
           structuredContent: entryData.structuredContent ? sql`${JSON.stringify(entryData.structuredContent)}::jsonb` : undefined,

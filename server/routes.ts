@@ -179,7 +179,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/journal', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
-      const entry = await storage.getLatestJournalEntry(userId);
+      // Get date from query param, default to today
+      const date = (req.query.date as string) || new Date().toISOString().split('T')[0];
+      const entry = await storage.getJournalEntryByDate(userId, date);
       
       if (!entry) {
         return res.json({ 
@@ -219,6 +221,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const bodySchema = z.object({
         content: z.string().optional(),
         structuredContent: z.any().optional(),
+        date: z.string().optional(), // Journal date in YYYY-MM-DD format
         streak: z.number().optional(),
         mood: z.string().nullable().optional(),
         tags: z.array(z.string()).max(10).optional(),
@@ -233,7 +236,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const { content, structuredContent, streak, mood, tags, aiPrompt } = validation.data;
+      const { content, structuredContent, date, streak, mood, tags, aiPrompt } = validation.data;
 
       // For backwards compatibility, support both content and structuredContent
       const finalContent = content || "";
@@ -256,6 +259,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const entry = await storage.upsertJournalEntry({
         userId,
+        date: date || new Date().toISOString().split('T')[0], // Use provided date or default to today
         content: finalContent,
         structuredContent,
         streak: streak || 0,
