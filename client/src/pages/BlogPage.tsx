@@ -44,7 +44,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
         >
           {article.category}
         </Badge>
-        <h1 className="font-cormorant text-5xl md:text-6xl font-bold metallic-text leading-tight">
+        <h1 className="font-cormorant text-5xl md:text-6xl font-bold text-foreground leading-tight">
           {article.title}
         </h1>
         <p className="text-xl text-muted-foreground font-light italic">
@@ -94,7 +94,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
               return (
                 <h2 
                   key={index} 
-                  className="font-cormorant text-3xl font-bold metallic-text mt-12 mb-6"
+                  className="font-cormorant text-3xl font-bold text-foreground mt-12 mb-6"
                   data-testid={`heading-${index}`}
                 >
                   {block.text}
@@ -186,7 +186,7 @@ export default function BlogPage() {
             transition={{ duration: 0.6 }}
             className="text-center space-y-6"
           >
-            <h1 className="font-cormorant text-6xl md:text-7xl lg:text-8xl font-bold metallic-text">
+            <h1 className="font-cormorant text-6xl md:text-7xl lg:text-8xl font-bold text-foreground">
               MetaHers Daily
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-3xl mx-auto">
@@ -230,7 +230,7 @@ export default function BlogPage() {
                   <Badge variant="outline" className="w-fit mb-4 border-primary/30">
                     Featured
                   </Badge>
-                  <h2 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4 leading-tight">
+                  <h2 className="font-cormorant text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
                     {heroArticle.title}
                   </h2>
                   <p className="text-lg text-muted-foreground mb-6 font-light leading-relaxed">
@@ -304,7 +304,7 @@ export default function BlogPage() {
                   </Badge>
                 </div>
                 <CardContent className="p-6 flex-1 flex flex-col">
-                  <h3 className="font-cormorant text-2xl font-bold metallic-text mb-3 leading-tight line-clamp-2">
+                  <h3 className="font-cormorant text-2xl font-bold text-foreground mb-3 leading-tight line-clamp-2">
                     {article.title}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4 font-light line-clamp-2 flex-1">
