@@ -58,11 +58,39 @@ export const insertRitualProgressSchema = createInsertSchema(ritualProgress).omi
 export type InsertRitualProgress = z.infer<typeof insertRitualProgressSchema>;
 export type RitualProgressDB = typeof ritualProgress.$inferSelect;
 
+// Structured journal entry types
+export type JournalTodoItem = {
+  id: string;
+  text: string;
+  completed: boolean;
+};
+
+export type JournalEvent = {
+  id: string;
+  time?: string;
+  title: string;
+  notes?: string;
+};
+
+export type StructuredJournalContent = {
+  todos?: JournalTodoItem[];
+  gratitude?: string[];
+  reminders?: string[];
+  highlights?: string;
+  wins?: string[];
+  events?: JournalEvent[];
+  waterIntake?: number; // glasses of water
+  fitnessGoals?: string;
+  fitnessTracking?: string;
+  freeformNotes?: string; // For any additional thoughts
+};
+
 // Journal entries table
 export const journalEntries = pgTable("journal_entries", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-  content: text("content").notNull(),
+  content: text("content").notNull(), // Legacy field - kept for backwards compatibility
+  structuredContent: jsonb("structured_content").$type<StructuredJournalContent>(),
   mood: varchar("mood"),
   tags: jsonb("tags").$type<string[]>().default(sql`'[]'::jsonb`),
   wordCount: integer("word_count").default(0).notNull(),
