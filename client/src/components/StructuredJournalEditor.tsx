@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   CheckSquare, 
@@ -13,6 +13,7 @@ import {
   X,
   Check,
   Sparkles,
+  Brain,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +39,7 @@ export function StructuredJournalEditor() {
   const [fitnessGoals, setFitnessGoals] = useState("");
   const [fitnessTracking, setFitnessTracking] = useState("");
   const [freeformNotes, setFreeformNotes] = useState("");
+  const [aiSummary, setAiSummary] = useState<string>("");
   
   // Input states for adding new items
   const [newTodo, setNewTodo] = useState("");
@@ -46,6 +48,10 @@ export function StructuredJournalEditor() {
   const [newWin, setNewWin] = useState("");
   const [newEventTitle, setNewEventTitle] = useState("");
   const [newEventTime, setNewEventTime] = useState("");
+  
+  // Track initial load to prevent auto-save on mount
+  const isInitialLoad = useRef(true);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Fetch journal data
   const { data: journalData } = useQuery({
@@ -66,25 +72,30 @@ export function StructuredJournalEditor() {
       setFitnessGoals(data.fitnessGoals || "");
       setFitnessTracking(data.fitnessTracking || "");
       setFreeformNotes(data.freeformNotes || "");
+      isInitialLoad.current = false;
     }
   }, [journalData]);
 
-  // Save journal mutation
-  const saveMutation = useMutation({
-    mutationFn: async () => {
-      const structuredContent: StructuredJournalContent = {
-        todos,
-        gratitude,
-        reminders,
-        highlights,
-        wins,
-        events,
-        waterIntake,
-        fitnessGoals,
-        fitnessTracking,
-        freeformNotes,
-      };
+  // Save function
+  const saveJournal = useCallback(async () => {
+    if (isInitialLoad.current) {
+      return;
+    }
 
+    const structuredContent: StructuredJournalContent = {
+      todos,
+      gratitude,
+      reminders,
+      highlights,
+      wins,
+      events,
+      waterIntake,
+      fitnessGoals,
+      fitnessTracking,
+      freeformNotes,
+    };
+
+    try {
       const response = await fetch("/api/journal", {
         method: "POST",
         headers: {
@@ -102,10 +113,33 @@ export function StructuredJournalEditor() {
         throw new Error("Failed to save journal");
       }
 
-      return response.json();
-    },
+      // Don't show toast on auto-save
+    } catch (error) {
+      console.error("Save error:", error);
+    }
+  }, [todos, gratitude, reminders, highlights, wins, events, waterIntake, fitnessGoals, fitnessTracking, freeformNotes, journalData]);
+
+  // Auto-save on changes (debounced)
+  useEffect(() => {
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    saveTimeoutRef.current = setTimeout(() => {
+      saveJournal();
+    }, 2000);
+
+    return () => {
+      if (saveTimeoutRef.current) {
+        clearTimeout(saveTimeoutRef.current);
+      }
+    };
+  }, [todos, gratitude, reminders, highlights, wins, events, waterIntake, fitnessGoals, fitnessTracking, freeformNotes, saveJournal]);
+
+  // Manual save mutation (for Save Now button)
+  const saveMutation = useMutation({
+    mutationFn: saveJournal,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/journal"] });
       toast({
         title: "Saved",
         description: "Your journal entry has been saved",
@@ -120,14 +154,55 @@ export function StructuredJournalEditor() {
     },
   });
 
-  // Auto-save on changes (debounced)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      saveMutation.mutate();
-    }, 2000);
+  // Generate AI summary
+  const generateSummaryMutation = useMutation({
+    mutationFn: async () => {
+      const summaryText = `
+Today's Overview:
+- Completed ${todos.filter(t => t.completed).length} of ${todos.length} tasks
+- Grateful for ${gratitude.length} things
+- ${wins.length} wins to celebrate
+- ${events.length} events scheduled
+- ${waterIntake} glasses of water (${(waterIntake / 8 * 100).toFixed(0)}% of daily goal)
+${highlights ? `\nHighlights: ${highlights}` : ''}
+${fitnessTracking ? `\nFitness: ${fitnessTracking}` : ''}
+      `.trim();
 
-    return () => clearTimeout(timer);
-  }, [todos, gratitude, reminders, highlights, wins, events, waterIntake, fitnessGoals, fitnessTracking, freeformNotes]);
+      const response = await fetch("/api/journal/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          content: summaryText,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to generate summary");
+      }
+
+      const data = await response.json();
+      return data;
+    },
+    onSuccess: (data) => {
+      if (data.summary) {
+        setAiSummary(data.summary);
+      }
+      toast({
+        title: "Summary Generated",
+        description: "Your daily summary is ready",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to generate summary. Pro subscription required.",
+        variant: "destructive",
+      });
+    },
+  });
 
   // Todo functions
   const addTodo = () => {
@@ -555,6 +630,82 @@ export function StructuredJournalEditor() {
             className="min-h-[150px] resize-none"
             data-testid="textarea-freeform-notes"
           />
+        </Card>
+
+        {/* AI Daily Summary */}
+        <Card className="p-6 bg-gradient-to-br from-primary/5 to-secondary/5 border-2 border-primary/20">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-cormorant text-2xl font-bold text-foreground flex items-center gap-2">
+              <Brain className="w-6 h-6 text-primary" />
+              Daily Summary at a Glance
+            </h3>
+            <Button
+              onClick={() => generateSummaryMutation.mutate()}
+              disabled={generateSummaryMutation.isPending}
+              variant="default"
+              size="sm"
+              data-testid="button-generate-summary"
+            >
+              {generateSummaryMutation.isPending ? "Generating..." : "Generate AI Summary"}
+            </Button>
+          </div>
+          
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+            <div className="text-center p-3 bg-card rounded-lg">
+              <div className="text-2xl font-bold text-primary" data-testid="stat-todos">
+                {todos.filter(t => t.completed).length}/{todos.length}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">Tasks Done</div>
+            </div>
+            <div className="text-center p-3 bg-card rounded-lg">
+              <div className="text-2xl font-bold text-pink-500" data-testid="stat-gratitude">
+                {gratitude.length}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">Gratitude</div>
+            </div>
+            <div className="text-center p-3 bg-card rounded-lg">
+              <div className="text-2xl font-bold text-yellow-500" data-testid="stat-wins">
+                {wins.length}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">Wins</div>
+            </div>
+            <div className="text-center p-3 bg-card rounded-lg">
+              <div className="text-2xl font-bold text-blue-500" data-testid="stat-water">
+                {waterIntake}/8
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">Water</div>
+            </div>
+            <div className="text-center p-3 bg-card rounded-lg">
+              <div className="text-2xl font-bold text-primary" data-testid="stat-events">
+                {events.length}
+              </div>
+              <div className="text-xs text-muted-foreground mt-1">Events</div>
+            </div>
+          </div>
+
+          {/* AI Summary */}
+          {aiSummary ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="p-4 bg-card rounded-lg border border-primary/20"
+            >
+              <p className="text-foreground leading-relaxed whitespace-pre-wrap" data-testid="text-ai-summary">
+                {aiSummary}
+              </p>
+            </motion.div>
+          ) : (
+            <div className="text-center py-8 text-muted-foreground">
+              <Brain className="w-12 h-12 mx-auto mb-3 opacity-50" />
+              <p className="text-sm">
+                Click "Generate AI Summary" to get an AI-powered overview of your day
+              </p>
+              <p className="text-xs mt-2">
+                Pro subscription required
+              </p>
+            </div>
+          )}
         </Card>
       </div>
     </div>
