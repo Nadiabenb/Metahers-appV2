@@ -267,8 +267,8 @@ export const shopProducts: ShopProduct[] = [
     name: "Sheikha Ritual Bag",
     type: "bag",
     price: 199,
-    scents: ["Oud", "Musk", "Amber"],
-    description: "6-piece set + QR → MetaMuse 001. Rare crown candle unlocks full AI Squad.",
+    scents: ["Oud", "Musk", "Amber", "Rosewood", "Jasmine", "Sandalwood"],
+    description: "Includes: mystery candle, perfume roll-on, handmade soap, bath soak, body & hair mist, reusable tote + QR unlock for your Pro Membership.",
     image: "sheikha"
   },
   {
@@ -276,8 +276,8 @@ export const shopProducts: ShopProduct[] = [
     name: "Serenity Ritual Bag",
     type: "bag",
     price: 199,
-    scents: ["Lavender", "Lime", "Lemon"],
-    description: "6-piece set + QR → MetaMuse 001. Rare crown candle unlocks full AI Squad.",
+    scents: ["Lavender", "Lime", "Lemon", "Tea Tree"],
+    description: "Includes: mystery candle, perfume roll-on, handmade soap, bath soak, body & hair mist, reusable tote + QR unlock for your Pro Membership.",
     image: "serenity"
   },
   {
@@ -285,8 +285,8 @@ export const shopProducts: ShopProduct[] = [
     name: "Floral Ritual Bag",
     type: "bag",
     price: 199,
-    scents: ["White Rose", "Red Rose", "Jasmine"],
-    description: "6-piece set + QR → MetaMuse 001. Rare crown candle unlocks full AI Squad.",
+    scents: ["White Rose", "Red Rose", "Jasmine", "Chamomile"],
+    description: "Includes: mystery candle, perfume roll-on, handmade soap, bath soak, body & hair mist, reusable tote + QR unlock for your Pro Membership.",
     image: "floral"
   },
   {
@@ -295,7 +295,7 @@ export const shopProducts: ShopProduct[] = [
     type: "bundle",
     price: 499,
     scents: [],
-    description: "All three Ritual Bags in one luxurious collection. Save $98.",
+    description: "Includes all three Ritual Bags · 18 luxurious pieces · 3 reusable totes · One unified Pro Membership with all perks unlocked.",
     image: "bundle"
   }
 ];
