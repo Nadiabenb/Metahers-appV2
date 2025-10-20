@@ -89,6 +89,7 @@ export type StructuredJournalContent = {
 export const journalEntries = pgTable("journal_entries", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  date: varchar("date").notNull().default(sql`to_char(now(), 'YYYY-MM-DD')`), // Journal date in YYYY-MM-DD format
   content: text("content").notNull(), // Legacy field - kept for backwards compatibility
   structuredContent: jsonb("structured_content").$type<StructuredJournalContent>(),
   mood: varchar("mood"),
@@ -102,6 +103,7 @@ export const journalEntries = pgTable("journal_entries", {
 }, (table) => [
   index("idx_journal_user").on(table.userId),
   index("idx_journal_created").on(table.createdAt),
+  index("idx_journal_user_date").on(table.userId, table.date),
 ]);
 
 export const insertJournalEntrySchema = createInsertSchema(journalEntries).omit({ id: true, createdAt: true });

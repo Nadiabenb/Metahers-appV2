@@ -156,6 +156,7 @@ export class DatabaseStorage implements IStorage {
         .update(journalEntries)
         .set({
           content: entryData.content,
+          structuredContent: entryData.structuredContent ? sql`${JSON.stringify(entryData.structuredContent)}::jsonb` : undefined,
           mood: entryData.mood,
           tags: entryData.tags ? sql`${JSON.stringify(entryData.tags)}::jsonb` : undefined,
           wordCount: entryData.wordCount,
@@ -174,6 +175,7 @@ export class DatabaseStorage implements IStorage {
           ...entryData,
           tags: entryData.tags ? sql`${JSON.stringify(entryData.tags)}::jsonb` : sql`'[]'::jsonb`,
           aiInsights: entryData.aiInsights ? sql`${JSON.stringify(entryData.aiInsights)}::jsonb` : undefined,
+          structuredContent: entryData.structuredContent ? sql`${JSON.stringify(entryData.structuredContent)}::jsonb` : undefined,
         })
         .returning();
       return created;
