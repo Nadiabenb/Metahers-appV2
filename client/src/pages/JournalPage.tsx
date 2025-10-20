@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Flame, History } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { EnhancedJournalEditor } from "@/components/EnhancedJournalEditor";
+import { StructuredJournalEditor } from "@/components/StructuredJournalEditor";
 import { DailyCalendar } from "@/components/DailyCalendar";
 import { useJournal } from "@/hooks/useJournal";
 
@@ -73,7 +73,7 @@ export default function JournalPage() {
 
           <DailyCalendar className="mb-8" />
 
-          <EnhancedJournalEditor />
+          <StructuredJournalEditor />
 
           <motion.div
             initial={{ opacity: 0 }}

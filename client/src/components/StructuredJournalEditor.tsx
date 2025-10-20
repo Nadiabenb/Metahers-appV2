@@ -54,7 +54,7 @@ export function StructuredJournalEditor() {
 
   // Load data when fetched
   useEffect(() => {
-    if (journalData?.structuredContent) {
+    if (journalData && typeof journalData === 'object' && 'structuredContent' in journalData && journalData.structuredContent) {
       const data = journalData.structuredContent as StructuredJournalContent;
       setTodos(data.todos || []);
       setGratitude(data.gratitude || []);
@@ -85,14 +85,24 @@ export function StructuredJournalEditor() {
         freeformNotes,
       };
 
-      return apiRequest("/api/journal", {
+      const response = await fetch("/api/journal", {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
         body: JSON.stringify({
           content: "", // Legacy field
           structuredContent,
-          streak: journalData?.streak || 0,
+          streak: (journalData && typeof journalData === 'object' && 'streak' in journalData ? journalData.streak : 0) || 0,
         }),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to save journal");
+      }
+
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/journal"] });
