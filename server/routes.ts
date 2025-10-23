@@ -160,14 +160,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         expiresAt,
       });
       
-      // In a real app, you would send an email here
-      // For now, we'll return the reset link (for development/testing)
+      // In production, send an email here with the reset link
+      // For development/testing, log the reset link to server console
       const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+      console.log(`\n🔐 Password Reset Link (DEV ONLY): ${resetLink}\n`);
       
       res.json({ 
         success: true, 
-        message: "Password reset link generated",
-        resetLink // In production, remove this and send via email
+        message: "If an account exists with that email, a password reset link has been sent."
       });
     } catch (error) {
       console.error("Error requesting password reset:", error);

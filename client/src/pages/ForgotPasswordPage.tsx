@@ -11,7 +11,7 @@ export default function ForgotPasswordPage() {
   const { toast } = useToast();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [resetLink, setResetLink] = useState("");
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,14 +27,11 @@ export default function ForgotPasswordPage() {
       const data = await response.json();
 
       if (response.ok) {
+        setSubmitted(true);
         toast({
-          title: "Reset Link Generated",
-          description: "Check the link below to reset your password.",
+          title: "Request Submitted",
+          description: data.message || "If an account exists with that email, a password reset link has been sent.",
         });
-        // In development, show the reset link
-        if (data.resetLink) {
-          setResetLink(data.resetLink);
-        }
       } else {
         toast({
           title: "Error",
@@ -68,7 +65,7 @@ export default function ForgotPasswordPage() {
           </div>
 
           {/* Form */}
-          {!resetLink ? (
+          {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium text-foreground">
@@ -95,25 +92,21 @@ export default function ForgotPasswordPage() {
                 disabled={isLoading}
                 data-testid="button-submit"
               >
-                {isLoading ? "Generating Link..." : "Send Reset Link"}
+                {isLoading ? "Sending..." : "Send Reset Link"}
               </Button>
             </form>
           ) : (
             <div className="space-y-4">
               <div className="p-4 bg-primary/10 rounded-lg border border-primary/20">
                 <p className="text-sm font-medium text-foreground mb-2">
-                  Your Password Reset Link:
+                  Check Your Email
                 </p>
-                <a
-                  href={resetLink}
-                  className="text-sm text-primary hover:underline break-all"
-                  data-testid="link-reset"
-                >
-                  {resetLink}
-                </a>
+                <p className="text-sm text-muted-foreground">
+                  If an account exists with that email address, you will receive a password reset link shortly.
+                </p>
               </div>
               <p className="text-xs text-muted-foreground">
-                Note: In production, this link would be sent to your email. For now, click the link above to reset your password.
+                <strong>For Developers:</strong> In development mode, the reset link is logged to the server console. Check your terminal to find the link.
               </p>
             </div>
           )}
