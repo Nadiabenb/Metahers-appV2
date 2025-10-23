@@ -4,6 +4,7 @@ import {
   journalEntries,
   subscriptions,
   achievements,
+  passwordResetTokens,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -14,6 +15,8 @@ import {
   type InsertSubscription,
   type AchievementDB,
   type InsertAchievement,
+  type PasswordResetTokenDB,
+  type InsertPasswordResetToken,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -50,6 +53,12 @@ export interface IStorage {
   getUserAchievements(userId: string): Promise<AchievementDB[]>;
   unlockAchievement(userId: string, achievementKey: string): Promise<AchievementDB | null>;
   checkAchievementUnlocked(userId: string, achievementKey: string): Promise<boolean>;
+  
+  // Password reset operations
+  createPasswordResetToken(token: InsertPasswordResetToken): Promise<PasswordResetTokenDB>;
+  getPasswordResetToken(token: string): Promise<PasswordResetTokenDB | undefined>;
+  deletePasswordResetToken(token: string): Promise<void>;
+  deleteUserPasswordResetTokens(userId: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -354,6 +363,36 @@ export class DatabaseStorage implements IStorage {
       .limit(1);
     
     return !!achievement;
+  }
+
+  // Password reset operations
+  async createPasswordResetToken(tokenData: InsertPasswordResetToken): Promise<PasswordResetTokenDB> {
+    const [token] = await db
+      .insert(passwordResetTokens)
+      .values(tokenData)
+      .returning();
+    return token;
+  }
+
+  async getPasswordResetToken(token: string): Promise<PasswordResetTokenDB | undefined> {
+    const [resetToken] = await db
+      .select()
+      .from(passwordResetTokens)
+      .where(eq(passwordResetTokens.token, token))
+      .limit(1);
+    return resetToken;
+  }
+
+  async deletePasswordResetToken(token: string): Promise<void> {
+    await db
+      .delete(passwordResetTokens)
+      .where(eq(passwordResetTokens.token, token));
+  }
+
+  async deleteUserPasswordResetTokens(userId: string): Promise<void> {
+    await db
+      .delete(passwordResetTokens)
+      .where(eq(passwordResetTokens.userId, userId));
   }
 }
 

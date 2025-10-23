@@ -11,6 +11,8 @@ import { initializeApp } from "@/lib/storage";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import HomePage from "@/pages/HomePage";
 import RitualsPage from "@/pages/RitualsPage";
 import RitualDetailPage from "@/pages/RitualDetailPage";
@@ -41,6 +43,8 @@ function Router() {
     <Switch>
       <Route path="/login" component={LoginPage} />
       <Route path="/signup" component={SignupPage} />
+      <Route path="/forgot-password" component={ForgotPasswordPage} />
+      <Route path="/reset-password" component={ResetPasswordPage} />
       
       {!isAuthenticated ? (
         <Route path="/" component={LandingPage} />

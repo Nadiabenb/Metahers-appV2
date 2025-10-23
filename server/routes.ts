@@ -1,5 +1,6 @@
 import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
+import { randomBytes } from "crypto";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated, hashPassword, verifyPassword } from "./auth";
 import Stripe from "stripe";
@@ -126,6 +127,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error completing onboarding:", error);
       res.status(500).json({ message: "Failed to complete onboarding" });
+    }
+  });
+
+  // Request password reset
+  app.post('/api/auth/request-password-reset', async (req: Request, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        // Don't reveal if user exists for security
+        return res.json({ success: true, message: "If an account exists with that email, a password reset link has been generated." });
+      }
+      
+      // Delete any existing reset tokens for this user
+      await storage.deleteUserPasswordResetTokens(user.id);
+      
+      // Generate a random token
+      const resetToken = randomBytes(32).toString('hex');
+      
+      // Create reset token with 1 hour expiration
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
+      await storage.createPasswordResetToken({
+        userId: user.id,
+        token: resetToken,
+        expiresAt,
+      });
+      
+      // In a real app, you would send an email here
+      // For now, we'll return the reset link (for development/testing)
+      const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
+      
+      res.json({ 
+        success: true, 
+        message: "Password reset link generated",
+        resetLink // In production, remove this and send via email
+      });
+    } catch (error) {
+      console.error("Error requesting password reset:", error);
+      res.status(500).json({ message: "Failed to request password reset" });
+    }
+  });
+
+  // Reset password with token
+  app.post('/api/auth/reset-password', async (req: Request, res) => {
+    try {
+      const { token, newPassword } = req.body;
+      
+      if (!token || !newPassword) {
+        return res.status(400).json({ message: "Token and new password are required" });
+      }
+      
+      if (newPassword.length < 8) {
+        return res.status(400).json({ message: "Password must be at least 8 characters" });
+      }
+      
+      // Find the reset token
+      const resetToken = await storage.getPasswordResetToken(token);
+      if (!resetToken) {
+        return res.status(400).json({ message: "Invalid or expired reset token" });
+      }
+      
+      // Check if token has expired
+      if (new Date() > new Date(resetToken.expiresAt)) {
+        await storage.deletePasswordResetToken(token);
+        return res.status(400).json({ message: "Reset token has expired" });
+      }
+      
+      // Get the user
+      const user = await storage.getUser(resetToken.userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      // Hash the new password
+      const passwordHash = await hashPassword(newPassword);
+      
+      // Update user's password
+      await storage.upsertUser({
+        ...user,
+        passwordHash,
+      });
+      
+      // Delete the used reset token
+      await storage.deletePasswordResetToken(token);
+      
+      res.json({ success: true, message: "Password has been reset successfully" });
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      res.status(500).json({ message: "Failed to reset password" });
     }
   });
 
