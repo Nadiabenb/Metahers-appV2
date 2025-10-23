@@ -1,0 +1,121 @@
+You are a senior full‑stack engineer. Extend the existing Replit app “MetaHers Mind Spa” by adding a new module called **AI Glow‑Up Program** — a 14‑day automated experience that teaches women branding, niche, voice, social‑media mastery, and building‑in‑public using AI.
+
+---
+
+## ARCHITECTURE
+
+- Framework: **Next.js 14 (App Router)** + **TypeScript**
+- Styling: **Tailwind CSS**
+- State: **Zustand**
+- Storage: **localStorage** (MVP) or Replit DB fallback
+- Folder path: `/app/glow-up`
+- Add navigation item: “Glow‑Up Program”
+
+---
+
+## ROUTES
+
+1. `/glow-up`
+   - Onboarding form:
+     - name  
+     - brand type (personal / business)  
+     - niche  
+     - main platform (IG / TikTok / LinkedIn / X)  
+     - goal (rebrand / new)  
+   - Save data and display a personalized welcome message.
+
+2. `/glow-up/dashboard`
+   - 14‑day unlock sequence.
+   - Each day card includes:
+     - **Lesson Block:** short concept (branding, niche, voice, social, public building).  
+     - **GPT Prompt:** pre‑filled task.  
+     - **Share Template:** public‑post caption (copy button).  
+     - **Save Response:** store answers to Journal.  
+     - **Mark Done:** unlocks next day.
+   - Progress bar across top.
+
+3. `/glow-up/journal`
+   - Displays saved GPT outputs + public‑post drafts with edit and copy options.
+
+4. `/glow-up/complete`
+   - Auto‑generate **Glow‑Up Summary**:
+     - brand voice, tone, keywords  
+     - color palette (hex)  
+     - short bio + offer statement  
+     - 3 content pillars  
+   - “Download Brand Report” (HTML export).
+
+---
+
+## COMPONENTS
+
+- `OnboardingForm.tsx`
+- `DayCard.tsx`
+- `LessonBlock.tsx`
+- `PromptBox.tsx`
+- `ShareTemplate.tsx`
+- `ResponseSave.tsx`
+- `ProgressTracker.tsx`
+- `JournalCard.tsx`
+- `CompletionExport.tsx`
+
+---
+
+## DATA FILES (populate fully)
+
+Create `/data/glowupLessons.ts`, `/data/glowupPrompts.ts`, and `/data/glowupCaptions.ts` with arrays of 14 objects each.
+
+### Example content (Agent 3 must generate full 14 sets):
+
+**Day 1 – Your Brand Starts With You**
+- Lesson: why self‑awareness and values define a brand.  
+- GPT Prompt: “Write your founder story in 3 paragraphs showing why you started.”  
+- Caption: “Day 1 of my AI Glow‑Up ✨ Here’s why I built this brand and what it means to me…”
+
+**Day 2 – Find Your Niche**
+- Lesson: define target audience + specific result.  
+- GPT Prompt: “Describe who you help, their pain points, and the result you deliver.”  
+- Caption: “I finally claimed my niche 💫 I help [who] achieve [result] through [method].”
+
+**Day 3 – Craft Your Voice**
+- Lesson: tone consistency and cross‑platform voice.  
+- GPT Prompt: “Generate 3 brand voice styles (bold, soft, luxurious). Pick one that fits me.”  
+- Caption: “I’m shaping my brand voice today — because consistency builds trust.”
+
+Continue for Days 4–14 covering:  
+4 Visual Identity • 5 Platform Strategy • 6 Bio Glow‑Up • 7 Storytelling • 8 Offer Design • 9 Content Pillars • 10 Social Engine • 11 Build in Public • 12 Audience Nurture • 13 Consistency Audit • 14 Glow‑Up Recap.
+
+Agent 3 must generate educational text (~100 words each), a practical GPT prompt, and a public‑post caption template for every day.
+
+---
+
+## DESIGN
+
+- Use MetaHers color palette: blush #F6E8EA, champagne #F3EDE2, mint #E8F4EF, onyx #0D0D0F, gold rgba(255,215,0,0.6)
+- Fonts: Playfair Display for headings, Inter for body.
+- Layout: rounded‑2xl cards, soft shadows, glass blur backgrounds.
+
+---
+
+## AI INTEGRATION HOOKS
+
+Prepare a reusable `useGPT()` hook for OpenAI API calls (no key hard‑coded).  
+Prompts dynamically merge user data (name, niche, goal) with lesson templates.
+
+---
+
+## FUTURE HOOKS
+
+- Stripe checkout for paid cohorts  
+- MetaMuse GPT iframe integration  
+- Google Sheet sync via Zapier webhook
+
+---
+
+## DELIVERABLES
+
+- Fully working `/glow-up` module inside existing MetaHers app.  
+- Functional onboarding → dashboard → journal → completion flow.  
+- Pre‑filled 14‑day lessons, prompts, and captions.  
+- Clean, mobile‑first design matching MetaHers Mind Spa theme.  
+- Comment code for easy content editing later.
