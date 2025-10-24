@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Mail, Sparkles } from "lucide-react";
+import { X, Mail, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -51,7 +51,7 @@ export function EmailCaptureModal() {
         
         setTimeout(() => {
           setIsVisible(false);
-        }, 3000);
+        }, 8000);
       } else {
         const data = await response.json().catch(() => ({ message: "Failed to submit" }));
         setError(data.message || "Failed to submit email. Please try again.");
@@ -101,7 +101,7 @@ export function EmailCaptureModal() {
                     Get Beta Access
                   </h2>
                   <p className="text-center text-foreground/80 mb-6">
-                    Join our exclusive beta program and get free Pro access. Enter your email to receive your beta code.
+                    Join our exclusive beta program and unlock free Pro access. Enter your email to receive your private beta code.
                   </p>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -141,23 +141,31 @@ export function EmailCaptureModal() {
                   </form>
 
                   <p className="text-xs text-center text-muted-foreground mt-4">
-                    We'll send you the code 'MetaMuse2025' to activate Pro features for free.
+                    Your exclusive beta code will be revealed instantly after signup.
                   </p>
                 </div>
               ) : (
                 <div className="relative z-10 text-center py-8">
                   <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[hsl(var(--aurora-teal))]/20 mx-auto mb-6">
-                    <Mail className="w-8 h-8 text-[hsl(var(--aurora-teal))]" />
+                    <Sparkles className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
                   </div>
                   
                   <h2 className="font-cormorant text-3xl font-bold mb-4 metallic-text">
-                    Check Your Email
+                    Welcome to the Beta!
                   </h2>
-                  <p className="text-foreground/80 mb-6">
-                    We've sent your beta code to <span className="font-semibold">{email}</span>
+                  <p className="text-foreground/80 mb-4">
+                    Your exclusive beta code is:
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    Your beta code: <span className="font-mono font-bold text-foreground">MetaMuse2025</span>
+                  <div className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/10 to-[hsl(var(--liquid-gold))]/10 border-2 border-[hsl(var(--liquid-gold))]/30 rounded-lg p-4 mb-6">
+                    <code className="text-2xl md:text-3xl font-bold text-[hsl(var(--liquid-gold))] tracking-wider font-mono" data-testid="text-beta-code">
+                      MetaMuse2025
+                    </code>
+                  </div>
+                  <p className="text-sm text-foreground/70 mb-2">
+                    Go to your <span className="font-semibold">Account</span> page and enter this code to unlock Pro features for free!
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    This window will close automatically...
                   </p>
                 </div>
               )}
