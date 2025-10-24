@@ -10,6 +10,9 @@ import {
   X,
   CheckCircle2,
   Circle,
+  Calendar,
+  Droplet,
+  Dumbbell,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { queryClient, apiRequest } from "@/lib/queryClient";
-import type { StructuredJournalContent, JournalTodoItem } from "@shared/schema";
+import type { StructuredJournalContent, JournalTodoItem, JournalEvent } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 
@@ -46,11 +49,17 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
   const [gratitude, setGratitude] = useState<string[]>([]);
   const [wins, setWins] = useState<string[]>([]);
   const [freeformNotes, setFreeformNotes] = useState("");
+  const [events, setEvents] = useState<JournalEvent[]>([]);
+  const [waterIntake, setWaterIntake] = useState(0);
+  const [fitnessGoals, setFitnessGoals] = useState("");
+  const [fitnessTracking, setFitnessTracking] = useState("");
   
   // Input states
   const [newTodo, setNewTodo] = useState("");
   const [newGratitude, setNewGratitude] = useState("");
   const [newWin, setNewWin] = useState("");
+  const [newEventTitle, setNewEventTitle] = useState("");
+  const [newEventTime, setNewEventTime] = useState("");
   
   // Track loading and dirty state
   const isLoading = useRef(true);
@@ -88,14 +97,25 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
             gratitude,
             wins,
             freeformNotes,
+            events,
+            waterIntake,
+            fitnessGoals,
+            fitnessTracking,
           },
           mood,
         };
         
         // Flush save synchronously for previous date
-        apiRequest(`/api/journal/${flushDate}`, {
+        fetch(`/api/journal`, {
           method: "POST",
-          body: JSON.stringify(flushData),
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            ...flushData,
+            content: "",
+            date: flushDate,
+            streak: 0,
+          }),
         }).then(() => {
           queryClient.invalidateQueries({ queryKey: ["/api/journal/entries"] });
         }).catch((error) => {
@@ -117,6 +137,10 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
     setWins([]);
     setFreeformNotes("");
     setMood("");
+    setEvents([]);
+    setWaterIntake(0);
+    setFitnessGoals("");
+    setFitnessTracking("");
     
     // Then load data if it exists
     if (journalData && typeof journalData === 'object') {
@@ -126,6 +150,10 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
         if (data.gratitude) setGratitude(data.gratitude);
         if (data.wins) setWins(data.wins);
         if (data.freeformNotes) setFreeformNotes(data.freeformNotes);
+        if (data.events) setEvents(data.events);
+        if (data.waterIntake !== undefined) setWaterIntake(data.waterIntake);
+        if (data.fitnessGoals) setFitnessGoals(data.fitnessGoals);
+        if (data.fitnessTracking) setFitnessTracking(data.fitnessTracking);
       }
       
       if ('mood' in journalData && journalData.mood) {
@@ -147,12 +175,10 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
       gratitude,
       wins,
       freeformNotes,
-      reminders: [],
-      highlights: "",
-      events: [],
-      waterIntake: 0,
-      fitnessGoals: "",
-      fitnessTracking: "",
+      events,
+      waterIntake,
+      fitnessGoals,
+      fitnessTracking,
     };
 
     try {
@@ -174,7 +200,7 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
     } catch (error) {
       console.error("Save error:", error);
     }
-  }, [todos, gratitude, wins, freeformNotes, mood, journalData, dateStr]);
+  }, [todos, gratitude, wins, freeformNotes, events, waterIntake, fitnessGoals, fitnessTracking, mood, journalData, dateStr]);
 
   // Auto-save with debounce - only runs if user has made edits
   useEffect(() => {
@@ -185,7 +211,7 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
     return () => {
       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
     };
-  }, [todos, gratitude, wins, freeformNotes, mood, saveJournal]);
+  }, [todos, gratitude, wins, freeformNotes, events, waterIntake, fitnessGoals, fitnessTracking, mood, saveJournal]);
 
   // Helper functions - all mark dirty flag
   const addTodo = () => {
@@ -240,6 +266,39 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
   const handleNotesChange = (value: string) => {
     hasUserEdits.current = true;
     setFreeformNotes(value);
+  };
+  
+  const addEvent = () => {
+    if (newEventTitle.trim()) {
+      hasUserEdits.current = true;
+      setEvents([...events, {
+        id: Date.now().toString(),
+        time: newEventTime,
+        title: newEventTitle.trim(),
+      }]);
+      setNewEventTitle("");
+      setNewEventTime("");
+    }
+  };
+  
+  const removeEvent = (id: string) => {
+    hasUserEdits.current = true;
+    setEvents(events.filter(e => e.id !== id));
+  };
+  
+  const handleWaterClick = (glassIndex: number) => {
+    hasUserEdits.current = true;
+    setWaterIntake(waterIntake === glassIndex + 1 ? glassIndex : glassIndex + 1);
+  };
+  
+  const handleFitnessGoalsChange = (value: string) => {
+    hasUserEdits.current = true;
+    setFitnessGoals(value);
+  };
+  
+  const handleFitnessTrackingChange = (value: string) => {
+    hasUserEdits.current = true;
+    setFitnessTracking(value);
   };
 
   // Calculate completion stats
@@ -463,6 +522,143 @@ export function LuxuryJournalEditor({ selectedDate }: LuxuryJournalEditorProps =
           </div>
         </div>
       </Card>
+
+      {/* Events & Meetings */}
+      <Card className="p-8 neon-border-aurora relative overflow-hidden">
+        <div className="absolute inset-0 gradient-aurora-teal opacity-5" />
+        <div className="relative z-10">
+          <h3 className="font-cormorant text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+            <Calendar className="w-6 h-6 text-[hsl(var(--aurora-teal))]" />
+            Events & Meetings
+          </h3>
+          <div className="space-y-3 mb-4">
+            {events.map((event) => (
+              <motion.div
+                key={event.id}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-start gap-3 p-3 rounded-lg hover-elevate group"
+              >
+                <div className="flex-1">
+                  {event.time && (
+                    <div className="text-sm text-muted-foreground font-medium mb-1" data-testid={`text-event-time-${event.id}`}>
+                      {event.time}
+                    </div>
+                  )}
+                  <div className="text-foreground" data-testid={`text-event-title-${event.id}`}>
+                    {event.title}
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="opacity-0 group-hover:opacity-100 transition-opacity"
+                  onClick={() => removeEvent(event.id)}
+                  data-testid={`button-remove-event-${event.id}`}
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </motion.div>
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <Input
+              type="time"
+              value={newEventTime}
+              onChange={(e) => setNewEventTime(e.target.value)}
+              className="w-32"
+              data-testid="input-new-event-time"
+            />
+            <Input
+              placeholder="Event or meeting title..."
+              value={newEventTitle}
+              onChange={(e) => setNewEventTitle(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && addEvent()}
+              className="flex-1"
+              data-testid="input-new-event-title"
+            />
+            <Button onClick={addEvent} size="icon" data-testid="button-add-event">
+              <Plus className="w-4 h-4" />
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      {/* Water Intake & Fitness */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Water Intake */}
+        <Card className="p-8 neon-border-cyber relative overflow-hidden">
+          <div className="absolute inset-0 gradient-cyber-fuchsia opacity-5" />
+          <div className="relative z-10">
+            <h3 className="font-cormorant text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Droplet className="w-6 h-6 text-blue-500" />
+              Water Intake
+            </h3>
+            <div className="space-y-4">
+              <div className="flex gap-2 flex-wrap">
+                {[...Array(8)].map((_, i) => (
+                  <motion.button
+                    key={i}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    onClick={() => handleWaterClick(i)}
+                    className={`w-10 h-10 rounded-full transition-all ${
+                      i < waterIntake
+                        ? "bg-blue-500/20 border-2 border-blue-500"
+                        : "bg-muted border-2 border-muted-foreground/20"
+                    }`}
+                    data-testid={`button-water-${i}`}
+                  >
+                    <Droplet
+                      className={`w-5 h-5 mx-auto ${
+                        i < waterIntake ? "text-blue-500 fill-blue-500" : "text-muted-foreground"
+                      }`}
+                    />
+                  </motion.button>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground">
+                {waterIntake} / 8 glasses • Goal: 8 glasses per day
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Fitness Goals */}
+        <Card className="p-8 neon-border-magenta relative overflow-hidden">
+          <div className="absolute inset-0 gradient-magenta-quartz opacity-5" />
+          <div className="relative z-10">
+            <h3 className="font-cormorant text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+              <Dumbbell className="w-6 h-6 text-[hsl(var(--magenta-quartz))]" />
+              Fitness
+            </h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-muted-foreground mb-2 block">Today's Goals</label>
+                <Textarea
+                  placeholder="What are your fitness goals today?"
+                  value={fitnessGoals}
+                  onChange={(e) => handleFitnessGoalsChange(e.target.value)}
+                  rows={3}
+                  className="resize-none"
+                  data-testid="textarea-fitness-goals"
+                />
+              </div>
+              <div>
+                <label className="text-sm text-muted-foreground mb-2 block">Workout Log</label>
+                <Textarea
+                  placeholder="Log your workouts, steps, or activities..."
+                  value={fitnessTracking}
+                  onChange={(e) => handleFitnessTrackingChange(e.target.value)}
+                  rows={3}
+                  className="resize-none"
+                  data-testid="textarea-fitness-tracking"
+                />
+              </div>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       {/* Auto-save indicator */}
       <div className="text-center text-sm text-muted-foreground">
