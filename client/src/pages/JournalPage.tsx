@@ -5,6 +5,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { LuxuryJournalEditor } from "@/components/LuxuryJournalEditor";
 import { JournalCalendarPicker } from "@/components/JournalCalendarPicker";
+import { DailyCalendar } from "@/components/DailyCalendar";
 import { useJournal } from "@/hooks/useJournal";
 import { format } from "date-fns";
 
@@ -54,6 +55,11 @@ export default function JournalPage() {
                 </Button>
               </Link>
             </div>
+          </div>
+
+          {/* Daily Inspiration Quote */}
+          <div className="mb-8">
+            <DailyCalendar />
           </div>
 
           {/* Streak Card */}
