@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, Lock, Calendar, BookOpen } from "lucide-react";
+import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight } from "lucide-react";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function LandingPage() {
@@ -9,6 +9,14 @@ export default function LandingPage() {
 
   const handleLogin = () => {
     window.location.href = "/login";
+  };
+
+  const handleShop = () => {
+    window.location.href = "/shop";
+  };
+
+  const handleBlog = () => {
+    window.location.href = "/blog";
   };
 
   return (
@@ -38,21 +46,45 @@ export default function LandingPage() {
               MetaHers Mind Spa
             </h1>
 
-            <p className="text-xl sm:text-2xl text-foreground/90 mb-8 max-w-2xl mx-auto">
-              Luxury wellness rituals that teach you AI, blockchain, and Web3—one breath at a time.
+            <p className="text-xl sm:text-2xl text-foreground/90 mb-4 max-w-2xl mx-auto leading-relaxed">
+              Where Forbes meets Vogue. Where AI education meets luxury self-care.
+            </p>
+            <p className="text-lg text-foreground/70 mb-8 max-w-2xl mx-auto">
+              Guided rituals teaching AI & Web3 • AI-powered journal • Limited edition wellness kits
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <button
                 onClick={handleSignup}
-                className="w-full sm:w-auto rounded-full bg-[hsl(var(--liquid-gold))] text-background px-8 py-4 font-semibold text-lg hover-elevate active-elevate-2 transition-all duration-200 shadow-xl"
+                className="w-full sm:w-auto rounded-full bg-[hsl(var(--liquid-gold))] text-background px-8 py-4 font-semibold text-lg hover-elevate active-elevate-2 transition-all duration-200 shadow-xl flex items-center justify-center gap-2"
                 data-testid="button-signup"
               >
-                Begin Your Journey
+                Start Free
+                <ArrowRight className="w-5 h-5" />
               </button>
               <button
+                onClick={handleShop}
+                className="w-full sm:w-auto rounded-full backdrop-blur-xl bg-card/30 border-2 border-[hsl(var(--liquid-gold))]/40 text-foreground px-8 py-4 font-semibold text-lg hover-elevate active-elevate-2 transition-all duration-200 shadow-xl flex items-center justify-center gap-2"
+                data-testid="button-shop-cta"
+              >
+                <ShoppingBag className="w-5 h-5" />
+                Shop Drop 001
+              </button>
+            </div>
+
+            <div className="flex items-center justify-center gap-6 mb-16">
+              <button
+                onClick={handleBlog}
+                className="text-foreground/70 hover:text-foreground transition-colors text-sm flex items-center gap-2"
+                data-testid="button-blog-cta"
+              >
+                <Newspaper className="w-4 h-4" />
+                Read the Blog
+              </button>
+              <span className="text-foreground/40">•</span>
+              <button
                 onClick={handleLogin}
-                className="w-full sm:w-auto rounded-full backdrop-blur-xl bg-card/30 border-2 border-border text-foreground px-8 py-4 font-semibold text-lg hover-elevate active-elevate-2 transition-all duration-200 shadow-xl"
+                className="text-foreground/70 hover:text-foreground transition-colors text-sm"
                 data-testid="button-login"
               >
                 Sign In
@@ -88,10 +120,10 @@ export default function LandingPage() {
                 <div className="relative z-10">
                   <BookOpen className="w-8 h-8 text-[hsl(var(--liquid-gold))] mb-3 mx-auto" />
                   <h3 className="font-serif text-lg font-semibold text-foreground mb-2">
-                    Daily Journal
+                    AI-Powered Journal
                   </h3>
                   <p className="text-sm text-foreground/80">
-                    Track your progress with auto-save journaling and streak rewards.
+                    Daily mood tracking, AI insights, analytics, and personalized writing prompts.
                   </p>
                 </div>
               </motion.div>
@@ -106,10 +138,10 @@ export default function LandingPage() {
                 <div className="relative z-10">
                   <Lock className="w-8 h-8 text-[hsl(var(--liquid-gold))] mb-3 mx-auto" />
                   <h3 className="font-serif text-lg font-semibold text-foreground mb-2">
-                    Pro Access
+                    Drop 001 Ritual Bags
                   </h3>
                   <p className="text-sm text-foreground/80">
-                    Unlock all rituals and premium features with ritual bag purchases.
+                    18 limited edition handmade kits with AI unlocks + instant Pro membership.
                   </p>
                 </div>
               </motion.div>

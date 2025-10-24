@@ -41,7 +41,10 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 function ArticleContent({ article }: { article: BlogArticle }) {
   const { isAuthenticated } = useAuth();
-  const [, setLocation] = useLocation();
+
+  const handleNavigation = (path: string) => {
+    window.location.href = path;
+  };
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 px-6 py-12">
@@ -166,7 +169,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                   <Button 
                     size="lg"
-                    onClick={() => setLocation("/signup")}
+                    onClick={() => handleNavigation("/signup")}
                     className="gap-2 min-w-[200px]"
                     data-testid="button-cta-signup"
                   >
@@ -176,7 +179,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
                   <Button 
                     size="lg"
                     variant="outline"
-                    onClick={() => setLocation("/shop")}
+                    onClick={() => handleNavigation("/shop")}
                     className="gap-2 min-w-[200px]"
                     data-testid="button-cta-shop"
                   >
@@ -196,7 +199,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                   <Button 
                     size="lg"
-                    onClick={() => setLocation("/rituals")}
+                    onClick={() => handleNavigation("/rituals")}
                     className="gap-2 min-w-[200px]"
                     data-testid="button-cta-rituals"
                   >
@@ -206,7 +209,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
                   <Button 
                     size="lg"
                     variant="outline"
-                    onClick={() => setLocation("/shop")}
+                    onClick={() => handleNavigation("/shop")}
                     className="gap-2 min-w-[200px]"
                     data-testid="button-cta-shop-auth"
                   >
