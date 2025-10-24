@@ -3,6 +3,7 @@ import { blogArticles, BlogArticle } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { SEO } from "@/components/SEO";
 import { Calendar, Clock, Sparkles, BookOpen } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { motion } from "framer-motion";
@@ -176,6 +177,11 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-background pb-20">
+      <SEO
+        title="MetaHers Daily - AI & Web3 Blog for Women"
+        description="Discover AI and Web3 insights written for women in tech. Learn about AI prompts, blockchain, NFTs, crypto, and the metaverse with luxury editorial content."
+        keywords="AI blog, Web3 blog, women in tech, AI articles, blockchain guide, NFT news, crypto for women, metaverse updates"
+      />
       {/* Hero Header */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 gradient-violet-fuchsia opacity-10" />

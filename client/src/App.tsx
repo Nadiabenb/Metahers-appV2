@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { Navigation } from "@/components/Navigation";
 import { InstallPrompt } from "@/components/InstallPrompt";
+import { EmailCaptureModal } from "@/components/EmailCaptureModal";
 import { initializeApp } from "@/lib/storage";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
@@ -23,6 +24,7 @@ import MetaMusePage from "@/pages/MetaMusePage";
 import EventsPage from "@/pages/EventsPage";
 import AccountPage from "@/pages/AccountPage";
 import BlogPage from "@/pages/BlogPage";
+import GlowUpLandingPage from "@/pages/GlowUpLandingPage";
 import GlowUpOnboardingPage from "@/pages/GlowUpOnboardingPage";
 import GlowUpDashboardPage from "@/pages/GlowUpDashboardPage";
 import GlowUpJournalPage from "@/pages/GlowUpJournalPage";
@@ -49,6 +51,7 @@ function Router() {
       <Route path="/signup" component={SignupPage} />
       <Route path="/forgot-password" component={ForgotPasswordPage} />
       <Route path="/reset-password" component={ResetPasswordPage} />
+      <Route path="/ai-glow-up-program" component={GlowUpLandingPage} />
       
       {!isAuthenticated ? (
         <Route path="/" component={LandingPage} />
@@ -98,6 +101,7 @@ function App() {
           <Navigation />
           <Router />
           <InstallPrompt />
+          <EmailCaptureModal />
         </div>
         <Toaster />
       </TooltipProvider>

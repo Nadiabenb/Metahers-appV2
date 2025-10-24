@@ -5,6 +5,7 @@ import {
   subscriptions,
   achievements,
   passwordResetTokens,
+  emailLeads,
   glowUpProfiles,
   glowUpProgress,
   glowUpJournal,
@@ -20,6 +21,8 @@ import {
   type InsertAchievement,
   type PasswordResetTokenDB,
   type InsertPasswordResetToken,
+  type EmailLeadDB,
+  type InsertEmailLead,
   type GlowUpProfileDB,
   type InsertGlowUpProfile,
   type GlowUpProgressDB,
@@ -68,6 +71,9 @@ export interface IStorage {
   getPasswordResetToken(token: string): Promise<PasswordResetTokenDB | undefined>;
   deletePasswordResetToken(token: string): Promise<void>;
   deleteUserPasswordResetTokens(userId: string): Promise<void>;
+  
+  // Email lead operations
+  createEmailLead(lead: InsertEmailLead): Promise<EmailLeadDB>;
   
   // Glow-Up Program operations
   getGlowUpProfile(userId: string): Promise<GlowUpProfileDB | undefined>;
@@ -413,6 +419,16 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(passwordResetTokens)
       .where(eq(passwordResetTokens.userId, userId));
+  }
+
+  // Email lead operations
+  async createEmailLead(lead: InsertEmailLead): Promise<EmailLeadDB> {
+    const [emailLead] = await db
+      .insert(emailLeads)
+      .values(lead)
+      .onConflictDoNothing({ target: emailLeads.email })
+      .returning();
+    return emailLead;
   }
 
   // Glow-Up Program operations

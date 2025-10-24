@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import { WelcomeModal } from "@/components/WelcomeModal";
+import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
@@ -33,6 +34,11 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Learn AI & Web3 for Women"
+        description="MetaHers Mind Spa: Luxury meets literacy. Learn AI and Web3 through calm, guided rituals designed for modern women. Free AI Glow-Up ritual included."
+        keywords="AI for women, Web3 for women, AI course, blockchain tutorial, NFT guide, women in tech, AI prompts, ChatGPT for business"
+      />
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div 
           className="absolute inset-0 bg-cover bg-center"

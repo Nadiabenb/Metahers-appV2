@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { User, Settings, Crown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SEO } from "@/components/SEO";
 import { useStats } from "@/hooks/useStats";
 import { useAuth } from "@/hooks/useAuth";
 import { useMutation } from "@tanstack/react-query";
@@ -44,6 +45,11 @@ export default function AccountPage() {
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-background">
+      <SEO
+        title="My Account & Subscription"
+        description="Manage your MetaHers Mind Spa account, subscription, and preferences. Upgrade to Pro for full access to all rituals and features."
+        keywords="account settings, subscription management, upgrade to pro"
+      />
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

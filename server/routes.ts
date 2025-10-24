@@ -130,6 +130,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Submit email for beta access (public endpoint)
+  app.post('/api/email-leads', async (req: Request, res) => {
+    try {
+      const { email } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+      
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ message: "Invalid email address" });
+      }
+      
+      // Save email lead
+      await storage.createEmailLead({ email, source: "email_capture_modal" });
+      
+      res.json({ success: true, message: "Thank you for signing up!" });
+    } catch (error) {
+      console.error("Error saving email lead:", error);
+      // Don't expose duplicate email errors to users for privacy
+      res.status(500).json({ message: "Failed to save email. Please try again." });
+    }
+  });
+
   // Activate beta code for Pro access
   app.post('/api/auth/activate-beta-code', isAuthenticated, async (req: Request, res) => {
     try {

@@ -162,6 +162,21 @@ export const insertAchievementSchema = createInsertSchema(achievements).omit({ i
 export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
 export type AchievementDB = typeof achievements.$inferSelect;
 
+// Email leads table (for marketing/beta signups)
+export const emailLeads = pgTable("email_leads", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").notNull().unique(),
+  source: varchar("source").default("email_capture_modal"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_email_leads_email").on(table.email),
+  index("idx_email_leads_created").on(table.createdAt),
+]);
+
+export const insertEmailLeadSchema = createInsertSchema(emailLeads).omit({ id: true, createdAt: true });
+export type InsertEmailLead = z.infer<typeof insertEmailLeadSchema>;
+export type EmailLeadDB = typeof emailLeads.$inferSelect;
+
 // Glow-Up Program profile table (onboarding data)
 export const glowUpProfiles = pgTable("glow_up_profiles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
