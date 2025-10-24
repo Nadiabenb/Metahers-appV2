@@ -2,7 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { shopProducts } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { Sparkles, CheckCircle2, ShoppingBag, Package, Flame, Droplets, Flower2, Shirt, Wind, Blend, Gem, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Sparkles, CheckCircle2, ShoppingBag, Package, Flame, Droplets, Flower2, Shirt, Wind, Blend, Gem, Zap, Crown, Calendar, BookOpen, MessageSquare } from "lucide-react";
 
 // Product image mapping - 3 images per product for carousel
 const productImageSets: Record<string, string[]> = {
@@ -267,6 +268,82 @@ export default function ShopPage() {
                     <p className="text-sm text-muted-foreground">{ritual.desc}</p>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Pro Membership Included Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.6 }}
+          className="mb-16"
+        >
+          <div className="editorial-card p-8 md:p-12 relative overflow-hidden border-2 border-primary/30">
+            <div className="absolute inset-0 gradient-violet-fuchsia opacity-10" />
+            <div className="relative z-10">
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <Crown className="w-10 h-10 text-[hsl(var(--liquid-gold))]" />
+                <h2 className="font-cormorant text-3xl md:text-4xl font-bold text-foreground text-center">
+                  Every Purchase Includes MetaHers Pro
+                </h2>
+              </div>
+              
+              <div className="text-center mb-8">
+                <Badge className="bg-[hsl(var(--liquid-gold))]/20 text-[hsl(var(--liquid-gold))] border-[hsl(var(--liquid-gold))]/40 text-lg px-4 py-1">
+                  $19.99/month value • Instant activation
+                </Badge>
+              </div>
+
+              <p className="text-center text-lg text-foreground/80 mb-8 max-w-2xl mx-auto">
+                Your ritual bag purchase instantly unlocks full Pro membership—unlimited access to all guided rituals, AI-powered journal, and premium features.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                {[
+                  { 
+                    Icon: Sparkles, 
+                    title: "All AI & Web3 Rituals", 
+                    desc: "Complete library of guided learning experiences covering AI prompting, blockchain, crypto, NFTs, and the metaverse"
+                  },
+                  { 
+                    Icon: BookOpen, 
+                    title: "Advanced AI Journal", 
+                    desc: "Daily mood tracking, AI-generated insights, writing prompts, and comprehensive analytics"
+                  },
+                  { 
+                    Icon: MessageSquare, 
+                    title: "AI Coach Access", 
+                    desc: "Personal AI assistant for guidance on your Web3 and wellness journey"
+                  },
+                  { 
+                    Icon: Calendar, 
+                    title: "Premium Features", 
+                    desc: "Achievement system, progress tracking, exclusive events, and community access"
+                  },
+                ].map((feature, index) => (
+                  <div key={index} className="flex gap-4 p-4 rounded-lg bg-background/50">
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                        <feature.Icon className="w-6 h-6 text-primary" />
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-1">{feature.title}</h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 p-6 rounded-lg bg-primary/5 border border-primary/20 text-center">
+                <p className="text-foreground font-medium mb-2">
+                  <span className="text-primary">One-time purchase.</span> Lifetime access to Pro features.
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  No recurring subscription fees. Your ritual bag unlocks permanent Pro membership.
+                </p>
               </div>
             </div>
           </div>
