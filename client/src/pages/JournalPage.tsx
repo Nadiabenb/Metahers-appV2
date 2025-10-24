@@ -1,13 +1,20 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Flame, History } from "lucide-react";
+import { BookOpen, Flame, History, Calendar } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { StructuredJournalEditor } from "@/components/StructuredJournalEditor";
-import { DailyCalendar } from "@/components/DailyCalendar";
+import { JournalCalendarPicker } from "@/components/JournalCalendarPicker";
 import { useJournal } from "@/hooks/useJournal";
+import { format } from "date-fns";
 
 export default function JournalPage() {
-  const { streak } = useJournal();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [showCalendar, setShowCalendar] = useState(false);
+  const dateStr = format(selectedDate, "yyyy-MM-dd");
+  const { streak } = useJournal(dateStr);
+
+  const isToday = format(selectedDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-background">
@@ -29,9 +36,17 @@ export default function JournalPage() {
               Daily Journal
             </h1>
             <p className="text-lg text-foreground/80 max-w-2xl mx-auto mb-4">
-              Capture your thoughts, reflections, and insights as you journey through rituals.
+              Capture your thoughts, reflections, and insights as you journey through life.
             </p>
-            <div className="flex gap-3 justify-center">
+            <div className="flex gap-3 justify-center flex-wrap">
+              <Button
+                variant={showCalendar ? "default" : "outline"}
+                onClick={() => setShowCalendar(!showCalendar)}
+                data-testid="button-toggle-calendar"
+              >
+                <Calendar className="w-4 h-4 mr-2" />
+                {showCalendar ? "Hide Calendar" : "Show Calendar"}
+              </Button>
               <Link href="/journal/history">
                 <Button variant="outline" data-testid="button-view-history">
                   <History className="w-4 h-4 mr-2" />
@@ -41,10 +56,11 @@ export default function JournalPage() {
             </div>
           </div>
 
+          {/* Streak Card */}
           <div className="editorial-card p-6 mb-8 relative overflow-hidden">
             <div className="absolute inset-0 gradient-violet-magenta opacity-5" />
             <div className="relative z-10">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between flex-wrap gap-4">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/10 flex items-center justify-center">
                     <Flame className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
@@ -71,9 +87,44 @@ export default function JournalPage() {
             </div>
           </div>
 
-          <DailyCalendar className="mb-8" />
+          {/* Calendar Picker */}
+          {showCalendar && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="mb-8"
+            >
+              <JournalCalendarPicker
+                selectedDate={selectedDate}
+                onDateSelect={(date) => {
+                  setSelectedDate(date);
+                  setShowCalendar(false);
+                }}
+              />
+            </motion.div>
+          )}
 
-          <StructuredJournalEditor />
+          {/* Current Date Display */}
+          <div className="mb-6 text-center">
+            <h2 className="font-cormorant text-3xl font-bold text-foreground mb-2">
+              {format(selectedDate, "EEEE, MMMM d, yyyy")}
+            </h2>
+            {!isToday && (
+              <p className="text-sm text-muted-foreground">
+                Viewing past entry • <button
+                  onClick={() => setSelectedDate(new Date())}
+                  className="text-primary hover:underline"
+                  data-testid="button-back-to-today"
+                >
+                  Jump to today
+                </button>
+              </p>
+            )}
+          </div>
+
+          <StructuredJournalEditor selectedDate={dateStr} />
 
           <motion.div
             initial={{ opacity: 0 }}

@@ -333,6 +333,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== JOURNAL ROUTES =====
+  // List journal entries for a month (for calendar view)
+  app.get('/api/journal/list', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const month = req.query.month as string; // Expected format: YYYY-MM
+      
+      if (!month || !/^\d{4}-\d{2}$/.test(month)) {
+        return res.status(400).json({ message: "Invalid month format. Use YYYY-MM" });
+      }
+      
+      // Get all entries for the user
+      const allEntries = await storage.getAllJournalEntries(userId, 100);
+      
+      // Filter entries for the requested month
+      const monthEntries = allEntries
+        .filter(entry => entry.date.startsWith(month))
+        .map(entry => ({ date: entry.date }));
+      
+      res.json(monthEntries);
+    } catch (error) {
+      console.error("Error fetching journal list:", error);
+      res.status(500).json({ message: "Failed to fetch journal list" });
+    }
+  });
+
   app.get('/api/journal', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;

@@ -25,8 +25,13 @@ import { queryClient, apiRequest } from "@/lib/queryClient";
 import type { StructuredJournalContent, JournalTodoItem, JournalEvent } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 
-export function StructuredJournalEditor() {
+interface StructuredJournalEditorProps {
+  selectedDate?: string;
+}
+
+export function StructuredJournalEditor({ selectedDate }: StructuredJournalEditorProps = {}) {
   const { toast } = useToast();
+  const dateStr = selectedDate || new Date().toISOString().split('T')[0];
   
   // State for all journal sections
   const [todos, setTodos] = useState<JournalTodoItem[]>([]);
@@ -55,11 +60,21 @@ export function StructuredJournalEditor() {
 
   // Fetch journal data
   const { data: journalData } = useQuery({
-    queryKey: ["/api/journal"],
+    queryKey: ["/api/journal", dateStr],
+    queryFn: async () => {
+      const res = await fetch(`/api/journal?date=${dateStr}`, {
+        credentials: "include",
+      });
+      if (!res.ok) throw new Error("Failed to fetch journal");
+      return await res.json();
+    },
   });
 
-  // Load data when fetched
+  // Load data when fetched or date changes
   useEffect(() => {
+    // Reset to initial load state when date changes
+    isInitialLoad.current = true;
+    
     if (journalData && typeof journalData === 'object') {
       // Load structured content if it exists
       if ('structuredContent' in journalData && journalData.structuredContent) {
@@ -74,11 +89,25 @@ export function StructuredJournalEditor() {
         setFitnessGoals(data.fitnessGoals || "");
         setFitnessTracking(data.fitnessTracking || "");
         setFreeformNotes(data.freeformNotes || "");
+      } else {
+        // Clear all fields if no data for this date
+        setTodos([]);
+        setGratitude([]);
+        setReminders([]);
+        setHighlights("");
+        setWins([]);
+        setEvents([]);
+        setWaterIntake(0);
+        setFitnessGoals("");
+        setFitnessTracking("");
+        setFreeformNotes("");
       }
       // Always mark initial load as complete after first fetch
-      isInitialLoad.current = false;
+      setTimeout(() => {
+        isInitialLoad.current = false;
+      }, 100);
     }
-  }, [journalData]);
+  }, [journalData, dateStr]);
 
   // Save function
   const saveJournal = useCallback(async () => {
@@ -109,6 +138,7 @@ export function StructuredJournalEditor() {
         body: JSON.stringify({
           content: "", // Legacy field
           structuredContent,
+          date: dateStr,
           streak: (journalData && typeof journalData === 'object' && 'streak' in journalData ? journalData.streak : 0) || 0,
         }),
       });
@@ -117,11 +147,14 @@ export function StructuredJournalEditor() {
         throw new Error("Failed to save journal");
       }
 
+      // Invalidate calendar query so new entries show up immediately
+      queryClient.invalidateQueries({ queryKey: ["/api/journal/entries"] });
+      
       // Don't show toast on auto-save
     } catch (error) {
       console.error("Save error:", error);
     }
-  }, [todos, gratitude, reminders, highlights, wins, events, waterIntake, fitnessGoals, fitnessTracking, freeformNotes, journalData]);
+  }, [todos, gratitude, reminders, highlights, wins, events, waterIntake, fitnessGoals, fitnessTracking, freeformNotes, journalData, dateStr]);
 
   // Auto-save on changes (debounced)
   useEffect(() => {
