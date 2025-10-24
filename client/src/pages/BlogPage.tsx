@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
 import { blogArticles, BlogArticle } from "@shared/schema";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
-import { Calendar, Clock, Sparkles, BookOpen } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { Calendar, Clock, Sparkles, BookOpen, ArrowRight, ShoppingBag } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { motion } from "framer-motion";
 
@@ -38,6 +40,9 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 function ArticleContent({ article }: { article: BlogArticle }) {
+  const { isAuthenticated } = useAuth();
+  const [, setLocation] = useLocation();
+
   return (
     <div className="max-w-4xl mx-auto space-y-8 px-6 py-12">
       {/* Header */}
@@ -141,6 +146,78 @@ function ArticleContent({ article }: { article: BlogArticle }) {
               return null;
           }
         })}
+      </div>
+
+      {/* CTA Section */}
+      <div className="mt-16 border-t border-border pt-12">
+        <Card className="editorial-card p-8 md:p-12 relative overflow-hidden border-0">
+          <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
+          <div className="relative z-10 text-center space-y-6">
+            <Sparkles className="w-12 h-12 text-[hsl(var(--liquid-gold))] mx-auto" />
+            <h3 className="font-cormorant text-3xl md:text-4xl font-bold text-foreground">
+              Ready to Transform Your Digital Journey?
+            </h3>
+            
+            {!isAuthenticated ? (
+              <>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                  Get access to guided AI & Web3 rituals, an AI-powered journal, and exclusive content designed for women who want to lead in the digital age.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+                  <Button 
+                    size="lg"
+                    onClick={() => setLocation("/signup")}
+                    className="gap-2 min-w-[200px]"
+                    data-testid="button-cta-signup"
+                  >
+                    Start Your Journey
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    size="lg"
+                    variant="outline"
+                    onClick={() => setLocation("/shop")}
+                    className="gap-2 min-w-[200px]"
+                    data-testid="button-cta-shop"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    Explore Drop 001
+                  </Button>
+                </div>
+                <p className="text-sm text-muted-foreground/80">
+                  Drop 001 ritual bags include instant Pro membership + exclusive AI unlocks
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                  Continue your journey with our limited edition ritual bags—handmade luxury meets AI-powered transformation.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+                  <Button 
+                    size="lg"
+                    onClick={() => setLocation("/rituals")}
+                    className="gap-2 min-w-[200px]"
+                    data-testid="button-cta-rituals"
+                  >
+                    Explore Rituals
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    size="lg"
+                    variant="outline"
+                    onClick={() => setLocation("/shop")}
+                    className="gap-2 min-w-[200px]"
+                    data-testid="button-cta-shop-auth"
+                  >
+                    <ShoppingBag className="w-4 h-4" />
+                    Shop Drop 001
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
   );
