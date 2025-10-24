@@ -130,6 +130,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Activate beta code for Pro access
+  app.post('/api/auth/activate-beta-code', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { code } = req.body;
+      
+      if (!code) {
+        return res.status(400).json({ message: "Beta code is required" });
+      }
+      
+      // Check if code is valid (case-insensitive)
+      if (code.trim().toUpperCase() !== "METAMUSE2025") {
+        return res.status(400).json({ message: "Invalid beta code" });
+      }
+      
+      // Get user and check if already Pro
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      
+      if (user.isPro) {
+        return res.status(400).json({ message: "You already have Pro access" });
+      }
+      
+      // Grant Pro access
+      await storage.updateUserProStatus(userId, true);
+      
+      res.json({ success: true, message: "Pro access activated! Welcome to MetaHers Pro." });
+    } catch (error) {
+      console.error("Error activating beta code:", error);
+      res.status(500).json({ message: "Failed to activate beta code" });
+    }
+  });
+
   // Request password reset
   app.post('/api/auth/request-password-reset', async (req: Request, res) => {
     try {

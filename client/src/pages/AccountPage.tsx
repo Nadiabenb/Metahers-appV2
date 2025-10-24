@@ -1,12 +1,46 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Settings, Crown } from "lucide-react";
+import { User, Settings, Crown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useStats } from "@/hooks/useStats";
 import { useAuth } from "@/hooks/useAuth";
+import { useMutation } from "@tanstack/react-query";
+import { apiRequest, queryClient } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AccountPage() {
   const { data: stats, isLoading } = useStats();
   const { user } = useAuth();
+  const { toast } = useToast();
+  const [betaCode, setBetaCode] = useState("");
+
+  const activateBetaCodeMutation = useMutation({
+    mutationFn: (code: string) =>
+      apiRequest('POST', '/api/auth/activate-beta-code', { code }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      toast({
+        title: "Pro Access Activated",
+        description: "Welcome to MetaHers Pro. All features unlocked!",
+      });
+      setBetaCode("");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Activation Failed",
+        description: error.message || "Invalid beta code. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleActivateBetaCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (betaCode.trim()) {
+      activateBetaCodeMutation.mutate(betaCode);
+    }
+  };
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-background">
@@ -143,6 +177,38 @@ export default function AccountPage() {
                         </div>
                       </div>
                     </div>
+                  </div>
+                )}
+
+                {!user?.isPro && (
+                  <div className="mt-6 pt-6 border-t border-border">
+                    <div className="flex items-center gap-3 mb-4">
+                      <Sparkles className="w-5 h-5 text-[hsl(var(--aurora-teal))]" />
+                      <h4 className="font-serif text-lg font-semibold text-foreground">
+                        Have a Beta Code?
+                      </h4>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Enter your beta access code to unlock Pro features for free.
+                    </p>
+                    <form onSubmit={handleActivateBetaCode} className="flex gap-3">
+                      <Input
+                        type="text"
+                        placeholder="Enter beta code"
+                        value={betaCode}
+                        onChange={(e) => setBetaCode(e.target.value)}
+                        className="flex-1"
+                        data-testid="input-beta-code"
+                      />
+                      <Button
+                        type="submit"
+                        disabled={!betaCode.trim() || activateBetaCodeMutation.isPending}
+                        className="gap-2"
+                        data-testid="button-activate-beta"
+                      >
+                        {activateBetaCodeMutation.isPending ? "Activating..." : "Activate"}
+                      </Button>
+                    </form>
                   </div>
                 )}
               </div>
