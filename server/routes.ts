@@ -649,6 +649,161 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== GLOW-UP PROGRAM ROUTES =====
+
+  // Get user's glow-up profile
+  app.get('/api/glow-up/profile', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const profile = await storage.getGlowUpProfile(userId);
+      res.json(profile || null);
+    } catch (error) {
+      console.error("Error fetching glow-up profile:", error);
+      res.status(500).json({ message: "Failed to fetch profile" });
+    }
+  });
+
+  // Create/update glow-up profile (onboarding)
+  app.post('/api/glow-up/profile', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { name, brandType, niche, platform, goal } = req.body;
+
+      if (!name || !brandType || !niche || !platform || !goal) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+
+      const profile = await storage.upsertGlowUpProfile({
+        userId,
+        name,
+        brandType,
+        niche,
+        platform,
+        goal,
+      });
+
+      // Initialize progress if it doesn't exist
+      let progress = await storage.getGlowUpProgress(userId);
+      if (!progress) {
+        progress = await storage.upsertGlowUpProgress({
+          userId,
+          completedDays: [],
+          currentDay: 1,
+        });
+      }
+
+      res.json({ profile, progress });
+    } catch (error) {
+      console.error("Error saving glow-up profile:", error);
+      res.status(500).json({ message: "Failed to save profile" });
+    }
+  });
+
+  // Get user's glow-up progress
+  app.get('/api/glow-up/progress', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const progress = await storage.getGlowUpProgress(userId);
+      res.json(progress || null);
+    } catch (error) {
+      console.error("Error fetching glow-up progress:", error);
+      res.status(500).json({ message: "Failed to fetch progress" });
+    }
+  });
+
+  // Update glow-up progress (mark day complete)
+  app.post('/api/glow-up/progress', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { day } = req.body;
+
+      if (!day || day < 1 || day > 14) {
+        return res.status(400).json({ message: "Invalid day number" });
+      }
+
+      const currentProgress = await storage.getGlowUpProgress(userId);
+      if (!currentProgress) {
+        return res.status(404).json({ message: "Progress not found. Complete onboarding first." });
+      }
+
+      const completedDays = currentProgress.completedDays || [];
+      if (!completedDays.includes(day)) {
+        completedDays.push(day);
+        completedDays.sort((a, b) => a - b);
+      }
+
+      const completedAt = completedDays.length === 14 ? new Date() : currentProgress.completedAt;
+      const currentDay = Math.min(completedDays.length + 1, 14);
+
+      const progress = await storage.upsertGlowUpProgress({
+        userId,
+        completedDays,
+        currentDay,
+        completedAt,
+      });
+
+      res.json(progress);
+    } catch (error) {
+      console.error("Error updating glow-up progress:", error);
+      res.status(500).json({ message: "Failed to update progress" });
+    }
+  });
+
+  // Get all journal entries
+  app.get('/api/glow-up/journal', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const entries = await storage.getAllGlowUpJournalEntries(userId);
+      res.json(entries);
+    } catch (error) {
+      console.error("Error fetching glow-up journal entries:", error);
+      res.status(500).json({ message: "Failed to fetch journal entries" });
+    }
+  });
+
+  // Get specific day journal entry
+  app.get('/api/glow-up/journal/:day', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const day = parseInt(req.params.day);
+
+      if (isNaN(day) || day < 1 || day > 14) {
+        return res.status(400).json({ message: "Invalid day number" });
+      }
+
+      const entry = await storage.getGlowUpJournalEntry(userId, day);
+      res.json(entry || null);
+    } catch (error) {
+      console.error("Error fetching glow-up journal entry:", error);
+      res.status(500).json({ message: "Failed to fetch journal entry" });
+    }
+  });
+
+  // Save/update journal entry
+  app.post('/api/glow-up/journal', isAuthenticated, async (req, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { day, gptResponse, publicPostDraft, notes } = req.body;
+
+      if (!day || day < 1 || day > 14) {
+        return res.status(400).json({ message: "Invalid day number" });
+      }
+
+      const entry = await storage.upsertGlowUpJournalEntry({
+        userId,
+        day,
+        gptResponse: gptResponse || null,
+        publicPostDraft: publicPostDraft || null,
+        notes: notes || null,
+      });
+
+      res.json(entry);
+    } catch (error) {
+      console.error("Error saving glow-up journal entry:", error);
+      res.status(500).json({ message: "Failed to save journal entry" });
+    }
+  });
+
   // Stripe webhook handler
   app.post('/api/webhooks/stripe', async (req, res) => {
     const sig = req.headers['stripe-signature'];
