@@ -50,7 +50,7 @@ function ProductCarousel({ images, productId, productName }: ProductCarouselProp
     intervalRef.current = window.setInterval(() => {
       index = (index + 1) % images.length;
       setCurrentImage(index);
-    }, 1000); // Change image every 1 second
+    }, 2500); // Change image every 2.5 seconds
   };
 
   const handleMouseLeave = () => {
