@@ -5,27 +5,21 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, CheckCircle2, ShoppingBag, Package, Flame, Droplets, Flower2, Shirt, Wind, Blend, Gem, Zap } from "lucide-react";
 
 // Product image mapping - 3 images per product for carousel
-// Using direct URLs to attached_assets to handle uppercase .PNG extensions
 const productImageSets: Record<string, string[]> = {
   "sheikha-bag": [
-    "/attached_assets/CC6D738B-75D3-449A-A2CD-AE13833711A4_1761327881533.PNG",
-    "/attached_assets/236F6505-F528-4C27-8C09-8BD994F646AE_1761327881533.PNG",
-    "/attached_assets/53214468-D744-44D4-B67E-7B255CCAF54B 3_1761327881533.PNG",
+    "https://i.ibb.co/wMqxK7r/CC6D738B-75D3-449A-A2CD-AE13833711A4-1761327881533.png",
+    "https://i.ibb.co/zmJGpSZ/236F6505-F528-4C27-8C09-8BD994F646AE-1761327881533.png",
+    "https://i.ibb.co/fDbk8Cm/53214468-D744-44D4-B67E-7B255CCAF54B-3-1761327881533.png",
   ],
   "serenity-bag": [
-    "/attached_assets/25B5A72F-9B01-4E01-A5DB-DEC993F39104_1761327881533.PNG",
-    "/attached_assets/61904215-07FB-4E6B-9B18-F1CF23F3A7D2_1761327881533.PNG",
-    "/attached_assets/F2CBAB9F-EC8C-4122-9D4C-F90589A9B70D_1761327881533.PNG",
+    "https://i.ibb.co/Wp5rKGt/25B5A72F-9B01-4E01-A5DB-DEC993F39104-1761327881533.png",
+    "https://i.ibb.co/fMWJ75y/61904215-07FB-4E6B-9B18-F1CF23F3A7D2-1761327881533.png",
+    "https://i.ibb.co/GcLLLj2/F2CBAB9F-EC8C-4122-9D4C-F90589A9B70D-1761327881533.png",
   ],
   "floral-bag": [
-    "/attached_assets/F789EA16-979A-4C2E-A621-682F00F3A8BC_1761327881533.PNG",
-    "/attached_assets/147F88B6-8B76-424A-BFF2-2B04F4B3E886_1761327881533.PNG",
-    "/attached_assets/D9A54C83-6671-4B61-A992-033C10310041_1761327881533.PNG",
-  ],
-  "trio-bundle": [
-    "/attached_assets/826D97B3-91F3-4ED7-B400-CFC52BCBEE6C_1761327881533.PNG",
-    "/attached_assets/8B1E098D-F05A-4FE7-B83F-BAC21671D4A5_1761327881533.PNG",
-    "/attached_assets/F2CBAB9F-EC8C-4122-9D4C-F90589A9B70D_1761327881533.PNG",
+    "https://i.ibb.co/jG5TZYK/F789EA16-979A-4C2E-A621-682F00F3A8BC-1761327881533.png",
+    "https://i.ibb.co/25qSzDZ/147F88B6-8B76-424A-BFF2-2B04F4B3E886-1761327881533.png",
+    "https://i.ibb.co/cwrKrcP/D9A54C83-6671-4B61-A992-033C10310041-1761327881533.png",
   ],
 };
 
@@ -113,7 +107,6 @@ export default function ShopPage() {
   };
 
   const bags = shopProducts.filter(p => p.type === "bag");
-  const bundle = shopProducts.find(p => p.id === "trio-bundle");
 
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-background">
@@ -278,88 +271,6 @@ export default function ShopPage() {
             </div>
           </div>
         </motion.div>
-
-        {/* Complete Bundle */}
-        {bundle && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.6 }}
-            className="relative mb-16"
-          >
-            <div className="absolute -inset-1 bg-gradient-to-r from-[hsl(var(--liquid-gold))]/30 via-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--liquid-gold))]/30 rounded-2xl blur-lg" />
-            <div className="relative editorial-card p-8 neon-glow-gold">
-              <div className="absolute inset-0 gradient-teal-gold opacity-5" />
-              <div className="relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                  <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
-                    <img
-                      src="/attached_assets/826D97B3-91F3-4ED7-B400-CFC52BCBEE6C_1761327881533.PNG"
-                      alt="Complete Drop 001"
-                      className="w-full h-full object-cover"
-                      data-testid="img-product-trio-bundle"
-                    />
-                  </div>
-
-                  <div>
-                    <div className="inline-flex items-center gap-2 bg-[hsl(var(--liquid-gold))] text-background px-4 py-1 rounded-full text-sm font-semibold mb-4 shadow-md" data-testid="badge-bundle-savings">
-                      <Sparkles className="w-4 h-4" />
-                      Save $98 — The Complete Collection
-                    </div>
-                    
-                    <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4" data-testid="text-bundle-title">
-                      {bundle.name}
-                    </h2>
-                    
-                    <p className="text-lg text-foreground/80 mb-6 leading-relaxed" data-testid="text-bundle-description">
-                      {bundle.description}
-                    </p>
-
-                    <div className="bg-card/50 border border-border/40 rounded-lg p-4 mb-6">
-                      <h4 className="font-semibold mb-2">Includes:</h4>
-                      <div className="grid grid-cols-2 gap-2 text-sm text-foreground/80">
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-primary" />
-                          <span>3 Ritual Bags</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-primary" />
-                          <span>18 Products</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-primary" />
-                          <span>3 AI Unlocks</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-primary" />
-                          <span>Pro Membership</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-6 border-t border-border">
-                      <div>
-                        <div className="text-sm text-muted-foreground line-through mb-1" data-testid="text-bundle-original-price">
-                          $597
-                        </div>
-                        <div className="text-4xl font-bold text-primary" data-testid="text-bundle-price">
-                          $499
-                        </div>
-                      </div>
-                      <Button
-                        onClick={handlePurchase}
-                        className="bg-[hsl(var(--liquid-gold))] hover:bg-[hsl(var(--liquid-gold))]/90 text-background px-8 py-3 text-lg"
-                        data-testid="button-buy-trio-bundle"
-                      >
-                        Get Complete Set
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
 
         {/* CTA Footer */}
         <motion.div
