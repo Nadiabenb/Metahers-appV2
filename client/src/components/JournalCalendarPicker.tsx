@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import {  ChevronLeft, ChevronRight, Calendar, CheckCircle2, Circle, Sparkles } from "lucide-react";
+import {  ChevronLeft, ChevronRight, Calendar, CheckCircle2, Circle, Sparkles, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, addMonths, subMonths } from "date-fns";
@@ -14,6 +14,7 @@ interface JournalCalendarPickerProps {
 
 export function JournalCalendarPicker({ selectedDate, onDateSelect, className = "" }: JournalCalendarPickerProps) {
   const [currentMonth, setCurrentMonth] = useState(selectedDate);
+  const [showMonthPicker, setShowMonthPicker] = useState(false);
   
   // Sync currentMonth when selectedDate changes from outside (e.g., "Jump to today")
   useEffect(() => {
@@ -23,7 +24,7 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
   // Fetch journal entries for the current month to show which days have entries
   const firstDay = startOfMonth(currentMonth);
   const lastDay = endOfMonth(currentMonth);
-  const { data: entries } = useQuery<Array<{ date: string }>>({
+  const { data: entries } = useQuery<Array<{ date: string; mood: string | null }>>({
     queryKey: ["/api/journal/entries", format(currentMonth, "yyyy-MM")],
     queryFn: async () => {
       const res = await fetch(`/api/journal/list?month=${format(currentMonth, "yyyy-MM")}`, {
@@ -51,10 +52,108 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
     onDateSelect(today);
   };
 
+  const handleMonthYearSelect = (month: number, year: number) => {
+    const newDate = new Date(year, month, 1);
+    setCurrentMonth(newDate);
+    setShowMonthPicker(false);
+  };
+
+  // Generate months and years for quick picker
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 5 }, (_, i) => currentYear - 2 + i); // 2 years ago to 2 years ahead
+
   const hasEntry = (date: Date) => {
     if (!entries) return false;
     const dateStr = format(date, "yyyy-MM-dd");
     return entries.some(entry => entry.date === dateStr);
+  };
+
+  const getMood = (date: Date): string | null => {
+    if (!entries) return null;
+    const dateStr = format(date, "yyyy-MM-dd");
+    const entry = entries.find(entry => entry.date === dateStr);
+    return entry?.mood || null;
+  };
+
+  // Mood color mapping (jewel-tone neon palette)
+  const getMoodColor = (mood: string | null): { bg: string; border: string; text: string } => {
+    if (!mood) return { bg: "", border: "", text: "" };
+    
+    const moodColors: Record<string, { bg: string; border: string; text: string }> = {
+      happy: { 
+        bg: "bg-[hsl(var(--liquid-gold))]/15",
+        border: "border-[hsl(var(--liquid-gold))]", 
+        text: "text-[hsl(var(--liquid-gold))]"
+      },
+      peaceful: { 
+        bg: "bg-[hsl(var(--aurora-teal))]/15", 
+        border: "border-[hsl(var(--aurora-teal))]",
+        text: "text-[hsl(var(--aurora-teal))]"
+      },
+      motivated: { 
+        bg: "bg-[hsl(var(--hyper-violet))]/15", 
+        border: "border-[hsl(var(--hyper-violet))]",
+        text: "text-[hsl(var(--hyper-violet))]"
+      },
+      reflective: { 
+        bg: "bg-[hsl(var(--magenta-quartz))]/15", 
+        border: "border-[hsl(var(--magenta-quartz))]",
+        text: "text-[hsl(var(--magenta-quartz))]"
+      },
+      sad: { 
+        bg: "bg-blue-400/15", 
+        border: "border-blue-400",
+        text: "text-blue-400"
+      },
+      anxious: { 
+        bg: "bg-orange-400/15", 
+        border: "border-orange-400",
+        text: "text-orange-400"
+      },
+      tired: { 
+        bg: "bg-gray-400/15", 
+        border: "border-gray-400",
+        text: "text-gray-400"
+      },
+      inspired: { 
+        bg: "bg-[hsl(var(--cyber-fuchsia))]/15", 
+        border: "border-[hsl(var(--cyber-fuchsia))]",
+        text: "text-[hsl(var(--cyber-fuchsia))]"
+      },
+    };
+    
+    return moodColors[mood] || { bg: "", border: "", text: "" };
+  };
+
+  // Check if a date is part of the current streak
+  const isPartOfStreak = (date: Date): boolean => {
+    if (!entries || entries.length === 0) return false;
+    
+    const dateStr = format(date, "yyyy-MM-dd");
+    const today = format(new Date(), "yyyy-MM-dd");
+    
+    // Build a Set of all entry dates for quick lookup
+    const entryDates = new Set(entries.map(e => e.date));
+    
+    // Check if this date has an entry
+    if (!entryDates.has(dateStr)) return false;
+    
+    // Check if there's a consecutive path from this date to today
+    let currentDate = new Date(date);
+    while (format(currentDate, "yyyy-MM-dd") <= today) {
+      const currentStr = format(currentDate, "yyyy-MM-dd");
+      if (!entryDates.has(currentStr)) {
+        // Streak broken
+        return false;
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    return true;
   };
 
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -69,10 +168,16 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
               <Calendar className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
             </div>
             <div>
-              <h3 className="font-cormorant text-2xl font-bold text-foreground">
+              <button
+                onClick={() => setShowMonthPicker(!showMonthPicker)}
+                className="font-cormorant text-2xl font-bold text-foreground hover:text-primary transition-colors cursor-pointer text-left"
+                data-testid="button-toggle-month-picker"
+              >
                 {format(currentMonth, "MMMM yyyy")}
-              </h3>
-              <p className="text-sm text-muted-foreground">Select a date to journal</p>
+              </button>
+              <p className="text-sm text-muted-foreground">
+                {showMonthPicker ? "Choose month & year" : "Select a date to journal"}
+              </p>
             </div>
           </div>
           
@@ -104,6 +209,44 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
           </div>
         </div>
 
+        {/* Month/Year Quick Picker */}
+        {showMonthPicker && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="border-t border-border/40 pt-4 mt-4"
+          >
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {months.map((month, index) => (
+                <Button
+                  key={month}
+                  variant={currentMonth.getMonth() === index ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleMonthYearSelect(index, currentMonth.getFullYear())}
+                  className="text-xs"
+                  data-testid={`button-month-${index}`}
+                >
+                  {month.substring(0, 3)}
+                </Button>
+              ))}
+            </div>
+            <div className="grid grid-cols-5 gap-2">
+              {years.map((year) => (
+                <Button
+                  key={year}
+                  variant={currentMonth.getFullYear() === year ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => handleMonthYearSelect(currentMonth.getMonth(), year)}
+                  data-testid={`button-year-${year}`}
+                >
+                  {year}
+                </Button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+
         {/* Calendar Grid */}
         <div className="space-y-2">
           {/* Week days */}
@@ -131,6 +274,9 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
               const isTodayDay = isToday(day);
               const hasJournalEntry = hasEntry(day);
               const dayNum = format(day, "d");
+              const dayMood = getMood(day);
+              const moodColors = getMoodColor(dayMood);
+              const partOfStreak = isPartOfStreak(day);
 
               return (
                 <motion.button
@@ -145,6 +291,8 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
                       ? "bg-primary text-primary-foreground shadow-md ring-2 ring-primary ring-offset-2 ring-offset-background" 
                       : isTodayDay
                       ? "bg-accent text-accent-foreground border-2 border-primary/50"
+                      : hasJournalEntry && dayMood
+                      ? `${moodColors.bg} border-2 ${moodColors.border} hover-elevate ${moodColors.text}`
                       : hasJournalEntry
                       ? "bg-muted hover-elevate text-foreground"
                       : "hover-elevate text-muted-foreground"
@@ -157,9 +305,16 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
                   </span>
                   
                   {/* Entry indicator */}
-                  {hasJournalEntry && !isSelected && (
+                  {hasJournalEntry && !isSelected && !partOfStreak && (
                     <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
                       <CheckCircle2 className="w-3 h-3 text-[hsl(var(--aurora-teal))]" />
+                    </div>
+                  )}
+                  
+                  {/* Streak indicator (fire emoji) */}
+                  {partOfStreak && !isSelected && (
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
+                      <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
                     </div>
                   )}
                   
@@ -176,10 +331,14 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground pt-2 border-t border-border/40">
+        <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border/40 flex-wrap">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-[hsl(var(--aurora-teal))]" />
-            <span>Has entry</span>
+            <span>Entry</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Flame className="w-3.5 h-3.5 text-orange-500 fill-orange-500" />
+            <span>Streak</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--liquid-gold))]" />

@@ -346,10 +346,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Get all entries for the user
       const allEntries = await storage.getAllJournalEntries(userId, 100);
       
-      // Filter entries for the requested month
+      // Filter entries for the requested month and include mood
       const monthEntries = allEntries
         .filter(entry => entry.date.startsWith(month))
-        .map(entry => ({ date: entry.date }));
+        .map(entry => ({ 
+          date: entry.date,
+          mood: entry.mood || null
+        }));
       
       res.json(monthEntries);
     } catch (error) {
