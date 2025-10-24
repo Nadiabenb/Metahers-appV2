@@ -91,7 +91,27 @@ export function Navigation() {
           )}
 
           {!isAuthenticated && !isLoading && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setLocation("/blog")}
+                variant="ghost"
+                size="sm"
+                className="gap-2"
+                data-testid="link-blog"
+              >
+                <Newspaper className="w-4 h-4" />
+                Blog
+              </Button>
+              <Button
+                onClick={() => setLocation("/shop")}
+                variant="ghost"
+                size="sm"
+                className="gap-2"
+                data-testid="link-shop"
+              >
+                <ShoppingBag className="w-4 h-4" />
+                Shop
+              </Button>
               <Button
                 onClick={handleLogin}
                 variant="default"

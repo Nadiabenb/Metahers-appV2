@@ -53,6 +53,10 @@ function Router() {
       <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/ai-glow-up-program" component={GlowUpLandingPage} />
       
+      {/* Public routes - accessible to everyone */}
+      <Route path="/blog" component={BlogPage} />
+      <Route path="/shop" component={ShopPage} />
+      
       {!isAuthenticated ? (
         <Route path="/" component={LandingPage} />
       ) : (
@@ -60,10 +64,8 @@ function Router() {
           <Route path="/" component={HomePage} />
           <Route path="/rituals" component={RitualsPage} />
           <Route path="/rituals/:slug" component={RitualDetailPage} />
-          <Route path="/shop" component={ShopPage} />
           <Route path="/journal" component={JournalPage} />
           <Route path="/journal/history" component={JournalHistoryPage} />
-          <Route path="/blog" component={BlogPage} />
           <Route path="/metamuse" component={MetaMusePage} />
           <Route path="/events" component={EventsPage} />
           <Route path="/account" component={AccountPage} />
