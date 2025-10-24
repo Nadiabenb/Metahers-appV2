@@ -162,6 +162,62 @@ export const insertAchievementSchema = createInsertSchema(achievements).omit({ i
 export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
 export type AchievementDB = typeof achievements.$inferSelect;
 
+// Glow-Up Program profile table (onboarding data)
+export const glowUpProfiles = pgTable("glow_up_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  name: varchar("name").notNull(),
+  brandType: varchar("brand_type").notNull(), // "personal" or "business"
+  niche: text("niche").notNull(),
+  platform: varchar("platform").notNull(), // "IG", "TikTok", "LinkedIn", "X"
+  goal: varchar("goal").notNull(), // "rebrand" or "new"
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_glowup_profile_user").on(table.userId),
+]);
+
+export const insertGlowUpProfileSchema = createInsertSchema(glowUpProfiles).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertGlowUpProfile = z.infer<typeof insertGlowUpProfileSchema>;
+export type GlowUpProfileDB = typeof glowUpProfiles.$inferSelect;
+
+// Glow-Up Program progress table (tracks completed days)
+export const glowUpProgress = pgTable("glow_up_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  completedDays: jsonb("completed_days").$type<number[]>().notNull().default(sql`'[]'::jsonb`), // [1, 2, 3, ...]
+  currentDay: integer("current_day").default(1).notNull(),
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+}, (table) => [
+  index("idx_glowup_progress_user").on(table.userId),
+]);
+
+export const insertGlowUpProgressSchema = createInsertSchema(glowUpProgress).omit({ id: true, startedAt: true, lastUpdated: true });
+export type InsertGlowUpProgress = z.infer<typeof insertGlowUpProgressSchema>;
+export type GlowUpProgressDB = typeof glowUpProgress.$inferSelect;
+
+// Glow-Up Program journal table (stores GPT responses and drafts)
+export const glowUpJournal = pgTable("glow_up_journal", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  day: integer("day").notNull(), // 1-14
+  gptResponse: text("gpt_response"),
+  publicPostDraft: text("public_post_draft"),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_glowup_journal_user").on(table.userId),
+  index("idx_glowup_journal_day").on(table.day),
+  index("idx_glowup_journal_user_day").on(table.userId, table.day),
+]);
+
+export const insertGlowUpJournalSchema = createInsertSchema(glowUpJournal).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertGlowUpJournal = z.infer<typeof insertGlowUpJournalSchema>;
+export type GlowUpJournalDB = typeof glowUpJournal.$inferSelect;
+
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
 export const ritualSchema = z.object({
