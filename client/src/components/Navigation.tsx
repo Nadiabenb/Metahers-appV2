@@ -91,7 +91,7 @@ export function Navigation() {
           )}
 
           {!isAuthenticated && !isLoading && (
-            <div className="hidden md:flex items-center">
+            <div className="flex items-center">
               <Button
                 onClick={handleLogin}
                 variant="default"
