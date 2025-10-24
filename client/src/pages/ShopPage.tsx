@@ -1,157 +1,223 @@
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { shopProducts } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { Sparkles, CheckCircle2 } from "lucide-react";
-import sheikhaBag from "@assets/generated_images/Sheikha_Ritual_Bag_product_c23c112a.png";
-import serenityBag from "@assets/generated_images/Serenity_Ritual_Bag_product_343cd620.png";
-import floralBag from "@assets/generated_images/Floral_Ritual_Bag_product_60ad94ef.png";
-import trioBundle from "@assets/generated_images/Trio_Bundle_collection_product_693bd7b6.png";
+import { Sparkles, CheckCircle2, ShoppingBag, Package, Flame, Droplets, Flower2, Shirt, Wind, Blend, Gem, Zap } from "lucide-react";
+
+// Product image mapping - 3 images per product for carousel
+// Using direct URLs to attached_assets to handle uppercase .PNG extensions
+const productImageSets: Record<string, string[]> = {
+  "sheikha-bag": [
+    "/attached_assets/CC6D738B-75D3-449A-A2CD-AE13833711A4_1761327881533.PNG",
+    "/attached_assets/236F6505-F528-4C27-8C09-8BD994F646AE_1761327881533.PNG",
+    "/attached_assets/53214468-D744-44D4-B67E-7B255CCAF54B 3_1761327881533.PNG",
+  ],
+  "serenity-bag": [
+    "/attached_assets/25B5A72F-9B01-4E01-A5DB-DEC993F39104_1761327881533.PNG",
+    "/attached_assets/61904215-07FB-4E6B-9B18-F1CF23F3A7D2_1761327881533.PNG",
+    "/attached_assets/F2CBAB9F-EC8C-4122-9D4C-F90589A9B70D_1761327881533.PNG",
+  ],
+  "floral-bag": [
+    "/attached_assets/F789EA16-979A-4C2E-A621-682F00F3A8BC_1761327881533.PNG",
+    "/attached_assets/147F88B6-8B76-424A-BFF2-2B04F4B3E886_1761327881533.PNG",
+    "/attached_assets/D9A54C83-6671-4B61-A992-033C10310041_1761327881533.PNG",
+  ],
+  "trio-bundle": [
+    "/attached_assets/826D97B3-91F3-4ED7-B400-CFC52BCBEE6C_1761327881533.PNG",
+    "/attached_assets/8B1E098D-F05A-4FE7-B83F-BAC21671D4A5_1761327881533.PNG",
+    "/attached_assets/F2CBAB9F-EC8C-4122-9D4C-F90589A9B70D_1761327881533.PNG",
+  ],
+};
+
+interface ProductCarouselProps {
+  images: string[];
+  productId: string;
+  productName: string;
+}
+
+function ProductCarousel({ images, productId, productName }: ProductCarouselProps) {
+  const [currentImage, setCurrentImage] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
+  const intervalRef = useRef<number | null>(null);
+
+  // Cleanup interval on unmount
+  useEffect(() => {
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []);
+
+  // Auto-cycle through images on hover
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+    let index = 0;
+    intervalRef.current = window.setInterval(() => {
+      index = (index + 1) % images.length;
+      setCurrentImage(index);
+    }, 1000); // Change image every 1 second
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setCurrentImage(0);
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  return (
+    <div
+      className="relative aspect-square rounded-2xl overflow-hidden neon-glow-subtle cursor-pointer"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      data-testid={`carousel-${productId}`}
+    >
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={currentImage}
+          src={images[currentImage]}
+          alt={`${productName} - View ${currentImage + 1}`}
+          className="w-full h-full object-cover"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          data-testid={`img-product-${productId}-${currentImage}`}
+        />
+      </AnimatePresence>
+
+      {/* Image indicators */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+        {images.map((_, index) => (
+          <div
+            key={index}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentImage
+                ? "bg-white w-6"
+                : "bg-white/40"
+            }`}
+            data-testid={`indicator-${productId}-${index}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function ShopPage() {
-  const productImages: Record<string, string> = {
-    sheikha: sheikhaBag,
-    serenity: serenityBag,
-    floral: floralBag,
-    bundle: trioBundle,
-  };
-
-  const productTags: Record<string, { emoji: string; tag: string }> = {
-    "sheikha-bag": { emoji: "🖤", tag: "A royal, empowering ritual." },
-    "serenity-bag": { emoji: "💜", tag: "A calming, refreshing ritual." },
-    "floral-bag": { emoji: "🌹", tag: "A soft, romantic ritual." },
-  };
-
   const handlePurchase = () => {
     window.open("https://metahers.gumroad.com/l/metahers", "_blank");
   };
 
+  const bags = shopProducts.filter(p => p.type === "bag");
+  const bundle = shopProducts.find(p => p.id === "trio-bundle");
+
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-background">
+    <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
-        {/* Hero Section */}
+        {/* Drop 001 Hero */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="text-center mb-16"
+          className="text-center mb-12"
         >
-          <h1 className="font-cormorant text-5xl sm:text-6xl font-bold text-foreground mb-6" data-testid="text-page-title">
-            MetaHers Ritual Bags
-          </h1>
-          <p className="text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed mb-8" data-testid="text-page-subtitle">
-            Your self-care meets your digital glow-up.<br />
-            Each Ritual Bag blends luxury wellness with personal AI guidance.<br />
-            When you purchase one, you instantly become a <span className="text-primary font-semibold">MetaHers Pro Member</span> — unlocking live sessions, your AI-powered journal, and exclusive digital tools for women.
-          </p>
-
-          {/* Pro Membership Benefits */}
-          <div className="max-w-2xl mx-auto editorial-card p-8 mb-12">
-            <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
-            <h3 className="font-cormorant text-2xl font-bold text-foreground mb-6 relative z-10">Pro Membership includes:</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left relative z-10">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-foreground/80">Weekly AI Glow-Up Sessions</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-foreground/80">AI-Powered Journal access</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-foreground/80">Private MetaHers Mind Spa community</span>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                <span className="text-foreground/80">Step-by-step AI tools for your goals</span>
-              </div>
-            </div>
+          <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-4 neon-glow-violet">
+            <Package className="w-4 h-4 text-primary" />
+            <span className="text-xs font-medium tracking-wide uppercase">
+              Limited Edition
+            </span>
           </div>
 
-          <Button
-            onClick={handlePurchase}
-            size="lg"
-            className="text-lg"
-            data-testid="button-shop-ritual-bags"
-          >
-            Shop Ritual Bags
-          </Button>
+          <h1 className="font-serif text-5xl md:text-6xl font-bold text-gradient-violet mb-4" data-testid="text-page-title">
+            MetaHers Mind Spa<br/>Drop 001
+          </h1>
+          <p className="text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed mb-6" data-testid="text-page-subtitle">
+            Handmade. Intentional. Soul-led.<br/>
+            18 exclusive Ritual Kits • 6 of each design • AI-guided experiences
+          </p>
+          <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+            Each bag unlocks a mystery AI ritual + instant MetaHers Pro Membership
+          </p>
         </motion.div>
 
-        {/* How It Works */}
+        {/* What's Inside Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, delay: 0.1 }}
-          className="mb-20"
+          className="mb-16"
         >
-          <div className="text-center mb-10">
-            <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4 flex items-center justify-center gap-3">
-              <Sparkles className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
-              How It Works
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
-            {[
-              { step: "1", text: "Choose your Ritual Bag." },
-              { step: "2", text: "Scan the QR code inside to activate your MetaHers Pro Membership." },
-              { step: "3", text: "Access your digital tools, Glow-Up sessions, and AI Journal instantly." },
-              { step: "4", text: "Enjoy your ritual products while learning to glow in life and online." },
-            ].map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }}
-                className="text-center"
-              >
-                <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-primary text-primary font-bold text-xl flex items-center justify-center mx-auto mb-4">
-                  {item.step}
-                </div>
-                <p className="text-foreground/80 leading-relaxed">{item.text}</p>
-              </motion.div>
-            ))}
+          <div className="editorial-card p-8 relative overflow-hidden">
+            <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
+            <div className="relative z-10">
+              <h2 className="font-cormorant text-3xl font-bold text-foreground mb-6 text-center flex items-center justify-center gap-3">
+                <Gem className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
+                Inside Every MetaHers Ritual Bag
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                {[
+                  { Icon: Flame, text: "Mystery Reveal Ritual Candle" },
+                  { Icon: Droplets, text: "Botanical Bath Tea" },
+                  { Icon: Flower2, text: "Handmade Loofah Soap" },
+                  { Icon: Sparkles, text: "Whipped Body Butter" },
+                  { Icon: Wind, text: "Body & Hair Mist" },
+                  { Icon: Blend, text: "Perfume Oil Roll-On" },
+                  { Icon: ShoppingBag, text: "Reusable Jute Bag" },
+                  { Icon: Zap, text: "AI Ritual Unlock (QR)" },
+                ].map((item, index) => (
+                  <div key={index} className="text-center">
+                    <item.Icon className="w-8 h-8 mx-auto mb-2 text-primary" />
+                    <p className="text-sm text-foreground/80">{item.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </motion.div>
 
         {/* Individual Ritual Bags */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {shopProducts.filter(p => p.type === "bag").map((product, index) => {
-            const tagInfo = productTags[product.id];
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+          {bags.map((product, index) => {
+            const images = productImageSets[product.id] || [];
             return (
               <motion.div
                 key={product.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
+                transition={{ duration: 0.3, delay: 0.2 + index * 0.1 }}
                 className="relative"
               >
-                <div className="aspect-square rounded-2xl overflow-hidden mb-4 neon-glow-subtle">
-                  <img
-                    src={productImages[product.image]}
-                    alt={product.name}
-                    className="w-full h-full object-cover"
-                    data-testid={`img-product-${product.id}`}
-                  />
+                {/* Limited Edition Badge */}
+                <div className="absolute -top-3 -right-3 z-20 bg-[hsl(var(--liquid-gold))] text-background px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                  Only {product.stock} left
                 </div>
+
+                <ProductCarousel
+                  images={images}
+                  productId={product.id}
+                  productName={product.name}
+                />
                 
-                <div className="editorial-card p-6 relative overflow-hidden">
+                <div className="editorial-card p-6 mt-4 relative overflow-hidden">
                   <div className="absolute inset-0 gradient-magenta-fuchsia opacity-5" />
                   <div className="relative z-10">
                     <h3 className="font-cormorant text-2xl font-semibold text-foreground mb-2" data-testid={`text-product-name-${product.id}`}>
-                      {tagInfo?.emoji} {product.name}
+                      {product.name}
                     </h3>
                     
-                    {tagInfo && (
-                      <p className="text-sm text-primary/90 mb-3 italic" data-testid={`text-product-tag-${product.id}`}>
-                        {tagInfo.tag}
+                    {product.theme && (
+                      <p className="text-sm text-primary/90 mb-3 italic" data-testid={`text-product-theme-${product.id}`}>
+                        {product.theme}
                       </p>
                     )}
                     
                     {product.scents && product.scents.length > 0 && (
                       <div className="text-sm text-muted-foreground mb-4 font-serif" data-testid={`text-product-scents-${product.id}`}>
-                        Scent: {product.scents.join(" • ")}
+                        Scent notes: {product.scents.join(" • ")}
                       </div>
                     )}
                     
@@ -167,7 +233,8 @@ export default function ShopPage() {
                         onClick={handlePurchase}
                         data-testid={`button-buy-${product.id}`}
                       >
-                        Add to Bag
+                        <ShoppingBag className="w-4 h-4 mr-2" />
+                        Get Yours
                       </Button>
                     </div>
                   </div>
@@ -177,62 +244,122 @@ export default function ShopPage() {
           })}
         </div>
 
-        {/* Trio Bundle */}
+        {/* AI Ritual Experience Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.6 }}
-          className="relative mb-20"
+          transition={{ duration: 0.3, delay: 0.5 }}
+          className="mb-16"
         >
-          <div className="absolute -inset-1 bg-gradient-to-r from-[hsl(var(--liquid-gold))]/30 via-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--liquid-gold))]/30 rounded-2xl blur-lg" />
-          <div className="relative editorial-card p-8 neon-glow-gold">
+          <div className="editorial-card p-8 relative overflow-hidden">
             <div className="absolute inset-0 gradient-teal-gold opacity-5" />
             <div className="relative z-10">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-                <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
-                  <img
-                    src={productImages.bundle}
-                    alt="Trio Bundle"
-                    className="w-full h-full object-cover"
-                    data-testid="img-product-trio-bundle"
-                  />
-                </div>
-
-                <div>
-                  <div className="inline-block bg-[hsl(var(--liquid-gold))] text-background px-4 py-1 rounded-full text-sm font-semibold mb-4 shadow-md" data-testid="badge-bundle-savings">
-                    ✨ Save $98 — full MetaHers experience
+              <h2 className="font-cormorant text-3xl font-bold text-foreground mb-6 text-center flex items-center justify-center gap-3">
+                <Zap className="w-8 h-8 text-[hsl(var(--cyber-fuchsia))]" />
+                What's an AI-Guided Ritual?
+              </h2>
+              <p className="text-center text-foreground/80 mb-8 max-w-2xl mx-auto">
+                Each candle reveals a secret symbol. Scan the QR code inside your bag to unlock one of the following AI experiences:
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                {[
+                  { title: "Daily Glow AI", desc: "Journaling + Vision Prompts" },
+                  { title: "Cosmic Birth Chart", desc: "GPT-powered astrology reading" },
+                  { title: "Affirmation Sequences", desc: "Custom voice & tone for you" },
+                  { title: "Crown Unlock", desc: "Access full AI Squad + 1:1 with founder" },
+                  { title: "VIP Circle Access", desc: "Exclusive MetaHers community" },
+                ].map((ritual, index) => (
+                  <div key={index} className="text-center p-4 rounded-lg bg-card/50 border border-border/40">
+                    <h4 className="font-semibold text-foreground mb-2">{ritual.title}</h4>
+                    <p className="text-sm text-muted-foreground">{ritual.desc}</p>
                   </div>
-                  
-                  <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4" data-testid="text-bundle-title">
-                    Trio Bundle
-                  </h2>
-                  
-                  <p className="text-lg text-foreground/80 mb-6 leading-relaxed" data-testid="text-bundle-description">
-                    {shopProducts.find(p => p.id === "trio-bundle")?.description}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-6 border-t border-border">
-                    <div>
-                      <div className="text-sm text-muted-foreground line-through mb-1" data-testid="text-bundle-original-price">
-                        $597
-                      </div>
-                      <div className="text-4xl font-bold text-primary" data-testid="text-bundle-price">
-                        $499
-                      </div>
-                    </div>
-                    <Button
-                      onClick={handlePurchase}
-                      className="bg-[hsl(var(--liquid-gold))] hover:bg-[hsl(var(--liquid-gold))]/90 text-background px-8 py-3 text-lg"
-                      data-testid="button-buy-trio-bundle"
-                    >
-                      Get Bundle
-                    </Button>
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </motion.div>
+
+        {/* Complete Bundle */}
+        {bundle && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.6 }}
+            className="relative mb-16"
+          >
+            <div className="absolute -inset-1 bg-gradient-to-r from-[hsl(var(--liquid-gold))]/30 via-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--liquid-gold))]/30 rounded-2xl blur-lg" />
+            <div className="relative editorial-card p-8 neon-glow-gold">
+              <div className="absolute inset-0 gradient-teal-gold opacity-5" />
+              <div className="relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                  <div className="aspect-square rounded-xl overflow-hidden shadow-lg">
+                    <img
+                      src="/attached_assets/826D97B3-91F3-4ED7-B400-CFC52BCBEE6C_1761327881533.PNG"
+                      alt="Complete Drop 001"
+                      className="w-full h-full object-cover"
+                      data-testid="img-product-trio-bundle"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="inline-flex items-center gap-2 bg-[hsl(var(--liquid-gold))] text-background px-4 py-1 rounded-full text-sm font-semibold mb-4 shadow-md" data-testid="badge-bundle-savings">
+                      <Sparkles className="w-4 h-4" />
+                      Save $98 — The Complete Collection
+                    </div>
+                    
+                    <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4" data-testid="text-bundle-title">
+                      {bundle.name}
+                    </h2>
+                    
+                    <p className="text-lg text-foreground/80 mb-6 leading-relaxed" data-testid="text-bundle-description">
+                      {bundle.description}
+                    </p>
+
+                    <div className="bg-card/50 border border-border/40 rounded-lg p-4 mb-6">
+                      <h4 className="font-semibold mb-2">Includes:</h4>
+                      <div className="grid grid-cols-2 gap-2 text-sm text-foreground/80">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-primary" />
+                          <span>3 Ritual Bags</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-primary" />
+                          <span>18 Products</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-primary" />
+                          <span>3 AI Unlocks</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-primary" />
+                          <span>Pro Membership</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-6 border-t border-border">
+                      <div>
+                        <div className="text-sm text-muted-foreground line-through mb-1" data-testid="text-bundle-original-price">
+                          $597
+                        </div>
+                        <div className="text-4xl font-bold text-primary" data-testid="text-bundle-price">
+                          $499
+                        </div>
+                      </div>
+                      <Button
+                        onClick={handlePurchase}
+                        className="bg-[hsl(var(--liquid-gold))] hover:bg-[hsl(var(--liquid-gold))]/90 text-background px-8 py-3 text-lg"
+                        data-testid="button-buy-trio-bundle"
+                      >
+                        Get Complete Set
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* CTA Footer */}
         <motion.div
@@ -244,19 +371,24 @@ export default function ShopPage() {
           <div className="editorial-card p-12 relative overflow-hidden">
             <div className="absolute inset-0 gradient-violet-fuchsia opacity-10" />
             <div className="relative z-10">
-              <h2 className="font-cormorant text-4xl md:text-5xl font-bold text-foreground mb-4">
-                💖 Glow inside and online.
+              <h2 className="font-cormorant text-4xl md:text-5xl font-bold text-foreground mb-4 flex items-center justify-center gap-3 flex-wrap">
+                <Sparkles className="w-10 h-10 text-primary" />
+                Handmade for your glow-up journey
               </h2>
-              <p className="text-xl text-foreground/80 mb-8 max-w-2xl mx-auto">
-                Join MetaHers — where self-care meets smart tech for women.
+              <p className="text-xl text-foreground/80 mb-6 max-w-2xl mx-auto">
+                Drop 001 • 18 kits only • Each purchase unlocks MetaHers Pro
+              </p>
+              <p className="text-sm text-muted-foreground mb-8">
+                Limited edition. Intentionally crafted. Soul-led wellness meets AI-powered growth.
               </p>
               <Button
                 onClick={handlePurchase}
                 size="lg"
                 className="text-lg"
-                data-testid="button-become-pro-member"
+                data-testid="button-shop-now"
               >
-                Become a Pro Member
+                <Sparkles className="w-5 h-5 mr-2" />
+                Shop Drop 001
               </Button>
             </div>
           </div>

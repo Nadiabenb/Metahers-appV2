@@ -254,6 +254,8 @@ export const shopProductSchema = z.object({
   scents: z.array(z.string()).optional(),
   description: z.string(),
   image: z.string(),
+  stock: z.number().optional(),
+  theme: z.string().optional(),
 });
 
 export type ShopProduct = z.infer<typeof shopProductSchema>;
@@ -381,39 +383,47 @@ export const rituals: Ritual[] = [
 export const shopProducts: ShopProduct[] = [
   {
     id: "sheikha-bag",
-    name: "Sheikha Ritual Bag",
+    name: "The Sheikha Bag",
     type: "bag",
     price: 199,
-    scents: ["Oud", "Musk", "Amber", "Rosewood", "Jasmine", "Sandalwood"],
-    description: "Includes: mystery candle, perfume roll-on, handmade soap, bath soak, body & hair mist, reusable tote + QR unlock for your Pro Membership.",
-    image: "sheikha"
+    scents: ["Oud", "Musk", "Amber"],
+    description: "Powerful. Royal. Sensual. Handcrafted for the woman who commands attention. 6 handmade products + AI-guided ritual experience + reusable jute bag. Scan QR to unlock your mystery ritual.",
+    image: "sheikha",
+    stock: 6,
+    theme: "Powerful, royal, sensual"
   },
   {
     id: "serenity-bag",
-    name: "Serenity Ritual Bag",
+    name: "The Serenity Bag",
     type: "bag",
     price: 199,
-    scents: ["Lavender", "Lime", "Lemon", "Tea Tree"],
-    description: "Includes: mystery candle, perfume roll-on, handmade soap, bath soak, body & hair mist, reusable tote + QR unlock for your Pro Membership.",
-    image: "serenity"
+    scents: ["Lavender", "Eucalyptus", "Lotus"],
+    description: "Grounding. Calming. Fresh. Handcrafted for the woman seeking peace. 6 handmade products + AI-guided ritual experience + reusable jute bag. Scan QR to unlock your mystery ritual.",
+    image: "serenity",
+    stock: 6,
+    theme: "Grounding, calming, fresh"
   },
   {
     id: "floral-bag",
-    name: "Floral Ritual Bag",
+    name: "The Floral Bag",
     type: "bag",
     price: 199,
-    scents: ["White Rose", "Red Rose", "Jasmine", "Chamomile"],
-    description: "Includes: mystery candle, perfume roll-on, handmade soap, bath soak, body & hair mist, reusable tote + QR unlock for your Pro Membership.",
-    image: "floral"
+    scents: ["White Rose", "Red Rose", "Jasmine"],
+    description: "Romantic. Feminine. Soft. Handcrafted for the woman who embodies grace. 6 handmade products + AI-guided ritual experience + reusable jute bag. Scan QR to unlock your mystery ritual.",
+    image: "floral",
+    stock: 6,
+    theme: "Romantic, feminine, soft"
   },
   {
     id: "trio-bundle",
-    name: "Trio Bundle",
+    name: "Complete Drop 001",
     type: "bundle",
     price: 499,
     scents: [],
-    description: "Includes all three Ritual Bags · 18 luxurious pieces · 3 reusable totes · One unified Pro Membership with all perks unlocked.",
-    image: "bundle"
+    description: "All three limited edition Ritual Bags. 18 handcrafted products. 3 AI ritual unlocks. The complete MetaHers Mind Spa experience.",
+    image: "bundle",
+    stock: 6,
+    theme: "The complete collection"
   }
 ];
 
