@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { glowUpLessons } from "@shared/glowUpData";
+import type { GlowUpJournalDB } from "@shared/schema";
 
 export default function GlowUpJournalPage() {
   const [, setLocation] = useLocation();
@@ -18,7 +19,7 @@ export default function GlowUpJournalPage() {
   const [editedResponse, setEditedResponse] = useState("");
   const [editedDraft, setEditedDraft] = useState("");
 
-  const { data: journalEntries } = useQuery<any>({
+  const { data: journalEntries } = useQuery<GlowUpJournalDB[]>({
     queryKey: ['/api/glow-up/journal'],
   });
 

@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { glowUpLessons } from "@shared/glowUpData";
+import type { GlowUpProfileDB, GlowUpProgressDB, GlowUpJournalDB } from "@shared/schema";
 
 export default function GlowUpDashboardPage() {
   const [, setLocation] = useLocation();
@@ -19,15 +20,15 @@ export default function GlowUpDashboardPage() {
   const [gptResponse, setGptResponse] = useState("");
   const [publicPostDraft, setPublicPostDraft] = useState("");
 
-  const { data: profile } = useQuery<any>({
+  const { data: profile } = useQuery<GlowUpProfileDB>({
     queryKey: ['/api/glow-up/profile'],
   });
 
-  const { data: progress } = useQuery<any>({
+  const { data: progress } = useQuery<GlowUpProgressDB>({
     queryKey: ['/api/glow-up/progress'],
   });
 
-  const { data: journalEntries } = useQuery<any>({
+  const { data: journalEntries } = useQuery<GlowUpJournalDB[]>({
     queryKey: ['/api/glow-up/journal'],
   });
 

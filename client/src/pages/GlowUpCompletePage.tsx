@@ -6,16 +6,17 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
+import type { GlowUpProfileDB, GlowUpProgressDB } from "@shared/schema";
 
 export default function GlowUpCompletePage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  const { data: profile } = useQuery<any>({
+  const { data: profile } = useQuery<GlowUpProfileDB>({
     queryKey: ['/api/glow-up/profile'],
   });
 
-  const { data: progress } = useQuery<any>({
+  const { data: progress } = useQuery<GlowUpProgressDB>({
     queryKey: ['/api/glow-up/progress'],
   });
 

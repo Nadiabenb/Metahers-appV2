@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useQuery } from "@tanstack/react-query";
+import type { GlowUpProfileDB } from "@shared/schema";
 
 export default function GlowUpOnboardingPage() {
   const [, setLocation] = useLocation();
@@ -24,7 +25,7 @@ export default function GlowUpOnboardingPage() {
     goal: "",
   });
 
-  const { data: existingProfile } = useQuery<any>({
+  const { data: existingProfile } = useQuery<GlowUpProfileDB>({
     queryKey: ['/api/glow-up/profile'],
   });
 
