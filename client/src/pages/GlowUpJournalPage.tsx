@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { Book, ArrowLeft, Copy, Edit2, Calendar } from "lucide-react";
+import { Book, ArrowLeft, Copy, Edit2, Calendar, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,10 +11,12 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { glowUpLessons } from "@shared/glowUpData";
 import type { GlowUpJournalDB } from "@shared/schema";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function GlowUpJournalPage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [editingDay, setEditingDay] = useState<number | null>(null);
   const [editedResponse, setEditedResponse] = useState("");
   const [editedDraft, setEditedDraft] = useState("");
@@ -63,6 +65,36 @@ export default function GlowUpJournalPage() {
     setEditedResponse("");
     setEditedDraft("");
   };
+
+  // Check if user is Pro
+  if (user && !user.isPro) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-primary/5">
+        <Card className="w-full max-w-2xl p-8 md:p-12 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-6">
+            <Crown className="w-10 h-10 text-[hsl(var(--liquid-gold))]" />
+          </div>
+          
+          <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
+            Pro Feature
+          </h1>
+          <p className="text-lg text-muted-foreground mb-8">
+            The AI Glow-Up Program is exclusive to Pro members. Upgrade to unlock your 14-day brand transformation journey.
+          </p>
+          
+          <Button
+            size="lg"
+            className="gap-2"
+            onClick={() => setLocation("/account")}
+            data-testid="button-upgrade-pro"
+          >
+            <Crown className="w-5 h-5" />
+            Upgrade to Pro
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   if (!journalEntries || journalEntries.length === 0) {
     return (

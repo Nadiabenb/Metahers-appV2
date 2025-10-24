@@ -1,6 +1,7 @@
 import { useLocation } from "wouter";
 import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 
 export function Navigation() {
@@ -8,15 +9,15 @@ export function Navigation() {
   const { isAuthenticated, isLoading } = useAuth();
 
   const navItems = [
-    { path: "/", label: "Home", icon: Sparkles },
-    { path: "/rituals", label: "Rituals", icon: Sparkles },
-    { path: "/glow-up", label: "Glow-Up", icon: TrendingUp },
-    { path: "/shop", label: "Shop", icon: ShoppingBag },
-    { path: "/journal", label: "Journal", icon: BookOpen },
-    { path: "/blog", label: "Blog", icon: Newspaper },
-    { path: "/metamuse", label: "MetaMuse", icon: MessageSquare },
-    { path: "/events", label: "Events", icon: Calendar },
-    { path: "/account", label: "Account", icon: User },
+    { path: "/", label: "Home", icon: Sparkles, pro: false },
+    { path: "/rituals", label: "Rituals", icon: Sparkles, pro: false },
+    { path: "/glow-up", label: "Glow-Up", icon: TrendingUp, pro: true },
+    { path: "/shop", label: "Shop", icon: ShoppingBag, pro: false },
+    { path: "/journal", label: "Journal", icon: BookOpen, pro: false },
+    { path: "/blog", label: "Blog", icon: Newspaper, pro: false },
+    { path: "/metamuse", label: "MetaMuse", icon: MessageSquare, pro: false },
+    { path: "/events", label: "Events", icon: Calendar, pro: false },
+    { path: "/account", label: "Account", icon: User, pro: false },
   ];
 
   const handleLogout = async () => {
@@ -68,6 +69,11 @@ export function Navigation() {
                   >
                     <Icon className="w-4 h-4" />
                     {item.label}
+                    {item.pro && (
+                      <Badge variant="secondary" className="ml-1 text-xs px-1.5 py-0">
+                        PRO
+                      </Badge>
+                    )}
                   </Button>
                 );
               })}
@@ -109,7 +115,7 @@ export function Navigation() {
               >
                 {navItems.map((item) => (
                   <option key={item.path} value={item.path}>
-                    {item.label}
+                    {item.label}{item.pro ? " (PRO)" : ""}
                   </option>
                 ))}
               </select>

@@ -649,12 +649,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ===== GLOW-UP PROGRAM ROUTES =====
+  // ===== GLOW-UP PROGRAM ROUTES (PRO ONLY) =====
 
   // Get user's glow-up profile
   app.get('/api/glow-up/profile', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
+      }
+      
       const profile = await storage.getGlowUpProfile(userId);
       res.json(profile || null);
     } catch (error) {
@@ -667,6 +673,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/glow-up/profile', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
+      }
+      
       const { name, brandType, niche, platform, goal } = req.body;
 
       if (!name || !brandType || !niche || !platform || !goal) {
@@ -703,6 +715,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/glow-up/progress', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
+      }
+      
       const progress = await storage.getGlowUpProgress(userId);
       res.json(progress || null);
     } catch (error) {
@@ -715,6 +733,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/glow-up/progress', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
+      }
+      
       const { day } = req.body;
 
       if (!day || day < 1 || day > 14) {
@@ -753,6 +777,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/glow-up/journal', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
+      }
+      
       const entries = await storage.getAllGlowUpJournalEntries(userId);
       res.json(entries);
     } catch (error) {
@@ -765,6 +795,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/glow-up/journal/:day', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
+      }
+      
       const day = parseInt(req.params.day);
 
       if (isNaN(day) || day < 1 || day > 14) {
@@ -783,6 +819,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/glow-up/journal', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user?.isPro) {
+        return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
+      }
+      
       const { day, gptResponse, publicPostDraft, notes } = req.body;
 
       if (!day || day < 1 || day > 14) {
