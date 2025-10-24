@@ -14,8 +14,12 @@ import nftGalleryImg from "@assets/generated_images/Woman_NFT_Gallery_Fashion_58
 import metaverseHomeImg from "@assets/generated_images/Woman_Metaverse_Virtual_Space_45ef040a.png";
 import blockchainNetworkImg from "@assets/generated_images/Woman_Blockchain_Network_Tech_ea561a21.png";
 import web3EvolutionImg from "@assets/generated_images/Woman_Web3_Future_Tech_a7d9fd8d.png";
+import ritualBagsImg from "@assets/generated_images/Luxury_ritual_bags_editorial_f8e3e90d.png";
+import aiAgentsImg from "@assets/generated_images/Women_and_AI_agents_editorial_80c3f4c1.png";
 
 const IMAGE_MAP: Record<string, string> = {
+  "ai-agents": aiAgentsImg,
+  "ritual-bags": ritualBagsImg,
   "ai-stylist": aiStylistImg,
   "crypto-wallet": cryptoWalletImg,
   "nft-gallery": nftGalleryImg,

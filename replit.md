@@ -2,7 +2,7 @@
 
 ## Overview
 
-MetaHers Mind Spa is a Progressive Web App (PWA) that merges luxury spa aesthetics with technology education, focusing on AI and Web3. It offers guided learning "rituals" covering AI prompting, blockchain, cryptocurrency, NFTs, and the metaverse in a serene, spa-like setting. The app operates on a subscription model, with a Pro tier ($19.99/month) unlocking all rituals and premium features. Key capabilities include an AI-Powered Personal Journal with mood tracking and AI-generated insights, comprehensive Journal Analytics, a gamified Achievements System, and a blog ("MetaHers Daily") featuring articles on Web3 and AI topics. The project aims to provide an engaging and educational experience for women in technology, presented with a Forbes-meets-Vogue luxury aesthetic.
+MetaHers Mind Spa is a Progressive Web App (PWA) that merges luxury spa aesthetics with technology education, focusing on AI and Web3. It offers guided learning "rituals" covering AI prompting, blockchain, cryptocurrency, NFTs, and the metaverse in a serene, spa-like setting. The app operates on a subscription model, with a Pro tier ($19.99/month) unlocking all rituals and premium features. Key capabilities include an AI-Powered Personal Journal with mood tracking and AI-generated insights, comprehensive Journal Analytics, a gamified Achievements System, a Shop featuring Drop 001 limited edition handmade ritual bags (18 total: 6 Sheikha, 6 Serenity, 6 Floral), and a blog ("MetaHers Daily") featuring articles on Web3 and AI topics. The project aims to provide an engaging and educational experience for women in technology, presented with a Forbes-meets-Vogue luxury aesthetic.
 
 ## User Preferences
 
@@ -70,3 +70,19 @@ The app features a "Forbes-meets-Vogue" luxury editorial design. Typography comb
 -   **Framer Motion**: Animations.
 -   **Drizzle ORM**: PostgreSQL ORM.
 -   **Zod**: Schema validation.
+
+## Recent Changes
+
+### October 24, 2025 - Blog Marketing & Shop Updates
+- **New Blog Articles**: Added two articles to drive traffic to Drop 001:
+  - "AI Agents: Your Digital Dream Team Is Here" - Covers autonomous AI agents for women in business
+  - "Drop 001: When Luxury Self-Care Meets AI Mystery" - Features ritual bags with handmade products and AI unlocks
+- **Blog Images**: Generated high-fashion Forbes-meets-Vogue editorial images for both articles
+- **Shop Page Updates**:
+  - Removed 3-bag bundle per user request
+  - Fixed product image carousel display issues
+  - Changed hover carousel speed from 1s to 2.5s for better UX
+  - Updated purchase links to point to shop.metahers.ai (Shopify store)
+  - Implemented proper image hosting in client/public/images folder
+- **Product Carousel**: Uses useRef/useEffect for proper lifecycle cleanup preventing memory leaks
+
