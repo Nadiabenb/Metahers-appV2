@@ -129,12 +129,11 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
     return moodColors[mood] || { bg: "", border: "", text: "" };
   };
 
-  // Check if a date is part of the current streak
+  // Check if a date is part of ANY consecutive streak (2+ days)
   const isPartOfStreak = (date: Date): boolean => {
     if (!entries || entries.length === 0) return false;
     
     const dateStr = format(date, "yyyy-MM-dd");
-    const today = format(new Date(), "yyyy-MM-dd");
     
     // Build a Set of all entry dates for quick lookup
     const entryDates = new Set(entries.map(e => e.date));
@@ -142,18 +141,18 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
     // Check if this date has an entry
     if (!entryDates.has(dateStr)) return false;
     
-    // Check if there's a consecutive path from this date to today
-    let currentDate = new Date(date);
-    while (format(currentDate, "yyyy-MM-dd") <= today) {
-      const currentStr = format(currentDate, "yyyy-MM-dd");
-      if (!entryDates.has(currentStr)) {
-        // Streak broken
-        return false;
-      }
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
+    // Check if the previous day has an entry
+    const prevDay = new Date(date);
+    prevDay.setDate(prevDay.getDate() - 1);
+    const prevDayStr = format(prevDay, "yyyy-MM-dd");
     
-    return true;
+    // Check if the next day has an entry
+    const nextDay = new Date(date);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const nextDayStr = format(nextDay, "yyyy-MM-dd");
+    
+    // Part of a streak if either adjacent day has an entry
+    return entryDates.has(prevDayStr) || entryDates.has(nextDayStr);
   };
 
   const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];

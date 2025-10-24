@@ -215,14 +215,14 @@ export function DailyCalendar({ className = "" }: DailyCalendarProps) {
 
   return (
     <div className={`relative ${className}`}>
-      <div className="editorial-card p-8 relative overflow-visible">
+      <div className="editorial-card p-4 relative overflow-visible">
         <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
         
         {/* Calendar Header */}
-        <div className="relative z-10 mb-6">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-cormorant text-2xl font-bold text-foreground flex items-center gap-2">
-              <Calendar className="w-6 h-6 text-primary" />
+        <div className="relative z-10 mb-3">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-cormorant text-lg font-bold text-foreground flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-primary" />
               Daily Inspiration
             </h3>
             <div className="flex items-center gap-2">
@@ -282,53 +282,48 @@ export function DailyCalendar({ className = "" }: DailyCalendarProps) {
               style={{ transformStyle: "preserve-3d" }}
             >
               {/* Calendar Page */}
-              <div className="bg-gradient-to-br from-card to-charcoal border-2 border-primary/20 rounded-xl shadow-2xl overflow-hidden">
+              <div className="bg-gradient-to-br from-card to-charcoal border border-primary/20 rounded-lg shadow-lg overflow-hidden">
                 {/* Top Bar - Date Display */}
-                <div className="bg-gradient-to-r from-primary/20 to-secondary/20 p-6 text-center border-b-2 border-primary/30">
-                  <div className="text-sm uppercase tracking-wider text-muted-foreground mb-1 font-medium">
-                    {format(currentDate, "EEEE")}
-                  </div>
-                  <div className="font-cormorant text-6xl font-bold text-foreground">
-                    {format(currentDate, "d")}
-                  </div>
-                  <div className="text-lg uppercase tracking-wide text-foreground/80 mt-1">
-                    {format(currentDate, "MMMM yyyy")}
+                <div className="bg-gradient-to-r from-primary/20 to-secondary/20 p-3 text-center border-b border-primary/30">
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+                    {format(currentDate, "EEEE, MMMM d, yyyy")}
                   </div>
                 </div>
 
                 {/* Quote Display */}
-                <div className="p-8 min-h-[280px] flex flex-col justify-center">
+                <div className="p-4 min-h-[120px] flex flex-col justify-center">
                   <div className="relative">
-                    <div className="absolute -top-4 -left-2 text-6xl text-primary/20 font-serif">"</div>
-                    <p className="text-lg md:text-xl text-foreground/90 italic leading-relaxed pl-8 pr-4 font-light text-center">
+                    <div className="absolute -top-2 -left-1 text-3xl text-primary/20 font-serif">"</div>
+                    <p className="text-sm md:text-base text-foreground/90 italic leading-relaxed pl-4 pr-2 font-light text-center">
                       {currentQuote}
                     </p>
-                    <div className="absolute -bottom-4 -right-2 text-6xl text-primary/20 font-serif">"</div>
+                    <div className="absolute -bottom-2 -right-1 text-3xl text-primary/20 font-serif">"</div>
                   </div>
                 </div>
 
                 {/* Action Bar */}
-                <div className="px-6 pb-6 flex items-center justify-between border-t border-border/40 pt-6">
+                <div className="px-3 pb-3 flex items-center justify-between border-t border-border/40 pt-3">
                   <div className="text-xs text-muted-foreground uppercase tracking-wider">
                     Quote {quoteIndex + 1} of {DAILY_QUOTES.length}
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={toggleFavorite}
-                      className={isFavorite ? "text-pink-500" : ""}
+                      className={isFavorite ? "text-pink-500 h-8 w-8" : "h-8 w-8"}
                       data-testid="button-favorite"
                     >
-                      <Heart className={`w-5 h-5 ${isFavorite ? "fill-current" : ""}`} />
+                      <Heart className={`w-4 h-4 ${isFavorite ? "fill-current" : ""}`} />
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
                       onClick={handleShare}
+                      className="h-8 w-8"
                       data-testid="button-share"
                     >
-                      <Share2 className="w-5 h-5" />
+                      <Share2 className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
@@ -339,7 +334,7 @@ export function DailyCalendar({ className = "" }: DailyCalendarProps) {
 
         {/* Favorites Count */}
         {favorites.length > 0 && (
-          <div className="relative z-10 mt-4 text-center text-sm text-muted-foreground">
+          <div className="relative z-10 mt-2 text-center text-xs text-muted-foreground">
             ❤️ {favorites.length} favorite {favorites.length === 1 ? "quote" : "quotes"} saved
           </div>
         )}
