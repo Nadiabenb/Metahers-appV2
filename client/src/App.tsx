@@ -23,6 +23,10 @@ import MetaMusePage from "@/pages/MetaMusePage";
 import EventsPage from "@/pages/EventsPage";
 import AccountPage from "@/pages/AccountPage";
 import BlogPage from "@/pages/BlogPage";
+import GlowUpOnboardingPage from "@/pages/GlowUpOnboardingPage";
+import GlowUpDashboardPage from "@/pages/GlowUpDashboardPage";
+import GlowUpJournalPage from "@/pages/GlowUpJournalPage";
+import GlowUpCompletePage from "@/pages/GlowUpCompletePage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -60,6 +64,10 @@ function Router() {
           <Route path="/metamuse" component={MetaMusePage} />
           <Route path="/events" component={EventsPage} />
           <Route path="/account" component={AccountPage} />
+          <Route path="/glow-up" component={GlowUpOnboardingPage} />
+          <Route path="/glow-up/dashboard" component={GlowUpDashboardPage} />
+          <Route path="/glow-up/journal" component={GlowUpJournalPage} />
+          <Route path="/glow-up/complete" component={GlowUpCompletePage} />
         </>
       )}
       <Route component={NotFound} />

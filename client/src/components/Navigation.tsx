@@ -1,5 +1,5 @@
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -10,6 +10,7 @@ export function Navigation() {
   const navItems = [
     { path: "/", label: "Home", icon: Sparkles },
     { path: "/rituals", label: "Rituals", icon: Sparkles },
+    { path: "/glow-up", label: "Glow-Up", icon: TrendingUp },
     { path: "/shop", label: "Shop", icon: ShoppingBag },
     { path: "/journal", label: "Journal", icon: BookOpen },
     { path: "/blog", label: "Blog", icon: Newspaper },
