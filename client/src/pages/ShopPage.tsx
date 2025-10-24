@@ -103,7 +103,7 @@ function ProductCarousel({ images, productId, productName }: ProductCarouselProp
 
 export default function ShopPage() {
   const handlePurchase = () => {
-    window.open("https://metahers.gumroad.com/l/metahers", "_blank");
+    window.open("https://shop.metahers.ai", "_blank");
   };
 
   const bags = shopProducts.filter(p => p.type === "bag");
