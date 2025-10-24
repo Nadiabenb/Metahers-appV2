@@ -5,6 +5,9 @@ import {
   subscriptions,
   achievements,
   passwordResetTokens,
+  glowUpProfiles,
+  glowUpProgress,
+  glowUpJournal,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -17,6 +20,12 @@ import {
   type InsertAchievement,
   type PasswordResetTokenDB,
   type InsertPasswordResetToken,
+  type GlowUpProfileDB,
+  type InsertGlowUpProfile,
+  type GlowUpProgressDB,
+  type InsertGlowUpProgress,
+  type GlowUpJournalDB,
+  type InsertGlowUpJournal,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -59,6 +68,17 @@ export interface IStorage {
   getPasswordResetToken(token: string): Promise<PasswordResetTokenDB | undefined>;
   deletePasswordResetToken(token: string): Promise<void>;
   deleteUserPasswordResetTokens(userId: string): Promise<void>;
+  
+  // Glow-Up Program operations
+  getGlowUpProfile(userId: string): Promise<GlowUpProfileDB | undefined>;
+  upsertGlowUpProfile(profile: InsertGlowUpProfile): Promise<GlowUpProfileDB>;
+  
+  getGlowUpProgress(userId: string): Promise<GlowUpProgressDB | undefined>;
+  upsertGlowUpProgress(progress: InsertGlowUpProgress): Promise<GlowUpProgressDB>;
+  
+  getGlowUpJournalEntry(userId: string, day: number): Promise<GlowUpJournalDB | undefined>;
+  getAllGlowUpJournalEntries(userId: string): Promise<GlowUpJournalDB[]>;
+  upsertGlowUpJournalEntry(entry: InsertGlowUpJournal): Promise<GlowUpJournalDB>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -393,6 +413,121 @@ export class DatabaseStorage implements IStorage {
     await db
       .delete(passwordResetTokens)
       .where(eq(passwordResetTokens.userId, userId));
+  }
+
+  // Glow-Up Program operations
+  async getGlowUpProfile(userId: string): Promise<GlowUpProfileDB | undefined> {
+    const [profile] = await db
+      .select()
+      .from(glowUpProfiles)
+      .where(eq(glowUpProfiles.userId, userId))
+      .limit(1);
+    return profile;
+  }
+
+  async upsertGlowUpProfile(profileData: InsertGlowUpProfile): Promise<GlowUpProfileDB> {
+    const existing = await this.getGlowUpProfile(profileData.userId);
+    
+    if (existing) {
+      const [updated] = await db
+        .update(glowUpProfiles)
+        .set({
+          ...profileData,
+          updatedAt: new Date(),
+        })
+        .where(eq(glowUpProfiles.userId, profileData.userId))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(glowUpProfiles)
+        .values(profileData)
+        .returning();
+      return created;
+    }
+  }
+
+  async getGlowUpProgress(userId: string): Promise<GlowUpProgressDB | undefined> {
+    const [progress] = await db
+      .select()
+      .from(glowUpProgress)
+      .where(eq(glowUpProgress.userId, userId))
+      .limit(1);
+    return progress;
+  }
+
+  async upsertGlowUpProgress(progressData: InsertGlowUpProgress): Promise<GlowUpProgressDB> {
+    const existing = await this.getGlowUpProgress(progressData.userId);
+    
+    if (existing) {
+      const [updated] = await db
+        .update(glowUpProgress)
+        .set({
+          completedDays: sql`${JSON.stringify(progressData.completedDays)}::jsonb`,
+          currentDay: progressData.currentDay,
+          completedAt: progressData.completedAt,
+          lastUpdated: new Date(),
+        })
+        .where(eq(glowUpProgress.userId, progressData.userId))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(glowUpProgress)
+        .values({
+          ...progressData,
+          completedDays: sql`${JSON.stringify(progressData.completedDays)}::jsonb`,
+        })
+        .returning();
+      return created;
+    }
+  }
+
+  async getGlowUpJournalEntry(userId: string, day: number): Promise<GlowUpJournalDB | undefined> {
+    const [entry] = await db
+      .select()
+      .from(glowUpJournal)
+      .where(and(
+        eq(glowUpJournal.userId, userId),
+        eq(glowUpJournal.day, day)
+      ))
+      .limit(1);
+    return entry;
+  }
+
+  async getAllGlowUpJournalEntries(userId: string): Promise<GlowUpJournalDB[]> {
+    return await db
+      .select()
+      .from(glowUpJournal)
+      .where(eq(glowUpJournal.userId, userId))
+      .orderBy(glowUpJournal.day);
+  }
+
+  async upsertGlowUpJournalEntry(entryData: InsertGlowUpJournal): Promise<GlowUpJournalDB> {
+    const existing = await this.getGlowUpJournalEntry(entryData.userId, entryData.day);
+    
+    if (existing) {
+      const [updated] = await db
+        .update(glowUpJournal)
+        .set({
+          gptResponse: entryData.gptResponse,
+          publicPostDraft: entryData.publicPostDraft,
+          notes: entryData.notes,
+          updatedAt: new Date(),
+        })
+        .where(and(
+          eq(glowUpJournal.userId, entryData.userId),
+          eq(glowUpJournal.day, entryData.day)
+        ))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(glowUpJournal)
+        .values(entryData)
+        .returning();
+      return created;
+    }
   }
 }
 
