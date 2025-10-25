@@ -704,3 +704,323 @@ export const blogArticles: BlogArticle[] = [
     ]
   }
 ];
+
+// ===== QUIZ DATA & MATCHING LOGIC =====
+
+export type QuizQuestion = {
+  id: string;
+  question: string;
+  options: QuizOption[];
+};
+
+export type QuizOption = {
+  id: string;
+  text: string;
+  matchScore: Record<string, number>; // ritual slug -> score weight
+};
+
+export const quizQuestions: QuizQuestion[] = [
+  {
+    id: "q1",
+    question: "Where are you on your tech journey right now?",
+    options: [
+      {
+        id: "beginner",
+        text: "Just getting started—curious but overwhelmed",
+        matchScore: {
+          "ai-glow-up-facial": 3,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 1,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 1
+        }
+      },
+      {
+        id: "learning",
+        text: "I understand the basics, ready to go deeper",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 2,
+          "crypto-confidence-bath": 2,
+          "nft-radiance-wrap": 2,
+          "metaverse-meditation": 2
+        }
+      },
+      {
+        id: "advanced",
+        text: "I'm ready for the cutting-edge concepts",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 2,
+          "crypto-confidence-bath": 2,
+          "nft-radiance-wrap": 3,
+          "metaverse-meditation": 3
+        }
+      }
+    ]
+  },
+  {
+    id: "q2",
+    question: "What excites you most about technology?",
+    options: [
+      {
+        id: "creating",
+        text: "Creating and automating with AI tools",
+        matchScore: {
+          "ai-glow-up-facial": 4,
+          "blockchain-detox-ritual": 0,
+          "crypto-confidence-bath": 0,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 1
+        }
+      },
+      {
+        id: "finance",
+        text: "Understanding digital money and finance differently",
+        matchScore: {
+          "ai-glow-up-facial": 0,
+          "blockchain-detox-ritual": 2,
+          "crypto-confidence-bath": 4,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 0
+        }
+      },
+      {
+        id: "art",
+        text: "Digital ownership, art, and creativity",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 0,
+          "crypto-confidence-bath": 0,
+          "nft-radiance-wrap": 4,
+          "metaverse-meditation": 2
+        }
+      },
+      {
+        id: "virtual",
+        text: "Virtual worlds and immersive experiences",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 0,
+          "nft-radiance-wrap": 2,
+          "metaverse-meditation": 4
+        }
+      },
+      {
+        id: "foundation",
+        text: "The tech behind it all—how it works",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 4,
+          "crypto-confidence-bath": 2,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 1
+        }
+      }
+    ]
+  },
+  {
+    id: "q3",
+    question: "How do you prefer to learn new skills?",
+    options: [
+      {
+        id: "handson",
+        text: "Hands-on, practical applications I can use today",
+        matchScore: {
+          "ai-glow-up-facial": 3,
+          "blockchain-detox-ritual": 2,
+          "crypto-confidence-bath": 2,
+          "nft-radiance-wrap": 2,
+          "metaverse-meditation": 2
+        }
+      },
+      {
+        id: "conceptual",
+        text: "Deep dive into concepts and theory first",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 3,
+          "crypto-confidence-bath": 3,
+          "nft-radiance-wrap": 2,
+          "metaverse-meditation": 2
+        }
+      },
+      {
+        id: "creative",
+        text: "Visual, creative, and experimental",
+        matchScore: {
+          "ai-glow-up-facial": 2,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 1,
+          "nft-radiance-wrap": 3,
+          "metaverse-meditation": 3
+        }
+      }
+    ]
+  },
+  {
+    id: "q4",
+    question: "What's your biggest goal right now?",
+    options: [
+      {
+        id: "productivity",
+        text: "Multiply my productivity and automate tasks",
+        matchScore: {
+          "ai-glow-up-facial": 4,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 0,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 1
+        }
+      },
+      {
+        id: "invest",
+        text: "Invest confidently in digital assets",
+        matchScore: {
+          "ai-glow-up-facial": 0,
+          "blockchain-detox-ritual": 2,
+          "crypto-confidence-bath": 4,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 0
+        }
+      },
+      {
+        id: "create",
+        text: "Create and monetize digital content",
+        matchScore: {
+          "ai-glow-up-facial": 2,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 0,
+          "nft-radiance-wrap": 4,
+          "metaverse-meditation": 2
+        }
+      },
+      {
+        id: "build",
+        text: "Build my presence in Web3 and virtual spaces",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 2,
+          "crypto-confidence-bath": 1,
+          "nft-radiance-wrap": 2,
+          "metaverse-meditation": 4
+        }
+      },
+      {
+        id: "understand",
+        text: "Understand the foundation of blockchain technology",
+        matchScore: {
+          "ai-glow-up-facial": 0,
+          "blockchain-detox-ritual": 4,
+          "crypto-confidence-bath": 2,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 1
+        }
+      }
+    ]
+  },
+  {
+    id: "q5",
+    question: "Which description resonates most with you?",
+    options: [
+      {
+        id: "innovator",
+        text: "The Innovator—I love testing new AI tools and automations",
+        matchScore: {
+          "ai-glow-up-facial": 4,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 1,
+          "nft-radiance-wrap": 2,
+          "metaverse-meditation": 2
+        }
+      },
+      {
+        id: "investor",
+        text: "The Investor—I want to make smart financial moves",
+        matchScore: {
+          "ai-glow-up-facial": 0,
+          "blockchain-detox-ritual": 2,
+          "crypto-confidence-bath": 4,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 1
+        }
+      },
+      {
+        id: "creator",
+        text: "The Creator—I want to own and monetize my digital art",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 0,
+          "nft-radiance-wrap": 4,
+          "metaverse-meditation": 2
+        }
+      },
+      {
+        id: "builder",
+        text: "The Builder—I'm designing my virtual brand presence",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 1,
+          "crypto-confidence-bath": 1,
+          "nft-radiance-wrap": 2,
+          "metaverse-meditation": 4
+        }
+      },
+      {
+        id: "architect",
+        text: "The Architect—I need to understand how it all works",
+        matchScore: {
+          "ai-glow-up-facial": 1,
+          "blockchain-detox-ritual": 4,
+          "crypto-confidence-bath": 2,
+          "nft-radiance-wrap": 1,
+          "metaverse-meditation": 2
+        }
+      }
+    ]
+  }
+];
+
+// Matching algorithm to determine which ritual based on quiz answers
+export function matchRitual(answers: Record<string, string>): string {
+  const scores: Record<string, number> = {
+    "ai-glow-up-facial": 0,
+    "blockchain-detox-ritual": 0,
+    "crypto-confidence-bath": 0,
+    "nft-radiance-wrap": 0,
+    "metaverse-meditation": 0
+  };
+
+  // Calculate scores based on answers
+  Object.entries(answers).forEach(([questionId, answerId]) => {
+    const question = quizQuestions.find(q => q.id === questionId);
+    if (question) {
+      const option = question.options.find(o => o.id === answerId);
+      if (option) {
+        Object.entries(option.matchScore).forEach(([ritual, score]) => {
+          scores[ritual] += score;
+        });
+      }
+    }
+  });
+
+  // Find ritual with highest score
+  let maxScore = -1;
+  let matchedRitual = "ai-glow-up-facial"; // default fallback
+  
+  Object.entries(scores).forEach(([ritual, score]) => {
+    if (score > maxScore) {
+      maxScore = score;
+      matchedRitual = ritual;
+    }
+  });
+
+  return matchedRitual;
+}
+
+// Get ritual details by slug
+export function getRitualBySlug(slug: string): Ritual | undefined {
+  return rituals.find(r => r.slug === slug);
+}
