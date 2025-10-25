@@ -259,13 +259,29 @@ export type QuizSubmissionDB = typeof quizSubmissions.$inferSelect;
 
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
+// Structured step with rich content
+export const ritualStepSchema = z.object({
+  id: z.number(),
+  title: z.string(),
+  summary: z.string(),
+  content: z.string(),
+  resources: z.array(z.object({
+    title: z.string(),
+    url: z.string(),
+    type: z.enum(["tool", "article", "video", "guide"]),
+  })).optional(),
+  proOnly: z.boolean().default(false),
+});
+
+export type RitualStep = z.infer<typeof ritualStepSchema>;
+
 export const ritualSchema = z.object({
   slug: z.string(),
   title: z.string(),
   tier: z.enum(["free", "pro"]),
   duration_min: z.number(),
   summary: z.string(),
-  steps: z.array(z.string()),
+  steps: z.array(ritualStepSchema),
 });
 
 export type Ritual = z.infer<typeof ritualSchema>;
@@ -339,11 +355,49 @@ export const rituals: Ritual[] = [
     duration_min: 60,
     summary: "Prompting, daily automations, 1 task off your plate.",
     steps: [
-      "Cleanse intent",
-      "Prompting 101",
-      "Automate one task",
-      "Reflect & journal",
-      "Set weekly trigger"
+      {
+        id: 1,
+        title: "Cleanse Your Intent",
+        summary: "Set your mindful foundation for AI exploration",
+        content: "Begin by creating sacred space—light a candle, take three deep breaths, and set an intention for this ritual. Ask yourself: What repetitive task drains my energy most? What would I do with 5 extra hours per week? Write this down. This isn't just about learning AI—it's about reclaiming your time and energy for what truly matters to you.",
+        proOnly: false,
+      },
+      {
+        id: 2,
+        title: "AI Prompting 101",
+        summary: "Master the art of communicating with AI",
+        content: "Think of AI prompting like giving instructions to your most brilliant assistant. Instead of vague requests ('write an email'), try specific, context-rich prompts ('write a warm, professional email to a potential client introducing our wellness retreat, using a Forbes-meets-Vogue tone'). Practice the 3-part prompt formula: Context + Task + Style. Example: 'I'm a wellness coach (context) creating Instagram captions (task) that feel luxurious yet approachable (style).' Spend 15 minutes experimenting with ChatGPT or Claude using this framework.",
+        resources: [
+          { title: "ChatGPT", url: "https://chat.openai.com", type: "tool" },
+          { title: "Claude AI", url: "https://claude.ai", type: "tool" },
+        ],
+        proOnly: false,
+      },
+      {
+        id: 3,
+        title: "Automate One Task",
+        summary: "Transform theory into tangible time savings",
+        content: "Choose ONE repetitive weekly task and automate it using AI. Popular options: email drafting (use ChatGPT to create templates), social media scheduling (Claude for caption writing), meeting prep (AI-generated agendas), or research summaries (paste articles, request key takeaways). Create a saved prompt you can reuse. The goal isn't perfection—it's progress. Even automating 30 minutes per week compounds to 26 hours per year.",
+        resources: [
+          { title: "Zapier AI", url: "https://zapier.com/ai", type: "tool" },
+          { title: "Notion AI", url: "https://www.notion.so/product/ai", type: "tool" },
+        ],
+        proOnly: true,
+      },
+      {
+        id: 4,
+        title: "Reflect & Journal",
+        summary: "Integrate your insights and celebrate progress",
+        content: "Take 10 minutes to journal your experience. What surprised you about AI? What felt natural vs. challenging? What task did you automate, and how will this shift your daily routine? Most importantly: what will you do with your reclaimed time? This reflection anchors the learning and helps you track your evolution from AI-curious to AI-fluent.",
+        proOnly: true,
+      },
+      {
+        id: 5,
+        title: "Set Your Weekly Trigger",
+        summary: "Build sustainable AI habits through ritual",
+        content: "Sustainability comes from systems. Choose a weekly 'AI ritual moment'—every Monday morning with coffee, every Friday afternoon planning next week, etc. Set a calendar reminder. Use this time to refine your prompts, explore new AI tools, or document what's working. Treat it like a spa appointment with yourself—non-negotiable, restorative, transformative. Your future self will thank you.",
+        proOnly: true,
+      }
     ]
   },
   {
@@ -353,11 +407,51 @@ export const rituals: Ritual[] = [
     duration_min: 60,
     summary: "Wallet setup, self-custody, safety.",
     steps: [
-      "Visualize trust",
-      "Create wallet",
-      "Self-custody basics",
-      "Testnet transfer",
-      "Journal"
+      {
+        id: 1,
+        title: "Visualize Decentralized Trust",
+        summary: "Understand the philosophy before the technology",
+        content: "Close your eyes and imagine a world where you don't need banks, intermediaries, or institutions to verify trust. Blockchain is a shared, transparent ledger that everyone can see but no single entity controls. Think of it like a group diary where everyone has a copy—if someone tries to change a page, everyone notices because their copies don't match. This is the foundation of Web3: trust through transparency, not through authority. Take 5 minutes to sit with this concept. How would your financial life change if you were your own bank?",
+        proOnly: false,
+      },
+      {
+        id: 2,
+        title: "Create Your First Wallet",
+        summary: "Set up your digital vault for crypto assets",
+        content: "Download MetaMask (browser extension or mobile app). This is your 'hot wallet'—think everyday purse, not life savings vault. During setup, you'll receive a 12-word 'seed phrase.' This is EVERYTHING—whoever has these words controls your wallet. Write them down by hand on paper (never screenshot, never email). Store this paper somewhere fireproof and private. Create a strong password. Congratulations—you now have a self-custody wallet. You are your own bank.",
+        resources: [
+          { title: "MetaMask", url: "https://metamask.io", type: "tool" },
+          { title: "Wallet Security Guide", url: "https://ethereum.org/en/wallets/", type: "guide" },
+        ],
+        proOnly: false,
+      },
+      {
+        id: 3,
+        title: "Self-Custody Essentials",
+        summary: "Master the responsibility of being your own bank",
+        content: "Self-custody means freedom—and responsibility. Your wallet has a public address (like your email—safe to share) and a private key (like your password—never share). No bank will help if you lose your seed phrase. No customer service can reverse transactions. This sounds scary, but it's empowering. Practice these safety rules: (1) Never share your seed phrase, (2) Double-check addresses before sending, (3) Start with small amounts, (4) Beware of phishing (MetaMask will never DM you), (5) For large holdings, upgrade to a hardware wallet (Ledger/Trezor).",
+        resources: [
+          { title: "Ledger Hardware Wallet", url: "https://www.ledger.com", type: "tool" },
+        ],
+        proOnly: true,
+      },
+      {
+        id: 4,
+        title: "Practice Transfer on Testnet",
+        summary: "Learn without risk using practice networks",
+        content: "Before using real money, practice on a testnet—a fake version of Ethereum where you can experiment safely. Switch your MetaMask to 'Sepolia Testnet' (Settings → Networks). Get free test ETH from a faucet (Google 'Sepolia faucet'). Practice sending test ETH to a friend or between two wallets you control. This builds muscle memory for: copying addresses correctly, paying gas fees, and confirming transactions. Mistakes here cost nothing. Mistakes on mainnet cost real money.",
+        resources: [
+          { title: "Sepolia Faucet", url: "https://sepoliafaucet.com", type: "tool" },
+        ],
+        proOnly: true,
+      },
+      {
+        id: 5,
+        title: "Journal Your Blockchain Journey",
+        summary: "Document insights and next steps",
+        content: "Reflect on what you learned. How does it feel to control your own wallet? What fears came up, and how did you navigate them? What questions remain? Write down your 'why'—why are you learning blockchain? Financial sovereignty? Career skills? Curiosity? This 'why' will guide your next steps. Celebrate this milestone: you now understand more about blockchain than 99% of the population.",
+        proOnly: true,
+      }
     ]
   },
   {
@@ -367,11 +461,48 @@ export const rituals: Ritual[] = [
     duration_min: 75,
     summary: "BTC/ETH/stablecoins in plain language.",
     steps: [
-      "Tea ritual",
-      "BTC & ETH basics",
-      "Stablecoins",
-      "Use cases",
-      "Journal"
+      {
+        id: 1,
+        title: "Prepare Your Tea Ritual",
+        summary: "Ground yourself before exploring digital currency",
+        content: "Brew your favorite tea. This ritual is about demystifying cryptocurrency, not rushing through jargon. As you steep your tea, set an intention: you're not here to become a day trader—you're here to understand the future of money. Crypto isn't just about getting rich; it's about financial access, innovation, and alternatives to traditional banking. Approach this with curiosity, not FOMO.",
+        proOnly: false,
+      },
+      {
+        id: 2,
+        title: "Bitcoin & Ethereum Fundamentals",
+        summary: "Understand the two pillars of crypto",
+        content: "Bitcoin (BTC) is digital gold—limited supply (21 million coins), designed as a store of value and hedge against inflation. Think: digital scarcity. Ethereum (ETH) is a programmable blockchain—not just currency, but a platform for apps, contracts, NFTs, and DeFi. Think: digital infrastructure. BTC is 'save and hold.' ETH is 'build and create.' Both are volatile, both are revolutionary. Neither requires you to understand all the technical details—just like you can drive a car without being a mechanic.",
+        resources: [
+          { title: "Bitcoin Whitepaper", url: "https://bitcoin.org/bitcoin.pdf", type: "article" },
+          { title: "Ethereum Explained", url: "https://ethereum.org/en/what-is-ethereum/", type: "guide" },
+        ],
+        proOnly: false,
+      },
+      {
+        id: 3,
+        title: "Stablecoins Decoded",
+        summary: "The bridge between traditional money and crypto",
+        content: "Stablecoins are cryptocurrencies pegged to real-world assets (usually $1 USD). Popular ones: USDC, USDT, DAI. They solve crypto's volatility problem—you can send money globally in minutes with minimal fees, without worrying about price swings. Use cases: international payments (faster/cheaper than banks), earning yield (higher interest than savings accounts), and stability while staying in crypto. Think of stablecoins as the calm, reliable friend in the chaotic crypto party.",
+        resources: [
+          { title: "Circle USDC", url: "https://www.circle.com/en/usdc", type: "guide" },
+        ],
+        proOnly: true,
+      },
+      {
+        id: 4,
+        title: "Real-World Use Cases",
+        summary: "How crypto solves actual problems",
+        content: "Crypto isn't just speculation—it's solving real problems. (1) Financial inclusion: 1.7 billion people lack bank access but have phones. (2) Cross-border payments: Send money internationally in minutes vs. days. (3) Creator economy: Artists receive royalties automatically via smart contracts. (4) Inflation protection: In countries with unstable currencies, crypto offers stability. (5) Ownership: Your crypto is yours—no bank can freeze it. Understanding these use cases transforms crypto from 'internet money' to 'financial revolution.'",
+        proOnly: true,
+      },
+      {
+        id: 5,
+        title: "Reflection Journal",
+        summary: "Process and integrate your learning",
+        content: "Take 15 minutes to journal. Which cryptocurrency resonates with you most—BTC's scarcity, ETH's programmability, or stablecoin practicality? Can you imagine using crypto in your life? What questions remain? What feels exciting vs. overwhelming? Remember: you don't need to invest to understand crypto. Knowledge is the first investment. The goal today wasn't to buy—it was to build confidence through clarity.",
+        proOnly: true,
+      }
     ]
   },
   {
@@ -381,11 +512,52 @@ export const rituals: Ritual[] = [
     duration_min: 90,
     summary: "Design and mint a first NFT (testnet).",
     steps: [
-      "Inspiration",
-      "Prompt art",
-      "Mint on testnet",
-      "List draft",
-      "Story share"
+      {
+        id: 1,
+        title: "Find Your Creative Inspiration",
+        summary: "Connect with what you want to create",
+        content: "NFTs are digital ownership certificates—art, music, writing, photography, anything unique. Before creating, ask: What story do I want to tell? What visual represents my brand or emotion right now? Browse NFT galleries (OpenSea, Foundation, Objkt) not to copy, but to spark inspiration. Notice what resonates. This isn't about technical perfection—it's about authentic expression. Your first NFT is a milestone, not a masterpiece. Give yourself permission to experiment.",
+        resources: [
+          { title: "OpenSea Gallery", url: "https://opensea.io/explore-collections", type: "guide" },
+          { title: "Foundation", url: "https://foundation.app", type: "tool" },
+        ],
+        proOnly: false,
+      },
+      {
+        id: 2,
+        title: "Generate Art with AI Prompting",
+        summary: "Use AI to bring your vision to life",
+        content: "Use AI art tools to create your NFT image. Try Midjourney (Discord-based, $10/month), DALL-E (via ChatGPT Plus), or free alternatives like Playground AI. Apply your AI prompting skills: be specific about style, mood, colors, and composition. Example prompt: 'ethereal portrait of a woman surrounded by digital butterflies, neon purple and gold, cyberpunk aesthetic, high fashion photography style.' Generate several variations. Choose the one that resonates. Remember: AI is your collaborator, not your replacement. You're still the creative director.",
+        resources: [
+          { title: "Midjourney", url: "https://www.midjourney.com", type: "tool" },
+          { title: "Playground AI", url: "https://playgroundai.com", type: "tool" },
+        ],
+        proOnly: false,
+      },
+      {
+        id: 3,
+        title: "Mint Your NFT on Testnet",
+        summary: "Practice minting risk-free before going live",
+        content: "Use OpenSea's testnet (testnets.opensea.io) to mint your first NFT for FREE. Switch MetaMask to Sepolia testnet. Upload your image, add a title and description. Understand gas fees (transaction costs)—on testnet they're fake, on mainnet they're real. Click 'Create' and sign the transaction. Congratulations—you just minted an NFT! The blockchain now has an immutable record that this digital creation belongs to you. Feel the power of that. When you're ready, repeat this process on mainnet (real Ethereum) for your official debut.",
+        resources: [
+          { title: "OpenSea Testnet", url: "https://testnets.opensea.io", type: "tool" },
+        ],
+        proOnly: true,
+      },
+      {
+        id: 4,
+        title: "Draft Your Listing Story",
+        summary: "Craft compelling context for your creation",
+        content: "NFTs with stories sell better than NFTs without. Write a description for your piece: What inspired it? What does it represent? What journey led you here? People don't just buy art—they buy meaning. Your first NFT isn't just pixels; it's proof you're a creator in the digital age. Even if you never list it for sale, writing this description clarifies your creative intention and builds skills for future drops. Practice pricing psychology: if you were to sell this, what feels aligned—accessible or exclusive?",
+        proOnly: true,
+      },
+      {
+        id: 5,
+        title: "Share Your Story",
+        summary: "Celebrate your creator milestone",
+        content: "Screenshot your minted NFT. Share it—on social media, in your journal, with friends. Caption it with your journey: 'I just minted my first NFT.' Tag communities (#WomeninNFTs, #NFTCommunity). This isn't bragging; it's claiming your place in the creator economy. Reflect: How does it feel to own a piece of the blockchain? What creative possibilities excite you? Whether you mint 100 more NFTs or just this one, you've crossed a threshold. You're no longer just consuming digital culture—you're creating it.",
+        proOnly: true,
+      }
     ]
   },
   {
@@ -395,11 +567,49 @@ export const rituals: Ritual[] = [
     duration_min: 90,
     summary: "Avatar, space, brand presence.",
     steps: [
-      "Visualize",
-      "Avatar setup",
-      "Space design",
-      "Brand ritual",
-      "Journal"
+      {
+        id: 1,
+        title: "Visualize Your Digital Presence",
+        summary: "Imagine your ideal virtual identity and space",
+        content: "Close your eyes. Imagine a space that's entirely yours—designed to your exact vision, where geography doesn't exist and your community can gather instantly. What does it look like? A serene virtual garden? A neon-lit gallery? A futuristic conference room? The metaverse is your blank canvas. Before diving into technology, get clear on intention: Why do you want a presence here? Networking? Education? Community? Commerce? Your 'why' shapes your 'how.' Spend 10 minutes journaling your metaverse vision.",
+        proOnly: false,
+      },
+      {
+        id: 2,
+        title: "Create Your Avatar Identity",
+        summary: "Design your digital self-expression",
+        content: "Your avatar is your metaverse identity—choose wisely and have fun. Explore avatar creation in platforms like Ready Player Me (cross-platform avatar), Spatial (professional), or Horizon Worlds (social). Decide: realistic representation of you, or creative fantasy version? There's no wrong answer. Some women choose aspirational avatars (how they want to be perceived), others choose fantastical (expressing hidden parts of themselves). Customize everything: appearance, style, accessories. This is identity play—liberating and empowering. Your avatar is YOU in digital spaces.",
+        resources: [
+          { title: "Ready Player Me", url: "https://readyplayer.me", type: "tool" },
+          { title: "Spatial", url: "https://spatial.io", type: "tool" },
+        ],
+        proOnly: false,
+      },
+      {
+        id: 3,
+        title: "Design Your Virtual Space",
+        summary: "Build your metaverse home or business",
+        content: "Start simple: claim free space in Spatial or Decentraland. Upload images, add interactive elements, set the mood with lighting and music. Think of this like decorating a room—but with infinite possibilities and zero physical constraints. Use your space for: (1) Portfolio/gallery, (2) Meeting room for clients, (3) Event venue, (4) Private sanctuary. Many platforms offer templates—customize them to match your brand aesthetic. Luxury spa vibe? Neon cyberpunk? Minimalist modern? Your space should feel like YOU.",
+        resources: [
+          { title: "Decentraland", url: "https://decentraland.org", type: "tool" },
+          { title: "Spatial Creator", url: "https://spatial.io/create", type: "guide" },
+        ],
+        proOnly: true,
+      },
+      {
+        id: 4,
+        title: "Craft Your Brand Ritual",
+        summary: "Define how you'll show up in virtual worlds",
+        content: "Just like you have rituals IRL (morning routine, client process, content schedule), create metaverse rituals. Examples: Host monthly virtual gatherings in your space, Create wearable NFTs for your avatar that reflect your brand, Join metaverse networking events every Friday, Build a virtual vision board you update quarterly. Consistency builds presence. Decide on ONE recurring metaverse ritual you'll commit to. Start small—even 30 minutes monthly in virtual spaces builds fluency. The metaverse rewards those who show up consistently, not perfectly.",
+        proOnly: true,
+      },
+      {
+        id: 5,
+        title: "Integration Journal",
+        summary: "Reflect on your metaverse journey",
+        content: "Reflect deeply: How did it feel to create a virtual identity? What surprised you about the metaverse? Does your avatar feel like an extension of you, or a different version entirely? Where do you see yourself using virtual spaces in 6 months? 1 year? What opportunities excite you (events, networking, commerce, community)? What challenges remain (learning curve, time investment, tech barriers)? The metaverse isn't for everyone—but understanding it is essential for anyone building in the digital age. You now have the foundation.",
+        proOnly: true,
+      }
     ]
   }
 ];
