@@ -358,22 +358,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to fetch quiz results" });
     }
   });
-  
-  // Get all quiz submissions (admin only)
-  app.get('/api/admin/quiz-submissions', isAuthenticated, async (req: Request, res) => {
+
+  // Admin route to get all quiz submissions
+  app.get('/api/quiz/admin/all', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
       
-      // TODO: Add admin check when we have admin roles
-      // For now, restrict to specific email
-      if (user?.email !== 'admin@metahers.ai') {
-        return res.status(403).json({ message: "Forbidden" });
+      // Simple admin check - only allow specific emails
+      if (user?.email !== "hello@metahers.ai" && user?.email !== "metahers@gmail.com") {
+        return res.status(403).json({ message: "Access denied" });
       }
       
       const submissions = await storage.getAllQuizSubmissions();
       
-      res.json({ submissions });
+      res.json(submissions);
     } catch (error) {
       console.error("Error fetching all quiz submissions:", error);
       res.status(500).json({ message: "Failed to fetch quiz submissions" });

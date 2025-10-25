@@ -30,6 +30,7 @@ import GlowUpDashboardPage from "@/pages/GlowUpDashboardPage";
 import GlowUpJournalPage from "@/pages/GlowUpJournalPage";
 import GlowUpCompletePage from "@/pages/GlowUpCompletePage";
 import DiscoverPage from "@/pages/DiscoverPage";
+import AdminQuizResultsPage from "@/pages/AdminQuizResultsPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -75,6 +76,7 @@ function Router() {
           <Route path="/glow-up/dashboard" component={GlowUpDashboardPage} />
           <Route path="/glow-up/journal" component={GlowUpJournalPage} />
           <Route path="/glow-up/complete" component={GlowUpCompletePage} />
+          <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
         </>
       )}
       <Route component={NotFound} />
