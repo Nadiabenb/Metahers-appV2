@@ -1,5 +1,5 @@
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
@@ -10,6 +10,7 @@ export function Navigation() {
 
   const navItems = [
     { path: "/", label: "Home", icon: Sparkles, pro: false },
+    { path: "/discover", label: "Discover", icon: Compass, pro: false },
     { path: "/rituals", label: "Rituals", icon: Sparkles, pro: false },
     { path: "/glow-up", label: "Glow-Up", icon: TrendingUp, pro: true },
     { path: "/shop", label: "Shop", icon: ShoppingBag, pro: false },
@@ -92,6 +93,16 @@ export function Navigation() {
 
           {!isAuthenticated && !isLoading && (
             <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setLocation("/discover")}
+                variant="ghost"
+                size="sm"
+                className="gap-2"
+                data-testid="link-discover"
+              >
+                <Compass className="w-4 h-4" />
+                Discover
+              </Button>
               <Button
                 onClick={() => setLocation("/blog")}
                 variant="ghost"
