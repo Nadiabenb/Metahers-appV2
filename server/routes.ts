@@ -286,6 +286,118 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== QUIZ ROUTES =====
+  
+  // Submit quiz (public route - no auth required)
+  app.post('/api/quiz/submit', async (req: Request, res) => {
+    try {
+      const { name, email, answers } = req.body;
+      
+      // Validate input
+      if (!name || !email || !answers) {
+        return res.status(400).json({ message: "Name, email, and answers are required" });
+      }
+      
+      // Import matching function
+      const { matchRitual } = await import('../shared/schema');
+      const matchedRitual = matchRitual(answers);
+      
+      // Check if user is logged in
+      const userId = req.session?.userId as string | undefined;
+      
+      // Create quiz submission
+      const submission = await storage.createQuizSubmission({
+        userId: userId || null,
+        name,
+        email,
+        answers,
+        matchedRitual,
+        claimed: !!userId, // If logged in, mark as claimed immediately
+        ritualCompleted: false,
+        oneOnOneBooked: false,
+      });
+      
+      // If user is logged in, update their profile with the unlocked ritual
+      if (userId) {
+        const user = await storage.getUser(userId);
+        if (user) {
+          await storage.upsertUser({
+            ...user,
+            quizUnlockedRitual: matchedRitual,
+            quizCompletedAt: new Date(),
+          });
+        }
+      }
+      
+      res.json({ 
+        success: true, 
+        submissionId: submission.id,
+        matchedRitual,
+      });
+    } catch (error) {
+      console.error("Error submitting quiz:", error);
+      res.status(500).json({ message: "Failed to submit quiz" });
+    }
+  });
+  
+  // Get quiz results (for retake or viewing)
+  app.get('/api/quiz/results/:email', async (req: Request, res) => {
+    try {
+      const { email } = req.params;
+      
+      const submissions = await storage.getQuizSubmissionsByEmail(email);
+      
+      res.json({ submissions });
+    } catch (error) {
+      console.error("Error fetching quiz results:", error);
+      res.status(500).json({ message: "Failed to fetch quiz results" });
+    }
+  });
+  
+  // Get all quiz submissions (admin only)
+  app.get('/api/admin/quiz-submissions', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const user = await storage.getUser(userId);
+      
+      // TODO: Add admin check when we have admin roles
+      // For now, restrict to specific email
+      if (user?.email !== 'admin@metahers.ai') {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+      
+      const submissions = await storage.getAllQuizSubmissions();
+      
+      res.json({ submissions });
+    } catch (error) {
+      console.error("Error fetching all quiz submissions:", error);
+      res.status(500).json({ message: "Failed to fetch quiz submissions" });
+    }
+  });
+  
+  // Update quiz submission status (admin only)
+  app.patch('/api/admin/quiz-submissions/:id', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const user = await storage.getUser(userId);
+      
+      // TODO: Add admin check when we have admin roles
+      if (user?.email !== 'admin@metahers.ai') {
+        return res.status(403).json({ message: "Forbidden" });
+      }
+      
+      const { id } = req.params;
+      const { oneOnOneBooked } = req.body;
+      
+      await storage.updateQuizSubmission(id, { oneOnOneBooked });
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error updating quiz submission:", error);
+      res.status(500).json({ message: "Failed to update quiz submission" });
+    }
+  });
+
   // ===== RITUAL PROGRESS ROUTES =====
   app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: Request, res) => {
     try {

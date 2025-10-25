@@ -9,6 +9,7 @@ import {
   glowUpProfiles,
   glowUpProgress,
   glowUpJournal,
+  quizSubmissions,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -29,6 +30,8 @@ import {
   type InsertGlowUpProgress,
   type GlowUpJournalDB,
   type InsertGlowUpJournal,
+  type QuizSubmissionDB,
+  type InsertQuizSubmission,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -85,6 +88,12 @@ export interface IStorage {
   getGlowUpJournalEntry(userId: string, day: number): Promise<GlowUpJournalDB | undefined>;
   getAllGlowUpJournalEntries(userId: string): Promise<GlowUpJournalDB[]>;
   upsertGlowUpJournalEntry(entry: InsertGlowUpJournal): Promise<GlowUpJournalDB>;
+  
+  // Quiz submission operations
+  createQuizSubmission(submission: InsertQuizSubmission): Promise<QuizSubmissionDB>;
+  getQuizSubmissionsByEmail(email: string): Promise<QuizSubmissionDB[]>;
+  getAllQuizSubmissions(): Promise<QuizSubmissionDB[]>;
+  updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -544,6 +553,42 @@ export class DatabaseStorage implements IStorage {
         .returning();
       return created;
     }
+  }
+
+  // Quiz submission operations
+  async createQuizSubmission(submissionData: InsertQuizSubmission): Promise<QuizSubmissionDB> {
+    const [submission] = await db
+      .insert(quizSubmissions)
+      .values({
+        ...submissionData,
+        answers: sql`${JSON.stringify(submissionData.answers)}::jsonb`,
+      })
+      .returning();
+    return submission;
+  }
+
+  async getQuizSubmissionsByEmail(email: string): Promise<QuizSubmissionDB[]> {
+    return await db
+      .select()
+      .from(quizSubmissions)
+      .where(eq(quizSubmissions.email, email))
+      .orderBy(desc(quizSubmissions.createdAt));
+  }
+
+  async getAllQuizSubmissions(): Promise<QuizSubmissionDB[]> {
+    return await db
+      .select()
+      .from(quizSubmissions)
+      .orderBy(desc(quizSubmissions.createdAt));
+  }
+
+  async updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB> {
+    const [updated] = await db
+      .update(quizSubmissions)
+      .set(updates)
+      .where(eq(quizSubmissions.id, id))
+      .returning();
+    return updated;
   }
 }
 
