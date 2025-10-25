@@ -29,6 +29,7 @@ import GlowUpOnboardingPage from "@/pages/GlowUpOnboardingPage";
 import GlowUpDashboardPage from "@/pages/GlowUpDashboardPage";
 import GlowUpJournalPage from "@/pages/GlowUpJournalPage";
 import GlowUpCompletePage from "@/pages/GlowUpCompletePage";
+import DiscoverPage from "@/pages/DiscoverPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -56,6 +57,7 @@ function Router() {
       {/* Public routes - accessible to everyone */}
       <Route path="/blog" component={BlogPage} />
       <Route path="/shop" component={ShopPage} />
+      <Route path="/discover" component={DiscoverPage} />
       
       {!isAuthenticated ? (
         <Route path="/" component={LandingPage} />
