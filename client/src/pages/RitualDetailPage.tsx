@@ -1,16 +1,18 @@
 import { useRoute, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock } from "lucide-react";
+import { ArrowLeft, Clock, Sparkles } from "lucide-react";
 import { rituals } from "@shared/schema";
 import { RitualStepper } from "@/components/RitualStepper";
 import { PlanBadge } from "@/components/PlanBadge";
 import { ProgressRing } from "@/components/ProgressRing";
 import { Button } from "@/components/ui/button";
 import { useRitualProgress } from "@/hooks/useRitualProgress";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function RitualDetailPage() {
   const [, params] = useRoute("/rituals/:slug");
   const [, setLocation] = useLocation();
+  const { user } = useAuth();
 
   const ritual = rituals.find(r => r.slug === params?.slug);
   const { completedSteps, isLoading } = useRitualProgress(ritual?.slug || "");
@@ -18,6 +20,8 @@ export default function RitualDetailPage() {
   const progress = ritual 
     ? (completedSteps.length / ritual.steps.length) * 100 
     : 0;
+  
+  const isQuizUnlocked = user?.quizUnlockedRitual === ritual?.slug;
 
   if (!ritual) {
     return (
@@ -76,7 +80,21 @@ export default function RitualDetailPage() {
                     {ritual.summary}
                   </p>
 
-                  {ritual.tier === "pro" && (
+                  {isQuizUnlocked && (
+                    <div className="bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl p-4 mb-6" data-testid="alert-quiz-unlocked">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
+                        <p className="text-sm font-semibold text-foreground">
+                          Quiz Discovery Gift!
+                        </p>
+                      </div>
+                      <p className="text-sm text-foreground/80">
+                        This ritual was unlocked via your personalized quiz. Complete all steps to book your FREE 1:1 session with the founder.
+                      </p>
+                    </div>
+                  )}
+
+                  {ritual.tier === "pro" && !isQuizUnlocked && (
                     <div className="bg-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl p-4 mb-6" data-testid="alert-pro-required">
                       <p className="text-sm text-foreground">
                         <strong>Pro Ritual:</strong> Steps 3-5 require Pro access. 
@@ -133,8 +151,32 @@ export default function RitualDetailPage() {
                 <p className="text-foreground/80 mb-6">
                   Congratulations on completing {ritual.title}. Take a moment to reflect in your journal.
                 </p>
+                
+                {isQuizUnlocked && (
+                  <div className="bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl p-6 mb-6">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <Sparkles className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
+                      <h4 className="font-serif text-xl font-bold text-foreground">
+                        Claim Your FREE 1:1 Session
+                      </h4>
+                    </div>
+                    <p className="text-foreground/80 mb-4">
+                      You've completed your quiz-matched ritual! Now book your complimentary discovery call with the founder.
+                    </p>
+                    <Button
+                      size="lg"
+                      onClick={() => window.open('https://calendly.com/metahers/discovery', '_blank')}
+                      className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
+                      data-testid="button-book-calendly"
+                    >
+                      Book Your Session
+                    </Button>
+                  </div>
+                )}
+                
                 <Button
                   size="lg"
+                  variant={isQuizUnlocked ? "outline" : "default"}
                   onClick={() => setLocation("/journal")}
                   className="gap-2"
                   data-testid="button-go-journal"

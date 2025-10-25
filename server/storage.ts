@@ -92,6 +92,7 @@ export interface IStorage {
   // Quiz submission operations
   createQuizSubmission(submission: InsertQuizSubmission): Promise<QuizSubmissionDB>;
   getQuizSubmissionsByEmail(email: string): Promise<QuizSubmissionDB[]>;
+  getQuizSubmissionByEmail(email: string): Promise<QuizSubmissionDB | undefined>;
   getAllQuizSubmissions(): Promise<QuizSubmissionDB[]>;
   updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB>;
 }
@@ -573,6 +574,11 @@ export class DatabaseStorage implements IStorage {
       .from(quizSubmissions)
       .where(eq(quizSubmissions.email, email))
       .orderBy(desc(quizSubmissions.createdAt));
+  }
+
+  async getQuizSubmissionByEmail(email: string): Promise<QuizSubmissionDB | undefined> {
+    const submissions = await this.getQuizSubmissionsByEmail(email);
+    return submissions[0];
   }
 
   async getAllQuizSubmissions(): Promise<QuizSubmissionDB[]> {

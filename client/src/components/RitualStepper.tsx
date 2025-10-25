@@ -37,6 +37,10 @@ export function RitualStepper({
     if (userIsPro) {
       return false;
     }
+    // Check if user unlocked this ritual via quiz
+    if (user?.quizUnlockedRitual === ritualSlug) {
+      return false;
+    }
     return isPro || index >= 2;
   };
 
@@ -56,6 +60,10 @@ export function RitualStepper({
 
   const shouldBlur = (index: number) => {
     if (userIsPro) {
+      return false;
+    }
+    // Check if user unlocked this ritual via quiz
+    if (user?.quizUnlockedRitual === ritualSlug) {
       return false;
     }
     return isPro || index >= 2;

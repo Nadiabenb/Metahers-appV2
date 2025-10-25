@@ -39,6 +39,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(409).json({ message: "User with this email already exists" });
       }
       
+      // Check if user has completed the quiz
+      const quizSubmission = await storage.getQuizSubmissionByEmail(email);
+      
       // Hash password and create user
       const passwordHash = await hashPassword(password);
       const user = await storage.createUser({
@@ -46,6 +49,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         passwordHash,
         firstName: firstName || null,
         lastName: lastName || null,
+        quizUnlockedRitual: quizSubmission?.matchedRitual || null,
+        quizCompletedAt: quizSubmission ? new Date() : null,
       });
       
       // Set up session
