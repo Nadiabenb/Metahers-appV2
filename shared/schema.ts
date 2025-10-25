@@ -34,6 +34,8 @@ export const users = pgTable("users", {
   lastName: varchar("last_name"),
   isPro: boolean("is_pro").default(false).notNull(),
   onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
+  quizUnlockedRitual: varchar("quiz_unlocked_ritual"), // Ritual unlocked via quiz
+  quizCompletedAt: timestamp("quiz_completed_at"), // When they completed the quiz
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -232,6 +234,28 @@ export const glowUpJournal = pgTable("glow_up_journal", {
 export const insertGlowUpJournalSchema = createInsertSchema(glowUpJournal).omit({ id: true, createdAt: true, updatedAt: true });
 export type InsertGlowUpJournal = z.infer<typeof insertGlowUpJournalSchema>;
 export type GlowUpJournalDB = typeof glowUpJournal.$inferSelect;
+
+// Quiz submissions table (tracks "Discover Your Ritual" quiz results)
+export const quizSubmissions = pgTable("quiz_submissions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "cascade" }), // Null if not logged in yet
+  name: varchar("name").notNull(),
+  email: varchar("email").notNull(),
+  answers: jsonb("answers").$type<Record<string, string>>().notNull(), // { q1: "answer", q2: "answer", ... }
+  matchedRitual: varchar("matched_ritual").notNull(), // The ritual slug that was matched
+  claimed: boolean("claimed").default(false).notNull(), // Whether they signed up to claim it
+  ritualCompleted: boolean("ritual_completed").default(false).notNull(), // Whether they completed the ritual
+  oneOnOneBooked: boolean("one_on_one_booked").default(false).notNull(), // Manual update by admin
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_quiz_submission_user").on(table.userId),
+  index("idx_quiz_submission_email").on(table.email),
+  index("idx_quiz_submission_created").on(table.createdAt),
+]);
+
+export const insertQuizSubmissionSchema = createInsertSchema(quizSubmissions).omit({ id: true, createdAt: true });
+export type InsertQuizSubmission = z.infer<typeof insertQuizSubmissionSchema>;
+export type QuizSubmissionDB = typeof quizSubmissions.$inferSelect;
 
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
