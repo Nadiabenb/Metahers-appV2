@@ -8,6 +8,7 @@ import { ProgressRing } from "@/components/ProgressRing";
 import { Button } from "@/components/ui/button";
 import { useRitualProgress } from "@/hooks/useRitualProgress";
 import { useAuth } from "@/hooks/useAuth";
+import { SEO } from "@/components/SEO";
 
 export default function RitualDetailPage() {
   const [, params] = useRoute("/rituals/:slug");
@@ -40,6 +41,11 @@ export default function RitualDetailPage() {
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-background">
+      <SEO
+        title={ritual.title}
+        description={`${ritual.summary} Learn through ${ritual.steps.length} guided steps in ${ritual.duration_min} minutes.`}
+        keywords={`${ritual.title}, AI learning, Web3 education, women in tech, tech rituals`}
+      />
       <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

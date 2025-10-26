@@ -2,12 +2,18 @@ import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { rituals } from "@shared/schema";
 import { RitualCard } from "@/components/MenuCard";
+import { SEO } from "@/components/SEO";
 
 export default function RitualsPage() {
   const [, setLocation] = useLocation();
 
   return (
     <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-background">
+      <SEO
+        title="AI & Web3 Learning Rituals"
+        description="Explore guided learning rituals for AI prompting, blockchain, cryptocurrency, NFTs, and the metaverse. Each ritual offers calm, structured tech education for women."
+        keywords="AI learning, Web3 courses, blockchain tutorial, NFT guide, crypto education, AI prompts course, metaverse guide"
+      />
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { SEO } from "@/components/SEO";
 
 export default function DiscoverPage() {
   const [stage, setStage] = useState<"intro" | "quiz" | "results">("intro");
@@ -77,6 +78,11 @@ export default function DiscoverPage() {
   if (stage === "intro") {
     return (
       <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
+        <SEO
+          title="Discover Your Perfect AI & Web3 Ritual - Free Quiz"
+          description="Take our personalized quiz to find your perfect learning ritual. Get matched to AI Prompting, Blockchain, Crypto, NFTs, or Metaverse education + unlock a FREE 1:1 founder session."
+          keywords="AI quiz, Web3 assessment, personalized learning, AI course finder, blockchain quiz, tech education quiz"
+        />
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -277,11 +283,11 @@ export default function DiscoverPage() {
             <div className="space-y-2 mb-8">
               <h3 className="font-serif text-lg font-semibold text-foreground/80 mb-3">What You'll Learn:</h3>
               {matchedRitual?.steps.map((step, index) => (
-                <div key={index} className="flex items-center gap-3 text-left">
+                <div key={step.id} className="flex items-center gap-3 text-left">
                   <div className="w-6 h-6 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center flex-shrink-0">
                     <span className="text-xs font-bold text-[hsl(var(--liquid-gold))]">{index + 1}</span>
                   </div>
-                  <span className="text-foreground/80">{step}</span>
+                  <span className="text-foreground/80">{step.title}</span>
                 </div>
               ))}
             </div>

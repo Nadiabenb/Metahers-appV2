@@ -73,6 +73,27 @@ The app features a "Forbes-meets-Vogue" luxury editorial design. Typography comb
 
 ## Recent Changes
 
+### October 26, 2025 - Expandable Ritual Steps & SEO Implementation
+- **Ritual Steps Enhancement**: Transformed ritual steps from simple strings to rich educational content
+  - Each of 25 steps (5 rituals × 5 steps) now includes: id, title, summary, detailed content, resources, proOnly flag
+  - Implemented Collapsible accordion UI for expandable step content
+  - Separate click handlers: checkbox toggles completion, header/chevron expands content
+  - Updated paywall logic to use step.proOnly field instead of positional index
+  - Added resource links display when steps are expanded
+- **SEO Foundation**: Implemented comprehensive SEO strategy for Google rankings
+  - Created robots.txt (/client/public/robots.txt) to guide search engines
+  - Generated sitemap.xml with all public pages and proper priorities
+  - Added SEO meta tags to all major pages: RitualsPage, RitualDetailPage, DiscoverPage
+  - Dynamic SEO content on ritual pages based on ritual data
+  - All pages now have unique titles, descriptions, Open Graph tags, and Twitter Cards
+  - Fixed DiscoverPage bug: step.title rendering in quiz results
+- **Documentation**: Created SEO_STRATEGY.md with complete implementation roadmap
+  - Immediate actions: Google Search Console setup, Analytics integration
+  - Content calendar for blog posts targeting high-intent keywords
+  - Link building and backlink strategies
+  - Performance optimization checklist
+  - 6-12 month growth timeline with realistic traffic expectations
+
 ### October 24, 2025 - Blog Marketing & Shop Updates
 - **New Blog Articles**: Added two articles to drive traffic to Drop 001:
   - "AI Agents: Your Digital Dream Team Is Here" - Covers autonomous AI agents for women in business
