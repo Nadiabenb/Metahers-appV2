@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
 import { Lock, Check, Sparkles, Copy, Save, Book, ArrowRight, Calendar, Crown } from "lucide-react";
@@ -33,6 +33,22 @@ export default function GlowUpDashboardPage() {
   const { data: journalEntries } = useQuery<GlowUpJournalDB[]>({
     queryKey: ['/api/glow-up/journal'],
   });
+
+  // Sync form state with journal data when expandedDay or journalEntries changes
+  useEffect(() => {
+    if (expandedDay !== null && journalEntries) {
+      const existing = journalEntries.find((e: any) => e.day === expandedDay);
+      
+      console.log(`Syncing state for Day ${expandedDay}:`, { 
+        hasExisting: !!existing, 
+        gptResponseLength: existing?.gptResponse?.length || 0,
+        publicPostDraftLength: existing?.publicPostDraft?.length || 0
+      });
+      
+      setGptResponse(existing?.gptResponse || "");
+      setPublicPostDraft(existing?.publicPostDraft || "");
+    }
+  }, [expandedDay, journalEntries]);
 
   const saveJournalMutation = useMutation({
     mutationFn: (data: { day: number; gptResponse: string; publicPostDraft: string }) =>
@@ -178,21 +194,13 @@ export default function GlowUpDashboardPage() {
     if (!isDayUnlocked(day)) return;
     
     if (expandedDay === day) {
+      // Closing the expanded day
       setExpandedDay(null);
       setGptResponse("");
       setPublicPostDraft("");
     } else {
+      // Opening a new day - just set expandedDay, useEffect will handle loading the data
       setExpandedDay(day);
-      const existing = journalEntries?.find((e: any) => e.day === day);
-      
-      console.log(`Expanding Day ${day}:`, { 
-        hasExisting: !!existing, 
-        gptResponseLength: existing?.gptResponse?.length || 0,
-        publicPostDraftLength: existing?.publicPostDraft?.length || 0
-      });
-      
-      setGptResponse(existing?.gptResponse || "");
-      setPublicPostDraft(existing?.publicPostDraft || "");
     }
   };
 
