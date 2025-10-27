@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { Link } from "wouter";
-import heroImage from "@assets/generated_images/Luxury_spa_hero_background_8444d20c.png";
+import heroImage from "@assets/generated_images/VIP_Cohort_hero_background_d42d4ea1.png";
 
 export default function VIPCohortPage() {
   return (
