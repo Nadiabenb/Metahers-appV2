@@ -53,6 +53,38 @@ All user data is stored in a PostgreSQL database using Drizzle ORM for schema de
 
 The app features a "Forbes-meets-Vogue" luxury editorial design. Typography combines Cormorant Garamond for headings and Sora for body text. The color system uses a jewel-toned neon-on-onyx palette with deep obsidian backgrounds and vivid accents like Hyper Violet, Magenta Quartz, Cyber Fuchsia, Aurora Teal, and Liquid Gold. Visual effects include neon glow, gradient animations, and metallic text.
 
+## Technical Debt & Next Steps
+
+### Payment Integration (User Action Required)
+The monetization UI is complete and functional, but payment processing still needs to be wired up:
+
+**1. Stripe Product Setup** (User must do in Stripe Dashboard):
+- Create products for: Pro Monthly ($19.99), Pro Annual ($199), VIP Cohort ($197), Executive Intensive ($499)
+- Save product/price IDs and add to environment secrets
+- Set up webhook endpoints for subscription events
+
+**2. Backend Payment Routes** (Code needed):
+```typescript
+// server/routes.ts additions needed:
+POST /api/checkout/subscription  // For Pro Monthly/Annual
+POST /api/checkout/one-time      // For VIP Cohort/Executive
+POST /api/webhooks/stripe        // Handle successful payments
+```
+
+**3. Signup Flow Enhancement** (Code needed):
+- Read `vip_cohort_interest` from localStorage during signup
+- Store in user profile for later upsell targeting
+- Optionally redirect VIP-interested users to checkout after account creation
+
+**4. Account Page Pricing Display** (Code needed):
+- Import and display pricing tiers from `shared/pricing.ts`
+- Show upgrade options based on current subscriptionTier
+- Link upgrade buttons to checkout endpoints
+
+**5. Feature Gating Update** (Code needed):
+- Current: `isPro` checks subscription status
+- Needed: Update to check `subscriptionTier` field (vip_cohort, executive, pro_annual also grant Pro access)
+
 ## External Dependencies
 
 -   **OpenAI API**: For AI-powered journal insights, conversational AI coach, and AI-generated writing prompts.
@@ -72,6 +104,30 @@ The app features a "Forbes-meets-Vogue" luxury editorial design. Typography comb
 -   **Zod**: Schema validation.
 
 ## Recent Changes
+
+### October 27, 2025 - Multi-Tier Pricing & VIP Cohort Monetization (LATEST)
+- **Pricing Infrastructure**: Expanded from 2-tier (Free/Pro) to 5-tier subscription model
+  - Created `shared/pricing.ts` with complete tier definitions and benefits
+  - Database schema updated: added `subscriptionTier` field to users, `paymentType`/`tier` to subscriptions
+  - New tiers: Pro Monthly ($19.99), Pro Annual ($199), VIP Cohort ($197 one-time), Executive Intensive ($499 one-time)
+- **VIP Cohort Landing Page**: High-conversion page at `/vip-cohort` with:
+  - Scarcity messaging (10 spots per cohort, 3 remaining)
+  - 4-week intensive curriculum breakdown
+  - Physical product bundle (luxury ritual bag worth $275)
+  - Trust signals and social proof
+  - Three functional CTAs that navigate to signup with VIP interest flag
+- **Testimonials System**: Created reusable `TestimonialsSection.tsx` component
+  - Professional social proof with star ratings
+  - Can be embedded on any page (Homepage, VIP, Quiz results)
+- **Quiz Conversion Optimization**: Added VIP Cohort upsell section to quiz results
+  - Shows for non-authenticated users only
+  - Positioned after primary signup CTA as premium alternative
+  - Drives traffic to VIP landing page
+- **Navigation Enhancement**: Added VIP Cohort link with Crown icon
+  - Highlighted in primary color for visibility
+  - Accessible from all pages in main nav
+- **Conversion Funnel Flow**: Quiz → VIP upsell → Landing page → Signup (with VIP flag in localStorage)
+- **Status**: Frontend complete and architect-approved. Backend payment integration needed (see Technical Debt section)
 
 ### October 27, 2025 - UX/UI Scaling Improvements & Conversion Optimization
 - **Mobile Navigation Enhancement**: Implemented Sheet-based hamburger menu making all public pages (Quiz, Rituals, Blog, Shop) accessible to unauthenticated users on mobile
