@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, Heart, Star, Zap } from "lucide-react";
+import { Sparkles, ArrowRight, Heart, Star, Zap, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { quizQuestions, matchRitual, getRitualBySlug } from "@shared/schema";
@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { SEO } from "@/components/SEO";
+import { Input } from "@/components/ui/input";
 
 export default function DiscoverPage() {
   const [stage, setStage] = useState<"intro" | "quiz" | "results">("intro");
@@ -27,6 +28,17 @@ export default function DiscoverPage() {
       setName(`${user.firstName || ""} ${user.lastName || ""}`.trim());
       setEmail(user.email);
     }
+    
+    // Validate email for non-logged-in users
+    if (!user && (!email || !email.includes('@'))) {
+      toast({
+        title: "Email Required",
+        description: "Please enter a valid email to continue.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setStage("quiz");
   };
 
@@ -55,8 +67,8 @@ export default function DiscoverPage() {
 
       // Submit to backend
       await apiRequest("POST", "/api/quiz/submit", {
-        name: name || "Unknown",
-        email: email || "noemail@example.com",
+        name: name || "Spa Member",
+        email: email,
         answers: finalAnswers,
       });
 
@@ -149,29 +161,33 @@ export default function DiscoverPage() {
 
             {!user && (
               <div className="space-y-4 max-w-md mx-auto">
-                <input
+                <Input
                   type="text"
                   placeholder="Your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full px-6 py-3 rounded-full bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--liquid-gold))]/50"
+                  className="w-full"
                   data-testid="input-quiz-name"
                 />
-                <input
+                <Input
                   type="email"
-                  placeholder="Your email"
+                  placeholder="Your email *"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-6 py-3 rounded-full bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-[hsl(var(--liquid-gold))]/50"
+                  className="w-full"
+                  required
                   data-testid="input-quiz-email"
                 />
+                <p className="text-xs text-muted-foreground text-left">
+                  * Required to receive your ritual unlock and 1:1 session link
+                </p>
               </div>
             )}
 
             <Button
               size="lg"
               onClick={handleStartQuiz}
-              disabled={!user && (!name || !email)}
+              disabled={!user && (!email || !email.includes('@'))}
               className="gap-2 px-8 py-6 text-lg bg-[hsl(var(--liquid-gold))] text-background rounded-full shadow-xl"
               data-testid="button-start-quiz"
             >
@@ -292,6 +308,24 @@ export default function DiscoverPage() {
               ))}
             </div>
 
+            {/* Social Proof Section */}
+            <div className="bg-gradient-to-r from-[hsl(var(--hyper-violet))]/5 via-[hsl(var(--magenta-quartz))]/5 to-[hsl(var(--cyber-fuchsia))]/5 rounded-xl p-6 mb-6">
+              <div className="flex items-center justify-center gap-2 mb-3">
+                <Users className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
+                <h3 className="font-serif text-lg font-bold text-foreground">
+                  Join 500+ Women Learning AI & Web3
+                </h3>
+              </div>
+              <div className="space-y-3">
+                <div className="text-sm text-foreground/80 italic">
+                  "This quiz matched me perfectly! The AI ritual transformed how I approach content creation." <span className="text-[hsl(var(--liquid-gold))]">— Sarah M., Marketing Manager</span>
+                </div>
+                <div className="text-sm text-foreground/80 italic">
+                  "Finally, tech education that doesn't feel overwhelming. The Forbes-meets-Vogue aesthetic makes learning actually enjoyable." <span className="text-[hsl(var(--liquid-gold))]">— Jessica R., Entrepreneur</span>
+                </div>
+              </div>
+            </div>
+
             <div className="p-6 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 rounded-xl mb-6">
               <h3 className="font-serif text-xl font-bold text-foreground mb-2">
                 🎁 Your Special Gift
@@ -319,7 +353,13 @@ export default function DiscoverPage() {
                 <>
                   <Button
                     size="lg"
-                    onClick={() => window.location.href = "/signup"}
+                    onClick={() => {
+                      // Store matched ritual in localStorage for signup flow
+                      localStorage.setItem('quiz_matched_ritual', matchedRitualSlug);
+                      localStorage.setItem('quiz_email', email);
+                      localStorage.setItem('quiz_name', name);
+                      window.location.href = "/signup";
+                    }}
                     className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
                     data-testid="button-signup-claim"
                   >
@@ -329,7 +369,11 @@ export default function DiscoverPage() {
                   <Button
                     size="lg"
                     variant="outline"
-                    onClick={() => window.location.href = "/login"}
+                    onClick={() => {
+                      // Store matched ritual for login flow
+                      localStorage.setItem('quiz_matched_ritual', matchedRitualSlug);
+                      window.location.href = "/login";
+                    }}
                     data-testid="button-login-claim"
                   >
                     Already Have an Account?

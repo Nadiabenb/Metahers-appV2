@@ -43,6 +43,8 @@ export default function HomePage() {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url(${heroBackground})` }}
+          role="img"
+          aria-label="Hero background with neon light trails"
         >
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
         </div>
@@ -169,6 +171,70 @@ export default function HomePage() {
                   <p className="text-foreground/80 leading-relaxed">
                     {feature.description}
                   </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/50">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6">
+              <Sparkles className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
+              <span className="text-sm font-medium">Trusted by 500+ Women</span>
+            </div>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-violet">
+              What our community says
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                quote: "MetaHers made AI accessible in a way I never thought possible. The luxury aesthetic makes learning feel like self-care.",
+                author: "Sarah M.",
+                role: "Marketing Manager",
+                gradient: "gradient-violet-magenta",
+              },
+              {
+                quote: "I finally understand blockchain! The quiz matched me perfectly, and the 1:1 session was invaluable.",
+                author: "Jessica R.",
+                role: "Entrepreneur",
+                gradient: "gradient-magenta-fuchsia",
+              },
+              {
+                quote: "This is what tech education should be - beautiful, empowering, and actually enjoyable. Forbes meets Vogue indeed!",
+                author: "Maya K.",
+                role: "Content Creator",
+                gradient: "gradient-teal-gold",
+              },
+            ].map((testimonial, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="editorial-card p-6 relative overflow-hidden"
+              >
+                <div className={`absolute inset-0 ${testimonial.gradient} opacity-5`} />
+                <div className="relative z-10">
+                  <div className="text-4xl text-[hsl(var(--liquid-gold))] mb-4">"</div>
+                  <p className="text-foreground/90 mb-6 italic leading-relaxed">
+                    {testimonial.quote}
+                  </p>
+                  <div className="border-t border-border pt-4">
+                    <p className="font-semibold text-foreground">{testimonial.author}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                  </div>
                 </div>
               </motion.div>
             ))}

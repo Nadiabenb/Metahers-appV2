@@ -22,7 +22,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Signup endpoint
   app.post('/api/auth/signup', async (req, res) => {
     try {
-      const { email, password, firstName, lastName } = req.body;
+      const { email, password, firstName, lastName, quizUnlockedRitual } = req.body;
       
       // Validate input
       if (!email || !password) {
@@ -42,6 +42,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Check if user has completed the quiz
       const quizSubmission = await storage.getQuizSubmissionByEmail(email);
       
+      // Use quiz ritual from request body if provided, otherwise from quiz submission
+      const unlockedRitual = quizUnlockedRitual || quizSubmission?.matchedRitual || null;
+      
       // Hash password and create user
       const passwordHash = await hashPassword(password);
       const user = await storage.createUser({
@@ -49,7 +52,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         passwordHash,
         firstName: firstName || null,
         lastName: lastName || null,
-        quizUnlockedRitual: quizSubmission?.matchedRitual || null,
+        quizUnlockedRitual: unlockedRitual,
         quizCompletedAt: quizSubmission ? new Date() : null,
       });
       

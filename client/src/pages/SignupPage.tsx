@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { Sparkles, Mail, Lock, User, ArrowRight } from "lucide-react";
+import { Sparkles, Mail, Lock, User, ArrowRight, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { getRitualBySlug } from "@shared/schema";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function SignupPage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [quizRitual, setQuizRitual] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -20,22 +22,60 @@ export default function SignupPage() {
     lastName: "",
   });
 
+  useEffect(() => {
+    // Check for quiz data in localStorage
+    const quizEmail = localStorage.getItem('quiz_email');
+    const quizName = localStorage.getItem('quiz_name');
+    const matchedRitual = localStorage.getItem('quiz_matched_ritual');
+    
+    if (quizEmail) {
+      setFormData(prev => ({ ...prev, email: quizEmail }));
+    }
+    
+    if (quizName) {
+      const names = quizName.split(' ');
+      setFormData(prev => ({
+        ...prev,
+        firstName: names[0] || '',
+        lastName: names.slice(1).join(' ') || '',
+      }));
+    }
+    
+    if (matchedRitual) {
+      setQuizRitual(matchedRitual);
+    }
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      await apiRequest('POST', '/api/auth/signup', formData);
+      // Include matched ritual if coming from quiz
+      const signupData = {
+        ...formData,
+        quizUnlockedRitual: quizRitual || undefined,
+      };
+      
+      await apiRequest('POST', '/api/auth/signup', signupData);
+      
+      // Clear quiz data from localStorage
+      localStorage.removeItem('quiz_email');
+      localStorage.removeItem('quiz_name');
+      localStorage.removeItem('quiz_matched_ritual');
       
       // Invalidate user query to fetch fresh data
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
       
       toast({
         title: "Welcome to MetaHers Mind Spa!",
-        description: "Your account has been created successfully.",
+        description: quizRitual 
+          ? "Your account has been created and your ritual is unlocked!"
+          : "Your account has been created successfully.",
       });
       
-      setLocation("/");
+      // Redirect to rituals page if coming from quiz
+      setLocation(quizRitual ? "/rituals" : "/");
     } catch (error: any) {
       toast({
         title: "Signup failed",
@@ -46,6 +86,8 @@ export default function SignupPage() {
       setIsLoading(false);
     }
   };
+
+  const matchedRitualData = quizRitual ? getRitualBySlug(quizRitual) : null;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
@@ -62,6 +104,27 @@ export default function SignupPage() {
         transition={{ duration: 0.4 }}
         className="w-full max-w-md relative z-10"
       >
+        {quizRitual && matchedRitualData && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="mb-6 p-4 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl"
+          >
+            <div className="flex items-start gap-3">
+              <CheckCircle className="w-5 h-5 text-[hsl(var(--liquid-gold))] flex-shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-sm font-semibold text-foreground mb-1">
+                  Quiz Match: {matchedRitualData.title}
+                </p>
+                <p className="text-xs text-foreground/80">
+                  Create your account to unlock this ritual + your FREE 1:1 session!
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         <Card className="editorial-card p-8 md:p-10 relative overflow-hidden">
           <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
           
@@ -76,6 +139,10 @@ export default function SignupPage() {
               </h1>
               <p className="text-muted-foreground">
                 Create your account to begin your learning journey
+              </p>
+              <p className="text-xs text-muted-foreground mt-2 flex items-center justify-center gap-1">
+                <Lock className="w-3 h-3" />
+                Your information is safe and secure
               </p>
             </div>
 
