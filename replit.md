@@ -67,6 +67,14 @@ The application features a "Forbes-meets-Vogue" luxury editorial design. Typogra
 
 ## Recent Changes
 
+### October 27, 2025 - PWA App Icon Update
+- **Branded App Icon**: Replaced generic black "M" icon with luxury branded MetaHers icon
+  - Features stylized M logo with jewel-toned neon gradient (hyper violet, magenta, fuchsia, teal, gold)
+  - Deep obsidian background with metallic chrome finish and glowing neon effects
+  - Matches Forbes-meets-Vogue luxury aesthetic
+  - Professional brand identity for home screen installation
+  - Updated both 192x192 and 512x512 icon sizes in PWA manifest
+
 ### October 27, 2025 - Production Deployment Fix
 - **Health Check Endpoints**: Added multiple health check endpoints to resolve deployment failures
   - `/health` - JSON response with status and timestamp
