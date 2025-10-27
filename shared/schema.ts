@@ -33,6 +33,7 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   isPro: boolean("is_pro").default(false).notNull(),
+  subscriptionTier: varchar("subscription_tier").default("free").notNull(), // free, pro_monthly, pro_annual, vip_cohort, executive
   onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
   quizUnlockedRitual: varchar("quiz_unlocked_ritual"), // Ritual unlocked via quiz
   quizCompletedAt: timestamp("quiz_completed_at"), // When they completed the quiz
@@ -128,13 +129,16 @@ export const insertJournalEntrySchema = createInsertSchema(journalEntries).omit(
 export type InsertJournalEntry = z.infer<typeof insertJournalEntrySchema>;
 export type JournalEntryDB = typeof journalEntries.$inferSelect;
 
-// Subscriptions table (for Pro tier)
+// Subscriptions table (for Pro tier and one-time payments)
 export const subscriptions = pgTable("subscriptions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   stripeCustomerId: varchar("stripe_customer_id").unique(),
   stripeSubscriptionId: varchar("stripe_subscription_id").unique(),
+  stripePaymentIntentId: varchar("stripe_payment_intent_id"), // For one-time payments
   stripePriceId: varchar("stripe_price_id"),
+  paymentType: varchar("payment_type").notNull().default("subscription"), // subscription, one_time
+  tier: varchar("tier").notNull().default("pro_monthly"), // pro_monthly, pro_annual, vip_cohort, executive
   status: varchar("status").notNull(),
   currentPeriodEnd: timestamp("current_period_end"),
   cancelAtPeriodEnd: boolean("cancel_at_period_end").default(false).notNull(),

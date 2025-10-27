@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import { WelcomeModal } from "@/components/WelcomeModal";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { SEO } from "@/components/SEO";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { useAuth } from "@/hooks/useAuth";
