@@ -37,11 +37,25 @@ export default function GlowUpDashboardPage() {
   const saveJournalMutation = useMutation({
     mutationFn: (data: { day: number; gptResponse: string; publicPostDraft: string }) =>
       apiRequest('POST', '/api/glow-up/journal', data),
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['/api/glow-up/journal'] });
       toast({
         title: "Saved! ✨",
         description: "Your responses have been saved to your journal.",
+      });
+      // Update local state to reflect the saved content
+      if (expandedDay === variables.day) {
+        setGptResponse(variables.gptResponse);
+        setPublicPostDraft(variables.publicPostDraft);
+      }
+      console.log(`Day ${variables.day} saved successfully`);
+    },
+    onError: (error: any, variables) => {
+      console.error(`Error saving Day ${variables.day}:`, error);
+      toast({
+        title: "Save failed",
+        description: error.message || "Failed to save your journal entry. Please try again.",
+        variant: "destructive",
       });
     },
   });
@@ -129,6 +143,13 @@ export default function GlowUpDashboardPage() {
       });
       return;
     }
+    
+    console.log(`Saving Day ${day}:`, { 
+      day, 
+      gptResponseLength: gptResponse.length, 
+      publicPostDraftLength: publicPostDraft.length 
+    });
+    
     saveJournalMutation.mutate({ day, gptResponse, publicPostDraft });
   };
 
@@ -163,6 +184,13 @@ export default function GlowUpDashboardPage() {
     } else {
       setExpandedDay(day);
       const existing = journalEntries?.find((e: any) => e.day === day);
+      
+      console.log(`Expanding Day ${day}:`, { 
+        hasExisting: !!existing, 
+        gptResponseLength: existing?.gptResponse?.length || 0,
+        publicPostDraftLength: existing?.publicPostDraft?.length || 0
+      });
+      
       setGptResponse(existing?.gptResponse || "");
       setPublicPostDraft(existing?.publicPostDraft || "");
     }

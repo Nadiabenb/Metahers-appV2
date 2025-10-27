@@ -1039,6 +1039,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid day number" });
       }
 
+      console.log(`[Glow-Up] Saving Day ${day} for user ${userId}:`, {
+        day,
+        gptResponseLength: gptResponse?.length || 0,
+        publicPostDraftLength: publicPostDraft?.length || 0,
+        notesLength: notes?.length || 0
+      });
+
       const entry = await storage.upsertGlowUpJournalEntry({
         userId,
         day,
@@ -1046,6 +1053,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         publicPostDraft: publicPostDraft || null,
         notes: notes || null,
       });
+
+      console.log(`[Glow-Up] Successfully saved Day ${day}, entry ID: ${entry.id}`);
 
       res.json(entry);
     } catch (error) {
