@@ -85,6 +85,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
           src={IMAGE_MAP[article.image] || aiStylistImg} 
           alt={article.title}
           className="w-full h-full object-cover"
+          loading="eager"
         />
         <div className="absolute inset-0 gradient-overlay-vertical" />
       </div>
@@ -307,6 +308,7 @@ export default function BlogPage() {
                     src={IMAGE_MAP[heroArticle.image] || aiStylistImg}
                     alt={heroArticle.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="eager"
                   />
                   <div className="absolute inset-0 gradient-overlay-vertical" />
                   <Badge 
@@ -384,6 +386,7 @@ export default function BlogPage() {
                     src={IMAGE_MAP[article.image] || aiStylistImg}
                     alt={article.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
                   />
                   <div className="absolute inset-0 gradient-overlay-vertical" />
                   <Badge 
