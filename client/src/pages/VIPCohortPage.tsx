@@ -55,6 +55,11 @@ export default function VIPCohortPage() {
               </div>
               <Button 
                 size="lg" 
+                onClick={() => {
+                  // Store VIP interest for signup flow
+                  localStorage.setItem('vip_cohort_interest', 'true');
+                  window.location.href = "/signup";
+                }}
                 className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2 px-8 py-6 text-lg"
                 data-testid="button-join-vip-hero"
               >
@@ -238,7 +243,11 @@ export default function VIPCohortPage() {
                     </div>
                   </div>
                   <Button 
-                    size="lg" 
+                    size="lg"
+                    onClick={() => {
+                      localStorage.setItem('vip_cohort_interest', 'true');
+                      window.location.href = "/signup";
+                    }}
                     className="bg-primary hover:bg-primary/90 gap-2"
                     data-testid="button-join-vip-package"
                   >
@@ -388,7 +397,11 @@ export default function VIPCohortPage() {
               
               <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-6">
                 <Button 
-                  size="lg" 
+                  size="lg"
+                  onClick={() => {
+                    localStorage.setItem('vip_cohort_interest', 'true');
+                    window.location.href = "/signup";
+                  }}
                   className="bg-primary hover:bg-primary/90 gap-2 px-10 py-6 text-lg"
                   data-testid="button-join-vip-final"
                 >
