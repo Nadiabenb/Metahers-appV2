@@ -18,6 +18,9 @@ import blockchainNetworkImg from "@assets/generated_images/Woman_Blockchain_Netw
 import web3EvolutionImg from "@assets/generated_images/Woman_Web3_Future_Tech_a7d9fd8d.png";
 import ritualBagsImg from "@assets/generated_images/Luxury_ritual_bags_editorial_f8e3e90d.png";
 import aiAgentsImg from "@assets/generated_images/Women_and_AI_agents_editorial_80c3f4c1.png";
+import aiPromptsBossImg from "@assets/generated_images/Woman_boss_using_AI_ChatGPT_09fca1ce.png";
+import web3LuxuryImg from "@assets/generated_images/Luxury_Web3_digital_ownership_NFTs_96c054e3.png";
+import web3LocationIndependentImg from "@assets/generated_images/Woman_Web3_location-independent_career_c5e099ee.png";
 
 const IMAGE_MAP: Record<string, string> = {
   "ai-agents": aiAgentsImg,
@@ -28,6 +31,9 @@ const IMAGE_MAP: Record<string, string> = {
   "metaverse-home": metaverseHomeImg,
   "blockchain-network": blockchainNetworkImg,
   "web3-evolution": web3EvolutionImg,
+  "ai-prompts-boss": aiPromptsBossImg,
+  "web3-luxury": web3LuxuryImg,
+  "web3-location-independent": web3LocationIndependentImg,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
