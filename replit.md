@@ -64,3 +64,29 @@ The application features a "Forbes-meets-Vogue" luxury editorial design. Typogra
 -   **Framer Motion**: Animations.
 -   **Drizzle ORM**: PostgreSQL ORM.
 -   **Zod**: Schema validation.
+
+## Recent Changes
+
+### October 27, 2025 - Production Deployment Fix
+- **Health Check Endpoints**: Added multiple health check endpoints to resolve deployment failures
+  - `/health` - JSON response with status and timestamp
+  - `/api/health` - API-specific health check endpoint
+  - Root `/` endpoint responds with 200 OK in production (Vite handles it in development)
+  - All health check endpoints respond quickly without authentication requirements
+- **Deployment Status**: App now passes Replit Autoscale Deployment health checks and is ready for publishing
+
+### October 27, 2025 - VIP Cohort Hero Image Update
+- **Brand Alignment**: Replaced VIP Cohort hero section background image
+  - New image features diverse women in luxury tech environment with jewel-toned neon lighting
+  - Matches MetaHers aesthetic: bold, vivid, futuristic, feminine
+  - Forbes-meets-Vogue editorial quality
+
+### October 27, 2025 - Glow-Up Program Bug Fix
+- **Critical Bug Fixed**: Resolved day 2 (and all days) journal entry saving issue
+  - Root cause: Race condition where form state was set before journal data finished loading
+  - Solution: Added useEffect hook to automatically sync form state with loaded journal data
+  - Form state now properly updates when switching between days or after saving
+  - Added comprehensive logging (frontend + backend) to diagnose future issues
+  - Added error handling with user-facing error messages for failed saves
+- **State Management**: Improved synchronization between React Query cache and component state
+- **User Experience**: Saved journal entries now consistently display when reopening days
