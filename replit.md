@@ -73,6 +73,27 @@ The app features a "Forbes-meets-Vogue" luxury editorial design. Typography comb
 
 ## Recent Changes
 
+### October 27, 2025 - UX/UI Scaling Improvements & Conversion Optimization
+- **Mobile Navigation Enhancement**: Implemented Sheet-based hamburger menu making all public pages (Quiz, Rituals, Blog, Shop) accessible to unauthenticated users on mobile
+  - Desktop navigation unchanged, mobile gets collapsible menu with all public pages
+  - Auth buttons (Login/Signup) preserved in mobile menu for clear conversion paths
+- **Quiz Conversion Funnel Fixes**: Eliminated leaks in the discovery-to-signup journey
+  - Email now required before quiz starts (basic @ validation)
+  - Quiz results store matched ritual in localStorage
+  - Auto-redirects to signup page with pre-filled email and matched ritual
+  - Backend accepts quizUnlockedRitual field during signup, auto-unlocks ritual
+  - Signup page redirects to /rituals if user came from quiz
+  - Added social proof to quiz results ("Join 500+ women learning AI & Web3")
+- **Trust Signals**: Added conversion-boosting social proof throughout the app
+  - Homepage testimonials section ("Trusted by 500+ Women") with 3 testimonials
+  - Security messaging on signup page ("Your information is safe and secure")
+  - Social proof badges integrated into quiz flow
+- **Post-Signup Onboarding**: Improved new user experience
+  - Signup page pre-fills email/name from quiz localStorage
+  - Shows quiz match banner if coming from quiz ("Matched to: [Ritual Name]")
+  - Backend stores quizUnlockedRitual in user profile for immediate access
+- **Status**: 4 of 5 critical UX scaling blockers resolved. Image optimization (lazy loading, responsive srcset, compression) deferred - requires converting CSS background-images to proper <img> tags.
+
 ### October 26, 2025 - Expandable Ritual Steps & SEO Implementation
 - **Ritual Steps Enhancement**: Transformed ritual steps from simple strings to rich educational content
   - Each of 25 steps (5 rituals × 5 steps) now includes: id, title, summary, detailed content, resources, proOnly flag
