@@ -4,6 +4,7 @@ import { Sparkles, ArrowRight } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { SEO } from "@/components/SEO";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
@@ -40,14 +41,14 @@ export default function HomePage() {
         keywords="AI for women, Web3 for women, AI course, blockchain tutorial, NFT guide, women in tech, AI prompts, ChatGPT for business"
       />
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroBackground})` }}
-          role="img"
-          aria-label="Hero background with neon light trails"
-        >
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        </div>
+        <OptimizedImage
+          src={heroBackground}
+          alt="Luxury neon light trails representing AI and Web3 technology"
+          className="absolute inset-0 w-full h-full"
+          objectFit="cover"
+          priority={true}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight } from "lucide-react";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function LandingPage() {
@@ -22,12 +23,14 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
-        </div>
+        <OptimizedImage
+          src={heroImage}
+          alt="Luxury neon light trails representing MetaHers Mind Spa"
+          className="absolute inset-0 w-full h-full"
+          objectFit="cover"
+          priority={true}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/60 to-background/90" />
 
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
           <motion.div

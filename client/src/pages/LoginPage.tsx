@@ -5,6 +5,7 @@ import { Sparkles, Mail, Lock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
@@ -47,12 +48,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-cover bg-center opacity-30"
-        style={{ backgroundImage: `url(${heroBackground})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
-      </div>
+      <OptimizedImage
+        src={heroBackground}
+        alt="Luxury background for login"
+        className="absolute inset-0 w-full h-full opacity-30"
+        objectFit="cover"
+        priority={true}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

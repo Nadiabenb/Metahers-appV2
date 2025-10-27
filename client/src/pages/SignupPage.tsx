@@ -5,6 +5,7 @@ import { Sparkles, Mail, Lock, User, ArrowRight, CheckCircle } from "lucide-reac
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { OptimizedImage } from "@/components/OptimizedImage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getRitualBySlug } from "@shared/schema";
@@ -91,12 +92,14 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-cover bg-center opacity-30"
-        style={{ backgroundImage: `url(${heroBackground})` }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
-      </div>
+      <OptimizedImage
+        src={heroBackground}
+        alt="Luxury background for signup"
+        className="absolute inset-0 w-full h-full opacity-30"
+        objectFit="cover"
+        priority={true}
+      />
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
