@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, Heart, Star, Zap, Users } from "lucide-react";
+import { Sparkles, ArrowRight, Heart, Star, Zap, Users, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { quizQuestions, matchRitual, getRitualBySlug } from "@shared/schema";
@@ -338,47 +338,81 @@ export default function DiscoverPage() {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {user ? (
-                <Button
-                  size="lg"
-                  onClick={() => window.location.href = "/rituals"}
-                  className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
-                  data-testid="button-go-to-rituals"
-                >
-                  Start Your Ritual
-                  <ArrowRight className="w-5 h-5" />
-                </Button>
-              ) : (
-                <>
+            <div className="space-y-6">
+              {/* Primary CTA */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                {user ? (
                   <Button
                     size="lg"
-                    onClick={() => {
-                      // Store matched ritual in localStorage for signup flow
-                      localStorage.setItem('quiz_matched_ritual', matchedRitualSlug);
-                      localStorage.setItem('quiz_email', email);
-                      localStorage.setItem('quiz_name', name);
-                      window.location.href = "/signup";
-                    }}
+                    onClick={() => window.location.href = "/rituals"}
                     className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
-                    data-testid="button-signup-claim"
+                    data-testid="button-go-to-rituals"
                   >
-                    Create Account to Claim
+                    Start Your Ritual
                     <ArrowRight className="w-5 h-5" />
                   </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    onClick={() => {
-                      // Store matched ritual for login flow
-                      localStorage.setItem('quiz_matched_ritual', matchedRitualSlug);
-                      window.location.href = "/login";
-                    }}
-                    data-testid="button-login-claim"
-                  >
-                    Already Have an Account?
-                  </Button>
-                </>
+                ) : (
+                  <>
+                    <Button
+                      size="lg"
+                      onClick={() => {
+                        // Store matched ritual in localStorage for signup flow
+                        localStorage.setItem('quiz_matched_ritual', matchedRitualSlug);
+                        localStorage.setItem('quiz_email', email);
+                        localStorage.setItem('quiz_name', name);
+                        window.location.href = "/signup";
+                      }}
+                      className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
+                      data-testid="button-signup-claim"
+                    >
+                      Create Free Account
+                      <ArrowRight className="w-5 h-5" />
+                    </Button>
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      onClick={() => {
+                        // Store matched ritual for login flow
+                        localStorage.setItem('quiz_matched_ritual', matchedRitualSlug);
+                        window.location.href = "/login";
+                      }}
+                      data-testid="button-login-claim"
+                    >
+                      Already Have an Account?
+                    </Button>
+                  </>
+                )}
+              </div>
+
+              {/* VIP Cohort Upsell - Only for non-users */}
+              {!user && (
+                <div className="border-t border-border/40 pt-6">
+                  <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-xl p-6 border-2 border-primary/20">
+                    <div className="flex items-center justify-center gap-2 mb-3">
+                      <Crown className="w-5 h-5 text-primary" />
+                      <h3 className="font-cormorant text-xl font-bold text-foreground">
+                        Want Guided Mentorship?
+                      </h3>
+                    </div>
+                    <p className="text-center text-foreground/80 mb-4">
+                      Skip self-paced learning. Get <span className="font-bold">4 weeks of intensive 1:1 coaching</span>, live office hours, and a luxury ritual bag for just $197.
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                      <Button
+                        size="lg"
+                        onClick={() => window.location.href = "/vip-cohort"}
+                        className="gap-2 bg-primary hover:bg-primary/90"
+                        data-testid="button-vip-cohort-upsell"
+                      >
+                        <Crown className="w-4 h-4" />
+                        Join VIP Cohort - $197
+                      </Button>
+                      <span className="text-sm text-muted-foreground">
+                        🔥 Only 3 spots left
+                      </span>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
           </Card>
