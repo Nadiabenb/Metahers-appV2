@@ -23,16 +23,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
-  // Root endpoint for quick health checks
-  app.get('/', (_req, res, next) => {
-    // Only respond to health checks in production
-    // In development, let Vite handle the root route
-    if (app.get("env") !== "development") {
-      return res.status(200).send('OK');
-    }
-    next();
-  });
-
   // Setup authentication middleware
   await setupAuth(app);
 
