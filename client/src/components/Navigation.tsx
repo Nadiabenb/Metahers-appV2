@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -15,6 +15,7 @@ export function Navigation() {
   const publicNavItems = [
     { path: "/discover", label: "Discover", icon: Compass, pro: false },
     { path: "/rituals", label: "Rituals", icon: Sparkles, pro: false },
+    { path: "/vip-cohort", label: "VIP Cohort", icon: Crown, pro: false, highlight: true },
     { path: "/blog", label: "Blog", icon: Newspaper, pro: false },
     { path: "/shop", label: "Shop", icon: ShoppingBag, pro: false },
   ];
@@ -55,8 +56,8 @@ export function Navigation() {
         onClick={() => handleNavClick(item.path)}
         variant={isActive ? "default" : "ghost"}
         size="sm"
-        className="gap-2 w-full sm:w-auto justify-start sm:justify-center"
-        data-testid={`link-${item.label.toLowerCase()}`}
+        className={`gap-2 w-full sm:w-auto justify-start sm:justify-center ${item.highlight ? 'text-primary hover:text-primary' : ''}`}
+        data-testid={`link-${item.label.toLowerCase().replace(' ', '-')}`}
       >
         <Icon className="w-4 h-4" />
         {item.label}
