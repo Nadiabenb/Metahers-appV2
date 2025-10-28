@@ -67,6 +67,18 @@ The application features a "Forbes-meets-Vogue" luxury editorial design. Typogra
 
 ## Recent Changes
 
+### October 27, 2025 - MetaHers Daily News Feed Launch
+- **New Feature**: Created "MetaHers Daily" - a public news feed at /daily for women in tech
+  - Bite-sized tech news covering AI, Crypto, Blockchain, NFTs, Metaverse, and Social Media
+  - Entertaining, metaphor-rich writing style specifically for women ("Think of it like..." explanations)
+  - Category filtering by topic (All, AI, Crypto, NFT, Blockchain, Metaverse, Social)
+  - Every news item includes: headline, metaphor callout, summary, actionable tip
+  - Share functionality: native Web Share API + WhatsApp share with canonical URLs
+  - SEO-optimized for traffic generation with comprehensive meta tags
+  - Highlighted in main navigation with Zap icon for visibility
+- **Use Case**: User wanted daily news for their WhatsApp Business group - this provides shareable content
+- **Content Strategy**: Sample news demonstrates the tone and format for future updates
+
 ### October 27, 2025 - Blog Image Updates
 - **Unique Topic-Specific Images**: Generated 3 new editorial images for recent blog posts
   - "10 ChatGPT Prompts Every Woman Boss Needs" - Woman entrepreneur with AI interface in luxury office
