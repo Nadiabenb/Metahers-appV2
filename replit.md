@@ -67,17 +67,25 @@ The application features a "Forbes-meets-Vogue" luxury editorial design. Typogra
 
 ## Recent Changes
 
+### October 28, 2025 - Live RSS News Integration
+- **Major Update**: Replaced static sample news with live RSS feeds pulling from real sources
+  - **Backend RSS Service**: Aggregates news from TechCrunch, CoinDesk, CoinTelegraph, NFT Plazas
+  - **30-minute caching**: Prevents excessive RSS feed requests while keeping news current
+  - **Category-specific feeds**: Separate RSS sources for AI, Crypto, NFT, Blockchain, Metaverse, Social
+  - **API endpoint**: Public /api/news endpoint with optional category filtering
+  - **Frontend updates**: Live data fetching with loading/error states, source attribution, "Read Full Article" links
+  - **Share functionality**: Updated to share original article links with summaries
+- **Why**: User reported sample news was outdated (showed "BTC ATH" when price was $115k) - now shows current, real-time tech news
+- **Architecture**: RSS Parser library with in-memory caching, public API endpoint, React Query for frontend data fetching
+
 ### October 27, 2025 - MetaHers Daily News Feed Launch
 - **New Feature**: Created "MetaHers Daily" - a public news feed at /daily for women in tech
   - Bite-sized tech news covering AI, Crypto, Blockchain, NFTs, Metaverse, and Social Media
-  - Entertaining, metaphor-rich writing style specifically for women ("Think of it like..." explanations)
   - Category filtering by topic (All, AI, Crypto, NFT, Blockchain, Metaverse, Social)
-  - Every news item includes: headline, metaphor callout, summary, actionable tip
   - Share functionality: native Web Share API + WhatsApp share with canonical URLs
   - SEO-optimized for traffic generation with comprehensive meta tags
   - Highlighted in main navigation with Zap icon for visibility
 - **Use Case**: User wanted daily news for their WhatsApp Business group - this provides shareable content
-- **Content Strategy**: Sample news demonstrates the tone and format for future updates
 
 ### October 27, 2025 - Blog Image Updates
 - **Unique Topic-Specific Images**: Generated 3 new editorial images for recent blog posts
