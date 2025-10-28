@@ -65,6 +65,7 @@ const sampleNews: NewsItem[] = [
     category: "Metaverse",
     date: "2025-10-25",
     metaphor: "Fashion Week just went from 'you can't sit with us' to 'everyone's invited (if you have WiFi)'.",
+    actionTip: "Create a free avatar in Decentraland or Spatial to explore virtual events. You don't need expensive VR gear—just a browser.",
   },
   {
     id: "6",
@@ -82,6 +83,7 @@ const sampleNews: NewsItem[] = [
     category: "Crypto",
     date: "2025-10-24",
     metaphor: "Apple just made crypto as sleek and intuitive as the iPhone. No more 'too technical' excuses.",
+    actionTip: "If you're crypto-curious but intimidated, wait for mainstream integrations like this. The barrier to entry is dropping fast.",
   },
 ];
 
@@ -104,13 +106,15 @@ export default function DailyNewsPage() {
     : sampleNews.filter(item => item.category === selectedCategory);
 
   const handleShare = async (item: NewsItem) => {
-    const shareText = `${item.title}\n\n${item.metaphor}\n\n${item.summary}\n\nRead more on MetaHers Daily 💎`;
+    const shareUrl = `${window.location.origin}/daily#news-${item.id}`;
+    const shareText = `${item.title}\n\n${item.metaphor}\n\n${item.summary}\n\nRead more: ${shareUrl}`;
     
     if (navigator.share) {
       try {
         await navigator.share({
           title: item.title,
           text: shareText,
+          url: shareUrl,
         });
       } catch (err) {
         // User cancelled share
@@ -119,15 +123,16 @@ export default function DailyNewsPage() {
       // Fallback: copy to clipboard
       await navigator.clipboard.writeText(shareText);
       toast({
-        title: "Copied to clipboard! ✨",
+        title: "Copied to clipboard!",
         description: "Share this news with your community",
       });
     }
   };
 
   const handleWhatsAppShare = (item: NewsItem) => {
+    const shareUrl = `${window.location.origin}/daily#news-${item.id}`;
     const shareText = encodeURIComponent(
-      `${item.title}\n\n${item.metaphor}\n\n${item.summary}\n\nRead more at MetaHers Daily 💎`
+      `${item.title}\n\n${item.metaphor}\n\n${item.summary}\n\nRead more: ${shareUrl}`
     );
     window.open(`https://wa.me/?text=${shareText}`, '_blank');
   };
@@ -199,6 +204,7 @@ export default function DailyNewsPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
+              id={`news-${item.id}`}
             >
               <Card className="editorial-card border-0 hover-elevate" data-testid={`card-news-${item.id}`}>
                 <CardContent className="p-6">
@@ -229,7 +235,7 @@ export default function DailyNewsPage() {
                       {/* Metaphor Callout */}
                       <div className="editorial-card p-4 border-l-4 border-primary bg-primary/5">
                         <p className="text-sm font-medium italic text-foreground/90">
-                          💡 {item.metaphor}
+                          <span className="text-[hsl(var(--liquid-gold))]">In other words:</span> {item.metaphor}
                         </p>
                       </div>
 
@@ -285,7 +291,7 @@ export default function DailyNewsPage() {
         {filteredNews.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg">
-              No news in this category yet. Check back soon! ✨
+              No news in this category yet. Check back soon!
             </p>
           </div>
         )}
