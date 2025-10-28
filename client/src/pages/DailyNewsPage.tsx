@@ -102,7 +102,7 @@ export default function DailyNewsPage() {
             MetaHers Daily
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-light">
-            Tech news for women who want the tea, not the textbook. AI, crypto, Web3, and the digital world—explained with metaphors that actually make sense.
+            Live tech news for women. Current updates on AI, crypto, blockchain, NFTs, and the metaverse—straight from the source.
           </p>
         </motion.div>
 
@@ -155,7 +155,7 @@ export default function DailyNewsPage() {
         {!isLoading && !error && (
           <div className="space-y-6">
             {filteredNews.map((item, index) => (
-            <motion.div
+              <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
