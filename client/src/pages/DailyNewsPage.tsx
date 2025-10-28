@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Sparkles, Share2, Calendar, Filter, TrendingUp, BookmarkPlus, ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,78 +15,12 @@ interface NewsItem {
   id: string;
   title: string;
   summary: string;
-  category: NewsCategory;
+  category: Exclude<NewsCategory, "All">;
   date: string;
-  metaphor: string;
-  actionTip?: string;
-  source?: string;
+  link: string;
+  source: string;
 }
 
-const sampleNews: NewsItem[] = [
-  {
-    id: "1",
-    title: "OpenAI Launches GPT-5 with 'Memory Vault' Feature",
-    summary: "Think of it like your AI assistant finally getting a diary. GPT-5 now remembers your past conversations, preferences, and work style—no more repeating yourself every single time. It's like upgrading from a goldfish to an elephant.",
-    category: "AI",
-    date: "2025-10-27",
-    metaphor: "Your AI went from having amnesia to keeping a detailed journal about you.",
-    actionTip: "If you use ChatGPT regularly, upgrade to GPT-5 to save hours of context-setting.",
-  },
-  {
-    id: "2",
-    title: "Bitcoin Hits New All-Time High of $120K",
-    summary: "BTC just broke through $120K, and the crypto Twitter queens are celebrating like it's New Year's Eve. For context: that's higher than a Tesla Model S, a year of college tuition, or 600 Birkin bags (okay, maybe 2 Birkins). Digital gold is glowing.",
-    category: "Crypto",
-    date: "2025-10-27",
-    metaphor: "Bitcoin is that friend who said 'trust me' in 2015 and now pulls up in a Lambo.",
-    actionTip: "Don't FOMO buy at the peak. If you're new to crypto, start with dollar-cost averaging.",
-  },
-  {
-    id: "3",
-    title: "Nike Launches Web3 Sneaker Club with NFT Memberships",
-    summary: "Nike's new 'Swoosh Society' is a members-only club where your NFT is your VIP pass. Get early access to limited drops, virtual sneaker designs you can wear in the metaverse, and IRL events. It's like Soho House, but for sneakerheads—and your membership card is on the blockchain.",
-    category: "NFT",
-    date: "2025-10-26",
-    metaphor: "Your sneakers now come with a digital twin and a backstage pass to exclusive drops.",
-    actionTip: "If you're into fashion + tech, explore how brands are using NFTs for loyalty programs.",
-  },
-  {
-    id: "4",
-    title: "Ethereum's 'Dencun' Upgrade Slashes Transaction Fees by 90%",
-    summary: "Gas fees on Ethereum just went from 'ouch' to 'oh, that's it?' The Dencun upgrade is like switching from surge pricing on Uber to a monthly metro pass. Transactions that cost $50 now cost $5. Web3 just became way more accessible.",
-    category: "Blockchain",
-    date: "2025-10-26",
-    metaphor: "Ethereum went from expensive Manhattan rent to affordable Brooklyn vibes.",
-    actionTip: "Now's a great time to experiment with DeFi apps or mint NFTs without breaking the bank.",
-  },
-  {
-    id: "5",
-    title: "Decentraland Hosts First-Ever Virtual Fashion Week",
-    summary: "Digital runways, avatar models, and NFT couture collections. Fashion Week in the metaverse means you can attend front row without leaving your couch, wearing virtual Balenciaga while sipping real champagne. The future is weird and fabulous.",
-    category: "Metaverse",
-    date: "2025-10-25",
-    metaphor: "Fashion Week just went from 'you can't sit with us' to 'everyone's invited (if you have WiFi)'.",
-    actionTip: "Create a free avatar in Decentraland or Spatial to explore virtual events. You don't need expensive VR gear—just a browser.",
-  },
-  {
-    id: "6",
-    title: "Instagram Tests 'AI Co-Pilot' for Content Creators",
-    summary: "Instagram's new AI assistant helps you brainstorm captions, optimize posting times, and suggest trending audio. It's like having a social media manager in your pocket who never sleeps and doesn't charge $3K/month. Content creation just got a cheat code.",
-    category: "Social",
-    date: "2025-10-25",
-    metaphor: "Your Instagram account now has a personal trainer who knows exactly when you'll go viral.",
-    actionTip: "Creators: Test the AI suggestions but keep your authentic voice. Let AI handle data, you handle soul.",
-  },
-  {
-    id: "7",
-    title: "Apple Announces Vision Pro 2 with Crypto Wallet Integration",
-    summary: "The next Vision Pro headset will let you manage your crypto portfolio, sign blockchain transactions, and browse NFT galleries—all in mixed reality. Your digital wallet just got a 3D glow-up. Web3 is officially entering the mainstream luxury tech space.",
-    category: "Crypto",
-    date: "2025-10-24",
-    metaphor: "Apple just made crypto as sleek and intuitive as the iPhone. No more 'too technical' excuses.",
-    actionTip: "If you're crypto-curious but intimidated, wait for mainstream integrations like this. The barrier to entry is dropping fast.",
-  },
-];
 
 const CATEGORY_COLORS: Record<NewsCategory, string> = {
   "AI": "text-[hsl(var(--liquid-gold))] bg-[hsl(var(--liquid-gold))]/10",
@@ -101,20 +36,23 @@ export default function DailyNewsPage() {
   const [selectedCategory, setSelectedCategory] = useState<NewsCategory>("All");
   const { toast } = useToast();
 
-  const filteredNews = selectedCategory === "All" 
-    ? sampleNews 
-    : sampleNews.filter(item => item.category === selectedCategory);
+  // Fetch live news from RSS feeds
+  const { data: news, isLoading, error } = useQuery<NewsItem[]>({
+    queryKey: ['/api/news', selectedCategory === "All" ? undefined : selectedCategory],
+    refetchInterval: 30 * 60 * 1000, // Refetch every 30 minutes
+  });
+
+  const filteredNews = news || [];
 
   const handleShare = async (item: NewsItem) => {
-    const shareUrl = `${window.location.origin}/daily#news-${item.id}`;
-    const shareText = `${item.title}\n\n${item.metaphor}\n\n${item.summary}\n\nRead more: ${shareUrl}`;
+    const shareText = `${item.title}\n\n${item.summary.substring(0, 200)}...\n\nRead more: ${item.link}`;
     
     if (navigator.share) {
       try {
         await navigator.share({
           title: item.title,
           text: shareText,
-          url: shareUrl,
+          url: item.link,
         });
       } catch (err) {
         // User cancelled share
@@ -130,9 +68,8 @@ export default function DailyNewsPage() {
   };
 
   const handleWhatsAppShare = (item: NewsItem) => {
-    const shareUrl = `${window.location.origin}/daily#news-${item.id}`;
     const shareText = encodeURIComponent(
-      `${item.title}\n\n${item.metaphor}\n\n${item.summary}\n\nRead more: ${shareUrl}`
+      `${item.title}\n\n${item.summary.substring(0, 200)}...\n\nRead more: ${item.link}`
     );
     window.open(`https://wa.me/?text=${shareText}`, '_blank');
   };
@@ -196,9 +133,28 @@ export default function DailyNewsPage() {
           </div>
         </motion.div>
 
+        {/* Loading State */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading the latest tech news...</p>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-12">
+            <p className="text-destructive text-lg mb-4">Failed to load news. Please try again later.</p>
+            <Button onClick={() => window.location.reload()} variant="outline">
+              Refresh Page
+            </Button>
+          </div>
+        )}
+
         {/* News Feed */}
-        <div className="space-y-6">
-          {filteredNews.map((item, index) => (
+        {!isLoading && !error && (
+          <div className="space-y-6">
+            {filteredNews.map((item, index) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
@@ -232,30 +188,29 @@ export default function DailyNewsPage() {
                         </div>
                       </div>
 
-                      {/* Metaphor Callout */}
-                      <div className="editorial-card p-4 border-l-4 border-primary bg-primary/5">
-                        <p className="text-sm font-medium italic text-foreground/90">
-                          <span className="text-[hsl(var(--liquid-gold))]">In other words:</span> {item.metaphor}
-                        </p>
-                      </div>
-
                       {/* Summary */}
                       <p className="text-foreground/80 leading-relaxed">
                         {item.summary}
                       </p>
 
-                      {/* Action Tip */}
-                      {item.actionTip && (
-                        <div className="flex items-start gap-2 p-3 rounded-lg bg-muted/50">
-                          <TrendingUp className="w-4 h-4 text-[hsl(var(--liquid-gold))] mt-0.5 flex-shrink-0" />
-                          <p className="text-sm text-foreground/80">
-                            <span className="font-semibold">Action:</span> {item.actionTip}
-                          </p>
-                        </div>
-                      )}
+                      {/* Source */}
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <ExternalLink className="w-3 h-3" />
+                        <span>Source: {item.source}</span>
+                      </div>
 
                       {/* Actions */}
                       <div className="flex flex-wrap items-center gap-2 pt-2">
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={() => window.open(item.link, '_blank')}
+                          className="gap-2"
+                          data-testid={`button-read-more-${item.id}`}
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          Read Full Article
+                        </Button>
                         <Button
                           variant="outline"
                           size="sm"
@@ -284,15 +239,16 @@ export default function DailyNewsPage() {
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
-        </div>
+            ))}
 
-        {/* Empty State */}
-        {filteredNews.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">
-              No news in this category yet. Check back soon!
-            </p>
+            {/* Empty State */}
+            {filteredNews.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-muted-foreground text-lg">
+                  No news in this category yet. Check back soon!
+                </p>
+              </div>
+            )}
           </div>
         )}
 
