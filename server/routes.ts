@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated, hashPassword, verifyPassword } from "./auth";
 import Stripe from "stripe";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach } from "./aiService";
+import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 
 // Initialize Stripe
@@ -1069,6 +1070,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error saving glow-up journal entry:", error);
       res.status(500).json({ message: "Failed to save journal entry" });
+    }
+  });
+
+  // ===== NEWS ROUTES (Public) =====
+  
+  // Get daily tech news from RSS feeds
+  app.get('/api/news', async (req, res) => {
+    try {
+      const category = req.query.category as NewsCategory | undefined;
+      
+      // Validate category if provided
+      const validCategories: NewsCategory[] = ["AI", "Crypto", "NFT", "Blockchain", "Metaverse", "Social"];
+      if (category && !validCategories.includes(category)) {
+        return res.status(400).json({ message: "Invalid category" });
+      }
+      
+      const news = await fetchNewsByCategory(category);
+      res.json(news);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+      res.status(500).json({ message: "Failed to fetch news" });
     }
   });
 
