@@ -24,6 +24,7 @@ import MetaMusePage from "@/pages/MetaMusePage";
 import EventsPage from "@/pages/EventsPage";
 import AccountPage from "@/pages/AccountPage";
 import BlogPage from "@/pages/BlogPage";
+import DailyNewsPage from "@/pages/DailyNewsPage";
 import GlowUpLandingPage from "@/pages/GlowUpLandingPage";
 import GlowUpOnboardingPage from "@/pages/GlowUpOnboardingPage";
 import GlowUpDashboardPage from "@/pages/GlowUpDashboardPage";
@@ -58,6 +59,7 @@ function Router() {
       
       {/* Public routes - accessible to everyone */}
       <Route path="/blog" component={BlogPage} />
+      <Route path="/daily" component={DailyNewsPage} />
       <Route path="/shop" component={ShopPage} />
       <Route path="/discover" component={DiscoverPage} />
       <Route path="/vip-cohort" component={VIPCohortPage} />
