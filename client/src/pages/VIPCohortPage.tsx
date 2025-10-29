@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Link } from "wouter";
 import heroImage from "@assets/generated_images/VIP_Cohort_hero_background_d42d4ea1.png";
 
@@ -377,6 +378,9 @@ export default function VIPCohortPage() {
             ))}
           </div>
         </motion.div>
+
+        {/* Testimonials */}
+        <TestimonialsSection />
 
         {/* Final CTA */}
         <motion.div

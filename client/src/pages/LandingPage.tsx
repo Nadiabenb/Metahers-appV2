@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function LandingPage() {
@@ -152,6 +153,9 @@ export default function LandingPage() {
           </motion.div>
         </div>
       </div>
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
     </div>
   );
 }

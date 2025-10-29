@@ -10,6 +10,7 @@ import {
   glowUpProgress,
   glowUpJournal,
   quizSubmissions,
+  cohortCapacity,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -32,6 +33,8 @@ import {
   type InsertGlowUpJournal,
   type QuizSubmissionDB,
   type InsertQuizSubmission,
+  type CohortCapacityDB,
+  type InsertCohortCapacity,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -95,6 +98,11 @@ export interface IStorage {
   getQuizSubmissionByEmail(email: string): Promise<QuizSubmissionDB | undefined>;
   getAllQuizSubmissions(): Promise<QuizSubmissionDB[]>;
   updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB>;
+  
+  // Cohort capacity operations
+  getCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined>;
+  upsertCohortCapacity(capacity: InsertCohortCapacity): Promise<CohortCapacityDB>;
+  incrementCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -593,6 +601,56 @@ export class DatabaseStorage implements IStorage {
       .update(quizSubmissions)
       .set(updates)
       .where(eq(quizSubmissions.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Cohort capacity operations
+  async getCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined> {
+    const [capacity] = await db
+      .select()
+      .from(cohortCapacity)
+      .where(eq(cohortCapacity.cohortName, cohortName))
+      .limit(1);
+    return capacity;
+  }
+
+  async upsertCohortCapacity(capacityData: InsertCohortCapacity): Promise<CohortCapacityDB> {
+    const existing = await this.getCohortCapacity(capacityData.cohortName);
+    
+    if (existing) {
+      const [updated] = await db
+        .update(cohortCapacity)
+        .set({
+          totalSpots: capacityData.totalSpots,
+          takenSpots: capacityData.takenSpots,
+          nextCohortDate: capacityData.nextCohortDate,
+          isActive: capacityData.isActive,
+          updatedAt: new Date(),
+        })
+        .where(eq(cohortCapacity.cohortName, capacityData.cohortName))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(cohortCapacity)
+        .values(capacityData)
+        .returning();
+      return created;
+    }
+  }
+
+  async incrementCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined> {
+    const existing = await this.getCohortCapacity(cohortName);
+    if (!existing) return undefined;
+    
+    const [updated] = await db
+      .update(cohortCapacity)
+      .set({
+        takenSpots: sql`${cohortCapacity.takenSpots} + 1`,
+        updatedAt: new Date(),
+      })
+      .where(eq(cohortCapacity.cohortName, cohortName))
       .returning();
     return updated;
   }

@@ -32,6 +32,7 @@ import GlowUpJournalPage from "@/pages/GlowUpJournalPage";
 import GlowUpCompletePage from "@/pages/GlowUpCompletePage";
 import DiscoverPage from "@/pages/DiscoverPage";
 import VIPCohortPage from "@/pages/VIPCohortPage";
+import ExecutivePage from "@/pages/ExecutivePage";
 import AdminQuizResultsPage from "@/pages/AdminQuizResultsPage";
 import NotFound from "@/pages/not-found";
 
@@ -63,6 +64,7 @@ function Router() {
       <Route path="/shop" component={ShopPage} />
       <Route path="/discover" component={DiscoverPage} />
       <Route path="/vip-cohort" component={VIPCohortPage} />
+      <Route path="/executive" component={ExecutivePage} />
       <Route path="/rituals" component={RitualsPage} />
       
       {!isAuthenticated ? (

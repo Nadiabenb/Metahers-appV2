@@ -261,6 +261,23 @@ export const insertQuizSubmissionSchema = createInsertSchema(quizSubmissions).om
 export type InsertQuizSubmission = z.infer<typeof insertQuizSubmissionSchema>;
 export type QuizSubmissionDB = typeof quizSubmissions.$inferSelect;
 
+// VIP Cohort capacity tracking table
+export const cohortCapacity = pgTable("cohort_capacity", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  cohortName: varchar("cohort_name").notNull().unique(), // "vip_cohort" or "executive"
+  totalSpots: integer("total_spots").notNull().default(10),
+  takenSpots: integer("taken_spots").notNull().default(0),
+  nextCohortDate: timestamp("next_cohort_date"),
+  isActive: boolean("is_active").default(true).notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_cohort_capacity_name").on(table.cohortName),
+]);
+
+export const insertCohortCapacitySchema = createInsertSchema(cohortCapacity).omit({ id: true, updatedAt: true });
+export type InsertCohortCapacity = z.infer<typeof insertCohortCapacitySchema>;
+export type CohortCapacityDB = typeof cohortCapacity.$inferSelect;
+
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
 // Structured step with rich content
