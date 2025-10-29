@@ -2,9 +2,9 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { randomBytes } from "crypto";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated, hashPassword, verifyPassword } from "./auth";
+import { setupAuth, isAuthenticated, isProUser, hashPassword, verifyPassword } from "./auth";
 import Stripe from "stripe";
-import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach } from "./aiService";
+import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 
@@ -1204,6 +1204,283 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error handling webhook event:', error);
       res.status(500).json({ message: 'Webhook handler failed' });
+    }
+  });
+
+  // ===== THOUGHT LEADERSHIP JOURNEY ROUTES (PRO-ONLY) =====
+
+  // Get user's journey progress
+  app.get('/api/thought-leadership/progress', isProUser, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const progress = await storage.getThoughtLeadershipProgress(userId);
+      
+      if (!progress) {
+        // Create initial progress for new user
+        const newProgress = await storage.createThoughtLeadershipProgress({
+          userId,
+          currentDay: 1,
+          completedDays: [],
+          currentStreak: 0,
+          longestStreak: 0,
+          totalPostsGenerated: 0,
+          totalPostsPublished: 0,
+          journeyStatus: 'active',
+        });
+        return res.json(newProgress);
+      }
+      
+      res.json(progress);
+    } catch (error) {
+      console.error('Error fetching TL progress:', error);
+      res.status(500).json({ message: 'Failed to fetch progress' });
+    }
+  });
+
+  // Generate new content for current day
+  app.post('/api/thought-leadership/generate', isProUser, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { niche, dayNumber } = req.body;
+
+      // Get previous topics to avoid repetition
+      const recentPosts = await storage.getThoughtLeadershipPostsByUser(userId, 7);
+      const previousTopics = recentPosts.map(p => p.topic);
+
+      // Generate content using AI
+      const content = await generateThoughtLeadershipContent(
+        niche || "AI and Web3",
+        dayNumber || 1,
+        previousTopics
+      );
+
+      // Get current progress
+      const progress = await storage.getThoughtLeadershipProgress(userId);
+      const actualDayNumber = progress?.currentDay || 1;
+
+      // Save as draft
+      const post = await storage.createThoughtLeadershipPost({
+        userId,
+        dayNumber: actualDayNumber,
+        topic: content.topic,
+        contentLong: content.contentLong,
+        contentMedium: content.contentMedium,
+        contentShort: content.contentShort,
+        status: 'draft',
+        publishedToMetaHers: false,
+        publishedToExternal: false,
+        externalPlatforms: [],
+        isPublic: false,
+      });
+
+      // Update progress - mark day as completed and advance
+      if (progress) {
+        const today = new Date().toISOString().split('T')[0];
+        const completedDays = [...progress.completedDays, actualDayNumber].filter((v, i, a) => a.indexOf(v) === i).sort((a, b) => a - b);
+        
+        // Calculate streak
+        let newStreak = 1;
+        if (progress.lastActivityDate) {
+          const lastDate = new Date(progress.lastActivityDate);
+          const todayDate = new Date(today);
+          const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+          
+          if (daysDiff === 1) {
+            newStreak = progress.currentStreak + 1;
+          } else if (daysDiff > 1) {
+            newStreak = 1; // Streak broken
+          } else {
+            newStreak = progress.currentStreak || 1; // Same day
+          }
+        }
+
+        const nextDay = Math.min(actualDayNumber + 1, 30);
+
+        await storage.updateThoughtLeadershipProgress(userId, {
+          currentDay: nextDay,
+          completedDays,
+          currentStreak: newStreak,
+          longestStreak: Math.max(newStreak, progress.longestStreak),
+          totalPostsGenerated: progress.totalPostsGenerated + 1,
+          lastActivityDate: today,
+          journeyStatus: completedDays.length >= 30 ? 'completed' : 'active',
+          completedAt: completedDays.length >= 30 ? new Date() : undefined,
+          updatedAt: new Date(),
+        });
+      }
+
+      res.json(post);
+    } catch (error) {
+      console.error('Error generating TL content:', error);
+      res.status(500).json({ message: 'Failed to generate content' });
+    }
+  });
+
+  // Save or update a post
+  app.patch('/api/thought-leadership/posts/:id', isProUser, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { id } = req.params;
+      const updates = req.body;
+
+      // Verify ownership
+      const post = await storage.getThoughtLeadershipPostById(id);
+      if (!post || post.userId !== userId) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+
+      const updated = await storage.updateThoughtLeadershipPost(id, {
+        ...updates,
+        updatedAt: new Date(),
+      });
+
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating TL post:', error);
+      res.status(500).json({ message: 'Failed to update post' });
+    }
+  });
+
+  // Publish a post
+  app.post('/api/thought-leadership/posts/:id/publish', isProUser, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { id } = req.params;
+      const { publishTo } = req.body; // "metahers", "external", or "both"
+
+      const post = await storage.getThoughtLeadershipPostById(id);
+      if (!post || post.userId !== userId) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+
+      // Generate slug from topic
+      const slug = post.topic
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+
+      const updates: any = {
+        publishedAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      if (publishTo === 'metahers' || publishTo === 'both') {
+        updates.publishedToMetaHers = true;
+        updates.isPublic = true;
+        updates.slug = `${slug}-${id.slice(0, 8)}`;
+        updates.status = publishTo === 'both' ? 'published_both' : 'published_metahers';
+      }
+
+      if (publishTo === 'external' || publishTo === 'both') {
+        updates.publishedToExternal = true;
+        updates.status = publishTo === 'both' ? 'published_both' : 'published_external';
+      }
+
+      const updated = await storage.updateThoughtLeadershipPost(id, updates);
+
+      // Update progress - mark day as completed and update streak
+      const progress = await storage.getThoughtLeadershipProgress(userId);
+      if (progress) {
+        const today = new Date().toISOString().split('T')[0];
+        const completedDays = [...progress.completedDays, post.dayNumber].filter((v, i, a) => a.indexOf(v) === i);
+        
+        // Calculate streak
+        let newStreak = 1;
+        if (progress.lastActivityDate) {
+          const lastDate = new Date(progress.lastActivityDate);
+          const todayDate = new Date(today);
+          const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+          
+          if (daysDiff === 1) {
+            newStreak = progress.currentStreak + 1;
+          } else if (daysDiff > 1) {
+            newStreak = 1; // Streak broken
+          } else {
+            newStreak = progress.currentStreak; // Same day
+          }
+        }
+
+        await storage.updateThoughtLeadershipProgress(userId, {
+          completedDays,
+          currentStreak: newStreak,
+          longestStreak: Math.max(newStreak, progress.longestStreak),
+          totalPostsPublished: progress.totalPostsPublished + 1,
+          lastActivityDate: today,
+          journeyStatus: completedDays.length >= 30 ? 'completed' : 'active',
+          completedAt: completedDays.length >= 30 ? new Date() : undefined,
+          updatedAt: new Date(),
+        });
+      }
+
+      res.json(updated);
+    } catch (error) {
+      console.error('Error publishing TL post:', error);
+      res.status(500).json({ message: 'Failed to publish post' });
+    }
+  });
+
+  // Get user's posts
+  app.get('/api/thought-leadership/posts', isProUser, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const limit = parseInt(req.query.limit as string) || 30;
+      const posts = await storage.getThoughtLeadershipPostsByUser(userId, limit);
+      res.json(posts);
+    } catch (error) {
+      console.error('Error fetching TL posts:', error);
+      res.status(500).json({ message: 'Failed to fetch posts' });
+    }
+  });
+
+  // Get a specific post
+  app.get('/api/thought-leadership/posts/:id', isProUser, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { id } = req.params;
+      
+      const post = await storage.getThoughtLeadershipPostById(id);
+      if (!post || post.userId !== userId) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+      
+      res.json(post);
+    } catch (error) {
+      console.error('Error fetching TL post:', error);
+      res.status(500).json({ message: 'Failed to fetch post' });
+    }
+  });
+
+  // Get public posts for MetaHers Insights feed (public route)
+  app.get('/api/thought-leadership/public', async (_req: Request, res) => {
+    try {
+      const limit = parseInt(_req.query.limit as string) || 20;
+      const posts = await storage.getPublicThoughtLeadershipPosts(limit);
+      res.json(posts);
+    } catch (error) {
+      console.error('Error fetching public TL posts:', error);
+      res.status(500).json({ message: 'Failed to fetch posts' });
+    }
+  });
+
+  // Get public post by slug (public route)
+  app.get('/api/thought-leadership/insights/:slug', async (req: Request, res) => {
+    try {
+      const { slug } = req.params;
+      const post = await storage.getThoughtLeadershipPostBySlug(slug);
+      
+      if (!post || !post.isPublic) {
+        return res.status(404).json({ message: 'Post not found' });
+      }
+
+      // Increment view count
+      await storage.updateThoughtLeadershipPost(post.id, {
+        viewCount: post.viewCount + 1,
+      });
+
+      res.json(post);
+    } catch (error) {
+      console.error('Error fetching public TL post:', error);
+      res.status(500).json({ message: 'Failed to fetch post' });
     }
   });
 

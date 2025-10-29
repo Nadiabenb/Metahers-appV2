@@ -32,17 +32,18 @@ The application adheres to a "Forbes-meets-Vogue" luxury editorial design, empha
 Developed as a React and TypeScript PWA, utilizing Wouter for routing, Vite for builds, and `localStorage` for state management. UI components are built with Radix UI primitives wrapped in custom components following the shadcn/ui pattern. Styling is managed with Tailwind CSS and custom CSS variables. Framer Motion is used for animations. The PWA includes a manifest and a service worker for caching.
 
 ### Backend
-An Express.js server provides RESTful API routes for journal operations (CRUD, AI insights, AI coach chat), analytics, achievements, subscriptions, and custom email/password authentication. Static content, such as ritual and shop product data, is defined as JSON. The backend also includes an RSS service for aggregating and caching tech news.
+An Express.js server provides RESTful API routes for journal operations (CRUD, AI insights, AI coach chat), analytics, achievements, subscriptions, thought leadership journey (Pro-only), and custom email/password authentication. Static content, such as ritual and shop product data, is defined as JSON. The backend includes an RSS service for aggregating tech news and an AI service using OpenAI GPT-4o for journal insights, coaching, and thought leadership content generation.
 
 ### Authentication
-Custom email/password authentication uses bcrypt for password hashing (12 salt rounds) and database-backed sessions with `connect-pg-simple`. Password validation requires a minimum of 8 characters and email uniqueness. An `isAuthenticated` middleware protects user-specific routes.
+Custom email/password authentication uses bcrypt for password hashing (12 salt rounds) and database-backed sessions with `connect-pg-simple`. Password validation requires a minimum of 8 characters and email uniqueness. Two middleware functions protect routes: `isAuthenticated` for user-specific routes, and `isProUser` for Pro-only features (checks both authentication and Pro subscription status).
 
 ### Data Storage
-All user and application data, including `users`, `ritual_progress`, `journal_entries`, `achievements`, and `subscriptions`, is persisted in a PostgreSQL database using Drizzle ORM. Zod is employed for client-side validation of API requests and responses.
+All user and application data, including `users`, `ritual_progress`, `journal_entries`, `achievements`, `subscriptions`, `thought_leadership_posts`, and `thought_leadership_progress`, is persisted in a PostgreSQL database using Drizzle ORM. Zod is employed for client-side validation of API requests and responses. The thought leadership tables track 30-day journey progress with streak calculation, day completion tracking, and AI-generated multi-platform content.
 
 ### Key Features
 - **Multi-Tier Pricing**: A 7-tier model (Free, Pro Monthly/Annual, AI Builder Group/Private, VIP Retreat, Executive Suite).
 - **Specialized Landing Pages**: Dedicated high-conversion pages for VIP Retreat (`/vip-cohort`), Executive Suite (`/executive`), and AI Builder's Retreat (`/ai-builder`), the latter teaching "vibe coding" with AI tools.
+- **30-Day Thought Leadership Journey** (Pro-Only): AI-powered content generation feature helping users build authority through consistent daily posting. Generates 30 days of content in 3 formats (Substack long-form 800-1200 words, LinkedIn medium 300-400 words, Twitter short 280 chars). Includes gamification via streak tracking, 30-day calendar visualization, and progress stats. Routes protected with `isProUser` middleware on backend and Pro-check upsell on frontend. Journey progression automatically advances currentDay, updates completedDays array, and calculates streaks (resets if >1 day gap). Posts can be published to MetaHers Insights feed (future public feature) or marked as published externally.
 - **Testimonials System**: A reusable component for social proof.
 - **Quiz Conversion Optimization**: Improved quiz funnel to guide users to signup and unlock rituals.
 - **SEO Foundation**: Implemented `robots.txt`, `sitemap.xml`, and dynamic meta tags for major pages.
@@ -51,7 +52,7 @@ All user and application data, including `users`, `ritual_progress`, `journal_en
 - **Dynamic Cohort Capacity**: Real-time display of spots remaining for VIP and Executive tiers, based on database records.
 
 ## External Dependencies
--   **OpenAI API**: For AI-powered journal insights, conversational AI coaching, and AI-generated writing prompts.
+-   **OpenAI API**: For AI-powered journal insights, conversational AI coaching, AI-generated writing prompts, and thought leadership content generation (GPT-4o with Forbes-meets-Vogue tone, generating 800-1200 word articles, 300-400 word LinkedIn posts, and 280-char Twitter posts).
 -   **Stripe**: Payment processing for Pro tier subscriptions (integration pending).
 -   **bcrypt**: For secure password hashing.
 -   **Calendly**: Embedded via iframe for scheduling.

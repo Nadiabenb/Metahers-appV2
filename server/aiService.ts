@@ -107,3 +107,88 @@ Your role:
 
   return response.choices[0].message.content?.trim() || "That's a wonderful reflection. How does this insight make you feel about your learning journey?";
 }
+
+// Thought Leadership Content Generation
+interface ThoughtLeadershipContent {
+  topic: string;
+  contentLong: string; // Substack/Medium (800-1200 words)
+  contentMedium: string; // LinkedIn (300-400 words)
+  contentShort: string; // Twitter/X (280 chars or thread)
+}
+
+export async function generateThoughtLeadershipContent(
+  userNiche: string,
+  dayNumber: number,
+  previousTopics?: string[]
+): Promise<ThoughtLeadershipContent> {
+  const topicCategories = [
+    "AI tools and productivity",
+    "Web3 and blockchain insights",
+    "Personal branding in tech",
+    "Entrepreneurship lessons",
+    "Women in technology",
+    "Future of work",
+    "Digital transformation"
+  ];
+
+  const avoidTopics = previousTopics && previousTopics.length > 0
+    ? `\nAvoid these recently used topics: ${previousTopics.join(", ")}`
+    : "";
+
+  // First, generate the topic
+  const topicPrompt = `You are helping a woman in tech build thought leadership through a 30-day daily posting challenge.
+
+User's niche: ${userNiche}
+Day: ${dayNumber} of 30${avoidTopics}
+
+Generate ONE specific, engaging topic for today's post that:
+- Relates to ${topicCategories[dayNumber % topicCategories.length]}
+- Is relevant to ${userNiche}
+- Would spark engagement on professional platforms
+- Offers a unique perspective or personal insight
+- Is specific enough to be actionable
+
+Return ONLY the topic title (5-12 words), nothing else.`;
+
+  const topicResponse = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [{ role: "user", content: topicPrompt }],
+    temperature: 0.9,
+    max_tokens: 30,
+  });
+
+  const topic = topicResponse.choices[0].message.content?.trim() || "Building Your Tech Career in 2025";
+
+  // Now generate content in all three formats
+  const contentPrompt = `You are a Forbes-meets-Vogue editorial content creator helping a woman in tech build thought leadership.
+
+Topic: "${topic}"
+User's niche: ${userNiche}
+Tone: Professional, confident, personal stories mixed with insights, feminine energy
+
+Generate content in 3 formats for multi-platform publishing. Return ONLY valid JSON with this structure:
+{
+  "long": "800-1200 word article for Substack/Medium with: compelling hook, personal story or example, 3-4 key insights, actionable takeaways, powerful conclusion. Use short paragraphs, conversational tone, markdown formatting with ## headers and **bold**",
+  "medium": "300-400 word LinkedIn post with: attention-grabbing first line, 2-3 key points with line breaks for readability, call-to-action question at the end. Professional but warm tone",
+  "short": "Twitter/X post under 280 characters OR a 3-tweet thread. Each tweet complete, engaging, with clear value. Format as single string with tweet breaks marked as [TWEET BREAK]"
+}
+
+Make it authentic, valuable, and shareable. No corporate jargon or fluff.`;
+
+  const contentResponse = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages: [{ role: "user", content: contentPrompt }],
+    temperature: 0.8,
+    max_tokens: 2000,
+    response_format: { type: "json_object" },
+  });
+
+  const content = JSON.parse(contentResponse.choices[0].message.content || "{}");
+
+  return {
+    topic,
+    contentLong: content.long || `# ${topic}\n\n[Content generation in progress...]`,
+    contentMedium: content.medium || `${topic}\n\n[Content generation in progress...]`,
+    contentShort: content.short || topic,
+  };
+}

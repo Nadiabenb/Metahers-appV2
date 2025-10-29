@@ -52,6 +52,22 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   return res.status(401).json({ message: "Unauthorized" });
 };
 
+export const isProUser: RequestHandler = async (req, res, next) => {
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  
+  // Get user and check Pro status
+  const { storage } = await import("./storage");
+  const user = await storage.getUser(req.session.userId);
+  
+  if (!user || !user.isPro) {
+    return res.status(403).json({ message: "Pro subscription required" });
+  }
+  
+  return next();
+};
+
 declare module "express-session" {
   interface SessionData {
     userId: string;

@@ -11,6 +11,8 @@ import {
   glowUpJournal,
   quizSubmissions,
   cohortCapacity,
+  thoughtLeadershipPosts,
+  thoughtLeadershipProgress,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -35,6 +37,10 @@ import {
   type InsertQuizSubmission,
   type CohortCapacityDB,
   type InsertCohortCapacity,
+  type ThoughtLeadershipPostDB,
+  type InsertThoughtLeadershipPost,
+  type ThoughtLeadershipProgressDB,
+  type InsertThoughtLeadershipProgress,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -103,6 +109,18 @@ export interface IStorage {
   getCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined>;
   upsertCohortCapacity(capacity: InsertCohortCapacity): Promise<CohortCapacityDB>;
   incrementCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined>;
+
+  // Thought Leadership operations
+  createThoughtLeadershipPost(post: InsertThoughtLeadershipPost): Promise<ThoughtLeadershipPostDB>;
+  getThoughtLeadershipPostById(id: string): Promise<ThoughtLeadershipPostDB | undefined>;
+  getThoughtLeadershipPostBySlug(slug: string): Promise<ThoughtLeadershipPostDB | undefined>;
+  getThoughtLeadershipPostsByUser(userId: string, limit: number): Promise<ThoughtLeadershipPostDB[]>;
+  getPublicThoughtLeadershipPosts(limit: number): Promise<ThoughtLeadershipPostDB[]>;
+  updateThoughtLeadershipPost(id: string, updates: Partial<ThoughtLeadershipPostDB>): Promise<ThoughtLeadershipPostDB>;
+  
+  getThoughtLeadershipProgress(userId: string): Promise<ThoughtLeadershipProgressDB | undefined>;
+  createThoughtLeadershipProgress(progress: InsertThoughtLeadershipProgress): Promise<ThoughtLeadershipProgressDB>;
+  updateThoughtLeadershipProgress(userId: string, updates: Partial<ThoughtLeadershipProgressDB>): Promise<ThoughtLeadershipProgressDB>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -651,6 +669,91 @@ export class DatabaseStorage implements IStorage {
         updatedAt: new Date(),
       })
       .where(eq(cohortCapacity.cohortName, cohortName))
+      .returning();
+    return updated;
+  }
+
+  // Thought Leadership operations
+  async createThoughtLeadershipPost(postData: InsertThoughtLeadershipPost): Promise<ThoughtLeadershipPostDB> {
+    const [post] = await db
+      .insert(thoughtLeadershipPosts)
+      .values({
+        ...postData,
+        externalPlatforms: sql`${JSON.stringify(postData.externalPlatforms || [])}::jsonb`,
+      })
+      .returning();
+    return post;
+  }
+
+  async getThoughtLeadershipPostById(id: string): Promise<ThoughtLeadershipPostDB | undefined> {
+    const [post] = await db
+      .select()
+      .from(thoughtLeadershipPosts)
+      .where(eq(thoughtLeadershipPosts.id, id));
+    return post;
+  }
+
+  async getThoughtLeadershipPostBySlug(slug: string): Promise<ThoughtLeadershipPostDB | undefined> {
+    const [post] = await db
+      .select()
+      .from(thoughtLeadershipPosts)
+      .where(eq(thoughtLeadershipPosts.slug, slug));
+    return post;
+  }
+
+  async getThoughtLeadershipPostsByUser(userId: string, limit: number): Promise<ThoughtLeadershipPostDB[]> {
+    const posts = await db
+      .select()
+      .from(thoughtLeadershipPosts)
+      .where(eq(thoughtLeadershipPosts.userId, userId))
+      .orderBy(desc(thoughtLeadershipPosts.createdAt))
+      .limit(limit);
+    return posts;
+  }
+
+  async getPublicThoughtLeadershipPosts(limit: number): Promise<ThoughtLeadershipPostDB[]> {
+    const posts = await db
+      .select()
+      .from(thoughtLeadershipPosts)
+      .where(eq(thoughtLeadershipPosts.isPublic, true))
+      .orderBy(desc(thoughtLeadershipPosts.publishedAt))
+      .limit(limit);
+    return posts;
+  }
+
+  async updateThoughtLeadershipPost(id: string, updates: Partial<ThoughtLeadershipPostDB>): Promise<ThoughtLeadershipPostDB> {
+    const [updated] = await db
+      .update(thoughtLeadershipPosts)
+      .set(updates)
+      .where(eq(thoughtLeadershipPosts.id, id))
+      .returning();
+    return updated;
+  }
+
+  async getThoughtLeadershipProgress(userId: string): Promise<ThoughtLeadershipProgressDB | undefined> {
+    const [progress] = await db
+      .select()
+      .from(thoughtLeadershipProgress)
+      .where(eq(thoughtLeadershipProgress.userId, userId));
+    return progress;
+  }
+
+  async createThoughtLeadershipProgress(progressData: InsertThoughtLeadershipProgress): Promise<ThoughtLeadershipProgressDB> {
+    const [progress] = await db
+      .insert(thoughtLeadershipProgress)
+      .values({
+        ...progressData,
+        completedDays: sql`${JSON.stringify(progressData.completedDays || [])}::jsonb`,
+      })
+      .returning();
+    return progress;
+  }
+
+  async updateThoughtLeadershipProgress(userId: string, updates: Partial<ThoughtLeadershipProgressDB>): Promise<ThoughtLeadershipProgressDB> {
+    const [updated] = await db
+      .update(thoughtLeadershipProgress)
+      .set(updates)
+      .where(eq(thoughtLeadershipProgress.userId, userId))
       .returning();
     return updated;
   }
