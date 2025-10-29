@@ -7,9 +7,17 @@ import { SEO } from "@/components/SEO";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/VIP_Cohort_hero_background_d42d4ea1.png";
 
 export default function VIPCohortPage() {
+  const { data: capacity, isLoading } = useQuery({
+    queryKey: ['/api/cohort-capacity/vip_cohort'],
+  });
+
+  const spotsRemaining = capacity?.spotsRemaining ?? 3;
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
@@ -57,7 +65,7 @@ export default function VIPCohortPage() {
               <Button 
                 size="lg" 
                 onClick={() => {
-                  // Store VIP interest for signup flow
+                  trackCTAClick('vip_cohort_hero_cta', '/signup', 'vip_cohort');
                   localStorage.setItem('vip_cohort_interest', 'true');
                   window.location.href = "/signup";
                 }}
@@ -69,9 +77,11 @@ export default function VIPCohortPage() {
               </Button>
             </div>
 
-            <p className="text-white/70 text-sm">
-              🔥 Only <span className="font-bold text-white">3 spots remaining</span> in this cohort
-            </p>
+            {!isLoading && (
+              <p className="text-white/70 text-sm">
+                🔥 Only <span className="font-bold text-white">{spotsRemaining} {spotsRemaining === 1 ? 'spot' : 'spots'} remaining</span> in this cohort
+              </p>
+            )}
           </motion.div>
         </div>
       </div>
@@ -403,6 +413,7 @@ export default function VIPCohortPage() {
                 <Button 
                   size="lg"
                   onClick={() => {
+                    trackCTAClick('vip_cohort_final_cta', '/signup', 'vip_cohort');
                     localStorage.setItem('vip_cohort_interest', 'true');
                     window.location.href = "/signup";
                   }}

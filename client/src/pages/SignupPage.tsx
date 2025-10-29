@@ -9,6 +9,7 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getRitualBySlug } from "@shared/schema";
+import { trackSignup } from "@/lib/analytics";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function SignupPage() {
@@ -60,7 +61,27 @@ export default function SignupPage() {
       
       await apiRequest('POST', '/api/auth/signup', signupData);
       
-      // Clear quiz data from localStorage
+      // Track signup conversion with proper source attribution (priority: paid tiers > quiz > direct)
+      let source = 'direct';
+      let tier = 'free';
+      
+      // Check paid tier interest flags first (highest priority for attribution)
+      if (localStorage.getItem('vip_cohort_interest') === 'true') {
+        source = 'vip_cohort';
+        tier = 'vip_cohort';
+      } else if (localStorage.getItem('executive_interest') === 'true') {
+        source = 'executive';
+        tier = 'executive';
+      } else if (quizRitual) {
+        // Quiz is secondary - only if no paid tier interest
+        source = 'quiz';
+      }
+      
+      trackSignup(source, tier);
+      
+      // Clear all attribution and interest flags
+      localStorage.removeItem('vip_cohort_interest');
+      localStorage.removeItem('executive_interest');
       localStorage.removeItem('quiz_email');
       localStorage.removeItem('quiz_name');
       localStorage.removeItem('quiz_matched_ritual');

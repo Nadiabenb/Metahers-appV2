@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
+import { trackCTAClick } from "@/lib/analytics";
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
@@ -45,7 +46,11 @@ export function Navigation() {
     }
   };
 
-  const handleNavClick = (path: string) => {
+  const handleNavClick = (path: string, label?: string) => {
+    // Track navigation clicks for key conversion paths
+    if (label && ['Discover', 'VIP Cohort', 'Shop', 'Blog'].includes(label)) {
+      trackCTAClick(`nav_${label.toLowerCase().replace(' ', '_')}`, path);
+    }
     setLocation(path);
     setMobileMenuOpen(false);
   };
@@ -54,7 +59,7 @@ export function Navigation() {
     const Icon = item.icon;
     return (
       <Button
-        onClick={() => handleNavClick(item.path)}
+        onClick={() => handleNavClick(item.path, item.label)}
         variant={isActive ? "default" : "ghost"}
         size="sm"
         className={`gap-2 w-full sm:w-auto justify-start sm:justify-center ${item.highlight ? 'text-primary hover:text-primary' : ''}`}
@@ -104,7 +109,10 @@ export function Navigation() {
             {/* Auth buttons */}
             {!isAuthenticated && !isLoading && (
               <Button
-                onClick={() => setLocation("/login")}
+                onClick={() => {
+                  trackCTAClick('nav_login', '/login');
+                  setLocation("/login");
+                }}
                 variant="default"
                 size="sm"
                 className="gap-2 ml-2"
@@ -183,7 +191,10 @@ export function Navigation() {
                     {!isAuthenticated && !isLoading && (
                       <>
                         <Button
-                          onClick={() => handleNavClick("/login")}
+                          onClick={() => {
+                            trackCTAClick('nav_login_mobile', '/login');
+                            handleNavClick("/login");
+                          }}
                           variant="default"
                           size="sm"
                           className="w-full gap-2"
@@ -193,7 +204,10 @@ export function Navigation() {
                           Sign In
                         </Button>
                         <Button
-                          onClick={() => handleNavClick("/signup")}
+                          onClick={() => {
+                            trackCTAClick('nav_signup_mobile', '/signup');
+                            handleNavClick("/signup");
+                          }}
                           variant="outline"
                           size="sm"
                           className="w-full gap-2"

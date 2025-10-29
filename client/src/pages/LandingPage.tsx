@@ -2,10 +2,12 @@ import { motion } from "framer-motion";
 import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
 export default function LandingPage() {
   const handleSignup = () => {
+    trackCTAClick('landing_hero_signup', '/signup', 'free');
     window.location.href = "/signup";
   };
 

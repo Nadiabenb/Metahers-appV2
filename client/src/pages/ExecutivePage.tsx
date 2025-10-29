@@ -7,9 +7,17 @@ import { SEO } from "@/components/SEO";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Executive_woman_in_luxury_tech_office_8ad88ef4.png";
 
 export default function ExecutivePage() {
+  const { data: capacity, isLoading } = useQuery({
+    queryKey: ['/api/cohort-capacity/executive'],
+  });
+
+  const spotsRemaining = capacity?.spotsRemaining ?? 2;
+
   return (
     <div className="min-h-screen bg-background">
       <SEO
@@ -57,6 +65,7 @@ export default function ExecutivePage() {
               <Button 
                 size="lg" 
                 onClick={() => {
+                  trackCTAClick('executive_hero_cta', '/signup', 'executive');
                   localStorage.setItem('executive_interest', 'true');
                   window.location.href = "/signup";
                 }}
@@ -68,9 +77,11 @@ export default function ExecutivePage() {
               </Button>
             </div>
 
-            <p className="text-white/70 text-sm">
-              🔥 <span className="font-bold text-white">Exclusive</span> - Limited availability
-            </p>
+            {!isLoading && spotsRemaining > 0 && (
+              <p className="text-white/70 text-sm">
+                🔥 <span className="font-bold text-white">Only {spotsRemaining} {spotsRemaining === 1 ? 'spot' : 'spots'} remaining</span> this month
+              </p>
+            )}
           </motion.div>
         </div>
       </div>
@@ -328,6 +339,7 @@ export default function ExecutivePage() {
                 <Button 
                   size="lg"
                   onClick={() => {
+                    trackCTAClick('executive_final_cta', '/signup', 'executive');
                     localStorage.setItem('executive_interest', 'true');
                     window.location.href = "/signup";
                   }}

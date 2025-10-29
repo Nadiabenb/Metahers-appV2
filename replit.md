@@ -67,6 +67,25 @@ The application features a "Forbes-meets-Vogue" luxury editorial design. Typogra
 
 ## Recent Changes
 
+### October 29, 2025 - Conversion Optimization for Paid Ads Campaign
+- **Google Analytics 4 Infrastructure**: Added GA4 tracking setup in index.html with global `trackEvent` function ready for measurement ID
+- **Comprehensive Event Tracking System**: Created `analytics.ts` utility with tracking for:
+  - Page views (automatic on route changes)
+  - Signup conversions (tracks source: quiz vs direct)
+  - Quiz start and completion events
+  - CTA clicks across all key pages (landing, VIP, Executive, discover)
+  - Checkout initiations and ritual starts (future use)
+- **Dynamic Cohort Capacity System**:
+  - Added `cohort_capacity` database table tracking VIP Cohort and Executive tier availability
+  - Public API endpoint `/api/cohort-capacity/:cohortName` returns spots remaining
+  - VIP Cohort and Executive pages fetch and display real-time capacity (e.g., "3 spots remaining")
+  - Scarcity messaging updates automatically based on database state
+- **Executive Landing Page**: Created `/executive` route with premium 1:1 mentorship positioning at $499
+- **Conversion Funnel Tracking**: All critical touchpoints now tracked:
+  - Landing hero CTA → Signup → Quiz start → Quiz complete → Ritual unlock
+  - VIP/Executive hero CTAs and final CTAs with tier-specific tracking
+- **Why**: User preparing paid advertising campaign, needs conversion data to optimize ad spend and identify drop-off points
+
 ### October 28, 2025 - Live RSS News Integration
 - **Major Update**: Replaced static sample news with live RSS feeds pulling from real sources
   - **Backend RSS Service**: Aggregates news from TechCrunch, CoinDesk, CoinTelegraph, NFT Plazas

@@ -1094,6 +1094,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== COHORT CAPACITY ROUTES (Public) =====
+  
+  // Get cohort capacity by name (vip_cohort or executive)
+  app.get('/api/cohort-capacity/:cohortName', async (req, res) => {
+    try {
+      const { cohortName } = req.params;
+      
+      // Validate cohort name
+      if (cohortName !== 'vip_cohort' && cohortName !== 'executive') {
+        return res.status(400).json({ message: "Invalid cohort name" });
+      }
+      
+      const capacity = await storage.getCohortCapacity(cohortName);
+      
+      // Return default if not found
+      if (!capacity) {
+        return res.json({
+          cohortName,
+          totalSpots: 10,
+          takenSpots: 7,
+          spotsRemaining: 3,
+          isActive: true,
+        });
+      }
+      
+      res.json({
+        ...capacity,
+        spotsRemaining: capacity.totalSpots - capacity.takenSpots,
+      });
+    } catch (error) {
+      console.error("Error fetching cohort capacity:", error);
+      res.status(500).json({ message: "Failed to fetch cohort capacity" });
+    }
+  });
+
   // Stripe webhook handler
   app.post('/api/webhooks/stripe', async (req, res) => {
     const sig = req.headers['stripe-signature'];

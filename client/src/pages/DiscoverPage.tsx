@@ -10,6 +10,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { SEO } from "@/components/SEO";
 import { Input } from "@/components/ui/input";
+import { trackCTAClick, trackQuizComplete } from "@/lib/analytics";
 
 export default function DiscoverPage() {
   const [stage, setStage] = useState<"intro" | "quiz" | "results">("intro");
@@ -38,6 +39,9 @@ export default function DiscoverPage() {
       });
       return;
     }
+    
+    // Track quiz start
+    trackCTAClick('quiz_start', '/discover', 'free');
     
     setStage("quiz");
   };
@@ -71,6 +75,9 @@ export default function DiscoverPage() {
         email: email,
         answers: finalAnswers,
       });
+
+      // Track quiz completion
+      trackQuizComplete(ritual);
 
       setStage("results");
     } catch (error) {
@@ -420,6 +427,7 @@ export default function DiscoverPage() {
           <Button
             variant="ghost"
             onClick={() => {
+              trackCTAClick('quiz_restart', '/discover', 'free');
               setStage("intro");
               setCurrentQuestion(0);
               setAnswers({});
