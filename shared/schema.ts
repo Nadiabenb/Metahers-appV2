@@ -278,6 +278,64 @@ export const insertCohortCapacitySchema = createInsertSchema(cohortCapacity).omi
 export type InsertCohortCapacity = z.infer<typeof insertCohortCapacitySchema>;
 export type CohortCapacityDB = typeof cohortCapacity.$inferSelect;
 
+// Thought Leadership Journey - Posts table
+export const thoughtLeadershipPosts = pgTable("thought_leadership_posts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  dayNumber: integer("day_number").notNull(), // 1-30
+  topic: text("topic").notNull(), // AI-generated topic suggestion
+  contentLong: text("content_long").notNull(), // Substack/Medium format
+  contentMedium: text("content_medium").notNull(), // LinkedIn format
+  contentShort: text("content_short").notNull(), // Twitter/X format
+  status: varchar("status").notNull().default("draft"), // "draft", "published_metahers", "published_external", "published_both"
+  publishedToMetaHers: boolean("published_to_metahers").default(false).notNull(),
+  publishedToExternal: boolean("published_to_external").default(false).notNull(),
+  externalPlatforms: jsonb("external_platforms").$type<string[]>().default(sql`'[]'::jsonb`), // ["substack", "linkedin", "twitter"]
+  isPublic: boolean("is_public").default(false).notNull(), // Public on MetaHers Insights
+  slug: varchar("slug"), // URL slug for public posts
+  viewCount: integer("view_count").default(0).notNull(),
+  likeCount: integer("like_count").default(0).notNull(),
+  commentCount: integer("comment_count").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  publishedAt: timestamp("published_at"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_tlp_user").on(table.userId),
+  index("idx_tlp_day").on(table.dayNumber),
+  index("idx_tlp_status").on(table.status),
+  index("idx_tlp_public").on(table.isPublic),
+  index("idx_tlp_slug").on(table.slug),
+  index("idx_tlp_created").on(table.createdAt),
+]);
+
+export const insertThoughtLeadershipPostSchema = createInsertSchema(thoughtLeadershipPosts).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertThoughtLeadershipPost = z.infer<typeof insertThoughtLeadershipPostSchema>;
+export type ThoughtLeadershipPostDB = typeof thoughtLeadershipPosts.$inferSelect;
+
+// Thought Leadership Journey - Progress tracking table
+export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  currentDay: integer("current_day").default(1).notNull(), // 1-30
+  completedDays: jsonb("completed_days").$type<number[]>().notNull().default(sql`'[]'::jsonb`), // [1, 2, 3, ...]
+  currentStreak: integer("current_streak").default(0).notNull(),
+  longestStreak: integer("longest_streak").default(0).notNull(),
+  totalPostsGenerated: integer("total_posts_generated").default(0).notNull(),
+  totalPostsPublished: integer("total_posts_published").default(0).notNull(),
+  lastActivityDate: varchar("last_activity_date"), // YYYY-MM-DD format
+  journeyStatus: varchar("journey_status").default("active").notNull(), // "active", "paused", "completed"
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_tlprog_user").on(table.userId),
+  index("idx_tlprog_status").on(table.journeyStatus),
+]);
+
+export const insertThoughtLeadershipProgressSchema = createInsertSchema(thoughtLeadershipProgress).omit({ id: true, startedAt: true, updatedAt: true });
+export type InsertThoughtLeadershipProgress = z.infer<typeof insertThoughtLeadershipProgressSchema>;
+export type ThoughtLeadershipProgressDB = typeof thoughtLeadershipProgress.$inferSelect;
+
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
 // Structured step with rich content
