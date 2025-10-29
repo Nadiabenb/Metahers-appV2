@@ -21,9 +21,9 @@ export default function VIPCohortPage() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="VIP Cohort Experience - 4-Week Guided AI & Web3 Program"
-        description="Join a limited cohort of 10 ambitious women for 4 weeks of intensive AI & Web3 mentorship with the MetaHers founder. Live office hours, private community, and your own ritual bag included."
-        keywords="vip cohort, ai mentorship, web3 coaching, women in tech, luxury learning program"
+        title="VIP Retreat - 4-Week Guided AI & Web3 Journey"
+        description="Join an intimate circle of 10 ambitious women for 4 weeks of guided AI & Web3 discovery with the MetaHers founder. Live sessions, private sanctuary, and your own ritual bag included."
+        keywords="vip retreat, ai guidance, web3 journey, women in tech, luxury learning experience"
       />
 
       {/* Hero Section */}
@@ -50,11 +50,11 @@ export default function VIPCohortPage() {
             </Badge>
             
             <h1 className="font-cormorant text-6xl md:text-7xl lg:text-8xl font-bold text-white drop-shadow-2xl">
-              VIP Cohort Experience
+              VIP Retreat
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 font-light max-w-3xl mx-auto drop-shadow-lg">
-              4 weeks of intensive AI & Web3 mentorship with direct founder access, live office hours, and a private community of ambitious women
+              4 weeks of guided AI & Web3 discovery with direct founder access, live sessions, and an intimate circle of ambitious women
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4">
@@ -79,7 +79,7 @@ export default function VIPCohortPage() {
 
             {!isLoading && (
               <p className="text-white/70 text-sm">
-                🔥 Only <span className="font-bold text-white">{spotsRemaining} {spotsRemaining === 1 ? 'spot' : 'spots'} remaining</span> in this cohort
+                🔥 Only <span className="font-bold text-white">{spotsRemaining} {spotsRemaining === 1 ? 'space' : 'spaces'} remaining</span> in this retreat
               </p>
             )}
           </motion.div>
@@ -96,10 +96,10 @@ export default function VIPCohortPage() {
         >
           <div className="text-center mb-12">
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
-              What's Included
+              Your Retreat Includes
             </h2>
             <p className="text-xl text-muted-foreground">
-              Everything you need to master AI & Web3 in 4 transformative weeks
+              Everything you need to discover AI & Web3 in 4 transformative weeks
             </p>
           </div>
 
@@ -107,13 +107,13 @@ export default function VIPCohortPage() {
             {[
               {
                 icon: Video,
-                title: "4 Live Office Hours",
-                description: "Weekly group calls with the founder. Ask anything, get personalized guidance.",
+                title: "4 Live Guided Sessions",
+                description: "Weekly intimate gatherings with the founder. Share, explore, and grow together.",
               },
               {
                 icon: Users,
-                title: "Private VIP Community",
-                description: "Exclusive Slack/Discord with your cohort. Network, collaborate, grow together.",
+                title: "Private VIP Sanctuary",
+                description: "Exclusive space with your circle. Connect, collaborate, and support each other.",
               },
               {
                 icon: Gift,
@@ -155,7 +155,7 @@ export default function VIPCohortPage() {
               Your 4-Week Journey
             </h2>
             <p className="text-xl text-muted-foreground">
-              A structured path from AI beginner to confident creator
+              A gentle path from curious explorer to confident creator
             </p>
           </div>
 
@@ -163,13 +163,13 @@ export default function VIPCohortPage() {
             {[
               {
                 week: 1,
-                title: "AI Mastery Foundations",
-                description: "Learn ChatGPT, prompt engineering, and AI-powered productivity. Complete your first ritual.",
+                title: "AI Discovery",
+                description: "Experience ChatGPT, explore prompt crafting, and discover AI-powered flow. Complete your first ritual.",
               },
               {
                 week: 2,
-                title: "Web3 Essentials",
-                description: "Understand blockchain, NFTs, and crypto. Set up your wallet and explore DAOs.",
+                title: "Web3 Exploration",
+                description: "Discover blockchain, NFTs, and crypto through gentle guidance. Set up your wallet with ease.",
               },
               {
                 week: 3,
@@ -179,7 +179,7 @@ export default function VIPCohortPage() {
               {
                 week: 4,
                 title: "Launch & Lead",
-                description: "Present your final project. Network with your cohort. Plan your next chapter.",
+                description: "Share your journey. Connect with your circle. Celebrate your growth.",
               },
             ].map((week, index) => (
               <Card key={index} className="editorial-card border-0">
@@ -219,22 +219,22 @@ export default function VIPCohortPage() {
                   Complete Package
                 </h2>
                 <p className="text-muted-foreground">
-                  Everything included in your $197 VIP Cohort investment
+                  Everything included in your $197 VIP Retreat experience
                 </p>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4">
                 {[
                   "4 weeks of guided ritual progression",
-                  "4 live group office hours with founder",
-                  "Private VIP community (Slack/Discord)",
+                  "4 live guided sessions with founder",
+                  "Private VIP sanctuary (Slack/Discord)",
                   "Exclusive ritual bag (worth $150)",
-                  "Weekly accountability check-ins",
+                  "Weekly gentle check-ins",
                   "Certificate of completion",
-                  "Lifetime access to cohort materials",
+                  "Lifetime access to retreat materials",
                   "Full Pro subscription access (4 weeks)",
                   "Early access to new rituals",
-                  "Priority email support",
+                  "Priority support",
                 ].map((feature, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -256,6 +256,7 @@ export default function VIPCohortPage() {
                   <Button 
                     size="lg"
                     onClick={() => {
+                      trackCTAClick('vip_retreat_package_cta', '/signup', 'vip_cohort');
                       localStorage.setItem('vip_cohort_interest', 'true');
                       window.location.href = "/signup";
                     }}
@@ -263,7 +264,7 @@ export default function VIPCohortPage() {
                     data-testid="button-join-vip-package"
                   >
                     <Crown className="w-4 h-4" />
-                    Join VIP Cohort
+                    Join VIP Retreat
                   </Button>
                 </div>
               </div>
@@ -283,7 +284,7 @@ export default function VIPCohortPage() {
               Is This Right For You?
             </h2>
             <p className="text-xl text-muted-foreground">
-              Perfect for ambitious women who want intensive, guided learning
+              Perfect for ambitious women who want gentle, guided discovery
             </p>
           </div>
 
