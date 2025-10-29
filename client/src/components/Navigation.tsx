@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -16,8 +16,9 @@ export function Navigation() {
   const publicNavItems = [
     { path: "/discover", label: "Discover", icon: Compass, pro: false },
     { path: "/rituals", label: "Rituals", icon: Sparkles, pro: false },
-    { path: "/vip-cohort", label: "VIP Cohort", icon: Crown, pro: false, highlight: true },
-    { path: "/daily", label: "Daily", icon: Zap, pro: false, highlight: true },
+    { path: "/ai-builder", label: "AI Builder", icon: Code2, pro: false, highlight: true },
+    { path: "/vip-cohort", label: "VIP Retreat", icon: Crown, pro: false },
+    { path: "/daily", label: "Daily", icon: Zap, pro: false },
     { path: "/blog", label: "Blog", icon: Newspaper, pro: false },
     { path: "/shop", label: "Shop", icon: ShoppingBag, pro: false },
   ];
@@ -48,7 +49,7 @@ export function Navigation() {
 
   const handleNavClick = (path: string, label?: string) => {
     // Track navigation clicks for key conversion paths
-    if (label && ['Discover', 'VIP Cohort', 'Shop', 'Blog'].includes(label)) {
+    if (label && ['Discover', 'AI Builder', 'VIP Retreat', 'Shop', 'Blog'].includes(label)) {
       trackCTAClick(`nav_${label.toLowerCase().replace(' ', '_')}`, path);
     }
     setLocation(path);

@@ -21,9 +21,9 @@ export default function ExecutivePage() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="Executive Intensive - Premium 1:1 AI & Web3 Mentorship"
-        description="Premium one-on-one mentorship with the MetaHers founder. Two private sessions, custom AI & Web3 playbook, direct access for 30 days, and personalized learning path tailored to your business goals."
-        keywords="executive coaching, ai mentorship, web3 consulting, 1:1 coaching, personalized learning, women entrepreneurs"
+        title="Executive Suite - Premium 1:1 AI & Web3 Journey"
+        description="Premium one-on-one sanctuary with the MetaHers founder. Two private sessions, custom AI & Web3 playbook, direct access for 30 days, and personalized discovery tailored to your vision."
+        keywords="executive suite, ai guidance, web3 journey, 1:1 sessions, personalized experience, women entrepreneurs"
       />
 
       {/* Hero Section */}
@@ -50,11 +50,11 @@ export default function ExecutivePage() {
             </Badge>
             
             <h1 className="font-cormorant text-6xl md:text-7xl lg:text-8xl font-bold text-white drop-shadow-2xl">
-              Executive Intensive
+              Executive Suite
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 font-light max-w-3xl mx-auto drop-shadow-lg">
-              Two private 1:1 sessions with the founder, custom AI & Web3 strategy playbook, and 30 days of direct access
+              Two private 1:1 sessions with the founder, bespoke AI & Web3 playbook, and 30 days of gentle support
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 items-center justify-center pt-4">
@@ -73,13 +73,13 @@ export default function ExecutivePage() {
                 data-testid="button-join-executive-hero"
               >
                 <Crown className="w-5 h-5" />
-                Book Your Strategy Session
+                Reserve Your Private Suite
               </Button>
             </div>
 
             {!isLoading && spotsRemaining > 0 && (
               <p className="text-white/70 text-sm">
-                🔥 <span className="font-bold text-white">Only {spotsRemaining} {spotsRemaining === 1 ? 'spot' : 'spots'} remaining</span> this month
+                🔥 <span className="font-bold text-white">Only {spotsRemaining} {spotsRemaining === 1 ? 'space' : 'spaces'} remaining</span> this month
               </p>
             )}
           </motion.div>
@@ -99,7 +99,7 @@ export default function ExecutivePage() {
               What's Included
             </h2>
             <p className="text-xl text-muted-foreground">
-              Premium mentorship designed for ambitious women entrepreneurs
+              Bespoke guidance designed for ambitious women entrepreneurs
             </p>
           </div>
 
@@ -108,22 +108,22 @@ export default function ExecutivePage() {
               {
                 icon: Video,
                 title: "2 Private 1:1 Sessions",
-                description: "90-minute deep-dive strategy calls with the founder. Your business, your goals.",
+                description: "90-minute intimate sessions with the founder. Your vision, your pace.",
               },
               {
                 icon: BookOpen,
-                title: "Custom AI Playbook",
-                description: "Personalized AI & Web3 implementation plan for your specific business.",
+                title: "Bespoke AI Playbook",
+                description: "Personalized AI & Web3 journey tailored to your unique vision.",
               },
               {
                 icon: MessageCircle,
-                title: "30 Days Direct Access",
-                description: "Private Slack/WhatsApp line to the founder. Get answers when you need them.",
+                title: "30 Days Gentle Support",
+                description: "Private Slack/WhatsApp access to the founder. Get guidance when you need it.",
               },
               {
                 icon: Award,
                 title: "Everything in VIP",
-                description: "All VIP Cohort benefits included: community, Pro access, ritual bag.",
+                description: "All VIP Retreat benefits included: sanctuary, Pro access, ritual bag.",
               },
             ].map((feature, index) => (
               <Card key={index} className="editorial-card border-0 hover-elevate">

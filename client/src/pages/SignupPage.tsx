@@ -72,6 +72,10 @@ export default function SignupPage() {
       } else if (localStorage.getItem('executive_interest') === 'true') {
         source = 'executive';
         tier = 'executive';
+      } else if (localStorage.getItem('ai_builder_interest') === 'true') {
+        const aiBuilderTier = localStorage.getItem('ai_builder_tier');
+        source = 'ai_builder';
+        tier = aiBuilderTier === 'private' ? 'ai_builder_private' : 'ai_builder_group';
       } else if (quizRitual) {
         // Quiz is secondary - only if no paid tier interest
         source = 'quiz';
@@ -82,6 +86,8 @@ export default function SignupPage() {
       // Clear all attribution and interest flags
       localStorage.removeItem('vip_cohort_interest');
       localStorage.removeItem('executive_interest');
+      localStorage.removeItem('ai_builder_interest');
+      localStorage.removeItem('ai_builder_tier');
       localStorage.removeItem('quiz_email');
       localStorage.removeItem('quiz_name');
       localStorage.removeItem('quiz_matched_ritual');
