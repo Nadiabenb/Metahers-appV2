@@ -1211,6 +1211,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== THOUGHT LEADERSHIP JOURNEY ROUTES (PRO-ONLY) =====
 
   // Get user's journey progress
+  // Get curriculum (all 30 days)
+  app.get('/api/thought-leadership/curriculum', isProUser, async (_req: Request, res) => {
+    res.json(CURRICULUM);
+  });
+
+  // Get specific curriculum day
+  app.get('/api/thought-leadership/curriculum/:day', isProUser, async (req: Request, res) => {
+    const day = parseInt(req.params.day);
+    const curriculumDay = CURRICULUM.find(d => d.day === day);
+    
+    if (!curriculumDay) {
+      return res.status(404).json({ message: 'Day not found' });
+    }
+    
+    res.json(curriculumDay);
+  });
+
   app.get('/api/thought-leadership/progress', isProUser, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
@@ -1222,6 +1239,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           userId,
           currentDay: 1,
           completedDays: [],
+          lessonsCompleted: [],
+          practicesSubmitted: [],
+          practiceReflections: {},
           currentStreak: 0,
           longestStreak: 0,
           totalPostsGenerated: 0,
@@ -1285,7 +1305,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/thought-leadership/generate', isProUser, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
-      const { dailyStory } = req.body;
+      const { practiceReflection } = req.body;
+
+      if (!practiceReflection || !practiceReflection.trim()) {
+        return res.status(400).json({ message: 'Practice reflection is required' });
+      }
 
       // Get user's brand profile and progress
       const progress = await storage.getThoughtLeadershipProgress(userId);
@@ -1293,11 +1317,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Please complete brand onboarding first' });
       }
 
+      // Get curriculum for current day
+      const curriculumDay = CURRICULUM.find(d => d.day === progress.currentDay);
+      if (!curriculumDay) {
+        return res.status(400).json({ message: 'Invalid day number' });
+      }
+
       // Get previous topics to avoid repetition
       const recentPosts = await storage.getThoughtLeadershipPostsByUser(userId, 7);
       const previousTopics = recentPosts.map(p => p.topic);
 
-      // Generate content using AI with brand profile and daily story
+      // Generate content using AI with brand profile and practice reflection
       const brandProfile = {
         brandExpertise: progress.brandExpertise || undefined,
         brandNiche: progress.brandNiche || undefined,
@@ -1309,18 +1339,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const content = await generateThoughtLeadershipContent(
         progress.currentDay,
         brandProfile,
-        dailyStory,
+        practiceReflection,
+        curriculumDay.contentFocus.topic,
+        curriculumDay.contentFocus.angle,
         previousTopics
       );
 
       const actualDayNumber = progress.currentDay;
 
-      // Save as draft with daily story
+      // Save as draft with practice reflection
       const post = await storage.createThoughtLeadershipPost({
         userId,
         dayNumber: actualDayNumber,
         topic: content.topic,
-        dailyStory: dailyStory || null,
+        dailyStory: practiceReflection, // Store practice reflection in dailyStory field for now
         contentLong: content.contentLong,
         contentMedium: content.contentMedium,
         contentShort: content.contentShort,
@@ -1331,8 +1363,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isPublic: false,
       });
 
-      // Update progress - mark day as completed and advance
+      // Update progress - mark day as completed, practice submitted, and advance
       if (progress) {
+        const practiceReflections = progress.practiceReflections || {};
+        practiceReflections[actualDayNumber] = practiceReflection;
+        
+        const practicesSubmitted = [...(progress.practicesSubmitted || []), actualDayNumber]
+          .filter((v, i, a) => a.indexOf(v) === i)
+          .sort((a, b) => a - b);
         const today = new Date().toISOString().split('T')[0];
         const completedDays = [...progress.completedDays, actualDayNumber].filter((v, i, a) => a.indexOf(v) === i).sort((a, b) => a - b);
         
@@ -1357,6 +1395,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         await storage.updateThoughtLeadershipProgress(userId, {
           currentDay: nextDay,
           completedDays,
+          practicesSubmitted,
+          practiceReflections,
           currentStreak: newStreak,
           longestStreak: Math.max(newStreak, progress.longestStreak),
           totalPostsGenerated: progress.totalPostsGenerated + 1,
