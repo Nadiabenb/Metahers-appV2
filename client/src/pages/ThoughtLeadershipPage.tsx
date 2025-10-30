@@ -347,7 +347,7 @@ export default function ThoughtLeadershipPage() {
 
                   <TabsContent value="medium" className="space-y-4">
                     <div className="p-6 rounded-lg bg-card border border-border">
-                      <div className="text-base text-foreground leading-relaxed whitespace-pre-wrap">
+                      <div className="text-base text-white leading-relaxed whitespace-pre-wrap">
                         {currentDayPost.contentMedium}
                       </div>
                     </div>
@@ -526,7 +526,7 @@ export default function ThoughtLeadershipPage() {
 
                   <TabsContent value="medium" className="space-y-4">
                     <div className="p-6 rounded-lg bg-card border border-border">
-                      <div className="text-base text-foreground leading-relaxed whitespace-pre-wrap">
+                      <div className="text-base text-white leading-relaxed whitespace-pre-wrap">
                         {selectedPost.contentMedium}
                       </div>
                     </div>
