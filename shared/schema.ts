@@ -329,6 +329,9 @@ export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", 
   // Journey Progress
   currentDay: integer("current_day").default(1).notNull(), // 1-30
   completedDays: jsonb("completed_days").$type<number[]>().notNull().default(sql`'[]'::jsonb`), // [1, 2, 3, ...]
+  lessonsCompleted: jsonb("lessons_completed").$type<number[]>().notNull().default(sql`'[]'::jsonb`), // Days where lesson was viewed
+  practicesSubmitted: jsonb("practices_submitted").$type<number[]>().notNull().default(sql`'[]'::jsonb`), // Days where practice was completed
+  practiceReflections: jsonb("practice_reflections").$type<Record<number, string>>().notNull().default(sql`'{}'::jsonb`), // {1: "reflection text", 2: "..."}
   currentStreak: integer("current_streak").default(0).notNull(),
   longestStreak: integer("longest_streak").default(0).notNull(),
   totalPostsGenerated: integer("total_posts_generated").default(0).notNull(),
