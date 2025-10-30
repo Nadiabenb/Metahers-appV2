@@ -329,8 +329,10 @@ export default function ThoughtLeadershipPage() {
                   </TabsList>
 
                   <TabsContent value="long" className="space-y-4">
-                    <div className="prose prose-sm max-w-none dark:prose-invert">
-                      <div dangerouslySetInnerHTML={{ __html: currentDayPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2>').replace(/<br\/><h2>/g, '<h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                    <div className="p-6 rounded-lg bg-card border border-border">
+                      <div className="prose prose-sm max-w-none dark:prose-invert">
+                        <div dangerouslySetInnerHTML={{ __html: currentDayPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2>').replace(/<br\/><h2>/g, '<h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                      </div>
                     </div>
                     <Button
                       variant="outline"
@@ -344,8 +346,10 @@ export default function ThoughtLeadershipPage() {
                   </TabsContent>
 
                   <TabsContent value="medium" className="space-y-4">
-                    <div className="text-sm text-foreground/90 whitespace-pre-wrap">
-                      {currentDayPost.contentMedium}
+                    <div className="p-6 rounded-lg bg-card border border-border">
+                      <div className="text-base text-foreground leading-relaxed whitespace-pre-wrap">
+                        {currentDayPost.contentMedium}
+                      </div>
                     </div>
                     <Button
                       variant="outline"
@@ -359,10 +363,12 @@ export default function ThoughtLeadershipPage() {
                   </TabsContent>
 
                   <TabsContent value="short" className="space-y-4">
-                    <div className="text-sm text-foreground/90 whitespace-pre-wrap">
+                    <div className="space-y-3">
                       {currentDayPost.contentShort.split('[TWEET BREAK]').map((tweet, i) => (
-                        <div key={i} className="mb-4 p-4 rounded-lg bg-accent/30 border border-accent-border">
-                          {tweet.trim()}
+                        <div key={i} className="p-5 rounded-lg bg-card border border-border">
+                          <div className="text-sm text-foreground leading-relaxed">
+                            {tweet.trim()}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -503,8 +509,10 @@ export default function ThoughtLeadershipPage() {
                   </TabsContent>
 
                   <TabsContent value="long" className="space-y-4">
-                    <div className="prose prose-sm max-w-none dark:prose-invert">
-                      <div dangerouslySetInnerHTML={{ __html: selectedPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2>').replace(/<br\/><h2>/g, '<h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                    <div className="p-6 rounded-lg bg-card border border-border">
+                      <div className="prose prose-sm max-w-none dark:prose-invert">
+                        <div dangerouslySetInnerHTML={{ __html: selectedPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2>').replace(/<br\/><h2>/g, '<h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                      </div>
                     </div>
                     <Button
                       variant="outline"
@@ -512,27 +520,33 @@ export default function ThoughtLeadershipPage() {
                       onClick={() => copyToClipboard(selectedPost.contentLong, 'Substack')}
                     >
                       <Copy className="w-4 h-4 mr-2" />
-                      Copy
+                      Copy to Clipboard
                     </Button>
                   </TabsContent>
 
                   <TabsContent value="medium" className="space-y-4">
-                    <div className="text-sm whitespace-pre-wrap">{selectedPost.contentMedium}</div>
+                    <div className="p-6 rounded-lg bg-card border border-border">
+                      <div className="text-base text-foreground leading-relaxed whitespace-pre-wrap">
+                        {selectedPost.contentMedium}
+                      </div>
+                    </div>
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={() => copyToClipboard(selectedPost.contentMedium, 'LinkedIn')}
                     >
                       <Copy className="w-4 h-4 mr-2" />
-                      Copy
+                      Copy to Clipboard
                     </Button>
                   </TabsContent>
 
                   <TabsContent value="short" className="space-y-4">
-                    <div className="text-sm whitespace-pre-wrap">
+                    <div className="space-y-3">
                       {selectedPost.contentShort.split('[TWEET BREAK]').map((tweet, i) => (
-                        <div key={i} className="mb-4 p-4 rounded-lg bg-accent/30">
-                          {tweet.trim()}
+                        <div key={i} className="p-5 rounded-lg bg-card border border-border">
+                          <div className="text-sm text-foreground leading-relaxed">
+                            {tweet.trim()}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -542,7 +556,7 @@ export default function ThoughtLeadershipPage() {
                       onClick={() => copyToClipboard(selectedPost.contentShort, 'Twitter')}
                     >
                       <Copy className="w-4 h-4 mr-2" />
-                      Copy
+                      Copy to Clipboard
                     </Button>
                   </TabsContent>
                 </Tabs>
