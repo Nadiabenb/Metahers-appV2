@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { Sparkles, Calendar, TrendingUp, Zap, Copy, Check, ExternalLink, Lock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, Calendar, TrendingUp, Zap, Copy, Check, ExternalLink, Lock, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { SEO } from "@/components/SEO";
@@ -41,6 +42,7 @@ export default function ThoughtLeadershipPage() {
   const { user } = useAuth();
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [copiedFormat, setCopiedFormat] = useState<string | null>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Fetch progress (will return 403 if not Pro)
   const { data: progress, isLoading: progressLoading, error: progressError } = useQuery<Progress>({
@@ -64,9 +66,13 @@ export default function ThoughtLeadershipPage() {
       queryClient.invalidateQueries({ queryKey: ['/api/thought-leadership/posts'] });
       queryClient.invalidateQueries({ queryKey: ['/api/thought-leadership/progress'] });
       toast({
-        title: "Content Generated!",
-        description: `Day ${progress?.currentDay || 1} content is ready for you to review.`,
+        title: "Content Generated! ✨",
+        description: `Your Day ${progress?.currentDay || 1} content is ready below.`,
       });
+      // Auto-scroll to content after a brief delay
+      setTimeout(() => {
+        contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 500);
     },
     onError: (error: any) => {
       console.error('Generation error:', error);
@@ -88,7 +94,7 @@ export default function ThoughtLeadershipPage() {
       queryClient.invalidateQueries({ queryKey: ['/api/thought-leadership/posts'] });
       queryClient.invalidateQueries({ queryKey: ['/api/thought-leadership/progress'] });
       toast({
-        title: "Published!",
+        title: "Published! 🎉",
         description: "Your post is now live.",
       });
     },
@@ -102,6 +108,13 @@ export default function ThoughtLeadershipPage() {
       title: "Copied!",
       description: `${format} content copied to clipboard.`,
     });
+  };
+
+  const handleDayClick = (day: number) => {
+    const post = posts.find(p => p.dayNumber === day);
+    if (post) {
+      setSelectedPost(post);
+    }
   };
 
   const currentDayPost = posts.find(p => p.dayNumber === progress?.currentDay);
@@ -241,19 +254,23 @@ export default function ThoughtLeadershipPage() {
           <Card className="editorial-card">
             <CardHeader>
               <CardTitle>Your 30-Day Calendar</CardTitle>
+              <p className="text-sm text-muted-foreground">Click any completed day to view its content</p>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-7 md:grid-cols-10 gap-2">
                 {Array.from({ length: 30 }, (_, i) => i + 1).map((day) => {
                   const isCompleted = progress?.completedDays.includes(day);
                   const isCurrent = day === progress?.currentDay;
+                  const hasPost = posts.some(p => p.dayNumber === day);
                   
                   return (
                     <div
                       key={day}
+                      onClick={() => hasPost && handleDayClick(day)}
                       className={`
                         aspect-square rounded-lg flex items-center justify-center text-sm font-semibold
-                        transition-all duration-200 hover-elevate cursor-pointer
+                        transition-all duration-200
+                        ${hasPost ? 'hover-elevate cursor-pointer active-elevate-2' : 'cursor-default'}
                         ${isCurrent ? 'bg-primary text-primary-foreground ring-2 ring-primary' : ''}
                         ${isCompleted && !isCurrent ? 'bg-primary/20 text-primary' : ''}
                         ${!isCompleted && !isCurrent ? 'bg-muted text-muted-foreground' : ''}
@@ -276,6 +293,7 @@ export default function ThoughtLeadershipPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="mb-8"
+            ref={contentRef}
           >
             <Card className="editorial-card border-2 border-primary/30">
               <CardContent className="p-8 text-center">
@@ -296,7 +314,7 @@ export default function ThoughtLeadershipPage() {
                   {generateMutation.isPending ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Generating...
+                      Generating Magic...
                     </>
                   ) : (
                     <>
@@ -313,16 +331,18 @@ export default function ThoughtLeadershipPage() {
         {/* Today's Generated Content */}
         {currentDayPost && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
             className="mb-8"
+            ref={contentRef}
           >
-            <Card className="editorial-card">
-              <CardHeader>
+            <Card className="editorial-card border-2 border-primary/50 shadow-lg">
+              <CardHeader className="bg-primary/5">
                 <div className="flex items-start justify-between">
                   <div>
-                    <CardTitle>Day {currentDayPost.dayNumber}: {currentDayPost.topic}</CardTitle>
+                    <Badge className="mb-2 bg-primary">Day {currentDayPost.dayNumber}</Badge>
+                    <CardTitle className="text-2xl">{currentDayPost.topic}</CardTitle>
                     <p className="text-sm text-muted-foreground mt-1">
                       Generated {new Date(currentDayPost.createdAt).toLocaleDateString()}
                     </p>
@@ -332,12 +352,12 @@ export default function ThoughtLeadershipPage() {
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-6">
                 <Tabs defaultValue="long" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="long">Substack/Medium</TabsTrigger>
-                    <TabsTrigger value="medium">LinkedIn</TabsTrigger>
-                    <TabsTrigger value="short">Twitter/X</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-3 mb-6">
+                    <TabsTrigger value="long">📝 Substack</TabsTrigger>
+                    <TabsTrigger value="medium">💼 LinkedIn</TabsTrigger>
+                    <TabsTrigger value="short">🐦 Twitter</TabsTrigger>
                   </TabsList>
 
                   <TabsContent value="long" className="mt-4">
@@ -383,7 +403,7 @@ export default function ThoughtLeadershipPage() {
                   </TabsContent>
                 </Tabs>
 
-                <div className="flex gap-4 mt-6">
+                <div className="flex flex-wrap gap-4 mt-6">
                   <Button
                     onClick={() => publishMutation.mutate({ postId: currentDayPost.id, publishTo: 'metahers' })}
                     disabled={publishMutation.isPending || currentDayPost.publishedToMetaHers}
@@ -398,7 +418,7 @@ export default function ThoughtLeadershipPage() {
                     disabled={publishMutation.isPending || currentDayPost.publishedToExternal}
                     data-testid="button-mark-published-external"
                   >
-                    {currentDayPost.publishedToExternal ? 'Marked as Published' : 'Mark as Published Externally'}
+                    {currentDayPost.publishedToExternal ? 'Marked as Published ✓' : 'Mark as Published Externally'}
                   </Button>
                 </div>
               </CardContent>
@@ -406,30 +426,38 @@ export default function ThoughtLeadershipPage() {
           </motion.div>
         )}
 
-        {/* Previous Posts */}
-        {posts.length > 1 && (
+        {/* All Posts Library */}
+        {posts.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <h2 className="font-cormorant text-3xl font-bold text-foreground mb-4">Your Posts</h2>
-            <div className="grid md:grid-cols-2 gap-4">
+            <h2 className="font-cormorant text-3xl font-bold text-foreground mb-4">Your Content Library</h2>
+            <p className="text-muted-foreground mb-6">All your generated posts - click to view</p>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
               {posts
-                .filter(p => p.id !== currentDayPost?.id)
+                .sort((a, b) => b.dayNumber - a.dayNumber)
                 .map((post) => (
-                  <Card key={post.id} className="editorial-card hover-elevate cursor-pointer" onClick={() => setSelectedPost(post)}>
+                  <Card
+                    key={post.id}
+                    className={`editorial-card hover-elevate cursor-pointer active-elevate-2 ${
+                      post.id === currentDayPost?.id ? 'border-2 border-primary' : ''
+                    }`}
+                    onClick={() => setSelectedPost(post)}
+                    data-testid={`post-card-${post.dayNumber}`}
+                  >
                     <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex-1 min-w-0">
                           <Badge variant="secondary" className="mb-2">Day {post.dayNumber}</Badge>
-                          <CardTitle className="text-lg">{post.topic}</CardTitle>
+                          <CardTitle className="text-lg truncate">{post.topic}</CardTitle>
                           <p className="text-sm text-muted-foreground mt-1">
                             {new Date(post.createdAt).toLocaleDateString()}
                           </p>
                         </div>
                         {post.publishedToMetaHers && (
-                          <Badge variant="default">Published</Badge>
+                          <Badge variant="default" className="shrink-0">Published</Badge>
                         )}
                       </div>
                     </CardHeader>
@@ -439,6 +467,94 @@ export default function ThoughtLeadershipPage() {
           </motion.div>
         )}
       </div>
+
+      {/* Post Detail Modal */}
+      <Dialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          {selectedPost && (
+            <>
+              <DialogHeader>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <Badge className="mb-2">Day {selectedPost.dayNumber}</Badge>
+                    <DialogTitle className="text-2xl">{selectedPost.topic}</DialogTitle>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Generated {new Date(selectedPost.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <Badge variant={selectedPost.publishedToMetaHers ? "default" : "secondary"}>
+                    {selectedPost.status.replace(/_/g, ' ')}
+                  </Badge>
+                </div>
+              </DialogHeader>
+
+              <Tabs defaultValue="long" className="w-full mt-4">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="long">📝 Substack</TabsTrigger>
+                  <TabsTrigger value="medium">💼 LinkedIn</TabsTrigger>
+                  <TabsTrigger value="short">🐦 Twitter</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="long" className="mt-4">
+                  <div className="bg-muted/30 p-6 rounded-lg mb-4 max-h-96 overflow-y-auto">
+                    <div className="prose prose-sm dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: selectedPost.contentLong.replace(/\n/g, '<br/>') }} />
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => copyToClipboard(selectedPost.contentLong, 'Substack')}
+                  >
+                    {copiedFormat === 'Substack' ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                    Copy for Substack
+                  </Button>
+                </TabsContent>
+
+                <TabsContent value="medium" className="mt-4">
+                  <div className="bg-muted/30 p-6 rounded-lg mb-4 max-h-96 overflow-y-auto whitespace-pre-wrap">
+                    {selectedPost.contentMedium}
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => copyToClipboard(selectedPost.contentMedium, 'LinkedIn')}
+                  >
+                    {copiedFormat === 'LinkedIn' ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                    Copy for LinkedIn
+                  </Button>
+                </TabsContent>
+
+                <TabsContent value="short" className="mt-4">
+                  <div className="bg-muted/30 p-6 rounded-lg mb-4 whitespace-pre-wrap">
+                    {selectedPost.contentShort}
+                  </div>
+                  <Button
+                    variant="outline"
+                    onClick={() => copyToClipboard(selectedPost.contentShort, 'Twitter')}
+                  >
+                    {copiedFormat === 'Twitter' ? <Check className="w-4 h-4 mr-2" /> : <Copy className="w-4 h-4 mr-2" />}
+                    Copy for Twitter
+                  </Button>
+                </TabsContent>
+              </Tabs>
+
+              <div className="flex flex-wrap gap-4 mt-6">
+                <Button
+                  onClick={() => publishMutation.mutate({ postId: selectedPost.id, publishTo: 'metahers' })}
+                  disabled={publishMutation.isPending || selectedPost.publishedToMetaHers}
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  {selectedPost.publishedToMetaHers ? 'Published to MetaHers' : 'Publish to MetaHers'}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => publishMutation.mutate({ postId: selectedPost.id, publishTo: 'external' })}
+                  disabled={publishMutation.isPending || selectedPost.publishedToExternal}
+                >
+                  {selectedPost.publishedToExternal ? 'Marked as Published ✓' : 'Mark as Published Externally'}
+                </Button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
