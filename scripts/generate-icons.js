@@ -31,12 +31,25 @@ async function generateIcons() {
       .toFile(join(publicDir, 'apple-touch-icon.png'));
     console.log('✓ Generated apple-touch-icon.png');
 
-    // Also generate a favicon
+    // Generate high-quality favicon (48x48 for better clarity)
     await sharp(sourceImage)
-      .resize(32, 32, { fit: 'cover' })
-      .png()
+      .resize(48, 48, { 
+        fit: 'cover',
+        kernel: sharp.kernel.lanczos3 
+      })
+      .png({ quality: 100, compressionLevel: 6 })
       .toFile(join(publicDir, 'favicon.png'));
     console.log('✓ Generated favicon.png');
+    
+    // Also generate standard 16x16 favicon
+    await sharp(sourceImage)
+      .resize(16, 16, { 
+        fit: 'cover',
+        kernel: sharp.kernel.lanczos3 
+      })
+      .png({ quality: 100, compressionLevel: 6 })
+      .toFile(join(publicDir, 'favicon-16x16.png'));
+    console.log('✓ Generated favicon-16x16.png');
 
     console.log('\n✨ All icons generated successfully!');
   } catch (error) {
