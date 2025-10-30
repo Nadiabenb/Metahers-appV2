@@ -1326,7 +1326,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(post);
     } catch (error) {
       console.error('Error generating TL content:', error);
-      res.status(500).json({ message: 'Failed to generate content' });
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      res.status(500).json({ message: 'Failed to generate content', error: errorMessage });
     }
   });
 

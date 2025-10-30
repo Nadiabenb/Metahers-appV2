@@ -68,10 +68,12 @@ export default function ThoughtLeadershipPage() {
         description: `Day ${progress?.currentDay || 1} content is ready for you to review.`,
       });
     },
-    onError: () => {
+    onError: (error: any) => {
+      console.error('Generation error:', error);
+      const errorMessage = error?.message || error?.toString() || "Unknown error occurred";
       toast({
         title: "Generation Failed",
-        description: "Please try again in a moment.",
+        description: errorMessage,
         variant: "destructive",
       });
     },
