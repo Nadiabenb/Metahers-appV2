@@ -185,38 +185,6 @@ export default function AccountPage() {
                     </div>
                   </div>
                 )}
-
-                {!user?.isPro && (
-                  <div className="mt-6 pt-6 border-t border-border">
-                    <div className="flex items-center gap-3 mb-4">
-                      <Sparkles className="w-5 h-5 text-[hsl(var(--aurora-teal))]" />
-                      <h4 className="font-serif text-lg font-semibold text-foreground">
-                        Have a Beta Code?
-                      </h4>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Enter your beta access code to unlock Pro features for free.
-                    </p>
-                    <form onSubmit={handleActivateBetaCode} className="flex gap-3">
-                      <Input
-                        type="text"
-                        placeholder="Enter beta code"
-                        value={betaCode}
-                        onChange={(e) => setBetaCode(e.target.value)}
-                        className="flex-1"
-                        data-testid="input-beta-code"
-                      />
-                      <Button
-                        type="submit"
-                        disabled={!betaCode.trim() || activateBetaCodeMutation.isPending}
-                        className="gap-2"
-                        data-testid="button-activate-beta"
-                      >
-                        {activateBetaCodeMutation.isPending ? "Activating..." : "Activate"}
-                      </Button>
-                    </form>
-                  </div>
-                )}
               </div>
             </div>
 

@@ -8,7 +8,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { trackPageView } from "@/lib/analytics";
 import { Navigation } from "@/components/Navigation";
 import { InstallPrompt } from "@/components/InstallPrompt";
-import { EmailCaptureModal } from "@/components/EmailCaptureModal";
 import { initializeApp } from "@/lib/storage";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
@@ -124,7 +123,6 @@ function App() {
           <Navigation />
           <Router />
           <InstallPrompt />
-          <EmailCaptureModal />
         </div>
         <Toaster />
       </TooltipProvider>
