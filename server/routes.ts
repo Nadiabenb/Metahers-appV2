@@ -7,6 +7,7 @@ import Stripe from "stripe";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
+import { CURRICULUM } from "@shared/curriculum";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {

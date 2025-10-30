@@ -127,7 +127,9 @@ interface BrandProfile {
 export async function generateThoughtLeadershipContent(
   dayNumber: number,
   brandProfile: BrandProfile,
-  dailyStory?: string,
+  practiceReflection: string,
+  lessonTopic?: string,
+  lessonAngle?: string,
   previousTopics?: string[]
 ): Promise<ThoughtLeadershipContent> {
   // Determine journey phase
@@ -135,13 +137,13 @@ export async function generateThoughtLeadershipContent(
   let phaseGoal: string;
   
   if (dayNumber <= 10) {
-    journeyPhase = "Introduction";
+    journeyPhase = "Foundation Ritual";
     phaseGoal = "Introduce yourself, your expertise, and what you stand for. Build credibility and connection.";
   } else if (dayNumber <= 20) {
-    journeyPhase = "Journey Sharing";
-    phaseGoal = "Share your process, wins, challenges, and lessons learned. Build in public. Show the behind-the-scenes.";
+    journeyPhase = "Visibility Sanctuary";
+    phaseGoal = "Share your systems, strategies, and approach to visibility. Educate while demonstrating expertise.";
   } else {
-    journeyPhase = "Thought Leadership";
+    journeyPhase = "Authority Amplification";
     phaseGoal = "Offer deep insights, frameworks, and unique perspectives. Establish authority in your niche.";
   }
 
@@ -154,24 +156,30 @@ BRAND PROFILE:
 - Current Goals: ${brandProfile.currentGoals || 'Not specified'}
 `;
 
-  const dailyContext = dailyStory 
-    ? `\n\nTODAY'S UPDATE:\n${dailyStory}`
+  const lessonContext = lessonTopic 
+    ? `\n\nTODAY'S LESSON: ${lessonTopic}\nCONTENT ANGLE: ${lessonAngle || 'Share your perspective on this topic'}`
     : '';
+
+  const practiceContext = `\n\nPRACTICE REFLECTION:\n${practiceReflection}`;
 
   const avoidTopics = previousTopics && previousTopics.length > 0
     ? `\nAvoid these recently used topics: ${previousTopics.join(", ")}`
     : "";
 
-  // First, generate the topic based on today's story
-  const topicPrompt = `You are helping a solopreneur build their personal brand through authentic storytelling.
+  // Use lesson topic directly if provided, otherwise generate
+  let topic: string;
+  if (lessonTopic) {
+    topic = lessonTopic;
+  } else {
+    const topicPrompt = `You are helping a solopreneur build their personal brand through authentic storytelling.
 
-${brandContext}${dailyContext}
+${brandContext}${practiceContext}
 
 Day: ${dayNumber} of 30 (${journeyPhase} Phase)
 Phase Goal: ${phaseGoal}${avoidTopics}
 
-Based on today's update and their brand profile, generate ONE specific, engaging topic that:
-- Authentically reflects what they actually did/learned today
+Based on their practice reflection and brand profile, generate ONE specific, engaging topic that:
+- Authentically reflects what they learned/reflected on today
 - Fits the ${journeyPhase} phase strategy
 - Would resonate with their target audience
 - Offers value and builds their authority
@@ -179,34 +187,40 @@ Based on today's update and their brand profile, generate ONE specific, engaging
 
 Return ONLY the topic title (5-12 words), nothing else.`;
 
-  const topicResponse = await openai.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [{ role: "user", content: topicPrompt }],
-    temperature: 0.9,
-    max_tokens: 30,
-  });
+    const topicResponse = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [{ role: "user", content: topicPrompt }],
+      temperature: 0.9,
+      max_tokens: 30,
+    });
 
-  const topic = topicResponse.choices[0].message.content?.trim() || "Building Your Brand Authentically";
+    topic = topicResponse.choices[0].message.content?.trim() || "Building Your Brand Authentically";
+  }
 
   // Now generate content in all three formats
   const contentPrompt = `You are a Forbes-meets-Vogue editorial content creator helping a solopreneur build thought leadership through authentic storytelling.
 
-${brandContext}${dailyContext}
+${brandContext}${lessonContext}${practiceContext}
 
 Topic: "${topic}"
 Day: ${dayNumber} of 30 (${journeyPhase} Phase)
 Tone: Professional yet personal, confident feminine energy, building in public, authentic and valuable
 
-CRITICAL: This content must feel like it's genuinely written BY THEM, based on their real experiences today. Weave their daily story naturally into the content. Make it sound like their voice, not AI-generated corporate speak.
+CRITICAL: This content must:
+- Feel like it's genuinely written BY THEM based on their practice reflection today
+- Incorporate insights from today's lesson into their personal experience
+- Weave their reflection naturally into valuable, shareable content
+- Sound like their authentic voice, not AI-generated corporate speak
+- Provide real value to their audience while building their authority
 
 Generate content in 3 formats for multi-platform publishing. Return ONLY valid JSON with this structure:
 {
-  "long": "800-1200 word article for Substack/Medium. Start with today's story/experience, then expand into insights. Use: compelling hook from their real experience, their unique perspective based on their journey, 3-4 actionable insights, personal examples, powerful conclusion. Short paragraphs, conversational tone, markdown with ## headers and **bold**. Make it feel AUTHENTIC.",
-  "medium": "300-400 word LinkedIn post. Lead with their daily win/experience, 2-3 key insights with line breaks for readability, end with engaging question. Professional but warm, building in public vibe. Use their voice and story.",
-  "short": "Twitter/X post under 280 characters OR a 3-tweet thread based on today's achievement. Each tweet complete, valuable, authentic. Format as single string with tweet breaks marked as [TWEET BREAK]. Make it shareable and genuine."
+  "long": "800-1200 word article for Substack/Medium. Start with their reflection/experience, connect to today's lesson insights, expand with 3-4 actionable takeaways. Use: compelling hook from their real experience, their unique perspective, practical examples, powerful conclusion. Short paragraphs, conversational tone, markdown with ## headers and **bold**. Make it feel AUTHENTIC.",
+  "medium": "300-400 word LinkedIn post. Lead with their key insight from today, connect to the lesson concept, share 2-3 practical takeaways with line breaks for readability, end with engaging question. Professional but warm, building in public vibe. Use their voice.",
+  "short": "Twitter/X post under 280 characters OR a 3-tweet thread based on today's learning. Each tweet complete, valuable, authentic. Format as single string with tweet breaks marked as [TWEET BREAK]. Make it shareable and genuine."
 }
 
-This is THEIR story, THEIR experience, THEIR insights. Make it personal, valuable, and 100% authentic to who they are.`;
+This is THEIR learning journey, THEIR insights, THEIR voice. Make it personal, valuable, and 100% authentic to who they are.`;
 
   const contentResponse = await openai.chat.completions.create({
     model: "gpt-4o",
