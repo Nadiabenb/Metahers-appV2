@@ -5,7 +5,7 @@ import { dirname, join } from 'path';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const sourceImage = join(__dirname, '../attached_assets/generated_images/MetaHers_luxury_app_icon_d0b12232.png');
+const sourceImage = join(__dirname, '../attached_assets/generated_images/Gradient_M_minimalist_icon_2e1fa2e4.png');
 const publicDir = join(__dirname, '../public');
 
 async function generateIcons() {
