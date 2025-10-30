@@ -1226,6 +1226,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           totalPostsGenerated: 0,
           totalPostsPublished: 0,
           journeyStatus: 'active',
+          lastActivityDate: null,
         });
         return res.json(newProgress);
       }
@@ -1254,9 +1255,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         previousTopics
       );
 
-      // Get current progress
-      const progress = await storage.getThoughtLeadershipProgress(userId);
-      const actualDayNumber = progress?.currentDay || 1;
+      // Get or create progress record
+      let progress = await storage.getThoughtLeadershipProgress(userId);
+      if (!progress) {
+        progress = await storage.createThoughtLeadershipProgress({
+          userId,
+          currentDay: 1,
+          completedDays: [],
+          currentStreak: 0,
+          longestStreak: 0,
+          totalPostsGenerated: 0,
+          totalPostsPublished: 0,
+          journeyStatus: 'active',
+          lastActivityDate: null,
+        });
+      }
+      const actualDayNumber = progress.currentDay;
 
       // Save as draft
       const post = await storage.createThoughtLeadershipPost({
