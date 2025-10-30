@@ -330,8 +330,8 @@ export default function ThoughtLeadershipPage() {
 
                   <TabsContent value="long" className="space-y-4">
                     <div className="p-6 rounded-lg bg-card border border-border">
-                      <div className="prose prose-sm max-w-none dark:prose-invert">
-                        <div dangerouslySetInnerHTML={{ __html: currentDayPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2>').replace(/<br\/><h2>/g, '<h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                      <div className="prose prose-sm max-w-none prose-invert">
+                        <div className="text-white" dangerouslySetInnerHTML={{ __html: currentDayPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2 class="text-white">').replace(/<br\/><h2>/g, '<h2 class="text-white">').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                       </div>
                     </div>
                     <Button
@@ -366,7 +366,7 @@ export default function ThoughtLeadershipPage() {
                     <div className="space-y-3">
                       {currentDayPost.contentShort.split('[TWEET BREAK]').map((tweet, i) => (
                         <div key={i} className="p-5 rounded-lg bg-card border border-border">
-                          <div className="text-sm text-foreground leading-relaxed">
+                          <div className="text-sm text-white leading-relaxed">
                             {tweet.trim()}
                           </div>
                         </div>
@@ -510,8 +510,8 @@ export default function ThoughtLeadershipPage() {
 
                   <TabsContent value="long" className="space-y-4">
                     <div className="p-6 rounded-lg bg-card border border-border">
-                      <div className="prose prose-sm max-w-none dark:prose-invert">
-                        <div dangerouslySetInnerHTML={{ __html: selectedPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2>').replace(/<br\/><h2>/g, '<h2>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                      <div className="prose prose-sm max-w-none prose-invert">
+                        <div className="text-white" dangerouslySetInnerHTML={{ __html: selectedPost.contentLong.replace(/\n/g, '<br/>').replace(/##\s+/g, '<h2 class="text-white">').replace(/<br\/><h2>/g, '<h2 class="text-white">').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
                       </div>
                     </div>
                     <Button
@@ -544,7 +544,7 @@ export default function ThoughtLeadershipPage() {
                     <div className="space-y-3">
                       {selectedPost.contentShort.split('[TWEET BREAK]').map((tweet, i) => (
                         <div key={i} className="p-5 rounded-lg bg-card border border-border">
-                          <div className="text-sm text-foreground leading-relaxed">
+                          <div className="text-sm text-white leading-relaxed">
                             {tweet.trim()}
                           </div>
                         </div>
