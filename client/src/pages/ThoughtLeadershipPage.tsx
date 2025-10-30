@@ -12,6 +12,8 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
+import { BrandOnboarding } from "@/components/BrandOnboarding";
+import { DailyCheckIn } from "@/components/DailyCheckIn";
 
 type Post = {
   id: string;
@@ -35,6 +37,7 @@ type Progress = {
   totalPostsGenerated: number;
   totalPostsPublished: number;
   journeyStatus: string;
+  brandOnboardingCompleted?: boolean;
 };
 
 export default function ThoughtLeadershipPage() {
@@ -54,12 +57,25 @@ export default function ThoughtLeadershipPage() {
     queryKey: ['/api/thought-leadership/posts'],
   });
 
-  // Generate content mutation
+  // Brand profile mutation
+  const brandProfileMutation = useMutation({
+    mutationFn: async (profile: any) => {
+      return apiRequest('PUT', '/api/thought-leadership/brand-profile', profile);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/thought-leadership/progress'] });
+      toast({
+        title: "Brand Profile Saved!",
+        description: "Let's start building your brand in public!",
+      });
+    },
+  });
+
+  // Generate content mutation (with daily story)
   const generateMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (dailyStory: string) => {
       return apiRequest('POST', '/api/thought-leadership/generate', {
-        niche: 'AI and Web3',
-        dayNumber: progress?.currentDay || 1,
+        dailyStory,
       });
     },
     onSuccess: () => {
@@ -118,6 +134,17 @@ export default function ThoughtLeadershipPage() {
   };
 
   const currentDayPost = posts.find(p => p.dayNumber === progress?.currentDay);
+  const [showDailyCheckIn, setShowDailyCheckIn] = useState(false);
+
+  // Show brand onboarding if not completed
+  if (progress && !progress.brandOnboardingCompleted) {
+    return (
+      <BrandOnboarding
+        onComplete={(profile) => brandProfileMutation.mutate(profile)}
+        isLoading={brandProfileMutation.isPending}
+      />
+    );
+  }
 
   // Show Pro upsell if not Pro
   if (progressError && (progressError as any).message === 'Pro subscription required') {
@@ -286,14 +313,13 @@ export default function ThoughtLeadershipPage() {
           </Card>
         </motion.div>
 
-        {/* Generate Today's Content */}
-        {!currentDayPost && (
+        {/* Daily Check-In or Generate */}
+        {!currentDayPost && !showDailyCheckIn && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             className="mb-8"
-            ref={contentRef}
           >
             <Card className="editorial-card border-2 border-primary/30">
               <CardContent className="p-8 text-center">
@@ -302,30 +328,29 @@ export default function ThoughtLeadershipPage() {
                   Ready for Day {progress?.currentDay}?
                 </h3>
                 <p className="text-muted-foreground mb-6">
-                  Generate your AI-powered content in 3 formats: Substack, LinkedIn, and Twitter
+                  Share your daily story and generate authentic content in 3 formats
                 </p>
                 <Button
                   size="lg"
-                  onClick={() => generateMutation.mutate()}
-                  disabled={generateMutation.isPending}
+                  onClick={() => setShowDailyCheckIn(true)}
                   className="bg-primary hover:bg-primary/90"
-                  data-testid="button-generate-content"
+                  data-testid="button-start-checkin"
                 >
-                  {generateMutation.isPending ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                      Generating Magic...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Generate Day {progress?.currentDay} Content
-                    </>
-                  )}
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Start Day {progress?.currentDay} Check-In
                 </Button>
               </CardContent>
             </Card>
           </motion.div>
+        )}
+
+        {/* Daily Check-In Form */}
+        {!currentDayPost && showDailyCheckIn && (
+          <DailyCheckIn
+            dayNumber={progress?.currentDay || 1}
+            onSubmit={(story) => generateMutation.mutate(story)}
+            isLoading={generateMutation.isPending}
+          />
         )}
 
         {/* Today's Generated Content */}

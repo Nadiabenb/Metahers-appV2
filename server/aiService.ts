@@ -116,37 +116,66 @@ interface ThoughtLeadershipContent {
   contentShort: string; // Twitter/X (280 chars or thread)
 }
 
+interface BrandProfile {
+  brandExpertise?: string;
+  brandNiche?: string;
+  problemSolved?: string;
+  uniqueStory?: string;
+  currentGoals?: string;
+}
+
 export async function generateThoughtLeadershipContent(
-  userNiche: string,
   dayNumber: number,
+  brandProfile: BrandProfile,
+  dailyStory?: string,
   previousTopics?: string[]
 ): Promise<ThoughtLeadershipContent> {
-  const topicCategories = [
-    "AI tools and productivity",
-    "Web3 and blockchain insights",
-    "Personal branding in tech",
-    "Entrepreneurship lessons",
-    "Women in technology",
-    "Future of work",
-    "Digital transformation"
-  ];
+  // Determine journey phase
+  let journeyPhase: string;
+  let phaseGoal: string;
+  
+  if (dayNumber <= 10) {
+    journeyPhase = "Introduction";
+    phaseGoal = "Introduce yourself, your expertise, and what you stand for. Build credibility and connection.";
+  } else if (dayNumber <= 20) {
+    journeyPhase = "Journey Sharing";
+    phaseGoal = "Share your process, wins, challenges, and lessons learned. Build in public. Show the behind-the-scenes.";
+  } else {
+    journeyPhase = "Thought Leadership";
+    phaseGoal = "Offer deep insights, frameworks, and unique perspectives. Establish authority in your niche.";
+  }
+
+  const brandContext = `
+BRAND PROFILE:
+- Expertise: ${brandProfile.brandExpertise || 'Not specified'}
+- Niche: ${brandProfile.brandNiche || 'Not specified'}
+- Problem Solved: ${brandProfile.problemSolved || 'Not specified'}
+- Unique Story: ${brandProfile.uniqueStory || 'Not specified'}
+- Current Goals: ${brandProfile.currentGoals || 'Not specified'}
+`;
+
+  const dailyContext = dailyStory 
+    ? `\n\nTODAY'S UPDATE:\n${dailyStory}`
+    : '';
 
   const avoidTopics = previousTopics && previousTopics.length > 0
     ? `\nAvoid these recently used topics: ${previousTopics.join(", ")}`
     : "";
 
-  // First, generate the topic
-  const topicPrompt = `You are helping a woman in tech build thought leadership through a 30-day daily posting challenge.
+  // First, generate the topic based on today's story
+  const topicPrompt = `You are helping a solopreneur build their personal brand through authentic storytelling.
 
-User's niche: ${userNiche}
-Day: ${dayNumber} of 30${avoidTopics}
+${brandContext}${dailyContext}
 
-Generate ONE specific, engaging topic for today's post that:
-- Relates to ${topicCategories[dayNumber % topicCategories.length]}
-- Is relevant to ${userNiche}
-- Would spark engagement on professional platforms
-- Offers a unique perspective or personal insight
-- Is specific enough to be actionable
+Day: ${dayNumber} of 30 (${journeyPhase} Phase)
+Phase Goal: ${phaseGoal}${avoidTopics}
+
+Based on today's update and their brand profile, generate ONE specific, engaging topic that:
+- Authentically reflects what they actually did/learned today
+- Fits the ${journeyPhase} phase strategy
+- Would resonate with their target audience
+- Offers value and builds their authority
+- Sounds natural, not forced or generic
 
 Return ONLY the topic title (5-12 words), nothing else.`;
 
@@ -157,23 +186,27 @@ Return ONLY the topic title (5-12 words), nothing else.`;
     max_tokens: 30,
   });
 
-  const topic = topicResponse.choices[0].message.content?.trim() || "Building Your Tech Career in 2025";
+  const topic = topicResponse.choices[0].message.content?.trim() || "Building Your Brand Authentically";
 
   // Now generate content in all three formats
-  const contentPrompt = `You are a Forbes-meets-Vogue editorial content creator helping a woman in tech build thought leadership.
+  const contentPrompt = `You are a Forbes-meets-Vogue editorial content creator helping a solopreneur build thought leadership through authentic storytelling.
+
+${brandContext}${dailyContext}
 
 Topic: "${topic}"
-User's niche: ${userNiche}
-Tone: Professional, confident, personal stories mixed with insights, feminine energy
+Day: ${dayNumber} of 30 (${journeyPhase} Phase)
+Tone: Professional yet personal, confident feminine energy, building in public, authentic and valuable
+
+CRITICAL: This content must feel like it's genuinely written BY THEM, based on their real experiences today. Weave their daily story naturally into the content. Make it sound like their voice, not AI-generated corporate speak.
 
 Generate content in 3 formats for multi-platform publishing. Return ONLY valid JSON with this structure:
 {
-  "long": "800-1200 word article for Substack/Medium with: compelling hook, personal story or example, 3-4 key insights, actionable takeaways, powerful conclusion. Use short paragraphs, conversational tone, markdown formatting with ## headers and **bold**",
-  "medium": "300-400 word LinkedIn post with: attention-grabbing first line, 2-3 key points with line breaks for readability, call-to-action question at the end. Professional but warm tone",
-  "short": "Twitter/X post under 280 characters OR a 3-tweet thread. Each tweet complete, engaging, with clear value. Format as single string with tweet breaks marked as [TWEET BREAK]"
+  "long": "800-1200 word article for Substack/Medium. Start with today's story/experience, then expand into insights. Use: compelling hook from their real experience, their unique perspective based on their journey, 3-4 actionable insights, personal examples, powerful conclusion. Short paragraphs, conversational tone, markdown with ## headers and **bold**. Make it feel AUTHENTIC.",
+  "medium": "300-400 word LinkedIn post. Lead with their daily win/experience, 2-3 key insights with line breaks for readability, end with engaging question. Professional but warm, building in public vibe. Use their voice and story.",
+  "short": "Twitter/X post under 280 characters OR a 3-tweet thread based on today's achievement. Each tweet complete, valuable, authentic. Format as single string with tweet breaks marked as [TWEET BREAK]. Make it shareable and genuine."
 }
 
-Make it authentic, valuable, and shareable. No corporate jargon or fluff.`;
+This is THEIR story, THEIR experience, THEIR insights. Make it personal, valuable, and 100% authentic to who they are.`;
 
   const contentResponse = await openai.chat.completions.create({
     model: "gpt-4o",

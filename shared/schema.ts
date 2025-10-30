@@ -284,6 +284,7 @@ export const thoughtLeadershipPosts = pgTable("thought_leadership_posts", {
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
   dayNumber: integer("day_number").notNull(), // 1-30
   topic: text("topic").notNull(), // AI-generated topic suggestion
+  dailyStory: text("daily_story"), // User's daily achievement/story input
   contentLong: text("content_long").notNull(), // Substack/Medium format
   contentMedium: text("content_medium").notNull(), // LinkedIn format
   contentShort: text("content_short").notNull(), // Twitter/X format
@@ -316,6 +317,16 @@ export type ThoughtLeadershipPostDB = typeof thoughtLeadershipPosts.$inferSelect
 export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  
+  // Brand Profile (Personal Storytelling)
+  brandExpertise: text("brand_expertise"), // What's your expertise/zone of genius?
+  brandNiche: text("brand_niche"), // What specific niche/industry?
+  problemSolved: text("problem_solved"), // What problem do you solve for clients?
+  uniqueStory: text("unique_story"), // Your unique journey/background story
+  currentGoals: text("current_goals"), // Current projects/goals
+  brandOnboardingCompleted: boolean("brand_onboarding_completed").default(false).notNull(),
+  
+  // Journey Progress
   currentDay: integer("current_day").default(1).notNull(), // 1-30
   completedDays: jsonb("completed_days").$type<number[]>().notNull().default(sql`'[]'::jsonb`), // [1, 2, 3, ...]
   currentStreak: integer("current_streak").default(0).notNull(),

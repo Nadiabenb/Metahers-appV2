@@ -1238,25 +1238,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Generate new content for current day
-  app.post('/api/thought-leadership/generate', isProUser, async (req: Request, res) => {
+  // Update brand profile (onboarding)
+  app.put('/api/thought-leadership/brand-profile', isProUser, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
-      const { niche, dayNumber } = req.body;
-
-      // Get previous topics to avoid repetition
-      const recentPosts = await storage.getThoughtLeadershipPostsByUser(userId, 7);
-      const previousTopics = recentPosts.map(p => p.topic);
-
-      // Generate content using AI
-      const content = await generateThoughtLeadershipContent(
-        niche || "AI and Web3",
-        dayNumber || 1,
-        previousTopics
-      );
+      const { brandExpertise, brandNiche, problemSolved, uniqueStory, currentGoals } = req.body;
 
       // Get or create progress record
       let progress = await storage.getThoughtLeadershipProgress(userId);
+      
       if (!progress) {
         progress = await storage.createThoughtLeadershipProgress({
           userId,
@@ -1268,15 +1258,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
           totalPostsPublished: 0,
           journeyStatus: 'active',
           lastActivityDate: null,
+          brandOnboardingCompleted: false,
         });
       }
+
+      // Update brand profile
+      const updated = await storage.updateThoughtLeadershipProgress(userId, {
+        brandExpertise,
+        brandNiche,
+        problemSolved,
+        uniqueStory,
+        currentGoals,
+        brandOnboardingCompleted: true,
+        updatedAt: new Date(),
+      });
+
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating brand profile:', error);
+      res.status(500).json({ message: 'Failed to update brand profile' });
+    }
+  });
+
+  // Generate new content for current day
+  app.post('/api/thought-leadership/generate', isProUser, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { dailyStory } = req.body;
+
+      // Get user's brand profile and progress
+      const progress = await storage.getThoughtLeadershipProgress(userId);
+      if (!progress) {
+        return res.status(400).json({ message: 'Please complete brand onboarding first' });
+      }
+
+      // Get previous topics to avoid repetition
+      const recentPosts = await storage.getThoughtLeadershipPostsByUser(userId, 7);
+      const previousTopics = recentPosts.map(p => p.topic);
+
+      // Generate content using AI with brand profile and daily story
+      const brandProfile = {
+        brandExpertise: progress.brandExpertise || undefined,
+        brandNiche: progress.brandNiche || undefined,
+        problemSolved: progress.problemSolved || undefined,
+        uniqueStory: progress.uniqueStory || undefined,
+        currentGoals: progress.currentGoals || undefined,
+      };
+
+      const content = await generateThoughtLeadershipContent(
+        progress.currentDay,
+        brandProfile,
+        dailyStory,
+        previousTopics
+      );
+
       const actualDayNumber = progress.currentDay;
 
-      // Save as draft
+      // Save as draft with daily story
       const post = await storage.createThoughtLeadershipPost({
         userId,
         dayNumber: actualDayNumber,
         topic: content.topic,
+        dailyStory: dailyStory || null,
         contentLong: content.contentLong,
         contentMedium: content.contentMedium,
         contentShort: content.contentShort,
