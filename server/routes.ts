@@ -4,6 +4,7 @@ import { randomBytes } from "crypto";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated, isProUser, hashPassword, verifyPassword } from "./auth";
 import Stripe from "stripe";
+import { Resend } from "resend";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
@@ -14,6 +15,12 @@ if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+// Initialize Resend for email sending
+if (!process.env.RESEND_API_KEY) {
+  throw new Error('Missing required Resend secret: RESEND_API_KEY');
+}
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment
@@ -223,7 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const user = await storage.getUserByEmail(email);
       if (!user) {
         // Don't reveal if user exists for security
-        return res.json({ success: true, message: "If an account exists with that email, a password reset link has been generated." });
+        return res.json({ success: true, message: "If an account exists with that email, a password reset link has been sent." });
       }
       
       // Delete any existing reset tokens for this user
@@ -240,10 +247,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
         expiresAt,
       });
       
-      // In production, send an email here with the reset link
-      // For development/testing, log the reset link to server console
+      // Generate reset link
       const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
-      console.log(`\n🔐 Password Reset Link (DEV ONLY): ${resetLink}\n`);
+      
+      // Send password reset email via Resend
+      try {
+        await resend.emails.send({
+          from: 'MetaHers Mind Spa <help@metahers.ai>',
+          to: email,
+          subject: 'Reset Your MetaHers Password',
+          html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Your Password</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Georgia', 'Palatino', serif; background-color: #0A0A0F;">
+  <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="background-color: #0A0A0F;">
+    <tr>
+      <td style="padding: 40px 20px;">
+        <table role="presentation" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #1a0a2e 0%, #0A0A0F 100%); border-radius: 12px; border: 1px solid #8B5CF6;">
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 40px 20px; text-align: center;">
+              <h1 style="margin: 0; font-size: 32px; font-weight: 300; color: #F8F8F8; letter-spacing: 1px;">
+                MetaHers Mind Spa
+              </h1>
+              <div style="height: 2px; width: 60px; background: linear-gradient(90deg, #8B5CF6, #EC4899); margin: 20px auto;"></div>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 20px 40px;">
+              <p style="margin: 0 0 20px; font-size: 18px; color: #F8F8F8; line-height: 1.6;">
+                Hello ${user.firstName || 'there'},
+              </p>
+              <p style="margin: 0 0 20px; font-size: 16px; color: #D4D4D8; line-height: 1.6;">
+                We received a request to reset your password for your MetaHers account. Click the button below to create a new password:
+              </p>
+              
+              <!-- CTA Button -->
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
+                <tr>
+                  <td style="text-align: center;">
+                    <a href="${resetLink}" style="display: inline-block; padding: 16px 40px; background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%); color: #FFFFFF; text-decoration: none; border-radius: 8px; font-size: 16px; font-weight: 500; letter-spacing: 0.5px;">
+                      Reset Your Password
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <p style="margin: 20px 0; font-size: 14px; color: #A1A1AA; line-height: 1.6;">
+                This link will expire in 1 hour for your security.
+              </p>
+              
+              <p style="margin: 20px 0; font-size: 14px; color: #A1A1AA; line-height: 1.6;">
+                If you didn't request this password reset, you can safely ignore this email. Your password will remain unchanged.
+              </p>
+              
+              <!-- Divider -->
+              <div style="height: 1px; background: linear-gradient(90deg, transparent, #8B5CF6, transparent); margin: 30px 0;"></div>
+              
+              <p style="margin: 0; font-size: 13px; color: #71717A; line-height: 1.6;">
+                If the button doesn't work, copy and paste this link into your browser:
+              </p>
+              <p style="margin: 10px 0 0; font-size: 13px; color: #8B5CF6; word-break: break-all;">
+                ${resetLink}
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 30px 40px; text-align: center; border-top: 1px solid #27272A;">
+              <p style="margin: 0; font-size: 14px; color: #71717A; line-height: 1.6;">
+                With gratitude,<br>
+                <span style="color: #F8F8F8; font-style: italic;">The MetaHers Team</span>
+              </p>
+              <p style="margin: 15px 0 0; font-size: 12px; color: #52525B;">
+                © ${new Date().getFullYear()} MetaHers Mind Spa. All rights reserved.
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+          `,
+        });
+        
+        console.log(`✅ Password reset email sent to ${email}`);
+      } catch (emailError) {
+        console.error("Error sending password reset email:", emailError);
+        // Don't fail the request if email fails - token is still valid
+        // User can contact support if they don't receive the email
+      }
       
       res.json({ 
         success: true, 
