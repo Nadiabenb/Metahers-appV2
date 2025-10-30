@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Copy, Check, ExternalLink, Lock, ChevronLeft, ChevronRight } from "lucide-react";
+import { Sparkles, Copy, Check, ExternalLink, Lock, ChevronLeft, ChevronRight, Lightbulb, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +53,12 @@ export default function ThoughtLeadershipPage() {
   const [copiedFormat, setCopiedFormat] = useState<string | null>(null);
   const [lessonCompleted, setLessonCompleted] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // Fetch curriculum for selected post's day
+  const { data: selectedDayCurriculum } = useQuery<CurriculumDay>({
+    queryKey: ['/api/thought-leadership/curriculum', selectedPost?.dayNumber],
+    enabled: !!selectedPost?.dayNumber,
+  });
 
   // Fetch progress
   const { data: progress, isLoading: progressLoading, error: progressError } = useQuery<Progress>({
@@ -302,6 +308,19 @@ export default function ThoughtLeadershipPage() {
                 </p>
               </CardHeader>
               <CardContent>
+                {/* Practice Reflection Preview */}
+                {currentDayPost.dailyStory && (
+                  <div className="mb-6 p-5 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+                    <div className="flex items-start gap-3 mb-3">
+                      <Lightbulb className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <h3 className="font-medium text-sm text-primary">Your Practice Reflection</h3>
+                    </div>
+                    <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap italic pl-8 line-clamp-3">
+                      "{currentDayPost.dailyStory}"
+                    </p>
+                  </div>
+                )}
+
                 <Tabs defaultValue="long" className="w-full">
                   <TabsList className="grid w-full grid-cols-3">
                     <TabsTrigger value="long" data-testid="tab-substack">Substack</TabsTrigger>
@@ -399,7 +418,7 @@ export default function ThoughtLeadershipPage() {
 
         {/* Post Dialog */}
         <Dialog open={!!selectedPost} onOpenChange={() => setSelectedPost(null)}>
-          <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
             {selectedPost && (
               <>
                 <DialogHeader>
@@ -407,14 +426,81 @@ export default function ThoughtLeadershipPage() {
                     <Badge>Day {selectedPost.dayNumber}</Badge>
                     <Badge variant="outline">{selectedPost.status}</Badge>
                   </div>
-                  <DialogTitle className="font-cormorant text-2xl">{selectedPost.topic}</DialogTitle>
+                  <DialogTitle className="font-cormorant text-3xl mb-4">{selectedPost.topic}</DialogTitle>
                 </DialogHeader>
-                <Tabs defaultValue="long" className="w-full">
-                  <TabsList className="grid w-full grid-cols-3 mb-4">
+
+                {/* Practice Reflection Section */}
+                {selectedPost.dailyStory && (
+                  <div className="mb-6 p-5 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+                    <div className="flex items-start gap-3 mb-3">
+                      <Lightbulb className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                      <h3 className="font-medium text-base text-primary">Your Practice Reflection</h3>
+                    </div>
+                    <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap italic pl-8">
+                      "{selectedPost.dailyStory}"
+                    </p>
+                  </div>
+                )}
+
+                <Tabs defaultValue="reflection" className="w-full">
+                  <TabsList className="grid w-full grid-cols-5 mb-4">
+                    <TabsTrigger value="reflection">Your Insights</TabsTrigger>
+                    <TabsTrigger value="lesson">The Lesson</TabsTrigger>
                     <TabsTrigger value="long">Substack</TabsTrigger>
                     <TabsTrigger value="medium">LinkedIn</TabsTrigger>
                     <TabsTrigger value="short">Twitter</TabsTrigger>
                   </TabsList>
+
+                  <TabsContent value="reflection" className="space-y-4">
+                    {selectedPost.dailyStory ? (
+                      <div className="space-y-4">
+                        <div className="p-5 rounded-lg bg-accent/50 border border-accent-border">
+                          <h4 className="font-medium text-sm text-foreground mb-3">What You Discovered</h4>
+                          <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
+                            {selectedPost.dailyStory}
+                          </p>
+                        </div>
+                        <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
+                          <p className="text-xs text-muted-foreground">
+                            This reflection was used to generate your personalized content across all platforms. 
+                            Your authentic voice and insights are woven into each piece below.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="p-5 rounded-lg bg-accent/30 text-center">
+                        <p className="text-sm text-muted-foreground">
+                          No practice reflection saved for this day.
+                        </p>
+                      </div>
+                    )}
+                  </TabsContent>
+
+                  <TabsContent value="lesson" className="space-y-4">
+                    {selectedDayCurriculum ? (
+                      <div className="space-y-4">
+                        <div className="p-5 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+                          <div className="flex items-start gap-3 mb-3">
+                            <BookOpen className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                            <h3 className="font-cormorant text-xl text-primary">{selectedDayCurriculum.discovery.headline}</h3>
+                          </div>
+                          <p className="text-sm text-foreground/90 leading-relaxed mb-4">
+                            {selectedDayCurriculum.discovery.teaching}
+                          </p>
+                          <div className="p-3 rounded bg-accent/30 border border-accent-border">
+                            <h4 className="font-medium text-xs text-muted-foreground mb-2">Why This Matters</h4>
+                            <p className="text-xs text-foreground/80 leading-relaxed">
+                              {selectedDayCurriculum.discovery.whyItMatters}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center p-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+                      </div>
+                    )}
+                  </TabsContent>
 
                   <TabsContent value="long" className="space-y-4">
                     <div className="prose prose-sm max-w-none dark:prose-invert">
