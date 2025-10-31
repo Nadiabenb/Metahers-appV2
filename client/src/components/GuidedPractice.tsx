@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Lightbulb, Sparkles } from "lucide-react";
+import { CheckCircle2, Lightbulb, Sparkles, Edit2, RotateCcw } from "lucide-react";
 import { motion } from "framer-motion";
 import type { CurriculumDay } from "@shared/curriculum";
 
@@ -16,12 +16,23 @@ type GuidedPracticeProps = {
 
 export function GuidedPractice({ curriculumDay, onSubmit, isLoading, existingReflection }: GuidedPracticeProps) {
   const [reflection, setReflection] = useState(existingReflection || "");
+  const [isEditing, setIsEditing] = useState(false);
   const isCompleted = !!existingReflection;
 
   const handleSubmit = () => {
     if (reflection.trim()) {
       onSubmit(reflection);
+      setIsEditing(false);
     }
+  };
+
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setReflection(existingReflection || "");
+    setIsEditing(false);
   };
 
   return (
@@ -95,7 +106,7 @@ export function GuidedPractice({ curriculumDay, onSubmit, isLoading, existingRef
               onChange={(e) => setReflection(e.target.value)}
               placeholder="Take a few minutes to reflect deeply on these questions. Your answers will help generate personalized content that truly sounds like you..."
               className="min-h-[200px] text-base"
-              disabled={isCompleted}
+              disabled={isCompleted && !isEditing}
               data-testid="input-reflection"
             />
             <p className="text-xs text-muted-foreground">
@@ -125,11 +136,56 @@ export function GuidedPractice({ curriculumDay, onSubmit, isLoading, existingRef
             </Button>
           )}
 
-          {isCompleted && (
-            <div className="p-4 rounded-lg bg-primary/10 border border-primary/20">
-              <p className="text-sm text-foreground/90">
-                Your practice reflection has been saved. Your personalized content is ready below.
-              </p>
+          {isCompleted && !isEditing && (
+            <div className="flex items-center justify-between gap-4 flex-wrap">
+              <div className="p-4 rounded-lg bg-primary/10 border border-primary/20 flex-1">
+                <p className="text-sm text-foreground/90">
+                  Your practice reflection has been saved. Your personalized content is ready below.
+                </p>
+              </div>
+              <Button
+                onClick={handleEdit}
+                variant="outline"
+                size="lg"
+                className="gap-2"
+                data-testid="button-edit-reflection"
+              >
+                <Edit2 className="w-4 h-4" />
+                Edit Reflection
+              </Button>
+            </div>
+          )}
+
+          {isCompleted && isEditing && (
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button
+                onClick={handleSubmit}
+                size="lg"
+                disabled={!reflection.trim() || isLoading}
+                className="bg-primary hover:bg-primary/90"
+                data-testid="button-regenerate-content"
+              >
+                {isLoading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                    Regenerating Content...
+                  </>
+                ) : (
+                  <>
+                    <RotateCcw className="w-4 h-4 mr-2" />
+                    Save & Regenerate Content
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={handleCancel}
+                variant="outline"
+                size="lg"
+                disabled={isLoading}
+                data-testid="button-cancel-edit"
+              >
+                Cancel
+              </Button>
             </div>
           )}
         </CardContent>
