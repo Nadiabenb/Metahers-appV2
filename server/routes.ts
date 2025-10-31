@@ -2,7 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { randomBytes } from "crypto";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated, isProUser, hashPassword, verifyPassword } from "./auth";
+import { setupAuth, isAuthenticated, isProUser, isSanctuaryMember, isInnerCircleMember, isFoundersCircleMember, hashPassword, verifyPassword } from "./auth";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent } from "./aiService";
@@ -1718,6 +1718,239 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching public TL post:', error);
       res.status(500).json({ message: 'Failed to fetch post' });
+    }
+  });
+
+  // ===== MEMBERSHIP TIER ROUTES =====
+  
+  // GROUP SESSIONS (Sanctuary tier and above)
+  app.get('/api/sessions/upcoming', isSanctuaryMember, async (req: Request, res) => {
+    try {
+      const sessionType = req.query.type as string | undefined;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const sessions = await storage.getUpcomingGroupSessions(sessionType, limit);
+      res.json(sessions);
+    } catch (error) {
+      console.error('Error fetching upcoming sessions:', error);
+      res.status(500).json({ message: 'Failed to fetch sessions' });
+    }
+  });
+
+  app.get('/api/sessions/past', isSanctuaryMember, async (req: Request, res) => {
+    try {
+      const sessionType = req.query.type as string | undefined;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const sessions = await storage.getPastGroupSessions(sessionType, limit);
+      res.json(sessions);
+    } catch (error) {
+      console.error('Error fetching past sessions:', error);
+      res.status(500).json({ message: 'Failed to fetch sessions' });
+    }
+  });
+
+  app.get('/api/sessions/:id', isSanctuaryMember, async (req: Request, res) => {
+    try {
+      const { id } = req.params;
+      const session = await storage.getGroupSessionById(id);
+      
+      if (!session) {
+        return res.status(404).json({ message: 'Session not found' });
+      }
+      
+      res.json(session);
+    } catch (error) {
+      console.error('Error fetching session:', error);
+      res.status(500).json({ message: 'Failed to fetch session' });
+    }
+  });
+
+  // SESSION REGISTRATIONS
+  app.post('/api/sessions/:id/register', isSanctuaryMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { id: sessionId } = req.params;
+      
+      // Check if session exists
+      const session = await storage.getGroupSessionById(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: 'Session not found' });
+      }
+      
+      // Check if user is already registered
+      const existingRegistrations = await storage.getSessionRegistrations(sessionId);
+      const alreadyRegistered = existingRegistrations.some(r => r.userId === userId);
+      
+      if (alreadyRegistered) {
+        return res.status(400).json({ message: 'Already registered for this session' });
+      }
+      
+      // Check capacity
+      const activeRegistrations = existingRegistrations.filter(r => r.status === 'confirmed');
+      if (activeRegistrations.length >= session.maxCapacity) {
+        return res.status(400).json({ message: 'Session is full' });
+      }
+      
+      // Create registration
+      const registration = await storage.createSessionRegistration({
+        userId,
+        sessionId,
+        status: 'confirmed',
+      });
+      
+      res.json(registration);
+    } catch (error) {
+      console.error('Error registering for session:', error);
+      res.status(500).json({ message: 'Failed to register for session' });
+    }
+  });
+
+  app.delete('/api/sessions/:id/cancel', isSanctuaryMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { id: sessionId } = req.params;
+      
+      const registrations = await storage.getUserSessionRegistrations(userId);
+      const registration = registrations.find(r => r.sessionId === sessionId);
+      
+      if (!registration) {
+        return res.status(404).json({ message: 'Registration not found' });
+      }
+      
+      await storage.cancelSessionRegistration(registration.id);
+      res.json({ message: 'Registration cancelled' });
+    } catch (error) {
+      console.error('Error cancelling registration:', error);
+      res.status(500).json({ message: 'Failed to cancel registration' });
+    }
+  });
+
+  app.get('/api/sessions/my-registrations', isSanctuaryMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const status = req.query.status as string | undefined;
+      const registrations = await storage.getUserSessionRegistrations(userId, status);
+      res.json(registrations);
+    } catch (error) {
+      console.error('Error fetching registrations:', error);
+      res.status(500).json({ message: 'Failed to fetch registrations' });
+    }
+  });
+
+  // ONE-ON-ONE BOOKINGS (Inner Circle and above)
+  app.post('/api/bookings', isInnerCircleMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { scheduledDate, sessionType, notes } = req.body;
+      
+      if (!scheduledDate || !sessionType) {
+        return res.status(400).json({ message: 'Scheduled date and session type are required' });
+      }
+      
+      const booking = await storage.createOneOnOneBooking({
+        userId,
+        scheduledDate: new Date(scheduledDate),
+        bookingType: sessionType,
+        notes: notes || null,
+        status: 'pending',
+        duration: 30,
+      });
+      
+      res.json(booking);
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      res.status(500).json({ message: 'Failed to create booking' });
+    }
+  });
+
+  app.get('/api/bookings', isInnerCircleMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const status = req.query.status as string | undefined;
+      const bookings = await storage.getUserOneOnOneBookings(userId, status);
+      res.json(bookings);
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      res.status(500).json({ message: 'Failed to fetch bookings' });
+    }
+  });
+
+  app.get('/api/bookings/upcoming', isInnerCircleMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const bookings = await storage.getUpcomingOneOnOneBookings(userId);
+      res.json(bookings);
+    } catch (error) {
+      console.error('Error fetching upcoming bookings:', error);
+      res.status(500).json({ message: 'Failed to fetch bookings' });
+    }
+  });
+
+  app.patch('/api/bookings/:id', isInnerCircleMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { id } = req.params;
+      
+      const booking = await storage.getOneOnOneBookingById(id);
+      if (!booking || booking.userId !== userId) {
+        return res.status(404).json({ message: 'Booking not found' });
+      }
+      
+      const updated = await storage.updateOneOnOneBooking(id, req.body);
+      res.json(updated);
+    } catch (error) {
+      console.error('Error updating booking:', error);
+      res.status(500).json({ message: 'Failed to update booking' });
+    }
+  });
+
+  app.delete('/api/bookings/:id', isInnerCircleMember, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const { id } = req.params;
+      
+      const booking = await storage.getOneOnOneBookingById(id);
+      if (!booking || booking.userId !== userId) {
+        return res.status(404).json({ message: 'Booking not found' });
+      }
+      
+      await storage.updateOneOnOneBooking(id, { status: 'cancelled' });
+      res.json({ message: 'Booking cancelled' });
+    } catch (error) {
+      console.error('Error cancelling booking:', error);
+      res.status(500).json({ message: 'Failed to cancel booking' });
+    }
+  });
+
+  // FOUNDER INSIGHTS (Inner Circle and above)
+  app.get('/api/insights', isInnerCircleMember, async (req: Request, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 20;
+      const insights = await storage.getFounderInsights(undefined, limit);
+      res.json(insights);
+    } catch (error) {
+      console.error('Error fetching insights:', error);
+      res.status(500).json({ message: 'Failed to fetch insights' });
+    }
+  });
+
+  app.get('/api/insights/:id', isInnerCircleMember, async (req: Request, res) => {
+    try {
+      const { id } = req.params;
+      const insight = await storage.getFounderInsightById(id);
+      
+      if (!insight || !insight.isPublished) {
+        return res.status(404).json({ message: 'Insight not found' });
+      }
+      
+      // Increment view count
+      await storage.updateFounderInsight(id, {
+        viewCount: insight.viewCount + 1,
+      });
+      
+      res.json(insight);
+    } catch (error) {
+      console.error('Error fetching insight:', error);
+      res.status(500).json({ message: 'Failed to fetch insight' });
     }
   });
 
