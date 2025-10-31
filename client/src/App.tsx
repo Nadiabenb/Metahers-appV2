@@ -37,6 +37,7 @@ import AIBuilderRetreatPage from "@/pages/AIBuilderRetreatPage";
 import ThoughtLeadershipPage from "@/pages/ThoughtLeadershipPage";
 import JourneyDayPage from "@/pages/JourneyDayPage";
 import AdminQuizResultsPage from "@/pages/AdminQuizResultsPage";
+import MemberWorkspacePage from "@/pages/MemberWorkspacePage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -82,6 +83,7 @@ function Router() {
       ) : (
         <>
           <Route path="/" component={HomePage} />
+          <Route path="/workspace" component={MemberWorkspacePage} />
           <Route path="/rituals" component={RitualsPage} />
           <Route path="/rituals/:slug" component={RitualDetailPage} />
           <Route path="/journal" component={JournalPage} />
