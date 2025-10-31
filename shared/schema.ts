@@ -350,6 +350,117 @@ export const insertThoughtLeadershipProgressSchema = createInsertSchema(thoughtL
 export type InsertThoughtLeadershipProgress = z.infer<typeof insertThoughtLeadershipProgressSchema>;
 export type ThoughtLeadershipProgressDB = typeof thoughtLeadershipProgress.$inferSelect;
 
+// Mind Spa Membership - Group Sessions table (for Sanctuary tier and above)
+export const groupSessions = pgTable("group_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: varchar("title").notNull(), // "Monthly Ritual Session - January 2025"
+  description: text("description"), // Session description
+  sessionType: varchar("session_type").notNull().default("sanctuary_monthly"), // "sanctuary_monthly", "inner_circle_biweekly"
+  scheduledDate: timestamp("scheduled_date").notNull(), // When the session happens
+  duration: integer("duration").default(90).notNull(), // Duration in minutes
+  maxCapacity: integer("max_capacity").default(30).notNull(), // Max attendees
+  currentAttendees: integer("current_attendees").default(0).notNull(), // Current count
+  zoomLink: varchar("zoom_link"), // Virtual meeting link
+  meetingId: varchar("meeting_id"), // Zoom/external meeting ID
+  status: varchar("status").notNull().default("scheduled"), // "scheduled", "completed", "cancelled"
+  recordingUrl: varchar("recording_url"), // Post-session recording
+  notes: text("notes"), // Session notes/summary
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_group_session_date").on(table.scheduledDate),
+  index("idx_group_session_type").on(table.sessionType),
+  index("idx_group_session_status").on(table.status),
+]);
+
+export const insertGroupSessionSchema = createInsertSchema(groupSessions).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertGroupSession = z.infer<typeof insertGroupSessionSchema>;
+export type GroupSessionDB = typeof groupSessions.$inferSelect;
+
+// Mind Spa Membership - Session Registrations table (tracks who's attending)
+export const sessionRegistrations = pgTable("session_registrations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => groupSessions.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  status: varchar("status").notNull().default("registered"), // "registered", "attended", "no_show", "cancelled"
+  registeredAt: timestamp("registered_at").defaultNow(),
+  cancelledAt: timestamp("cancelled_at"),
+}, (table) => [
+  index("idx_session_reg_session").on(table.sessionId),
+  index("idx_session_reg_user").on(table.userId),
+]);
+
+export const insertSessionRegistrationSchema = createInsertSchema(sessionRegistrations).omit({ id: true, registeredAt: true });
+export type InsertSessionRegistration = z.infer<typeof insertSessionRegistrationSchema>;
+export type SessionRegistrationDB = typeof sessionRegistrations.$inferSelect;
+
+// Mind Spa Membership - 1:1 Bookings table (for Inner Circle quarterly and Founder's Circle monthly)
+export const oneOnOneBookings = pgTable("one_on_one_bookings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  bookingType: varchar("booking_type").notNull(), // "inner_circle_quarterly", "founders_circle_monthly", "founders_circle_retreat_day"
+  scheduledDate: timestamp("scheduled_date").notNull(),
+  duration: integer("duration").default(30).notNull(), // Duration in minutes
+  meetingLink: varchar("meeting_link"), // Zoom/Calendly link
+  status: varchar("status").notNull().default("scheduled"), // "scheduled", "completed", "cancelled", "rescheduled"
+  agenda: text("agenda"), // User-submitted agenda/topics
+  notes: text("notes"), // Post-session notes
+  followUpActions: jsonb("follow_up_actions").$type<string[]>().default(sql`'[]'::jsonb`),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_1on1_user").on(table.userId),
+  index("idx_1on1_date").on(table.scheduledDate),
+  index("idx_1on1_status").on(table.status),
+  index("idx_1on1_type").on(table.bookingType),
+]);
+
+export const insertOneOnOneBookingSchema = createInsertSchema(oneOnOneBookings).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertOneOnOneBooking = z.infer<typeof insertOneOnOneBookingSchema>;
+export type OneOnOneBookingDB = typeof oneOnOneBookings.$inferSelect;
+
+// Mind Spa Membership - Founder Insights table (exclusive content for Inner Circle and above)
+export const founderInsights = pgTable("founder_insights", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: varchar("title").notNull(),
+  content: text("content").notNull(), // Text content
+  insightType: varchar("insight_type").notNull().default("voice_note"), // "voice_note", "article", "video", "quick_tip"
+  audioUrl: varchar("audio_url"), // For voice notes
+  videoUrl: varchar("video_url"), // For video content
+  minTierRequired: varchar("min_tier_required").notNull().default("inner_circle"), // "inner_circle", "founders_circle"
+  isPublished: boolean("is_published").default(true).notNull(),
+  publishedAt: timestamp("published_at").defaultNow(),
+  viewCount: integer("view_count").default(0).notNull(),
+  likeCount: integer("like_count").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_founder_insight_type").on(table.insightType),
+  index("idx_founder_insight_tier").on(table.minTierRequired),
+  index("idx_founder_insight_published").on(table.publishedAt),
+]);
+
+export const insertFounderInsightSchema = createInsertSchema(founderInsights).omit({ id: true, createdAt: true });
+export type InsertFounderInsight = z.infer<typeof insertFounderInsightSchema>;
+export type FounderInsightDB = typeof founderInsights.$inferSelect;
+
+// Mind Spa Membership - Insight Interactions table (tracks views, likes)
+export const insightInteractions = pgTable("insight_interactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  insightId: varchar("insight_id").notNull().references(() => founderInsights.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  hasViewed: boolean("has_viewed").default(false).notNull(),
+  hasLiked: boolean("has_liked").default(false).notNull(),
+  viewedAt: timestamp("viewed_at"),
+  likedAt: timestamp("liked_at"),
+}, (table) => [
+  index("idx_insight_int_insight").on(table.insightId),
+  index("idx_insight_int_user").on(table.userId),
+]);
+
+export const insertInsightInteractionSchema = createInsertSchema(insightInteractions).omit({ id: true });
+export type InsertInsightInteraction = z.infer<typeof insertInsightInteractionSchema>;
+export type InsightInteractionDB = typeof insightInteractions.$inferSelect;
+
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
 // Structured step with rich content

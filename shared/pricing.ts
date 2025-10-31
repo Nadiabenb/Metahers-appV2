@@ -2,7 +2,7 @@
  * Pricing tiers and configuration for MetaHers Mind Spa
  */
 
-export type SubscriptionTier = 'free' | 'pro_monthly' | 'pro_annual' | 'vip_cohort' | 'executive';
+export type SubscriptionTier = 'free' | 'pro_monthly' | 'pro_annual' | 'sanctuary' | 'inner_circle' | 'founders_circle' | 'vip_cohort' | 'executive';
 
 export type PricingPlan = {
   id: SubscriptionTier;
@@ -73,6 +73,67 @@ export const PRICING_PLANS: Record<SubscriptionTier, PricingPlan> = {
       'Exclusive annual member perks',
     ],
   },
+  sanctuary: {
+    id: 'sanctuary',
+    name: 'The Sanctuary',
+    displayName: 'The Sanctuary',
+    price: 99,
+    interval: 'month',
+    stripePriceEnvVar: 'STRIPE_PRICE_ID_SANCTUARY',
+    description: 'VIP spa membership with monthly live sessions',
+    buttonText: 'Join The Sanctuary',
+    badge: 'Popular',
+    features: [
+      'Everything in Pro',
+      'Monthly group ritual sessions (90 min)',
+      'Ritual Refresh Library with new guided practices',
+      'Priority support (24hr response)',
+      'Early access to new features',
+      'Sanctuary member badge',
+    ],
+  },
+  inner_circle: {
+    id: 'inner_circle',
+    name: 'The Inner Circle',
+    displayName: 'The Inner Circle',
+    price: 399,
+    interval: 'month',
+    stripePriceEnvVar: 'STRIPE_PRICE_ID_INNER_CIRCLE',
+    description: 'Intimate access to the founder + curated community',
+    buttonText: 'Join Inner Circle',
+    highlighted: true,
+    badge: 'Most Exclusive',
+    features: [
+      'Everything in Sanctuary',
+      'Bi-weekly intimate sessions (8-12 members)',
+      'Quarterly 1:1 check-ins (30 min)',
+      'Custom ritual design assistance',
+      "Founder's exclusive insight feed",
+      'Private Inner Circle salon',
+      'First access to retreat invitations',
+    ],
+  },
+  founders_circle: {
+    id: 'founders_circle',
+    name: "Founder's Circle",
+    displayName: "Founder's Circle",
+    price: 999,
+    interval: 'month',
+    stripePriceEnvVar: 'STRIPE_PRICE_ID_FOUNDERS_CIRCLE',
+    description: 'Personal guide + advisor + connector (limited to 15 members)',
+    buttonText: "Join Founder's Circle",
+    badge: 'Ultra Premium',
+    features: [
+      'Everything in Inner Circle',
+      'Monthly 1:1 power hour with founder',
+      'Direct WhatsApp/Voxer access',
+      'Personalized AI workflows & automations',
+      'Strategic network introductions',
+      'Co-creation opportunities',
+      'Annual private retreat day',
+      'VIP status across all MetaHers events',
+    ],
+  },
   vip_cohort: {
     id: 'vip_cohort',
     name: 'VIP Cohort',
@@ -133,7 +194,19 @@ export function isPaidTier(tier: SubscriptionTier): boolean {
 }
 
 export function isProTier(tier: SubscriptionTier): boolean {
-  return tier === 'pro_monthly' || tier === 'pro_annual' || tier === 'vip_cohort' || tier === 'executive';
+  return tier === 'pro_monthly' || tier === 'pro_annual' || tier === 'sanctuary' || tier === 'inner_circle' || tier === 'founders_circle' || tier === 'vip_cohort' || tier === 'executive';
+}
+
+export function isSanctuaryTier(tier: SubscriptionTier): boolean {
+  return tier === 'sanctuary' || tier === 'inner_circle' || tier === 'founders_circle';
+}
+
+export function isInnerCircleTier(tier: SubscriptionTier): boolean {
+  return tier === 'inner_circle' || tier === 'founders_circle';
+}
+
+export function isFoundersCircleTier(tier: SubscriptionTier): boolean {
+  return tier === 'founders_circle';
 }
 
 export function formatPrice(price: number, interval: string): string {
