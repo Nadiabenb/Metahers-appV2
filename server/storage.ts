@@ -13,6 +13,11 @@ import {
   cohortCapacity,
   thoughtLeadershipPosts,
   thoughtLeadershipProgress,
+  groupSessions,
+  sessionRegistrations,
+  oneOnOneBookings,
+  founderInsights,
+  insightInteractions,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -41,6 +46,16 @@ import {
   type InsertThoughtLeadershipPost,
   type ThoughtLeadershipProgressDB,
   type InsertThoughtLeadershipProgress,
+  type GroupSessionDB,
+  type InsertGroupSession,
+  type SessionRegistrationDB,
+  type InsertSessionRegistration,
+  type OneOnOneBookingDB,
+  type InsertOneOnOneBooking,
+  type FounderInsightDB,
+  type InsertFounderInsight,
+  type InsightInteractionDB,
+  type InsertInsightInteraction,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -121,6 +136,44 @@ export interface IStorage {
   getThoughtLeadershipProgress(userId: string): Promise<ThoughtLeadershipProgressDB | undefined>;
   createThoughtLeadershipProgress(progress: InsertThoughtLeadershipProgress): Promise<ThoughtLeadershipProgressDB>;
   updateThoughtLeadershipProgress(userId: string, updates: Partial<ThoughtLeadershipProgressDB>): Promise<ThoughtLeadershipProgressDB>;
+
+  // Mind Spa Membership - Group Sessions operations
+  createGroupSession(session: InsertGroupSession): Promise<GroupSessionDB>;
+  getGroupSessionById(id: string): Promise<GroupSessionDB | undefined>;
+  getUpcomingGroupSessions(sessionType?: string, limit?: number): Promise<GroupSessionDB[]>;
+  getPastGroupSessions(sessionType?: string, limit?: number): Promise<GroupSessionDB[]>;
+  updateGroupSession(id: string, updates: Partial<GroupSessionDB>): Promise<GroupSessionDB>;
+  incrementSessionAttendees(id: string): Promise<void>;
+  decrementSessionAttendees(id: string): Promise<void>;
+
+  // Mind Spa Membership - Session Registrations operations
+  createSessionRegistration(registration: InsertSessionRegistration): Promise<SessionRegistrationDB>;
+  getSessionRegistration(sessionId: string, userId: string): Promise<SessionRegistrationDB | undefined>;
+  getUserSessionRegistrations(userId: string, status?: string): Promise<SessionRegistrationDB[]>;
+  getSessionRegistrations(sessionId: string): Promise<SessionRegistrationDB[]>;
+  updateSessionRegistration(id: string, updates: Partial<SessionRegistrationDB>): Promise<SessionRegistrationDB>;
+  cancelSessionRegistration(id: string): Promise<void>;
+
+  // Mind Spa Membership - 1:1 Bookings operations
+  createOneOnOneBooking(booking: InsertOneOnOneBooking): Promise<OneOnOneBookingDB>;
+  getOneOnOneBookingById(id: string): Promise<OneOnOneBookingDB | undefined>;
+  getUserOneOnOneBookings(userId: string, status?: string): Promise<OneOnOneBookingDB[]>;
+  getUpcomingOneOnOneBookings(userId?: string): Promise<OneOnOneBookingDB[]>;
+  updateOneOnOneBooking(id: string, updates: Partial<OneOnOneBookingDB>): Promise<OneOnOneBookingDB>;
+  cancelOneOnOneBooking(id: string): Promise<void>;
+
+  // Mind Spa Membership - Founder Insights operations
+  createFounderInsight(insight: InsertFounderInsight): Promise<FounderInsightDB>;
+  getFounderInsightById(id: string): Promise<FounderInsightDB | undefined>;
+  getFounderInsights(minTierRequired?: string, limit?: number): Promise<FounderInsightDB[]>;
+  updateFounderInsight(id: string, updates: Partial<FounderInsightDB>): Promise<FounderInsightDB>;
+  deleteFounderInsight(id: string): Promise<void>;
+
+  // Mind Spa Membership - Insight Interactions operations
+  createInsightInteraction(interaction: InsertInsightInteraction): Promise<InsightInteractionDB>;
+  getInsightInteraction(insightId: string, userId: string): Promise<InsightInteractionDB | undefined>;
+  markInsightAsViewed(insightId: string, userId: string): Promise<void>;
+  toggleInsightLike(insightId: string, userId: string): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -744,6 +797,9 @@ export class DatabaseStorage implements IStorage {
       .values({
         ...progressData,
         completedDays: sql`${JSON.stringify(progressData.completedDays || [])}::jsonb`,
+        lessonsCompleted: sql`${JSON.stringify(progressData.lessonsCompleted || [])}::jsonb`,
+        practicesSubmitted: sql`${JSON.stringify(progressData.practicesSubmitted || [])}::jsonb`,
+        practiceReflections: sql`${JSON.stringify(progressData.practiceReflections || {})}::jsonb`,
       })
       .returning();
     return progress;
@@ -756,6 +812,357 @@ export class DatabaseStorage implements IStorage {
       .where(eq(thoughtLeadershipProgress.userId, userId))
       .returning();
     return updated;
+  }
+
+  // Mind Spa Membership - Group Sessions operations
+  async createGroupSession(sessionData: InsertGroupSession): Promise<GroupSessionDB> {
+    const [session] = await db
+      .insert(groupSessions)
+      .values(sessionData)
+      .returning();
+    return session;
+  }
+
+  async getGroupSessionById(id: string): Promise<GroupSessionDB | undefined> {
+    const [session] = await db
+      .select()
+      .from(groupSessions)
+      .where(eq(groupSessions.id, id));
+    return session;
+  }
+
+  async getUpcomingGroupSessions(sessionType?: string, limit = 20): Promise<GroupSessionDB[]> {
+    const now = new Date();
+    const conditions = [sql`${groupSessions.scheduledDate} > ${now}`];
+    
+    if (sessionType) {
+      conditions.push(eq(groupSessions.sessionType, sessionType));
+    }
+    
+    return await db
+      .select()
+      .from(groupSessions)
+      .where(and(...conditions))
+      .orderBy(groupSessions.scheduledDate)
+      .limit(limit);
+  }
+
+  async getPastGroupSessions(sessionType?: string, limit = 20): Promise<GroupSessionDB[]> {
+    const now = new Date();
+    const conditions = [sql`${groupSessions.scheduledDate} <= ${now}`];
+    
+    if (sessionType) {
+      conditions.push(eq(groupSessions.sessionType, sessionType));
+    }
+    
+    return await db
+      .select()
+      .from(groupSessions)
+      .where(and(...conditions))
+      .orderBy(desc(groupSessions.scheduledDate))
+      .limit(limit);
+  }
+
+  async updateGroupSession(id: string, updates: Partial<GroupSessionDB>): Promise<GroupSessionDB> {
+    const [updated] = await db
+      .update(groupSessions)
+      .set(updates)
+      .where(eq(groupSessions.id, id))
+      .returning();
+    return updated;
+  }
+
+  async incrementSessionAttendees(id: string): Promise<void> {
+    await db
+      .update(groupSessions)
+      .set({
+        currentAttendees: sql`${groupSessions.currentAttendees} + 1`,
+        updatedAt: new Date(),
+      })
+      .where(eq(groupSessions.id, id));
+  }
+
+  async decrementSessionAttendees(id: string): Promise<void> {
+    await db
+      .update(groupSessions)
+      .set({
+        currentAttendees: sql`GREATEST(${groupSessions.currentAttendees} - 1, 0)`,
+        updatedAt: new Date(),
+      })
+      .where(eq(groupSessions.id, id));
+  }
+
+  // Mind Spa Membership - Session Registrations operations
+  async createSessionRegistration(registrationData: InsertSessionRegistration): Promise<SessionRegistrationDB> {
+    const [registration] = await db
+      .insert(sessionRegistrations)
+      .values(registrationData)
+      .returning();
+    return registration;
+  }
+
+  async getSessionRegistration(sessionId: string, userId: string): Promise<SessionRegistrationDB | undefined> {
+    const [registration] = await db
+      .select()
+      .from(sessionRegistrations)
+      .where(and(
+        eq(sessionRegistrations.sessionId, sessionId),
+        eq(sessionRegistrations.userId, userId)
+      ));
+    return registration;
+  }
+
+  async getUserSessionRegistrations(userId: string, status?: string): Promise<SessionRegistrationDB[]> {
+    const conditions = [eq(sessionRegistrations.userId, userId)];
+    
+    if (status) {
+      conditions.push(eq(sessionRegistrations.status, status));
+    }
+    
+    return await db
+      .select()
+      .from(sessionRegistrations)
+      .where(and(...conditions))
+      .orderBy(desc(sessionRegistrations.registeredAt));
+  }
+
+  async getSessionRegistrations(sessionId: string): Promise<SessionRegistrationDB[]> {
+    return await db
+      .select()
+      .from(sessionRegistrations)
+      .where(eq(sessionRegistrations.sessionId, sessionId))
+      .orderBy(sessionRegistrations.registeredAt);
+  }
+
+  async updateSessionRegistration(id: string, updates: Partial<SessionRegistrationDB>): Promise<SessionRegistrationDB> {
+    const [updated] = await db
+      .update(sessionRegistrations)
+      .set(updates)
+      .where(eq(sessionRegistrations.id, id))
+      .returning();
+    return updated;
+  }
+
+  async cancelSessionRegistration(id: string): Promise<void> {
+    await db
+      .update(sessionRegistrations)
+      .set({
+        status: 'cancelled',
+        cancelledAt: new Date(),
+      })
+      .where(eq(sessionRegistrations.id, id));
+  }
+
+  // Mind Spa Membership - 1:1 Bookings operations
+  async createOneOnOneBooking(bookingData: InsertOneOnOneBooking): Promise<OneOnOneBookingDB> {
+    const [booking] = await db
+      .insert(oneOnOneBookings)
+      .values({
+        ...bookingData,
+        followUpActions: sql`${JSON.stringify(bookingData.followUpActions || [])}::jsonb`,
+      })
+      .returning();
+    return booking;
+  }
+
+  async getOneOnOneBookingById(id: string): Promise<OneOnOneBookingDB | undefined> {
+    const [booking] = await db
+      .select()
+      .from(oneOnOneBookings)
+      .where(eq(oneOnOneBookings.id, id));
+    return booking;
+  }
+
+  async getUserOneOnOneBookings(userId: string, status?: string): Promise<OneOnOneBookingDB[]> {
+    const conditions = [eq(oneOnOneBookings.userId, userId)];
+    
+    if (status) {
+      conditions.push(eq(oneOnOneBookings.status, status));
+    }
+    
+    return await db
+      .select()
+      .from(oneOnOneBookings)
+      .where(and(...conditions))
+      .orderBy(desc(oneOnOneBookings.scheduledDate));
+  }
+
+  async getUpcomingOneOnOneBookings(userId?: string): Promise<OneOnOneBookingDB[]> {
+    const now = new Date();
+    const conditions = [sql`${oneOnOneBookings.scheduledDate} > ${now}`];
+    
+    if (userId) {
+      conditions.push(eq(oneOnOneBookings.userId, userId));
+    }
+    
+    return await db
+      .select()
+      .from(oneOnOneBookings)
+      .where(and(...conditions))
+      .orderBy(oneOnOneBookings.scheduledDate);
+  }
+
+  async updateOneOnOneBooking(id: string, updates: Partial<OneOnOneBookingDB>): Promise<OneOnOneBookingDB> {
+    const [updated] = await db
+      .update(oneOnOneBookings)
+      .set(updates)
+      .where(eq(oneOnOneBookings.id, id))
+      .returning();
+    return updated;
+  }
+
+  async cancelOneOnOneBooking(id: string): Promise<void> {
+    await db
+      .update(oneOnOneBookings)
+      .set({
+        status: 'cancelled',
+        updatedAt: new Date(),
+      })
+      .where(eq(oneOnOneBookings.id, id));
+  }
+
+  // Mind Spa Membership - Founder Insights operations
+  async createFounderInsight(insightData: InsertFounderInsight): Promise<FounderInsightDB> {
+    const [insight] = await db
+      .insert(founderInsights)
+      .values(insightData)
+      .returning();
+    return insight;
+  }
+
+  async getFounderInsightById(id: string): Promise<FounderInsightDB | undefined> {
+    const [insight] = await db
+      .select()
+      .from(founderInsights)
+      .where(eq(founderInsights.id, id));
+    return insight;
+  }
+
+  async getFounderInsights(minTierRequired?: string, limit = 20): Promise<FounderInsightDB[]> {
+    const conditions = [eq(founderInsights.isPublished, true)];
+    
+    if (minTierRequired) {
+      conditions.push(eq(founderInsights.minTierRequired, minTierRequired));
+    }
+    
+    return await db
+      .select()
+      .from(founderInsights)
+      .where(and(...conditions))
+      .orderBy(desc(founderInsights.publishedAt))
+      .limit(limit);
+  }
+
+  async updateFounderInsight(id: string, updates: Partial<FounderInsightDB>): Promise<FounderInsightDB> {
+    const [updated] = await db
+      .update(founderInsights)
+      .set(updates)
+      .where(eq(founderInsights.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteFounderInsight(id: string): Promise<void> {
+    await db
+      .delete(founderInsights)
+      .where(eq(founderInsights.id, id));
+  }
+
+  // Mind Spa Membership - Insight Interactions operations
+  async createInsightInteraction(interactionData: InsertInsightInteraction): Promise<InsightInteractionDB> {
+    const [interaction] = await db
+      .insert(insightInteractions)
+      .values(interactionData)
+      .returning();
+    return interaction;
+  }
+
+  async getInsightInteraction(insightId: string, userId: string): Promise<InsightInteractionDB | undefined> {
+    const [interaction] = await db
+      .select()
+      .from(insightInteractions)
+      .where(and(
+        eq(insightInteractions.insightId, insightId),
+        eq(insightInteractions.userId, userId)
+      ));
+    return interaction;
+  }
+
+  async markInsightAsViewed(insightId: string, userId: string): Promise<void> {
+    const existing = await this.getInsightInteraction(insightId, userId);
+    
+    if (existing) {
+      await db
+        .update(insightInteractions)
+        .set({
+          hasViewed: true,
+          viewedAt: new Date(),
+        })
+        .where(eq(insightInteractions.id, existing.id));
+    } else {
+      await db
+        .insert(insightInteractions)
+        .values({
+          insightId,
+          userId,
+          hasViewed: true,
+          viewedAt: new Date(),
+        });
+    }
+    
+    // Increment view count on the insight
+    await db
+      .update(founderInsights)
+      .set({
+        viewCount: sql`${founderInsights.viewCount} + 1`,
+      })
+      .where(eq(founderInsights.id, insightId));
+  }
+
+  async toggleInsightLike(insightId: string, userId: string): Promise<boolean> {
+    const existing = await this.getInsightInteraction(insightId, userId);
+    
+    if (existing) {
+      const newLikedState = !existing.hasLiked;
+      await db
+        .update(insightInteractions)
+        .set({
+          hasLiked: newLikedState,
+          likedAt: newLikedState ? new Date() : null,
+        })
+        .where(eq(insightInteractions.id, existing.id));
+      
+      // Update like count
+      await db
+        .update(founderInsights)
+        .set({
+          likeCount: newLikedState 
+            ? sql`${founderInsights.likeCount} + 1`
+            : sql`GREATEST(${founderInsights.likeCount} - 1, 0)`,
+        })
+        .where(eq(founderInsights.id, insightId));
+      
+      return newLikedState;
+    } else {
+      await db
+        .insert(insightInteractions)
+        .values({
+          insightId,
+          userId,
+          hasLiked: true,
+          likedAt: new Date(),
+        });
+      
+      // Increment like count
+      await db
+        .update(founderInsights)
+        .set({
+          likeCount: sql`${founderInsights.likeCount} + 1`,
+        })
+        .where(eq(founderInsights.id, insightId));
+      
+      return true;
+    }
   }
 }
 
