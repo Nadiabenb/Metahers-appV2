@@ -1404,11 +1404,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Generate new content for current day
+  // Generate new content for current day (or regenerate for specific day)
   app.post('/api/thought-leadership/generate', isProUser, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
-      const { practiceReflection } = req.body;
+      const { practiceReflection, dayNumber: requestedDay } = req.body;
 
       if (!practiceReflection || !practiceReflection.trim()) {
         return res.status(400).json({ message: 'Practice reflection is required' });
@@ -1420,8 +1420,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Please complete brand onboarding first' });
       }
 
-      // Get curriculum for current day
-      const curriculumDay = CURRICULUM.find(d => d.day === progress.currentDay);
+      // Use requested day number or default to current day
+      const targetDay = requestedDay || progress.currentDay;
+
+      // Validate day number
+      if (targetDay < 1 || targetDay > 30) {
+        return res.status(400).json({ message: 'Invalid day number. Must be between 1 and 30.' });
+      }
+
+      // Get curriculum for target day
+      const curriculumDay = CURRICULUM.find(d => d.day === targetDay);
       if (!curriculumDay) {
         return res.status(400).json({ message: 'Invalid day number' });
       }
@@ -1440,7 +1448,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       };
 
       const content = await generateThoughtLeadershipContent(
-        progress.currentDay,
+        targetDay,
         brandProfile,
         practiceReflection,
         curriculumDay.contentFocus.topic,
@@ -1448,23 +1456,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
         previousTopics
       );
 
-      const actualDayNumber = progress.currentDay;
+      const actualDayNumber = targetDay;
+      const isRegenerating = !!requestedDay; // If dayNumber is provided, it's a regeneration request
 
-      // Save as draft with practice reflection
-      const post = await storage.createThoughtLeadershipPost({
-        userId,
-        dayNumber: actualDayNumber,
-        topic: content.topic,
-        dailyStory: practiceReflection, // Store practice reflection in dailyStory field for now
-        contentLong: content.contentLong,
-        contentMedium: content.contentMedium,
-        contentShort: content.contentShort,
-        status: 'draft',
-        publishedToMetaHers: false,
-        publishedToExternal: false,
-        externalPlatforms: [],
-        isPublic: false,
-      });
+      // Check if post already exists for this day
+      const existingPosts = await storage.getThoughtLeadershipPostsByUser(userId, 100);
+      const existingPost = existingPosts.find(p => p.dayNumber === actualDayNumber);
+
+      let post;
+      if (existingPost) {
+        // Update existing post (whether current day or past day)
+        post = await storage.updateThoughtLeadershipPost(existingPost.id, {
+          topic: content.topic,
+          dailyStory: practiceReflection,
+          contentLong: content.contentLong,
+          contentMedium: content.contentMedium,
+          contentShort: content.contentShort,
+          updatedAt: new Date(),
+        });
+      } else {
+        // Create new post only if none exists for this day
+        post = await storage.createThoughtLeadershipPost({
+          userId,
+          dayNumber: actualDayNumber,
+          topic: content.topic,
+          dailyStory: practiceReflection,
+          contentLong: content.contentLong,
+          contentMedium: content.contentMedium,
+          contentShort: content.contentShort,
+          status: 'draft',
+          publishedToMetaHers: false,
+          publishedToExternal: false,
+          externalPlatforms: [],
+          isPublic: false,
+        });
+      }
 
       // Update progress - mark day as completed, practice submitted, and advance
       if (progress) {
@@ -1477,37 +1503,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const today = new Date().toISOString().split('T')[0];
         const completedDays = [...progress.completedDays, actualDayNumber].filter((v, i, a) => a.indexOf(v) === i).sort((a, b) => a - b);
         
-        // Calculate streak
-        let newStreak = 1;
-        if (progress.lastActivityDate) {
-          const lastDate = new Date(progress.lastActivityDate);
-          const todayDate = new Date(today);
-          const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
-          
-          if (daysDiff === 1) {
-            newStreak = progress.currentStreak + 1;
-          } else if (daysDiff > 1) {
-            newStreak = 1; // Streak broken
-          } else {
-            newStreak = progress.currentStreak || 1; // Same day
-          }
-        }
-
-        const nextDay = Math.min(actualDayNumber + 1, 30);
-
-        await storage.updateThoughtLeadershipProgress(userId, {
-          currentDay: nextDay,
+        // Only update streak and advance day if this is a new completion (not regenerating)
+        const progressUpdates: any = {
           completedDays,
           practicesSubmitted,
           practiceReflections,
-          currentStreak: newStreak,
-          longestStreak: Math.max(newStreak, progress.longestStreak),
-          totalPostsGenerated: progress.totalPostsGenerated + 1,
-          lastActivityDate: today,
-          journeyStatus: completedDays.length >= 30 ? 'completed' : 'active',
-          completedAt: completedDays.length >= 30 ? new Date() : undefined,
           updatedAt: new Date(),
-        });
+        };
+
+        // Only advance progress if this is the current day AND we're creating a new post
+        const shouldAdvance = actualDayNumber === progress.currentDay && !existingPost;
+
+        if (shouldAdvance) {
+          // Calculate streak
+          let newStreak = 1;
+          if (progress.lastActivityDate) {
+            const lastDate = new Date(progress.lastActivityDate);
+            const todayDate = new Date(today);
+            const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
+            
+            if (daysDiff === 1) {
+              newStreak = progress.currentStreak + 1;
+            } else if (daysDiff > 1) {
+              newStreak = 1; // Streak broken
+            } else {
+              newStreak = progress.currentStreak || 1; // Same day
+            }
+          }
+
+          const nextDay = Math.min(actualDayNumber + 1, 30);
+
+          progressUpdates.currentDay = nextDay;
+          progressUpdates.currentStreak = newStreak;
+          progressUpdates.longestStreak = Math.max(newStreak, progress.longestStreak);
+          progressUpdates.totalPostsGenerated = progress.totalPostsGenerated + 1;
+          progressUpdates.lastActivityDate = today;
+          progressUpdates.journeyStatus = completedDays.length >= 30 ? 'completed' : 'active';
+          progressUpdates.completedAt = completedDays.length >= 30 ? new Date() : undefined;
+        }
+
+        await storage.updateThoughtLeadershipProgress(userId, progressUpdates);
       }
 
       res.json(post);

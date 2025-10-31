@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +18,12 @@ export function GuidedPractice({ curriculumDay, onSubmit, isLoading, existingRef
   const [reflection, setReflection] = useState(existingReflection || "");
   const [isEditing, setIsEditing] = useState(false);
   const isCompleted = !!existingReflection;
+
+  // Sync local state when existingReflection or curriculumDay changes
+  useEffect(() => {
+    setReflection(existingReflection || "");
+    setIsEditing(false);
+  }, [existingReflection, curriculumDay.day]);
 
   const handleSubmit = () => {
     if (reflection.trim()) {

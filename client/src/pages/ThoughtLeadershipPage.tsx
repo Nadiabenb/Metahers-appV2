@@ -90,19 +90,21 @@ export default function ThoughtLeadershipPage() {
     },
   });
 
-  // Generate content mutation (with practice reflection)
+  // Generate content mutation (with practice reflection and optional day number)
   const generateMutation = useMutation({
-    mutationFn: async (practiceReflection: string) => {
+    mutationFn: async ({ practiceReflection, dayNumber }: { practiceReflection: string; dayNumber?: number }) => {
       return apiRequest('POST', '/api/thought-leadership/generate', {
         practiceReflection,
+        dayNumber,
       });
     },
-    onSuccess: () => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['/api/thought-leadership/posts'] });
       queryClient.invalidateQueries({ queryKey: ['/api/thought-leadership/progress'] });
+      const targetDay = variables.dayNumber || progress?.currentDay || 1;
       toast({
-        title: "Content Generated!",
-        description: `Your Day ${progress?.currentDay || 1} content is ready below.`,
+        title: variables.dayNumber ? "Content Regenerated!" : "Content Generated!",
+        description: `Your Day ${targetDay} content is ready below.`,
       });
       setTimeout(() => {
         contentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -284,7 +286,16 @@ export default function ThoughtLeadershipPage() {
         {lessonCompleted && !isPracticeSubmitted && (
           <GuidedPractice
             curriculumDay={curriculumDay}
-            onSubmit={(reflection) => generateMutation.mutate(reflection)}
+            onSubmit={(reflection) => {
+              // Only pass dayNumber if regenerating (existingReflection exists)
+              const payload: { practiceReflection: string; dayNumber?: number } = {
+                practiceReflection: reflection
+              };
+              if (existingReflection) {
+                payload.dayNumber = progress.currentDay;
+              }
+              generateMutation.mutate(payload);
+            }}
             isLoading={generateMutation.isPending}
             existingReflection={existingReflection}
           />
@@ -460,18 +471,23 @@ export default function ThoughtLeadershipPage() {
                   </TabsList>
 
                   <TabsContent value="reflection" className="space-y-4">
-                    {selectedPost.dailyStory ? (
+                    {selectedPost.dailyStory && selectedDayCurriculum ? (
                       <div className="space-y-4">
-                        <div className="p-5 rounded-lg bg-accent/50 border border-accent-border">
-                          <h4 className="font-medium text-sm text-foreground mb-3">What You Discovered</h4>
-                          <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
-                            {selectedPost.dailyStory}
-                          </p>
-                        </div>
+                        <GuidedPractice
+                          curriculumDay={selectedDayCurriculum}
+                          onSubmit={(reflection) => {
+                            generateMutation.mutate({ 
+                              practiceReflection: reflection,
+                              dayNumber: selectedPost.dayNumber 
+                            });
+                          }}
+                          isLoading={generateMutation.isPending}
+                          existingReflection={selectedPost.dailyStory}
+                        />
                         <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
                           <p className="text-xs text-muted-foreground">
-                            This reflection was used to generate your personalized content across all platforms. 
-                            Your authentic voice and insights are woven into each piece below.
+                            Your reflection was used to generate personalized content across all platforms. 
+                            Edit your reflection above to regenerate content with your updated insights.
                           </p>
                         </div>
                       </div>
