@@ -46,7 +46,13 @@ All user and application data, including `users`, `ritual_progress`, `journal_en
 - **30-Day Thought Leadership Journey** (Pro-Only): AI-powered content generation feature helping users build authority through consistent daily posting. Generates 30 days of content in 3 formats (Substack long-form 800-1200 words, LinkedIn medium 300-400 words, Twitter short 280 chars). Includes gamification via streak tracking, 30-day calendar visualization, and progress stats. Routes protected with `isProUser` middleware on backend and Pro-check upsell on frontend. Journey progression automatically advances currentDay, updates completedDays array, and calculates streaks (resets if >1 day gap). Posts can be published to MetaHers Insights feed (future public feature) or marked as published externally.
 - **Testimonials System**: A reusable component for social proof.
 - **Quiz Conversion Optimization**: Improved quiz funnel to guide users to signup and unlock rituals.
-- **SEO Foundation**: Implemented `robots.txt`, `sitemap.xml`, and dynamic meta tags for major pages.
+- **Comprehensive SEO Infrastructure**: 
+  - **30 Individual Journey Pages**: Created dedicated SEO-optimized pages for each day of the 30-day thought leadership journey (`/journey/day-1` through `/journey/day-30`) with unique meta tags, descriptions, and Course schema markup targeting specific keywords like "thought leadership day 1", "personal branding foundation", etc.
+  - **8 High-Value Blog Articles**: Added three 2,500+ word SEO-optimized blog posts targeting "women in AI training", "personal branding for women in tech", and "women in Web3 careers", plus five existing articles on AI learning, coaching, and productivity.
+  - **Structured Data (Schema.org)**: Implemented JSON-LD schema markup across the site - Article schema for blog posts, Course schema for journey pages, and Organization schema for the homepage. The enhanced SEO component manages schema injection/removal during SPA navigation to prevent stale data.
+  - **Optimized Meta Tags**: Enhanced all major pages (Landing, Thought Leadership, Blog, Journey) with targeted keywords, unique titles, and descriptions optimized for organic search visibility.
+  - **Comprehensive Sitemap**: Updated `sitemap.xml` to include 30 journey pages + 8 blog articles (50+ indexed pages total) for Google discovery and crawling.
+  - **Rich Snippets Ready**: All structured data configured for Google rich snippets including course ratings, article authors, and organization details.
 - **MetaHers Daily**: A public news feed at `/daily` featuring bite-sized tech news with category filtering and sharing capabilities, pulling live RSS feeds.
 - **Conversion Tracking**: Comprehensive GA4 tracking for page views, signups (multi-tier attribution), quiz events, and CTA clicks.
 - **Dynamic Cohort Capacity**: Real-time display of spots remaining for VIP and Executive tiers, based on database records.
