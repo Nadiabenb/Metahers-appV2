@@ -223,8 +223,10 @@ export default function ThoughtLeadershipPage() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="30-Day Brand Authority Journey - MetaHers"
-        description="Transform your online presence through guided daily lessons and AI-powered content creation"
+        title="30-Day Thought Leadership Journey for Women in Tech - MetaHers"
+        description="Build your personal brand and online authority with our 30-day guided journey. AI-powered content creation for LinkedIn, Twitter, and Substack. Designed for women in AI, Web3, and tech."
+        keywords="30-day thought leadership, personal branding women tech, thought leadership training, LinkedIn personal brand, content creation women, AI content strategy, women in tech branding, online authority building"
+        url="https://metahers.ai/thought-leadership"
       />
 
       <div className="max-w-5xl mx-auto py-12 px-6">

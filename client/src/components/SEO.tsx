@@ -7,6 +7,7 @@ interface SEOProps {
   type?: "website" | "article";
   url?: string;
   keywords?: string;
+  schema?: Record<string, any>;
 }
 
 export function SEO({ 
@@ -15,7 +16,8 @@ export function SEO({
   image = "/og-image.png",
   type = "website",
   url,
-  keywords
+  keywords,
+  schema
 }: SEOProps) {
   useEffect(() => {
     const fullTitle = `${title} | MetaHers Mind Spa`;
@@ -54,7 +56,23 @@ export function SEO({
     updateMetaTag("twitter:description", description);
     updateMetaTag("twitter:image", imageUrl);
     
-  }, [title, description, image, type, url, keywords]);
+    const schemaScript = document.getElementById("schema-org") as HTMLScriptElement;
+    
+    if (schema) {
+      if (!schemaScript) {
+        const newScript = document.createElement("script");
+        newScript.id = "schema-org";
+        newScript.type = "application/ld+json";
+        newScript.textContent = JSON.stringify(schema);
+        document.head.appendChild(newScript);
+      } else {
+        schemaScript.textContent = JSON.stringify(schema);
+      }
+    } else if (schemaScript) {
+      schemaScript.remove();
+    }
+    
+  }, [title, description, image, type, url, keywords, schema]);
 
   return null;
 }

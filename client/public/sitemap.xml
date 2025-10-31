@@ -2,83 +2,299 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Homepage -->
   <url>
-    <loc>https://metahers.replit.app/</loc>
+    <loc>https://metahers.ai/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- Quiz/Discovery -->
   <url>
-    <loc>https://metahers.replit.app/discover</loc>
+    <loc>https://metahers.ai/discover</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Rituals Hub -->
   <url>
-    <loc>https://metahers.replit.app/rituals</loc>
+    <loc>https://metahers.ai/rituals</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Individual Rituals -->
   <url>
-    <loc>https://metahers.replit.app/rituals/ai-glow-up-facial</loc>
+    <loc>https://metahers.ai/rituals/ai-glow-up-facial</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://metahers.replit.app/rituals/blockchain-detox</loc>
+    <loc>https://metahers.ai/rituals/blockchain-detox</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://metahers.replit.app/rituals/crypto-confidence-boost</loc>
+    <loc>https://metahers.ai/rituals/crypto-confidence-boost</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://metahers.replit.app/rituals/nft-radiance-treatment</loc>
+    <loc>https://metahers.ai/rituals/nft-radiance-treatment</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://metahers.replit.app/rituals/metaverse-meditation</loc>
+    <loc>https://metahers.ai/rituals/metaverse-meditation</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <!-- Blog -->
   <url>
-    <loc>https://metahers.replit.app/blog</loc>
+    <loc>https://metahers.ai/blog</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
+  <!-- High-SEO Blog Articles -->
+  <url>
+    <loc>https://metahers.ai/blog/ai-training-women-beginners-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/blog/personal-branding-women-tech-30-day-guide</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/blog/women-web3-careers-complete-roadmap</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/blog/ai-agents-women-workforce</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/blog/drop-001-ritual-bags-unveiled</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/blog/ai-prompts-women-boss-moves</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/blog/web3-luxury-digital-ownership</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/blog/web3-location-independent-empire</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  
+  <!-- 30-Day Journey Pages (High SEO Value) -->
+  <url>
+    <loc>https://metahers.ai/journey/day-1</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-2</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-3</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-4</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-5</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-6</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-7</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-8</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-9</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-10</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-11</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-12</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-13</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-14</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-15</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-16</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-17</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-18</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-19</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-20</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-21</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-22</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-23</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-24</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-25</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-26</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-27</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-28</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-29</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/journey/day-30</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Thought Leadership Hub -->
+  <url>
+    <loc>https://metahers.ai/thought-leadership</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  
+  <!-- MetaHers Daily News -->
+  <url>
+    <loc>https://metahers.ai/daily</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+  </url>
+  
   <!-- Shop -->
   <url>
-    <loc>https://metahers.replit.app/shop</loc>
+    <loc>https://metahers.ai/shop</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
-  <!-- Journal -->
+  <!-- Pricing Tiers / Landing Pages -->
   <url>
-    <loc>https://metahers.replit.app/journal</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
+    <loc>https://metahers.ai/vip-cohort</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
-  
-  <!-- About/Features -->
   <url>
-    <loc>https://metahers.replit.app/achievements</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://metahers.ai/executive</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/ai-builder</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
   
   <!-- Auth Pages (lower priority) -->
   <url>
-    <loc>https://metahers.replit.app/auth</loc>
+    <loc>https://metahers.ai/signup</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://metahers.ai/login</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

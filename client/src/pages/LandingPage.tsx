@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
+import { SEO } from "@/components/SEO";
 import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
@@ -23,8 +24,27 @@ export default function LandingPage() {
     window.location.href = "/blog";
   };
 
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "MetaHers Mind Spa",
+    "description": "AI and Web3 education platform designed for women, offering guided learning journeys, personal branding courses, and thought leadership training.",
+    "url": "https://metahers.ai",
+    "logo": "https://metahers.ai/icon-512.png",
+    "sameAs": [
+      "https://twitter.com/metahers"
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="MetaHers Mind Spa - AI & Web3 Education for Women"
+        description="Learn AI and Web3 through a luxury spa-inspired experience designed for women in tech. 30-day thought leadership journeys, AI training, personal branding courses, and expert coaching."
+        keywords="AI training for women, Web3 education women, personal branding women tech, women in AI, women in blockchain, thought leadership training, AI learning platform, Web3 careers women"
+        url="https://metahers.ai"
+        schema={schema}
+      />
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <OptimizedImage
           src={heroImage}

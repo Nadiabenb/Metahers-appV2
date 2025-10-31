@@ -52,8 +52,42 @@ function ArticleContent({ article }: { article: BlogArticle }) {
     window.location.href = path;
   };
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": article.title,
+    "description": article.subtitle,
+    "image": `https://metahers.ai${IMAGE_MAP[article.image] || aiStylistImg}`,
+    "author": {
+      "@type": "Organization",
+      "name": article.author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "MetaHers Mind Spa",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://metahers.ai/icon-512.png"
+      }
+    },
+    "datePublished": article.publishDate,
+    "dateModified": article.publishDate,
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://metahers.ai/blog/${article.slug}`
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-8 px-6 py-12">
+      <SEO
+        title={article.title}
+        description={article.subtitle}
+        type="article"
+        url={`https://metahers.ai/blog/${article.slug}`}
+        keywords={`${article.category}, women in tech, ${article.title.toLowerCase()}`}
+        schema={articleSchema}
+      />
       {/* Header */}
       <div className="text-center space-y-4">
         <Badge 

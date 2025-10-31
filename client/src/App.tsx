@@ -35,6 +35,7 @@ import VIPCohortPage from "@/pages/VIPCohortPage";
 import ExecutivePage from "@/pages/ExecutivePage";
 import AIBuilderRetreatPage from "@/pages/AIBuilderRetreatPage";
 import ThoughtLeadershipPage from "@/pages/ThoughtLeadershipPage";
+import JourneyDayPage from "@/pages/JourneyDayPage";
 import AdminQuizResultsPage from "@/pages/AdminQuizResultsPage";
 import NotFound from "@/pages/not-found";
 
@@ -74,6 +75,7 @@ function Router() {
       <Route path="/executive" component={ExecutivePage} />
       <Route path="/ai-builder" component={AIBuilderRetreatPage} />
       <Route path="/rituals" component={RitualsPage} />
+      <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
       
       {!isAuthenticated ? (
         <Route path="/" component={LandingPage} />
