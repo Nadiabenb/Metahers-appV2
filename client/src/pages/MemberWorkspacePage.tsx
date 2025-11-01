@@ -111,7 +111,7 @@ export default function MemberWorkspacePage() {
                 {plan.displayName}
               </Badge>
               {tier !== 'founders_circle' && (
-                <Link href="/account">
+                <Link href="/upgrade">
                   <Button variant="ghost" size="sm" data-testid="button-upgrade">
                     Upgrade
                     <ArrowRight className="w-4 h-4 ml-2" />
