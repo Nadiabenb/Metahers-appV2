@@ -60,7 +60,7 @@ All user and application data, including `users`, `ritual_progress`, `journal_en
 ## External Dependencies
 -   **OpenAI API**: For AI-powered journal insights, conversational AI coaching, AI-generated writing prompts, and thought leadership content generation (GPT-4o with Forbes-meets-Vogue tone, generating 800-1200 word articles, 300-400 word LinkedIn posts, and 280-char Twitter posts).
 -   **Stripe**: Payment processing for Pro tier subscriptions (integration pending).
--   **Resend**: Transactional email service for sending password reset emails from help@metahers.ai. Emails use luxury spa-themed HTML templates with MetaHers branding (jewel-tone gradients, serif typography). Free tier provides 3,000 emails/month.
+-   **Resend** (Optional): Transactional email service for sending password reset emails from help@metahers.ai. Emails use luxury spa-themed HTML templates with MetaHers branding (jewel-tone gradients, serif typography). Free tier provides 3,000 emails/month. The app gracefully degrades if RESEND_API_KEY is not configured - password reset tokens are still created and logged to console for development/testing.
 -   **bcrypt**: For secure password hashing.
 -   **Calendly**: Embedded via iframe for scheduling.
 -   **MetaMuse GPT**: External link to a custom ChatGPT instance.

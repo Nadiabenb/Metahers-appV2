@@ -16,11 +16,8 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Initialize Resend for email sending
-if (!process.env.RESEND_API_KEY) {
-  throw new Error('Missing required Resend secret: RESEND_API_KEY');
-}
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Initialize Resend for email sending (optional - gracefully degrade if not configured)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment
@@ -250,9 +247,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate reset link
       const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
       
-      // Send password reset email via Resend
-      try {
-        await resend.emails.send({
+      // Send password reset email via Resend (if configured)
+      if (!resend) {
+        console.warn('⚠️ RESEND_API_KEY not configured - password reset email not sent. Reset token created for user:', email);
+        console.warn('Reset link (for development/testing):', resetLink);
+      } else {
+        try {
+          await resend.emails.send({
           from: 'MetaHers Mind Spa <help@metahers.ai>',
           to: email,
           subject: 'Reset Your MetaHers Password',
@@ -341,11 +342,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           `,
         });
         
-        console.log(`✅ Password reset email sent to ${email}`);
-      } catch (emailError) {
-        console.error("Error sending password reset email:", emailError);
-        // Don't fail the request if email fails - token is still valid
-        // User can contact support if they don't receive the email
+          console.log(`✅ Password reset email sent to ${email}`);
+        } catch (emailError) {
+          console.error("Error sending password reset email:", emailError);
+          // Don't fail the request if email fails - token is still valid
+          // User can contact support if they don't receive the email
+        }
       }
       
       res.json({ 
