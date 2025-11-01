@@ -1023,6 +1023,131 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Create Stripe checkout session for tier subscription/upgrade
+  app.post('/api/create-checkout-session', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { tier } = req.body as { tier: string };
+      
+      if (!tier) {
+        return res.status(400).json({ message: "Tier is required" });
+      }
+
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      if (!user.email) {
+        return res.status(400).json({ message: "User email is required for subscriptions" });
+      }
+
+      // Map tier to Stripe price ID from environment
+      const tierPriceMap: Record<string, string | undefined> = {
+        'pro_monthly': process.env.STRIPE_PRICE_ID,
+        'pro_annual': process.env.STRIPE_PRICE_ID_ANNUAL,
+        'sanctuary': process.env.STRIPE_PRICE_ID_SANCTUARY,
+        'inner_circle': process.env.STRIPE_PRICE_ID_INNER_CIRCLE,
+        'founders_circle': process.env.STRIPE_PRICE_ID_FOUNDERS_CIRCLE,
+        'vip_cohort': process.env.STRIPE_PRICE_ID_VIP,
+        'executive': process.env.STRIPE_PRICE_ID_EXECUTIVE,
+      };
+
+      const priceId = tierPriceMap[tier];
+      if (!priceId) {
+        return res.status(400).json({ message: `Invalid tier or missing price configuration for: ${tier}` });
+      }
+
+      // Check for existing subscription
+      const existingSubscription = await storage.getSubscription(userId);
+      
+      // If user has active subscription, upgrade it directly (not via checkout)
+      if (existingSubscription?.status === 'active' && existingSubscription.stripeSubscriptionId) {
+        // Get current subscription from Stripe
+        const subscription = await stripe.subscriptions.retrieve(existingSubscription.stripeSubscriptionId);
+        
+        // Update subscription with new price (proration automatic)
+        const updatedSubscription = await stripe.subscriptions.update(
+          existingSubscription.stripeSubscriptionId,
+          {
+            items: [{
+              id: subscription.items.data[0].id,
+              price: priceId,
+            }],
+            proration_behavior: 'create_prorations',
+            metadata: {
+              userId: user.id,
+              tier,
+            },
+          }
+        );
+
+        // Update database
+        const subData = updatedSubscription as any;
+        await storage.upsertSubscription({
+          userId: user.id,
+          stripeCustomerId: existingSubscription.stripeCustomerId,
+          stripeSubscriptionId: updatedSubscription.id,
+          stripePriceId: priceId,
+          status: updatedSubscription.status,
+          currentPeriodEnd: subData.current_period_end ? new Date(subData.current_period_end * 1000) : undefined,
+          cancelAtPeriodEnd: updatedSubscription.cancel_at_period_end || false,
+        });
+
+        // Update user subscription tier
+        await storage.updateUserSubscriptionTier(user.id, tier);
+
+        return res.json({
+          upgraded: true,
+          message: 'Subscription upgraded successfully with proration applied',
+        });
+      }
+
+      // New subscription - create checkout session
+      let customerId = existingSubscription?.stripeCustomerId;
+
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: user.email,
+          name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.firstName || undefined,
+          metadata: { userId: user.id },
+        });
+        customerId = customer.id;
+      }
+      
+      // Create checkout session for new subscription
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        mode: 'subscription',
+        payment_method_types: ['card'],
+        line_items: [{
+          price: priceId,
+          quantity: 1,
+        }],
+        success_url: `${req.protocol}://${req.get('host')}/workspace?upgrade=success`,
+        cancel_url: `${req.protocol}://${req.get('host')}/upgrade?canceled=true`,
+        subscription_data: {
+          metadata: {
+            userId: user.id,
+            tier,
+          },
+        },
+        metadata: {
+          userId: user.id,
+          tier,
+        },
+      });
+
+      res.json({ 
+        sessionId: session.id,
+        url: session.url,
+      });
+    } catch (error: any) {
+      console.error("Error creating checkout session:", error);
+      res.status(500).json({ message: error.message || "Failed to create checkout session" });
+    }
+  });
+
   // ===== GLOW-UP PROGRAM ROUTES (PRO ONLY) =====
 
   // Get user's glow-up profile

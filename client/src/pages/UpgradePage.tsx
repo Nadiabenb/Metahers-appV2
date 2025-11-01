@@ -30,8 +30,36 @@ export default function UpgradePage() {
     }
   };
 
-  const handleUpgrade = (tier: SubscriptionTier) => {
-    console.log('Upgrade to:', tier);
+  const handleUpgrade = async (tier: SubscriptionTier) => {
+    try {
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ tier }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Failed to create checkout session');
+      }
+
+      const data = await response.json();
+      
+      // Check if this was a direct upgrade (existing subscription)
+      if (data.upgraded) {
+        // Direct upgrade successful - redirect to workspace with success message
+        window.location.href = '/workspace?upgrade=success';
+      } else if (data.url) {
+        // New subscription - redirect to Stripe checkout
+        window.location.href = data.url;
+      }
+    } catch (error) {
+      console.error('Error creating checkout session:', error);
+      alert('Failed to start checkout. Please try again or contact support.');
+    }
   };
 
   const currentTierIndex = TIER_ORDER.indexOf(currentTier);

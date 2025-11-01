@@ -83,6 +83,7 @@ export interface IStorage {
   getSubscriptionByStripeCustomerId(stripeCustomerId: string): Promise<SubscriptionDB | undefined>;
   upsertSubscription(subscription: InsertSubscription): Promise<SubscriptionDB>;
   updateUserProStatus(userId: string, isPro: boolean): Promise<User>;
+  updateUserSubscriptionTier(userId: string, tier: string): Promise<User>;
   
   // Journal analytics operations
   getJournalStats(userId: string): Promise<any>;
@@ -390,6 +391,15 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .update(users)
       .set({ isPro, updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async updateUserSubscriptionTier(userId: string, tier: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ subscriptionTier: tier, updatedAt: new Date() })
       .where(eq(users.id, userId))
       .returning();
     return user;
