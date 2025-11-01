@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3 } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -25,6 +25,8 @@ export function Navigation() {
 
   // Authenticated-only pages
   const authNavItems = [
+    { path: "/workspace", label: "Workspace", icon: Briefcase, pro: false },
+    { path: "/upgrade", label: "Upgrade", icon: ArrowUpCircle, pro: false, highlight: true },
     { path: "/journal", label: "Journal", icon: BookOpen, pro: false },
     { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, pro: true },
     { path: "/glow-up", label: "Glow-Up", icon: TrendingUp, pro: true },
