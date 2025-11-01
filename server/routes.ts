@@ -16,8 +16,57 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-// Initialize Resend for email sending (optional - gracefully degrade if not configured)
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+// Resend email client (using Replit-managed connection)
+let connectionSettings: any;
+
+async function getResendCredentials() {
+  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
+  const xReplitToken = process.env.REPL_IDENTITY 
+    ? 'repl ' + process.env.REPL_IDENTITY 
+    : process.env.WEB_REPL_RENEWAL 
+    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
+    : null;
+
+  if (!xReplitToken || !hostname) {
+    return null;
+  }
+
+  try {
+    connectionSettings = await fetch(
+      'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=resend',
+      {
+        headers: {
+          'Accept': 'application/json',
+          'X_REPLIT_TOKEN': xReplitToken
+        }
+      }
+    ).then(res => res.json()).then(data => data.items?.[0]);
+
+    if (!connectionSettings || !connectionSettings.settings.api_key) {
+      return null;
+    }
+    return {
+      apiKey: connectionSettings.settings.api_key, 
+      fromEmail: connectionSettings.settings.from_email || 'MetaHers Mind Spa <help@metahers.ai>'
+    };
+  } catch (error) {
+    console.warn('Failed to fetch Resend credentials from Replit connector:', error);
+    return null;
+  }
+}
+
+// WARNING: Never cache this client.
+// Access tokens expire, so a new client must be created each time.
+async function getUncachableResendClient() {
+  const credentials = await getResendCredentials();
+  if (!credentials) {
+    return null;
+  }
+  return {
+    client: new Resend(credentials.apiKey),
+    fromEmail: credentials.fromEmail
+  };
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment
@@ -248,13 +297,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
       
       // Send password reset email via Resend (if configured)
-      if (!resend) {
-        console.warn('⚠️ RESEND_API_KEY not configured - password reset email not sent. Reset token created for user:', email);
+      const resendClient = await getUncachableResendClient();
+      if (!resendClient) {
+        console.warn('⚠️ Resend not configured - password reset email not sent. Reset token created for user:', email);
         console.warn('Reset link (for development/testing):', resetLink);
       } else {
         try {
-          await resend.emails.send({
-          from: 'MetaHers Mind Spa <help@metahers.ai>',
+          await resendClient.client.emails.send({
+          from: resendClient.fromEmail,
           to: email,
           subject: 'Reset Your MetaHers Password',
           html: `
