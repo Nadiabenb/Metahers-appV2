@@ -1,17 +1,97 @@
 # MetaHers Mind Spa – Design System
-## Forbes Meets Vogue: Luxury Tech-Editorial Aesthetic
+## Metaverse Immersion Meets Forbes-Vogue Luxury
 
 ---
 
 ## Design Philosophy
 
-MetaHers embodies the intersection of **high-fashion editorial sophistication** and **futuristic technology innovation**, creating a world-class luxury experience for women. Think Vogue's bold typography and editorial layouts colliding with Forbes' premium authority, all rendered in vivid neon jewel tones on deep obsidian surfaces.
+MetaHers embodies the intersection of **metaverse-level immersion**, **high-fashion editorial sophistication**, and **futuristic technology innovation**. We create a luxury experience that transports visitors to another dimension - where Forbes meets Vogue meets the future of Web3.
 
 **Core Pillars:**
+- **Metaverse Immersion**: Interactive particles, 3D depth, parallax scrolling, morphing gradients
 - **Vivid & Futuristic**: Neon jewel tones, metallic gradients, animated light effects
 - **Editorial Luxury**: Bold typography, generous whitespace, asymmetric layouts
 - **Feminine Power**: Confident, sophisticated, playful yet premium
-- **Advanced UI**: Smooth animations, magnetic interactions, gradient washes
+- **Advanced Interactions**: Smooth animations, magnetic effects, scroll-driven storytelling
+
+**The MetaHers Experience:**
+Every page should feel like stepping into a luxury digital sanctuary - an immersive metaverse space that inspires visitors to rebuild their own websites. We aim for a level of design that makes users stop and say "wow."
+
+---
+
+## Metaverse Immersion System
+
+### Particle Effects
+
+**Interactive Particle Fields** (50-100 particles):
+- Usage: Hero sections, page backgrounds for atmosphere
+- Behavior: Respond to mouse movement (repel within 200px radius)
+- Performance: Single shared mouse listener, ref-based state (no re-renders)
+- Animation: Interval-based updates (~60fps), gentle floating motion
+- Colors: Liquid gold (`hsl(var(--liquid-gold))`) with 60% opacity
+- Size: 1px (w-1 h-1), blurred (blur-sm)
+- Accessibility: Disabled when `prefers-reduced-motion` is true
+
+**Implementation:**
+```tsx
+// SSR-safe, performance-optimized particle system
+const mousePosRef = useRef({ x: 0, y: 0 });
+{!prefersReducedMotion && (
+  Array.from({ length: 50 }).map((_, i) => (
+    <Particle key={i} index={i} mousePosRef={mousePosRef} />
+  ))
+)}
+```
+
+### 3D Tilt Cards
+
+**Perspective Interaction** (Tilt on hover):
+- Effect: Cards rotate in 3D space based on mouse position
+- Range: ±10deg rotation on X and Y axes
+- Reset: Smooth return to flat on mouse leave
+- Usage: Feature cards, ritual cards, pricing tiers
+- Accessibility: Disabled when `prefers-reduced-motion` is true
+
+**Implementation:**
+```tsx
+<TiltCard prefersReducedMotion={prefersReducedMotion}>
+  <div className="backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-10 border border-white/10">
+    {/* Card content */}
+  </div>
+</TiltCard>
+```
+
+### Multi-Layer Parallax
+
+**Depth Through Motion**:
+- Layer 1 (Background): 60% vertical scroll speed
+- Layer 2 (Mid-ground): 30-50% vertical scroll speed
+- Layer 3 (Foreground/Title): 100% scroll speed (disappears)
+- Scale: Background grows 1.0 → 1.2 on scroll for zoom effect
+- Accessibility: Parallax disabled when `prefers-reduced-motion` is true
+
+**Use Cases:**
+- Hero sections with background images
+- Section dividers with atmospheric depth
+- Scroll-driven storytelling sequences
+
+### Morphing Gradient Orbs
+
+**Ambient Atmospheric Effects**:
+- Count: 2-3 large orbs per section
+- Size: 500-700px diameter
+- Blur: blur-3xl for soft glow
+- Animation: Organic movement (scale, position, opacity)
+- Duration: 15-20 seconds per loop
+- Colors: Violet (#B565D8), Magenta (#E935C1), Teal (#00D9FF), Gold (#FFD700)
+- Opacity: 10-25% for subtle ambiance
+- Accessibility: Static positions when `prefers-reduced-motion` is true
+
+**Grid Overlays:**
+Add depth with subtle grid patterns over gradient backgrounds:
+```tsx
+<div className="bg-[linear-gradient(rgba(181,101,216,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(181,101,216,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+```
 
 ---
 
@@ -45,12 +125,13 @@ Our palette is anchored in **deep obsidian darkness** with **vivid neon jewel ac
 ### Gradient Combinations
 
 **Editorial Gradients** (for hero sections, premium cards):
-- `gradient-violet-magenta`: Violet → Magenta (135deg)
-- `gradient-magenta-fuchsia`: Magenta → Cyber Fuchsia (135deg)
-- `gradient-teal-gold`: Aurora Teal → Liquid Gold (135deg)
+- `from-[#B565D8] via-[#FF00FF] to-[#E935C1]` - Violet → Magenta → Fuchsia
+- `from-[#FFD700] via-[#FFF] to-[#FFD700]` - Liquid Gold shimmer
+- `from-[#00D9FF] via-[#FFD700] to-transparent` - Teal → Gold atmospheric
 
-**Radial Accents** (for ambient backgrounds):
-- `gradient-radial-violet`: Radial violet glow from center
+**Radial Ambient Orbs**:
+- `bg-gradient-to-br from-[#B565D8] via-[#E935C1] to-transparent` - Violet orb
+- `bg-gradient-to-br from-[#00D9FF] via-[#FFD700] to-transparent` - Teal-gold orb
 
 ---
 
@@ -71,9 +152,11 @@ Our palette is anchored in **deep obsidian darkness** with **vivid neon jewel ac
 ### Typography Scale
 
 ```
-H1: 4xl–6xl (text-4xl md:text-5xl lg:text-6xl) - Hero headlines
-H2: 3xl–5xl (text-3xl md:text-4xl lg:text-5xl) - Section titles
-H3: 2xl–3xl (text-2xl md:text-3xl) - Subsection headers
+H1: 7xl–9xl (text-7xl md:text-8xl lg:text-9xl) - Hero headlines (immersive pages)
+H2: 6xl–7xl (text-6xl md:text-7xl) - Section titles
+H3: 3xl–4xl (text-3xl md:text-4xl) - Subsection headers
+H4: 2xl–3xl (text-2xl md:text-3xl) - Card titles
+Body Large: 2xl–3xl (text-2xl md:text-3xl) - Hero subtitles
 Body: base–lg (text-base lg:text-lg) - Paragraph text
 UI Text: sm–base (text-sm md:text-base) - Buttons, labels
 Caption: xs–sm (text-xs sm:text-sm) - Meta information
@@ -81,208 +164,268 @@ Caption: xs–sm (text-xs sm:text-sm) - Meta information
 
 ### Typography Treatments
 
-1. **Generous Letter Spacing**: Headlines use `-0.02em`, uppercase captions use `0.1em` (Vogue editorial style)
-2. **Gradient Text Effects**: Apply `.text-gradient-violet` or `.text-gradient-gold` to premium headlines
-3. **Bold Weights**: Use 600-700 weights for headlines to create editorial impact
-4. **Optical Hierarchy**: Combine size, weight, and color to guide attention
-5. **Asymmetric Layouts**: Break grid occasionally for editorial flair (offset headlines, wrapped text blocks)
+1. **Massive Scale**: Landing/hero pages use extra-large type (7xl-9xl) for immersive impact
+2. **Gradient Text**: Apply `bg-gradient-to-r from-[#B565D8] via-[#FF00FF] to-[#E935C1] bg-clip-text text-transparent` with `py-2 leading-tight` to prevent clipping
+3. **Text Shadows**: Add glow effects `textShadow: '0 0 80px rgba(255,215,0,0.5), 0 0 120px rgba(181,101,216,0.3)'`
+4. **Letter Spacing**: Headlines use `-0.02em`, uppercase captions use `0.1em tracking-widest`
+5. **Bold Weights**: Use 600-700 weights for headlines to create editorial impact
 
 ---
 
 ## Component Styling
 
-### Cards & Panels
+### Immersive Cards
 
-**Editorial Cards** (`.editorial-card`):
-- Background: Gradient from charcoal to deeper charcoal
-- Border: Subtle card-border with neon top accent line
-- Rounded corners: `rounded-xl` (0.75rem)
-- Padding: Generous (`p-6 lg:p-8`)
-- Shadow: Neon-tinted shadows with violet/magenta glow
+**Backdrop Blur Cards** (Primary pattern):
+```tsx
+className="backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-10 border border-white/10 overflow-hidden"
+```
 
-**Glass Morphism** (`.glass-card`):
-- Background: `bg-card/40` with `backdrop-blur-xl`
-- Border: `border-primary/20` with neon glow
-- Usage: Floating elements, overlays, modal dialogs
+- Background: Glass morphism with subtle gradient
+- Blur: backdrop-blur-2xl for depth
+- Corners: rounded-3xl (1.5rem) for premium softness
+- Padding: Generous (p-10 = 2.5rem)
+- Border: Subtle white/10 with optional colored accent
+- Hover: Add gradient overlay that fades in
+
+**Animated Card Backgrounds**:
+```tsx
+<motion.div
+  className="absolute inset-0 bg-gradient-to-br from-[#B565D8]/20 to-transparent opacity-0 group-hover:opacity-100"
+  transition={{ duration: 0.5 }}
+/>
+```
+
+### Portal-Style CTAs
+
+**Rotating Gradient Border Effect**:
+```tsx
+<div className="relative p-[2px] rounded-full overflow-hidden group">
+  <motion.div
+    className="absolute inset-0 bg-gradient-to-r from-[#B565D8] via-[#FFD700] to-[#E935C1]"
+    animate={{ rotate: 360 }}
+    transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+  />
+  <div className="relative bg-background rounded-full px-12 py-6">
+    Button Content
+  </div>
+</div>
+```
+
+### Shimmer Effects
+
+**Animated Shine on Badges/CTAs**:
+```tsx
+<motion.div
+  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+  animate={{ x: ['-100%', '200%'] }}
+  transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+/>
+```
+
+### Floating Stats
+
+**Metric Cards with Hover Lift**:
+```tsx
+<motion.div
+  whileHover={{ y: -8, boxShadow: "0 20px 60px rgba(181,101,216,0.4)" }}
+  className="backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-white/10"
+>
+  <div className="text-6xl font-bold text-[hsl(var(--liquid-gold))]">500+</div>
+  <div className="text-foreground/70">Women Empowered</div>
+</motion.div>
+```
 
 ### Buttons
 
-**Primary Button** (Liquid Gold fill):
-- Background: `bg-[hsl(var(--liquid-gold))]`
-- Text: `text-obsidian` (dark text on bright gold)
-- Hover: Neon glow effect (`.neon-glow-violet`)
-- Shadow: Metallic shadow with gold tint
+**Primary Button** (Liquid Gold fill with shimmer):
+```tsx
+<motion.button
+  whileHover={{ scale: 1.08, boxShadow: "0 0 40px rgba(255,215,0,0.6)" }}
+  whileTap={{ scale: 0.95 }}
+  className="relative px-12 py-6 rounded-full overflow-hidden group"
+>
+  <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
+  <motion.div
+    className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-50"
+    animate={{ x: ['-100%', '200%'] }}
+    transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 0.5 }}
+  />
+  <span className="relative z-10 font-bold text-xl text-background">
+    Enter the Sanctuary
+  </span>
+</motion.button>
+```
 
-**Secondary Button** (Magenta Quartz):
-- Background: `bg-secondary`
-- Border: Neon border with `.neon-border-violet`
-- Hover: Gradient shift animation
-
-**Outline Button**:
-- Border: Neon violet or magenta outline
-- Background: Transparent with hover fill
-- Glow: Activate neon glow on hover
-
-### Interactive States
-
-1. **Hover**: Subtle neon glow + gradient shift (`.neon-glow-violet`, `.neon-glow-magenta`)
-2. **Focus**: Bold neon ring (2px violet or magenta outline)
-3. **Active/Pressed**: Increased brightness + scale(0.98)
-4. **Disabled**: 40% opacity + grayscale filter
-
-### Borders & Outlines
-
-- **Standard Borders**: 1px solid with `border-card-border`
-- **Neon Accents**: Use `.neon-border-violet` for premium elements
-- **Gradient Borders**: Top accent lines with violet-magenta gradient
-- **Rounded Corners**: Default `rounded-xl` (0.75rem) for modern luxury feel
+**Outline Button** (Glass with border):
+```tsx
+<motion.button
+  whileHover={{ scale: 1.08 }}
+  whileTap={{ scale: 0.95 }}
+  className="px-12 py-6 rounded-full backdrop-blur-2xl bg-white/5 border-2 border-[hsl(var(--liquid-gold))]/50"
+>
+  Button Text
+</motion.button>
+```
 
 ---
 
 ## Layout & Spacing
 
-### Grid System
+### Immersive Page Structure
 
-**Editorial Asymmetry**:
-- Break traditional grid with 60/40 or 70/30 splits for hero sections
-- Use full-bleed images with text overlays (dark gradient wash)
-- Offset headlines and body copy for magazine-style layouts
+Every page should follow this pattern:
 
-**Spacing Scale**:
-- XS: 0.5rem (8px) - Tight spacing
-- SM: 1rem (16px) - Compact groups
-- MD: 1.5rem (24px) - Default spacing
-- LG: 2rem (32px) - Section spacing
-- XL: 3rem (48px) - Page section dividers
-- 2XL: 4rem (64px) - Hero section padding
+```tsx
+<div className="relative min-h-screen bg-background overflow-x-hidden">
+  {/* Particle field (if applicable) */}
+  {!prefersReducedMotion && <ParticleField />}
+  
+  {/* Hero section with parallax */}
+  <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    {/* Background with parallax */}
+    {/* Morphing gradient orbs */}
+    {/* Grid overlay */}
+    {/* Radial gradient wash */}
+    {/* Hero content */}
+  </div>
+  
+  {/* Content sections */}
+  <div className="relative py-40 px-4 sm:px-6 lg:px-8">
+    {/* Scroll-triggered reveals */}
+  </div>
+</div>
+```
 
-### Whitespace Philosophy
+### Spacing Scale
 
-**Generous Breathing Room**:
-- Use 1.5x–2x more padding than typical apps for luxury feel
-- Let cards and content breathe with ample margins
-- Avoid cramped layouts - space = sophistication
+- **Hero Sections**: min-h-screen with py-40 content spacing
+- **Content Sections**: py-40 (10rem) between major sections
+- **Card Padding**: p-10 (2.5rem) for immersive feel
+- **Section Titles**: mb-32 (8rem) below section headers
+- **Card Grids**: gap-12 (3rem) between 3D tilt cards
 
 ---
 
 ## Visual Effects & Motion
 
-### Neon Glow Effects
+### Scroll-Driven Animations
 
-Apply glows sparingly for premium interactive elements:
+**Scroll Progress Tracking**:
+```tsx
+const { scrollYProgress } = useScroll({
+  target: containerRef,
+  offset: ["start start", "end start"]
+});
 
-- `.neon-glow-violet`: Violet halo (20px + 40px radii)
-- `.neon-glow-magenta`: Magenta halo for secondary elements
-- `.neon-glow-teal`: Teal glow for success states
+const smoothProgress = useSpring(scrollYProgress, {
+  stiffness: 100,
+  damping: 30,
+  restDelta: 0.001
+});
 
-### Gradient Animations
+const heroY = useTransform(smoothProgress, [0, 1], ["0%", "60%"]);
+const heroScale = useTransform(smoothProgress, [0, 1], [1, 1.2]);
+```
 
-**Shimmer Effect** (`.text-gradient-violet`, `.text-gradient-gold`):
-- Animated background position shift
-- 3s linear infinite loop
-- Creates metallic sheen on text
+**Scroll-Triggered Reveals**:
+```tsx
+<motion.div
+  initial={{ opacity: 0, y: 60 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  viewport={{ once: true, margin: "-100px" }}
+  transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+>
+  Content
+</motion.div>
+```
 
-### Transitions & Animations
+### Animation Principles
 
-**Animation Principles**:
-- Duration: 200-400ms for interactions (smooth but swift)
-- Easing: `ease-out` for entrances, `ease-in-out` for hovers
-- Spring Physics: Use for magnetic buttons and card reveals
-- Parallax: Subtle depth on scroll (hero sections)
+**Duration & Easing**:
+- Quick interactions: 200-400ms
+- Entrances/reveals: 1-1.2s with custom cubic bezier `[0.25, 0.1, 0.25, 1]`
+- Organic loops: 15-20s for ambient effects
+- Spring physics: stiffness 100, damping 30 for smooth feel
 
-**Recommended Animations**:
-1. **Card Entrance**: Fade up + scale (0.95 → 1.0)
-2. **Button Hover**: Neon glow fade-in + lift shadow
-3. **Page Transitions**: Gradient wipe or diagonal slide
-4. **Achievement Unlock**: Scale burst + confetti + glow pulse
+**Stagger Delays**:
+```tsx
+delay: 0     // First element
+delay: 0.3   // Second element
+delay: 0.5   // Third element
+delay: 0.8   // Fourth element
+```
 
 ### Accessibility Motion
 
-Always respect `prefers-reduced-motion`:
-```css
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
+**Always Respect Reduced Motion**:
+```tsx
+const prefersReducedMotion = useReducedMotion();
+
+// Conditional rendering
+{!prefersReducedMotion && <ParticleField />}
+
+// Conditional values
+const heroY = useTransform(
+  smoothProgress,
+  [0, 1],
+  prefersReducedMotion ? ["0%", "0%"] : ["0%", "60%"]
+);
 ```
 
 ---
 
-## Content Patterns
+## Reusable Components Library
 
-### Hero Sections
+### Core Metaverse Components
 
-**Full-Bleed Editorial Heroes**:
-- Background: Abstract light trail imagery with jewel tones
-- Overlay: Dark gradient wash (black → transparent from bottom)
-- Typography: Extra-large Cormorant headlines (H1 6xl-8xl)
-- CTA: Liquid gold button with neon violet glow
-- Layout: Asymmetric text placement (left 60%, image right 40%)
+**ParticleField.tsx** - Interactive particle system
+**TiltCard.tsx** - 3D perspective card wrapper  
+**GradientOrbs.tsx** - Morphing ambient background orbs
+**ImmersiveSection.tsx** - Wrapper with scroll animations
+**PortalButton.tsx** - CTA with rotating gradient border
+**ShimmerBadge.tsx** - Badge with animated shine effect
+**FloatingStat.tsx** - Metric card with hover lift
 
-### Ritual Cards
+*Create these components once, reuse everywhere*
 
-- Background: Editorial card with gradient overlay
-- Badge: Neon-bordered tier badge (FREE/PRO) in top-right
-- Typography: Cormorant title + Sora description
-- Hover: Lift effect + neon glow activation
-- Progress: Circular ring with gradient fill (violet-magenta)
+---
 
-### Journal Interface
+## Implementation Checklist
 
-- Entry Cards: Dark charcoal with subtle top accent line
-- Mood Indicators: Vivid color-coded pills (pink, blue, purple, amber, yellow)
-- Tags: Neon-bordered chips with frequency-based sizing
-- Calendar: 28-day grid with mood-based background colors
-- AI Insights: Glass card with violet glow
+### Every Page Should Have:
 
-### Analytics Visualizations
+✅ **Particles**: Background particle field (50-100 particles) on hero sections  
+✅ **Depth**: Multi-layer parallax OR morphing gradient orbs  
+✅ **3D Cards**: TiltCard wrapper for feature/ritual cards  
+✅ **Massive Type**: Hero headlines at 7xl-9xl scale  
+✅ **Gradient Text**: Key headlines with gradient + glow effects  
+✅ **Scroll Reveals**: whileInView animations with stagger delays  
+✅ **Portal CTAs**: Primary actions with rotating borders or shimmer  
+✅ **Glass Morphism**: backdrop-blur-2xl cards throughout  
+✅ **Reduced Motion**: All effects disabled when preference is set  
 
-- Charts: Use chart color variables (5 jewel tones)
-- Progress Bars: Gradient fills (violet-magenta)
-- Stats Cards: Editorial cards with large numerals in Cormorant
-- Tag Cloud: Variable font sizes (xs-xl) based on frequency
+### Pro Features Get Extra Luxury:
+
+✨ Additional particle density (100+ particles)  
+✨ Enhanced gradient orbs with more complex animations  
+✨ Liquid gold accent colors throughout  
+✨ Premium badge indicators  
+✨ Exclusive shimmer effects  
 
 ---
 
 ## Brand Voice & Tone
 
 **Visual Communication**:
+- **Immersive**: Transport users to another dimension
 - **Confident**: Bold typography, vivid colors, generous sizing
 - **Sophisticated**: Editorial layouts, refined spacing, luxury materials
-- **Playful**: Gradient shimmers, neon glows, animated interactions
-- **Premium**: Metallic accents, liquid gold CTAs, high-end imagery
+- **Playful**: Interactive particles, 3D depth, animated interactions
+- **Premium**: Metaverse-quality design that inspires others
 
-**Avoid**:
-- Overly bright backgrounds (stay dark for luxury)
-- Too many neon glows (use sparingly for impact)
-- Cramped layouts (breathing room = premium)
-- Basic stock photography (use abstract futuristic visuals)
-
----
-
-## Implementation Checklist
-
-### Every Component Should Have:
-
-✅ **Color**: Uses jewel-tone palette with dark backgrounds  
-✅ **Typography**: Cormorant headlines + Sora body text  
-✅ **Spacing**: Generous padding (p-6 or more)  
-✅ **Borders**: Rounded corners (rounded-xl default)  
-✅ **Hover States**: Neon glow or gradient shift  
-✅ **Focus States**: Neon ring outline  
-✅ **Motion**: Smooth transitions (200-400ms)  
-✅ **Shadows**: Neon-tinted with color accents  
-✅ **Accessibility**: WCAG AA contrast + reduced-motion support  
-
-### Pro Features Get Extra Luxury:
-
-✨ Liquid gold accents  
-✨ Animated gradient backgrounds  
-✨ Enhanced neon glows  
-✨ Metallic text effects  
-✨ Premium badge indicators  
+**The MetaHers Standard**:
+When users see a MetaHers page, they should think: "This is unlike anything I've seen. I want my website to feel like this."
 
 ---
 
@@ -295,12 +438,14 @@ Always respect `prefers-reduced-motion`:
 - **Stripe**: Modern gradients, smooth animations, clean UI
 - **Linear App**: Dark mode sophistication, neon accents, refined interactions
 - **Apple (Product Pages)**: Large typography, full-bleed imagery, premium feel
+- **Metaverse Platforms**: Immersive 3D environments, particle effects, depth
+- **Luxury Spas**: Tranquil atmospheres, premium materials, sensory experiences
 
-### Color Mood Board:
+### Design Philosophy in Action:
 
-Imagine a dark luxury boutique at night, illuminated by neon art installations - violet and magenta holograms, teal laser lights, liquid gold accents on black marble surfaces. That's the MetaHers aesthetic.
+Imagine walking into a luxury spa at night in the metaverse - floating particles of light, holographic panels that tilt as you pass, ambient gradient orbs morphing in the background, and everything responds to your presence. That's MetaHers.
 
 ---
 
-**Last Updated**: October 2025  
-**Version**: 2.0 (Forbes Meets Vogue Redesign)
+**Last Updated**: November 2025  
+**Version**: 3.0 (Metaverse Immersion Update)
