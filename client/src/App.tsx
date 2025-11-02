@@ -75,6 +75,7 @@ function Router() {
       <Route path="/daily" component={DailyNewsPage} />
       <Route path="/playground" component={PromptPlaygroundPage} />
       <Route path="/career-path" component={CareerPathGeneratorPage} />
+      <Route path="/upgrade" component={UpgradePage} />
       <Route path="/shop" component={ShopPage} />
       <Route path="/discover" component={DiscoverPage} />
       <Route path="/vip-cohort" component={VIPCohortPage} />
@@ -89,7 +90,6 @@ function Router() {
         <>
           <Route path="/" component={HomePage} />
           <Route path="/workspace" component={MemberWorkspacePage} />
-          <Route path="/upgrade" component={UpgradePage} />
           <Route path="/rituals" component={RitualsPage} />
           <Route path="/rituals/:slug" component={RitualDetailPage} />
           <Route path="/journal" component={JournalPage} />
