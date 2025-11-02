@@ -39,6 +39,7 @@ import JourneyDayPage from "@/pages/JourneyDayPage";
 import AdminQuizResultsPage from "@/pages/AdminQuizResultsPage";
 import MemberWorkspacePage from "@/pages/MemberWorkspacePage";
 import UpgradePage from "@/pages/UpgradePage";
+import PromptPlaygroundPage from "@/pages/PromptPlaygroundPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -71,6 +72,7 @@ function Router() {
       {/* Public routes - accessible to everyone */}
       <Route path="/blog" component={BlogPage} />
       <Route path="/daily" component={DailyNewsPage} />
+      <Route path="/playground" component={PromptPlaygroundPage} />
       <Route path="/shop" component={ShopPage} />
       <Route path="/discover" component={DiscoverPage} />
       <Route path="/vip-cohort" component={VIPCohortPage} />

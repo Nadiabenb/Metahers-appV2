@@ -14,12 +14,13 @@ export function Navigation() {
 
   // Public pages accessible to everyone
   const publicNavItems = [
+    { path: "/playground", label: "Playground", icon: Sparkles, pro: false, highlight: true },
     { path: "/discover", label: "Discover", icon: Compass, pro: false },
-    { path: "/rituals", label: "Rituals", icon: Sparkles, pro: false },
+    { path: "/rituals", label: "Rituals", icon: Zap, pro: false },
     { path: "/ai-builder", label: "AI Builder", icon: Code2, pro: false, highlight: true },
     { path: "/vip-cohort", label: "VIP Retreat", icon: Crown, pro: false },
-    { path: "/daily", label: "Daily", icon: Zap, pro: false },
-    { path: "/blog", label: "Blog", icon: Newspaper, pro: false },
+    { path: "/daily", label: "Daily", icon: Newspaper, pro: false },
+    { path: "/blog", label: "Blog", icon: BookOpen, pro: false },
     { path: "/shop", label: "Shop", icon: ShoppingBag, pro: false },
   ];
 

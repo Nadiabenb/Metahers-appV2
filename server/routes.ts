@@ -617,6 +617,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== PUBLIC PLAYGROUND API =====
+  // Simple rate limiting for playground (max 10 prompts per IP per hour)
+  const playgroundRateLimit = new Map<string, { count: number; resetTime: number }>();
+  
+  app.post('/api/playground/run-prompt', async (req: Request, res) => {
+    try {
+      const { prompt } = req.body;
+      
+      if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
+        return res.status(400).json({ message: "Prompt is required" });
+      }
+      
+      if (prompt.length > 2000) {
+        return res.status(400).json({ message: "Prompt is too long. Maximum 2000 characters." });
+      }
+      
+      // Simple rate limiting by IP
+      const clientIP = req.ip || req.socket.remoteAddress || 'unknown';
+      const now = Date.now();
+      const hourInMs = 60 * 60 * 1000;
+      
+      const rateLimitData = playgroundRateLimit.get(clientIP);
+      if (rateLimitData) {
+        if (now < rateLimitData.resetTime) {
+          if (rateLimitData.count >= 10) {
+            return res.status(429).json({ 
+              message: "Rate limit exceeded. Please try again in an hour or sign up for unlimited access." 
+            });
+          }
+          rateLimitData.count++;
+        } else {
+          playgroundRateLimit.set(clientIP, { count: 1, resetTime: now + hourInMs });
+        }
+      } else {
+        playgroundRateLimit.set(clientIP, { count: 1, resetTime: now + hourInMs });
+      }
+      
+      // Clean up old entries (optional, prevents memory leak)
+      if (playgroundRateLimit.size > 1000) {
+        const entries = Array.from(playgroundRateLimit.entries());
+        for (const [ip, data] of entries) {
+          if (now > data.resetTime) {
+            playgroundRateLimit.delete(ip);
+          }
+        }
+      }
+      
+      // Use OpenAI to generate response
+      const OpenAI = require("openai");
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+      
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          {
+            role: "system",
+            content: "You are a helpful AI assistant for MetaHers Mind Spa. Provide clear, professional, and empowering responses. Keep responses concise (under 300 words) unless the user asks for more detail."
+          },
+          {
+            role: "user",
+            content: prompt
+          }
+        ],
+        temperature: 0.8,
+        max_tokens: 500
+      });
+      
+      const response = completion.choices[0].message.content || "I apologize, but I couldn't generate a response. Please try again.";
+      
+      res.json({ response });
+    } catch (error: any) {
+      console.error("Playground API error:", error);
+      res.status(500).json({ message: "Failed to generate AI response. Please try again." });
+    }
+  });
+
   // ===== JOURNAL ROUTES =====
   // List journal entries for a month (for calendar view)
   app.get('/api/journal/list', isAuthenticated, async (req: Request, res) => {
