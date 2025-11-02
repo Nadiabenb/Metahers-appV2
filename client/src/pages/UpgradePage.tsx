@@ -7,7 +7,8 @@ import { PRICING_PLANS, type SubscriptionTier, formatPrice } from "@shared/prici
 import { Check, Sparkles, Crown, Gem, Diamond } from "lucide-react";
 import { motion } from "framer-motion";
 
-const TIER_ORDER: SubscriptionTier[] = ['free', 'pro_monthly', 'sanctuary', 'inner_circle', 'founders_circle'];
+// Only show the 3 main tiers to avoid confusion
+const TIER_ORDER: SubscriptionTier[] = ['pro_monthly', 'sanctuary', 'inner_circle'];
 
 export default function UpgradePage() {
   const { user } = useAuth();
@@ -74,10 +75,10 @@ export default function UpgradePage() {
             className="text-center mb-12"
           >
             <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Elevate Your Journey
+              Choose Your Path
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-              Choose the membership tier that aligns with your ambitions and unlock transformative benefits
+              Three simple tiers designed for your learning journey — from self-paced mastery to concierge-level guidance
             </p>
             
             {currentTier !== 'free' && (
@@ -87,6 +88,28 @@ export default function UpgradePage() {
               </div>
             )}
           </motion.div>
+
+          {/* Pro Annual Savings Callout */}
+          <div className="max-w-4xl mx-auto mb-8">
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-1">Save with Annual Billing</h3>
+                    <p className="text-sm text-muted-foreground">Get 2 months free when you choose Pro Annual ($199/year)</p>
+                  </div>
+                  <Button
+                    onClick={() => handleUpgrade('pro_annual')}
+                    variant="outline"
+                    className="border-primary/30"
+                    data-testid="button-annual-upgrade"
+                  >
+                    View Annual Option
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12">
             {TIER_ORDER.map((tier, index) => {
@@ -181,6 +204,52 @@ export default function UpgradePage() {
               );
             })}
           </div>
+
+          {/* Special Programs */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="mb-12"
+          >
+            <div className="text-center mb-6">
+              <h2 className="font-serif text-2xl font-bold text-foreground mb-2">Looking for Something More?</h2>
+              <p className="text-muted-foreground">We also offer specialized intensive programs</p>
+            </div>
+            <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
+              <Card className="border-primary/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-primary" />
+                    VIP Cohort Experience
+                  </CardTitle>
+                  <CardDescription>$197 one-time • Limited to 10 members</CardDescription>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p className="mb-3">4-week guided program with direct founder mentorship, live group sessions, and exclusive ritual bag.</p>
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="/vip-cohort">Learn More</a>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="border-primary/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Diamond className="w-5 h-5 text-primary" />
+                    Executive Intensive
+                  </CardTitle>
+                  <CardDescription>$499 one-time • For Founders & Leaders</CardDescription>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p className="mb-3">Private 1:1 consulting with custom AI & Web3 playbook for your business plus 3 months Pro included.</p>
+                  <Button variant="outline" size="sm" asChild>
+                    <a href="/executive">Learn More</a>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}

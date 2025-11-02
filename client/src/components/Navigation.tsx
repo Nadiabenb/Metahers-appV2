@@ -12,27 +12,21 @@ export function Navigation() {
   const { isAuthenticated, isLoading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Public pages accessible to everyone
+  // Public pages accessible to everyone (streamlined)
   const publicNavItems = [
-    { path: "/playground", label: "Playground", icon: Sparkles, pro: false, highlight: true },
+    { path: "/playground", label: "AI Tools", icon: Sparkles, pro: false, highlight: true },
     { path: "/career-path", label: "Career Path", icon: Target, pro: false, highlight: true },
     { path: "/discover", label: "Discover", icon: Compass, pro: false },
     { path: "/rituals", label: "Rituals", icon: Zap, pro: false },
-    { path: "/ai-builder", label: "AI Builder", icon: Code2, pro: false },
-    { path: "/vip-cohort", label: "VIP Retreat", icon: Crown, pro: false },
-    { path: "/daily", label: "Daily", icon: Newspaper, pro: false },
-    { path: "/blog", label: "Blog", icon: BookOpen, pro: false },
-    { path: "/shop", label: "Shop", icon: ShoppingBag, pro: false },
+    { path: "/blog", label: "Resources", icon: BookOpen, pro: false },
+    { path: "/upgrade", label: "Pricing", icon: ArrowUpCircle, pro: false, highlight: true },
   ];
 
-  // Authenticated-only pages
+  // Authenticated-only pages (streamlined)
   const authNavItems = [
     { path: "/workspace", label: "Workspace", icon: Briefcase, pro: false },
-    { path: "/upgrade", label: "Upgrade", icon: ArrowUpCircle, pro: false, highlight: true },
     { path: "/journal", label: "Journal", icon: BookOpen, pro: false },
     { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, pro: true },
-    { path: "/glow-up", label: "Glow-Up", icon: TrendingUp, pro: true },
-    { path: "/metamuse", label: "MetaMuse", icon: MessageSquare, pro: false },
     { path: "/events", label: "Events", icon: Calendar, pro: false },
     { path: "/account", label: "Account", icon: User, pro: false },
   ];
