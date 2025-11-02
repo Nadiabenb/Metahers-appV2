@@ -693,6 +693,110 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Career Path Generator API with rate limiting
+  const careerPathRateLimit = new Map<string, { count: number; resetTime: number }>();
+  
+  app.post('/api/career-path/generate', async (req: Request, res) => {
+    try {
+      const { answers } = req.body;
+      
+      if (!answers || typeof answers !== 'object') {
+        return res.status(400).json({ message: "Answers are required" });
+      }
+      
+      // Validate input size
+      const answersString = JSON.stringify(answers);
+      if (answersString.length > 5000) {
+        return res.status(400).json({ message: "Answers are too long. Please be more concise." });
+      }
+      
+      // Rate limiting by IP (max 3 career paths per hour per IP)
+      const clientIP = req.ip || req.socket.remoteAddress || 'unknown';
+      const now = Date.now();
+      const hourInMs = 60 * 60 * 1000;
+      
+      const rateLimitData = careerPathRateLimit.get(clientIP);
+      if (rateLimitData) {
+        if (now < rateLimitData.resetTime) {
+          if (rateLimitData.count >= 3) {
+            return res.status(429).json({ 
+              message: "Rate limit exceeded. You can generate 3 career paths per hour. Please try again later or sign up for unlimited access." 
+            });
+          }
+          rateLimitData.count++;
+        } else {
+          careerPathRateLimit.set(clientIP, { count: 1, resetTime: now + hourInMs });
+        }
+      } else {
+        careerPathRateLimit.set(clientIP, { count: 1, resetTime: now + hourInMs });
+      }
+      
+      // Clean up old entries
+      if (careerPathRateLimit.size > 1000) {
+        const entries = Array.from(careerPathRateLimit.entries());
+        for (const [ip, data] of entries) {
+          if (now > data.resetTime) {
+            careerPathRateLimit.delete(ip);
+          }
+        }
+      }
+
+      // Build prompt from answers
+      const prompt = `You are a career advisor for MetaHers Mind Spa, helping women transition into AI and Web3 careers.
+
+User Profile:
+- Current Situation: ${answers.current_role || 'Not specified'}
+- Interest Area: ${answers.interest_area || 'Not specified'}
+- Experience Level: ${answers.experience_level || 'Not specified'}
+- Timeline: ${answers.timeline || 'Not specified'}
+- Specific Goals: ${answers.goals || 'Not specified'}
+
+Generate a detailed, personalized 3-phase career roadmap in JSON format with this exact structure:
+{
+  "title": "A specific career title they're working toward (e.g., 'AI Product Manager', 'Web3 Developer')",
+  "overview": "1-2 sentence overview of their path and what makes them well-suited for it",
+  "phase1": {
+    "title": "Phase 1 title with timeframe (e.g., 'Months 1-3: Foundation Building')",
+    "goals": ["3-4 specific, measurable learning goals for this phase"],
+    "resources": ["3-4 specific courses, books, or actions to take"]
+  },
+  "phase2": {
+    "title": "Phase 2 title with timeframe",
+    "goals": ["3-4 specific goals building on phase 1"],
+    "resources": ["3-4 specific resources and projects"]
+  },
+  "phase3": {
+    "title": "Phase 3 title with timeframe",
+    "goals": ["3-4 advanced goals leading to career entry"],
+    "resources": ["3-4 resources including portfolio projects and networking"]
+  },
+  "nextSteps": ["3 immediate actions they should take this week to start their journey"]
+}
+
+Make it empowering, specific, and actionable. Reference MetaHers programs where relevant but focus on the complete path. Return only valid JSON.`;
+
+      const OpenAI = require("openai");
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "user", content: prompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 1500,
+        response_format: { type: "json_object" }
+      });
+
+      const careerPath = JSON.parse(completion.choices[0].message.content || "{}");
+
+      res.json({ careerPath });
+    } catch (error: any) {
+      console.error("Career path generation error:", error);
+      res.status(500).json({ message: "Failed to generate career path. Please try again." });
+    }
+  });
+
   // ===== JOURNAL ROUTES =====
   // List journal entries for a month (for calendar view)
   app.get('/api/journal/list', isAuthenticated, async (req: Request, res) => {

@@ -40,6 +40,7 @@ import AdminQuizResultsPage from "@/pages/AdminQuizResultsPage";
 import MemberWorkspacePage from "@/pages/MemberWorkspacePage";
 import UpgradePage from "@/pages/UpgradePage";
 import PromptPlaygroundPage from "@/pages/PromptPlaygroundPage";
+import CareerPathGeneratorPage from "@/pages/CareerPathGeneratorPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -73,6 +74,7 @@ function Router() {
       <Route path="/blog" component={BlogPage} />
       <Route path="/daily" component={DailyNewsPage} />
       <Route path="/playground" component={PromptPlaygroundPage} />
+      <Route path="/career-path" component={CareerPathGeneratorPage} />
       <Route path="/shop" component={ShopPage} />
       <Route path="/discover" component={DiscoverPage} />
       <Route path="/vip-cohort" component={VIPCohortPage} />

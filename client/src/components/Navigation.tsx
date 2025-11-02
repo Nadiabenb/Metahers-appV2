@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -15,9 +15,10 @@ export function Navigation() {
   // Public pages accessible to everyone
   const publicNavItems = [
     { path: "/playground", label: "Playground", icon: Sparkles, pro: false, highlight: true },
+    { path: "/career-path", label: "Career Path", icon: Target, pro: false, highlight: true },
     { path: "/discover", label: "Discover", icon: Compass, pro: false },
     { path: "/rituals", label: "Rituals", icon: Zap, pro: false },
-    { path: "/ai-builder", label: "AI Builder", icon: Code2, pro: false, highlight: true },
+    { path: "/ai-builder", label: "AI Builder", icon: Code2, pro: false },
     { path: "/vip-cohort", label: "VIP Retreat", icon: Crown, pro: false },
     { path: "/daily", label: "Daily", icon: Newspaper, pro: false },
     { path: "/blog", label: "Blog", icon: BookOpen, pro: false },
