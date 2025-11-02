@@ -5,6 +5,7 @@ import { storage } from "./storage";
 import { setupAuth, isAuthenticated, isProUser, isSanctuaryMember, isInnerCircleMember, isFoundersCircleMember, hashPassword, verifyPassword } from "./auth";
 import Stripe from "stripe";
 import { Resend } from "resend";
+import OpenAI from "openai";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
@@ -665,7 +666,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Use OpenAI to generate response
-      const OpenAI = require("openai");
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
       
       const completion = await openai.chat.completions.create({
@@ -775,7 +775,6 @@ Generate a detailed, personalized 3-phase career roadmap in JSON format with thi
 
 Make it empowering, specific, and actionable. Reference MetaHers programs where relevant but focus on the complete path. Return only valid JSON.`;
 
-      const OpenAI = require("openai");
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
       const completion = await openai.chat.completions.create({
