@@ -463,7 +463,7 @@ export default function LandingPage() {
             <span className="text-sm font-medium tracking-wider uppercase">Three Pillars of Mastery</span>
           </motion.div>
 
-          <h2 className="font-serif text-6xl sm:text-7xl font-bold mb-8 bg-gradient-to-r from-[#B565D8] via-[#FF00FF] to-[#E935C1] bg-clip-text text-transparent">
+          <h2 className="font-serif text-6xl sm:text-7xl font-bold mb-8 bg-gradient-to-r from-[#B565D8] via-[#FF00FF] to-[#E935C1] bg-clip-text text-transparent py-2 leading-tight">
             Your Digital Sanctuary
           </h2>
           <p className="text-2xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
