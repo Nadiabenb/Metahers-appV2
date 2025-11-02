@@ -90,7 +90,7 @@ export function ParticleField({ count = 50, prefersReducedMotion = false }: Part
   if (prefersReducedMotion) return null;
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
+    <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
       {Array.from({ length: count }).map((_, i) => (
         <Particle key={i} index={i} mousePosRef={mousePosRef} />
       ))}

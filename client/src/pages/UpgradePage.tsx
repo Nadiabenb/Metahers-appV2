@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlanBadge } from "@/components/PlanBadge";
 import { PRICING_PLANS, type SubscriptionTier, formatPrice } from "@shared/pricing";
-import { Check, Sparkles, Crown, Gem, Diamond } from "lucide-react";
-import { motion } from "framer-motion";
+import { Check, Sparkles, Crown, Gem, Diamond, TrendingUp } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import { ParticleField, GradientOrbs, TiltCard, ShimmerBadge, ImmersiveSection } from "@/components/metaverse";
 
 // Only show the 3 main tiers to avoid confusion
 const TIER_ORDER: SubscriptionTier[] = ['pro_monthly', 'sanctuary', 'inner_circle'];
@@ -13,6 +14,7 @@ const TIER_ORDER: SubscriptionTier[] = ['pro_monthly', 'sanctuary', 'inner_circl
 export default function UpgradePage() {
   const { user } = useAuth();
   const currentTier = (user?.subscriptionTier || 'free') as SubscriptionTier;
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     document.title = "Upgrade Your Membership - MetaHers Mind Spa";
@@ -66,72 +68,96 @@ export default function UpgradePage() {
   const currentTierIndex = TIER_ORDER.indexOf(currentTier);
 
   return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Choose Your Path
-            </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-              Three simple tiers designed for your learning journey — from self-paced mastery to concierge-level guidance
-            </p>
-            
-            {currentTier !== 'free' && (
-              <div className="flex items-center justify-center gap-3">
-                <span className="text-sm text-muted-foreground">Your current membership:</span>
-                <PlanBadge tier={currentTier} />
-              </div>
-            )}
-          </motion.div>
+      <div className="relative min-h-screen bg-background overflow-x-hidden">
+        {/* Particle field background */}
+        <ParticleField count={40} prefersReducedMotion={prefersReducedMotion || false} />
 
-          {/* Pro Annual Savings Callout */}
-          <div className="max-w-4xl mx-auto mb-8">
-            <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between flex-wrap gap-4">
+        {/* Hero section with gradient orbs */}
+        <div className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+          {/* Morphing gradient orbs */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <GradientOrbs prefersReducedMotion={prefersReducedMotion || false} />
+          </div>
+
+          {/* Grid overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(181,101,216,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(181,101,216,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+
+          <div className="relative z-10 max-w-7xl mx-auto">
+            <ImmersiveSection className="text-center mb-32">
+              <ShimmerBadge
+                icon={<TrendingUp className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />}
+                className="mb-12"
+              >
+                Membership Tiers
+              </ShimmerBadge>
+
+              <h1 
+                className="font-serif text-7xl sm:text-8xl md:text-9xl font-bold mb-12 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-clip-text text-transparent py-2 leading-tight"
+                style={{
+                  textShadow: '0 0 80px rgba(255,215,0,0.5), 0 0 120px rgba(181,101,216,0.3)',
+                }}
+              >
+                Choose Your Path
+              </h1>
+              
+              <p className="text-2xl sm:text-3xl text-foreground/90 max-w-4xl mx-auto leading-relaxed font-light mb-6">
+                Three simple tiers designed for your learning journey.
+                <br />
+                <span className="text-[hsl(var(--liquid-gold))]">From self-paced mastery to concierge-level guidance.</span>
+              </p>
+              
+              {currentTier !== 'free' && (
+                <div className="flex items-center justify-center gap-3 mt-8">
+                  <span className="text-lg text-foreground/70">Your current membership:</span>
+                  <PlanBadge tier={currentTier} />
+                </div>
+              )}
+            </ImmersiveSection>
+
+            {/* Pro Annual Savings Callout */}
+            <ImmersiveSection className="max-w-4xl mx-auto mb-16" delay={0.2}>
+              <div className="backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border border-[hsl(var(--liquid-gold))]/30 relative overflow-hidden group">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/10 to-transparent opacity-0 group-hover:opacity-100"
+                  transition={{ duration: 0.5 }}
+                />
+                <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
                   <div>
-                    <h3 className="font-semibold text-lg mb-1">Save with Annual Billing</h3>
-                    <p className="text-sm text-muted-foreground">Get 2 months free when you choose Pro Annual ($199/year)</p>
+                    <h3 className="font-serif text-2xl font-bold text-[hsl(var(--liquid-gold))] mb-2">Save with Annual Billing</h3>
+                    <p className="text-lg text-foreground/80">Get 2 months free when you choose Pro Annual ($199/year)</p>
                   </div>
                   <Button
                     onClick={() => handleUpgrade('pro_annual')}
                     variant="outline"
-                    className="border-primary/30"
+                    className="border-[hsl(var(--liquid-gold))]/50 hover:bg-[hsl(var(--liquid-gold))]/10"
                     data-testid="button-annual-upgrade"
                   >
                     View Annual Option
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </ImmersiveSection>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-12">
-            {TIER_ORDER.map((tier, index) => {
-              const plan = PRICING_PLANS[tier];
-              const TierIcon = getTierIcon(tier);
-              const isCurrentTier = tier === currentTier;
-              const isLowerTier = index < currentTierIndex;
-              const isHighlighted = tier === 'inner_circle';
+            <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3 mb-16">
+              {TIER_ORDER.map((tier, index) => {
+                const plan = PRICING_PLANS[tier];
+                const TierIcon = getTierIcon(tier);
+                const isCurrentTier = tier === currentTier;
+                const isLowerTier = index < currentTierIndex;
+                const isHighlighted = tier === 'inner_circle';
 
-              return (
-                <motion.div
-                  key={tier}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                >
-                  <Card 
-                    className={`relative h-full flex flex-col ${
-                      isHighlighted ? 'border-primary shadow-lg shadow-primary/20' : ''
-                    } ${isCurrentTier ? 'ring-2 ring-primary' : ''}`}
-                    data-testid={`card-tier-${tier}`}
+                return (
+                  <TiltCard
+                    key={tier}
+                    delay={index * 0.1}
+                    prefersReducedMotion={prefersReducedMotion || false}
                   >
+                    <div 
+                      className={`relative h-full flex flex-col backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border ${
+                        isHighlighted ? 'border-[hsl(var(--liquid-gold))] shadow-[0_0_60px_rgba(255,215,0,0.3)]' : 'border-white/10'
+                      } ${isCurrentTier ? 'ring-2 ring-[hsl(var(--liquid-gold))]' : ''} overflow-hidden group`}
+                      data-testid={`card-tier-${tier}`}
+                    >
                     {plan.badge && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                         <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-medium">
@@ -199,10 +225,10 @@ export default function UpgradePage() {
                         </Button>
                       )}
                     </CardFooter>
-                  </Card>
-                </motion.div>
-              );
-            })}
+                    </div>
+                  </TiltCard>
+                );
+              })}
           </div>
 
           {/* Special Programs */}
@@ -275,6 +301,7 @@ export default function UpgradePage() {
               </CardContent>
             </Card>
           </motion.div>
+          </div>
         </div>
       </div>
   );

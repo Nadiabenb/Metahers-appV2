@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 interface PortalButtonProps {
@@ -18,7 +18,24 @@ export function PortalButton({
   className = "",
   testId
 }: PortalButtonProps) {
+  const prefersReducedMotion = useReducedMotion();
+
   if (variant === "primary") {
+    if (prefersReducedMotion) {
+      return (
+        <button
+          onClick={onClick}
+          className={`relative w-full sm:w-auto px-12 py-6 rounded-full overflow-hidden bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] hover:shadow-[0_0_40px_rgba(255,215,0,0.6)] transition-shadow ${className}`}
+          data-testid={testId}
+        >
+          <span className="relative z-10 font-bold text-xl text-background flex items-center gap-3 justify-center">
+            {children}
+            {showIcon && <ArrowRight className="w-6 h-6" />}
+          </span>
+        </button>
+      );
+    }
+
     return (
       <motion.button
         onClick={onClick}
@@ -44,6 +61,18 @@ export function PortalButton({
           {showIcon && <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />}
         </span>
       </motion.button>
+    );
+  }
+
+  if (prefersReducedMotion) {
+    return (
+      <button
+        onClick={onClick}
+        className={`w-full sm:w-auto px-12 py-6 rounded-full backdrop-blur-2xl bg-white/5 border-2 border-[hsl(var(--liquid-gold))]/50 text-foreground font-bold text-xl flex items-center justify-center gap-3 relative overflow-hidden hover:bg-white/10 transition-colors ${className}`}
+        data-testid={testId}
+      >
+        {children}
+      </button>
     );
   }
 
