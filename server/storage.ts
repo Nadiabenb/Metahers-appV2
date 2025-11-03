@@ -19,6 +19,7 @@ import {
   founderInsights,
   insightInteractions,
   spaces,
+  transformationalExperiences,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -58,6 +59,7 @@ import {
   type InsightInteractionDB,
   type InsertInsightInteraction,
   type SpaceDB,
+  type TransformationalExperienceDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -181,6 +183,10 @@ export interface IStorage {
   // MetaHers World - Spaces operations
   getSpaces(): Promise<SpaceDB[]>;
   getSpaceBySlug(slug: string): Promise<SpaceDB | undefined>;
+  
+  // MetaHers World - Transformational Experiences operations
+  getExperiencesBySpace(spaceId: string): Promise<TransformationalExperienceDB[]>;
+  getExperienceById(id: string): Promise<TransformationalExperienceDB | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1197,6 +1203,30 @@ export class DatabaseStorage implements IStorage {
       .from(spaces)
       .where(and(eq(spaces.slug, slug), eq(spaces.isActive, true)));
     return space;
+  }
+
+  // MetaHers World - Transformational Experiences operations
+  async getExperiencesBySpace(spaceId: string): Promise<TransformationalExperienceDB[]> {
+    const experiences = await db
+      .select()
+      .from(transformationalExperiences)
+      .where(and(
+        eq(transformationalExperiences.spaceId, spaceId),
+        eq(transformationalExperiences.isActive, true)
+      ))
+      .orderBy(transformationalExperiences.sortOrder);
+    return experiences;
+  }
+
+  async getExperienceById(id: string): Promise<TransformationalExperienceDB | undefined> {
+    const [experience] = await db
+      .select()
+      .from(transformationalExperiences)
+      .where(and(
+        eq(transformationalExperiences.id, id),
+        eq(transformationalExperiences.isActive, true)
+      ));
+    return experience;
   }
 }
 

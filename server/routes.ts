@@ -599,6 +599,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== TRANSFORMATIONAL EXPERIENCES ROUTES =====
+  app.get('/api/spaces/:spaceId/experiences', async (req: Request, res) => {
+    try {
+      const { spaceId } = req.params;
+      const experiences = await storage.getExperiencesBySpace(spaceId);
+      res.json(experiences);
+    } catch (error) {
+      console.error("Error fetching experiences:", error);
+      res.status(500).json({ message: "Failed to fetch experiences" });
+    }
+  });
+
+  app.get('/api/experiences/:id', async (req: Request, res) => {
+    try {
+      const { id } = req.params;
+      const experience = await storage.getExperienceById(id);
+      
+      if (!experience) {
+        return res.status(404).json({ message: "Experience not found" });
+      }
+      
+      res.json(experience);
+    } catch (error) {
+      console.error("Error fetching experience:", error);
+      res.status(500).json({ message: "Failed to fetch experience" });
+    }
+  });
+
   // ===== RITUAL PROGRESS ROUTES =====
   app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: Request, res) => {
     try {

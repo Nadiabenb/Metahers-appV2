@@ -43,6 +43,7 @@ import UpgradePage from "@/pages/UpgradePage";
 import PromptPlaygroundPage from "@/pages/PromptPlaygroundPage";
 import CareerPathGeneratorPage from "@/pages/CareerPathGeneratorPage";
 import MetaHersWorldPage from "@/pages/MetaHersWorldPage";
+import SpaceDetailPage from "@/pages/SpaceDetailPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -89,6 +90,9 @@ function Router() {
       {/* Main immersive landing page - MetaHers World */}
       <Route path="/world" component={MetaHersWorldPage} />
       <Route path="/" component={MetaHersWorldPage} />
+      
+      {/* Space Detail Pages - Public */}
+      <Route path="/spaces/:slug" component={SpaceDetailPage} />
       
       {isAuthenticated && (
         <>

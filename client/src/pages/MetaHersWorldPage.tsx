@@ -322,7 +322,7 @@ export default function MetaHersWorldPage() {
                         </p>
 
                         {!isAuthenticated ? (
-                          <Link href="/signup">
+                          <Link href={`/spaces/${space.slug}`}>
                             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                               <Button
                                 className={`w-full bg-gradient-to-r ${gradientClass} text-white border-0 hover:opacity-90`}
@@ -346,7 +346,7 @@ export default function MetaHersWorldPage() {
                             </Button>
                           </Link>
                         ) : (
-                          <Link href={`/world/${space.slug}`}>
+                          <Link href={`/spaces/${space.slug}`}>
                             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                               <Button
                                 className={`w-full bg-gradient-to-r ${gradientClass} text-white border-0`}
