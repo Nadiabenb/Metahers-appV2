@@ -77,6 +77,14 @@ export default function MetaHersWorldPage() {
   const totalSpaces = 6;
   const overallProgress = (completedSpaces / totalSpaces) * 100;
 
+  // Debug logging
+  console.log('MetaHersWorldPage render:', { 
+    isLoading, 
+    spacesCount: spaces.length,
+    spaces,
+    isProUser 
+  });
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Animated background particles */}
