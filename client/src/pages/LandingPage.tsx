@@ -315,7 +315,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.5 }}
-              className="font-cormorant text-6xl sm:text-7xl md:text-8xl font-bold leading-tight mb-8 metallic-text"
+              className="font-cormorant text-6xl sm:text-7xl md:text-8xl font-bold leading-tight mb-8 text-gradient-gold"
             >
               MetaHers Mind Spa
             </motion.h1>
