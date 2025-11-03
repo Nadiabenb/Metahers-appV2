@@ -9,6 +9,7 @@ import {
   timestamp,
   varchar,
   boolean,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
@@ -460,6 +461,108 @@ export const insightInteractions = pgTable("insight_interactions", {
 export const insertInsightInteractionSchema = createInsertSchema(insightInteractions).omit({ id: true });
 export type InsertInsightInteraction = z.infer<typeof insertInsightInteractionSchema>;
 export type InsightInteractionDB = typeof insightInteractions.$inferSelect;
+
+// ===== METAHERS WORLD ARCHITECTURE =====
+
+// Spaces table (6 main learning spaces in MetaHers World)
+export const spaces = pgTable("spaces", {
+  id: varchar("id").primaryKey(),
+  name: varchar("name").notNull(),
+  slug: varchar("slug").unique().notNull(),
+  description: text("description").notNull(),
+  icon: varchar("icon").notNull(),
+  color: varchar("color").notNull(),
+  sortOrder: integer("sort_order").notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_space_slug").on(table.slug),
+  index("idx_space_active").on(table.isActive),
+]);
+
+export const insertSpaceSchema = createInsertSchema(spaces).omit({ createdAt: true, updatedAt: true });
+export type InsertSpace = z.infer<typeof insertSpaceSchema>;
+export type SpaceDB = typeof spaces.$inferSelect;
+
+// Transformational Experiences table (6 per space, personalized learning paths)
+export const transformationalExperiences = pgTable("transformational_experiences", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  spaceId: varchar("space_id").notNull().references(() => spaces.id, { onDelete: "cascade" }),
+  title: varchar("title").notNull(),
+  slug: varchar("slug").unique().notNull(),
+  description: text("description").notNull(),
+  learningObjectives: jsonb("learning_objectives").$type<string[]>().notNull(),
+  tier: varchar("tier").notNull().default("free"),
+  estimatedMinutes: integer("estimated_minutes").notNull(),
+  sortOrder: integer("sort_order").notNull(),
+  content: jsonb("content").$type<{
+    sections: Array<{
+      id: string;
+      title: string;
+      type: "text" | "video" | "interactive" | "quiz" | "hands_on_lab";
+      content: string;
+      resources?: Array<{ title: string; url: string; type: string }>;
+    }>;
+  }>().notNull(),
+  personalizationEnabled: boolean("personalization_enabled").default(false).notNull(),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_experience_space").on(table.spaceId),
+  index("idx_experience_tier").on(table.tier),
+]);
+
+export const insertTransformationalExperienceSchema = createInsertSchema(transformationalExperiences).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertTransformationalExperience = z.infer<typeof insertTransformationalExperienceSchema>;
+export type TransformationalExperienceDB = typeof transformationalExperiences.$inferSelect;
+
+// Experience Progress tracking table
+export const experienceProgress = pgTable("experience_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  experienceId: varchar("experience_id").notNull().references(() => transformationalExperiences.id, { onDelete: "cascade" }),
+  completedSections: jsonb("completed_sections").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+  personalizationAnswers: jsonb("personalization_answers").$type<Record<string, any>>(),
+  personalizedContent: jsonb("personalized_content").$type<{
+    customGuidance?: string;
+    recommendedTools?: string[];
+    nextSteps?: string[];
+  }>(),
+  confidenceScore: integer("confidence_score"),
+  businessImpact: text("business_impact"),
+  milestonesAchieved: jsonb("milestones_achieved").$type<string[]>().default(sql`'[]'::jsonb`),
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+  lastUpdated: timestamp("last_updated").defaultNow(),
+}, (table) => [
+  index("idx_exp_progress_user").on(table.userId),
+  index("idx_exp_progress_experience").on(table.experienceId),
+  uniqueIndex("idx_exp_progress_user_experience_unique").on(table.userId, table.experienceId),
+]);
+
+export const insertExperienceProgressSchema = createInsertSchema(experienceProgress).omit({ id: true, startedAt: true, lastUpdated: true });
+export type InsertExperienceProgress = z.infer<typeof insertExperienceProgressSchema>;
+export type ExperienceProgressDB = typeof experienceProgress.$inferSelect;
+
+// Personalization Questions table (AI-powered adaptive questions)
+export const personalizationQuestions = pgTable("personalization_questions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  experienceId: varchar("experience_id").notNull().references(() => transformationalExperiences.id, { onDelete: "cascade" }),
+  questionText: text("question_text").notNull(),
+  questionType: varchar("question_type").notNull(),
+  options: jsonb("options").$type<string[]>(),
+  sortOrder: integer("sort_order").notNull(),
+  isRequired: boolean("is_required").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_personalization_experience").on(table.experienceId),
+]);
+
+export const insertPersonalizationQuestionSchema = createInsertSchema(personalizationQuestions).omit({ id: true, createdAt: true });
+export type InsertPersonalizationQuestion = z.infer<typeof insertPersonalizationQuestionSchema>;
+export type PersonalizationQuestionDB = typeof personalizationQuestions.$inferSelect;
 
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
