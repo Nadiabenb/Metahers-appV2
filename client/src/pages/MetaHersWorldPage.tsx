@@ -1,14 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Sparkles, Globe, Boxes, Coins, Image as ImageIcon, Megaphone, ArrowRight, Lock, Users, Rocket, Brain } from "lucide-react";
+import { Globe, Sparkles, Boxes, Coins, Image as ImageIcon, Megaphone, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
-import { trackCTAClick } from "@/lib/analytics";
-import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 type Space = {
   id: string;
@@ -28,7 +22,6 @@ const ICON_MAP: Record<string, any> = {
   Coins,
   Image: ImageIcon,
   Megaphone,
-  Brain,
 };
 
 const COLOR_MAP: Record<string, string> = {
@@ -39,91 +32,8 @@ const COLOR_MAP: Record<string, string> = {
   "liquid-gold": "#fbbf24",
 };
 
-// Simple world card component
-function WorldCard({ space, index, isLocked }: { space: Space; index: number; isLocked: boolean }) {
-  const [isHovered, setIsHovered] = useState(false);
-  const IconComponent = ICON_MAP[space.icon] || Sparkles;
-  const color = COLOR_MAP[space.color] || COLOR_MAP["hyper-violet"];
-  
-  return (
-    <Link href={`/spaces/${space.slug}`}>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: index * 0.1, type: "spring" }}
-        whileHover={{ scale: 1.05 }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className="relative cursor-pointer"
-        data-testid={`world-card-${space.slug}`}
-      >
-        {/* Glow effect */}
-        <div
-          className="absolute -inset-4 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity"
-          style={{
-            background: `radial-gradient(circle, ${color}80, transparent 70%)`,
-          }}
-        />
-        
-        {/* Main orb */}
-        <div
-          className="relative w-48 h-48 rounded-full flex flex-col items-center justify-center border-4 transition-all duration-300 group"
-          style={{
-            borderColor: color,
-            background: `linear-gradient(135deg, ${color}, ${color}99)`,
-            boxShadow: `0 0 30px ${color}99`,
-          }}
-        >
-          {/* Lock badge */}
-          {isLocked && (
-            <div className="absolute -top-2 -right-2 bg-background rounded-full p-2 border-2 z-10" style={{ borderColor: color }}>
-              <Lock className="w-5 h-5" data-testid={`icon-locked-${space.slug}`} />
-            </div>
-          )}
-          
-          {/* Icon */}
-          <motion.div
-            animate={{
-              rotate: isHovered ? 360 : 0,
-            }}
-            transition={{ duration: 0.6 }}
-          >
-            <IconComponent className="w-16 h-16 mb-3 text-white" />
-          </motion.div>
-          
-          {/* Name */}
-          <div className="font-serif text-lg font-bold text-center px-4 text-white" data-testid={`text-world-name-${space.slug}`}>
-            {space.name}
-          </div>
-          
-          {/* Experience count */}
-          <div className="text-sm text-white/80 mt-1">
-            6 Experiences
-          </div>
-        </div>
-        
-        {/* Hover description */}
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="absolute -bottom-20 left-1/2 -translate-x-1/2 bg-card border rounded-lg px-4 py-3 shadow-xl z-50 w-64 text-center"
-            style={{ borderColor: color }}
-          >
-            <p className="text-xs text-foreground">{space.description}</p>
-            <p className="text-xs font-semibold mt-2" style={{ color }}>
-              Click to explore →
-            </p>
-          </motion.div>
-        )}
-      </motion.div>
-    </Link>
-  );
-}
-
 export default function MetaHersWorldPage() {
   const { user } = useAuth();
-
   const { data: spaces = [], isLoading } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
   });
@@ -131,148 +41,114 @@ export default function MetaHersWorldPage() {
   const isAuthenticated = !!user;
   const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
 
-  return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="relative py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-20"
-          >
-            <motion.h1
-              className="font-serif text-6xl md:text-8xl font-bold mb-6"
-              style={{
-                background: "linear-gradient(135deg, #fbbf24, #a855f7, #e879f9)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              MetaHers World
-            </motion.h1>
-            
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8"
-            >
-              Six immersive learning worlds. Each one designed to transform how you master AI and Web3.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap justify-center gap-4"
-            >
-              <Badge variant="outline" className="gap-2 px-4 py-2 text-base">
-                <Users className="w-4 h-4" />
-                Join 1,000+ Women
-              </Badge>
-              <Badge variant="outline" className="gap-2 px-4 py-2 text-base">
-                <Rocket className="w-4 h-4" />
-                36 AI-Powered Experiences
-              </Badge>
-              <Badge variant="outline" className="gap-2 px-4 py-2 text-base">
-                <Brain className="w-4 h-4" />
-                AI-Personalized Learning
-              </Badge>
-            </motion.div>
-          </motion.div>
-
-          {/* Worlds Grid */}
-          {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
-              {[...Array(6)].map((_, i) => (
-                <div key={i} className="flex justify-center">
-                  <div className="w-48 h-48 rounded-full bg-muted animate-pulse" />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 max-w-6xl mx-auto">
-              {spaces.map((space, index) => {
-                const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
-                return (
-                  <div key={space.id} className="flex justify-center">
-                    <WorldCard
-                      space={space}
-                      index={index}
-                      isLocked={isLocked}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          )}
-
-          {/* CTA for non-authenticated users */}
-          {!isAuthenticated && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="mt-24 text-center max-w-3xl mx-auto"
-            >
-              <Card className="p-8 md:p-12 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-primary/20">
-                <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">
-                  Ready to Begin?
-                </h2>
-                <p className="text-lg text-muted-foreground mb-8">
-                  Start with free experiences in each world. No credit card required.
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <Link href="/signup">
-                    <Button size="lg" className="text-lg px-8 py-6" data-testid="button-get-started">
-                      Start Free
-                      <Sparkles className="ml-2 w-5 h-5" />
-                    </Button>
-                  </Link>
-                  <Link href="/login">
-                    <Button size="lg" variant="outline" className="text-lg px-8 py-6" data-testid="button-login">
-                      Log In
-                    </Button>
-                  </Link>
-                </div>
-              </Card>
-            </motion.div>
-          )}
-
-          {/* Pro upsell for free users */}
-          {isAuthenticated && !isProUser && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="mt-24 text-center max-w-3xl mx-auto"
-            >
-              <Card className="p-8 md:p-12 bg-gradient-to-br from-[#a855f7]/10 via-[#e879f9]/5 to-transparent border-primary/20">
-                <Rocket className="w-12 h-12 mx-auto mb-6 text-primary" />
-                <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4">
-                  Unlock All Worlds
-                </h2>
-                <p className="text-lg text-muted-foreground mb-8">
-                  Upgrade to Pro for full access to all 36 transformational learning experiences
-                </p>
-                <Link href="/upgrade">
-                  <Button size="lg" className="text-lg px-8 py-6 bg-gradient-to-r from-[#a855f7] to-[#e879f9] text-white" data-testid="button-upgrade-pro">
-                    Upgrade to Pro
-                    <Rocket className="ml-2 w-5 h-5" />
-                  </Button>
-                </Link>
-              </Card>
-            </motion.div>
-          )}
-        </div>
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-2xl">Loading worlds...</div>
       </div>
+    );
+  }
 
-      {/* Testimonials section */}
-      <div className="py-16 md:py-24">
-        <TestimonialsSection />
+  return (
+    <div className="min-h-screen bg-background py-20 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Title */}
+        <h1 className="text-6xl font-serif font-bold text-center mb-4 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 bg-clip-text text-transparent">
+          MetaHers World
+        </h1>
+        <p className="text-2xl text-center text-muted-foreground mb-20">
+          Six immersive learning worlds. Master AI and Web3.
+        </p>
+
+        {/* Simple Grid of Worlds */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-20">
+          {spaces.map((space) => {
+            const IconComponent = ICON_MAP[space.icon] || Sparkles;
+            const color = COLOR_MAP[space.color] || "#a855f7";
+            const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
+
+            return (
+              <Link key={space.id} href={`/spaces/${space.slug}`}>
+                <div
+                  className="relative cursor-pointer transition-transform hover:scale-105"
+                  data-testid={`world-card-${space.slug}`}
+                >
+                  {/* Circular World */}
+                  <div
+                    className="w-64 h-64 mx-auto rounded-full flex flex-col items-center justify-center border-4 relative"
+                    style={{
+                      borderColor: color,
+                      background: `linear-gradient(135deg, ${color}, ${color}dd)`,
+                      boxShadow: `0 0 40px ${color}80`,
+                    }}
+                  >
+                    {/* Lock Badge */}
+                    {isLocked && (
+                      <div
+                        className="absolute -top-3 -right-3 bg-white dark:bg-gray-900 rounded-full p-3 border-4 z-10"
+                        style={{ borderColor: color }}
+                      >
+                        <Lock className="w-6 h-6" style={{ color }} />
+                      </div>
+                    )}
+
+                    {/* Icon */}
+                    <IconComponent className="w-20 h-20 mb-4 text-white" />
+
+                    {/* Name */}
+                    <div className="font-serif text-2xl font-bold text-center px-4 text-white">
+                      {space.name}
+                    </div>
+
+                    {/* Experience Count */}
+                    <div className="text-sm text-white/90 mt-2">6 Experiences</div>
+                  </div>
+
+                  {/* Description */}
+                  <p className="text-center mt-6 text-sm text-muted-foreground px-4">
+                    {space.description}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* CTA */}
+        {!isAuthenticated && (
+          <div className="text-center max-w-2xl mx-auto bg-card border rounded-lg p-8">
+            <h2 className="text-3xl font-serif font-bold mb-4">Ready to Begin?</h2>
+            <p className="text-lg text-muted-foreground mb-6">
+              Start with free experiences in each world. No credit card required.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link href="/signup">
+                <Button size="lg" data-testid="button-get-started">
+                  Start Free
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button size="lg" variant="outline" data-testid="button-login">
+                  Log In
+                </Button>
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {isAuthenticated && !isProUser && (
+          <div className="text-center max-w-2xl mx-auto bg-card border rounded-lg p-8">
+            <h2 className="text-3xl font-serif font-bold mb-4">Unlock All Worlds</h2>
+            <p className="text-lg text-muted-foreground mb-6">
+              Upgrade to Pro for full access to all 36 transformational experiences
+            </p>
+            <Link href="/upgrade">
+              <Button size="lg" data-testid="button-upgrade-pro">
+                Upgrade to Pro
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );
