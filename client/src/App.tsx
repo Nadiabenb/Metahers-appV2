@@ -42,6 +42,7 @@ import MemberWorkspacePage from "@/pages/MemberWorkspacePage";
 import UpgradePage from "@/pages/UpgradePage";
 import PromptPlaygroundPage from "@/pages/PromptPlaygroundPage";
 import CareerPathGeneratorPage from "@/pages/CareerPathGeneratorPage";
+import MetaHersWorldPage from "@/pages/MetaHersWorldPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -92,6 +93,7 @@ function Router() {
         <>
           <Route path="/home" component={HomePage} />
           <Route path="/workspace" component={MemberWorkspacePage} />
+          <Route path="/world" component={MetaHersWorldPage} />
           <Route path="/rituals" component={RitualsPage} />
           <Route path="/rituals/:slug" component={RitualDetailPage} />
           <Route path="/journal" component={JournalPage} />

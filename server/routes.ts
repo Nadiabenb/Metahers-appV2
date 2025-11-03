@@ -572,6 +572,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== METAHERS WORLD SPACES ROUTES =====
+  app.get('/api/spaces', async (_req: Request, res) => {
+    try {
+      const spaces = await storage.getSpaces();
+      res.json(spaces);
+    } catch (error) {
+      console.error("Error fetching spaces:", error);
+      res.status(500).json({ message: "Failed to fetch spaces" });
+    }
+  });
+
+  app.get('/api/spaces/:slug', async (req: Request, res) => {
+    try {
+      const { slug } = req.params;
+      const space = await storage.getSpaceBySlug(slug);
+      
+      if (!space) {
+        return res.status(404).json({ message: "Space not found" });
+      }
+      
+      res.json(space);
+    } catch (error) {
+      console.error("Error fetching space:", error);
+      res.status(500).json({ message: "Failed to fetch space" });
+    }
+  });
+
   // ===== RITUAL PROGRESS ROUTES =====
   app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: Request, res) => {
     try {

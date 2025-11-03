@@ -18,6 +18,7 @@ import {
   oneOnOneBookings,
   founderInsights,
   insightInteractions,
+  spaces,
   type User,
   type UpsertUser,
   type RitualProgressDB,
@@ -56,6 +57,7 @@ import {
   type InsertFounderInsight,
   type InsightInteractionDB,
   type InsertInsightInteraction,
+  type SpaceDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -175,6 +177,10 @@ export interface IStorage {
   getInsightInteraction(insightId: string, userId: string): Promise<InsightInteractionDB | undefined>;
   markInsightAsViewed(insightId: string, userId: string): Promise<void>;
   toggleInsightLike(insightId: string, userId: string): Promise<boolean>;
+
+  // MetaHers World - Spaces operations
+  getSpaces(): Promise<SpaceDB[]>;
+  getSpaceBySlug(slug: string): Promise<SpaceDB | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1173,6 +1179,24 @@ export class DatabaseStorage implements IStorage {
       
       return true;
     }
+  }
+
+  // MetaHers World - Spaces operations
+  async getSpaces(): Promise<SpaceDB[]> {
+    const allSpaces = await db
+      .select()
+      .from(spaces)
+      .where(eq(spaces.isActive, true))
+      .orderBy(spaces.sortOrder);
+    return allSpaces;
+  }
+
+  async getSpaceBySlug(slug: string): Promise<SpaceDB | undefined> {
+    const [space] = await db
+      .select()
+      .from(spaces)
+      .where(and(eq(spaces.slug, slug), eq(spaces.isActive, true)));
+    return space;
   }
 }
 
