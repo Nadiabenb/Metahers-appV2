@@ -56,6 +56,16 @@
     </script>
     
     <title>MetaHers</title>
+    
+    <!-- Theme initialization script - prevents flash of wrong theme -->
+    <script>
+      // Apply theme class immediately before React loads (default to dark mode)
+      (function() {
+        const savedTheme = localStorage.getItem('metahers-theme');
+        const theme = savedTheme || 'dark'; // Default to dark mode (Web3 aesthetic)
+        document.documentElement.classList.add(theme);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
