@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { trackPageView } from "@/lib/analytics";
 import { Navigation } from "@/components/Navigation";
 import { InstallPrompt } from "@/components/InstallPrompt";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { initializeApp } from "@/lib/storage";
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
@@ -129,14 +130,16 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <div className="min-h-screen bg-background">
-          <Navigation />
-          <Router />
-          <InstallPrompt />
-        </div>
-        <Toaster />
-      </TooltipProvider>
+      <ThemeProvider>
+        <TooltipProvider>
+          <div className="min-h-screen bg-background">
+            <Navigation />
+            <Router />
+            <InstallPrompt />
+          </div>
+          <Toaster />
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
