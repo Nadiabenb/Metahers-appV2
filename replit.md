@@ -49,7 +49,24 @@ An Express.js server provides RESTful API routes for journal operations (CRUD, A
 Custom email/password authentication uses bcrypt for password hashing (12 salt rounds) and database-backed sessions with `connect-pg-simple`. Password validation requires a minimum of 8 characters and email uniqueness. Two middleware functions protect routes: `isAuthenticated` for user-specific routes, and `isProUser` for Pro-only features (checks both authentication and Pro subscription status).
 
 ### Data Storage
-All user and application data, including `users`, `ritual_progress`, `journal_entries`, `achievements`, `subscriptions`, `thought_leadership_posts`, and `thought_leadership_progress`, is persisted in a PostgreSQL database using Drizzle ORM. Zod is employed for client-side validation of API requests and responses. The thought leadership tables track 30-day journey progress with streak calculation, day completion tracking, and AI-generated multi-platform content.
+All user and application data, including `users`, `ritual_progress`, `journal_entries`, `achievements`, `subscriptions`, `thought_leadership_posts`, `thought_leadership_progress`, `spaces`, `transformational_experiences`, `experience_progress`, and `personalization_responses`, is persisted in a PostgreSQL database using Drizzle ORM. Zod is employed for client-side validation of API requests and responses.
+
+### MetaHers World Architecture (Hub-and-Spoke Model)
+**Strategic Pivot**: Moving from spa-themed rituals to a structured learning academy with measurable outcomes. The new architecture centers around **MetaHers World** - a central hub connecting 6 specialized learning spaces, each containing 6 AI-personalized transformational experiences.
+
+**Core Components**:
+1. **Spaces Table**: 6 curated learning domains (Web3, AI, Metaverse, Crypto, NFTs, AI-Powered Branding). Each space has: unique slug, name, description, icon, accent color, tier requirement (sortOrder-based gating), and active/inactive status.
+2. **Transformational Experiences Table**: 36 total experiences (6 per space). Each experience includes: personalized AI questions, outcome-focused content, skill-building activities, and progress tracking with confidence scoring.
+3. **Experience Progress Table**: Tracks individual user progress with unique (userId, experienceId) constraint. Records: completion percentage, time spent, confidence scores (1-10), business impact measurements, milestones achieved, and streak tracking.
+4. **Personalization Responses Table**: Stores user answers to AI-powered questions with unique (userId, experienceId, questionId) constraint, enabling dynamic content adaptation.
+
+**Tier Gating Strategy**: 
+- Free tier: Spaces 1-2 unlocked (Web3 Foundation, AI Essentials)
+- Pro tier: Spaces 3-4 unlocked (Metaverse Mastery, Crypto Confidence)
+- Premium tiers: Spaces 5-6 unlocked (NFT Creation, AI-Powered Branding)
+- Determined by `sortOrder` field: spaces with sortOrder ≤ 2 available to Free users
+
+**Value Proposition Shift**: From aesthetic luxury learning to outcome-driven skill mastery. Emphasizes "what you'll accomplish" over "what you'll learn". Features always-updated content reflecting latest tech developments, AI-personalized guidance based on individual women's needs, and measurable transformation metrics.
 
 ### Key Features
 - **Multi-Tier Pricing**: A 7-tier model (Free, Pro Monthly/Annual, AI Builder Group/Private, VIP Retreat, Executive Suite).
