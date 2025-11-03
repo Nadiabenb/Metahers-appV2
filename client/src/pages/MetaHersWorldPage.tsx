@@ -97,11 +97,11 @@ function OrbitalWorld({ space, index, total, isLocked }: { space: Space; index: 
         
         {/* Main orb */}
         <div
-          className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center border-4 backdrop-blur-sm transition-all duration-300"
+          className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center border-4 transition-all duration-300"
           style={{
             borderColor: color,
-            background: `radial-gradient(circle at 30% 30%, ${color}40, ${color}10)`,
-            boxShadow: `0 0 40px ${color}80, inset 0 0 30px ${color}30`,
+            background: `linear-gradient(135deg, ${color}CC, ${color}66)`,
+            boxShadow: `0 0 40px ${color}, inset 0 0 30px ${color}99`,
           }}
         >
           {/* Lock badge */}
@@ -119,15 +119,13 @@ function OrbitalWorld({ space, index, total, isLocked }: { space: Space; index: 
             transition={{ duration: 0.8 }}
           >
             <IconComponent 
-              className="w-12 h-12 mb-2" 
-              style={{ color }}
+              className="w-12 h-12 mb-2 text-white drop-shadow-lg" 
             />
           </motion.div>
           
           {/* Name */}
           <div 
-            className="font-serif text-sm font-bold text-center px-2"
-            style={{ color }}
+            className="font-serif text-base font-bold text-center px-2 text-white drop-shadow-lg"
             data-testid={`text-world-name-${space.slug}`}
           >
             {space.name}
@@ -158,15 +156,6 @@ export default function MetaHersWorldPage() {
 
   const { data: spaces = [], isLoading, error, isError } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
-  });
-
-  // Debug logging
-  console.log("MetaHersWorld Debug:", { 
-    spacesLength: spaces?.length, 
-    isLoading, 
-    isError, 
-    error,
-    spaces: spaces 
   });
 
   const isAuthenticated = !!user;
