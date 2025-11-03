@@ -40,7 +40,7 @@ export function Navigation() {
       });
       
       if (response.ok) {
-        window.location.href = "/";
+        window.location.href = "/"; // Landing page
       }
     } catch (error) {
       console.error("Logout failed:", error);

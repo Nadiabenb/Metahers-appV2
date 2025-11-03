@@ -84,11 +84,12 @@ function Router() {
       <Route path="/rituals" component={RitualsPage} />
       <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
       
-      {!isAuthenticated ? (
-        <Route path="/" component={LandingPage} />
-      ) : (
+      {/* Landing page always accessible at / */}
+      <Route path="/" component={LandingPage} />
+      
+      {isAuthenticated && (
         <>
-          <Route path="/" component={HomePage} />
+          <Route path="/home" component={HomePage} />
           <Route path="/workspace" component={MemberWorkspacePage} />
           <Route path="/rituals" component={RitualsPage} />
           <Route path="/rituals/:slug" component={RitualDetailPage} />

@@ -103,7 +103,7 @@ export default function SignupPage() {
       });
       
       // Redirect to rituals page if coming from quiz
-      setLocation(quizRitual ? "/rituals" : "/");
+      setLocation(quizRitual ? "/rituals" : "/home");
     } catch (error: any) {
       toast({
         title: "Signup failed",

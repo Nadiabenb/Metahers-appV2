@@ -34,7 +34,7 @@ export default function LoginPage() {
         description: "You've successfully logged in.",
       });
       
-      setLocation("/");
+      setLocation("/home");
     } catch (error: any) {
       toast({
         title: "Login failed",
