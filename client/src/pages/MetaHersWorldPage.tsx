@@ -47,20 +47,20 @@ function OrbitalWorld({ space, index, total, isLocked }: { space: Space; index: 
   
   // Calculate orbital position
   const angle = (index / total) * 360;
-  const radius = 280; // Distance from center
+  const radius = 250; // Distance from center
+  const x = Math.cos((angle * Math.PI) / 180) * radius;
+  const y = Math.sin((angle * Math.PI) / 180) * radius;
   
   return (
     <Link href={`/spaces/${space.slug}`}>
       <motion.div
         className="absolute cursor-pointer"
         style={{
-          left: '50%',
-          top: '50%',
+          left: `calc(50% + ${x}px - 80px)`,
+          top: `calc(50% + ${y}px - 80px)`,
         }}
         initial={{ scale: 0, opacity: 0 }}
         animate={{
-          x: Math.cos((angle * Math.PI) / 180) * radius - 80,
-          y: Math.sin((angle * Math.PI) / 180) * radius - 80,
           scale: 1,
           opacity: 1,
           rotate: isHovered ? 360 : 0,
@@ -68,12 +68,12 @@ function OrbitalWorld({ space, index, total, isLocked }: { space: Space; index: 
         transition={{
           type: "spring",
           stiffness: 100,
-          delay: index * 0.1,
+          delay: index * 0.15,
           rotate: { duration: 0.6 }
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        whileHover={{ scale: 1.2 }}
+        whileHover={{ scale: 1.3 }}
         data-testid={`world-orb-${space.slug}`}
       >
         {/* Glow effect */}
@@ -161,9 +161,13 @@ export default function MetaHersWorldPage() {
   });
 
   // Debug logging
-  if (isError) {
-    console.error("Failed to load spaces:", error);
-  }
+  console.log("MetaHersWorld Debug:", { 
+    spacesLength: spaces?.length, 
+    isLoading, 
+    isError, 
+    error,
+    spaces: spaces 
+  });
 
   const isAuthenticated = !!user;
   const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
@@ -233,19 +237,19 @@ export default function MetaHersWorldPage() {
         </motion.div>
 
         {/* Orbital worlds container */}
-        <div className="relative w-full max-w-4xl" style={{ height: '700px' }}>
+        <div className="relative w-full max-w-5xl mx-auto" style={{ height: '800px' }}>
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary"></div>
             </div>
           ) : (
-            <>
+            <div className="relative w-full h-full flex items-center justify-center">
               {/* Central orbital ring */}
               <motion.div
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/20"
+                className="absolute rounded-full border-2 border-primary/30"
                 style={{
-                  width: '600px',
-                  height: '600px',
+                  width: '650px',
+                  height: '650px',
                 }}
                 animate={{
                   rotate: 360,
@@ -258,19 +262,21 @@ export default function MetaHersWorldPage() {
               />
               
               {/* Orbiting worlds */}
-              {spaces.map((space, index) => {
-                const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
-                return (
-                  <OrbitalWorld
-                    key={space.id}
-                    space={space}
-                    index={index}
-                    total={spaces.length}
-                    isLocked={isLocked}
-                  />
-                );
-              })}
-            </>
+              <div className="relative" style={{ width: '650px', height: '650px' }}>
+                {spaces.map((space, index) => {
+                  const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
+                  return (
+                    <OrbitalWorld
+                      key={space.id}
+                      space={space}
+                      index={index}
+                      total={spaces.length}
+                      isLocked={isLocked}
+                    />
+                  );
+                })}
+              </div>
+            </div>
           )}
         </div>
 
