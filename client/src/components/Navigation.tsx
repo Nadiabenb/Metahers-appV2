@@ -15,6 +15,7 @@ export function Navigation() {
   // Public pages accessible to everyone (streamlined)
   const publicNavItems = [
     { path: "/playground", label: "AI Tools", icon: Sparkles, pro: false, highlight: true },
+    { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, pro: true, highlight: true },
     { path: "/career-path", label: "Career Path", icon: Target, pro: false, highlight: true },
     { path: "/discover", label: "Discover", icon: Compass, pro: false },
     { path: "/rituals", label: "Rituals", icon: Zap, pro: false },
