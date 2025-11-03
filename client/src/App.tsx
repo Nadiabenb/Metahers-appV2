@@ -102,7 +102,6 @@ function Router() {
         <>
           <Route path="/home" component={HomePage} />
           <Route path="/workspace" component={MemberWorkspacePage} />
-          <Route path="/rituals" component={RitualsPage} />
           <Route path="/rituals/:slug" component={RitualDetailPage} />
           <Route path="/journal" component={JournalPage} />
           <Route path="/journal/history" component={JournalHistoryPage} />
