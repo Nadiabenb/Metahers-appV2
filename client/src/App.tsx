@@ -86,14 +86,14 @@ function Router() {
       <Route path="/rituals" component={RitualsPage} />
       <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
       
-      {/* Landing page always accessible at / */}
-      <Route path="/" component={LandingPage} />
+      {/* Main immersive landing page - MetaHers World */}
+      <Route path="/world" component={MetaHersWorldPage} />
+      <Route path="/" component={MetaHersWorldPage} />
       
       {isAuthenticated && (
         <>
           <Route path="/home" component={HomePage} />
           <Route path="/workspace" component={MemberWorkspacePage} />
-          <Route path="/world" component={MetaHersWorldPage} />
           <Route path="/rituals" component={RitualsPage} />
           <Route path="/rituals/:slug" component={RitualDetailPage} />
           <Route path="/journal" component={JournalPage} />
