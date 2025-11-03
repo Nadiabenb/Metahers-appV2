@@ -273,9 +273,14 @@ export default function MetaHersWorldPage() {
   const { user } = useAuth();
   const prefersReducedMotion = useReducedMotion();
 
-  const { data: spaces = [], isLoading } = useQuery<Space[]>({
+  const { data: spaces = [], isLoading, error, isError } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
   });
+
+  // Debug logging
+  if (isError) {
+    console.error("Failed to load spaces:", error);
+  }
 
   const isAuthenticated = !!user;
   const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
