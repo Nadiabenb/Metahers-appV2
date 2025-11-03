@@ -291,7 +291,7 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="inline-flex items-center gap-3 backdrop-blur-2xl bg-gradient-to-r from-white/10 to-white/5 px-8 py-4 rounded-full mb-12 border border-[hsl(var(--liquid-gold))]/30 relative overflow-hidden group"
+              className="inline-flex items-center gap-3 glass-card px-8 py-4 rounded-full mb-12 neon-glow-violet"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
