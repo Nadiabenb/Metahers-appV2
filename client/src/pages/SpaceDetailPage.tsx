@@ -44,17 +44,17 @@ export default function SpaceDetailPage() {
   const [, navigate] = useLocation();
   const { user } = useAuth();
 
-  const { data: space, isLoading: spaceLoading } = useQuery<Space>({
+  const { data: space, isLoading: spaceLoading, error: spaceError } = useQuery<Space>({
     queryKey: [`/api/spaces/${slug}`],
   });
 
-  const { data: experiences = [], isLoading: experiencesLoading } = useQuery<Experience[]>({
+  const { data: experiences = [], isLoading: experiencesLoading, error: experiencesError } = useQuery<Experience[]>({
     queryKey: [`/api/spaces/${space?.id}/experiences`],
     enabled: !!space?.id,
   });
 
   const isAuthenticated = !!user;
-  const isProUser = user?.isPro || user?.subscriptionTier !== "free";
+  const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
 
   if (spaceLoading || experiencesLoading) {
     return (
@@ -67,14 +67,75 @@ export default function SpaceDetailPage() {
     );
   }
 
+  if (spaceError) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <Card className="max-w-md text-center p-8">
+          <CardHeader>
+            <CardTitle className="text-2xl mb-2">Unable to Load Space</CardTitle>
+            <CardDescription>
+              We encountered an error while loading this space. Please try again.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Button onClick={() => window.location.reload()} data-testid="button-retry">
+              Try Again
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/world")} data-testid="button-back-to-world">
+              Back to MetaHers World
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (!space) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Space Not Found</h1>
-          <Button onClick={() => navigate("/world")} data-testid="button-back-to-world">
-            Back to MetaHers World
-          </Button>
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <Card className="max-w-md text-center p-8">
+          <CardHeader>
+            <CardTitle className="text-2xl mb-2">Space Not Found</CardTitle>
+            <CardDescription>
+              The space you're looking for doesn't exist or has been moved.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => navigate("/world")} data-testid="button-back-to-world">
+              Back to MetaHers World
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (experiencesError) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className={`relative bg-gradient-to-br ${COLOR_CLASSES[space.color] || COLOR_CLASSES["hyper-violet"]} text-white py-16 px-6`}>
+          <div className="absolute inset-0 bg-black/20"></div>
+          <div className="container mx-auto max-w-6xl relative z-10">
+            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">{space.name}</h1>
+          </div>
+        </div>
+        <div className="container mx-auto max-w-6xl px-6 py-16">
+          <Card className="max-w-2xl mx-auto text-center p-8">
+            <CardHeader>
+              <CardTitle className="text-2xl mb-2">Unable to Load Experiences</CardTitle>
+              <CardDescription>
+                We encountered an error while loading the experiences for this space.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Button onClick={() => window.location.reload()} data-testid="button-retry-experiences">
+                Try Again
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/world")} data-testid="button-back-to-world-error">
+                Back to MetaHers World
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
@@ -135,7 +196,7 @@ export default function SpaceDetailPage() {
             <div className="flex items-center gap-3 mb-6">
               <h2 className="font-serif text-3xl font-bold">Start Free</h2>
               <Badge className="bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--hyper-violet))] text-white">
-                No Sign-Up Required
+                Free with Account
               </Badge>
             </div>
             <div className="grid gap-6">

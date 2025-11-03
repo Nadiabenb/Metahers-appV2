@@ -44,6 +44,7 @@ import PromptPlaygroundPage from "@/pages/PromptPlaygroundPage";
 import CareerPathGeneratorPage from "@/pages/CareerPathGeneratorPage";
 import MetaHersWorldPage from "@/pages/MetaHersWorldPage";
 import SpaceDetailPage from "@/pages/SpaceDetailPage";
+import ExperienceDetailPage from "@/pages/ExperienceDetailPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -93,6 +94,9 @@ function Router() {
       
       {/* Space Detail Pages - Public */}
       <Route path="/spaces/:slug" component={SpaceDetailPage} />
+      
+      {/* Experience Detail Pages - Public */}
+      <Route path="/experiences/:slug" component={ExperienceDetailPage} />
       
       {isAuthenticated && (
         <>

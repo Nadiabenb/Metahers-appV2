@@ -611,6 +611,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET single experience by slug
+  app.get('/api/experiences/:slug', async (req: Request, res) => {
+    try {
+      const { slug } = req.params;
+      const experience = await storage.getExperienceBySlug(slug);
+      
+      if (!experience) {
+        return res.status(404).json({ message: "Experience not found" });
+      }
+      
+      res.json(experience);
+    } catch (error) {
+      console.error("Error fetching experience:", error);
+      res.status(500).json({ message: "Failed to fetch experience" });
+    }
+  });
+
   app.get('/api/experiences/:id', async (req: Request, res) => {
     try {
       const { id } = req.params;

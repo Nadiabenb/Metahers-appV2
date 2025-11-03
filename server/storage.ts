@@ -187,6 +187,7 @@ export interface IStorage {
   // MetaHers World - Transformational Experiences operations
   getExperiencesBySpace(spaceId: string): Promise<TransformationalExperienceDB[]>;
   getExperienceById(id: string): Promise<TransformationalExperienceDB | undefined>;
+  getExperienceBySlug(slug: string): Promise<TransformationalExperienceDB | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1224,6 +1225,17 @@ export class DatabaseStorage implements IStorage {
       .from(transformationalExperiences)
       .where(and(
         eq(transformationalExperiences.id, id),
+        eq(transformationalExperiences.isActive, true)
+      ));
+    return experience;
+  }
+
+  async getExperienceBySlug(slug: string): Promise<TransformationalExperienceDB | undefined> {
+    const [experience] = await db
+      .select()
+      .from(transformationalExperiences)
+      .where(and(
+        eq(transformationalExperiences.slug, slug),
         eq(transformationalExperiences.isActive, true)
       ));
     return experience;
