@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Globe, Boxes, Coins, Image, Megaphone, ArrowRight, Lock, Star, Trophy, Zap, CheckCircle2 } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useMotionValue, useReducedMotion } from "framer-motion";
+import { Sparkles, Globe, Boxes, Coins, Image as ImageIcon, Megaphone, ArrowRight, Lock, Star, Trophy, Zap, CheckCircle2, Heart, Users, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/useAuth";
+import { trackCTAClick } from "@/lib/analytics";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 type Space = {
   id: string;
@@ -25,7 +26,7 @@ const ICON_MAP: Record<string, any> = {
   Sparkles,
   Boxes,
   Coins,
-  Image,
+  Image: ImageIcon,
   Megaphone,
 };
 
@@ -37,387 +38,446 @@ const COLOR_CLASSES: Record<string, string> = {
   "liquid-gold": "from-[hsl(var(--liquid-gold))] to-[hsl(var(--hyper-violet))]",
 };
 
+// Floating particle component
+function Particle({ index }: { index: number }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const [mounted, setMounted] = useState(false);
+  const [targets] = useState(() => ({
+    xOffset: (Math.random() - 0.5) * 200,
+    yOffset: (Math.random() - 0.5) * 200,
+    duration: 15 + Math.random() * 10
+  }));
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      x.set(Math.random() * window.innerWidth);
+      y.set(Math.random() * window.innerHeight);
+      setMounted(true);
+    }
+  }, [x, y]);
+
+  if (!mounted) return null;
+
+  const initialX = x.get();
+  const initialY = y.get();
+
+  return (
+    <motion.div
+      style={{ x, y }}
+      animate={{
+        x: [initialX, initialX + targets.xOffset, initialX],
+        y: [initialY, initialY + targets.yOffset, initialY],
+        opacity: [0, 0.6, 0.3, 0.6, 0],
+      }}
+      transition={{
+        duration: targets.duration,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+      className="absolute w-1.5 h-1.5 bg-[hsl(var(--liquid-gold))] rounded-full blur-sm"
+    />
+  );
+}
+
 export default function MetaHersWorldPage() {
   const { user } = useAuth();
   const [hoveredSpace, setHoveredSpace] = useState<string | null>(null);
-  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; delay: number }>>([]);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   const { data: spaces = [], isLoading } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
   });
 
-  useEffect(() => {
-    // Check for reduced motion preference
-    if (typeof window !== 'undefined') {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      setPrefersReducedMotion(mediaQuery.matches);
-
-      const listener = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-      mediaQuery.addEventListener('change', listener);
-      return () => mediaQuery.removeEventListener('change', listener);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Generate particles on client side only
-    if (typeof window !== 'undefined' && !prefersReducedMotion) {
-      const particleData = Array.from({ length: 20 }, (_, i) => ({
-        id: i,
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        delay: Math.random() * 5,
-      }));
-      setParticles(particleData);
-    }
-  }, [prefersReducedMotion]);
-
+  const isAuthenticated = !!user;
   const isProUser = user?.isPro || user?.subscriptionTier !== "free";
-  const completedSpaces = 1;
-  const totalSpaces = 6;
-  const overallProgress = (completedSpaces / totalSpaces) * 100;
-
-  // Debug logging
-  console.log('MetaHersWorldPage render:', { 
-    isLoading, 
-    spacesCount: spaces.length,
-    spaces,
-    isProUser 
-  });
 
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
-      {/* Animated background particles */}
-      {!prefersReducedMotion && particles.length > 0 && (
+      {/* Immersive floating particles */}
+      {!prefersReducedMotion && (
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {particles.map((particle) => {
-            const endX = Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1000);
-            const endY = Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 1000);
-            return (
-              <motion.div
-                key={particle.id}
-                className="absolute w-1 h-1 bg-primary/20 rounded-full"
-                initial={{ x: particle.x, y: particle.y, opacity: 0 }}
-                animate={{
-                  x: [particle.x, endX, particle.x],
-                  y: [particle.y, endY, particle.y],
-                  opacity: [0, 1, 0.5, 1, 0],
-                }}
-                transition={{
-                  duration: 15 + particle.delay,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: particle.delay,
-                }}
-              />
-            );
-          })}
+          {Array.from({ length: 30 }, (_, i) => (
+            <Particle key={i} index={i} />
+          ))}
         </div>
       )}
 
-      <div className="relative mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-        {/* Hero Section with Animation */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12"
-        >
+      {/* Hero Section */}
+      <div className="relative">
+        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-block mb-6"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
           >
-            <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl text-gradient-gold relative">
-              <motion.span
-                animate={{
-                  textShadow: [
-                    "0 0 20px rgba(255, 215, 0, 0.3)",
-                    "0 0 40px rgba(255, 215, 0, 0.5)",
-                    "0 0 20px rgba(255, 215, 0, 0.3)",
-                  ],
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
-                MetaHers World
-              </motion.span>
-            </h1>
+            <motion.h1
+              className="font-serif text-5xl md:text-6xl lg:text-7xl mb-6"
+              style={{
+                background: "linear-gradient(135deg, hsl(var(--liquid-gold)), hsl(var(--hyper-violet)), hsl(var(--cyber-fuchsia)))",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Welcome to MetaHers World
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="text-xl md:text-2xl text-muted-foreground max-w-4xl mx-auto mb-8 leading-relaxed"
+            >
+              Where tech stops being intimidating and starts being yours.
+              <br />
+              <span className="text-foreground font-medium">AI, Web3, NFTs, Crypto</span> – made simple, elevated, and personalized just for you.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="flex flex-wrap justify-center gap-4 mb-12"
+            >
+              {!isAuthenticated ? (
+                <>
+                  <Link href="/signup">
+                    <Button 
+                      size="lg" 
+                      className="text-lg px-8 py-6 bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] hover:opacity-90"
+                      data-testid="button-join-metahers"
+                      onClick={() => trackCTAClick('Join MetaHers - Hero')}
+                    >
+                      Start Your Journey Free
+                      <Rocket className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
+                  <Link href="/login">
+                    <Button 
+                      size="lg" 
+                      variant="outline" 
+                      className="text-lg px-8 py-6"
+                      data-testid="button-login"
+                    >
+                      Log In
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <Badge variant="outline" className="text-base px-6 py-3 gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-primary" />
+                  Welcome back, {user.firstName || 'there'}!
+                </Badge>
+              )}
+            </motion.div>
+
+            {/* Value Props */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.7 }}
+              className="flex flex-wrap justify-center gap-3 mb-8"
+            >
+              <Badge variant="outline" className="text-sm px-4 py-2 gap-2">
+                <Heart className="w-4 h-4" />
+                Built for Women
+              </Badge>
+              <Badge variant="outline" className="text-sm px-4 py-2 gap-2">
+                <Sparkles className="w-4 h-4" />
+                AI-Personalized
+              </Badge>
+              <Badge variant="outline" className="text-sm px-4 py-2 gap-2">
+                <Users className="w-4 h-4" />
+                Real Community
+              </Badge>
+              <Badge variant="outline" className="text-sm px-4 py-2 gap-2">
+                <Trophy className="w-4 h-4" />
+                Actual Results
+              </Badge>
+            </motion.div>
           </motion.div>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8"
-          >
-            Step into six immersive learning spaces where AI personalizes your journey.
-            Master AI, Web3, and emerging tech through interactive experiences that adapt to you.
-          </motion.p>
-
-          {/* Progress Dashboard */}
+          {/* The Promise */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
-            className="max-w-2xl mx-auto mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            className="max-w-3xl mx-auto text-center mb-20"
           >
-            <Card className="p-6 bg-gradient-to-br from-card to-card/50 border-primary/20">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <Trophy className="w-6 h-6 text-primary" />
-                  <div className="text-left">
-                    <p className="text-sm text-muted-foreground">Your Journey</p>
-                    <p className="font-semibold">{completedSpaces} of {totalSpaces} Spaces Explored</p>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <Badge variant="outline" className="gap-1">
-                    <Star className="w-3 h-3 fill-primary text-primary" />
-                    <span>Level 1</span>
-                  </Badge>
-                </div>
-              </div>
-              <Progress value={overallProgress} className="h-2" />
+            <Card className="p-8 bg-gradient-to-br from-card via-card/80 to-card/50 border-primary/20">
+              <h2 className="font-serif text-3xl mb-4">You already know tech is powerful.</h2>
+              <p className="text-lg text-muted-foreground mb-6">
+                But between the jargon, the gatekeeping, and the "bro culture" – it feels out of reach.
+              </p>
+              <p className="text-lg font-medium mb-4">
+                Not here. Not in MetaHers World.
+              </p>
+              <p className="text-muted-foreground">
+                We translate complex tech into practical tools you'll actually use. Think of it as your mind spa for mastering AI, Web3, and everything that's shaping the future – in a space designed for women, by women who get it.
+              </p>
             </Card>
           </motion.div>
 
+          {/* Six Immersive Spaces */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="flex flex-wrap justify-center gap-3"
+            transition={{ delay: 1.1 }}
+            className="text-center mb-12"
           >
-            <Badge variant="outline" className="text-sm px-4 py-2 gap-2">
-              <Sparkles className="w-4 h-4" />
-              AI-Powered
-            </Badge>
-            <Badge variant="outline" className="text-sm px-4 py-2 gap-2">
-              <Zap className="w-4 h-4" />
-              Interactive
-            </Badge>
-            <Badge variant="outline" className="text-sm px-4 py-2 gap-2">
-              <Trophy className="w-4 h-4" />
-              Game-Like Progress
-            </Badge>
+            <h2 className="font-serif text-4xl md:text-5xl mb-4">
+              Six Spaces. Infinite Possibilities.
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Each space is designed to transform how you understand and leverage technology – personalized to your goals, your pace, your life.
+            </p>
           </motion.div>
-        </motion.div>
 
-        {/* Spaces Grid with Staggered Animation */}
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(6)].map((_, i) => (
-              <Card key={i} className="p-8 animate-pulse">
-                <div className="h-12 w-12 bg-muted rounded-lg mb-4" />
-                <div className="h-6 bg-muted rounded mb-3 w-3/4" />
-                <div className="h-4 bg-muted rounded mb-2" />
-                <div className="h-4 bg-muted rounded w-5/6" />
-              </Card>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {spaces.map((space, index) => {
-              const IconComponent = ICON_MAP[space.icon] || Sparkles;
-              const gradientClass = COLOR_CLASSES[space.color] || COLOR_CLASSES["hyper-violet"];
-              const isLocked = !isProUser && space.sortOrder > 2;
-              const isHovered = hoveredSpace === space.id;
+          {/* Spaces Grid */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+              {[...Array(6)].map((_, i) => (
+                <Card key={i} className="p-8 animate-pulse">
+                  <div className="h-14 w-14 bg-muted rounded-xl mb-4" />
+                  <div className="h-7 bg-muted rounded mb-3 w-3/4" />
+                  <div className="h-4 bg-muted rounded mb-2" />
+                  <div className="h-4 bg-muted rounded w-5/6" />
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+              {spaces.map((space, index) => {
+                const IconComponent = ICON_MAP[space.icon] || Sparkles;
+                const gradientClass = COLOR_CLASSES[space.color] || COLOR_CLASSES["hyper-violet"];
+                const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
+                const isHovered = hoveredSpace === space.id;
 
-              return (
-                <motion.div
-                  key={space.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  onMouseEnter={() => setHoveredSpace(space.id)}
-                  onMouseLeave={() => setHoveredSpace(null)}
-                >
-                  <Card
-                    className="group relative overflow-hidden h-full transition-all duration-500 border-2 hover:border-primary/40"
-                    data-testid={`card-space-${space.slug}`}
-                    style={{
-                      transform: isHovered ? "translateY(-8px) scale(1.02)" : "translateY(0) scale(1)",
-                    }}
+                return (
+                  <motion.div
+                    key={space.id}
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2 + index * 0.1, duration: 0.6 }}
+                    onMouseEnter={() => setHoveredSpace(space.id)}
+                    onMouseLeave={() => setHoveredSpace(null)}
                   >
-                    {/* Animated gradient background */}
-                    <motion.div
-                      className={`absolute inset-0 bg-gradient-to-br ${gradientClass}`}
-                      animate={{
-                        opacity: isHovered ? 0.15 : 0.05,
+                    <Card
+                      className="group relative overflow-hidden h-full transition-all duration-500 border-2 hover:border-primary/40 hover-elevate"
+                      data-testid={`card-space-${space.slug}`}
+                      style={{
+                        transform: isHovered ? "translateY(-8px) scale(1.02)" : "translateY(0) scale(1)",
                       }}
-                      transition={{ duration: 0.3 }}
-                    />
-
-                    {/* Glow effect on hover */}
-                    <AnimatePresence>
-                      {isHovered && !isLocked && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className={`absolute inset-0 bg-gradient-to-br ${gradientClass} blur-xl`}
-                          style={{ zIndex: -1 }}
-                        />
-                      )}
-                    </AnimatePresence>
-
-                    <div className="relative p-8">
-                      <div className="flex items-start justify-between mb-4">
-                        <motion.div
-                          className={`p-4 rounded-xl bg-gradient-to-br ${gradientClass} shadow-lg`}
-                          whileHover={{ scale: 1.1, rotate: 5 }}
-                          transition={{ type: "spring", stiffness: 300 }}
-                        >
-                          <IconComponent className="w-7 h-7 text-white" />
-                        </motion.div>
-                        {isLocked ? (
-                          <motion.div
-                            animate={{ rotate: [0, -10, 10, 0] }}
-                            transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
-                          >
-                            <Lock className="w-5 h-5 text-muted-foreground" data-testid={`icon-locked-${space.slug}`} />
-                          </motion.div>
-                        ) : (
-                          <CheckCircle2 className="w-5 h-5 text-primary" />
-                        )}
-                      </div>
-
-                      <h3
-                        className="font-serif text-2xl mb-3 transition-colors"
-                        style={{
-                          color: isHovered ? "hsl(var(--primary))" : "inherit",
+                    >
+                      {/* Gradient background */}
+                      <motion.div
+                        className={`absolute inset-0 bg-gradient-to-br ${gradientClass}`}
+                        animate={{
+                          opacity: isHovered ? 0.15 : 0.05,
                         }}
-                        data-testid={`text-space-name-${space.slug}`}
-                      >
-                        {space.name}
-                      </h3>
+                        transition={{ duration: 0.3 }}
+                      />
 
-                      <p className="text-muted-foreground mb-6 min-h-[3rem]" data-testid={`text-space-description-${space.slug}`}>
-                        {space.description}
-                      </p>
+                      {/* Glow effect */}
+                      <AnimatePresence>
+                        {isHovered && !isLocked && (
+                          <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className={`absolute -inset-1 bg-gradient-to-br ${gradientClass} blur-xl opacity-50`}
+                            style={{ zIndex: -1 }}
+                          />
+                        )}
+                      </AnimatePresence>
 
-                      {/* Progress indicator for unlocked spaces */}
-                      {!isLocked && (
-                        <div className="mb-4 p-3 rounded-lg bg-primary/5">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="text-xs text-muted-foreground">Progress</span>
-                            <span className="text-xs font-semibold">2 of 6 Complete</span>
-                          </div>
-                          <Progress value={33} className="h-1.5" />
+                      <div className="relative p-8">
+                        <div className="flex items-start justify-between mb-6">
+                          <motion.div
+                            className={`p-4 rounded-xl bg-gradient-to-br ${gradientClass} shadow-lg`}
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                          >
+                            <IconComponent className="w-8 h-8 text-white" />
+                          </motion.div>
+                          {isLocked && (
+                            <Lock className="w-5 h-5 text-muted-foreground" data-testid={`icon-locked-${space.slug}`} />
+                          )}
                         </div>
-                      )}
 
-                      {isLocked ? (
-                        <div className="space-y-3">
-                          <div className="p-3 rounded-lg bg-muted/30 border border-muted">
-                            <p className="text-sm text-muted-foreground flex items-center gap-2">
-                              <Lock className="w-4 h-4" />
-                              Unlock with Pro to access
-                            </p>
-                          </div>
+                        <h3
+                          className="font-serif text-2xl mb-3 transition-colors"
+                          style={{
+                            color: isHovered ? "hsl(var(--primary))" : "inherit",
+                          }}
+                          data-testid={`text-space-name-${space.slug}`}
+                        >
+                          {space.name}
+                        </h3>
+
+                        <p className="text-muted-foreground mb-6 min-h-[4rem]" data-testid={`text-space-description-${space.slug}`}>
+                          {space.description}
+                        </p>
+
+                        {!isAuthenticated ? (
+                          <Link href="/signup">
+                            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                              <Button
+                                className={`w-full bg-gradient-to-r ${gradientClass} text-white border-0 hover:opacity-90`}
+                                data-testid={`button-explore-${space.slug}`}
+                                onClick={() => trackCTAClick(`Explore ${space.name}`)}
+                              >
+                                Explore {space.name}
+                                <ArrowRight className="w-4 h-4 ml-2" />
+                              </Button>
+                            </motion.div>
+                          </Link>
+                        ) : isLocked ? (
                           <Link href="/upgrade">
                             <Button
                               variant="outline"
-                              className="w-full group/btn"
-                              data-testid={`button-upgrade-${space.slug}`}
+                              className="w-full"
+                              data-testid={`button-unlock-${space.slug}`}
                             >
-                              Upgrade to Unlock
-                              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                              <Lock className="w-4 h-4 mr-2" />
+                              Unlock with Pro
                             </Button>
                           </Link>
-                        </div>
-                      ) : (
-                        <Link href={`/world/${space.slug}`}>
-                          <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                            <Button
-                              className={`w-full group/btn bg-gradient-to-r ${gradientClass} text-white border-0`}
-                              data-testid={`button-enter-${space.slug}`}
-                            >
-                              Enter This Space
-                              <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                            </Button>
-                          </motion.div>
-                        </Link>
-                      )}
+                        ) : (
+                          <Link href={`/world/${space.slug}`}>
+                            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                              <Button
+                                className={`w-full bg-gradient-to-r ${gradientClass} text-white border-0`}
+                                data-testid={`button-enter-${space.slug}`}
+                              >
+                                Enter Space
+                                <ArrowRight className="w-4 h-4 ml-2" />
+                              </Button>
+                            </motion.div>
+                          </Link>
+                        )}
 
-                      <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
-                        <p className="text-sm text-muted-foreground">
-                          6 Experiences
-                        </p>
-                        <Badge variant="secondary" className="text-xs">
-                          AI-Personalized
-                        </Badge>
+                        <div className="mt-4 pt-4 border-t border-border flex items-center justify-between">
+                          <p className="text-sm text-muted-foreground">
+                            6 Personalized Experiences
+                          </p>
+                        </div>
+                      </div>
+                    </Card>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* How It Works */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2 }}
+            className="text-center mb-20"
+          >
+            <Card className="p-10 max-w-4xl mx-auto bg-gradient-to-br from-card via-card/80 to-card/50 border-primary/20">
+              <h3 className="font-serif text-4xl mb-8">
+                <span className="bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--hyper-violet))] bg-clip-text text-transparent">
+                  How MetaHers Works
+                </span>
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                {[
+                  {
+                    step: "1",
+                    title: "Choose Your Space",
+                    description: "Pick the tech topic that speaks to you – whether it's AI tools, Web3, NFTs, or building your brand.",
+                    icon: Globe,
+                  },
+                  {
+                    step: "2",
+                    title: "Get Personalized Guidance",
+                    description: "Answer a few questions and our AI tailors the content to your exact needs, experience level, and goals.",
+                    icon: Sparkles,
+                  },
+                  {
+                    step: "3",
+                    title: "Learn Through Doing",
+                    description: "No boring lectures. Interactive experiences, real tools, and practical applications you'll use tomorrow.",
+                    icon: Zap,
+                  },
+                  {
+                    step: "4",
+                    title: "See Real Results",
+                    description: "Track your confidence, build actual skills, and transform how you show up in the digital world.",
+                    icon: Trophy,
+                  },
+                ].map((item, index) => (
+                  <motion.div
+                    key={item.step}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex gap-4 p-6 rounded-xl bg-background/50 hover-elevate"
+                  >
+                    <div className="flex-shrink-0">
+                      <div className="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center font-bold text-white text-xl shadow-lg">
+                        {item.step}
                       </div>
                     </div>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        )}
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <item.icon className="w-5 h-5 text-primary" />
+                        <h4 className="font-semibold text-lg">{item.title}</h4>
+                      </div>
+                      <p className="text-muted-foreground">
+                        {item.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </Card>
+          </motion.div>
 
-        {/* How It Works Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="text-center"
-        >
-          <Card className="p-8 max-w-3xl mx-auto bg-gradient-to-br from-card via-card/80 to-card/50 border-primary/20">
-            <h3 className="font-serif text-3xl mb-8 text-gradient-gold">Your Transformation Journey</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-              {[
-                {
-                  step: 1,
-                  title: "Choose Your Space",
-                  description: "Select the tech domain you want to master",
-                  icon: Globe,
-                },
-                {
-                  step: 2,
-                  title: "AI Personalizes Your Path",
-                  description: "Answer questions to tailor content to your needs",
-                  icon: Sparkles,
-                },
-                {
-                  step: 3,
-                  title: "Complete Interactive Experiences",
-                  description: "Engage with game-like challenges and practical tools",
-                  icon: Zap,
-                },
-                {
-                  step: 4,
-                  title: "Track Real Results",
-                  description: "Measure confidence, skills, and business impact",
-                  icon: Trophy,
-                },
-              ].map((item, index) => (
-                <motion.div
-                  key={item.step}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1 + index * 0.1 }}
-                  className="flex gap-4 p-4 rounded-lg bg-background/50 hover-elevate"
-                >
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center font-bold text-white shadow-lg">
-                      {item.step}
-                    </div>
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <item.icon className="w-4 h-4 text-primary" />
-                      <h4 className="font-semibold">{item.title}</h4>
-                    </div>
-                    <p className="text-muted-foreground text-sm">
-                      {item.description}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </Card>
-        </motion.div>
+          {/* Social Proof - Women's Transformations */}
+          <div className="mb-20">
+            <TestimonialsSection />
+          </div>
+
+          {/* Final CTA */}
+          {!isAuthenticated && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="text-center mb-20"
+            >
+              <Card className="p-12 max-w-3xl mx-auto bg-gradient-to-br from-primary/10 via-card to-primary/10 border-primary/30">
+                <h3 className="font-serif text-4xl mb-4">
+                  Ready to make tech yours?
+                </h3>
+                <p className="text-xl text-muted-foreground mb-8">
+                  Join thousands of women who've stopped feeling intimidated and started feeling empowered.
+                </p>
+                <Link href="/signup">
+                  <Button 
+                    size="lg" 
+                    className="text-xl px-12 py-7 bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] hover:opacity-90"
+                    data-testid="button-join-footer"
+                    onClick={() => trackCTAClick('Join MetaHers - Footer')}
+                  >
+                    Start Free Today
+                    <Rocket className="ml-2 w-6 h-6" />
+                  </Button>
+                </Link>
+                <p className="text-sm text-muted-foreground mt-4">
+                  No credit card required. Cancel anytime.
+                </p>
+              </Card>
+            </motion.div>
+          )}
+        </div>
       </div>
     </div>
   );
