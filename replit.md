@@ -28,6 +28,17 @@ Preferred communication style: Simple, everyday language.
 ### Design Philosophy
 The application adheres to a "Forbes-meets-Vogue" luxury editorial design, emphasizing a spa-inspired brand language (e.g., "retreat," "journey," "sanctuary"). Typography uses Cormorant Garamond for headings and Sora for body text. The color system features a jewel-toned neon-on-onyx palette with deep obsidian backgrounds and vivid accents (Hyper Violet, Magenta Quartz, Cyber Fuchsia, Aurora Teal, Liquid Gold), incorporating neon glow, gradient animations, and metallic text. All images are optimized for performance and SEO via an `OptimizedImage` component with lazy loading.
 
+#### Theme System (Light/Dark Mode)
+The application supports both light and dark modes with **dark mode as the default** (Web3 aesthetic preference). Implementation includes:
+- **Default Dark Mode**: Blocking script in `client/index.html` applies saved or default dark class before React loads, preventing flash of unstyled content (FOUC)
+- **ThemeProvider**: React context managing theme state with localStorage persistence (`client/src/components/ThemeProvider.tsx`)
+- **ThemeToggle**: Accessible toggle button in navigation with sun/moon icons and proper aria-labels (`client/src/components/ThemeToggle.tsx`)
+- **Smooth Transitions**: 0.3s CSS transitions on background/color changes for polished theme switching
+- **Color Palettes**: 
+  - Dark mode: Deep obsidian backgrounds with jewel-toned neon accents (primary Web3 aesthetic)
+  - Light mode: Soft lavender and pale luxury tones while maintaining brand sophistication
+- **Accessibility**: Respects user preferences, localStorage persistence, smooth visual transitions
+
 ### Frontend
 Developed as a React and TypeScript PWA, utilizing Wouter for routing, Vite for builds, and `localStorage` for state management. UI components are built with Radix UI primitives wrapped in custom components following the shadcn/ui pattern. Styling is managed with Tailwind CSS and custom CSS variables. Framer Motion is used for animations. The PWA includes a manifest and a service worker for caching.
 
