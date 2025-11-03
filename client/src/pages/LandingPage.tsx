@@ -310,22 +310,14 @@ export default function LandingPage() {
               </span>
             </motion.div>
 
-            {/* Title with 3D depth */}
+            {/* Title */}
             <motion.h1
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.5 }}
-              className="font-serif text-7xl sm:text-8xl md:text-9xl font-bold leading-tight mb-12"
-              style={{
-                textShadow: '0 0 80px rgba(255,215,0,0.5), 0 0 120px rgba(181,101,216,0.3)',
-              }}
+              className="font-cormorant text-6xl sm:text-7xl md:text-8xl font-bold leading-tight mb-8 metallic-text"
             >
-              <span className="block bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-clip-text text-transparent">
-                MetaHers
-              </span>
-              <span className="block bg-gradient-to-r from-[#B565D8] via-[#FF00FF] to-[#E935C1] bg-clip-text text-transparent">
-                Mind Spa
-              </span>
+              MetaHers Mind Spa
             </motion.h1>
 
             {/* Subtitle */}
