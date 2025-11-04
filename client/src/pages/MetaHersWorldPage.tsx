@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "wouter";
+import { useLocation } from "wouter";
 import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock, ChevronRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -41,6 +41,7 @@ const BORDER_COLOR_MAP: Record<string, string> = {
 
 export default function MetaHersWorldPage() {
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
   const { data: spaces = [], isLoading } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
   });
@@ -85,57 +86,57 @@ export default function MetaHersWorldPage() {
             const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
 
             return (
-              <Link key={space.id} href={`/spaces/${space.slug}`}>
-                <div
-                  className={`group relative h-96 rounded-2xl border-2 ${borderClass} bg-card overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer`}
-                  data-testid={`door-${space.slug}`}
-                >
-                  {/* Door Background Gradient */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
+              <div
+                key={space.id}
+                onClick={() => setLocation(`/spaces/${space.slug}`)}
+                className={`group relative h-96 rounded-2xl border-2 ${borderClass} bg-card overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer`}
+                data-testid={`door-${space.slug}`}
+              >
+                {/* Door Background Gradient */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
 
-                  {/* Lock Badge */}
-                  {isLocked && (
-                    <div className="absolute top-4 right-4 z-10">
-                      <div className={`bg-gradient-to-br ${gradientClass} rounded-full p-3 shadow-lg`}>
-                        <Lock className="w-5 h-5 text-white" />
-                      </div>
+                {/* Lock Badge */}
+                {isLocked && (
+                  <div className="absolute top-4 right-4 z-10">
+                    <div className={`bg-gradient-to-br ${gradientClass} rounded-full p-3 shadow-lg`}>
+                      <Lock className="w-5 h-5 text-white" />
                     </div>
-                  )}
+                  </div>
+                )}
 
-                  {/* Door Content */}
-                  <div className="relative h-full flex flex-col items-center justify-center p-8 text-center">
-                    {/* Icon */}
-                    <div className={`mb-6 p-6 rounded-full bg-gradient-to-br ${gradientClass} shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6`}>
-                      <IconComponent className="w-12 h-12 text-white" />
-                    </div>
+                {/* Door Content */}
+                <div className="relative h-full flex flex-col items-center justify-center p-8 text-center">
+                  {/* Icon */}
+                  <div className={`mb-6 p-6 rounded-full bg-gradient-to-br ${gradientClass} shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6`}>
+                    <IconComponent className="w-12 h-12 text-white" />
+                  </div>
 
-                    {/* Room Name Plaque */}
-                    <div className="mb-4">
-                      <div className={`inline-block px-6 py-2 rounded-full border ${borderClass} bg-background/50 backdrop-blur-sm`}>
-                        <h3 className="text-2xl font-serif font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                          {space.name}
-                        </h3>
-                      </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed max-w-xs">
-                      {space.description}
-                    </p>
-
-                    {/* Enter Button - appears on hover */}
-                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
-                      <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r ${gradientClass} text-white font-semibold shadow-lg`}>
-                        <span>Enter Room</span>
-                        <ChevronRight className="w-5 h-5" />
-                      </div>
+                  {/* Room Name Plaque */}
+                  <div className="mb-4">
+                    <div className={`inline-block px-6 py-2 rounded-full border ${borderClass} bg-background/50 backdrop-blur-sm`}>
+                      <h3 className="text-2xl font-serif font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                        {space.name}
+                      </h3>
                     </div>
                   </div>
 
-                  {/* Door Edge Shadow Effect */}
-                  <div className={`absolute inset-y-0 left-0 w-2 bg-gradient-to-r ${gradientClass} opacity-30 group-hover:opacity-60 transition-opacity duration-500`} />
+                  {/* Description */}
+                  <p className="text-sm text-muted-foreground mb-6 leading-relaxed max-w-xs">
+                    {space.description}
+                  </p>
+
+                  {/* Enter Button - appears on hover */}
+                  <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                    <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r ${gradientClass} text-white font-semibold shadow-lg`}>
+                      <span>Enter Room</span>
+                      <ChevronRight className="w-5 h-5" />
+                    </div>
+                  </div>
                 </div>
-              </Link>
+
+                {/* Door Edge Shadow Effect */}
+                <div className={`absolute inset-y-0 left-0 w-2 bg-gradient-to-r ${gradientClass} opacity-30 group-hover:opacity-60 transition-opacity duration-500`} />
+              </div>
             );
           })}
         </div>
@@ -146,17 +147,31 @@ export default function MetaHersWorldPage() {
             Each treatment room offers curated resources, transformational experiences, and a supportive community. 
             {!isAuthenticated && (
               <span className="block mt-4 text-sm">
-                <Link href="/login" className="text-primary hover:underline font-semibold">
+                <a
+                  href="/login"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLocation("/login");
+                  }}
+                  className="text-primary hover:underline font-semibold cursor-pointer"
+                >
                   Sign in
-                </Link>
+                </a>
                 {" "}to unlock your first experience in each room for free
               </span>
             )}
             {isAuthenticated && !isProUser && (
               <span className="block mt-4 text-sm">
-                <Link href="/pricing" className="text-primary hover:underline font-semibold">
+                <a
+                  href="/pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setLocation("/pricing");
+                  }}
+                  className="text-primary hover:underline font-semibold cursor-pointer"
+                >
                   Upgrade to Pro
-                </Link>
+                </a>
                 {" "}to access all treatment rooms
               </span>
             )}
