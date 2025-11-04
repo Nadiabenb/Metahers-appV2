@@ -1,4 +1,4 @@
-const CACHE_NAME = 'metahers-v1';
+const CACHE_NAME = 'metahers-v2-spa-doors';
 const urlsToCache = [
   '/',
   '/index.html',
