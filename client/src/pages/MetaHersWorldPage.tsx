@@ -255,8 +255,8 @@ export default function MetaHersWorldPage() {
             </p>
           </div>
 
-          {/* Desktop: 3D Interactive Spa Map */}
-          <div className="hidden md:block relative max-w-5xl mx-auto">
+          {/* 3D Interactive Spa Map - Works on Desktop & Mobile */}
+          <div className="relative max-w-5xl mx-auto">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img 
                 src={spaImage} 
@@ -287,10 +287,11 @@ export default function MetaHersWorldPage() {
                     }}
                     onMouseEnter={() => setHoveredSpace(space.id)}
                     onMouseLeave={() => setHoveredSpace(null)}
+                    onTouchStart={() => setHoveredSpace(space.id)}
                     onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
                     data-testid={`hotspot-${space.slug}`}
                   >
-                    {/* Glow effect on hover */}
+                    {/* Glow effect on hover/touch */}
                     <div
                       className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
                         isHovered ? 'opacity-50 scale-105' : 'opacity-0'
@@ -302,7 +303,7 @@ export default function MetaHersWorldPage() {
                       }}
                     />
 
-                    {/* Border pulse on hover */}
+                    {/* Border pulse on hover/touch */}
                     <div
                       className={`absolute inset-0 rounded-2xl border-3 transition-all duration-500 ${
                         isHovered ? 'opacity-100 scale-105 animate-pulse' : 'opacity-30 scale-100'
@@ -317,7 +318,7 @@ export default function MetaHersWorldPage() {
                       }`}
                     >
                       <div
-                        className={`px-5 py-4 rounded-2xl backdrop-blur-xl shadow-2xl border-2 transition-all duration-500 ${
+                        className={`px-3 py-2 md:px-5 md:py-4 rounded-xl md:rounded-2xl backdrop-blur-xl shadow-2xl border-2 transition-all duration-500 ${
                           isHovered ? 'bg-opacity-95' : 'bg-opacity-70'
                         }`}
                         style={{
@@ -328,16 +329,16 @@ export default function MetaHersWorldPage() {
                       >
                         {/* Lock icon for locked spaces */}
                         {isLocked && (
-                          <div className="mb-2">
-                            <Lock className="w-6 h-6 mx-auto" style={{ color }} />
+                          <div className="mb-1 md:mb-2">
+                            <Lock className="w-4 h-4 md:w-6 md:h-6 mx-auto" style={{ color }} />
                           </div>
                         )}
 
                         {/* Icon + Room Title */}
-                        <div className="flex items-center gap-2 justify-center mb-3">
-                          <IconComponent className="w-7 h-7" style={{ color }} />
+                        <div className="flex items-center gap-1 md:gap-2 justify-center mb-2 md:mb-3">
+                          <IconComponent className="w-4 h-4 md:w-7 md:h-7" style={{ color }} />
                           <h3 
-                            className="text-xl md:text-2xl font-serif font-bold whitespace-nowrap" 
+                            className="text-sm md:text-xl lg:text-2xl font-serif font-bold whitespace-nowrap" 
                             style={{ color }}
                           >
                             {space.name}
@@ -347,7 +348,7 @@ export default function MetaHersWorldPage() {
                         {/* Enter Button - always visible, grows on hover */}
                         <div className={`transition-all duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}>
                           <div
-                            className="px-6 py-2 rounded-full font-semibold text-sm flex items-center gap-2 justify-center"
+                            className="px-3 py-1 md:px-6 md:py-2 rounded-full font-semibold text-xs md:text-sm flex items-center gap-1 md:gap-2 justify-center"
                             style={{
                               backgroundColor: isHovered ? color : `${color}80`,
                               color: '#000',
@@ -356,21 +357,22 @@ export default function MetaHersWorldPage() {
                           >
                             {isLocked ? (
                               <>
-                                <Lock className="w-4 h-4" />
-                                <span>UPGRADE</span>
+                                <Lock className="w-3 h-3 md:w-4 md:h-4" />
+                                <span className="hidden md:inline">UPGRADE</span>
+                                <span className="md:hidden">PRO</span>
                               </>
                             ) : (
                               <>
                                 <span>ENTER</span>
-                                <ArrowRight className="w-4 h-4" />
+                                <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
                               </>
                             )}
                           </div>
                         </div>
 
-                        {/* Hover instruction */}
+                        {/* Hover instruction - desktop only */}
                         {isHovered && !isLocked && (
-                          <p className="text-xs text-white/90 mt-2 animate-in fade-in duration-200">
+                          <p className="hidden md:block text-xs text-white/90 mt-2 animate-in fade-in duration-200">
                             Click to explore
                           </p>
                         )}
@@ -380,88 +382,6 @@ export default function MetaHersWorldPage() {
                 );
               })}
             </div>
-          </div>
-
-          {/* Mobile: Clean Grid of Room Cards */}
-          <div className="md:hidden grid grid-cols-1 gap-6 max-w-lg mx-auto">
-            {spaces.map((space) => {
-              const IconComponent = ICON_MAP[space.icon] || Sparkles;
-              const color = COLOR_MAP[space.color] || "#a855f7";
-              const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
-
-              return (
-                <div
-                  key={space.id}
-                  onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
-                  className="relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 active:scale-95"
-                  data-testid={`mobile-card-${space.slug}`}
-                  style={{
-                    background: `linear-gradient(135deg, ${color}20, ${color}05)`,
-                    borderColor: color,
-                    borderWidth: '2px',
-                  }}
-                >
-                  {/* Card Content */}
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div 
-                        className="p-4 rounded-xl"
-                        style={{ backgroundColor: `${color}30` }}
-                      >
-                        <IconComponent className="w-8 h-8" style={{ color }} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 
-                          className="text-2xl font-serif font-bold mb-1"
-                          style={{ color }}
-                        >
-                          {space.name}
-                        </h3>
-                        {isLocked && (
-                          <div className="flex items-center gap-1 text-sm text-white/60">
-                            <Lock className="w-3 h-3" />
-                            <span>Pro Only</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <p className="text-white/80 text-sm mb-5 leading-relaxed">
-                      {space.description}
-                    </p>
-
-                    <Button
-                      className="w-full"
-                      style={{
-                        backgroundColor: color,
-                        color: '#000',
-                      }}
-                      data-testid={`button-enter-${space.slug}`}
-                    >
-                      {isLocked ? (
-                        <>
-                          <Lock className="w-4 h-4 mr-2" />
-                          Upgrade to Unlock
-                        </>
-                      ) : (
-                        <>
-                          Enter Space
-                          <ArrowRight className="w-4 h-4 ml-2" />
-                        </>
-                      )}
-                    </Button>
-                  </div>
-
-                  {/* Decorative gradient overlay */}
-                  <div 
-                    className="absolute top-0 right-0 w-32 h-32 opacity-20 blur-3xl"
-                    style={{
-                      background: `radial-gradient(circle, ${color}, transparent)`,
-                    }}
-                  />
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>
