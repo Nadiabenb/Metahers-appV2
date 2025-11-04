@@ -247,13 +247,16 @@ export default function MetaHersWorldPage() {
                 Explore 6 Transformational Spaces
               </span>
             </h2>
-            <p className="text-lg text-white/70">
+            <p className="text-lg text-white/70 hidden md:block">
               Hover over each room to preview • Click to enter your journey
+            </p>
+            <p className="text-lg text-white/70 md:hidden">
+              Tap any room to begin your journey
             </p>
           </div>
 
-          {/* Interactive 3D Spa Map */}
-          <div className="relative max-w-5xl mx-auto">
+          {/* Desktop: 3D Interactive Spa Map */}
+          <div className="hidden md:block relative max-w-5xl mx-auto">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img 
                 src={spaImage} 
@@ -377,36 +380,88 @@ export default function MetaHersWorldPage() {
                 );
               })}
             </div>
+          </div>
 
-            {/* Legend */}
-            <div className="mt-8 grid grid-cols-2 md:grid-cols-3 gap-4">
-              {spaces.map((space) => {
-                const IconComponent = ICON_MAP[space.icon] || Sparkles;
-                const color = COLOR_MAP[space.color] || "#a855f7";
-                const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
+          {/* Mobile: Clean Grid of Room Cards */}
+          <div className="md:hidden grid grid-cols-1 gap-6 max-w-lg mx-auto">
+            {spaces.map((space) => {
+              const IconComponent = ICON_MAP[space.icon] || Sparkles;
+              const color = COLOR_MAP[space.color] || "#a855f7";
+              const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
 
-                return (
-                  <div
-                    key={space.id}
-                    className="flex items-center gap-3 p-3 rounded-lg bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
-                    onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
-                    data-testid={`legend-${space.slug}`}
-                  >
-                    <div className="p-2 rounded-lg flex-shrink-0" style={{ backgroundColor: `${color}30` }}>
-                      <IconComponent className="w-5 h-5" style={{ color }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-white truncate">
+              return (
+                <div
+                  key={space.id}
+                  onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
+                  className="relative overflow-hidden rounded-2xl cursor-pointer transition-all duration-300 active:scale-95"
+                  data-testid={`mobile-card-${space.slug}`}
+                  style={{
+                    background: `linear-gradient(135deg, ${color}20, ${color}05)`,
+                    borderColor: color,
+                    borderWidth: '2px',
+                  }}
+                >
+                  {/* Card Content */}
+                  <div className="p-6">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div 
+                        className="p-4 rounded-xl"
+                        style={{ backgroundColor: `${color}30` }}
+                      >
+                        <IconComponent className="w-8 h-8" style={{ color }} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 
+                          className="text-2xl font-serif font-bold mb-1"
+                          style={{ color }}
+                        >
                           {space.name}
-                        </span>
-                        {isLocked && <Lock className="w-3 h-3 text-white/40 flex-shrink-0" />}
+                        </h3>
+                        {isLocked && (
+                          <div className="flex items-center gap-1 text-sm text-white/60">
+                            <Lock className="w-3 h-3" />
+                            <span>Pro Only</span>
+                          </div>
+                        )}
                       </div>
                     </div>
+
+                    <p className="text-white/80 text-sm mb-5 leading-relaxed">
+                      {space.description}
+                    </p>
+
+                    <Button
+                      className="w-full"
+                      style={{
+                        backgroundColor: color,
+                        color: '#000',
+                      }}
+                      data-testid={`button-enter-${space.slug}`}
+                    >
+                      {isLocked ? (
+                        <>
+                          <Lock className="w-4 h-4 mr-2" />
+                          Upgrade to Unlock
+                        </>
+                      ) : (
+                        <>
+                          Enter Space
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </>
+                      )}
+                    </Button>
                   </div>
-                );
-              })}
-            </div>
+
+                  {/* Decorative gradient overlay */}
+                  <div 
+                    className="absolute top-0 right-0 w-32 h-32 opacity-20 blur-3xl"
+                    style={{
+                      background: `radial-gradient(circle, ${color}, transparent)`,
+                    }}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
