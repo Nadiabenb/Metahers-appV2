@@ -35,16 +35,6 @@ const COLOR_MAP: Record<string, string> = {
   "liquid-gold": "#fbbf24",
 };
 
-// Hotspot positions for 3D isometric layout (adjusted for new image)
-const HOTSPOTS: Record<string, { left: string; top: string; width: string; height: string }> = {
-  "web3": { left: "8%", top: "30%", width: "25%", height: "30%" },
-  "ai": { left: "37%", top: "15%", width: "25%", height: "30%" },
-  "crypto": { left: "67%", top: "30%", width: "25%", height: "30%" },
-  "metaverse": { left: "8%", top: "60%", width: "25%", height: "30%" },
-  "branding": { left: "37%", top: "50%", width: "25%", height: "30%" },
-  "moms": { left: "67%", top: "60%", width: "25%", height: "30%" },
-};
-
 const TESTIMONIALS = [
   {
     name: "Sarah Chen",
