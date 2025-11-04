@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock, Star, CheckCircle2, TrendingUp, Users, Award, ArrowRight } from "lucide-react";
+import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock, Star, CheckCircle2, TrendingUp, Users, Award, ArrowRight, Crown } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 import spaImage from '@assets/generated_images/3D_isometric_luxury_spa_6_rooms_52f40b1c.png';
 
 type Space = {
@@ -238,154 +239,257 @@ export default function MetaHersWorldPage() {
         </div>
       </section>
 
-      {/* INTERACTIVE 3D SPA MAP SECTION */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">
+      {/* META SANCTUARY - RADIAL ORBIT SECTION */}
+      <section className="relative py-24 px-4 overflow-hidden">
+        {/* Ambient Background Effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          {/* Gradient Orbs */}
+          <motion.div
+            className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+            style={{ background: 'radial-gradient(circle, #B565D8, transparent)' }}
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.2, 0.3, 0.2],
+            }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-3xl opacity-20"
+            style={{ background: 'radial-gradient(circle, #FF00FF, transparent)' }}
+            animate={{
+              scale: [1.2, 1, 1.2],
+              opacity: [0.3, 0.2, 0.3],
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+          
+          {/* Grid overlay */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Title */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl md:text-6xl font-serif font-bold mb-4">
               <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-yellow-400 bg-clip-text text-transparent">
-                Explore 6 Transformational Spaces
+                Your Meta Sanctuary
               </span>
             </h2>
-            <p className="text-lg text-white/70 max-w-2xl mx-auto">
-              Each space contains 6 hands-on experiences designed to transform how you use AI, Web3, and no-code tools in your business and life.
+            <p className="text-lg text-white/60 max-w-2xl mx-auto">
+              Six transformational portals to master AI, Web3, and the future of technology
             </p>
-          </div>
+          </motion.div>
 
-          {/* Beautiful Card Grid - Main Feature */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-16">
+          {/* RADIAL ORBIT LAYOUT */}
+          <div className="relative w-full max-w-6xl mx-auto aspect-square">
+            {/* Central Sanctuary Core */}
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ type: "spring", duration: 1, delay: 0.2 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
+            >
+              <div className="relative">
+                {/* Rotating outer ring */}
+                <motion.div
+                  className="absolute -inset-16 rounded-full border-2 border-dashed border-purple-500/30"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                />
+                
+                {/* Core element */}
+                <div className="relative bg-gradient-to-br from-purple-900/40 to-pink-900/40 backdrop-blur-3xl rounded-3xl border-2 border-white/20 p-12 shadow-2xl">
+                  <div className="text-center">
+                    <Sparkles className="w-16 h-16 mx-auto mb-4 text-yellow-400" />
+                    <h3 className="font-serif text-3xl font-bold text-white mb-2">
+                      MetaHers
+                    </h3>
+                    <p className="text-sm text-white/60 mb-6">Mind Spa Sanctuary</p>
+                    <div className="text-xs text-white/40">
+                      {isAuthenticated ? (isProUser ? "Pro Member" : "Free Member") : "Guest"}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Orbiting Space Portals */}
             {spaces
               .sort((a, b) => a.sortOrder - b.sortOrder)
               .map((space, index) => {
                 const IconComponent = ICON_MAP[space.icon] || Sparkles;
                 const color = COLOR_MAP[space.color] || "#a855f7";
                 const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
+                const isHovered = hoveredSpace === space.id;
+
+                // Calculate circular position (6 portals around 360 degrees)
+                const angle = (index * 60 - 90) * (Math.PI / 180); // Start at top
+                const radius = 42; // percentage
+                const x = 50 + radius * Math.cos(angle);
+                const y = 50 + radius * Math.sin(angle);
 
                 return (
-                  <div
+                  <motion.div
                     key={space.id}
-                    className="group relative"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                    data-testid={`space-card-${space.slug}`}
+                    initial={{ scale: 0, opacity: 0 }}
+                    whileInView={{ scale: 1, opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{
+                      type: "spring",
+                      duration: 0.8,
+                      delay: 0.4 + index * 0.1,
+                    }}
+                    className="absolute"
+                    style={{
+                      left: `${x}%`,
+                      top: `${y}%`,
+                      transform: 'translate(-50%, -50%)',
+                    }}
+                    data-testid={`portal-${space.slug}`}
                   >
-                    {/* Animated card wrapper */}
-                    <div
-                      className={`relative h-full rounded-2xl backdrop-blur-xl border-2 transition-all duration-500 ${
-                        isLocked 
-                          ? 'bg-white/5 border-white/20 cursor-not-allowed' 
-                          : 'bg-white/10 border-white/30 cursor-pointer hover:scale-105 hover:-translate-y-2'
-                      }`}
-                      style={{
-                        borderColor: isLocked ? '#ffffff30' : color,
-                        boxShadow: isLocked ? 'none' : `0 8px 32px ${color}20`,
-                      }}
+                    {/* Portal Container */}
+                    <motion.div
+                      className={`relative ${isLocked ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                      whileHover={!isLocked ? { scale: 1.15, rotateZ: 5 } : {}}
+                      whileTap={!isLocked ? { scale: 0.95 } : {}}
                       onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
                       onMouseEnter={() => setHoveredSpace(space.id)}
                       onMouseLeave={() => setHoveredSpace(null)}
                     >
-                      {/* Glow effect on hover */}
-                      <div
-                        className={`absolute inset-0 rounded-2xl transition-opacity duration-500 -z-10 blur-xl ${
-                          hoveredSpace === space.id && !isLocked ? 'opacity-70' : 'opacity-0'
-                        }`}
-                        style={{ background: `radial-gradient(circle, ${color}, transparent)` }}
+                      {/* Pulsing glow effect */}
+                      <motion.div
+                        className="absolute -inset-8 rounded-full blur-2xl"
+                        style={{ background: `radial-gradient(circle, ${color}60, transparent)` }}
+                        animate={isHovered && !isLocked ? {
+                          scale: [1, 1.3, 1],
+                          opacity: [0.5, 0.8, 0.5],
+                        } : {}}
+                        transition={{ duration: 2, repeat: Infinity }}
                       />
 
-                      {/* Lock overlay for Pro spaces */}
-                      {isLocked && (
-                        <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-purple-900/40 rounded-2xl backdrop-blur-sm flex items-center justify-center z-10">
-                          <div className="text-center">
-                            <Lock className="w-12 h-12 mx-auto mb-3 text-purple-400" />
-                            <p className="text-white font-semibold mb-2">Pro Only</p>
-                            <Button
-                              size="sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setLocation("/pricing");
-                              }}
-                              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-                              data-testid={`button-upgrade-${space.slug}`}
-                            >
-                              Upgrade Now
-                            </Button>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Card content */}
-                      <div className="p-8">
-                        {/* Icon with animated background */}
-                        <div
-                          className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-6 mx-auto transition-all duration-500 ${
-                            hoveredSpace === space.id && !isLocked ? 'scale-110 rotate-6' : 'scale-100 rotate-0'
-                          }`}
+                      {/* Portal disc */}
+                      <div
+                        className="relative w-40 h-40 md:w-48 md:h-48 rounded-full backdrop-blur-3xl border-4 transition-all duration-500 overflow-hidden"
+                        style={{
+                          background: `linear-gradient(135deg, ${color}20, ${color}05)`,
+                          borderColor: isHovered ? color : `${color}60`,
+                          boxShadow: isHovered 
+                            ? `0 0 60px ${color}80, inset 0 0 30px ${color}30` 
+                            : `0 0 30px ${color}40, inset 0 0 15px ${color}20`,
+                        }}
+                      >
+                        {/* Animated gradient sweep */}
+                        <motion.div
+                          className="absolute inset-0"
                           style={{
-                            background: `linear-gradient(135deg, ${color}40, ${color}20)`,
-                            boxShadow: hoveredSpace === space.id && !isLocked ? `0 12px 40px ${color}60` : `0 4px 16px ${color}30`,
+                            background: `conic-gradient(from 0deg, transparent 0deg, ${color}40 180deg, transparent 360deg)`,
                           }}
-                        >
-                          <IconComponent className="w-10 h-10" style={{ color }} />
-                        </div>
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                        />
 
-                        {/* Space name */}
-                        <h3 className="text-2xl font-serif font-bold text-white text-center mb-3">
-                          {space.name}
-                        </h3>
-
-                        {/* Description */}
-                        <p className="text-white/70 text-center text-sm leading-relaxed mb-6 min-h-[4rem]">
-                          {space.description}
-                        </p>
-
-                        {/* Enter button */}
-                        {!isLocked && (
-                          <div
-                            className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 ${
-                              hoveredSpace === space.id ? 'scale-105' : 'scale-100'
-                            }`}
-                            style={{
-                              backgroundColor: hoveredSpace === space.id ? color : `${color}80`,
-                              color: '#000',
-                              boxShadow: hoveredSpace === space.id ? `0 8px 24px ${color}60` : 'none',
-                            }}
-                          >
-                            <span>EXPLORE SPACE</span>
-                            <ArrowRight className="w-4 h-4" />
+                        {/* Lock overlay */}
+                        {isLocked && (
+                          <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-10 rounded-full">
+                            <div className="text-center">
+                              <Lock className="w-10 h-10 mx-auto mb-2" style={{ color }} />
+                              <p className="text-xs text-white/80 font-semibold">PRO</p>
+                            </div>
                           </div>
                         )}
 
-                        {/* FREE badge for free spaces */}
+                        {/* Icon sphere */}
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <motion.div
+                            className="relative"
+                            animate={isHovered && !isLocked ? {
+                              rotateY: [0, 360],
+                              scale: [1, 1.1, 1],
+                            } : {}}
+                            transition={{ duration: 3, repeat: isHovered ? Infinity : 0 }}
+                          >
+                            <div
+                              className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center"
+                              style={{
+                                background: `radial-gradient(circle at 30% 30%, ${color}80, ${color}40)`,
+                                boxShadow: `0 8px 32px ${color}60, inset 0 0 20px ${color}30`,
+                              }}
+                            >
+                              <IconComponent className="w-10 h-10 md:w-12 md:h-12" style={{ color: '#fff' }} />
+                            </div>
+                          </motion.div>
+                        </div>
+
+                        {/* FREE badge */}
                         {space.sortOrder <= 2 && (
-                          <div className="absolute top-4 right-4">
-                            <div className="px-3 py-1 rounded-full bg-gradient-to-r from-teal-500 to-green-500 text-xs font-bold text-white shadow-lg">
+                          <div className="absolute top-2 right-2 z-20">
+                            <div className="px-2 py-1 rounded-full bg-gradient-to-r from-teal-500 to-green-500 text-[10px] font-bold text-white shadow-lg">
                               FREE
                             </div>
                           </div>
                         )}
                       </div>
-                    </div>
-                  </div>
+
+                      {/* Portal label */}
+                      <motion.div
+                        className="absolute -bottom-16 left-1/2 -translate-x-1/2 text-center w-48"
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 + index * 0.1 }}
+                      >
+                        <h3 className="font-serif text-xl font-bold text-white mb-1">
+                          {space.name}
+                        </h3>
+                        <p className="text-xs text-white/50 line-clamp-2">
+                          {space.description.split('.')[0]}
+                        </p>
+                      </motion.div>
+                    </motion.div>
+                  </motion.div>
                 );
               })}
           </div>
 
-          {/* Optional: 3D Visual Reference (smaller, decorative) */}
-          <div className="relative max-w-4xl mx-auto mt-16">
-            <div className="text-center mb-6">
-              <p className="text-sm text-white/50 uppercase tracking-widest">Your Luxury Learning Sanctuary</p>
-            </div>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl opacity-60 hover:opacity-100 transition-opacity duration-500">
-              <img 
-                src={spaImage} 
-                alt="MetaHers Mind Spa - 3D Visualization"
-                className="w-full h-auto"
-                data-testid="spa-map-image"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-8">
-                <p className="text-white/90 text-sm font-serif italic">A Forbes-meets-Vogue learning experience</p>
-              </div>
-            </div>
-          </div>
+          {/* Bottom CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mt-32"
+          >
+            {!isAuthenticated ? (
+              <Button
+                size="lg"
+                onClick={() => setLocation("/signup")}
+                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-12 py-6 text-lg font-semibold shadow-2xl"
+                data-testid="button-enter-sanctuary"
+              >
+                Enter the Sanctuary
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            ) : !isProUser ? (
+              <Button
+                size="lg"
+                onClick={() => setLocation("/pricing")}
+                className="bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-black px-12 py-6 text-lg font-semibold shadow-2xl"
+                data-testid="button-unlock-all"
+              >
+                Unlock All Spaces
+                <Crown className="ml-2 w-5 h-5" />
+              </Button>
+            ) : null}
+            <p className="text-sm text-white/40 mt-4">
+              {isAuthenticated 
+                ? (isProUser ? "All spaces unlocked • Continue your journey" : "2 FREE experiences per space • Upgrade for full access")
+                : "Start FREE • No credit card required • 12 experiences unlocked instantly"}
+            </p>
+          </motion.div>
         </div>
       </section>
 
