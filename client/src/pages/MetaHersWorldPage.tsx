@@ -275,8 +275,8 @@ export default function MetaHersWorldPage() {
             </p>
           </motion.div>
 
-          {/* RADIAL ORBIT LAYOUT */}
-          <div className="relative w-full max-w-6xl mx-auto aspect-square">
+          {/* RADIAL ORBIT LAYOUT - Desktop Only */}
+          <div className="hidden md:block relative w-full max-w-6xl mx-auto aspect-square">
             {/* Central Sanctuary Core */}
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
@@ -446,12 +446,120 @@ export default function MetaHersWorldPage() {
               })}
           </div>
 
+          {/* MOBILE LAYOUT - Vertical Stack */}
+          <div className="md:hidden space-y-6 max-w-md mx-auto">
+            {/* Central Sanctuary - Mobile */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              className="bg-gradient-to-br from-purple-900/40 to-pink-900/40 backdrop-blur-3xl rounded-3xl border-2 border-white/20 p-8 shadow-2xl text-center mb-8"
+            >
+              <Sparkles className="w-12 h-12 mx-auto mb-3 text-yellow-400" />
+              <h3 className="font-serif text-2xl font-bold text-white mb-1">
+                MetaHers
+              </h3>
+              <p className="text-xs text-white/60 mb-3">Mind Spa Sanctuary</p>
+              <div className="text-xs text-white/40">
+                {isAuthenticated ? (isProUser ? "Pro Member" : "Free Member") : "Guest"}
+              </div>
+            </motion.div>
+
+            {/* Mobile Portal Cards */}
+            {spaces
+              .sort((a, b) => a.sortOrder - b.sortOrder)
+              .map((space, index) => {
+                const IconComponent = ICON_MAP[space.icon] || Sparkles;
+                const color = COLOR_MAP[space.color] || "#a855f7";
+                const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
+
+                return (
+                  <motion.div
+                    key={space.id}
+                    initial={{ opacity: 0, x: -30 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1 }}
+                    whileTap={!isLocked ? { scale: 0.95 } : {}}
+                    onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
+                    className={`relative backdrop-blur-3xl rounded-2xl border-2 p-6 ${
+                      isLocked ? 'cursor-not-allowed' : 'cursor-pointer active:scale-95'
+                    }`}
+                    style={{
+                      background: `linear-gradient(135deg, ${color}15, ${color}05)`,
+                      borderColor: `${color}60`,
+                      boxShadow: `0 8px 32px ${color}30`,
+                    }}
+                    data-testid={`mobile-portal-${space.slug}`}
+                  >
+                    {/* Lock overlay */}
+                    {isLocked && (
+                      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
+                        <div className="text-center">
+                          <Lock className="w-8 h-8 mx-auto mb-2" style={{ color }} />
+                          <p className="text-xs text-white font-semibold mb-2">PRO ONLY</p>
+                          <Button
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setLocation("/pricing");
+                            }}
+                            className="bg-gradient-to-r from-purple-600 to-pink-600 text-xs"
+                            data-testid={`button-mobile-upgrade-${space.slug}`}
+                          >
+                            Upgrade
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-4">
+                      {/* Icon */}
+                      <div
+                        className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
+                        style={{
+                          background: `radial-gradient(circle at 30% 30%, ${color}80, ${color}40)`,
+                          boxShadow: `0 4px 16px ${color}40`,
+                        }}
+                      >
+                        <IconComponent className="w-8 h-8 text-white" />
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1">
+                        <h3 className="font-serif text-xl font-bold text-white mb-1">
+                          {space.name}
+                        </h3>
+                        <p className="text-xs text-white/60 line-clamp-2">
+                          {space.description.split('.')[0]}
+                        </p>
+                      </div>
+
+                      {/* Arrow or Badge */}
+                      {!isLocked && (
+                        <ArrowRight className="w-5 h-5 text-white/40 flex-shrink-0" />
+                      )}
+                    </div>
+
+                    {/* FREE badge */}
+                    {space.sortOrder <= 2 && (
+                      <div className="absolute top-3 right-3">
+                        <div className="px-2 py-1 rounded-full bg-gradient-to-r from-teal-500 to-green-500 text-[10px] font-bold text-white">
+                          FREE
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+          </div>
+
           {/* Bottom CTA */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mt-32"
+            className="text-center mt-16 md:mt-32"
           >
             {!isAuthenticated ? (
               <Button
