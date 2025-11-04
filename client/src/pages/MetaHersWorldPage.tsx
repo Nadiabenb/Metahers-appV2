@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock, Star, CheckCircle2, TrendingUp, Users, Award } from "lucide-react";
+import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock, Star, CheckCircle2, TrendingUp, Users, Award, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import spaImage from '@assets/generated_images/6-room_luxury_mind_spa_496894f5.png';
+import spaImage from '@assets/generated_images/3D_isometric_luxury_spa_6_rooms_52f40b1c.png';
 
 type Space = {
   id: string;
@@ -34,13 +34,14 @@ const COLOR_MAP: Record<string, string> = {
   "liquid-gold": "#fbbf24",
 };
 
+// Hotspot positions for 3D isometric layout (adjusted for new image)
 const HOTSPOTS: Record<string, { left: string; top: string; width: string; height: string }> = {
-  "web3": { left: "15%", top: "25%", width: "20%", height: "25%" },
-  "crypto": { left: "40%", top: "20%", width: "20%", height: "25%" },
-  "ai": { left: "65%", top: "25%", width: "20%", height: "25%" },
-  "metaverse": { left: "15%", top: "55%", width: "20%", height: "25%" },
-  "branding": { left: "40%", top: "55%", width: "20%", height: "25%" },
-  "moms": { left: "65%", top: "55%", width: "20%", height: "25%" },
+  "web3": { left: "8%", top: "30%", width: "25%", height: "30%" },
+  "ai": { left: "37%", top: "15%", width: "25%", height: "30%" },
+  "crypto": { left: "67%", top: "30%", width: "25%", height: "30%" },
+  "metaverse": { left: "8%", top: "60%", width: "25%", height: "30%" },
+  "branding": { left: "37%", top: "50%", width: "25%", height: "30%" },
+  "moms": { left: "67%", top: "60%", width: "25%", height: "30%" },
 };
 
 const TESTIMONIALS = [
@@ -261,7 +262,7 @@ export default function MetaHersWorldPage() {
                 data-testid="spa-map-image"
               />
 
-              {/* Interactive Hotspots */}
+              {/* Interactive Hotspots with Always-Visible Labels */}
               {spaces.map((space) => {
                 const hotspot = HOTSPOTS[space.id];
                 if (!hotspot) return null;
@@ -274,7 +275,7 @@ export default function MetaHersWorldPage() {
                 return (
                   <div
                     key={space.id}
-                    className="absolute cursor-pointer group"
+                    className="absolute cursor-pointer group transition-all duration-300"
                     style={{
                       left: hotspot.left,
                       top: hotspot.top,
@@ -286,46 +287,92 @@ export default function MetaHersWorldPage() {
                     onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
                     data-testid={`hotspot-${space.slug}`}
                   >
+                    {/* Glow effect on hover */}
                     <div
-                      className={`absolute inset-0 rounded-xl transition-all duration-500 ${
-                        isHovered ? 'opacity-40' : 'opacity-0'
+                      className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
+                        isHovered ? 'opacity-50 scale-105' : 'opacity-0'
                       }`}
                       style={{
                         background: `radial-gradient(circle, ${color}80, transparent)`,
-                        boxShadow: `0 0 60px ${color}`,
+                        boxShadow: `0 0 80px ${color}`,
+                        filter: 'blur(20px)',
                       }}
                     />
+
+                    {/* Border pulse on hover */}
                     <div
-                      className={`absolute inset-0 rounded-xl border-4 transition-all duration-700 ${
-                        isHovered ? 'opacity-100 scale-110' : 'opacity-0 scale-95'
+                      className={`absolute inset-0 rounded-2xl border-3 transition-all duration-500 ${
+                        isHovered ? 'opacity-100 scale-105 animate-pulse' : 'opacity-30 scale-100'
                       }`}
-                      style={{ borderColor: color }}
+                      style={{ borderColor: color, borderWidth: '3px' }}
                     />
-                    {isHovered && (
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none animate-in fade-in zoom-in duration-300">
-                        <div
-                          className="px-6 py-4 rounded-2xl backdrop-blur-xl shadow-2xl border-2"
-                          style={{
-                            backgroundColor: `${color}20`,
-                            borderColor: color,
-                            boxShadow: `0 0 40px ${color}80`,
-                          }}
-                        >
-                          {isLocked && (
-                            <Lock className="w-6 h-6 mx-auto mb-2" style={{ color }} />
-                          )}
-                          <div className="flex items-center gap-2 justify-center mb-2">
-                            <IconComponent className="w-6 h-6" style={{ color }} />
-                            <h3 className="text-xl font-serif font-bold whitespace-nowrap" style={{ color }}>
-                              {space.name}
-                            </h3>
+
+                    {/* Always-visible room label card */}
+                    <div
+                      className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center transition-all duration-500 pointer-events-none ${
+                        isHovered ? 'scale-110' : 'scale-100'
+                      }`}
+                    >
+                      <div
+                        className={`px-5 py-4 rounded-2xl backdrop-blur-xl shadow-2xl border-2 transition-all duration-500 ${
+                          isHovered ? 'bg-opacity-95' : 'bg-opacity-70'
+                        }`}
+                        style={{
+                          backgroundColor: `${color}30`,
+                          borderColor: color,
+                          boxShadow: isHovered ? `0 0 50px ${color}80` : `0 0 20px ${color}40`,
+                        }}
+                      >
+                        {/* Lock icon for locked spaces */}
+                        {isLocked && (
+                          <div className="mb-2">
+                            <Lock className="w-6 h-6 mx-auto" style={{ color }} />
                           </div>
-                          <p className="text-xs text-white/80 max-w-xs">
-                            {isLocked ? 'Upgrade to unlock' : 'Click to enter'}
-                          </p>
+                        )}
+
+                        {/* Icon + Room Title */}
+                        <div className="flex items-center gap-2 justify-center mb-3">
+                          <IconComponent className="w-7 h-7" style={{ color }} />
+                          <h3 
+                            className="text-xl md:text-2xl font-serif font-bold whitespace-nowrap" 
+                            style={{ color }}
+                          >
+                            {space.name}
+                          </h3>
                         </div>
+
+                        {/* Enter Button - always visible, grows on hover */}
+                        <div className={`transition-all duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}>
+                          <div
+                            className="px-6 py-2 rounded-full font-semibold text-sm flex items-center gap-2 justify-center"
+                            style={{
+                              backgroundColor: isHovered ? color : `${color}80`,
+                              color: '#000',
+                              boxShadow: isHovered ? `0 0 20px ${color}` : 'none',
+                            }}
+                          >
+                            {isLocked ? (
+                              <>
+                                <Lock className="w-4 h-4" />
+                                <span>UPGRADE</span>
+                              </>
+                            ) : (
+                              <>
+                                <span>ENTER</span>
+                                <ArrowRight className="w-4 h-4" />
+                              </>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Hover instruction */}
+                        {isHovered && !isLocked && (
+                          <p className="text-xs text-white/90 mt-2 animate-in fade-in duration-200">
+                            Click to explore
+                          </p>
+                        )}
                       </div>
-                    )}
+                    </div>
                   </div>
                 );
               })}
