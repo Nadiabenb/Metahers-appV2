@@ -3,7 +3,7 @@ import { useLocation } from "wouter";
 import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
-import spaImage from '@assets/generated_images/3D_isometric_luxury_mind_spa_fcf1b7f2.png';
+import spaImage from '@assets/generated_images/6-room_luxury_mind_spa_496894f5.png';
 
 type Space = {
   id: string;
