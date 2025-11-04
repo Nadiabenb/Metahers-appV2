@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
-import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock } from "lucide-react";
+import { Globe, Sparkles, Boxes, Coins, Megaphone, Heart, Lock, ChevronRight } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 type Space = {
@@ -24,11 +24,19 @@ const ICON_MAP: Record<string, any> = {
 };
 
 const COLOR_MAP: Record<string, string> = {
-  "hyper-violet": "#a855f7",
-  "magenta-quartz": "#ec4899",
-  "cyber-fuchsia": "#e879f9",
-  "aurora-teal": "#2dd4bf",
-  "liquid-gold": "#fbbf24",
+  "hyper-violet": "from-purple-500 to-violet-600",
+  "magenta-quartz": "from-pink-500 to-rose-600",
+  "cyber-fuchsia": "from-fuchsia-500 to-pink-600",
+  "aurora-teal": "from-teal-400 to-cyan-500",
+  "liquid-gold": "from-yellow-400 to-amber-500",
+};
+
+const BORDER_COLOR_MAP: Record<string, string> = {
+  "hyper-violet": "border-purple-500/30",
+  "magenta-quartz": "border-pink-500/30",
+  "cyber-fuchsia": "border-fuchsia-500/30",
+  "aurora-teal": "border-teal-400/30",
+  "liquid-gold": "border-yellow-400/30",
 };
 
 export default function MetaHersWorldPage() {
@@ -42,108 +50,116 @@ export default function MetaHersWorldPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-900/20 via-background to-pink-900/20">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="text-3xl font-serif mb-4 bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 bg-clip-text text-transparent">
-            Loading MetaHers World...
+          <div className="text-2xl font-serif mb-4 text-muted-foreground">
+            Preparing your sanctuary...
           </div>
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900/10 via-background to-pink-900/10 py-12 md:py-20 px-4">
+    <div className="min-h-screen py-12 md:py-20 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Hero Title */}
-        <div className="text-center mb-16 md:mb-24">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-serif font-bold mb-6 leading-tight">
-            <span className="block bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 bg-clip-text text-transparent">
-              MetaHers
+        <div className="text-center mb-16">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif font-bold mb-4">
+            <span className="bg-gradient-to-r from-purple-500 via-pink-500 to-yellow-500 bg-clip-text text-transparent">
+              MetaHers Mind Spa
             </span>
           </h1>
-          <p className="text-2xl md:text-3xl text-muted-foreground max-w-3xl mx-auto">
-            Explore Six Immersive Worlds
+          <p className="text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto">
+            Choose Your Treatment Room
           </p>
         </div>
 
-        {/* 6 Worlds Grid - Main Navigation */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16 max-w-6xl mx-auto">
-          {spaces.map((space, index) => {
+        {/* Spa Doors Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mb-16">
+          {spaces.map((space) => {
             const IconComponent = ICON_MAP[space.icon] || Sparkles;
-            const color = COLOR_MAP[space.color] || "#a855f7";
+            const gradientClass = COLOR_MAP[space.color] || "from-purple-500 to-violet-600";
+            const borderClass = BORDER_COLOR_MAP[space.color] || "border-purple-500/30";
             const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
 
             return (
               <Link key={space.id} href={`/spaces/${space.slug}`}>
                 <div
-                  className="group relative cursor-pointer"
-                  data-testid={`world-${space.slug}`}
+                  className={`group relative h-96 rounded-2xl border-2 ${borderClass} bg-card overflow-hidden transition-all duration-500 hover:scale-105 hover:shadow-2xl cursor-pointer`}
+                  data-testid={`door-${space.slug}`}
                 >
-                  {/* Animated glow background */}
-                  <div
-                    className="absolute -inset-8 rounded-full blur-3xl opacity-0 group-hover:opacity-60 transition-all duration-700 ease-out"
-                    style={{ background: `radial-gradient(circle, ${color}, transparent)` }}
-                  />
+                  {/* Door Background Gradient */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${gradientClass} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
 
-                  {/* World Orb */}
-                  <div className="relative">
-                    <div
-                      className="w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 mx-auto rounded-full flex flex-col items-center justify-center border-4 relative transition-all duration-500 group-hover:scale-110 group-hover:rotate-3"
-                      style={{
-                        borderColor: color,
-                        background: `linear-gradient(135deg, ${color}ee, ${color}aa)`,
-                        boxShadow: `0 20px 80px ${color}60, inset 0 0 80px ${color}40`,
-                      }}
-                    >
-                      {/* Lock badge for Pro-only worlds */}
-                      {isLocked && (
-                        <div
-                          className="absolute -top-4 -right-4 bg-background rounded-full p-4 border-4 z-10 shadow-2xl"
-                          style={{ borderColor: color }}
-                        >
-                          <Lock className="w-7 h-7" style={{ color }} />
-                        </div>
-                      )}
-
-                      {/* Rotating icon */}
-                      <div className="transition-transform duration-700 group-hover:scale-125 group-hover:rotate-12">
-                        <IconComponent className="w-28 h-28 md:w-32 md:h-32 text-white drop-shadow-2xl" />
+                  {/* Lock Badge */}
+                  {isLocked && (
+                    <div className="absolute top-4 right-4 z-10">
+                      <div className={`bg-gradient-to-br ${gradientClass} rounded-full p-3 shadow-lg`}>
+                        <Lock className="w-5 h-5 text-white" />
                       </div>
+                    </div>
+                  )}
 
-                      {/* World name */}
-                      <div className="mt-6 font-serif text-3xl md:text-4xl font-bold text-center px-6 text-white drop-shadow-lg">
-                        {space.name}
-                      </div>
-
-                      {/* Subtle pulse animation */}
-                      <div
-                        className="absolute inset-0 rounded-full border-2 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-1000"
-                        style={{ borderColor: `${color}80` }}
-                      />
+                  {/* Door Content */}
+                  <div className="relative h-full flex flex-col items-center justify-center p-8 text-center">
+                    {/* Icon */}
+                    <div className={`mb-6 p-6 rounded-full bg-gradient-to-br ${gradientClass} shadow-xl transition-transform duration-500 group-hover:scale-110 group-hover:rotate-6`}>
+                      <IconComponent className="w-12 h-12 text-white" />
                     </div>
 
-                    {/* Description on hover */}
-                    <div className="mt-8 text-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
-                      <p className="text-base text-muted-foreground max-w-xs mx-auto leading-relaxed">
-                        {space.description}
-                      </p>
-                      <div className="mt-4 font-semibold" style={{ color }}>
-                        Click to explore →
+                    {/* Room Name Plaque */}
+                    <div className="mb-4">
+                      <div className={`inline-block px-6 py-2 rounded-full border ${borderClass} bg-background/50 backdrop-blur-sm`}>
+                        <h3 className="text-2xl font-serif font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                          {space.name}
+                        </h3>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed max-w-xs">
+                      {space.description}
+                    </p>
+
+                    {/* Enter Button - appears on hover */}
+                    <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-4 group-hover:translate-y-0">
+                      <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r ${gradientClass} text-white font-semibold shadow-lg`}>
+                        <span>Enter Room</span>
+                        <ChevronRight className="w-5 h-5" />
                       </div>
                     </div>
                   </div>
+
+                  {/* Door Edge Shadow Effect */}
+                  <div className={`absolute inset-y-0 left-0 w-2 bg-gradient-to-r ${gradientClass} opacity-30 group-hover:opacity-60 transition-opacity duration-500`} />
                 </div>
               </Link>
             );
           })}
         </div>
 
-        {/* Bottom tagline */}
-        <div className="text-center mt-20 md:mt-32">
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Each world contains resources, experiences, and opportunities designed specifically for women mastering the future of technology
+        {/* Bottom Info */}
+        <div className="text-center max-w-3xl mx-auto">
+          <p className="text-muted-foreground leading-relaxed">
+            Each treatment room offers curated resources, transformational experiences, and a supportive community. 
+            {!isAuthenticated && (
+              <span className="block mt-4 text-sm">
+                <Link href="/login" className="text-primary hover:underline font-semibold">
+                  Sign in
+                </Link>
+                {" "}to unlock your first experience in each room for free
+              </span>
+            )}
+            {isAuthenticated && !isProUser && (
+              <span className="block mt-4 text-sm">
+                <Link href="/pricing" className="text-primary hover:underline font-semibold">
+                  Upgrade to Pro
+                </Link>
+                {" "}to access all treatment rooms
+              </span>
+            )}
           </p>
         </div>
       </div>
