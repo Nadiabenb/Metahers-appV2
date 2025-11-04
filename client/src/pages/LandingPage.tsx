@@ -325,16 +325,29 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.8 }}
-              className="text-3xl sm:text-4xl text-foreground/90 mb-8 max-w-4xl mx-auto leading-relaxed font-light"
+              className="text-3xl sm:text-4xl text-foreground/90 mb-6 max-w-4xl mx-auto leading-relaxed font-light"
               style={{
                 textShadow: '0 2px 20px rgba(0,0,0,0.8)',
               }}
             >
-              Step into the future.
-              <br />
               <span className="text-[hsl(var(--liquid-gold))]">Where Forbes meets Vogue.</span>
               <br />
               Where AI education meets luxury self-care.
+            </motion.p>
+
+            {/* Outcome-focused headline */}
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              className="text-xl sm:text-2xl text-foreground/80 mb-10 max-w-4xl mx-auto leading-relaxed"
+              style={{
+                textShadow: '0 2px 20px rgba(0,0,0,0.8)',
+              }}
+            >
+              For women solopreneurs, moms, and creatives: Master AI & no-code tools to save time, automate your business, and reclaim your life.
+              <br />
+              <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">Start FREE with 12 hands-on experiences + AI coaching.</span>
             </motion.p>
 
             {/* CTAs */}
@@ -434,6 +447,113 @@ export default function LandingPage() {
         )}
       </div>
 
+      {/* What You Get FREE Section - Lead Magnets */}
+      <div className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/95">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-[#FFD700] via-white to-[#FFD700] bg-clip-text text-transparent">
+              Start Learning Today—Completely Free
+            </h2>
+            <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
+              No credit card required. No pressure. Just instant access to powerful tools.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                icon: Sparkles,
+                title: "12 FREE Experiences",
+                description: "2 hands-on learning experiences in each of our 6 spaces—try before you commit",
+                color: "#B565D8"
+              },
+              {
+                icon: Brain,
+                title: "AI Prompts Playground",
+                description: "Access our library of proven AI prompts for business, content creation, and productivity",
+                color: "#FF00FF"
+              },
+              {
+                icon: Zap,
+                title: "Career Growth Path",
+                description: "AI-powered personalized roadmap showing your next steps in tech",
+                color: "#00D9FF"
+              },
+              {
+                icon: Crown,
+                title: "Moms Space Access",
+                description: "FREE experiences on AI for parenting, side hustles, and work-life automation",
+                color: "#FFD700"
+              }
+            ].map((benefit, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="relative backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-white/10 group hover:border-white/30 transition-all duration-300"
+              >
+                <div
+                  className="w-16 h-16 rounded-xl flex items-center justify-center mb-6 mx-auto"
+                  style={{
+                    background: `linear-gradient(135deg, ${benefit.color}40, ${benefit.color}20)`,
+                    boxShadow: `0 8px 32px ${benefit.color}30`
+                  }}
+                >
+                  <benefit.icon className="w-8 h-8" style={{ color: benefit.color }} />
+                </div>
+                <h3 className="font-semibold text-xl mb-3 text-center text-foreground">
+                  {benefit.title}
+                </h3>
+                <p className="text-foreground/70 text-center leading-relaxed text-sm">
+                  {benefit.description}
+                </p>
+
+                {/* Glow effect on hover */}
+                <div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"
+                  style={{ background: `${benefit.color}20` }}
+                />
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Free CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4, duration: 0.8 }}
+            className="text-center mt-12"
+          >
+            <motion.button
+              onClick={handleSignup}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.98 }}
+              className="relative px-10 py-5 rounded-full overflow-hidden group"
+              data-testid="button-free-access"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[#B565D8] via-[#FF00FF] to-[#E935C1]" />
+              <span className="relative z-10 font-bold text-lg text-white flex items-center gap-3">
+                Get FREE Access Now
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+              </span>
+            </motion.button>
+            <p className="text-foreground/50 mt-4 text-sm">
+              Join 1,247+ women already learning • Instant access • No credit card needed
+            </p>
+          </motion.div>
+        </div>
+      </div>
+
       {/* Transformation Journey Section */}
       <div className="relative py-40 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-background/95 to-background">
         {/* Section title */}
@@ -488,10 +608,10 @@ export default function LandingPage() {
               {/* Content */}
               <div className="relative z-10">
                 <h3 className="font-serif text-3xl font-semibold text-foreground mb-6 text-center">
-                  5 Guided Rituals
+                  6 Learning Spaces
                 </h3>
                 <p className="text-foreground/80 leading-relaxed text-center text-lg">
-                  Master AI prompting, blockchain, crypto, NFTs, and the metaverse through serene, spa-inspired learning sessions that transform complex technology into intuitive wisdom.
+                  36 hands-on experiences across Web3, AI, NFTs, Metaverse, Branding, and a dedicated Moms space. Learn to automate your business, save hours daily, and leverage AI for real results.
                 </p>
               </div>
 
@@ -551,10 +671,10 @@ export default function LandingPage() {
 
               <div className="relative z-10">
                 <h3 className="font-serif text-3xl font-semibold text-foreground mb-6 text-center">
-                  Luxury Ritual Kits
+                  Real Tools & Templates
                 </h3>
                 <p className="text-foreground/80 leading-relaxed text-center text-lg">
-                  18 limited edition handmade kits combining wellness essentials with exclusive AI unlocks and instant Pro membership access.
+                  AI prompts that actually work, no-code automation blueprints, side hustle templates, and time-saving systems you can implement today. Plus luxury ritual kits for the full experience.
                 </p>
               </div>
 
@@ -577,10 +697,10 @@ export default function LandingPage() {
 
         <div className="relative max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-16">
           {[
-            { value: "1,247+", label: "Women Empowered", icon: Crown, color: "#B565D8" },
-            { value: "5", label: "Learning Rituals", icon: Flame, color: "#FF00FF" },
-            { value: "30-Day", label: "Thought Leadership", icon: Star, color: "#00D9FF" },
-            { value: "AI-Powered", label: "Personal Coaching", icon: Brain, color: "#FFD700" }
+            { value: "10+ Hours", label: "Saved Per Week", icon: Zap, color: "#B565D8" },
+            { value: "36", label: "Actionable Experiences", icon: Sparkles, color: "#FF00FF" },
+            { value: "FREE", label: "To Start Learning", icon: Star, color: "#00D9FF" },
+            { value: "1,247+", label: "Women Already Inside", icon: Crown, color: "#FFD700" }
           ].map((stat, i) => (
             <motion.div
               key={i}
@@ -676,17 +796,17 @@ export default function LandingPage() {
                 className="inline-flex items-center gap-3 backdrop-blur-xl bg-gradient-to-r from-[#FFD700]/20 to-[#FFD700]/10 px-6 py-3 rounded-full mb-8 border border-[#FFD700]/30"
               >
                 <Gem className="w-5 h-5 text-[#FFD700]" />
-                <span className="text-sm font-medium tracking-wider uppercase">Limited Time Offer</span>
+                <span className="text-sm font-medium tracking-wider uppercase">No Risk, All Reward</span>
               </motion.div>
 
               <h2 className="font-serif text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-[#FFD700] via-white to-[#FFD700] bg-clip-text text-transparent">
-                Begin Your
+                Your Future Self
                 <br />
-                Transformation
+                Will Thank You
               </h2>
 
               <p className="text-2xl text-foreground/80 mb-12 max-w-3xl mx-auto leading-relaxed">
-                Join thousands of visionary women transforming their careers through AI and Web3 mastery in the most luxurious learning environment ever created.
+                Join 1,247+ women solopreneurs, moms, and creatives who are using AI to automate their businesses, save time, and build the freedom lifestyle they deserve.
               </p>
 
               <motion.button
@@ -694,6 +814,7 @@ export default function LandingPage() {
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 className="relative inline-flex items-center gap-4 px-14 py-7 rounded-full overflow-hidden group/btn"
+                data-testid="button-final-cta"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
                 <motion.div
@@ -708,13 +829,13 @@ export default function LandingPage() {
                   }}
                 />
                 <span className="relative z-10 font-bold text-2xl text-background">
-                  Start Free Trial
+                  Start FREE Today
                 </span>
                 <ArrowRight className="relative z-10 w-7 h-7 text-background group-hover/btn:translate-x-2 transition-transform" />
               </motion.button>
 
               <p className="text-foreground/50 mt-8 text-sm">
-                7-day free trial • No credit card required • Cancel anytime
+                100% FREE to start • 12 experiences unlocked instantly • No credit card required
               </p>
             </div>
           </motion.div>
