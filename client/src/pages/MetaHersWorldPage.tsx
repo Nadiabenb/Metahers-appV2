@@ -247,140 +247,143 @@ export default function MetaHersWorldPage() {
                 Explore 6 Transformational Spaces
               </span>
             </h2>
-            <p className="text-lg text-white/70 hidden md:block">
-              Hover over each room to preview • Click to enter your journey
-            </p>
-            <p className="text-lg text-white/70 md:hidden">
-              Tap any room to begin your journey
+            <p className="text-lg text-white/70 max-w-2xl mx-auto">
+              Each space contains 6 hands-on experiences designed to transform how you use AI, Web3, and no-code tools in your business and life.
             </p>
           </div>
 
-          {/* 3D Interactive Spa Map - Works on Desktop & Mobile */}
-          <div className="relative max-w-5xl mx-auto">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-              <img 
-                src={spaImage} 
-                alt="MetaHers Mind Spa - Interactive 3D View"
-                className="w-full h-auto"
-                data-testid="spa-map-image"
-              />
-
-              {/* Interactive Hotspots with Always-Visible Labels */}
-              {spaces.map((space) => {
-                const hotspot = HOTSPOTS[space.id];
-                if (!hotspot) return null;
-
+          {/* Beautiful Card Grid - Main Feature */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto mb-16">
+            {spaces
+              .sort((a, b) => a.sortOrder - b.sortOrder)
+              .map((space, index) => {
                 const IconComponent = ICON_MAP[space.icon] || Sparkles;
                 const color = COLOR_MAP[space.color] || "#a855f7";
                 const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
-                const isHovered = hoveredSpace === space.id;
 
                 return (
                   <div
                     key={space.id}
-                    className="absolute cursor-pointer group transition-all duration-300"
-                    style={{
-                      left: hotspot.left,
-                      top: hotspot.top,
-                      width: hotspot.width,
-                      height: hotspot.height,
-                    }}
-                    onMouseEnter={() => setHoveredSpace(space.id)}
-                    onMouseLeave={() => setHoveredSpace(null)}
-                    onTouchStart={() => setHoveredSpace(space.id)}
-                    onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
-                    data-testid={`hotspot-${space.slug}`}
+                    className="group relative"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                    data-testid={`space-card-${space.slug}`}
                   >
-                    {/* Glow effect on hover/touch */}
+                    {/* Animated card wrapper */}
                     <div
-                      className={`absolute inset-0 rounded-2xl transition-all duration-500 ${
-                        isHovered ? 'opacity-50 scale-105' : 'opacity-0'
+                      className={`relative h-full rounded-2xl backdrop-blur-xl border-2 transition-all duration-500 ${
+                        isLocked 
+                          ? 'bg-white/5 border-white/20 cursor-not-allowed' 
+                          : 'bg-white/10 border-white/30 cursor-pointer hover:scale-105 hover:-translate-y-2'
                       }`}
                       style={{
-                        background: `radial-gradient(circle, ${color}80, transparent)`,
-                        boxShadow: `0 0 80px ${color}`,
-                        filter: 'blur(20px)',
+                        borderColor: isLocked ? '#ffffff30' : color,
+                        boxShadow: isLocked ? 'none' : `0 8px 32px ${color}20`,
                       }}
-                    />
-
-                    {/* Border pulse on hover/touch */}
-                    <div
-                      className={`absolute inset-0 rounded-2xl border-3 transition-all duration-500 ${
-                        isHovered ? 'opacity-100 scale-105 animate-pulse' : 'opacity-30 scale-100'
-                      }`}
-                      style={{ borderColor: color, borderWidth: '3px' }}
-                    />
-
-                    {/* Always-visible room label card */}
-                    <div
-                      className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center transition-all duration-500 pointer-events-none ${
-                        isHovered ? 'scale-110' : 'scale-100'
-                      }`}
+                      onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
+                      onMouseEnter={() => setHoveredSpace(space.id)}
+                      onMouseLeave={() => setHoveredSpace(null)}
                     >
+                      {/* Glow effect on hover */}
                       <div
-                        className={`px-3 py-2 md:px-5 md:py-4 rounded-xl md:rounded-2xl backdrop-blur-xl shadow-2xl border-2 transition-all duration-500 ${
-                          isHovered ? 'bg-opacity-95' : 'bg-opacity-70'
+                        className={`absolute inset-0 rounded-2xl transition-opacity duration-500 -z-10 blur-xl ${
+                          hoveredSpace === space.id && !isLocked ? 'opacity-70' : 'opacity-0'
                         }`}
-                        style={{
-                          backgroundColor: `${color}30`,
-                          borderColor: color,
-                          boxShadow: isHovered ? `0 0 50px ${color}80` : `0 0 20px ${color}40`,
-                        }}
-                      >
-                        {/* Lock icon for locked spaces */}
-                        {isLocked && (
-                          <div className="mb-1 md:mb-2">
-                            <Lock className="w-4 h-4 md:w-6 md:h-6 mx-auto" style={{ color }} />
+                        style={{ background: `radial-gradient(circle, ${color}, transparent)` }}
+                      />
+
+                      {/* Lock overlay for Pro spaces */}
+                      {isLocked && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-black/60 to-purple-900/40 rounded-2xl backdrop-blur-sm flex items-center justify-center z-10">
+                          <div className="text-center">
+                            <Lock className="w-12 h-12 mx-auto mb-3 text-purple-400" />
+                            <p className="text-white font-semibold mb-2">Pro Only</p>
+                            <Button
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setLocation("/pricing");
+                              }}
+                              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                              data-testid={`button-upgrade-${space.slug}`}
+                            >
+                              Upgrade Now
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Card content */}
+                      <div className="p-8">
+                        {/* Icon with animated background */}
+                        <div
+                          className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-6 mx-auto transition-all duration-500 ${
+                            hoveredSpace === space.id && !isLocked ? 'scale-110 rotate-6' : 'scale-100 rotate-0'
+                          }`}
+                          style={{
+                            background: `linear-gradient(135deg, ${color}40, ${color}20)`,
+                            boxShadow: hoveredSpace === space.id && !isLocked ? `0 12px 40px ${color}60` : `0 4px 16px ${color}30`,
+                          }}
+                        >
+                          <IconComponent className="w-10 h-10" style={{ color }} />
+                        </div>
+
+                        {/* Space name */}
+                        <h3 className="text-2xl font-serif font-bold text-white text-center mb-3">
+                          {space.name}
+                        </h3>
+
+                        {/* Description */}
+                        <p className="text-white/70 text-center text-sm leading-relaxed mb-6 min-h-[4rem]">
+                          {space.description}
+                        </p>
+
+                        {/* Enter button */}
+                        {!isLocked && (
+                          <div
+                            className={`flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 ${
+                              hoveredSpace === space.id ? 'scale-105' : 'scale-100'
+                            }`}
+                            style={{
+                              backgroundColor: hoveredSpace === space.id ? color : `${color}80`,
+                              color: '#000',
+                              boxShadow: hoveredSpace === space.id ? `0 8px 24px ${color}60` : 'none',
+                            }}
+                          >
+                            <span>EXPLORE SPACE</span>
+                            <ArrowRight className="w-4 h-4" />
                           </div>
                         )}
 
-                        {/* Icon + Room Title */}
-                        <div className="flex items-center gap-1 md:gap-2 justify-center mb-2 md:mb-3">
-                          <IconComponent className="w-4 h-4 md:w-7 md:h-7" style={{ color }} />
-                          <h3 
-                            className="text-sm md:text-xl lg:text-2xl font-serif font-bold whitespace-nowrap" 
-                            style={{ color }}
-                          >
-                            {space.name}
-                          </h3>
-                        </div>
-
-                        {/* Enter Button - always visible, grows on hover */}
-                        <div className={`transition-all duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}>
-                          <div
-                            className="px-3 py-1 md:px-6 md:py-2 rounded-full font-semibold text-xs md:text-sm flex items-center gap-1 md:gap-2 justify-center"
-                            style={{
-                              backgroundColor: isHovered ? color : `${color}80`,
-                              color: '#000',
-                              boxShadow: isHovered ? `0 0 20px ${color}` : 'none',
-                            }}
-                          >
-                            {isLocked ? (
-                              <>
-                                <Lock className="w-3 h-3 md:w-4 md:h-4" />
-                                <span className="hidden md:inline">UPGRADE</span>
-                                <span className="md:hidden">PRO</span>
-                              </>
-                            ) : (
-                              <>
-                                <span>ENTER</span>
-                                <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
-                              </>
-                            )}
+                        {/* FREE badge for free spaces */}
+                        {space.sortOrder <= 2 && (
+                          <div className="absolute top-4 right-4">
+                            <div className="px-3 py-1 rounded-full bg-gradient-to-r from-teal-500 to-green-500 text-xs font-bold text-white shadow-lg">
+                              FREE
+                            </div>
                           </div>
-                        </div>
-
-                        {/* Hover instruction - desktop only */}
-                        {isHovered && !isLocked && (
-                          <p className="hidden md:block text-xs text-white/90 mt-2 animate-in fade-in duration-200">
-                            Click to explore
-                          </p>
                         )}
                       </div>
                     </div>
                   </div>
                 );
               })}
+          </div>
+
+          {/* Optional: 3D Visual Reference (smaller, decorative) */}
+          <div className="relative max-w-4xl mx-auto mt-16">
+            <div className="text-center mb-6">
+              <p className="text-sm text-white/50 uppercase tracking-widest">Your Luxury Learning Sanctuary</p>
+            </div>
+            <div className="relative rounded-2xl overflow-hidden shadow-2xl opacity-60 hover:opacity-100 transition-opacity duration-500">
+              <img 
+                src={spaImage} 
+                alt="MetaHers Mind Spa - 3D Visualization"
+                className="w-full h-auto"
+                data-testid="spa-map-image"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end justify-center pb-8">
+                <p className="text-white/90 text-sm font-serif italic">A Forbes-meets-Vogue learning experience</p>
+              </div>
             </div>
           </div>
         </div>
