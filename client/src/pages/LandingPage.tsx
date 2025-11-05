@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import { useRef, useState, useEffect } from "react";
+import { Link } from "wouter";
 
 // Particle component (SSR-safe with shared mouse listener)
 function Particle({ index, mousePosRef }: { index: number; mousePosRef: React.RefObject<{ x: number; y: number }> }) {
@@ -164,10 +165,6 @@ function WorldOrb({
     return () => clearInterval(interval);
   }, [prefersReducedMotion, mousePosRef, x, y]);
 
-  const handleClick = () => {
-    window.location.href = world.route;
-  };
-
   return (
     <motion.div
       ref={orbRef}
@@ -182,19 +179,20 @@ function WorldOrb({
       }}
       style={{ x, y }}
       className="relative flex items-center justify-center"
-      data-testid={`world-orb-${world.route.split('/').pop()}`}
     >
-      <motion.div
-        whileHover={{ scale: 1.15 }}
-        whileTap={{ scale: 0.95 }}
-        onHoverStart={() => setIsHovered(true)}
-        onHoverEnd={() => setIsHovered(false)}
-        onClick={handleClick}
-        className="relative cursor-pointer group"
-        style={{
-          willChange: 'transform',
-        }}
-      >
+      <Link href={world.route}>
+        <motion.a
+          whileHover={{ scale: 1.15 }}
+          whileTap={{ scale: 0.95 }}
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
+          className="relative cursor-pointer group focus:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-full block"
+          style={{
+            willChange: 'transform',
+          }}
+          data-testid={`world-orb-${world.route.split('/').pop()}`}
+          aria-label={`Explore ${world.name} learning space`}
+        >
         {/* Outer glow ring */}
         <motion.div
           className="absolute inset-0 rounded-full blur-xl -z-10"
@@ -286,7 +284,8 @@ function WorldOrb({
             className="absolute top-0 left-0 right-0 h-1/3 rounded-t-full bg-gradient-to-b from-white/20 to-transparent pointer-events-none"
           />
         </div>
-      </motion.div>
+      </motion.a>
+      </Link>
     </motion.div>
   );
 }
