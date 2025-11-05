@@ -88,9 +88,11 @@ function Router() {
       <Route path="/rituals" component={RitualsPage} />
       <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
       
-      {/* Main immersive landing page - MetaHers World */}
+      {/* Conversion-Optimized Landing Page for Ads */}
+      <Route path="/" component={LandingPage} />
+      
+      {/* MetaHers World - Internal Hub */}
       <Route path="/world" component={MetaHersWorldPage} />
-      <Route path="/" component={MetaHersWorldPage} />
       
       {/* Space Detail Pages - Public */}
       <Route path="/spaces/:slug" component={SpaceDetailPage} />
