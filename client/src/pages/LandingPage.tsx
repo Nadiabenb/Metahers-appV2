@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion, useMotionValue, useAnimation } from "framer-motion";
-import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight, Zap, Crown, Star, Award, Brain, Flame, Gem } from "lucide-react";
+import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight, Zap, Crown, Star, Award, Brain, Flame, Gem, TrendingUp } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { SEO } from "@/components/SEO";
@@ -638,7 +638,7 @@ export default function LandingPage() {
         )}
       </div>
 
-      {/* What You Get FREE Section - Lead Magnets */}
+      {/* What You Get FREE Section - Outcome-Focused */}
       <div className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/95">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -648,39 +648,51 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-[#FFD700] via-white to-[#FFD700] bg-clip-text text-transparent">
-              Start Learning Today—Completely Free
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, type: "spring" }}
+              className="inline-flex items-center gap-3 backdrop-blur-xl bg-gradient-to-r from-[#FFD700]/20 to-[#FFD700]/10 px-6 py-3 rounded-full mb-6 border border-[#FFD700]/30"
+            >
+              <Star className="w-5 h-5 text-[#FFD700]" fill="currentColor" />
+              <span className="text-sm font-medium tracking-wider uppercase">100% FREE Forever</span>
+            </motion.div>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 bg-gradient-to-r from-[#FFD700] via-white to-[#FFD700] bg-clip-text text-transparent">
+              What You'll Accomplish For FREE
             </h2>
-            <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-              No credit card required. No pressure. Just instant access to powerful tools.
+            <p className="text-xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
+              Not just features—real outcomes that save you time, make you money, and transform how you work.
+              <br />
+              <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">No credit card. No catches. Just results.</span>
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                icon: Sparkles,
-                title: "12 FREE Experiences",
-                description: "2 hands-on learning experiences in each of our 6 spaces—try before you commit",
-                color: "#B565D8"
+                icon: Zap,
+                title: "Save 10+ Hours Weekly",
+                description: "12 hands-on AI experiences teaching real automation—invoice generation, content creation, email workflows you can use immediately",
+                color: "#FFD700"
               },
               {
                 icon: Brain,
-                title: "AI Prompts Playground",
-                description: "Access our library of proven AI prompts for business, content creation, and productivity",
+                title: "Copy Proven AI Prompts",
+                description: "Steal our exact prompts that save $1000s on copywriters, designers, and virtual assistants",
                 color: "#FF00FF"
               },
               {
-                icon: Zap,
-                title: "Career Growth Path",
-                description: "AI-powered personalized roadmap showing your next steps in tech",
+                icon: TrendingUp,
+                title: "Launch Your Side Hustle",
+                description: "AI-powered personalized roadmap with exact steps to monetize your skills in 30 days",
                 color: "#00D9FF"
               },
               {
                 icon: Crown,
-                title: "Moms Space Access",
-                description: "FREE experiences on AI for parenting, side hustles, and work-life automation",
-                color: "#FFD700"
+                title: "Automate Mom Life",
+                description: "AI for meal planning, homework help, birthday parties, family scheduling—get 2 hours back daily",
+                color: "#B565D8"
               }
             ].map((benefit, i) => (
               <motion.div
