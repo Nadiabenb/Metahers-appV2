@@ -614,30 +614,6 @@ export default function LandingPage() {
           </motion.div>
         </motion.div>
 
-        {/* Animated scroll indicator */}
-        {!prefersReducedMotion && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 2 }}
-            className="absolute bottom-12 left-1/2 -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 15, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center gap-3"
-            >
-              <span className="text-foreground/60 text-sm tracking-widest uppercase">Scroll to explore</span>
-              <div className="w-6 h-12 border-2 border-foreground/30 rounded-full flex items-start justify-center p-2">
-                <motion.div
-                  animate={{ opacity: [0, 1, 0], y: [0, 20, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-1.5 h-3 bg-[hsl(var(--liquid-gold))] rounded-full"
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
       </div>
 
       {/* What You Get FREE Section - Outcome-Focused */}
