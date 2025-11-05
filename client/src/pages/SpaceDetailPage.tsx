@@ -40,17 +40,29 @@ const COLOR_CLASSES: Record<string, string> = {
 };
 
 export default function SpaceDetailPage() {
+  // VERY FIRST THING - TEST RENDER
+  const testRender = true;
+  
   const { slug } = useParams<{ slug: string }>();
   const [, navigate] = useLocation();
   const { user } = useAuth();
 
-  console.log('[SpaceDetailPage] slug:', slug);
+  console.log('[SpaceDetailPage] COMPONENT RENDERING! slug:', slug);
+
+  if (testRender && !slug) {
+    return (
+      <div className="min-h-screen bg-red-500 flex items-center justify-center text-white text-4xl">
+        TEST: Component loaded but no slug!
+      </div>
+    );
+  }
 
   const { data: space, isLoading: spaceLoading, error: spaceError } = useQuery<Space>({
     queryKey: [`/api/spaces/${slug}`],
+    enabled: !!slug,
   });
 
-  console.log('[SpaceDetailPage] space:', space, 'loading:', spaceLoading, 'error:', spaceError);
+  console.log('[SpaceDetailPage] Query state - space:', space, 'loading:', spaceLoading, 'error:', spaceError);
 
   const { data: experiences = [], isLoading: experiencesLoading, error: experiencesError } = useQuery<Experience[]>({
     queryKey: [`/api/spaces/${space?.id}/experiences`],
