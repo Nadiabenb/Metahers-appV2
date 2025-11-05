@@ -60,12 +60,34 @@ export default function SpaceDetailPage() {
   const isAuthenticated = !!user;
   const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
 
+  // Debug render test
+  if (!slug) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-6">
+        <Card className="max-w-md text-center p-8">
+          <CardHeader>
+            <CardTitle className="text-2xl mb-2 text-red-500">DEBUG: No slug parameter</CardTitle>
+            <CardDescription>
+              The URL parameter 'slug' is missing or undefined.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button onClick={() => navigate("/world")} data-testid="button-back-to-world">
+              Back to MetaHers World
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (spaceLoading || experiencesLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">Loading experiences...</p>
+          <p className="text-sm text-muted-foreground mt-2">Slug: {slug}</p>
         </div>
       </div>
     );
