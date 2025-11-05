@@ -188,6 +188,12 @@ export interface IStorage {
   getExperiencesBySpace(spaceId: string): Promise<TransformationalExperienceDB[]>;
   getExperienceById(id: string): Promise<TransformationalExperienceDB | undefined>;
   getExperienceBySlug(slug: string): Promise<TransformationalExperienceDB | undefined>;
+  getAllExperiences(): Promise<TransformationalExperienceDB[]>;
+  
+  // MetaHers World - Experience Progress operations
+  getAllExperienceProgress(userId: string): Promise<ExperienceProgressDB[]>;
+  savePersonalizationAnswers(userId: string, experienceId: string, answers: Record<string, any>): Promise<ExperienceProgressDB>;
+  getPersonalizationAnswers(userId: string, experienceId: string): Promise<Record<string, any> | null>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1239,6 +1245,55 @@ export class DatabaseStorage implements IStorage {
         eq(transformationalExperiences.isActive, true)
       ));
     return experience;
+  }
+
+  async getAllExperiences(): Promise<TransformationalExperienceDB[]> {
+    const experiences = await db
+      .select()
+      .from(transformationalExperiences)
+      .where(eq(transformationalExperiences.isActive, true))
+      .orderBy(transformationalExperiences.sortOrder);
+    return experiences;
+  }
+
+  // MetaHers World - Experience Progress operations
+  async getAllExperienceProgress(userId: string): Promise<ExperienceProgressDB[]> {
+    const progress = await db
+      .select()
+      .from(experienceProgress)
+      .where(eq(experienceProgress.userId, userId));
+    return progress;
+  }
+
+  async savePersonalizationAnswers(userId: string, experienceId: string, answers: Record<string, any>): Promise<ExperienceProgressDB> {
+    const [progress] = await db
+      .insert(experienceProgress)
+      .values({
+        userId,
+        experienceId,
+        personalizationAnswers: answers,
+        completedSections: [],
+      })
+      .onConflictDoUpdate({
+        target: [experienceProgress.userId, experienceProgress.experienceId],
+        set: {
+          personalizationAnswers: answers,
+          lastUpdated: new Date(),
+        },
+      })
+      .returning();
+    return progress;
+  }
+
+  async getPersonalizationAnswers(userId: string, experienceId: string): Promise<Record<string, any> | null> {
+    const [progress] = await db
+      .select()
+      .from(experienceProgress)
+      .where(and(
+        eq(experienceProgress.userId, userId),
+        eq(experienceProgress.experienceId, experienceId)
+      ));
+    return progress?.personalizationAnswers || null;
   }
 }
 

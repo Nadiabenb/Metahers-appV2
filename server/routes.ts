@@ -644,6 +644,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // GET all experiences (for progress dashboard)
+  app.get('/api/experiences/all', async (_req: Request, res) => {
+    try {
+      const experiences = await storage.getAllExperiences();
+      res.json(experiences);
+    } catch (error) {
+      console.error("Error fetching all experiences:", error);
+      res.status(500).json({ message: "Failed to fetch experiences" });
+    }
+  });
+
+  // GET all progress for current user (for progress dashboard)
+  app.get('/api/progress/all', async (req: Request, res) => {
+    try {
+      if (!req.session?.userId) {
+        return res.json([]); // Return empty array for non-authenticated users
+      }
+      
+      const userId = req.session.userId as string;
+      const progress = await storage.getAllExperienceProgress(userId);
+      res.json(progress);
+    } catch (error) {
+      console.error("Error fetching all progress:", error);
+      res.status(500).json({ message: "Failed to fetch progress" });
+    }
+  });
+
+  // POST personalization answers
+  app.post('/api/experiences/:experienceId/personalization', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { experienceId } = req.params;
+      const { answers } = req.body;
+
+      if (!answers || typeof answers !== 'object') {
+        return res.status(400).json({ message: "Answers are required" });
+      }
+
+      const result = await storage.savePersonalizationAnswers(userId, experienceId, answers);
+      res.json(result);
+    } catch (error) {
+      console.error("Error saving personalization answers:", error);
+      res.status(500).json({ message: "Failed to save answers" });
+    }
+  });
+
+  // GET personalization answers
+  app.get('/api/experiences/:experienceId/personalization', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { experienceId } = req.params;
+
+      const answers = await storage.getPersonalizationAnswers(userId, experienceId);
+      res.json(answers || {});
+    } catch (error) {
+      console.error("Error fetching personalization answers:", error);
+      res.status(500).json({ message: "Failed to fetch answers" });
+    }
+  });
+
   // ===== RITUAL PROGRESS ROUTES =====
   app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: Request, res) => {
     try {

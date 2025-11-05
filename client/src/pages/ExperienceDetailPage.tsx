@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
@@ -6,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import PersonalizationQuestionsModal from "@/components/PersonalizationQuestionsModal";
+import InteractiveQuiz from "@/components/InteractiveQuiz";
+import DownloadableResources from "@/components/DownloadableResources";
+import AchievementShowcase from "@/components/AchievementShowcase";
 
 type Experience = {
   id: string;
@@ -39,6 +44,8 @@ export default function ExperienceDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const [, navigate] = useLocation();
   const { user } = useAuth();
+  const [showPersonalization, setShowPersonalization] = useState(false);
+  const [personalizationCompleted, setPersonalizationCompleted] = useState(false);
 
   // Fetch experience data
   const { data: experience, isLoading, error } = useQuery<Experience>({
@@ -294,14 +301,12 @@ export default function ExperienceDetailPage() {
               <Button
                 size="lg"
                 className={`bg-gradient-to-r ${gradientClass} text-white`}
+                onClick={() => setShowPersonalization(true)}
                 data-testid="button-start-experience"
               >
                 <Play className="w-5 h-5 mr-2" />
                 Start Experience
               </Button>
-              <p className="text-sm text-muted-foreground mt-4">
-                Coming soon: AI-powered personalized questions and content
-              </p>
             </Card>
           ) : !isAuthenticated ? (
             <Card className="p-8 text-center">
@@ -326,7 +331,117 @@ export default function ExperienceDetailPage() {
             </Card>
           ) : null}
         </motion.div>
+
+        {/* Demo: Downloadable Resources (only show if user has access) */}
+        {hasAccess && personalizationCompleted && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-12"
+          >
+            <DownloadableResources
+              experienceTitle={experience.title}
+              isProUser={isProUser}
+              resources={[
+                {
+                  id: "res-1",
+                  title: "Beginner's Checklist",
+                  description: "Step-by-step guide to get started",
+                  type: "checklist",
+                  isPro: false,
+                },
+                {
+                  id: "res-2",
+                  title: "Advanced Workbook",
+                  description: "In-depth exercises and templates",
+                  type: "workbook",
+                  isPro: true,
+                },
+              ]}
+            />
+          </motion.div>
+        )}
+
+        {/* Demo: Interactive Quiz (only show if user has access) */}
+        {hasAccess && personalizationCompleted && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-12"
+          >
+            <h3 className="text-2xl font-serif font-bold mb-6">Knowledge Check</h3>
+            <InteractiveQuiz
+              questions={[
+                {
+                  id: "q1",
+                  question: "What is the primary benefit of using AI for personal branding?",
+                  options: [
+                    "It completely replaces human creativity",
+                    "It accelerates content creation while maintaining authenticity",
+                    "It makes everything automated",
+                    "It's only useful for technical tasks",
+                  ],
+                  correctAnswer: 1,
+                  explanation: "AI is most powerful when it amplifies your unique voice and accelerates content creation, not when it replaces your authentic perspective.",
+                },
+                {
+                  id: "q2",
+                  question: "When should you use AI prompts?",
+                  options: [
+                    "Only when you have no ideas",
+                    "As a starting point to customize for your needs",
+                    "Exactly as written without changes",
+                    "Never, they limit creativity",
+                  ],
+                  correctAnswer: 1,
+                  explanation: "AI prompts work best as templates you adapt to your specific situation, audience, and goals.",
+                },
+              ]}
+              onComplete={(score) => console.log(`Quiz completed with score: ${score}`)}
+            />
+          </motion.div>
+        )}
       </div>
+
+      {/* Personalization Modal */}
+      {experience && (
+        <PersonalizationQuestionsModal
+          open={showPersonalization}
+          onClose={() => setShowPersonalization(false)}
+          onComplete={() => {
+            setShowPersonalization(false);
+            setPersonalizationCompleted(true);
+          }}
+          experienceId={experience.id}
+          experienceTitle={experience.title}
+          questions={[
+            {
+              id: "pq-1",
+              questionText: "What's your primary goal for learning this topic?",
+              questionType: "multiple_choice",
+              options: [
+                "Building my personal brand",
+                "Growing my business",
+                "Career advancement",
+                "Personal interest",
+              ],
+              isRequired: true,
+            },
+            {
+              id: "pq-2",
+              questionText: "On a scale of 1-10, how confident are you with this topic currently?",
+              questionType: "scale",
+              isRequired: true,
+            },
+            {
+              id: "pq-3",
+              questionText: "What specific challenge are you hoping to solve?",
+              questionType: "textarea",
+              isRequired: false,
+            },
+          ]}
+        />
+      )}
     </div>
   );
 }

@@ -3,6 +3,15 @@
 ## Overview
 MetaHers Mind Spa is a Progressive Web App (PWA) designed to educate women in technology about AI and Web3 through guided learning "rituals" presented in a luxury spa aesthetic. The platform aims to provide an engaging and educational experience with a Forbes-meets-Vogue design. Key capabilities include an AI-Powered Personal Journal with mood tracking, Journal Analytics, a gamified Achievements System, an e-commerce Shop (Drop 001 ritual bags), and a "MetaHers Daily" blog. The app operates on a subscription model, with a Pro tier unlocking full content and premium features. The project's ambition is to offer a serene and empowering environment for women to master AI and Web3 concepts.
 
+## Recent Enhancements (November 2025)
+Added comprehensive learning experience features:
+- **Progress Dashboard**: Full stats dashboard showing completion %, confidence scores, streaks, and space-by-space progress visualization
+- **AI Personalization**: Dynamic question modal before each experience to tailor content to user's goals and skill level
+- **Interactive Quizzes**: Engaging quiz component with instant feedback, scoring, and progress tracking
+- **AI Prompt Library**: 50+ categorized, searchable AI prompts for personal branding, content creation, business strategy, tech learning, and growth
+- **Downloadable Resources**: Templates, checklists, and workbooks integrated into experiences (with Pro-gating)
+- **Achievement System**: Gamification with unlockable badges (First Step, Space Explorer, Streak rewards, Master Learner, etc.)
+
 ## User Preferences
 Preferred communication style: Simple, everyday language.
 

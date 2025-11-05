@@ -45,6 +45,8 @@ import CareerPathGeneratorPage from "@/pages/CareerPathGeneratorPage";
 import MetaHersWorldPage from "@/pages/MetaHersWorldPage";
 import SpaceDetailPage from "@/pages/SpaceDetailPage";
 import ExperienceDetailPage from "@/pages/ExperienceDetailPage";
+import ProgressDashboardPage from "@/pages/ProgressDashboardPage";
+import AIPromptLibraryPage from "@/pages/AIPromptLibraryPage";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -99,6 +101,12 @@ function Router() {
       
       {/* Experience Detail Pages - Public */}
       <Route path="/experiences/:slug" component={ExperienceDetailPage} />
+      
+      {/* Progress Dashboard - Public but enhanced for auth users */}
+      <Route path="/progress" component={ProgressDashboardPage} />
+      
+      {/* AI Prompt Library - Public resource */}
+      <Route path="/ai-prompts" component={AIPromptLibraryPage} />
       
       {isAuthenticated && (
         <>
