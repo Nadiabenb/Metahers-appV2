@@ -1174,6 +1174,35 @@ export default function LandingPage() {
 
       {/* Testimonials */}
       <TestimonialsSection />
+
+      {/* Mobile Sticky CTA Bar - Critical for Mobile Ad Conversion */}
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 1.5, duration: 0.5 }}
+        className="fixed bottom-0 left-0 right-0 z-50 md:hidden backdrop-blur-2xl bg-background/95 border-t border-white/10 p-4 shadow-2xl"
+        style={{
+          boxShadow: '0 -10px 40px rgba(0,0,0,0.5)'
+        }}
+      >
+        <div className="flex flex-col gap-2">
+          <motion.button
+            onClick={handleSignup}
+            whileTap={{ scale: 0.95 }}
+            className="relative w-full px-8 py-4 rounded-full overflow-hidden group shadow-xl"
+            data-testid="button-mobile-sticky-cta"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
+            <span className="relative z-10 font-bold text-lg text-background flex items-center justify-center gap-2">
+              Start FREE Now
+              <ArrowRight className="w-5 h-5" />
+            </span>
+          </motion.button>
+          <p className="text-xs text-center text-foreground/60">
+            12 experiences FREE • No credit card
+          </p>
+        </div>
+      </motion.div>
     </div>
   );
 }
