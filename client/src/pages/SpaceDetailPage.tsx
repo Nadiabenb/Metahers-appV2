@@ -60,6 +60,8 @@ export default function SpaceDetailPage() {
   const { data: space, isLoading: spaceLoading, error: spaceError } = useQuery<Space>({
     queryKey: [`/api/spaces/${slug}`],
     enabled: !!slug,
+    retry: 2, // Force retry on this specific query
+    staleTime: 0, // Always fetch fresh data
   });
 
   console.log('[SpaceDetailPage] Query state - space:', space, 'loading:', spaceLoading, 'error:', spaceError);
