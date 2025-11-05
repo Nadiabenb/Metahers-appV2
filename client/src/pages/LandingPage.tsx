@@ -363,9 +363,9 @@ export default function LandingPage() {
   return (
     <div ref={containerRef} className="relative min-h-screen bg-background overflow-x-hidden">
       <SEO
-        title="MetaHers Mind Spa - AI & Web3 Education for Women"
-        description="Learn AI and Web3 through a luxury spa-inspired experience designed for women in tech. 30-day thought leadership journeys, AI training, personal branding courses, and expert coaching."
-        keywords="AI training for women, Web3 education women, personal branding women tech, women in AI, women in blockchain, thought leadership training, AI learning platform, Web3 careers women"
+        title="Save 10+ Hours Every Week With AI - MetaHers Mind Spa"
+        description="For busy women solopreneurs, moms & creatives. Master AI & no-code tools to automate your business and reclaim your time. Start FREE with 12 hands-on experiences + AI coaching. No credit card required."
+        keywords="AI for women solopreneurs, AI for busy moms, AI automation for creatives, save time with AI, AI learning for women, AI no-code tools, women in AI, AI education for women, time-saving AI tools, business automation for women"
         url="https://metahers.ai"
         schema={schema}
       />
@@ -460,12 +460,12 @@ export default function LandingPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            {/* Badge */}
+            {/* Trust Badge - Social Proof Above Fold */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="inline-flex items-center gap-3 glass-card px-8 py-4 rounded-full mb-12 neon-glow-violet"
+              className="inline-flex items-center gap-3 glass-card px-8 py-4 rounded-full mb-8 neon-glow-violet"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
@@ -478,64 +478,82 @@ export default function LandingPage() {
                   repeatDelay: 2
                 }}
               />
-              <Sparkles className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
-              <span className="text-base font-medium tracking-widest uppercase relative z-10">
-                Where Technology Meets Tranquility
+              <Star className="w-6 h-6 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
+              <span className="text-base font-medium tracking-wide relative z-10">
+                Join 1,247+ Women Already Learning
               </span>
             </motion.div>
 
-            {/* Title */}
+            {/* Benefit-Driven Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.5 }}
-              className="font-cormorant text-6xl sm:text-7xl md:text-8xl font-bold leading-tight mb-8 text-gradient-gold"
+              className="font-cormorant text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-3 text-gradient-gold"
             >
-              MetaHers Mind Spa
+              Save 10+ Hours Every Week With AI
             </motion.h1>
 
-            {/* Subtitle */}
+            {/* Brand Name Subtitle */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.6 }}
+              className="text-lg sm:text-xl text-foreground/60 mb-6 font-light tracking-wide"
+            >
+              MetaHers Mind Spa
+            </motion.p>
+
+            {/* Subheadline - Who It's For */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="text-3xl sm:text-4xl text-foreground/90 mb-6 max-w-4xl mx-auto leading-relaxed font-light"
+              transition={{ duration: 1, delay: 0.7 }}
+              className="text-2xl sm:text-3xl text-foreground/90 mb-8 max-w-4xl mx-auto leading-relaxed font-light"
               style={{
                 textShadow: '0 2px 20px rgba(0,0,0,0.8)',
               }}
             >
-              <span className="text-[hsl(var(--liquid-gold))]">Where Forbes meets Vogue.</span>
-              <br />
-              Where AI education meets luxury self-care.
+              For <span className="text-[hsl(var(--liquid-gold))] font-semibold">busy women solopreneurs, moms & creatives</span> who need to automate their business, master AI tools, and finally get their time back.
             </motion.p>
 
-            {/* Outcome-focused headline */}
-            <motion.p
+            {/* Quick Benefits */}
+            <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 1 }}
-              className="text-xl sm:text-2xl text-foreground/80 mb-10 max-w-4xl mx-auto leading-relaxed"
-              style={{
-                textShadow: '0 2px 20px rgba(0,0,0,0.8)',
-              }}
+              transition={{ duration: 1, delay: 0.9 }}
+              className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-10 max-w-3xl mx-auto"
             >
-              For women solopreneurs, moms, and creatives: Master AI & no-code tools to save time, automate your business, and reclaim your life.
-              <br />
-              <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">Start FREE with 12 hands-on experiences + AI coaching.</span>
-            </motion.p>
+              {[
+                { icon: Zap, text: "10+ Hours Saved/Week" },
+                { icon: Brain, text: "AI-Powered Learning" },
+                { icon: Star, text: "12 FREE Experiences" },
+              ].map((benefit, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-2 glass-card px-4 py-2 rounded-full"
+                  style={{
+                    textShadow: '0 2px 10px rgba(0,0,0,0.8)',
+                  }}
+                >
+                  <benefit.icon className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))]" />
+                  <span className="text-sm sm:text-base font-medium text-foreground/90">{benefit.text}</span>
+                </div>
+              ))}
+            </motion.div>
 
-            {/* CTAs */}
+            {/* Primary CTA */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1.1 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-16"
+              className="flex flex-col items-center justify-center gap-4 mb-8"
             >
               <motion.button
                 onClick={handleSignup}
-                whileHover={{ scale: 1.08, boxShadow: "0 0 40px rgba(255,215,0,0.6)" }}
+                whileHover={{ scale: 1.08, boxShadow: "0 0 50px rgba(255,215,0,0.7)" }}
                 whileTap={{ scale: 0.95 }}
-                className="relative w-full sm:w-auto px-12 py-6 rounded-full overflow-hidden group"
+                className="relative w-full sm:w-auto px-16 py-7 rounded-full overflow-hidden group shadow-2xl"
                 data-testid="button-signup"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
@@ -550,22 +568,21 @@ export default function LandingPage() {
                     repeatDelay: 0.5
                   }}
                 />
-                <span className="relative z-10 font-bold text-xl text-background flex items-center gap-3">
-                  Enter the Sanctuary
+                <span className="relative z-10 font-bold text-2xl text-background flex items-center gap-3">
+                  Start FREE Now
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </span>
               </motion.button>
 
-              <motion.button
-                onClick={handleShop}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full sm:w-auto px-12 py-6 rounded-full backdrop-blur-2xl bg-white/5 border-2 border-[hsl(var(--liquid-gold))]/50 text-foreground font-bold text-xl flex items-center justify-center gap-3 relative overflow-hidden group"
-                data-testid="button-shop-cta"
-              >
-                <ShoppingBag className="w-6 h-6" />
-                Limited Edition Kits
-              </motion.button>
+              {/* Risk Reduction - No Credit Card */}
+              <p className="text-foreground/70 text-sm sm:text-base flex items-center gap-2 flex-wrap justify-center">
+                <Star className="w-4 h-4 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
+                <span className="font-semibold text-white">FREE Forever Plan</span>
+                <span className="text-foreground/50">•</span>
+                <span>No Credit Card Required</span>
+                <span className="text-foreground/50">•</span>
+                <span>Cancel Anytime</span>
+              </p>
             </motion.div>
 
             {/* Links */}
@@ -836,29 +853,33 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* CTA Below Orbs */}
+        {/* CTA Below Orbs - Conversion Optimized */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6, duration: 0.8 }}
-          className="relative z-10 text-center mt-20"
+          className="relative z-10 text-center mt-20 max-w-2xl mx-auto"
         >
+          <p className="text-xl sm:text-2xl text-foreground/80 mb-6">
+            Ready to save <span className="text-[hsl(var(--liquid-gold))] font-bold">10+ hours every week</span> and finally master AI?
+          </p>
           <motion.button
             onClick={handleSignup}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,215,0,0.6)" }}
             whileTap={{ scale: 0.98 }}
-            className="relative px-12 py-6 rounded-full overflow-hidden group"
+            className="relative px-16 py-7 rounded-full overflow-hidden group shadow-2xl mb-4"
             data-testid="button-explore-worlds"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-pink-400 via-purple-400 to-teal-400" />
-            <span className="relative z-10 font-bold text-lg text-white flex items-center gap-3">
-              Enter the Worlds
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
+            <span className="relative z-10 font-bold text-2xl text-background flex items-center gap-3">
+              Start Your FREE Journey
+              <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
             </span>
           </motion.button>
-          <p className="text-foreground/50 mt-4 text-sm">
-            12 experiences FREE to start • No credit card required
+          <p className="text-foreground/60 text-sm sm:text-base">
+            <Star className="w-4 h-4 inline text-[hsl(var(--liquid-gold))]" fill="currentColor" /> 
+            {" "}12 experiences FREE • No credit card • 1,247+ women already learning
           </p>
         </motion.div>
       </div>
