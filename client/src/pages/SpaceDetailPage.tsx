@@ -44,9 +44,13 @@ export default function SpaceDetailPage() {
   const [, navigate] = useLocation();
   const { user } = useAuth();
 
+  console.log('[SpaceDetailPage] slug:', slug);
+
   const { data: space, isLoading: spaceLoading, error: spaceError } = useQuery<Space>({
     queryKey: [`/api/spaces/${slug}`],
   });
+
+  console.log('[SpaceDetailPage] space:', space, 'loading:', spaceLoading, 'error:', spaceError);
 
   const { data: experiences = [], isLoading: experiencesLoading, error: experiencesError } = useQuery<Experience[]>({
     queryKey: [`/api/spaces/${space?.id}/experiences`],
