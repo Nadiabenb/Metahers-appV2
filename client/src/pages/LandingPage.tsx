@@ -821,25 +821,25 @@ export default function LandingPage() {
             {[
               {
                 name: "AI",
-                route: "/spaces/ai-essentials",
+                route: "/spaces/ai",
                 gradient: "from-pink-300 via-rose-200 to-pink-400",
                 glowColor: "255, 192, 203"
               },
               {
                 name: "Web3",
-                route: "/spaces/web3-foundation",
+                route: "/spaces/web3",
                 gradient: "from-purple-300 via-violet-200 to-purple-400",
                 glowColor: "183, 148, 244"
               },
               {
                 name: "Blockchain + NFTs + Crypto",
-                route: "/spaces/crypto-confidence",
+                route: "/spaces/crypto",
                 gradient: "from-blue-300 via-cyan-200 to-blue-400",
                 glowColor: "147, 197, 253"
               },
               {
                 name: "Metaverse",
-                route: "/spaces/metaverse-mastery",
+                route: "/spaces/metaverse",
                 gradient: "from-teal-300 via-emerald-200 to-teal-400",
                 glowColor: "152, 251, 152"
               },
@@ -850,8 +850,8 @@ export default function LandingPage() {
                 glowColor: "252, 211, 77"
               },
               {
-                name: "AI-Powered Brands",
-                route: "/spaces/ai-powered-branding",
+                name: "Branding",
+                route: "/spaces/branding",
                 gradient: "from-fuchsia-300 via-pink-200 to-fuchsia-400",
                 glowColor: "240, 171, 252"
               }
