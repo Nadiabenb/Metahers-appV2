@@ -166,31 +166,33 @@ function WorldOrb({
   }, [prefersReducedMotion, mousePosRef, x, y]);
 
   return (
-    <motion.div
-      ref={orbRef}
-      initial={{ opacity: 0, scale: 0.5 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ 
-        delay: index * 0.1, 
-        duration: 0.8,
-        type: "spring",
-        stiffness: 100
-      }}
-      style={{ x, y }}
-      className="relative flex items-center justify-center"
-    >
-      <Link href={world.route}>
-        <motion.a
+    <Link href={world.route}>
+      <motion.div
+        ref={orbRef}
+        initial={{ opacity: 0, scale: 0.5 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ 
+          delay: index * 0.1, 
+          duration: 0.8,
+          type: "spring",
+          stiffness: 100
+        }}
+        style={{ x, y }}
+        className="relative flex items-center justify-center cursor-pointer"
+      >
+        <motion.div
           whileHover={{ scale: 1.15 }}
           whileTap={{ scale: 0.95 }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className="relative cursor-pointer group focus:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-full block"
+          className="relative group focus:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-full block"
           style={{
             willChange: 'transform',
           }}
           data-testid={`world-orb-${world.route.split('/').pop()}`}
+          role="button"
+          tabIndex={0}
           aria-label={`Explore ${world.name} learning space`}
         >
         {/* Outer glow ring */}
@@ -284,9 +286,9 @@ function WorldOrb({
             className="absolute top-0 left-0 right-0 h-1/3 rounded-t-full bg-gradient-to-b from-white/20 to-transparent pointer-events-none"
           />
         </div>
-      </motion.a>
-      </Link>
-    </motion.div>
+        </motion.div>
+      </motion.div>
+    </Link>
   );
 }
 
