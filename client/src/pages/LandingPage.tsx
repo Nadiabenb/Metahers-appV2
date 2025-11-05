@@ -116,6 +116,181 @@ function TiltCard({ children, className = "", delay = 0, prefersReducedMotion = 
   );
 }
 
+// World Orb Component - Floating interactive orbs with parallax
+function WorldOrb({ 
+  world, 
+  index, 
+  mousePosRef, 
+  prefersReducedMotion 
+}: { 
+  world: { name: string; route: string; gradient: string; glowColor: string }; 
+  index: number; 
+  mousePosRef: React.RefObject<{ x: number; y: number }>; 
+  prefersReducedMotion: boolean;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const orbRef = useRef<HTMLDivElement>(null);
+
+  // Parallax effect based on mouse position
+  useEffect(() => {
+    if (prefersReducedMotion || !mousePosRef.current || !orbRef.current) return;
+
+    const interval = setInterval(() => {
+      const mousePos = mousePosRef.current;
+      const orbEl = orbRef.current;
+      if (!mousePos || !orbEl) return;
+
+      const rect = orbEl.getBoundingClientRect();
+      const orbCenterX = rect.left + rect.width / 2;
+      const orbCenterY = rect.top + rect.height / 2;
+      
+      const dx = mousePos.x - orbCenterX;
+      const dy = mousePos.y - orbCenterY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      
+      // Subtle parallax movement
+      if (distance < 400) {
+        const factor = (400 - distance) / 400;
+        x.set(dx * factor * 0.05);
+        y.set(dy * factor * 0.05);
+      } else {
+        x.set(0);
+        y.set(0);
+      }
+    }, 16); // ~60fps
+
+    return () => clearInterval(interval);
+  }, [prefersReducedMotion, mousePosRef, x, y]);
+
+  const handleClick = () => {
+    window.location.href = world.route;
+  };
+
+  return (
+    <motion.div
+      ref={orbRef}
+      initial={{ opacity: 0, scale: 0.5 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ 
+        delay: index * 0.1, 
+        duration: 0.8,
+        type: "spring",
+        stiffness: 100
+      }}
+      style={{ x, y }}
+      className="relative flex items-center justify-center"
+      data-testid={`world-orb-${world.route.split('/').pop()}`}
+    >
+      <motion.div
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.95 }}
+        onHoverStart={() => setIsHovered(true)}
+        onHoverEnd={() => setIsHovered(false)}
+        onClick={handleClick}
+        className="relative cursor-pointer group"
+        style={{
+          willChange: 'transform',
+        }}
+      >
+        {/* Outer glow ring */}
+        <motion.div
+          className="absolute inset-0 rounded-full blur-xl -z-10"
+          style={{
+            background: `rgba(${world.glowColor}, ${isHovered ? '0.6' : '0.3'})`,
+          }}
+          animate={
+            prefersReducedMotion 
+              ? {} 
+              : {
+                  scale: isHovered ? [1, 1.2, 1] : [1, 1.1, 1],
+                  opacity: isHovered ? [0.6, 0.8, 0.6] : [0.3, 0.5, 0.3],
+                }
+          }
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+
+        {/* Main orb */}
+        <div className="relative w-40 h-40 md:w-48 md:h-48">
+          {/* Glassmorphic orb with gradient */}
+          <div
+            className={`absolute inset-0 rounded-full bg-gradient-to-br ${world.gradient} backdrop-blur-xl border-2 border-white/30 shadow-2xl overflow-hidden`}
+            style={{
+              boxShadow: `0 20px 60px rgba(${world.glowColor}, 0.4), inset 0 1px 2px rgba(255,255,255,0.3)`,
+            }}
+          >
+            {/* Metallic shine overlay */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent"
+              animate={
+                prefersReducedMotion 
+                  ? {} 
+                  : {
+                      opacity: [0.3, 0.6, 0.3],
+                    }
+              }
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: index * 0.5
+              }}
+            />
+
+            {/* Floating animation */}
+            <motion.div
+              className="absolute inset-0"
+              animate={
+                prefersReducedMotion 
+                  ? {} 
+                  : {
+                      y: [-5, 5, -5],
+                    }
+              }
+              transition={{
+                duration: 3 + index * 0.5,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+          </div>
+
+          {/* World label */}
+          <div className="absolute inset-0 flex items-center justify-center p-6">
+            <motion.span
+              className="text-center font-semibold text-white drop-shadow-lg"
+              style={{
+                textShadow: `0 2px 10px rgba(0,0,0,0.5), 0 0 20px rgba(${world.glowColor}, 0.8)`,
+                fontSize: world.name.length > 10 ? '0.85rem' : '1.1rem',
+                lineHeight: '1.2'
+              }}
+              animate={
+                isHovered && !prefersReducedMotion
+                  ? { scale: [1, 1.05, 1] }
+                  : {}
+              }
+              transition={{ duration: 0.3 }}
+            >
+              {world.name}
+            </motion.span>
+          </div>
+
+          {/* Reflection highlight */}
+          <div
+            className="absolute top-0 left-0 right-0 h-1/3 rounded-t-full bg-gradient-to-b from-white/20 to-transparent pointer-events-none"
+          />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -552,6 +727,141 @@ export default function LandingPage() {
             </p>
           </motion.div>
         </div>
+      </div>
+
+      {/* 6 Worlds Floating Orbs Section */}
+      <div className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        {/* Cosmos/Nebula Background */}
+        <div className="absolute inset-0">
+          {/* Animated gradient nebula */}
+          <motion.div
+            animate={{
+              background: [
+                'radial-gradient(circle at 20% 30%, rgba(255, 192, 203, 0.15) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(183, 148, 244, 0.15) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(152, 251, 152, 0.1) 0%, transparent 50%)',
+                'radial-gradient(circle at 80% 20%, rgba(255, 192, 203, 0.15) 0%, transparent 40%), radial-gradient(circle at 30% 80%, rgba(183, 148, 244, 0.15) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(152, 251, 152, 0.1) 0%, transparent 50%)',
+                'radial-gradient(circle at 20% 30%, rgba(255, 192, 203, 0.15) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(183, 148, 244, 0.15) 0%, transparent 40%), radial-gradient(circle at 50% 50%, rgba(152, 251, 152, 0.1) 0%, transparent 50%)'
+              ]
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="absolute inset-0"
+          />
+          {/* Soft stars */}
+          <div className="absolute inset-0 opacity-30">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <motion.div
+                key={i}
+                className="absolute w-1 h-1 bg-white/60 rounded-full"
+                style={{
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                }}
+                animate={{
+                  opacity: [0.3, 0.8, 0.3],
+                  scale: [1, 1.5, 1],
+                }}
+                transition={{
+                  duration: 3 + Math.random() * 3,
+                  repeat: Infinity,
+                  delay: Math.random() * 3,
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative z-10 text-center mb-20"
+        >
+          <h2 className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-pink-300 via-purple-300 to-teal-300 bg-clip-text text-transparent">
+            Explore 6 Immersive Worlds
+          </h2>
+          <p className="text-xl sm:text-2xl text-foreground/70 max-w-3xl mx-auto">
+            Each world is a gateway to mastery—hover to discover your journey
+          </p>
+        </motion.div>
+
+        {/* 6 Floating Orbs Grid */}
+        <div className="relative z-10 max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
+            {[
+              {
+                name: "AI",
+                route: "/spaces/ai-essentials",
+                gradient: "from-pink-300 via-rose-200 to-pink-400",
+                glowColor: "255, 192, 203"
+              },
+              {
+                name: "Web3",
+                route: "/spaces/web3-foundation",
+                gradient: "from-purple-300 via-violet-200 to-purple-400",
+                glowColor: "183, 148, 244"
+              },
+              {
+                name: "Blockchain + NFTs + Crypto",
+                route: "/spaces/crypto-confidence",
+                gradient: "from-blue-300 via-cyan-200 to-blue-400",
+                glowColor: "147, 197, 253"
+              },
+              {
+                name: "Metaverse",
+                route: "/spaces/metaverse-mastery",
+                gradient: "from-teal-300 via-emerald-200 to-teal-400",
+                glowColor: "152, 251, 152"
+              },
+              {
+                name: "Moms",
+                route: "/spaces/moms",
+                gradient: "from-amber-300 via-yellow-200 to-amber-400",
+                glowColor: "252, 211, 77"
+              },
+              {
+                name: "AI-Powered Brands",
+                route: "/spaces/ai-powered-branding",
+                gradient: "from-fuchsia-300 via-pink-200 to-fuchsia-400",
+                glowColor: "240, 171, 252"
+              }
+            ].map((world, index) => (
+              <WorldOrb
+                key={world.name}
+                world={world}
+                index={index}
+                mousePosRef={mousePosRef}
+                prefersReducedMotion={prefersReducedMotion || false}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* CTA Below Orbs */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="relative z-10 text-center mt-20"
+        >
+          <motion.button
+            onClick={handleSignup}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            className="relative px-12 py-6 rounded-full overflow-hidden group"
+            data-testid="button-explore-worlds"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-pink-400 via-purple-400 to-teal-400" />
+            <span className="relative z-10 font-bold text-lg text-white flex items-center gap-3">
+              Enter the Worlds
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+            </span>
+          </motion.button>
+          <p className="text-foreground/50 mt-4 text-sm">
+            12 experiences FREE to start • No credit card required
+          </p>
+        </motion.div>
       </div>
 
       {/* Transformation Journey Section */}
