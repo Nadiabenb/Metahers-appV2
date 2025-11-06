@@ -8,7 +8,7 @@ import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import type { Space } from "@prisma/client";
+import type { SpaceDB } from "@shared/schema";
 
 // Particle component (SSR-safe with shared mouse listener)
 function Particle({ index, mousePosRef }: { index: number; mousePosRef: React.RefObject<{ x: number; y: number }> }) {
@@ -329,7 +329,7 @@ export default function LandingPage() {
   const titleOpacity = useTransform(smoothProgress, [0, 0.3], [1, 0]);
 
   // Fetch all spaces for the landing page orbs
-  const { data: spaces } = useQuery<Space[]>({
+  const { data: spaces } = useQuery<SpaceDB[]>({
     queryKey: ["spaces"],
     queryFn: async () => {
       const response = await fetch("/api/spaces");
