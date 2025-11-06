@@ -12,26 +12,41 @@ export function ChatbotPopup() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    // Show chatbot when user scrolls near the end of the page
+    // Show chatbot 9 seconds after user reaches the bottom of the page
     const hasSeenBot = localStorage.getItem('metahers_chatbot_seen');
     
     if (hasSeenBot) return;
 
+    let timer: NodeJS.Timeout | null = null;
+
     const handleScroll = () => {
       const scrollPosition = window.scrollY + window.innerHeight;
       const pageHeight = document.documentElement.scrollHeight;
-      const scrollPercentage = (scrollPosition / pageHeight) * 100;
+      const distanceFromBottom = pageHeight - scrollPosition;
 
-      // Show MetaMuse when user has scrolled 75% down the page
-      if (scrollPercentage >= 75 && !hasShown) {
-        setIsOpen(true);
-        setHasShown(true);
-        localStorage.setItem('metahers_chatbot_seen', 'true');
+      // Check if user is at or near the bottom (within 100px)
+      if (distanceFromBottom <= 100 && !hasShown) {
+        // Clear any existing timer
+        if (timer) clearTimeout(timer);
+        
+        // Start 9-second timer
+        timer = setTimeout(() => {
+          setIsOpen(true);
+          setHasShown(true);
+          localStorage.setItem('metahers_chatbot_seen', 'true');
+        }, 9000);
+      } else if (distanceFromBottom > 100 && timer) {
+        // User scrolled away from bottom, clear timer
+        clearTimeout(timer);
+        timer = null;
       }
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (timer) clearTimeout(timer);
+    };
   }, [hasShown]);
 
   const handleClose = () => {
