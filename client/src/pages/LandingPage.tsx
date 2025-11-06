@@ -341,7 +341,7 @@ export default function LandingPage() {
 
     return {
       name: space.name,
-      route: `/space/${space.id}`,
+      route: `/spaces/${space.slug}`,
       gradient: colors.gradient,
       glowColor: colors.glowColor,
     };
