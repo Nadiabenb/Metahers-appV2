@@ -815,68 +815,65 @@ export default function LandingPage() {
         {/* 6 Floating Orbs Grid */}
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
-            {spaces?.map((world) => (
+            {(spaces && spaces.length > 0 ? spaces.map((world, index) => (
               <WorldOrb
                 key={world.slug}
                 world={{
                   name: world.name,
                   route: `/spaces/${world.slug}`,
-                  gradient: "from-pink-300 via-rose-200 to-pink-400", // Placeholder, can be dynamic
-                  glowColor: "255, 192, 203" // Placeholder, can be dynamic
+                  gradient: "from-pink-300 via-rose-200 to-pink-400",
+                  glowColor: "255, 192, 203"
                 }}
-                index={0} // Placeholder, can be dynamic
+                index={index}
                 mousePosRef={mousePosRef}
                 prefersReducedMotion={prefersReducedMotion || false}
               />
-            )) || (
-              // Fallback to original hardcoded orbs if fetching fails or data is not yet available
-              [
-                {
-                  name: "AI",
-                  route: "/spaces/ai",
-                  gradient: "from-pink-300 via-rose-200 to-pink-400",
-                  glowColor: "255, 192, 203"
-                },
-                {
-                  name: "Web3",
-                  route: "/spaces/web3",
-                  gradient: "from-purple-300 via-violet-200 to-purple-400",
-                  glowColor: "183, 148, 244"
-                },
-                {
-                  name: "Blockchain + NFTs + Crypto",
-                  route: "/spaces/crypto",
-                  gradient: "from-blue-300 via-cyan-200 to-blue-400",
-                  glowColor: "147, 197, 253"
-                },
-                {
-                  name: "Metaverse",
-                  route: "/spaces/metaverse",
-                  gradient: "from-teal-300 via-emerald-200 to-teal-400",
-                  glowColor: "152, 251, 152"
-                },
-                {
-                  name: "Moms",
-                  route: "/spaces/moms",
-                  gradient: "from-amber-300 via-yellow-200 to-amber-400",
-                  glowColor: "252, 211, 77"
-                },
-                {
-                  name: "Branding",
-                  route: "/spaces/branding",
-                  gradient: "from-fuchsia-300 via-pink-200 to-fuchsia-400",
-                  glowColor: "240, 171, 252"
-                }
-              ].map((world, index) => (
-                <WorldOrb
-                  key={world.name}
-                  world={world}
-                  index={index}
-                  mousePosRef={mousePosRef}
-                  prefersReducedMotion={prefersReducedMotion || false}
-                />
-              ))
-            )}
+            )) : [
+              {
+                name: "AI",
+                route: "/spaces/ai",
+                gradient: "from-pink-300 via-rose-200 to-pink-400",
+                glowColor: "255, 192, 203"
+              },
+              {
+                name: "Web3",
+                route: "/spaces/web3",
+                gradient: "from-purple-300 via-violet-200 to-purple-400",
+                glowColor: "183, 148, 244"
+              },
+              {
+                name: "NFT/Blockchain/Crypto",
+                route: "/spaces/crypto",
+                gradient: "from-blue-300 via-cyan-200 to-blue-400",
+                glowColor: "147, 197, 253"
+              },
+              {
+                name: "Metaverse",
+                route: "/spaces/metaverse",
+                gradient: "from-teal-300 via-emerald-200 to-teal-400",
+                glowColor: "152, 251, 152"
+              },
+              {
+                name: "Moms",
+                route: "/spaces/moms",
+                gradient: "from-amber-300 via-yellow-200 to-amber-400",
+                glowColor: "252, 211, 77"
+              },
+              {
+                name: "Branding",
+                route: "/spaces/branding",
+                gradient: "from-fuchsia-300 via-pink-200 to-fuchsia-400",
+                glowColor: "240, 171, 252"
+              }
+            ].map((world, index) => (
+              <WorldOrb
+                key={world.name}
+                world={world}
+                index={index}
+                mousePosRef={mousePosRef}
+                prefersReducedMotion={prefersReducedMotion || false}
+              />
+            )))}
           </div>
         </div>
 
