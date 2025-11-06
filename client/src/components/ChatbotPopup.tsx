@@ -12,19 +12,27 @@ export function ChatbotPopup() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    // Show chatbot after 3 seconds on first visit
+    // Show chatbot when user scrolls near the end of the page
     const hasSeenBot = localStorage.getItem('metahers_chatbot_seen');
     
-    if (!hasSeenBot) {
-      const timer = setTimeout(() => {
+    if (hasSeenBot) return;
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight;
+      const pageHeight = document.documentElement.scrollHeight;
+      const scrollPercentage = (scrollPosition / pageHeight) * 100;
+
+      // Show MetaMuse when user has scrolled 75% down the page
+      if (scrollPercentage >= 75 && !hasShown) {
         setIsOpen(true);
         setHasShown(true);
         localStorage.setItem('metahers_chatbot_seen', 'true');
-      }, 3000);
+      }
+    };
 
-      return () => clearTimeout(timer);
-    }
-  }, []);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasShown]);
 
   const handleClose = () => {
     setIsOpen(false);
