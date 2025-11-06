@@ -1,37 +1,39 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
 
-  // Public pages accessible to everyone (streamlined)
-  const publicNavItems = [
-    { path: "/playground", label: "AI Tools", icon: Sparkles, pro: false, highlight: true },
-    { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, pro: true, highlight: true },
-    { path: "/career-path", label: "Career Path", icon: Target, pro: false, highlight: true },
-    { path: "/discover", label: "Discover", icon: Compass, pro: false },
-    { path: "/rituals", label: "Rituals", icon: Zap, pro: false },
-    { path: "/blog", label: "Resources", icon: BookOpen, pro: false },
-    { path: "/upgrade", label: "Pricing", icon: ArrowUpCircle, pro: false, highlight: true },
-  ];
-
-  // Authenticated-only pages (streamlined)
-  const authNavItems = [
-    { path: "/workspace", label: "Workspace", icon: Briefcase, pro: false },
-    { path: "/journal", label: "Journal", icon: BookOpen, pro: false },
-    { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, pro: true },
-    { path: "/events", label: "Events", icon: Calendar, pro: false },
-    { path: "/account", label: "Account", icon: User, pro: false },
-  ];
+  // Categorized navigation items for mega menu
+  const navCategories = {
+    "AI Tools": [
+      { path: "/playground", label: "AI Tools", icon: Sparkles, gradient: "from-cyan-500 to-blue-600", glow: "0, 217, 255" },
+      { path: "/career-path", label: "Career Path", icon: Target, gradient: "from-purple-500 to-pink-600", glow: "181, 101, 216" },
+      { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, gradient: "from-pink-500 to-rose-600", glow: "233, 53, 193", pro: true },
+    ],
+    "Learning": [
+      { path: "/discover", label: "Discover", icon: Compass, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216" },
+      { path: "/rituals", label: "Rituals", icon: Zap, gradient: "from-amber-500 to-orange-600", glow: "255, 215, 0" },
+      { path: "/blog", label: "Resources", icon: BookOpen, gradient: "from-teal-500 to-cyan-600", glow: "0, 217, 255" },
+    ],
+    "Workspace": isAuthenticated ? [
+      { path: "/workspace", label: "Workspace", icon: Briefcase, gradient: "from-blue-500 to-indigo-600", glow: "59, 130, 246" },
+      { path: "/journal", label: "Journal", icon: BookOpen, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129" },
+      { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216", pro: true },
+      { path: "/events", label: "Events", icon: Calendar, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
+    ] : [],
+  };
 
   const handleLogout = async () => {
     try {
@@ -41,7 +43,7 @@ export function Navigation() {
       });
       
       if (response.ok) {
-        window.location.href = "/"; // Landing page
+        window.location.href = "/";
       }
     } catch (error) {
       console.error("Logout failed:", error);
@@ -49,23 +51,88 @@ export function Navigation() {
   };
 
   const handleNavClick = (path: string, label?: string) => {
-    // Track navigation clicks for key conversion paths
     if (label && ['Discover', 'AI Builder', 'VIP Retreat', 'Shop', 'Blog'].includes(label)) {
       trackCTAClick(`nav_${label.toLowerCase().replace(' ', '_')}`, path);
     }
     setLocation(path);
     setMobileMenuOpen(false);
+    setMegaMenuOpen(false);
   };
 
-  const NavItem = ({ item, isActive }: { item: typeof publicNavItems[0], isActive: boolean }) => {
+  const MegaMenuCard = ({ item }: { item: any }) => {
     const Icon = item.icon;
+    const isActive = location === item.path || 
+      (item.path !== "/" && location.startsWith(item.path));
+
+    return (
+      <motion.button
+        onClick={() => handleNavClick(item.path, item.label)}
+        whileHover={{ scale: 1.05, y: -4 }}
+        whileTap={{ scale: 0.95 }}
+        className={`relative group rounded-2xl p-6 backdrop-blur-xl border-2 overflow-hidden transition-all ${
+          isActive 
+            ? 'border-white/50 bg-white/10' 
+            : 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10'
+        }`}
+        data-testid={`mega-nav-${item.label.toLowerCase().replace(' ', '-')}`}
+      >
+        {/* Animated glow background */}
+        <motion.div
+          className="absolute inset-0 rounded-2xl blur-xl -z-10"
+          style={{
+            background: `rgba(${item.glow}, 0.2)`,
+          }}
+          animate={{
+            opacity: [0.2, 0.4, 0.2],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+
+        {/* Icon with gradient */}
+        <div className={`mb-3 w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg`}>
+          <Icon className="w-6 h-6 text-white" />
+        </div>
+
+        {/* Label */}
+        <div className="text-left">
+          <p className="font-semibold text-foreground mb-1 flex items-center gap-2">
+            {item.label}
+            {item.pro && (
+              <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                PRO
+              </Badge>
+            )}
+          </p>
+        </div>
+
+        {/* Shine effect on hover */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          initial={{ x: '-100%', opacity: 0 }}
+          whileHover={{ x: '100%', opacity: 1 }}
+          transition={{ duration: 0.6 }}
+        />
+      </motion.button>
+    );
+  };
+
+  const MobileNavItem = ({ item }: { item: any }) => {
+    const Icon = item.icon;
+    const isActive = location === item.path || 
+      (item.path !== "/" && location.startsWith(item.path));
+    
     return (
       <Button
         onClick={() => handleNavClick(item.path, item.label)}
         variant={isActive ? "default" : "ghost"}
         size="sm"
-        className={`gap-2 w-full sm:w-auto justify-start sm:justify-center ${item.highlight ? 'text-primary hover:text-primary' : ''}`}
-        data-testid={`link-${item.label.toLowerCase().replace(' ', '-')}`}
+        className="gap-2 w-full justify-start"
+        data-testid={`mobile-nav-${item.label.toLowerCase().replace(' ', '-')}`}
       >
         <Icon className="w-4 h-4" />
         {item.label}
@@ -95,21 +162,91 @@ export function Navigation() {
             <span className="sm:hidden">MetaHers</span>
           </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-1">
-            {/* Public pages - always visible */}
-            {publicNavItems.map((item) => {
-              const isActive = location === item.path || 
-                (item.path !== "/" && location.startsWith(item.path));
-              return <NavItem key={item.path} item={item} isActive={isActive} />;
-            })}
+          {/* Desktop Navigation - Mega Menu */}
+          <div className="hidden lg:flex items-center gap-3">
+            {/* Explore Menu Button */}
+            <div className="relative">
+              <Button
+                onClick={() => setMegaMenuOpen(!megaMenuOpen)}
+                variant="ghost"
+                size="sm"
+                className="gap-2"
+                data-testid="button-explore-menu"
+              >
+                <Compass className="w-4 h-4" />
+                Explore
+                <ChevronDown className={`w-4 h-4 transition-transform ${megaMenuOpen ? 'rotate-180' : ''}`} />
+              </Button>
 
-            {/* Authenticated pages */}
-            {isAuthenticated && authNavItems.map((item) => {
-              const isActive = location === item.path || 
-                (item.path !== "/" && location.startsWith(item.path));
-              return <NavItem key={item.path} item={item} isActive={isActive} />;
-            })}
+              {/* Mega Menu Dropdown */}
+              <AnimatePresence>
+                {megaMenuOpen && (
+                  <>
+                    {/* Backdrop */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+                      onClick={() => setMegaMenuOpen(false)}
+                    />
+
+                    {/* Mega Menu Content */}
+                    <motion.div
+                      initial={{ opacity: 0, y: -20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.2 }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[600px] max-w-[90vw] backdrop-blur-2xl bg-background/95 border border-white/20 rounded-3xl shadow-2xl p-8 z-50"
+                    >
+                      {/* Categories */}
+                      {Object.entries(navCategories).map(([category, items]) => (
+                        items.length > 0 && (
+                          <div key={category} className="mb-8 last:mb-0">
+                            <h3 className="text-sm font-semibold text-foreground/60 uppercase tracking-wider mb-4">
+                              {category}
+                            </h3>
+                            <div className="grid grid-cols-3 gap-4">
+                              {items.map((item) => (
+                                <MegaMenuCard key={item.path} item={item} />
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      ))}
+
+                      {/* Quick Links */}
+                      <div className="border-t border-white/10 pt-6 mt-6">
+                        <div className="flex items-center gap-2">
+                          <Button
+                            onClick={() => handleNavClick("/upgrade")}
+                            variant="default"
+                            size="sm"
+                            className="gap-2"
+                            data-testid="mega-nav-pricing"
+                          >
+                            <Crown className="w-4 h-4" />
+                            View Pricing
+                          </Button>
+                          {isAuthenticated && (
+                            <Button
+                              onClick={() => handleNavClick("/account")}
+                              variant="ghost"
+                              size="sm"
+                              className="gap-2"
+                              data-testid="mega-nav-account"
+                            >
+                              <User className="w-4 h-4" />
+                              Account
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Auth buttons */}
             {!isAuthenticated && !isLoading && (
@@ -120,7 +257,7 @@ export function Navigation() {
                 }}
                 variant="default"
                 size="sm"
-                className="gap-2 ml-2"
+                className="gap-2"
                 data-testid="button-login-nav"
               >
                 <LogIn className="w-4 h-4" />
@@ -133,7 +270,7 @@ export function Navigation() {
                 onClick={handleLogout}
                 variant="ghost"
                 size="sm"
-                className="gap-2 ml-2"
+                className="gap-2"
                 data-testid="button-logout"
               >
                 <LogOut className="w-4 h-4" />
@@ -146,7 +283,7 @@ export function Navigation() {
           </div>
 
           {/* Mobile Menu Button & Theme Toggle */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2">
             <ThemeToggle />
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
@@ -171,27 +308,38 @@ export function Navigation() {
                   </div>
 
                   <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
-                    {/* Public pages */}
-                    <div className="space-y-1">
-                      {publicNavItems.map((item) => {
-                        const isActive = location === item.path || 
-                          (item.path !== "/" && location.startsWith(item.path));
-                        return <NavItem key={item.path} item={item} isActive={isActive} />;
-                      })}
+                    {/* All categories in mobile */}
+                    {Object.entries(navCategories).map(([category, items]) => (
+                      items.length > 0 && (
+                        <div key={category} className="mb-4">
+                          <h3 className="text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-2 px-2">
+                            {category}
+                          </h3>
+                          <div className="space-y-1">
+                            {items.map((item) => (
+                              <MobileNavItem key={item.path} item={item} />
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    ))}
+
+                    {/* Pricing link */}
+                    <div className="border-t border-border pt-2 mt-2">
+                      <MobileNavItem item={{
+                        path: "/upgrade",
+                        label: "Pricing",
+                        icon: ArrowUpCircle,
+                      }} />
                     </div>
 
-                    {/* Authenticated pages */}
+                    {/* Account link if authenticated */}
                     {isAuthenticated && (
-                      <>
-                        <div className="border-t border-border my-4" />
-                        <div className="space-y-1">
-                          {authNavItems.map((item) => {
-                            const isActive = location === item.path || 
-                              (item.path !== "/" && location.startsWith(item.path));
-                            return <NavItem key={item.path} item={item} isActive={isActive} />;
-                          })}
-                        </div>
-                      </>
+                      <MobileNavItem item={{
+                        path: "/account",
+                        label: "Account",
+                        icon: User,
+                      }} />
                     )}
                   </div>
 
