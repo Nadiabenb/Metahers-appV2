@@ -64,15 +64,15 @@ All user and application data, including `users`, `ritual_progress`, `journal_en
 **Strategic Pivot**: Moving from spa-themed rituals to a structured learning academy with measurable outcomes. The new architecture centers around **MetaHers World** - a central hub connecting 6 specialized learning spaces, each containing 6 AI-personalized transformational experiences.
 
 **Core Components**:
-1. **Spaces Table**: 6 curated learning domains (Web3, AI, Metaverse, Crypto, NFTs, AI-Powered Branding). Each space has: unique slug, name, description, icon, accent color, tier requirement (sortOrder-based gating), and active/inactive status.
+1. **Spaces Table**: 6 curated learning domains (Web3, AI, Metaverse, NFT/Blockchain/Crypto, Moms, AI-Powered Branding). Each space has: unique slug, name, description, icon, accent color, tier requirement (sortOrder-based gating), and active/inactive status.
 2. **Transformational Experiences Table**: 36 total experiences (6 per space). Each experience includes: personalized AI questions, outcome-focused content, skill-building activities, and progress tracking with confidence scoring.
 3. **Experience Progress Table**: Tracks individual user progress with unique (userId, experienceId) constraint. Records: completion percentage, time spent, confidence scores (1-10), business impact measurements, milestones achieved, and streak tracking.
 4. **Personalization Responses Table**: Stores user answers to AI-powered questions with unique (userId, experienceId, questionId) constraint, enabling dynamic content adaptation.
 
 **Tier Gating Strategy**: 
-- Free tier: Spaces 1-2 unlocked (Web3 Foundation, AI Essentials)
-- Pro tier: Spaces 3-4 unlocked (Metaverse Mastery, Crypto Confidence)
-- Premium tiers: Spaces 5-6 unlocked (NFT Creation, AI-Powered Branding)
+- Free tier: Spaces 1-2 unlocked (Web3, AI)
+- Pro tier: Spaces 3-4 unlocked (Metaverse, NFT/Blockchain/Crypto)
+- Premium tiers: Spaces 5-6 unlocked (Moms, AI-Powered Branding)
 - Determined by `sortOrder` field: spaces with sortOrder ≤ 2 available to Free users
 
 **Value Proposition Shift**: From aesthetic luxury learning to outcome-driven skill mastery. Emphasizes "what you'll accomplish" over "what you'll learn". Features always-updated content reflecting latest tech developments, AI-personalized guidance based on individual women's needs, and measurable transformation metrics.
