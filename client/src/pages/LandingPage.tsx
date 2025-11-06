@@ -6,7 +6,7 @@ import { SEO } from "@/components/SEO";
 import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "wouter";
+import { useLocation } from "wouter";
 
 // Particle component (SSR-safe with shared mouse listener)
 function Particle({ index, mousePosRef }: { index: number; mousePosRef: React.RefObject<{ x: number; y: number }> }) {
@@ -130,6 +130,7 @@ function WorldOrb({
   prefersReducedMotion: boolean;
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const [, setLocation] = useLocation();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const orbRef = useRef<HTMLDivElement>(null);
@@ -166,7 +167,6 @@ function WorldOrb({
   }, [prefersReducedMotion, mousePosRef, x, y]);
 
   return (
-    <Link href={world.route}>
       <motion.div
         ref={orbRef}
         initial={{ opacity: 0, scale: 0.5 }}
@@ -186,6 +186,7 @@ function WorldOrb({
           whileTap={{ scale: 0.95 }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
+          onClick={() => setLocation(world.route)}
           className="relative group focus:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-full block"
           style={{
             willChange: 'transform',
@@ -194,6 +195,12 @@ function WorldOrb({
           role="button"
           tabIndex={0}
           aria-label={`Explore ${world.name} learning space`}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setLocation(world.route);
+            }
+          }}
         >
         {/* Outer glow ring */}
         <motion.div
@@ -288,7 +295,6 @@ function WorldOrb({
         </div>
         </motion.div>
       </motion.div>
-    </Link>
   );
 }
 
