@@ -17,7 +17,8 @@ export async function verifyPassword(
 }
 
 export function getSession() {
-  const sessionTtl = 7 * 24 * 60 * 60 * 1000;
+  // Hardened session: 24 hours (reduced from 7 days for better security)
+  const sessionTtl = 24 * 60 * 60 * 1000;
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
@@ -31,17 +32,19 @@ export function getSession() {
     store: sessionStore,
     resave: false,
     saveUninitialized: false,
+    rolling: true, // Extend session on activity
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: sessionTtl,
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax", // Strict in production
+      path: "/",
     },
   });
 }
 
 export async function setupAuth(app: Express) {
-  app.set("trust proxy", 1);
+  // Note: trust proxy is now set in server/index.ts for global security
   app.use(getSession());
 }
 
@@ -123,6 +126,30 @@ export const isFoundersCircleMember: RequestHandler = async (req, res, next) => 
     });
   }
   
+  return next();
+};
+
+/**
+ * Admin middleware - protects sensitive admin endpoints
+ * Only allows specific admin emails defined in environment
+ */
+export const isAdmin: RequestHandler = async (req, res, next) => {
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  
+  const { storage } = await import("./storage");
+  const user = await storage.getUser(req.session.userId);
+  
+  // Define admin emails (should be in environment variable)
+  const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
+  
+  if (!user || !adminEmails.includes(user.email.toLowerCase())) {
+    console.warn(`Admin access denied for user: ${user?.email || 'unknown'} from IP: ${req.ip}`);
+    return res.status(403).json({ message: "Admin access required" });
+  }
+  
+  console.log(`Admin access granted for: ${user.email} from IP: ${req.ip}`);
   return next();
 };
 

@@ -2,7 +2,8 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { randomBytes } from "crypto";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated, isProUser, isSanctuaryMember, isInnerCircleMember, isFoundersCircleMember, hashPassword, verifyPassword } from "./auth";
+import { setupAuth, isAuthenticated, isProUser, isSanctuaryMember, isInnerCircleMember, isFoundersCircleMember, isAdmin, hashPassword, verifyPassword } from "./auth";
+import { sanitizeText, sanitizeHTML, sanitizeObject } from "./security";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import OpenAI from "openai";
@@ -1023,7 +1024,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       const { content, structuredContent, date, streak, mood, tags, aiPrompt } = validation.data;
 
       // For backwards compatibility, support both content and structuredContent
-      const finalContent = content || "";
+      // SECURITY: Sanitize user-generated content to prevent XSS attacks
+      const finalContent = content ? sanitizeText(content) : "";
+      const sanitizedStructuredContent = structuredContent ? sanitizeObject(structuredContent) : undefined;
+      const sanitizedMood = mood ? sanitizeText(mood) : null;
+      const sanitizedTags = tags ? tags.map(tag => sanitizeText(tag)) : undefined;
+      const sanitizedAiPrompt = aiPrompt ? sanitizeText(aiPrompt) : undefined;
 
       // Calculate word count (filter empty tokens)
       const wordCount = finalContent.trim() === "" 
@@ -1045,13 +1051,13 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         userId,
         date: date || new Date().toISOString().split('T')[0], // Use provided date or default to today
         content: finalContent,
-        structuredContent,
+        structuredContent: sanitizedStructuredContent,
         streak: streak || 0,
-        mood,
-        tags,
+        mood: sanitizedMood,
+        tags: sanitizedTags,
         wordCount,
         aiInsights,
-        aiPrompt,
+        aiPrompt: sanitizedAiPrompt,
       });
 
       res.json({
@@ -2448,7 +2454,8 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   // ONE-TIME PRODUCTION DATABASE POPULATION ENDPOINT
   // This endpoint populates the production database with initial spaces and experiences
   // It's idempotent and safe to call multiple times (uses ON CONFLICT DO UPDATE)
-  app.post('/api/admin/populate-database', async (_req: Request, res) => {
+  // PROTECTED: Requires admin authentication
+  app.post('/api/admin/populate-database', isAuthenticated, isAdmin, async (_req: Request, res) => {
     try {
       console.log('Starting database population...');
       

@@ -1,8 +1,21 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { setupSecurityHeaders, setupCORS, setupRateLimiting } from "./security";
 
 const app = express();
+
+// Trust proxy for rate limiting and session security
+app.set("trust proxy", 1);
+
+// Security headers (Helmet) - must be first
+setupSecurityHeaders(app);
+
+// CORS configuration - allow only trusted origins
+setupCORS(app);
+
+// Rate limiting - protect against abuse
+setupRateLimiting(app);
 
 // Stripe webhook needs raw body for signature verification
 app.use('/api/webhooks/stripe', express.raw({ type: 'application/json' }));
