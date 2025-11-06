@@ -1,3 +1,4 @@
+
 import { db } from "./db";
 import { spaces } from "../shared/schema";
 import { sql } from "drizzle-orm";
@@ -56,6 +57,15 @@ const METAHERS_SPACES = [
     icon: "Heart",
     color: "hyper-violet",
     sortOrder: 6,
+  },
+  {
+    id: "nfts",
+    name: "NFTs",
+    slug: "nfts",
+    description: "Create, buy, sell, and leverage NFTs. Understand digital ownership and how to build value in the NFT economy.",
+    icon: "Image",
+    color: "liquid-gold",
+    sortOrder: 7,
   },
 ];
 
