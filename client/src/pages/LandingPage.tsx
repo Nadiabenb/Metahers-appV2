@@ -2,6 +2,7 @@ import { motion, useScroll, useTransform, useSpring, useReducedMotion, useMotion
 import { Globe, Sparkles, Lock, ArrowRight, Zap, Star, CheckCircle2, Phone, MessageCircle, GraduationCap, Users } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { SEO } from "@/components/SEO";
+import { ChatbotPopup } from "@/components/ChatbotPopup";
 import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
@@ -664,6 +665,9 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
+
+      {/* Chatbot Popup */}
+      <ChatbotPopup />
 
     </div>
   );
