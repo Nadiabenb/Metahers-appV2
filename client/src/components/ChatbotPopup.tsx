@@ -156,7 +156,7 @@ export function ChatbotPopup() {
                   {/* Messages */}
                   <div className="flex-1">
                     <h3 className="font-serif text-lg font-bold text-gradient-violet mb-2">
-                      Your MetaHers Guide
+                      MetaMuse ✨
                     </h3>
                     <div className="space-y-2">
                       {welcomeMessages.map((message, index) => (
