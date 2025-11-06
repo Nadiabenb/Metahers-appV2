@@ -103,7 +103,7 @@ export function ChatbotPopup() {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleReopen}
-            className="fixed bottom-6 right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] shadow-2xl flex items-center justify-center border-2 border-white/20"
+            className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] shadow-2xl flex items-center justify-center border-2 border-white/20"
             data-testid="button-chatbot-reopen"
           >
             <MessageCircle className="w-7 h-7 text-white" />
@@ -131,7 +131,7 @@ export function ChatbotPopup() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
             transition={{ type: "spring", duration: 0.5 }}
-            className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-3rem)]"
+            className="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-6 sm:right-6 z-50 sm:w-[380px] max-w-[480px] sm:max-w-[380px]"
             data-testid="chatbot-popup"
           >
             {/* Chat Card */}
@@ -140,8 +140,8 @@ export function ChatbotPopup() {
               <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/20 via-transparent to-[hsl(var(--cyber-fuchsia))]/20 pointer-events-none" />
               
               {/* Header */}
-              <div className="relative p-6 pb-4 border-b border-white/10">
-                <div className="flex items-start gap-4">
+              <div className="relative p-4 sm:p-6 pb-3 sm:pb-4 border-b border-white/10">
+                <div className="flex items-start gap-3 sm:gap-4">
                   {/* Avatar */}
                   <motion.div
                     className="w-14 h-14 rounded-full bg-gradient-to-br from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] flex items-center justify-center shadow-lg flex-shrink-0"
@@ -193,11 +193,11 @@ export function ChatbotPopup() {
               </div>
 
               {/* Quick Actions */}
-              <div className="relative p-6">
-                <p className="text-sm font-semibold text-foreground/70 mb-4">
+              <div className="relative p-4 sm:p-6">
+                <p className="text-sm font-semibold text-foreground/70 mb-3 sm:mb-4">
                   Where would you like to start?
                 </p>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-2 sm:gap-3">
                   {quickActions.map((action, index) => {
                     const Icon = action.icon;
                     return (
@@ -209,16 +209,16 @@ export function ChatbotPopup() {
                         whileHover={{ scale: 1.05, y: -2 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => handleQuickAction(action.path, action.action)}
-                        className="relative p-4 rounded-xl bg-white/5 border-2 border-white/10 hover:border-white/30 hover:bg-white/10 transition-all text-left group overflow-hidden"
+                        className="relative p-3 sm:p-4 rounded-xl bg-white/5 border-2 border-white/10 hover:border-white/30 hover:bg-white/10 transition-all text-left group overflow-hidden"
                         data-testid={`chatbot-action-${action.action}`}
                       >
                         {/* Gradient Icon */}
-                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${action.gradient} flex items-center justify-center shadow-lg mb-2`}>
-                          <Icon className="w-5 h-5 text-white" />
+                        <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br ${action.gradient} flex items-center justify-center shadow-lg mb-1.5 sm:mb-2`}>
+                          <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                         </div>
                         
                         {/* Label */}
-                        <p className="text-sm font-medium text-foreground">
+                        <p className="text-xs sm:text-sm font-medium text-foreground">
                           {action.label}
                         </p>
 
