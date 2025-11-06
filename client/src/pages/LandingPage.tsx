@@ -846,7 +846,7 @@ export default function LandingPage() {
         {/* 6 Floating Orbs Grid */}
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
-            {(spaces && spaces.length > 0 ? spaces.map((world, index) => (
+            {(spaces && spaces.length > 0 ? spaces.filter(s => s.isActive).slice(0, 6).map((world, index) => (
               <WorldOrb
                 key={world.slug}
                 world={{

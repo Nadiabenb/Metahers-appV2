@@ -116,6 +116,7 @@ export function setupSecurityHeaders(app: Express) {
 export function setupCORS(app: Express) {
   const allowedOrigins = [
     'http://localhost:5000',
+    'http://127.0.0.1:5000', // Localhost IP
     'http://localhost:5173', // Vite dev server
     'https://app.metahers.ai',
     'https://metahers.ai', // Production domain without subdomain
