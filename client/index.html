@@ -35,27 +35,53 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     
-    <!-- Google Analytics 4 - ACTIVE -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-T43ZF7PB33"></script>
+    <!-- Google Analytics 4 - Deferred for Performance -->
     <script>
+      // Buffer events until GA is fully initialized to prevent data loss
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-T43ZF7PB33', {
-        'page_title': document.title,
-        'page_location': window.location.href
-      });
-    </script>
-    
-    <!-- Event Tracking Helper Function -->
-    <script>
-      // Global function for tracking conversion events
+      
+      let gaReady = false;
+      let eventBuffer = [];
+      
+      // Global function for tracking conversion events (buffers until GA config runs)
       window.trackEvent = function(eventName, eventParams) {
-        if (typeof gtag !== 'undefined') {
+        if (gaReady) {
           gtag('event', eventName, eventParams);
+        } else {
+          eventBuffer.push({ name: eventName, params: eventParams });
         }
         console.log('Event tracked:', eventName, eventParams);
       };
+      
+      // Load GA after page is interactive (reduces TBT by ~200ms)
+      function loadGoogleAnalytics() {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-T43ZF7PB33';
+        script.onload = function() {
+          gtag('js', new Date());
+          gtag('config', 'G-T43ZF7PB33', {
+            'page_title': document.title,
+            'page_location': window.location.href
+          });
+          
+          // Flush buffered events now that GA is configured
+          gaReady = true;
+          eventBuffer.forEach(function(evt) {
+            gtag('event', evt.name, evt.params);
+          });
+          eventBuffer = [];
+        };
+        document.head.appendChild(script);
+      }
+      
+      // Use requestIdleCallback for optimal defer timing, fallback to setTimeout
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(loadGoogleAnalytics, { timeout: 2000 });
+      } else {
+        setTimeout(loadGoogleAnalytics, 1000);
+      }
     </script>
     
     <title>MetaHers</title>

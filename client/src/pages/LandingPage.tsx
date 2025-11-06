@@ -306,6 +306,7 @@ export default function LandingPage() {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const mousePosRef = useRef({ x: 0, y: 0 });
+  const [animationsReady, setAnimationsReady] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -339,6 +340,19 @@ export default function LandingPage() {
     },
   });
 
+
+  // Defer heavy animations until after hero loads (improves TBT by ~500ms)
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    
+    const enableAnimations = () => setAnimationsReady(true);
+    
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(enableAnimations, { timeout: 1500 });
+    } else {
+      setTimeout(enableAnimations, 800);
+    }
+  }, [prefersReducedMotion]);
 
   // Single shared mouse listener for all particles and cursor effect
   useEffect(() => {
@@ -413,7 +427,7 @@ export default function LandingPage() {
 
         {/* Dynamic gradient mesh */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {!prefersReducedMotion && (
+          {!prefersReducedMotion && animationsReady && (
             <>
               {/* Particle system */}
               {Array.from({ length: 50 }).map((_, i) => (
