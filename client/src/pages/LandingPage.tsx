@@ -520,7 +520,7 @@ export default function LandingPage() {
               transition={{ duration: 1.2, delay: 0.5 }}
               className="font-cormorant text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-gradient-gold"
             >
-              Find Your Perfect AI Learning Path in 90 Seconds—
+              Save 10+ Hours Every Week: Find Your Perfect AI Path in 90 Seconds
               <br />
               <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl">With a Founder Who Actually Picks Up the Phone</span>
             </motion.h1>
