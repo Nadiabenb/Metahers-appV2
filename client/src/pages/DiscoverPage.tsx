@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { trackCTAClick, trackQuizComplete } from "@/lib/analytics";
 
 export default function DiscoverPage() {
-  const [stage, setStage] = useState<"intro" | "quiz" | "results">("intro");
+  const [stage, setStage] = useState<"intro" | "quiz" | "results" | "email-capture">("intro");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [name, setName] = useState("");
@@ -28,16 +28,6 @@ export default function DiscoverPage() {
     if (user) {
       setName(`${user.firstName || ""} ${user.lastName || ""}`.trim());
       setEmail(user.email);
-    }
-    
-    // Validate email for non-logged-in users
-    if (!user && (!email || !email.includes('@'))) {
-      toast({
-        title: "Email Required",
-        description: "Please enter a valid email to continue.",
-        variant: "destructive",
-      });
-      return;
     }
     
     // Track quiz start
@@ -62,22 +52,59 @@ export default function DiscoverPage() {
   };
 
   const handleQuizComplete = async (finalAnswers: Record<string, string>) => {
-    setIsSubmitting(true);
-    
-    try {
-      // Calculate matched ritual
-      const ritual = matchRitual(finalAnswers);
-      setMatchedRitualSlug(ritual);
+    // Calculate matched ritual
+    const ritual = matchRitual(finalAnswers);
+    setMatchedRitualSlug(ritual);
 
-      // Submit to backend
+    // If user is logged in, submit immediately and show results
+    if (user) {
+      setIsSubmitting(true);
+      try {
+        await apiRequest("POST", "/api/quiz/submit", {
+          name: name || "Spa Member",
+          email: user.email,
+          answers: finalAnswers,
+        });
+        trackQuizComplete(ritual);
+        setStage("results");
+      } catch (error) {
+        console.error("Error submitting quiz:", error);
+        toast({
+          title: "Submission Error",
+          description: "Failed to submit quiz. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else {
+      // Show email capture modal for non-logged-in users
+      setStage("email-capture");
+    }
+  };
+
+  const handleEmailSubmit = async () => {
+    // Validate email
+    if (!email || !email.includes('@')) {
+      toast({
+        title: "Email Required",
+        description: "Please enter a valid email to unlock your results.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Submit quiz with email
       await apiRequest("POST", "/api/quiz/submit", {
         name: name || "Spa Member",
         email: email,
-        answers: finalAnswers,
+        answers: answers,
       });
 
       // Track quiz completion
-      trackQuizComplete(ritual);
+      trackQuizComplete(matchedRitualSlug);
 
       setStage("results");
     } catch (error) {
@@ -166,39 +193,13 @@ export default function DiscoverPage() {
               </motion.div>
             </div>
 
-            {!user && (
-              <div className="space-y-4 max-w-md mx-auto">
-                <Input
-                  type="text"
-                  placeholder="Your name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full"
-                  data-testid="input-quiz-name"
-                />
-                <Input
-                  type="email"
-                  placeholder="Your email *"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full"
-                  required
-                  data-testid="input-quiz-email"
-                />
-                <p className="text-xs text-muted-foreground text-left">
-                  * Required to receive your ritual unlock and 1:1 session link
-                </p>
-              </div>
-            )}
-
             <Button
               size="lg"
               onClick={handleStartQuiz}
-              disabled={!user && (!email || !email.includes('@'))}
-              className="gap-2 px-8 py-6 text-lg bg-[hsl(var(--liquid-gold))] text-background rounded-full shadow-xl"
+              className="gap-2 px-8 py-6 text-lg bg-[hsl(var(--liquid-gold))] text-background rounded-full shadow-xl hover:scale-105 transition-transform"
               data-testid="button-start-quiz"
             >
-              Begin Your Discovery
+              Start Quiz - 90 Seconds
               <ArrowRight className="w-5 h-5" />
             </Button>
 
@@ -265,6 +266,110 @@ export default function DiscoverPage() {
                 ))}
               </div>
             </Card>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
+
+  // Email capture stage (shown after quiz, before results for non-logged-in users)
+  if (stage === "email-capture") {
+    const matchedRitual = getRitualBySlug(matchedRitualSlug);
+    
+    return (
+      <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="text-center space-y-6"
+          >
+            <div className="inline-flex items-center gap-2 glass-card px-6 py-3 rounded-full neon-glow-violet mb-4">
+              <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
+              <span className="text-sm font-medium tracking-wider uppercase">
+                Quiz Complete!
+              </span>
+            </div>
+
+            <h1 className="font-serif text-4xl sm:text-5xl font-bold text-gradient-gold leading-tight">
+              Your Perfect Ritual Is Ready
+            </h1>
+
+            <Card className="p-8 neon-glow-magenta space-y-6">
+              {/* Blurred preview */}
+              <div className="relative">
+                <div className="filter blur-sm opacity-50 pointer-events-none">
+                  <h3 className="font-serif text-2xl font-bold mb-3">{matchedRitual?.title}</h3>
+                  <p className="text-foreground/70">{matchedRitual?.summary}</p>
+                </div>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="text-center space-y-3 px-6">
+                    <Star className="w-12 h-12 text-[hsl(var(--liquid-gold))] mx-auto animate-pulse" />
+                    <p className="font-serif text-xl font-bold text-foreground">
+                      Unlock Your Results
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Value props */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-border/40">
+                <div className="text-center">
+                  <Sparkles className="w-6 h-6 text-[hsl(var(--aurora-teal))] mx-auto mb-2" />
+                  <p className="text-sm text-foreground/80">Personalized Match</p>
+                </div>
+                <div className="text-center">
+                  <Zap className="w-6 h-6 text-[hsl(var(--liquid-gold))] mx-auto mb-2" />
+                  <p className="text-sm text-foreground/80">Instant Access</p>
+                </div>
+                <div className="text-center">
+                  <Crown className="w-6 h-6 text-[hsl(var(--magenta-quartz))] mx-auto mb-2" />
+                  <p className="text-sm text-foreground/80">FREE 1:1 Session</p>
+                </div>
+              </div>
+
+              {/* Email capture form */}
+              <div className="space-y-4 pt-4">
+                <Input
+                  type="text"
+                  placeholder="Your name (optional)"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="w-full text-center"
+                  data-testid="input-email-capture-name"
+                />
+                <Input
+                  type="email"
+                  placeholder="Enter your email to unlock results"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full text-center text-lg"
+                  required
+                  data-testid="input-email-capture-email"
+                  onKeyDown={(e) => e.key === 'Enter' && handleEmailSubmit()}
+                />
+                <Button
+                  size="lg"
+                  onClick={handleEmailSubmit}
+                  disabled={isSubmitting || !email || !email.includes('@')}
+                  className="w-full gap-2 bg-[hsl(var(--liquid-gold))] text-background hover:scale-105 transition-transform"
+                  data-testid="button-unlock-results"
+                >
+                  {isSubmitting ? "Unlocking..." : "Unlock My Results"}
+                  <ArrowRight className="w-5 h-5" />
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  We'll email you your ritual + 1:1 session link. No spam, ever.
+                </p>
+              </div>
+            </Card>
+
+            {/* Trust signals */}
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+              <Users className="w-4 h-4" />
+              <span>Join 2,500+ women mastering AI & Web3</span>
+            </div>
           </motion.div>
         </div>
       </div>

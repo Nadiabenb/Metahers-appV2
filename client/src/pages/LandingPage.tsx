@@ -518,41 +518,31 @@ export default function LandingPage() {
               />
               <Star className="w-6 h-6 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
               <span className="text-base font-medium tracking-wide relative z-10">
-                Join 1,247+ Women Already Learning
+                Join 2,500+ Women Mastering AI & Web3
               </span>
             </motion.div>
 
-            {/* Benefit-Driven Headline */}
+            {/* Quiz-First Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.5 }}
-              className="font-cormorant text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-3 text-gradient-gold"
+              className="font-cormorant text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-gradient-gold"
             >
-              Save 10+ Hours Every Week With AI
+              Find Your Perfect AI Ritual in 90 Seconds
             </motion.h1>
-
-            {/* Brand Name Subtitle */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.6 }}
-              className="text-lg sm:text-xl text-foreground/60 mb-6 font-light tracking-wide"
-            >
-              MetaHers Mind Spa
-            </motion.p>
 
             {/* Subheadline - Who It's For */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7 }}
-              className="text-2xl sm:text-3xl text-foreground/90 mb-8 max-w-4xl mx-auto leading-relaxed font-light"
+              className="text-xl sm:text-2xl md:text-3xl text-foreground/90 mb-8 max-w-4xl mx-auto leading-relaxed font-light"
               style={{
                 textShadow: '0 2px 20px rgba(0,0,0,0.8)',
               }}
             >
-              For <span className="text-[hsl(var(--liquid-gold))] font-semibold">busy women solopreneurs, moms & creatives</span> who need to automate their business, master AI tools, and finally get their time back.
+              For <span className="text-[hsl(var(--liquid-gold))] font-semibold">busy women solopreneurs, moms & creatives</span>. Take our personalized quiz → Get matched to the perfect AI learning path → Save 10+ hours/week.
             </motion.p>
 
             {/* Quick Benefits */}
@@ -580,19 +570,23 @@ export default function LandingPage() {
               ))}
             </motion.div>
 
-            {/* Primary CTA */}
+            {/* CTA Hierarchy: Primary (Quiz) → Secondary (Signup) → Tertiary (Pricing) */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1.1 }}
               className="flex flex-col items-center justify-center gap-4 mb-8"
             >
+              {/* Primary CTA: Take the Quiz */}
               <motion.button
-                onClick={handleSignup}
+                onClick={() => {
+                  trackCTAClick('hero_quiz_cta', '/discover', 'free');
+                  window.location.href = "/discover";
+                }}
                 whileHover={{ scale: 1.08, boxShadow: "0 0 50px rgba(255,215,0,0.7)" }}
                 whileTap={{ scale: 0.95 }}
                 className="relative w-full sm:w-auto px-16 py-7 rounded-full overflow-hidden group shadow-2xl"
-                data-testid="button-signup"
+                data-testid="button-take-quiz"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
                 <motion.div
@@ -607,19 +601,41 @@ export default function LandingPage() {
                   }}
                 />
                 <span className="relative z-10 font-bold text-2xl text-background flex items-center gap-3">
-                  Start FREE Now
+                  Take the Free Quiz
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </span>
               </motion.button>
 
+              {/* Secondary CTAs: Signup & Pricing */}
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <motion.button
+                  onClick={handleSignup}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/10 hover:bg-white/20 transition-all text-white font-semibold"
+                  data-testid="button-signup-secondary"
+                >
+                  Start Free Account
+                </motion.button>
+                <motion.button
+                  onClick={() => window.location.href = "/subscribe"}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3 rounded-full text-white/70 hover:text-white transition-all font-medium"
+                  data-testid="button-pricing-tertiary"
+                >
+                  View Paid Tiers
+                </motion.button>
+              </div>
+
               {/* Risk Reduction - No Credit Card */}
               <p className="text-foreground/70 text-sm sm:text-base flex items-center gap-2 flex-wrap justify-center">
                 <Star className="w-4 h-4 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
-                <span className="font-semibold text-white">FREE Forever Plan</span>
+                <span className="font-semibold text-white">12 FREE Experiences</span>
                 <span className="text-foreground/50">•</span>
                 <span>No Credit Card Required</span>
                 <span className="text-foreground/50">•</span>
-                <span>Cancel Anytime</span>
+                <span>Takes 90 Seconds</span>
               </p>
             </motion.div>
 
