@@ -197,7 +197,7 @@ export function Navigation() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[600px] max-w-[90vw] backdrop-blur-2xl bg-background/95 border border-white/20 rounded-3xl shadow-2xl p-8 z-50"
+                      className="absolute top-full right-0 mt-2 w-[600px] max-w-[calc(100vw-2rem)] backdrop-blur-2xl bg-background/95 border border-white/20 rounded-3xl shadow-2xl p-8 z-50"
                     >
                       {/* Categories */}
                       {Object.entries(navCategories).map(([category, items]) => (
