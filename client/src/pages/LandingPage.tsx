@@ -407,6 +407,7 @@ export default function LandingPage() {
             className="absolute inset-0 w-full h-full opacity-70"
             objectFit="cover"
             priority={true}
+            optimizedBasename="Neon_light_trails_hero_2008ed57"
           />
         </motion.div>
 

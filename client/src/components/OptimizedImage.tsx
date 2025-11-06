@@ -8,7 +8,10 @@ interface OptimizedImageProps {
   priority?: boolean;
   objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
   onLoad?: () => void;
+  optimizedBasename?: string;
 }
+
+const BREAKPOINTS = [400, 800, 1200, 1600, 2400];
 
 export function OptimizedImage({
   src,
@@ -17,10 +20,11 @@ export function OptimizedImage({
   priority = false,
   objectFit = "cover",
   onLoad,
+  optimizedBasename,
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const pictureRef = useRef<HTMLPictureElement>(null);
 
   useEffect(() => {
     if (priority) return;
@@ -39,8 +43,8 @@ export function OptimizedImage({
       }
     );
 
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
+    if (pictureRef.current) {
+      observer.observe(pictureRef.current);
     }
 
     return () => {
@@ -61,9 +65,52 @@ export function OptimizedImage({
     "scale-down": "object-scale-down",
   }[objectFit];
 
+  if (optimizedBasename && isInView) {
+    const avifSrcset = BREAKPOINTS.map(w => `/optimized/${optimizedBasename}-${w}w.avif ${w}w`).join(', ');
+    const webpSrcset = BREAKPOINTS.map(w => `/optimized/${optimizedBasename}-${w}w.webp ${w}w`).join(', ');
+    const fallbackSrc = `/optimized/${optimizedBasename}-fallback.jpg`;
+
+    return (
+      <>
+        {!isLoaded && (
+          <div
+            className={`absolute inset-0 bg-muted/20 animate-pulse ${className}`}
+            aria-hidden="true"
+          />
+        )}
+
+        <motion.picture
+          ref={pictureRef}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isLoaded ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <source
+            type="image/avif"
+            srcSet={avifSrcset}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 2400px"
+          />
+          <source
+            type="image/webp"
+            srcSet={webpSrcset}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 2400px"
+          />
+          <img
+            src={fallbackSrc}
+            alt={alt}
+            className={`${className} ${objectFitClass} ${
+              isLoaded ? "opacity-100" : "opacity-0"
+            } transition-opacity duration-300`}
+            loading={priority ? "eager" : "lazy"}
+            onLoad={handleLoad}
+          />
+        </motion.picture>
+      </>
+    );
+  }
+
   return (
     <>
-      {/* Loading skeleton */}
       {!isLoaded && (
         <div
           className={`absolute inset-0 bg-muted/20 animate-pulse ${className}`}
@@ -71,9 +118,8 @@ export function OptimizedImage({
         />
       )}
 
-      {/* Actual image */}
       <motion.img
-        ref={imgRef}
+        ref={pictureRef as any}
         src={isInView ? src : undefined}
         alt={alt}
         className={`${className} ${objectFitClass} ${
