@@ -1,10 +1,11 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion, useMotionValue, useAnimation } from "framer-motion";
-import { Globe, Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight, Zap, Crown, Star, Award, Brain, Flame, Gem, TrendingUp, Users, CheckCircle2, Image } from "lucide-react";
+import { Globe, Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight, Zap, Crown, Star, Award, Brain, Flame, Gem, TrendingUp, Users, CheckCircle2, Image, Phone, MessageCircle, GraduationCap } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { SEO } from "@/components/SEO";
 import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
+import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -498,7 +499,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            {/* Trust Badge - Social Proof Above Fold */}
+            {/* Human-Powered Differentiator Badge */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -518,21 +519,21 @@ export default function LandingPage() {
               />
               <Star className="w-6 h-6 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
               <span className="text-base font-medium tracking-wide relative z-10">
-                Join 2,500+ Women Mastering AI & Web3
+                The First Human-Powered AI Learning App for Women
               </span>
             </motion.div>
 
-            {/* Quiz-First Headline */}
+            {/* Hero Headline - Human-Powered Angle */}
             <motion.h1
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.5 }}
               className="font-cormorant text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-gradient-gold"
             >
-              Find Your Perfect AI Ritual in 90 Seconds
+              Learn AI & Web3 Like You're Checking Into a Luxury Spa
             </motion.h1>
 
-            {/* Subheadline - Who It's For */}
+            {/* Subheadline - The "Human Touch" Story */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -542,7 +543,7 @@ export default function LandingPage() {
                 textShadow: '0 2px 20px rgba(0,0,0,0.8)',
               }}
             >
-              For <span className="text-[hsl(var(--liquid-gold))] font-semibold">busy women solopreneurs, moms & creatives</span>. Take our personalized quiz → Get matched to the perfect AI learning path → Save 10+ hours/week.
+              Everyone's building <span className="text-foreground/60 line-through">AI-powered apps</span>. This is a <span className="text-[hsl(var(--liquid-gold))] font-semibold">human-powered AI app</span>. Get personal mentorship from founder Nadia—a former Hotel GM who mastered Web3, AI & crypto. <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">Text or call her anytime</span> for guidance, motivation, or when you're stuck. No chatbots. Real human support.
             </motion.p>
 
             {/* Quick Benefits */}
@@ -553,9 +554,9 @@ export default function LandingPage() {
               className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-10 max-w-3xl mx-auto"
             >
               {[
-                { icon: Zap, text: "10+ Hours Saved/Week" },
-                { icon: Brain, text: "AI-Powered Learning" },
-                { icon: Star, text: "12 FREE Experiences" },
+                { icon: Zap, text: "Free Personal Calls Included" },
+                { icon: Brain, text: "Founder-Led Mentorship" },
+                { icon: Star, text: "No Tech Background Needed" },
               ].map((benefit, i) => (
                 <div
                   key={i}
@@ -577,16 +578,13 @@ export default function LandingPage() {
               transition={{ duration: 1, delay: 1.1 }}
               className="flex flex-col items-center justify-center gap-4 mb-8"
             >
-              {/* Primary CTA: Take the Quiz */}
+              {/* Primary CTA: Get Started with Personal Support */}
               <motion.button
-                onClick={() => {
-                  trackCTAClick('hero_quiz_cta', '/discover', 'free');
-                  window.location.href = "/discover";
-                }}
+                onClick={handleSignup}
                 whileHover={{ scale: 1.08, boxShadow: "0 0 50px rgba(255,215,0,0.7)" }}
                 whileTap={{ scale: 0.95 }}
                 className="relative w-full sm:w-auto px-16 py-7 rounded-full overflow-hidden group shadow-2xl"
-                data-testid="button-take-quiz"
+                data-testid="button-get-started"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
                 <motion.div
@@ -601,21 +599,24 @@ export default function LandingPage() {
                   }}
                 />
                 <span className="relative z-10 font-bold text-2xl text-background flex items-center gap-3">
-                  Take the Free Quiz
+                  Start Learning + Meet Nadia
                   <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                 </span>
               </motion.button>
 
-              {/* Secondary CTAs: Signup & Pricing */}
+              {/* Secondary CTAs: Quiz & Pricing */}
               <div className="flex flex-wrap items-center justify-center gap-3">
                 <motion.button
-                  onClick={handleSignup}
+                  onClick={() => {
+                    trackCTAClick('hero_quiz_cta', '/discover', 'free');
+                    window.location.href = "/discover";
+                  }}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/10 hover:bg-white/20 transition-all text-white font-semibold"
-                  data-testid="button-signup-secondary"
+                  data-testid="button-take-quiz"
                 >
-                  Start Free Account
+                  Take Learning Style Quiz
                 </motion.button>
                 <motion.button
                   onClick={() => window.location.href = "/subscribe"}
@@ -624,18 +625,18 @@ export default function LandingPage() {
                   className="px-8 py-3 rounded-full text-white/70 hover:text-white transition-all font-medium"
                   data-testid="button-pricing-tertiary"
                 >
-                  View Paid Tiers
+                  View Pricing
                 </motion.button>
               </div>
 
-              {/* Risk Reduction - No Credit Card */}
+              {/* Risk Reduction - Human Support Highlight */}
               <p className="text-foreground/70 text-sm sm:text-base flex items-center gap-2 flex-wrap justify-center">
                 <Star className="w-4 h-4 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
-                <span className="font-semibold text-white">12 FREE Experiences</span>
+                <span className="font-semibold text-white">Free Founder Calls Included</span>
                 <span className="text-foreground/50">•</span>
                 <span>No Credit Card Required</span>
                 <span className="text-foreground/50">•</span>
-                <span>Takes 90 Seconds</span>
+                <span>100% Human Support</span>
               </p>
             </motion.div>
 
@@ -666,6 +667,170 @@ export default function LandingPage() {
           </motion.div>
         </motion.div>
 
+      </div>
+
+      {/* Meet Your Mentor - Nadia Section */}
+      <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-[#0A0118] to-background overflow-hidden">
+        {/* Ambient glow background */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[#B565D8]/20 via-[#E935C1]/10 to-transparent rounded-full blur-3xl" />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, type: "spring" }}
+              className="inline-flex items-center gap-3 backdrop-blur-xl bg-gradient-to-r from-[#E935C1]/20 to-[#B565D8]/10 px-6 py-3 rounded-full mb-6 border border-[#E935C1]/30"
+            >
+              <Star className="w-5 h-5 text-[#E935C1]" fill="currentColor" />
+              <span className="text-sm font-medium tracking-wider uppercase">Your Personal Guide</span>
+            </motion.div>
+            <h2 className="font-cormorant text-5xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FFD700] via-white to-[#E935C1] bg-clip-text text-transparent">
+              Meet Nadia: The Mompreneur Behind MetaHers
+            </h2>
+            <p className="text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed font-light">
+              Unlike other platforms where you're lost in generic courses, at MetaHers <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">you get direct access to me</span>—a founder who's mastered AI, Web3, crypto, the metaverse, and AI-powered branding.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Nadia's Photo - Left Side */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="relative"
+            >
+              <div className="relative rounded-3xl overflow-hidden border-2 border-[#B565D8]/30 shadow-2xl">
+                <img 
+                  src={nadiaPhoto} 
+                  alt="Nadia - Founder of MetaHers, holding Join MetaHers sign in luxury purple dress" 
+                  className="w-full h-auto object-cover"
+                />
+                {/* Purple glow overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#B565D8]/30 via-transparent to-transparent pointer-events-none" />
+              </div>
+              
+              {/* Floating badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                className="absolute -bottom-6 -right-6 backdrop-blur-xl bg-gradient-to-br from-[#FFD700]/90 to-[#E935C1]/90 px-8 py-4 rounded-2xl border border-white/20 shadow-2xl"
+              >
+                <div className="flex items-center gap-3">
+                  <Phone className="w-6 h-6 text-white" />
+                  <div>
+                    <p className="text-white font-bold text-lg">Free Personal Calls</p>
+                    <p className="text-white/80 text-sm">Text or Call Anytime</p>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+
+            {/* Nadia's Story - Right Side */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
+            >
+              {/* My Journey */}
+              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <GraduationCap className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
+                  <h3 className="text-2xl font-bold text-foreground">My Journey</h3>
+                </div>
+                <ul className="space-y-3 text-foreground/80 leading-relaxed">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))] mt-1 flex-shrink-0" />
+                    <span><span className="font-semibold text-white">Computer Science degree</span> → MBA in Hospitality Management</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))] mt-1 flex-shrink-0" />
+                    <span><span className="font-semibold text-white">Hotel General Manager</span> across Africa, Europe & US</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))] mt-1 flex-shrink-0" />
+                    <span>Discovered Web3 in <span className="font-semibold text-white">2020</span> (yes, I started recently too!)</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))] mt-1 flex-shrink-0" />
+                    <span><span className="font-semibold text-white">Cornell-certified in Blockchain</span></span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))] mt-1 flex-shrink-0" />
+                    <span><span className="font-semibold text-white">Fluent in English, French & Arabic</span></span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Why This Matters */}
+              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-white/10">
+                <div className="flex items-center gap-3 mb-4">
+                  <MessageCircle className="w-8 h-8 text-[hsl(var(--aurora-teal))]" />
+                  <h3 className="text-2xl font-bold text-foreground">Why This Matters to You</h3>
+                </div>
+                <ul className="space-y-3 text-foreground/80 leading-relaxed">
+                  <li className="flex items-start gap-3">
+                    <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))] mt-1 flex-shrink-0" />
+                    <span>I remember what it's like to be a <span className="font-semibold text-white">beginner</span> (I was one in 2020!)</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))] mt-1 flex-shrink-0" />
+                    <span>My hospitality background = <span className="font-semibold text-white">luxury, personalized service</span></span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))] mt-1 flex-shrink-0" />
+                    <span>I speak <span className="font-semibold text-white">YOUR language</span> (English/French/Arabic + no-jargon)</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))] mt-1 flex-shrink-0" />
+                    <span className="font-semibold text-white text-lg">FREE personal calls when you're stuck—no extra charge</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* CTA */}
+              <motion.button
+                onClick={handleSignup}
+                whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(255,215,0,0.6)" }}
+                whileTap={{ scale: 0.95 }}
+                className="w-full relative px-12 py-6 rounded-2xl overflow-hidden group shadow-2xl"
+                data-testid="button-meet-nadia"
+              >
+                <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#E935C1] to-[#B565D8]" />
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-30"
+                  animate={{
+                    x: ['-100%', '200%']
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatDelay: 0.5
+                  }}
+                />
+                <span className="relative z-10 font-bold text-2xl text-white flex items-center justify-center gap-3">
+                  Join MetaHers + Connect with Nadia
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                </span>
+              </motion.button>
+            </motion.div>
+          </div>
+        </div>
       </div>
 
       {/* What You Get FREE Section - Outcome-Focused */}
