@@ -83,23 +83,6 @@ export default function MetaHersWorldPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-purple-950/30 to-black">
-      {/* DEBUG TEST LINKS */}
-      <div className="fixed top-20 right-4 z-50 bg-red-500 p-4 text-white text-sm">
-        <p className="font-bold mb-2">DEBUG LINKS:</p>
-        <button 
-          onClick={() => setLocation('/spaces/web3')}
-          className="block bg-white text-black px-3 py-1 rounded mb-1 hover:bg-gray-200"
-        >
-          Test Web3 Link
-        </button>
-        <button 
-          onClick={() => setLocation('/spaces/ai')}
-          className="block bg-white text-black px-3 py-1 rounded hover:bg-gray-200"
-        >
-          Test AI Link
-        </button>
-      </div>
-      
       {/* HERO SECTION */}
       <section className="relative overflow-hidden py-20 md:py-32">
         {/* Gradient background */}
