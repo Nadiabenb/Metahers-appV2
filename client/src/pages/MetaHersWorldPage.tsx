@@ -293,7 +293,7 @@ export default function MetaHersWorldPage() {
           </motion.div>
 
           {/* RADIAL ORBIT LAYOUT - Desktop Only */}
-          <div className="hidden md:block relative w-full max-w-6xl mx-auto aspect-square">
+          <div className="hidden md:block relative w-full max-w-6xl mx-auto" style={{ minHeight: '800px', height: '800px' }}>
             {/* Central Sanctuary Core */}
             <motion.div
               initial={{ scale: 0, opacity: 0 }}
