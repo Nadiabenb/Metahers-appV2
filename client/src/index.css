@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent horizontal overflow at root level */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+body {
+  position: relative;
+}
+
 :root {
   /* Light Mode - Luxury Edition */
   --button-outline: rgba(0,0,0, .12);
