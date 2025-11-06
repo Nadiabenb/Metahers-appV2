@@ -2500,16 +2500,6 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           isActive: true
         },
         {
-          id: 'nfts',
-          name: 'NFTs',
-          slug: 'nfts',
-          description: 'Create, buy, sell, and leverage NFTs. Understand digital ownership and how to build value in the NFT economy.',
-          icon: 'Image',
-          color: 'liquid-gold',
-          sortOrder: 5,
-          isActive: true
-        },
-        {
           id: 'branding',
           name: 'Branding',
           slug: 'branding',
