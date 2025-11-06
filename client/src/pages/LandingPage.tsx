@@ -499,12 +499,13 @@ export default function LandingPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            {/* Human-Powered Differentiator Badge */}
+            {/* Trust Badge - Social Proof */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.3 }}
-              className="inline-flex items-center gap-3 glass-card px-8 py-4 rounded-full mb-8 neon-glow-violet"
+              className="inline-flex items-center gap-3 glass-card px-8 py-4 rounded-full mb-6 neon-glow-violet"
+              data-testid="badge-social-proof"
             >
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
@@ -517,74 +518,80 @@ export default function LandingPage() {
                   repeatDelay: 2
                 }}
               />
-              <Star className="w-6 h-6 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
+              <Users className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
               <span className="text-base font-medium tracking-wide relative z-10">
-                The First Human-Powered AI Learning App for Women
+                Join 2,500+ Women Mastering AI & Web3
               </span>
             </motion.div>
 
-            {/* Hero Headline - Human-Powered Angle */}
+            {/* Hero Headline - Clear Quiz + Outcome Promise */}
             <motion.h1
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1.2, delay: 0.5 }}
-              className="font-cormorant text-5xl sm:text-6xl md:text-7xl font-bold leading-tight mb-6 text-gradient-gold"
+              className="font-cormorant text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-gradient-gold"
             >
-              Learn AI & Web3 Like You're Checking Into a Luxury Spa
+              Find Your Perfect AI Learning Path in 90 Seconds—
+              <br />
+              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl">With a Founder Who Actually Picks Up the Phone</span>
             </motion.h1>
 
-            {/* Subheadline - The "Human Touch" Story */}
+            {/* Subheadline - Human-Powered Value Prop */}
             <motion.p
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7 }}
-              className="text-xl sm:text-2xl md:text-3xl text-foreground/90 mb-8 max-w-4xl mx-auto leading-relaxed font-light"
+              className="text-lg sm:text-xl md:text-2xl text-foreground/90 mb-6 max-w-4xl mx-auto leading-relaxed"
               style={{
                 textShadow: '0 2px 20px rgba(0,0,0,0.8)',
               }}
             >
-              Everyone's building <span className="text-foreground/60 line-through">AI-powered apps</span>. This is a <span className="text-[hsl(var(--liquid-gold))] font-semibold">human-powered AI app</span>. Get personal mentorship from founder Nadia—a former Hotel GM who mastered Web3, AI & crypto. <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">Text or call her anytime</span> for guidance, motivation, or when you're stuck. No chatbots. Real human support.
+              Everyone's building <span className="text-foreground/60 line-through">AI-powered apps</span>. This is a <span className="text-[hsl(var(--liquid-gold))] font-semibold">human-powered AI app</span>. Take our quick quiz → Get matched to your ideal learning journey → Save <span className="text-[hsl(var(--cyber-fuchsia))] font-bold">10+ hours/week</span> with personal mentorship from founder Nadia.
             </motion.p>
 
-            {/* Quick Benefits */}
+            {/* Quick Trust Signals - Above Fold */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.9 }}
-              className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-10 max-w-3xl mx-auto"
+              className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-8 max-w-3xl mx-auto"
             >
               {[
-                { icon: Zap, text: "Free Personal Calls Included" },
-                { icon: Brain, text: "Founder-Led Mentorship" },
-                { icon: Star, text: "No Tech Background Needed" },
+                { icon: Phone, text: "Free Founder Calls" },
+                { icon: Zap, text: "Save 10+ Hours/Week" },
+                { icon: CheckCircle2, text: "No Credit Card" },
               ].map((benefit, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-2 glass-card px-4 py-2 rounded-full"
+                  className="flex items-center gap-2 glass-card px-3 sm:px-4 py-2 rounded-full"
                   style={{
                     textShadow: '0 2px 10px rgba(0,0,0,0.8)',
                   }}
+                  data-testid={`badge-trust-${i}`}
                 >
-                  <benefit.icon className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))]" />
-                  <span className="text-sm sm:text-base font-medium text-foreground/90">{benefit.text}</span>
+                  <benefit.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[hsl(var(--cyber-fuchsia))]" />
+                  <span className="text-xs sm:text-sm font-medium text-foreground/90">{benefit.text}</span>
                 </div>
               ))}
             </motion.div>
 
-            {/* CTA Hierarchy: Primary (Quiz) → Secondary (Signup) → Tertiary (Pricing) */}
+            {/* CTA Hierarchy: Quiz-First Funnel */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 1.1 }}
-              className="flex flex-col items-center justify-center gap-4 mb-8"
+              className="flex flex-col items-center justify-center gap-4 mb-6"
             >
-              {/* Primary CTA: Get Started with Personal Support */}
+              {/* Primary CTA: Take the Quiz */}
               <motion.button
-                onClick={handleSignup}
+                onClick={() => {
+                  trackCTAClick('hero_quiz_primary', '/discover', 'free');
+                  window.location.href = "/discover";
+                }}
                 whileHover={{ scale: 1.08, boxShadow: "0 0 50px rgba(255,215,0,0.7)" }}
                 whileTap={{ scale: 0.95 }}
-                className="relative w-full sm:w-auto px-16 py-7 rounded-full overflow-hidden group shadow-2xl"
-                data-testid="button-get-started"
+                className="relative w-full sm:w-auto px-12 sm:px-16 py-5 sm:py-7 rounded-full overflow-hidden group shadow-2xl"
+                data-testid="button-take-quiz-primary"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-[size:200%_100%]" />
                 <motion.div
@@ -598,70 +605,47 @@ export default function LandingPage() {
                     repeatDelay: 0.5
                   }}
                 />
-                <span className="relative z-10 font-bold text-2xl text-background flex items-center gap-3">
-                  Start Learning + Meet Nadia
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                <span className="relative z-10 font-bold text-xl sm:text-2xl text-background flex items-center gap-3">
+                  Take the 90-Second Quiz
+                  <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
                 </span>
               </motion.button>
 
-              {/* Secondary CTAs: Quiz & Pricing */}
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <motion.button
-                  onClick={() => {
-                    trackCTAClick('hero_quiz_cta', '/discover', 'free');
-                    window.location.href = "/discover";
-                  }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/10 hover:bg-white/20 transition-all text-white font-semibold"
-                  data-testid="button-take-quiz"
-                >
-                  Take Learning Style Quiz
-                </motion.button>
-                <motion.button
-                  onClick={() => window.location.href = "/subscribe"}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3 rounded-full text-white/70 hover:text-white transition-all font-medium"
-                  data-testid="button-pricing-tertiary"
-                >
-                  View Pricing
-                </motion.button>
-              </div>
+              {/* Secondary CTA: Direct Signup */}
+              <motion.button
+                onClick={handleSignup}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 sm:px-8 py-3 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/10 hover:bg-white/20 transition-all text-white font-semibold text-sm sm:text-base"
+                data-testid="button-signup-secondary"
+              >
+                Skip Quiz • Start Free Account
+              </motion.button>
 
-              {/* Risk Reduction - Human Support Highlight */}
-              <p className="text-foreground/70 text-sm sm:text-base flex items-center gap-2 flex-wrap justify-center">
-                <Star className="w-4 h-4 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
-                <span className="font-semibold text-white">Free Founder Calls Included</span>
+              {/* Risk Reduction - Compact */}
+              <p className="text-foreground/70 text-xs sm:text-sm flex items-center gap-2 flex-wrap justify-center mt-2">
+                <CheckCircle2 className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
+                <span>No Credit Card</span>
                 <span className="text-foreground/50">•</span>
-                <span>No Credit Card Required</span>
+                <span>Takes 90 Seconds</span>
                 <span className="text-foreground/50">•</span>
-                <span>100% Human Support</span>
+                <span className="font-semibold text-white">Get Matched Instantly</span>
               </p>
             </motion.div>
 
-            {/* Links */}
+            {/* Login Link Only - Minimal */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 1, delay: 1.4 }}
-              className="flex items-center justify-center gap-8 text-sm"
+              className="text-center"
             >
               <button
-                onClick={handleBlog}
-                className="text-foreground/70 hover:text-[hsl(var(--liquid-gold))] transition-all duration-300 flex items-center gap-2 px-4 py-2 rounded-full hover:backdrop-blur-xl hover:bg-white/5"
-                data-testid="button-blog-cta"
-              >
-                <Newspaper className="w-4 h-4" />
-                Explore Insights
-              </button>
-              <span className="text-foreground/30">•</span>
-              <button
                 onClick={handleLogin}
-                className="text-foreground/70 hover:text-[hsl(var(--liquid-gold))] transition-all duration-300 px-4 py-2 rounded-full hover:backdrop-blur-xl hover:bg-white/5"
+                className="text-foreground/60 hover:text-[hsl(var(--liquid-gold))] transition-all duration-300 text-sm underline underline-offset-4"
                 data-testid="button-login"
               >
-                Member Access
+                Already a member? Sign in
               </button>
             </motion.div>
           </motion.div>
