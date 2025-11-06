@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion, useMotionValue, useAnimation } from "framer-motion";
-import { Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight, Zap, Crown, Star, Award, Brain, Flame, Gem, TrendingUp } from "lucide-react";
+import { Globe, Sparkles, Lock, Calendar, BookOpen, ShoppingBag, Newspaper, ArrowRight, Zap, Crown, Star, Award, Brain, Flame, Gem, TrendingUp, Users, CheckCircle2, Image } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { SEO } from "@/components/SEO";
@@ -7,6 +7,8 @@ import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import type { Space } from "@prisma/client";
 
 // Particle component (SSR-safe with shared mouse listener)
 function Particle({ index, mousePosRef }: { index: number; mousePosRef: React.RefObject<{ x: number; y: number }> }) {
@@ -38,7 +40,7 @@ function Particle({ index, mousePosRef }: { index: number; mousePosRef: React.Re
       const dx = mousePos.x - x.get();
       const dy = mousePos.y - y.get();
       const distance = Math.sqrt(dx * dx + dy * dy);
-      
+
       if (distance < 200 && distance > 0) {
         const force = (200 - distance) / 200;
         x.set(x.get() - dx * force * 0.1);
@@ -147,11 +149,11 @@ function WorldOrb({
       const rect = orbEl.getBoundingClientRect();
       const orbCenterX = rect.left + rect.width / 2;
       const orbCenterY = rect.top + rect.height / 2;
-      
+
       const dx = mousePos.x - orbCenterX;
       const dy = mousePos.y - orbCenterY;
       const distance = Math.sqrt(dx * dx + dy * dy);
-      
+
       // Subtle parallax movement
       if (distance < 400) {
         const factor = (400 - distance) / 400;
@@ -324,6 +326,19 @@ export default function LandingPage() {
   const layer2Y = useTransform(smoothProgress, [0, 1], ["0%", "50%"]);
   const titleY = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
   const titleOpacity = useTransform(smoothProgress, [0, 0.3], [1, 0]);
+
+  // Fetch all spaces for the landing page orbs
+  const { data: spaces } = useQuery<Space[]>({
+    queryKey: ["spaces"],
+    queryFn: async () => {
+      const response = await fetch("/api/spaces");
+      if (!response.ok) {
+        throw new Error("Failed to fetch spaces");
+      }
+      return response.json();
+    },
+  });
+
 
   // Single shared mouse listener for all particles and cursor effect
   useEffect(() => {
@@ -800,52 +815,68 @@ export default function LandingPage() {
         {/* 6 Floating Orbs Grid */}
         <div className="relative z-10 max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
-            {[
-              {
-                name: "AI",
-                route: "/spaces/ai",
-                gradient: "from-pink-300 via-rose-200 to-pink-400",
-                glowColor: "255, 192, 203"
-              },
-              {
-                name: "Web3",
-                route: "/spaces/web3",
-                gradient: "from-purple-300 via-violet-200 to-purple-400",
-                glowColor: "183, 148, 244"
-              },
-              {
-                name: "Blockchain + NFTs + Crypto",
-                route: "/spaces/crypto",
-                gradient: "from-blue-300 via-cyan-200 to-blue-400",
-                glowColor: "147, 197, 253"
-              },
-              {
-                name: "Metaverse",
-                route: "/spaces/metaverse",
-                gradient: "from-teal-300 via-emerald-200 to-teal-400",
-                glowColor: "152, 251, 152"
-              },
-              {
-                name: "Moms",
-                route: "/spaces/moms",
-                gradient: "from-amber-300 via-yellow-200 to-amber-400",
-                glowColor: "252, 211, 77"
-              },
-              {
-                name: "Branding",
-                route: "/spaces/branding",
-                gradient: "from-fuchsia-300 via-pink-200 to-fuchsia-400",
-                glowColor: "240, 171, 252"
-              }
-            ].map((world, index) => (
+            {spaces?.map((world) => (
               <WorldOrb
-                key={world.name}
-                world={world}
-                index={index}
+                key={world.slug}
+                world={{
+                  name: world.name,
+                  route: `/spaces/${world.slug}`,
+                  gradient: "from-pink-300 via-rose-200 to-pink-400", // Placeholder, can be dynamic
+                  glowColor: "255, 192, 203" // Placeholder, can be dynamic
+                }}
+                index={0} // Placeholder, can be dynamic
                 mousePosRef={mousePosRef}
                 prefersReducedMotion={prefersReducedMotion || false}
               />
-            ))}
+            )) || (
+              // Fallback to original hardcoded orbs if fetching fails or data is not yet available
+              [
+                {
+                  name: "AI",
+                  route: "/spaces/ai",
+                  gradient: "from-pink-300 via-rose-200 to-pink-400",
+                  glowColor: "255, 192, 203"
+                },
+                {
+                  name: "Web3",
+                  route: "/spaces/web3",
+                  gradient: "from-purple-300 via-violet-200 to-purple-400",
+                  glowColor: "183, 148, 244"
+                },
+                {
+                  name: "Blockchain + NFTs + Crypto",
+                  route: "/spaces/crypto",
+                  gradient: "from-blue-300 via-cyan-200 to-blue-400",
+                  glowColor: "147, 197, 253"
+                },
+                {
+                  name: "Metaverse",
+                  route: "/spaces/metaverse",
+                  gradient: "from-teal-300 via-emerald-200 to-teal-400",
+                  glowColor: "152, 251, 152"
+                },
+                {
+                  name: "Moms",
+                  route: "/spaces/moms",
+                  gradient: "from-amber-300 via-yellow-200 to-amber-400",
+                  glowColor: "252, 211, 77"
+                },
+                {
+                  name: "Branding",
+                  route: "/spaces/branding",
+                  gradient: "from-fuchsia-300 via-pink-200 to-fuchsia-400",
+                  glowColor: "240, 171, 252"
+                }
+              ].map((world, index) => (
+                <WorldOrb
+                  key={world.name}
+                  world={world}
+                  index={index}
+                  mousePosRef={mousePosRef}
+                  prefersReducedMotion={prefersReducedMotion || false}
+                />
+              ))
+            )}
           </div>
         </div>
 
@@ -1046,7 +1077,7 @@ export default function LandingPage() {
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 blur-2xl transition-opacity duration-500"
                 style={{ background: stat.color }}
               />
-              
+
               <div className="relative">
                 <stat.icon className="w-12 h-12 mx-auto mb-4 opacity-70" style={{ color: stat.color }} />
                 <div className="font-serif text-5xl md:text-6xl font-bold mb-3 bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
