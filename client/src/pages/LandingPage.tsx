@@ -426,36 +426,39 @@ export default function LandingPage() {
           />
         </motion.div>
 
-        {/* Dynamic gradient mesh */}
+        {/* Dynamic gradient mesh - Simplified on mobile */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           {!prefersReducedMotion && animationsReady && (
             <>
-              {/* Particle system */}
-              {Array.from({ length: 50 }).map((_, i) => (
-                <Particle key={i} index={i} mousePosRef={mousePosRef} />
-              ))}
+              {/* Particle system - Fewer particles on mobile */}
+              <div className="hidden md:block">
+                {Array.from({ length: 30 }).map((_, i) => (
+                  <Particle key={i} index={i} mousePosRef={mousePosRef} />
+                ))}
+              </div>
+              <div className="block md:hidden">
+                {Array.from({ length: 10 }).map((_, i) => (
+                  <Particle key={i} index={i} mousePosRef={mousePosRef} />
+                ))}
+              </div>
 
-              {/* Morphing gradient orbs */}
+              {/* Morphing gradient orbs - Reduced complexity */}
               <motion.div
                 animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.2, 0.4, 0.2],
-                  x: [0, 100, 0],
-                  y: [0, -50, 0],
+                  scale: [1, 1.2, 1],
+                  opacity: [0.15, 0.3, 0.15],
                 }}
                 transition={{
                   duration: 12,
                   repeat: Infinity,
                   ease: "easeInOut"
                 }}
-                className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-gradient-to-br from-[#B565D8] via-[#FF00FF] to-transparent rounded-full blur-3xl"
+                className="absolute top-1/4 left-1/4 w-[400px] md:w-[600px] h-[400px] md:h-[600px] bg-gradient-to-br from-[#B565D8] via-[#FF00FF] to-transparent rounded-full blur-3xl"
               />
               <motion.div
                 animate={{
-                  scale: [1.2, 1, 1.2],
-                  opacity: [0.15, 0.35, 0.15],
-                  x: [0, -80, 0],
-                  y: [0, 70, 0],
+                  scale: [1.1, 1, 1.1],
+                  opacity: [0.1, 0.25, 0.1],
                 }}
                 transition={{
                   duration: 15,
@@ -463,27 +466,13 @@ export default function LandingPage() {
                   ease: "easeInOut",
                   delay: 2
                 }}
-                className="absolute bottom-1/4 right-1/4 w-[700px] h-[700px] bg-gradient-to-br from-[#00D9FF] via-[#FFD700] to-transparent rounded-full blur-3xl"
-              />
-              <motion.div
-                animate={{
-                  scale: [1.1, 1.4, 1.1],
-                  opacity: [0.1, 0.25, 0.1],
-                  x: [0, -120, 0],
-                }}
-                transition={{
-                  duration: 18,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 4
-                }}
-                className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-gradient-to-br from-[#E935C1] via-[#B565D8] to-transparent rounded-full blur-3xl"
+                className="absolute bottom-1/4 right-1/4 w-[500px] md:w-[700px] h-[500px] md:h-[700px] bg-gradient-to-br from-[#00D9FF] via-[#FFD700] to-transparent rounded-full blur-3xl"
               />
             </>
           )}
 
-          {/* Grid overlay for depth */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(181,101,216,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(181,101,216,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+          {/* Grid overlay for depth - Hidden on mobile for performance */}
+          <div className="hidden md:block absolute inset-0 bg-[linear-gradient(rgba(181,101,216,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(181,101,216,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
         </div>
 
         {/* Radial gradient wash */}
@@ -653,8 +642,86 @@ export default function LandingPage() {
 
       </div>
 
+      {/* Social Proof Strip - Testimonials Above Fold */}
+      <div className="relative py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background/50 to-background">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-8"
+          >
+            <p className="text-sm uppercase tracking-wider text-foreground/60 mb-2">Trusted by Women Worldwide</p>
+            <div className="flex flex-wrap items-center justify-center gap-4 text-xs sm:text-sm text-foreground/70">
+              <div className="flex items-center gap-2" data-testid="stat-members">
+                <Users className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
+                <span><strong className="text-white">2,500+</strong> Active Members</span>
+              </div>
+              <span className="text-foreground/30">•</span>
+              <div className="flex items-center gap-2" data-testid="stat-countries">
+                <Globe className="w-4 h-4 text-[hsl(var(--cyber-fuchsia))]" />
+                <span><strong className="text-white">50+</strong> Countries</span>
+              </div>
+              <span className="text-foreground/30">•</span>
+              <div className="flex items-center gap-2" data-testid="stat-rating">
+                <Star className="w-4 h-4 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
+                <span><strong className="text-white">4.9/5</strong> Rating</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Compact Testimonial Carousel */}
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              {
+                quote: "Nadia personally walked me through setting up my first AI workflow. Can't believe I got that level of support for free!",
+                name: "Sarah K.",
+                role: "Solopreneur"
+              },
+              {
+                quote: "I texted Nadia when I was stuck on a Web3 concept. She called me within an hour. This is TRUE human-powered AI.",
+                name: "Maria L.",
+                role: "Creative Director"
+              },
+              {
+                quote: "The quiz matched me perfectly. Now I'm saving 12+ hours/week on content creation. Best investment in myself.",
+                name: "Jessica T.",
+                role: "Mom Entrepreneur"
+              }
+            ].map((testimonial, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
+                className="backdrop-blur-xl bg-white/5 rounded-xl p-6 border border-white/10"
+                data-testid={`testimonial-${i}`}
+              >
+                <div className="flex gap-1 mb-3">
+                  {[...Array(5)].map((_, j) => (
+                    <Star key={j} className="w-4 h-4 text-[hsl(var(--liquid-gold))]" fill="currentColor" />
+                  ))}
+                </div>
+                <p className="text-foreground/80 text-sm mb-4 leading-relaxed italic">"{testimonial.quote}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#B565D8] to-[#E935C1] flex items-center justify-center text-white font-bold">
+                    {testimonial.name[0]}
+                  </div>
+                  <div>
+                    <p className="text-foreground font-semibold text-sm">{testimonial.name}</p>
+                    <p className="text-foreground/60 text-xs">{testimonial.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Meet Your Mentor - Nadia Section */}
-      <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-[#0A0118] to-background overflow-hidden">
+      <div className="relative py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-[#0A0118] to-background overflow-hidden">
         {/* Ambient glow background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[#B565D8]/20 via-[#E935C1]/10 to-transparent rounded-full blur-3xl" />
@@ -678,11 +745,11 @@ export default function LandingPage() {
               <Star className="w-5 h-5 text-[#E935C1]" fill="currentColor" />
               <span className="text-sm font-medium tracking-wider uppercase">Your Personal Guide</span>
             </motion.div>
-            <h2 className="font-cormorant text-5xl sm:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FFD700] via-white to-[#E935C1] bg-clip-text text-transparent">
-              Meet Nadia: The Mompreneur Behind MetaHers
+            <h2 className="font-cormorant text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-[#FFD700] via-white to-[#E935C1] bg-clip-text text-transparent">
+              Meet Nadia: Your Personal Guide
             </h2>
-            <p className="text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed font-light">
-              Unlike other platforms where you're lost in generic courses, at MetaHers <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">you get direct access to me</span>—a founder who's mastered AI, Web3, crypto, the metaverse, and AI-powered branding.
+            <p className="text-lg sm:text-xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
+              Unlike other platforms, you get <span className="text-[hsl(var(--cyber-fuchsia))] font-semibold">direct access to me</span>—a founder who's mastered all 6 domains and remembers what it's like to be a beginner.
             </p>
           </motion.div>
 
