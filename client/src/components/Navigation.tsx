@@ -127,21 +127,31 @@ export function Navigation() {
       (item.path !== "/" && location.startsWith(item.path));
     
     return (
-      <Button
+      <button
         onClick={() => handleNavClick(item.path, item.label)}
-        variant={isActive ? "default" : "ghost"}
-        size="sm"
-        className="gap-2 w-full justify-start"
+        className={`w-full flex items-center gap-3 p-3 rounded-xl transition-all hover-elevate active-elevate-2 ${
+          isActive 
+            ? 'bg-white/10 border-2 border-white/30' 
+            : 'bg-transparent border-2 border-transparent hover:bg-white/5'
+        }`}
         data-testid={`mobile-nav-${item.label.toLowerCase().replace(' ', '-')}`}
       >
-        <Icon className="w-4 h-4" />
-        {item.label}
+        {/* Gradient Icon */}
+        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg flex-shrink-0`}>
+          <Icon className="w-5 h-5 text-white" />
+        </div>
+        
+        {/* Label */}
+        <span className="font-medium text-foreground flex-1 text-left">
+          {item.label}
+        </span>
+        
         {item.pro && (
-          <Badge variant="secondary" className="ml-1 text-xs px-1.5 py-0">
+          <Badge variant="secondary" className="text-xs px-1.5 py-0">
             PRO
           </Badge>
         )}
-      </Button>
+      </button>
     );
   };
 
@@ -312,10 +322,10 @@ export function Navigation() {
                     {Object.entries(navCategories).map(([category, items]) => (
                       items.length > 0 && (
                         <div key={category} className="mb-4">
-                          <h3 className="text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-2 px-2">
+                          <h3 className="text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3 px-2">
                             {category}
                           </h3>
-                          <div className="space-y-1">
+                          <div className="space-y-2">
                             {items.map((item) => (
                               <MobileNavItem key={item.path} item={item} />
                             ))}
@@ -325,11 +335,12 @@ export function Navigation() {
                     ))}
 
                     {/* Pricing link */}
-                    <div className="border-t border-border pt-2 mt-2">
+                    <div className="border-t border-border pt-4 mt-2">
                       <MobileNavItem item={{
                         path: "/upgrade",
                         label: "Pricing",
                         icon: ArrowUpCircle,
+                        gradient: "from-yellow-500 to-amber-600",
                       }} />
                     </div>
 
@@ -339,6 +350,7 @@ export function Navigation() {
                         path: "/account",
                         label: "Account",
                         icon: User,
+                        gradient: "from-slate-500 to-gray-600",
                       }} />
                     )}
                   </div>
