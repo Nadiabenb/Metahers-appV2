@@ -372,7 +372,7 @@ export default function MetaHersWorldPage() {
                       {/* Pulsing glow effect */}
                       <motion.div
                         className="absolute -inset-8 rounded-full blur-2xl"
-                        style={{ background: `radial-gradient(circle, ${color}60, transparent)` }}
+                        style={{ background: `radial-gradient(circle, ${color}80, transparent)` }}
                         animate={isHovered && !isLocked ? {
                           scale: [1, 1.3, 1],
                           opacity: [0.5, 0.8, 0.5],
@@ -384,18 +384,18 @@ export default function MetaHersWorldPage() {
                       <div
                         className="relative w-40 h-40 md:w-48 md:h-48 rounded-full backdrop-blur-3xl border-4 transition-all duration-500 overflow-hidden"
                         style={{
-                          background: `linear-gradient(135deg, ${color}20, ${color}05)`,
-                          borderColor: isHovered ? color : `${color}60`,
+                          background: `linear-gradient(135deg, ${color}50, ${color}20)`,
+                          borderColor: isHovered ? color : `${color}80`,
                           boxShadow: isHovered 
-                            ? `0 0 60px ${color}80, inset 0 0 30px ${color}30` 
-                            : `0 0 30px ${color}40, inset 0 0 15px ${color}20`,
+                            ? `0 0 60px ${color}90, inset 0 0 30px ${color}50` 
+                            : `0 0 30px ${color}60, inset 0 0 15px ${color}40`,
                         }}
                       >
                         {/* Animated gradient sweep */}
                         <motion.div
                           className="absolute inset-0"
                           style={{
-                            background: `conic-gradient(from 0deg, transparent 0deg, ${color}40 180deg, transparent 360deg)`,
+                            background: `conic-gradient(from 0deg, transparent 0deg, ${color}60 180deg, transparent 360deg)`,
                           }}
                           animate={{ rotate: 360 }}
                           transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
@@ -424,8 +424,8 @@ export default function MetaHersWorldPage() {
                             <div
                               className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center"
                               style={{
-                                background: `radial-gradient(circle at 30% 30%, ${color}80, ${color}40)`,
-                                boxShadow: `0 8px 32px ${color}60, inset 0 0 20px ${color}30`,
+                                background: `radial-gradient(circle at 30% 30%, ${color}95, ${color}60)`,
+                                boxShadow: `0 8px 32px ${color}70, inset 0 0 20px ${color}40`,
                               }}
                             >
                               <IconComponent className="w-10 h-10 md:w-12 md:h-12" style={{ color: '#fff' }} />
@@ -503,9 +503,9 @@ export default function MetaHersWorldPage() {
                       isLocked ? 'cursor-not-allowed' : 'cursor-pointer active:scale-95'
                     }`}
                     style={{
-                      background: `linear-gradient(135deg, ${color}15, ${color}05)`,
-                      borderColor: `${color}60`,
-                      boxShadow: `0 8px 32px ${color}30`,
+                      background: `linear-gradient(135deg, ${color}40, ${color}15)`,
+                      borderColor: `${color}80`,
+                      boxShadow: `0 8px 32px ${color}50`,
                     }}
                     data-testid={`mobile-portal-${space.slug}`}
                   >
@@ -535,8 +535,8 @@ export default function MetaHersWorldPage() {
                       <div
                         className="w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0"
                         style={{
-                          background: `radial-gradient(circle at 30% 30%, ${color}80, ${color}40)`,
-                          boxShadow: `0 4px 16px ${color}40`,
+                          background: `radial-gradient(circle at 30% 30%, ${color}95, ${color}60)`,
+                          boxShadow: `0 4px 16px ${color}60`,
                         }}
                       >
                         <IconComponent className="w-8 h-8 text-white" />
