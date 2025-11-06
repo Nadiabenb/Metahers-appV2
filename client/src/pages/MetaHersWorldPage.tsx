@@ -28,11 +28,11 @@ const ICON_MAP: Record<string, any> = {
 };
 
 const COLOR_MAP: Record<string, string> = {
-  "hyper-violet": "#a855f7",
-  "magenta-quartz": "#ec4899",
-  "cyber-fuchsia": "#e879f9",
-  "aurora-teal": "#2dd4bf",
-  "liquid-gold": "#fbbf24",
+  "hyper-violet": "#9B87F5",
+  "magenta-quartz": "#87CEEB",
+  "cyber-fuchsia": "#FF69B4",
+  "aurora-teal": "#7FFFD4",
+  "liquid-gold": "#FFD700",
 };
 
 const TESTIMONIALS = [
