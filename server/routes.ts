@@ -10,6 +10,9 @@ import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, gener
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
+import { db } from "./db";
+import { spaces, transformationalExperiences } from "@shared/schema";
+import { sql as drizzleSql } from "drizzle-orm";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -2439,6 +2442,325 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     } catch (error) {
       console.error('Error fetching insight:', error);
       res.status(500).json({ message: 'Failed to fetch insight' });
+    }
+  });
+
+  // ONE-TIME PRODUCTION DATABASE POPULATION ENDPOINT
+  // This endpoint populates the production database with initial spaces and experiences
+  // It's idempotent and safe to call multiple times (uses ON CONFLICT DO UPDATE)
+  app.post('/api/admin/populate-database', async (_req: Request, res) => {
+    try {
+      console.log('Starting database population...');
+      
+      // Check if spaces already exist
+      const existingSpaces = await storage.getSpaces();
+      if (existingSpaces && existingSpaces.length > 0) {
+        console.log(`Database already has ${existingSpaces.length} spaces. Updating existing data...`);
+      }
+
+      const spacesData = [
+        {
+          id: 'web3',
+          name: 'Web3',
+          slug: 'web3',
+          description: 'Master decentralized technologies and understand the future of the internet. Build your Web3 fluency from fundamentals to real-world applications.',
+          icon: 'Globe',
+          color: 'hyper-violet',
+          sortOrder: 1,
+          isActive: true
+        },
+        {
+          id: 'crypto',
+          name: 'NFT/Blockchain/Crypto',
+          slug: 'crypto',
+          description: 'Navigate the world of digital assets with confidence. From NFTs to blockchain basics to cryptocurrency trading—understand it all and leverage it for your future.',
+          icon: 'Coins',
+          color: 'magenta-quartz',
+          sortOrder: 2,
+          isActive: true
+        },
+        {
+          id: 'ai',
+          name: 'AI',
+          slug: 'ai',
+          description: 'Transform how you work with AI tools. From custom GPTs to AI-powered content creation, become fluent in the language of artificial intelligence.',
+          icon: 'Sparkles',
+          color: 'cyber-fuchsia',
+          sortOrder: 3,
+          isActive: true
+        },
+        {
+          id: 'metaverse',
+          name: 'Metaverse',
+          slug: 'metaverse',
+          description: 'Navigate virtual worlds with confidence. Discover opportunities in immersive digital spaces and build your presence in the metaverse.',
+          icon: 'Boxes',
+          color: 'aurora-teal',
+          sortOrder: 4,
+          isActive: true
+        },
+        {
+          id: 'nfts',
+          name: 'NFTs',
+          slug: 'nfts',
+          description: 'Create, buy, sell, and leverage NFTs. Understand digital ownership and how to build value in the NFT economy.',
+          icon: 'Image',
+          color: 'liquid-gold',
+          sortOrder: 5,
+          isActive: true
+        },
+        {
+          id: 'branding',
+          name: 'Branding',
+          slug: 'branding',
+          description: 'Build your personal and professional brand with AI-powered tools. Master content creation, community building, and thought leadership for the digital age.',
+          icon: 'Megaphone',
+          color: 'liquid-gold',
+          sortOrder: 5,
+          isActive: true
+        },
+        {
+          id: 'moms',
+          name: 'Moms',
+          slug: 'moms',
+          description: 'A dedicated space for mothers navigating tech careers and entrepreneurship. Balance, growth, and community for moms building in AI and Web3.',
+          icon: 'Heart',
+          color: 'hyper-violet',
+          sortOrder: 6,
+          isActive: true
+        }
+      ];
+
+      const experiencesData = [
+        {
+          id: 'ai-1-foundations',
+          spaceId: 'ai',
+          title: 'AI Essentials',
+          slug: 'ai-essentials',
+          description: 'Understand AI, machine learning, and how to use these tools to multiply your productivity and creativity.',
+          learningObjectives: ['Explain AI and machine learning clearly', 'Identify AI tools for your workflow', 'Start using AI ethically and effectively'],
+          tier: 'free' as const,
+          estimatedMinutes: 20,
+          sortOrder: 1,
+          content: { sections: [{ id: 'ai-intro', type: 'text', title: 'AI Demystified', content: 'AI isn\'t magic - it\'s a powerful tool you can master.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'ai-2-chatgpt',
+          spaceId: 'ai',
+          title: 'Master ChatGPT & Custom GPTs',
+          slug: 'master-chatgpt',
+          description: 'Go beyond basic prompts. Create custom GPTs, build AI assistants, and automate your workflow.',
+          learningObjectives: ['Write advanced prompts that get results', 'Build your first custom GPT', 'Automate repetitive tasks with AI'],
+          tier: 'pro' as const,
+          estimatedMinutes: 35,
+          sortOrder: 2,
+          content: { sections: [{ id: 'prompting', type: 'interactive', title: 'Prompt Engineering Mastery', content: 'The art and science of talking to AI.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'ai-3-content',
+          spaceId: 'ai',
+          title: 'AI-Powered Content Creation',
+          slug: 'ai-content-creation',
+          description: 'Create blog posts, social media, newsletters, and more - faster and better than ever with AI as your co-pilot.',
+          learningObjectives: ['Generate high-quality content with AI', 'Maintain your unique voice and style', 'Build a content system that scales'],
+          tier: 'pro' as const,
+          estimatedMinutes: 30,
+          sortOrder: 3,
+          content: { sections: [{ id: 'content-intro', type: 'text', title: 'AI as Your Content Partner', content: 'Create more, stress less - AI handles the heavy lifting.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'ai-4-automation',
+          spaceId: 'ai',
+          title: 'AI Automation & Workflows',
+          slug: 'ai-automation',
+          description: 'Connect AI tools to automate your business processes. From email to social media to client onboarding.',
+          learningObjectives: ['Map your automation opportunities', 'Connect AI tools with no-code platforms', 'Build workflows that run on autopilot'],
+          tier: 'pro' as const,
+          estimatedMinutes: 40,
+          sortOrder: 4,
+          content: { sections: [{ id: 'automation-intro', type: 'text', title: 'Automation Foundations', content: 'Work smarter, not harder - let AI handle the busywork.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'ai-5-image-gen',
+          spaceId: 'ai',
+          title: 'AI Image & Video Generation',
+          slug: 'ai-image-video',
+          description: 'Create stunning visuals with Midjourney, DALL-E, and AI video tools. Design like a pro, no design skills required.',
+          learningObjectives: ['Generate professional images with AI', 'Create video content faster', 'Build a visual content library'],
+          tier: 'pro' as const,
+          estimatedMinutes: 35,
+          sortOrder: 5,
+          content: { sections: [{ id: 'image-gen', type: 'interactive', title: 'AI Visual Creation', content: 'Turn your ideas into stunning visuals instantly.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'ai-6-product',
+          spaceId: 'ai',
+          title: 'Build Your AI-Powered Product',
+          slug: 'build-ai-product',
+          description: 'Launch an AI tool, service, or product. From idea to MVP - ship something people will pay for.',
+          learningObjectives: ['Validate your AI product idea', 'Build an MVP with no-code tools', 'Launch and get your first customers'],
+          tier: 'pro' as const,
+          estimatedMinutes: 60,
+          sortOrder: 6,
+          content: { sections: [{ id: 'product-planning', type: 'hands_on_lab', title: 'AI Product Strategy', content: 'Time to build and ship your AI product.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'branding-1-strategy',
+          spaceId: 'branding',
+          title: 'AI Branding Fundamentals',
+          slug: 'ai-branding-fundamentals',
+          description: 'Build a powerful brand with AI tools. From positioning to messaging to visual identity.',
+          learningObjectives: ['Define your brand strategy with AI', 'Create compelling brand messaging', 'Position yourself in the market'],
+          tier: 'free' as const,
+          estimatedMinutes: 25,
+          sortOrder: 1,
+          content: { sections: [{ id: 'branding-intro', type: 'text', title: 'Brand Strategy with AI', content: 'Build a brand that stands out with AI power.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'branding-2-content',
+          spaceId: 'branding',
+          title: 'AI Content Strategy',
+          slug: 'ai-content-strategy',
+          description: 'Create a content system that builds your brand on autopilot. Blog, social, email, and more.',
+          learningObjectives: ['Build your AI content engine', 'Create content pillars and calendars', 'Maintain consistency across platforms'],
+          tier: 'pro' as const,
+          estimatedMinutes: 35,
+          sortOrder: 2,
+          content: { sections: [{ id: 'content-strategy', type: 'interactive', title: 'Content System Building', content: 'Create content that builds your brand.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'branding-3-social',
+          spaceId: 'branding',
+          title: 'AI-Powered Social Media',
+          slug: 'ai-social-media',
+          description: 'Grow your audience with AI. Create engaging content, optimize posting, and build community.',
+          learningObjectives: ['Generate social content with AI', 'Optimize posting times and frequency', 'Grow your following strategically'],
+          tier: 'pro' as const,
+          estimatedMinutes: 30,
+          sortOrder: 3,
+          content: { sections: [{ id: 'social-media', type: 'text', title: 'Social Media with AI', content: 'Grow your social presence efficiently.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        },
+        {
+          id: 'branding-4-thought-leadership',
+          spaceId: 'branding',
+          title: 'AI Thought Leadership',
+          slug: 'ai-thought-leadership',
+          description: 'Position yourself as an authority. Use AI to research, write, and publish thought leadership content.',
+          learningObjectives: ['Develop your unique point of view', 'Create high-quality thought leadership', 'Build authority in your niche'],
+          tier: 'pro' as const,
+          estimatedMinutes: 40,
+          sortOrder: 4,
+          content: { sections: [{ id: 'thought-leadership', type: 'text', title: 'Becoming a Thought Leader', content: 'Build authority with AI-assisted content.' }] },
+          personalizationEnabled: true,
+          isActive: true
+        }
+      ];
+
+      // Populate spaces
+      let spacesCreated = 0;
+      for (const spaceData of spacesData) {
+        await db.insert(spaces)
+          .values({
+            id: spaceData.id,
+            name: spaceData.name,
+            slug: spaceData.slug,
+            description: spaceData.description,
+            icon: spaceData.icon,
+            color: spaceData.color,
+            sortOrder: spaceData.sortOrder,
+            isActive: spaceData.isActive
+          })
+          .onConflictDoUpdate({
+            target: spaces.id,
+            set: {
+              name: drizzleSql`EXCLUDED.name`,
+              slug: drizzleSql`EXCLUDED.slug`,
+              description: drizzleSql`EXCLUDED.description`,
+              icon: drizzleSql`EXCLUDED.icon`,
+              color: drizzleSql`EXCLUDED.color`,
+              sortOrder: drizzleSql`EXCLUDED.sort_order`,
+              isActive: drizzleSql`EXCLUDED.is_active`,
+              updatedAt: drizzleSql`NOW()`
+            }
+          });
+        spacesCreated++;
+        console.log(`✓ Upserted space: ${spaceData.name}`);
+      }
+
+      // Populate experiences
+      let experiencesCreated = 0;
+      for (const expData of experiencesData) {
+        await db.insert(transformationalExperiences)
+          .values({
+            id: expData.id,
+            spaceId: expData.spaceId,
+            title: expData.title,
+            slug: expData.slug,
+            description: expData.description,
+            learningObjectives: expData.learningObjectives,
+            tier: expData.tier,
+            estimatedMinutes: expData.estimatedMinutes,
+            sortOrder: expData.sortOrder,
+            content: expData.content,
+            personalizationEnabled: expData.personalizationEnabled,
+            isActive: expData.isActive
+          } as any)
+          .onConflictDoUpdate({
+            target: transformationalExperiences.id,
+            set: {
+              spaceId: drizzleSql`EXCLUDED.space_id`,
+              title: drizzleSql`EXCLUDED.title`,
+              slug: drizzleSql`EXCLUDED.slug`,
+              description: drizzleSql`EXCLUDED.description`,
+              learningObjectives: drizzleSql`EXCLUDED.learning_objectives`,
+              tier: drizzleSql`EXCLUDED.tier`,
+              estimatedMinutes: drizzleSql`EXCLUDED.estimated_minutes`,
+              sortOrder: drizzleSql`EXCLUDED.sort_order`,
+              content: drizzleSql`EXCLUDED.content`,
+              personalizationEnabled: drizzleSql`EXCLUDED.personalization_enabled`,
+              isActive: drizzleSql`EXCLUDED.is_active`,
+              updatedAt: drizzleSql`NOW()`
+            }
+          });
+        experiencesCreated++;
+        console.log(`✓ Upserted experience: ${expData.title}`);
+      }
+
+      console.log(`✅ Database population complete: ${spacesCreated} spaces, ${experiencesCreated} experiences`);
+      
+      res.json({
+        success: true,
+        message: 'Database populated successfully',
+        stats: {
+          spaces: spacesCreated,
+          experiences: experiencesCreated
+        }
+      });
+    } catch (error) {
+      console.error('❌ Error populating database:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to populate database',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
