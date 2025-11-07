@@ -1187,19 +1187,81 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // ===== APP ATELIER AI COACH ROUTES =====
-  app.post('/api/app-atelier/chat', async (req: Request, res) => {
+  
+  // Get user's App Atelier usage status
+  app.get('/api/app-atelier/usage', isAuthenticated, async (req: Request, res) => {
     try {
+      const userId = req.session!.userId as string;
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Get usage stats
+      const usage = await storage.getAppAtelierUsage(userId);
+      const messageCount = usage?.messageCount || 0;
+      
+      // Determine limits based on subscription tier
+      const tier = user.subscriptionTier;
+      const hasFullAccess = tier === 'vip_cohort' || tier === 'executive';
+      const messageLimit = hasFullAccess ? null : 5; // Free tier gets 5 messages
+      
+      res.json({
+        messageCount,
+        messageLimit,
+        hasFullAccess,
+        tier,
+        remainingMessages: messageLimit ? Math.max(0, messageLimit - messageCount) : null
+      });
+    } catch (error) {
+      console.error("Error fetching App Atelier usage:", error);
+      res.status(500).json({ message: "Failed to fetch usage" });
+    }
+  });
+  
+  app.post('/api/app-atelier/chat', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
       const { message, conversationHistory, userProfile } = req.body;
       
       if (!message) {
         return res.status(400).json({ message: "Message required" });
       }
 
+      // Get user to check subscription tier
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Check if user has full access (Inner Circle or Executive Intensive)
+      const hasFullAccess = user.subscriptionTier === 'vip_cohort' || user.subscriptionTier === 'executive';
+      
+      // For free tier users, check message limit
+      if (!hasFullAccess) {
+        const usage = await storage.getAppAtelierUsage(userId);
+        const messageCount = usage?.messageCount || 0;
+        const MESSAGE_LIMIT = 5;
+        
+        if (messageCount >= MESSAGE_LIMIT) {
+          return res.status(403).json({ 
+            message: "Message limit reached",
+            limitReached: true,
+            upgradeRequired: true
+          });
+        }
+      }
+
+      // Get AI response
       const response = await chatWithAppAtelierCoach(
         message,
         conversationHistory || [],
         userProfile
       );
+      
+      // Track message usage
+      await storage.incrementAppAtelierUsage(userId);
       
       res.json({ response });
     } catch (error) {

@@ -564,6 +564,21 @@ export const insertPersonalizationQuestionSchema = createInsertSchema(personaliz
 export type InsertPersonalizationQuestion = z.infer<typeof insertPersonalizationQuestionSchema>;
 export type PersonalizationQuestionDB = typeof personalizationQuestions.$inferSelect;
 
+// App Atelier usage tracking
+export const appAtelierUsage = pgTable("app_atelier_usage", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  messageCount: integer("message_count").default(0).notNull(),
+  lastMessageAt: timestamp("last_message_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  uniqueIndex("idx_app_atelier_user_unique").on(table.userId),
+]);
+
+export const insertAppAtelierUsageSchema = createInsertSchema(appAtelierUsage).omit({ id: true, createdAt: true });
+export type InsertAppAtelierUsage = z.infer<typeof insertAppAtelierUsageSchema>;
+export type AppAtelierUsageDB = typeof appAtelierUsage.$inferSelect;
+
 // ===== ZOD SCHEMAS (for frontend/client data) =====
 
 // Structured step with rich content

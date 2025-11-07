@@ -60,6 +60,9 @@ import {
   type InsertInsightInteraction,
   type SpaceDB,
   type TransformationalExperienceDB,
+  type AppAtelierUsageDB,
+  type InsertAppAtelierUsage,
+  appAtelierUsage,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -194,6 +197,10 @@ export interface IStorage {
   getAllExperienceProgress(userId: string): Promise<ExperienceProgressDB[]>;
   savePersonalizationAnswers(userId: string, experienceId: string, answers: Record<string, any>): Promise<ExperienceProgressDB>;
   getPersonalizationAnswers(userId: string, experienceId: string): Promise<Record<string, any> | null>;
+  
+  // App Atelier usage tracking operations
+  getAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB | undefined>;
+  incrementAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1294,6 +1301,34 @@ export class DatabaseStorage implements IStorage {
         eq(experienceProgress.experienceId, experienceId)
       ));
     return progress?.personalizationAnswers || null;
+  }
+  
+  // App Atelier usage tracking operations
+  async getAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB | undefined> {
+    const [usage] = await db
+      .select()
+      .from(appAtelierUsage)
+      .where(eq(appAtelierUsage.userId, userId));
+    return usage;
+  }
+  
+  async incrementAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB> {
+    const [usage] = await db
+      .insert(appAtelierUsage)
+      .values({
+        userId,
+        messageCount: 1,
+        lastMessageAt: new Date(),
+      })
+      .onConflictDoUpdate({
+        target: appAtelierUsage.userId,
+        set: {
+          messageCount: sql`${appAtelierUsage.messageCount} + 1`,
+          lastMessageAt: new Date(),
+        },
+      })
+      .returning();
+    return usage;
   }
 }
 
