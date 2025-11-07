@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import { useRef, useState, useEffect } from "react";
-import { useLocation } from "wouter";
+import { useLocation, Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
 
@@ -20,9 +20,6 @@ import type { SpaceDB } from "@shared/schema";
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const mousePosRef = useRef({ x: 0, y: 0 });
   const [animationsReady, setAnimationsReady] = useState(false);
 
   const { scrollYProgress } = useScroll({
@@ -64,18 +61,6 @@ export default function LandingPage() {
     }
   }, [prefersReducedMotion]);
 
-  useEffect(() => {
-    if (prefersReducedMotion || typeof window === 'undefined') return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX.set(e.clientX);
-      mouseY.set(e.clientY);
-      mousePosRef.current = { x: e.clientX, y: e.clientY };
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, [mouseX, mouseY, prefersReducedMotion]);
 
   const handleSignup = () => {
     trackCTAClick('landing_hero_signup', '/signup', 'free');
@@ -291,17 +276,20 @@ export default function LandingPage() {
 
               return (
                 <TiltCard
-                  key={space.slug}
+                  key={space.name}
                   delay={index * 0.1}
                   prefersReducedMotion={prefersReducedMotion || false}
-                  className="group"
+                  className="group h-full"
                 >
-                  <Card 
-                    className="h-full border-0 bg-gradient-to-br from-background/95 to-background/80 backdrop-blur-xl hover-elevate active-elevate-2 overflow-hidden cursor-pointer transition-all duration-300"
-                    onClick={() => window.location.href = space.route}
-                    data-testid={`space-card-${space.slug}`}
+                  <Link 
+                    href={space.route}
+                    className="block h-full focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-xl"
+                    data-testid={`space-card-${space.route.split('/').pop()}`}
                   >
-                    <div className="p-8 flex flex-col h-full min-h-[280px]">
+                    <Card 
+                      className="h-full border-0 bg-gradient-to-br from-background/95 to-background/80 backdrop-blur-xl hover-elevate active-elevate-2 overflow-hidden cursor-pointer transition-all duration-300"
+                    >
+                      <div className="p-8 flex flex-col h-full min-h-[280px]">
                       {/* Space Badge (if applicable) */}
                       {badge && (
                         <div className="mb-4">
@@ -349,9 +337,10 @@ export default function LandingPage() {
                       </div>
                     </div>
                   </Card>
-                </TiltCard>
-              );
-            })}
+                </Link>
+              </TiltCard>
+            );
+          })}
           </div>
         </div>
       </div>
