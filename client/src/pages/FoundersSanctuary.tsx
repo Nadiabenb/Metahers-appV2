@@ -11,13 +11,15 @@ import {
   Crown, 
   CheckCircle2,
   Clock,
-  DollarSign,
   ArrowRight,
   Zap,
   Code2,
   Heart,
   Brain,
-  Shield
+  Shield,
+  Lightbulb,
+  PenTool,
+  MessageSquare
 } from "lucide-react";
 import { Link } from "wouter";
 
@@ -30,10 +32,10 @@ export default function FoundersSanctuary() {
       color: "from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--magenta-quartz))]",
       headline: "Crystal-Clear Vision",
       items: [
-        "Define the problem your AI/Web3 solution solves—with precision",
+        "Define the exact problem your business solves—with precision",
         "Validate your ideal customer through strategic research",
-        "Craft a magnetic value proposition that makes investors lean in",
-        "Map your competitive landscape in the AI/Web3 space",
+        "Craft a magnetic value proposition that makes people say 'yes'",
+        "Choose the right AI and no-code tools for YOUR business model",
       ]
     },
     {
@@ -43,10 +45,10 @@ export default function FoundersSanctuary() {
       color: "from-[hsl(var(--hyper-violet))] to-[hsl(var(--aurora-teal))]",
       headline: "Build Your Future",
       items: [
-        "Build your MVP using our AI-powered App Atelier (unlimited access)",
-        "Acquire your first 10 passionate beta users",
-        "Implement AI features that create real value",
-        "Master the product feedback loop",
+        "Build your digital presence using AI and no-code tools (no developer needed)",
+        "Use App Atelier to create custom solutions for your business",
+        "Acquire your first 10 passionate customers or clients",
+        "Master AI tools that save you 10+ hours per week",
       ]
     },
     {
@@ -56,34 +58,67 @@ export default function FoundersSanctuary() {
       color: "from-[hsl(var(--aurora-teal))] to-[hsl(var(--liquid-gold))]",
       headline: "Scale With Confidence",
       items: [
-        "Launch your revenue model (subscription, API, or marketplace)",
-        "Hit $1K MRR—your first proof of product-market fit",
-        "Build repeatable customer acquisition systems",
-        "Perfect your investor pitch and graduation presentation",
+        "Launch your revenue model (services, products, or membership)",
+        "Hit $1K MRR—your first proof of business viability",
+        "Build repeatable customer acquisition systems using AI",
+        "Perfect your pitch and graduation presentation",
       ]
+    }
+  ];
+
+  const personas = [
+    {
+      icon: MessageSquare,
+      title: "Coaches & Consultants",
+      desc: "Build your coaching practice, automate client onboarding, and create digital products that scale beyond 1:1 sessions."
+    },
+    {
+      icon: Users,
+      title: "Community Founders",
+      desc: "Launch membership communities, manage engagement with AI tools, and build sustainable recurring revenue."
+    },
+    {
+      icon: PenTool,
+      title: "Designers & Creatives",
+      desc: "Transform your freelance work into scalable offers, build portfolio sites with no-code, and leverage AI for content."
+    },
+    {
+      icon: Sparkles,
+      title: "Content Creators",
+      desc: "Turn your audience into revenue, automate content workflows with AI, and launch digital products your fans will love."
+    },
+    {
+      icon: Target,
+      title: "Small Business Owners",
+      desc: "Modernize your existing business with AI tools, expand online, or pivot to new revenue streams without breaking the bank."
+    },
+    {
+      icon: Heart,
+      title: "Moms Building Dreams",
+      desc: "Start the business you've been dreaming about—on your schedule, from home, with tools that work around your life."
     }
   ];
 
   const struggles = [
     {
       icon: Brain,
-      title: "You're Brilliant—But Scattered",
-      desc: "You have 12 brilliant AI ideas. Zero launched products. The problem? You don't need more ideas—you need a system that helps you pick ONE and execute flawlessly."
+      title: "You Have the Idea—But Not the Tech Skills",
+      desc: "You know what problem you want to solve. You just don't know how to build it. Hiring developers costs $10K+. You need tools that let YOU build."
     },
     {
       icon: Shield,
-      title: "Tech Bros Don't Get It",
-      desc: "Networking events are exhausting. Pitch competitions are designed for Stanford grads with VC connections. You need a sanctuary where brilliant women are the norm, not the exception."
+      title: "You're Building Alone",
+      desc: "No business partner. No mentor. Just you and Google at 11pm wondering if this will actually work. You need a community of women who get it."
     },
     {
       icon: Target,
-      title: "You're Building Alone in the Dark",
-      desc: "No co-founder. No technical team. Just you, YouTube tutorials, and imposter syndrome. You need expert guidance without giving up equity or creative control."
+      title: "You're Stuck Between Idea and Execution",
+      desc: "You have 12 notebooks full of ideas. Zero launched businesses. The problem isn't creativity—it's knowing which step comes next."
     },
     {
       icon: TrendingUp,
-      title: "You're Tracking the Wrong Things",
-      desc: "Instagram followers ≠ customers. Website traffic ≠ revenue. Newsletter subscribers ≠ traction. You need someone to help you focus on metrics that actually matter."
+      title: "You're Working Hard—But Not Getting Traction",
+      desc: "You're posting content, networking, hustling. But followers don't equal customers. You need someone to help you focus on what actually drives revenue."
     }
   ];
 
@@ -91,42 +126,42 @@ export default function FoundersSanctuary() {
     { 
       icon: Heart, 
       title: "Personal Founder Mentorship", 
-      desc: "Direct access to Nadia, MetaHers founder. This isn't a faceless course—it's human-powered guidance from someone who's built what you're building." 
+      desc: "Direct access to Nadia, MetaHers founder. Weekly calls, Slack access, real guidance from someone who's built what you're building." 
     },
     { 
       icon: Brain, 
-      title: "AI Milestone Prioritization", 
-      desc: "Our AI analyzes your progress weekly and tells you exactly what to focus on next. No more decision paralysis." 
+      title: "AI-Powered Milestone Tracker", 
+      desc: "Our system analyzes your progress weekly and tells you exactly what to focus on next. No more decision paralysis." 
     },
     { 
       icon: Code2, 
       title: "Unlimited App Atelier Access", 
-      desc: "Build your MVP with our AI coding coach. Premium tier unlocked for all Sanctuary members—build without limits." 
+      desc: "Build apps, landing pages, and custom tools with our AI coding coach. Zero coding experience required—just your vision." 
+    },
+    { 
+      icon: Zap, 
+      title: "No-Code Tool Mastery", 
+      desc: "Learn the exact AI and no-code tools successful founders use: ChatGPT prompts, automation workflows, and time-saving systems." 
     },
     { 
       icon: TrendingUp, 
       title: "Real-Time Traction Dashboard", 
-      desc: "Track the metrics that actually matter: revenue, active users, and product-market fit signals." 
+      desc: "Track the metrics that actually matter: revenue, active customers, and real business growth signals." 
     },
     { 
       icon: Users, 
-      title: "Elite Female Founder Circle", 
-      desc: "Your cohort of 100 brilliant women building AI/Web3 startups. Matched by industry and stage." 
+      title: "Female Founder Circle", 
+      desc: "Your cohort of 100 women building businesses. Matched by industry and stage. Lifetime network included." 
     },
     { 
-      icon: Zap, 
+      icon: Lightbulb, 
       title: "Weekly Expert Sessions", 
-      desc: "Live office hours with successful AI founders, growth experts, and investors who actually fund women." 
+      desc: "Live office hours with successful female founders, marketing experts, and business coaches who've been where you are." 
     },
     { 
       icon: Crown, 
-      title: "Investor Demo Day", 
-      desc: "Graduate with a polished pitch deck and present to our curated panel of investors actively funding female founders." 
-    },
-    { 
-      icon: Sparkles, 
-      title: "Lifetime MetaHers Membership", 
-      desc: "After graduation, you're part of our founder alumni network forever. Continue accessing events, mentorship, and community." 
+      title: "Investor & Partner Demo Day", 
+      desc: "Graduate with a polished pitch and present to our curated panel of investors, accelerators, and strategic partners." 
     },
   ];
 
@@ -151,12 +186,12 @@ export default function FoundersSanctuary() {
               Founder's Sanctuary
             </h1>
             
-            <p className="text-2xl md:text-3xl text-foreground/90 max-w-3xl mx-auto font-light">
-              The 12-Week Accelerator Where Brilliant Women Transform AI/Web3 Ideas Into Profitable Businesses
+            <p className="text-2xl md:text-3xl text-foreground/90 max-w-3xl mx-auto font-light leading-tight">
+              The 12-Week Program Where Women Turn Business Ideas Into Reality—Using AI, No-Code Tools & Web3 Mindset
             </p>
             
             <p className="text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-              Imagine: 12 weeks from now, you're launching your AI product. Real users. Real revenue. Real traction. No technical co-founder required. No VC pressure. Just you, our proven system, and a community of exceptional women building the future.
+              Whether you're launching a coaching practice, building a community, reviving a stuck business, or starting fresh—you'll learn to leverage AI and no-code tools to build it yourself. No technical co-founder. No expensive developers. Just you, proven systems, and a sanctuary of brilliant women.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
@@ -193,8 +228,51 @@ export default function FoundersSanctuary() {
         </div>
       </section>
 
-      {/* Struggles Section */}
+      {/* Who This Is For Section */}
       <section className="max-w-6xl mx-auto px-4 py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-center mb-12"
+        >
+          <h2 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-6">
+            Built For Women Like You
+          </h2>
+          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+            Founder's Sanctuary welcomes women from all industries who want to build or grow their business using modern tools—no technical background required.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {personas.map((persona, index) => {
+            const Icon = persona.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + index * 0.1 }}
+              >
+                <Card className="h-full hover-elevate">
+                  <CardHeader>
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--hyper-violet))]/20 flex items-center justify-center mb-3">
+                      <Icon className="w-6 h-6 text-[hsl(var(--cyber-fuchsia))]" />
+                    </div>
+                    <CardTitle className="text-xl">{persona.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-foreground/70 leading-relaxed">{persona.desc}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Struggles Section */}
+      <section className="max-w-6xl mx-auto px-4 py-20 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/5 to-[hsl(var(--cyber-fuchsia))]/5 rounded-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -205,7 +283,7 @@ export default function FoundersSanctuary() {
             If This Sounds Familiar, You're in the Right Place
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            These are the real struggles facing brilliant women building AI/Web3 startups. We've designed every aspect of Founder's Sanctuary to solve them.
+            These are the real struggles women face when building businesses. We've designed every aspect of Founder's Sanctuary to solve them.
           </p>
         </motion.div>
 
@@ -249,7 +327,7 @@ export default function FoundersSanctuary() {
             Your 12-Week Transformation
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-            Three stages. Eleven milestones. One outcome: A launched AI/Web3 product with real users and revenue.
+            Three stages. Eleven milestones. One outcome: A launched business with real customers and revenue.
           </p>
         </motion.div>
 
@@ -310,7 +388,7 @@ export default function FoundersSanctuary() {
             Everything You Need to Launch
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            This isn't just a course. It's a complete founder support system designed for women building AI/Web3 companies.
+            This isn't just a course. It's a complete founder support system designed for women building real businesses.
           </p>
         </motion.div>
 
@@ -358,13 +436,13 @@ export default function FoundersSanctuary() {
                     This is a Human-Powered AI Experience
                   </h3>
                   <p className="text-foreground/70 leading-relaxed">
-                    Yes, we use AI to help you build faster. But at the core? This is personal, founder-to-founder mentorship. You'll have direct access to Nadia (MetaHers founder) throughout the entire 12 weeks. Weekly calls. Slack access. Real support from someone who's walked this path.
+                    Yes, you'll learn to use AI and no-code tools to build faster. But at the core? This is personal, founder-to-founder mentorship. You'll have direct access to Nadia (MetaHers founder) throughout the entire 12 weeks. Weekly calls. Slack access. Real support from someone who's walked this path.
                   </p>
                 </div>
               </div>
               <div className="bg-background/50 rounded-xl p-6 border border-[hsl(var(--cyber-fuchsia))]/20">
                 <p className="text-sm text-foreground/60 italic">
-                  "I built MetaHers as a solo founder while working full-time. I know the isolation, the imposter syndrome, the late nights wondering if you're building the right thing. Founder's Sanctuary is everything I wish existed when I started—a sanctuary where brilliant women get the guidance, community, and tools they deserve."
+                  "I built MetaHers as a solo founder while working full-time. I know the isolation, the imposter syndrome, the late nights wondering if you're building the right thing. Founder's Sanctuary is everything I wish existed when I started—a sanctuary where brilliant women get the tools, community, and personal guidance they deserve."
                 </p>
                 <p className="text-sm font-medium mt-3 text-foreground/80">— Nadia, Founder of MetaHers</p>
               </div>
@@ -387,7 +465,7 @@ export default function FoundersSanctuary() {
               </Badge>
               
               <h3 className="font-cormorant text-3xl md:text-4xl font-bold metallic-text">
-                Ready to Launch Your AI/Web3 Business?
+                Ready to Launch Your Business?
               </h3>
 
               <div className="flex items-baseline justify-center gap-2">
@@ -397,10 +475,10 @@ export default function FoundersSanctuary() {
 
               <div className="space-y-2">
                 <p className="text-foreground/80 max-w-xl mx-auto leading-relaxed">
-                  That's $82.50/week for personal founder mentorship, unlimited AI coaching, expert sessions, investor access, and a lifetime female founder network.
+                  That's $82.50/week for personal founder mentorship, unlimited AI tools training, expert sessions, and a lifetime female founder network.
                 </p>
                 <p className="text-sm text-foreground/60">
-                  (Compare: Average accelerator = $20K+ for 8% equity. We take zero equity.)
+                  (Compare: Average business coach = $500-2K/month for group calls. We include personal mentorship, community, AND the tools.)
                 </p>
               </div>
 
@@ -448,14 +526,14 @@ export default function FoundersSanctuary() {
                 </div>
                 <div className="flex-1 text-center md:text-left">
                   <h3 className="font-cormorant text-2xl md:text-3xl font-bold metallic-text mb-3">
-                    Build Your MVP With App Atelier
+                    Build Anything With App Atelier
                   </h3>
                   <p className="text-foreground/70 mb-4 leading-relaxed">
-                    All Founder's Sanctuary members get unlimited access to App Atelier—our AI coding coach that helps you build your MVP without a technical co-founder. No more waiting on developers. Build it yourself during the program.
+                    All Founder's Sanctuary members get unlimited access to App Atelier—our AI coding coach. Build custom landing pages, membership sites, booking systems, course platforms, and more. No developer required. Whether you're a coach launching a booking system or a designer building a portfolio, App Atelier helps you build it yourself.
                   </p>
                   <Link href="/app-atelier">
                     <Button variant="outline" className="hover-elevate" data-testid="link-app-atelier">
-                      Try App Atelier (Free 5 Messages)
+                      Try App Atelier Free (5 Messages)
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
