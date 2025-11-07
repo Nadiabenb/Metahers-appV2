@@ -74,14 +74,14 @@ function Particle({ index, mousePosRef }: { index: number; mousePosRef: React.Re
   );
 }
 
-// World Orb Component
+// World Orb Component with Luxury Interactive Features
 function WorldOrb({ 
   world, 
   index, 
   mousePosRef, 
   prefersReducedMotion 
 }: { 
-  world: { name: string; route: string; gradient: string; glowColor: string }; 
+  world: { name: string; route: string; gradient: string; glowColor: string; description?: string }; 
   index: number; 
   mousePosRef: React.RefObject<{ x: number; y: number }>; 
   prefersReducedMotion: boolean;
@@ -92,6 +92,21 @@ function WorldOrb({
   const y = useMotionValue(0);
   const orbRef = useRef<HTMLDivElement>(null);
 
+  // Orbital positioning: asymmetrical arc layout
+  const orbitalPositions = [
+    { x: '10%', y: '20%', scale: 1.1, z: 30 },    // Web3 - top left
+    { x: '25%', y: '0%', scale: 0.95, z: 20 },    // NFT/Blockchain - top
+    { x: '50%', y: '10%', scale: 1.2, z: 40 },    // AI - center top (hero)
+    { x: '75%', y: '5%', scale: 0.9, z: 15 },     // Metaverse - top right
+    { x: '15%', y: '65%', scale: 0.85, z: 10 },   // Branding - bottom left
+    { x: '40%', y: '75%', scale: 0.95, z: 25 },   // Moms - bottom
+    { x: '65%', y: '70%', scale: 1, z: 35 },      // App Atelier - bottom right
+    { x: '85%', y: '45%', scale: 0.9, z: 20 },    // Founder's Club - right
+  ];
+
+  const position = orbitalPositions[index] || { x: '50%', y: '50%', scale: 1, z: 20 };
+
+  // Enhanced magnetic pull with depth influence
   useEffect(() => {
     if (prefersReducedMotion || !mousePosRef.current || !orbRef.current) return;
 
@@ -108,10 +123,12 @@ function WorldOrb({
       const dy = mousePos.y - orbCenterY;
       const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance < 400) {
-        const factor = (400 - distance) / 400;
-        x.set(dx * factor * 0.05);
-        y.set(dy * factor * 0.05);
+      // Stronger magnetic pull based on depth (z-index)
+      const depthFactor = position.z / 40;
+      if (distance < 500) {
+        const factor = (500 - distance) / 500;
+        x.set(dx * factor * 0.08 * depthFactor);
+        y.set(dy * factor * 0.08 * depthFactor);
       } else {
         x.set(0);
         y.set(0);
@@ -119,25 +136,54 @@ function WorldOrb({
     }, 16);
 
     return () => clearInterval(interval);
-  }, [prefersReducedMotion, mousePosRef, x, y]);
+  }, [prefersReducedMotion, mousePosRef, x, y, position.z]);
+
+  // Size scaling based on depth
+  const baseSize = 160;
+  const orbSize = baseSize * position.scale;
 
   return (
       <motion.div
         ref={orbRef}
-        initial={{ opacity: 0, scale: 0.5 }}
-        whileInView={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, scale: 0.3, y: 100 }}
+        whileInView={{ opacity: 1, scale: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ 
-          delay: index * 0.1, 
-          duration: 0.8,
+          delay: index * 0.15, 
+          duration: 1.2,
           type: "spring",
-          stiffness: 100
+          stiffness: 60
         }}
-        style={{ x, y }}
-        className="relative flex items-center justify-center cursor-pointer"
+        style={{ 
+          x, 
+          y,
+          left: position.x,
+          top: position.y,
+          zIndex: position.z
+        }}
+        className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer"
       >
+        {/* Glassmorphism Pedestal */}
         <motion.div
-          whileHover={{ scale: 1.15 }}
+          className="absolute left-1/2 -translate-x-1/2 rounded-full backdrop-blur-md border border-white/10"
+          style={{
+            width: orbSize * 1.1,
+            height: orbSize * 0.15,
+            top: orbSize * 0.9,
+            background: 'radial-gradient(ellipse at center, rgba(255,255,255,0.05) 0%, transparent 70%)',
+            boxShadow: `0 8px 32px rgba(0,0,0,0.3), inset 0 1px 2px rgba(255,255,255,0.1)`,
+          }}
+          animate={
+            !prefersReducedMotion ? {
+              scaleX: isHovered ? 1.2 : 1,
+              opacity: isHovered ? 0.6 : 0.3,
+            } : {}
+          }
+          transition={{ duration: 0.4 }}
+        />
+
+        <motion.div
+          whileHover={{ scale: 1.1, y: -8 }}
           whileTap={{ scale: 0.95 }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
@@ -145,6 +191,7 @@ function WorldOrb({
           className="relative group focus:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-full block"
           style={{
             willChange: 'transform',
+            filter: isHovered ? 'brightness(1.1)' : 'brightness(1)',
           }}
           data-testid={`world-orb-${world.route.split('/').pop()}`}
           role="button"
@@ -157,90 +204,140 @@ function WorldOrb({
             }
           }}
         >
-        <motion.div
-          className="absolute inset-0 rounded-full blur-xl -z-10"
-          style={{
-            background: `rgba(${world.glowColor}, ${isHovered ? '0.6' : '0.3'})`,
-          }}
-          animate={
-            prefersReducedMotion 
-              ? {} 
-              : {
-                  scale: isHovered ? [1, 1.2, 1] : [1, 1.1, 1],
-                  opacity: isHovered ? [0.6, 0.8, 0.6] : [0.3, 0.5, 0.3],
-                }
-          }
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-
-        <div className="relative w-40 h-40 md:w-48 md:h-48">
-          <div
-            className={`absolute inset-0 rounded-full bg-gradient-to-br ${world.gradient} backdrop-blur-xl border-2 border-white/30 shadow-2xl overflow-hidden`}
+          {/* Enhanced Glow with Particle Veil */}
+          <motion.div
+            className="absolute inset-0 rounded-full blur-2xl -z-10"
             style={{
-              boxShadow: `0 20px 60px rgba(${world.glowColor}, 0.4), inset 0 1px 2px rgba(255,255,255,0.3)`,
+              background: `radial-gradient(circle, rgba(${world.glowColor}, ${isHovered ? '0.8' : '0.4'}) 0%, transparent 70%)`,
             }}
-          >
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-white/40 via-transparent to-transparent"
-              animate={
-                prefersReducedMotion 
-                  ? {} 
-                  : {
-                      opacity: [0.3, 0.6, 0.3],
-                    }
-              }
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: index * 0.5
-              }}
-            />
-
-            <motion.div
-              className="absolute inset-0"
-              animate={
-                prefersReducedMotion 
-                  ? {} 
-                  : {
-                      y: [-5, 5, -5],
-                    }
-              }
-              transition={{
-                duration: 3 + index * 0.5,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-          </div>
-
-          <div className="absolute inset-0 flex items-center justify-center p-6">
-            <motion.span
-              className="text-center font-semibold text-white drop-shadow-lg"
-              style={{
-                textShadow: `0 2px 10px rgba(0,0,0,0.5), 0 0 20px rgba(${world.glowColor}, 0.8)`,
-                fontSize: world.name.length > 10 ? '0.85rem' : '1.1rem',
-                lineHeight: '1.2'
-              }}
-              animate={
-                isHovered && !prefersReducedMotion
-                  ? { scale: [1, 1.05, 1] }
-                  : {}
-              }
-              transition={{ duration: 0.3 }}
-            >
-              {world.name}
-            </motion.span>
-          </div>
-
-          <div
-            className="absolute top-0 left-0 right-0 h-1/3 rounded-t-full bg-gradient-to-b from-white/20 to-transparent pointer-events-none"
+            animate={
+              prefersReducedMotion 
+                ? {} 
+                : {
+                    scale: isHovered ? [1, 1.4, 1] : [1, 1.2, 1],
+                    opacity: isHovered ? [0.8, 1, 0.8] : [0.4, 0.6, 0.4],
+                  }
+            }
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
           />
-        </div>
+
+          <div 
+            className="relative" 
+            style={{ width: orbSize, height: orbSize }}
+          >
+            {/* Main Orb with Metallic Rim */}
+            <div
+              className={`absolute inset-0 rounded-full bg-gradient-to-br ${world.gradient} backdrop-blur-xl shadow-2xl overflow-hidden`}
+              style={{
+                boxShadow: `
+                  0 ${orbSize * 0.15}px ${orbSize * 0.4}px rgba(${world.glowColor}, 0.5),
+                  inset 0 2px 4px rgba(255,255,255,0.4),
+                  inset 0 -2px 4px rgba(0,0,0,0.3),
+                  0 0 0 2px rgba(255,255,255,0.2)
+                `,
+                border: `2px solid rgba(255,255,255,${isHovered ? '0.5' : '0.3'})`,
+              }}
+            >
+              {/* Glossy highlight */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-white/50 via-white/20 to-transparent"
+                animate={
+                  prefersReducedMotion 
+                    ? {} 
+                    : {
+                        opacity: isHovered ? [0.5, 0.7, 0.5] : [0.3, 0.5, 0.3],
+                      }
+                }
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: index * 0.5
+                }}
+              />
+
+              {/* Floating particles */}
+              <motion.div
+                className="absolute inset-0"
+                animate={
+                  prefersReducedMotion 
+                    ? {} 
+                    : {
+                        y: [-3, 3, -3],
+                        rotate: [0, 5, 0],
+                      }
+                }
+                transition={{
+                  duration: 4 + index * 0.5,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+            </div>
+
+            {/* Orb Label */}
+            <div className="absolute inset-0 flex items-center justify-center p-4">
+              <motion.span
+                className="text-center font-bold text-white drop-shadow-2xl z-10"
+                style={{
+                  textShadow: `0 3px 15px rgba(0,0,0,0.7), 0 0 30px rgba(${world.glowColor}, 1)`,
+                  fontSize: world.name.length > 10 ? `${orbSize * 0.06}px` : `${orbSize * 0.08}px`,
+                  lineHeight: '1.2'
+                }}
+                animate={
+                  isHovered && !prefersReducedMotion
+                    ? { scale: [1, 1.08, 1], y: [-2, 0, -2] }
+                    : {}
+                }
+                transition={{ duration: 0.5 }}
+              >
+                {world.name}
+              </motion.span>
+            </div>
+
+            {/* Top rim light */}
+            <div
+              className="absolute top-0 left-0 right-0 rounded-t-full bg-gradient-to-b from-white/30 to-transparent pointer-events-none"
+              style={{ height: `${orbSize * 0.33}px` }}
+            />
+          </div>
+
+          {/* Editorial Peek Card on Hover */}
+          {world.description && (
+            <motion.div
+              initial={{ opacity: 0, y: 20, scale: 0.9 }}
+              animate={{
+                opacity: isHovered ? 1 : 0,
+                y: isHovered ? 0 : 20,
+                scale: isHovered ? 1 : 0.9
+              }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="absolute top-full mt-6 left-1/2 -translate-x-1/2 w-64 pointer-events-none z-50"
+              style={{ filter: 'drop-shadow(0 10px 40px rgba(0,0,0,0.5))' }}
+            >
+              <div 
+                className="relative rounded-2xl backdrop-blur-xl border border-white/20 p-5 bg-gradient-to-br from-black/60 to-black/40"
+                style={{
+                  boxShadow: `0 0 40px rgba(${world.glowColor}, 0.3), inset 0 1px 2px rgba(255,255,255,0.1)`
+                }}
+              >
+                <p className="text-sm text-white/90 leading-relaxed font-light">
+                  {world.description}
+                </p>
+                {/* Accent border */}
+                <div 
+                  className="absolute bottom-0 left-0 right-0 h-1 rounded-b-2xl"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, rgba(${world.glowColor}, 0.8), transparent)`
+                  }}
+                />
+              </div>
+            </motion.div>
+          )}
         </motion.div>
       </motion.div>
   );
@@ -327,7 +424,7 @@ export default function LandingPage() {
     ]
   };
 
-  // Map spaces to world orbs
+  // Map spaces to world orbs with descriptions
   const worldOrbs = spaces?.map((space) => {
     const colorMap: Record<string, { gradient: string; glowColor: string }> = {
       "Web3": { gradient: "from-purple-600 to-pink-600", glowColor: "181, 101, 216" },
@@ -347,6 +444,7 @@ export default function LandingPage() {
       route: `/spaces/${space.slug}`,
       gradient: colors.gradient,
       glowColor: colors.glowColor,
+      description: space.description,
     };
   }) || [];
 
@@ -490,7 +588,28 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 md:gap-12 max-w-5xl mx-auto">
+          {/* Desktop: Orbital Celestial Promenade Layout */}
+          <div className="hidden md:block relative w-full mx-auto" style={{ height: '800px', maxWidth: '1200px' }}>
+            {/* Cinematic stage with energy ribbons */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              <div className="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-transparent via-[#B565D8]/20 to-transparent blur-sm" />
+              <div className="absolute top-0 right-1/4 w-1 h-full bg-gradient-to-b from-transparent via-[#E935C1]/20 to-transparent blur-sm" />
+              <div className="absolute left-0 top-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            </div>
+            
+            {worldOrbs.map((world, index) => (
+              <WorldOrb
+                key={world.name}
+                world={world}
+                index={index}
+                mousePosRef={mousePosRef}
+                prefersReducedMotion={prefersReducedMotion || false}
+              />
+            ))}
+          </div>
+
+          {/* Mobile: Vertical Carousel Stack */}
+          <div className="md:hidden grid grid-cols-2 gap-6 max-w-md mx-auto">
             {worldOrbs.map((world, index) => (
               <WorldOrb
                 key={world.name}
