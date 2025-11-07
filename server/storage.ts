@@ -4,12 +4,12 @@ import {
   journalEntries,
   subscriptions,
   achievements,
-  passwordResetTokens,
   emailLeads,
   glowUpProfiles,
   glowUpProgress,
   glowUpJournal,
   quizSubmissions,
+  passwordResetTokens,
   cohortCapacity,
   thoughtLeadershipPosts,
   thoughtLeadershipProgress,
@@ -20,49 +20,65 @@ import {
   insightInteractions,
   spaces,
   transformationalExperiences,
-  type User,
-  type UpsertUser,
-  type RitualProgressDB,
-  type InsertRitualProgress,
-  type JournalEntryDB,
-  type InsertJournalEntry,
-  type SubscriptionDB,
-  type InsertSubscription,
-  type AchievementDB,
-  type InsertAchievement,
-  type PasswordResetTokenDB,
-  type InsertPasswordResetToken,
-  type EmailLeadDB,
-  type InsertEmailLead,
-  type GlowUpProfileDB,
-  type InsertGlowUpProfile,
-  type GlowUpProgressDB,
-  type InsertGlowUpProgress,
-  type GlowUpJournalDB,
-  type InsertGlowUpJournal,
-  type QuizSubmissionDB,
-  type InsertQuizSubmission,
-  type CohortCapacityDB,
-  type InsertCohortCapacity,
-  type ThoughtLeadershipPostDB,
-  type InsertThoughtLeadershipPost,
-  type ThoughtLeadershipProgressDB,
-  type InsertThoughtLeadershipProgress,
-  type GroupSessionDB,
-  type InsertGroupSession,
-  type SessionRegistrationDB,
-  type InsertSessionRegistration,
-  type OneOnOneBookingDB,
-  type InsertOneOnOneBooking,
-  type FounderInsightDB,
-  type InsertFounderInsight,
-  type InsightInteractionDB,
-  type InsertInsightInteraction,
-  type SpaceDB,
-  type TransformationalExperienceDB,
-  type AppAtelierUsageDB,
-  type InsertAppAtelierUsage,
+  experienceProgress,
+  personalizationQuestions,
   appAtelierUsage,
+  companions,
+  companionActivities,
+} from "@shared/schema";
+import type {
+  UpsertUser,
+  User,
+  InsertRitualProgress,
+  RitualProgressDB,
+  InsertJournalEntry,
+  JournalEntryDB,
+  InsertSubscription,
+  SubscriptionDB,
+  InsertAchievement,
+  AchievementDB,
+  InsertEmailLead,
+  EmailLeadDB,
+  InsertGlowUpProfile,
+  GlowUpProfileDB,
+  InsertGlowUpProgress,
+  GlowUpProgressDB,
+  InsertGlowUpJournal,
+  GlowUpJournalDB,
+  InsertQuizSubmission,
+  QuizSubmissionDB,
+  InsertPasswordResetToken,
+  PasswordResetTokenDB,
+  InsertCohortCapacity,
+  CohortCapacityDB,
+  InsertThoughtLeadershipPost,
+  ThoughtLeadershipPostDB,
+  InsertThoughtLeadershipProgress,
+  ThoughtLeadershipProgressDB,
+  InsertGroupSession,
+  GroupSessionDB,
+  InsertSessionRegistration,
+  SessionRegistrationDB,
+  InsertOneOnOneBooking,
+  OneOnOneBookingDB,
+  InsertFounderInsight,
+  FounderInsightDB,
+  InsertInsightInteraction,
+  InsightInteractionDB,
+  InsertSpace,
+  SpaceDB,
+  InsertTransformationalExperience,
+  TransformationalExperienceDB,
+  InsertExperienceProgress,
+  ExperienceProgressDB,
+  InsertPersonalizationQuestion,
+  PersonalizationQuestionDB,
+  InsertAppAtelierUsage,
+  AppAtelierUsageDB,
+  InsertCompanion,
+  CompanionDB,
+  InsertCompanionActivity,
+  CompanionActivityDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -74,60 +90,60 @@ export interface IStorage {
   createUser(user: Omit<UpsertUser, 'id'>): Promise<User>;
   upsertUser(user: UpsertUser): Promise<User>;
   completeOnboarding(userId: string): Promise<void>;
-  
+
   // Ritual progress operations
   getRitualProgress(userId: string, ritualSlug: string): Promise<RitualProgressDB | undefined>;
   upsertRitualProgress(progress: InsertRitualProgress): Promise<RitualProgressDB>;
   getAllUserRitualProgress(userId: string): Promise<RitualProgressDB[]>;
-  
+
   // Journal operations
   getLatestJournalEntry(userId: string): Promise<JournalEntryDB | undefined>;
   getJournalEntryByDate(userId: string, date: string): Promise<JournalEntryDB | undefined>;
   upsertJournalEntry(entry: InsertJournalEntry): Promise<JournalEntryDB>;
-  
+
   // Subscription operations
   getSubscription(userId: string): Promise<SubscriptionDB | undefined>;
   getSubscriptionByStripeCustomerId(stripeCustomerId: string): Promise<SubscriptionDB | undefined>;
   upsertSubscription(subscription: InsertSubscription): Promise<SubscriptionDB>;
   updateUserProStatus(userId: string, isPro: boolean): Promise<User>;
   updateUserSubscriptionTier(userId: string, tier: string): Promise<User>;
-  
+
   // Journal analytics operations
   getJournalStats(userId: string): Promise<any>;
   getAllJournalEntries(userId: string, limit: number, mood?: string): Promise<JournalEntryDB[]>;
-  
+
   // Achievement operations
   getUserAchievements(userId: string): Promise<AchievementDB[]>;
   unlockAchievement(userId: string, achievementKey: string): Promise<AchievementDB | null>;
   checkAchievementUnlocked(userId: string, achievementKey: string): Promise<boolean>;
-  
+
   // Password reset operations
   createPasswordResetToken(token: InsertPasswordResetToken): Promise<PasswordResetTokenDB>;
   getPasswordResetToken(token: string): Promise<PasswordResetTokenDB | undefined>;
   deletePasswordResetToken(token: string): Promise<void>;
   deleteUserPasswordResetTokens(userId: string): Promise<void>;
-  
+
   // Email lead operations
   createEmailLead(lead: InsertEmailLead): Promise<EmailLeadDB>;
-  
+
   // Glow-Up Program operations
   getGlowUpProfile(userId: string): Promise<GlowUpProfileDB | undefined>;
   upsertGlowUpProfile(profile: InsertGlowUpProfile): Promise<GlowUpProfileDB>;
-  
+
   getGlowUpProgress(userId: string): Promise<GlowUpProgressDB | undefined>;
   upsertGlowUpProgress(progress: InsertGlowUpProgress): Promise<GlowUpProgressDB>;
-  
+
   getGlowUpJournalEntry(userId: string, day: number): Promise<GlowUpJournalDB | undefined>;
   getAllGlowUpJournalEntries(userId: string): Promise<GlowUpJournalDB[]>;
   upsertGlowUpJournalEntry(entry: InsertGlowUpJournal): Promise<GlowUpJournalDB>;
-  
+
   // Quiz submission operations
   createQuizSubmission(submission: InsertQuizSubmission): Promise<QuizSubmissionDB>;
   getQuizSubmissionsByEmail(email: string): Promise<QuizSubmissionDB[]>;
   getQuizSubmissionByEmail(email: string): Promise<QuizSubmissionDB | undefined>;
   getAllQuizSubmissions(): Promise<QuizSubmissionDB[]>;
   updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB>;
-  
+
   // Cohort capacity operations
   getCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined>;
   upsertCohortCapacity(capacity: InsertCohortCapacity): Promise<CohortCapacityDB>;
@@ -140,7 +156,7 @@ export interface IStorage {
   getThoughtLeadershipPostsByUser(userId: string, limit: number): Promise<ThoughtLeadershipPostDB[]>;
   getPublicThoughtLeadershipPosts(limit: number): Promise<ThoughtLeadershipPostDB[]>;
   updateThoughtLeadershipPost(id: string, updates: Partial<ThoughtLeadershipPostDB>): Promise<ThoughtLeadershipPostDB>;
-  
+
   getThoughtLeadershipProgress(userId: string): Promise<ThoughtLeadershipProgressDB | undefined>;
   createThoughtLeadershipProgress(progress: InsertThoughtLeadershipProgress): Promise<ThoughtLeadershipProgressDB>;
   updateThoughtLeadershipProgress(userId: string, updates: Partial<ThoughtLeadershipProgressDB>): Promise<ThoughtLeadershipProgressDB>;
@@ -186,21 +202,35 @@ export interface IStorage {
   // MetaHers World - Spaces operations
   getSpaces(): Promise<SpaceDB[]>;
   getSpaceBySlug(slug: string): Promise<SpaceDB | undefined>;
-  
+
   // MetaHers World - Transformational Experiences operations
   getExperiencesBySpace(spaceId: string): Promise<TransformationalExperienceDB[]>;
   getExperienceById(id: string): Promise<TransformationalExperienceDB | undefined>;
   getExperienceBySlug(slug: string): Promise<TransformationalExperienceDB | undefined>;
   getAllExperiences(): Promise<TransformationalExperienceDB[]>;
-  
+
   // MetaHers World - Experience Progress operations
   getAllExperienceProgress(userId: string): Promise<ExperienceProgressDB[]>;
   savePersonalizationAnswers(userId: string, experienceId: string, answers: Record<string, any>): Promise<ExperienceProgressDB>;
   getPersonalizationAnswers(userId: string, experienceId: string): Promise<Record<string, any> | null>;
-  
+
   // App Atelier usage tracking operations
   getAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB | undefined>;
   incrementAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB>;
+
+  // Companion operations
+  getCompanion(userId: string): Promise<CompanionDB | undefined>;
+  createCompanion(data: InsertCompanion): Promise<CompanionDB>;
+  updateCompanionStats(
+    userId: string,
+    update: {
+      growth?: number;
+      inspiration?: number;
+      connection?: number;
+      mastery?: number;
+      activityType: string;
+    }
+  ): Promise<CompanionDB>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -259,7 +289,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertRitualProgress(progressData: InsertRitualProgress): Promise<RitualProgressDB> {
     const existing = await this.getRitualProgress(progressData.userId, progressData.ritualSlug);
-    
+
     if (existing) {
       const [updated] = await db
         .update(ritualProgress)
@@ -316,7 +346,7 @@ export class DatabaseStorage implements IStorage {
     // Use the date from entryData, or default to today's date
     const journalDate = entryData.date || new Date().toISOString().split('T')[0];
     const existing = await this.getJournalEntryByDate(entryData.userId, journalDate);
-    
+
     if (existing) {
       const [updated] = await db
         .update(journalEntries)
@@ -363,7 +393,7 @@ export class DatabaseStorage implements IStorage {
     if (mood) {
       conditions.push(eq(journalEntries.mood, mood));
     }
-    
+
     return await db
       .select()
       .from(journalEntries)
@@ -393,7 +423,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertSubscription(subscriptionData: InsertSubscription): Promise<SubscriptionDB> {
     const existing = await this.getSubscription(subscriptionData.userId);
-    
+
     if (existing) {
       const [updated] = await db
         .update(subscriptions)
@@ -437,11 +467,11 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(journalEntries)
       .where(eq(journalEntries.userId, userId));
-    
+
     const totalEntries = entries.length;
     const totalWords = entries.reduce((sum, entry) => sum + (entry.wordCount || 0), 0);
     const currentStreak = entries.length > 0 ? entries[0].streak : 0;
-    
+
     // Mood distribution
     const moodCounts: Record<string, number> = {};
     entries.forEach(entry => {
@@ -449,7 +479,7 @@ export class DatabaseStorage implements IStorage {
         moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
       }
     });
-    
+
     // All unique tags
     const allTags = new Set<string>();
     entries.forEach(entry => {
@@ -457,7 +487,7 @@ export class DatabaseStorage implements IStorage {
         entry.tags.forEach(tag => allTags.add(tag));
       }
     });
-    
+
     return {
       totalEntries,
       totalWords,
@@ -490,7 +520,7 @@ export class DatabaseStorage implements IStorage {
     if (isUnlocked) {
       return null;
     }
-    
+
     // Unlock the achievement
     const [achievement] = await db
       .insert(achievements)
@@ -499,7 +529,7 @@ export class DatabaseStorage implements IStorage {
         achievementKey,
       })
       .returning();
-    
+
     return achievement;
   }
 
@@ -512,7 +542,7 @@ export class DatabaseStorage implements IStorage {
         eq(achievements.achievementKey, achievementKey)
       ))
       .limit(1);
-    
+
     return !!achievement;
   }
 
@@ -568,7 +598,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertGlowUpProfile(profileData: InsertGlowUpProfile): Promise<GlowUpProfileDB> {
     const existing = await this.getGlowUpProfile(profileData.userId);
-    
+
     if (existing) {
       const [updated] = await db
         .update(glowUpProfiles)
@@ -599,7 +629,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertGlowUpProgress(progressData: InsertGlowUpProgress): Promise<GlowUpProgressDB> {
     const existing = await this.getGlowUpProgress(progressData.userId);
-    
+
     if (existing) {
       const [updated] = await db
         .update(glowUpProgress)
@@ -646,7 +676,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertGlowUpJournalEntry(entryData: InsertGlowUpJournal): Promise<GlowUpJournalDB> {
     const existing = await this.getGlowUpJournalEntry(entryData.userId, entryData.day);
-    
+
     if (existing) {
       const [updated] = await db
         .update(glowUpJournal)
@@ -697,11 +727,83 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getAllQuizSubmissions(): Promise<QuizSubmissionDB[]> {
-    return await db
-      .select()
-      .from(quizSubmissions)
-      .orderBy(desc(quizSubmissions.createdAt));
-  }
+    return db.select().from(quizSubmissions).orderBy(desc(quizSubmissions.createdAt));
+  },
+
+  // ===== COMPANION METHODS =====
+  async getCompanion(userId: string): Promise<CompanionDB | undefined> {
+    const result = await db.select().from(companions).where(eq(companions.userId, userId)).limit(1);
+    return result[0];
+  },
+
+  async createCompanion(data: InsertCompanion): Promise<CompanionDB> {
+    const result = await db.insert(companions).values(data).returning();
+    return result[0];
+  },
+
+  async updateCompanionStats(
+    userId: string,
+    update: {
+      growth?: number;
+      inspiration?: number;
+      connection?: number;
+      mastery?: number;
+      activityType: string;
+    }
+  ): Promise<CompanionDB> {
+    const companion = await this.getCompanion(userId);
+    if (!companion) {
+      throw new Error('Companion not found');
+    }
+
+    // Calculate new stats (capped at 100)
+    const newGrowth = Math.min(100, companion.growth + (update.growth || 0));
+    const newInspiration = Math.min(100, companion.inspiration + (update.inspiration || 0));
+    const newConnection = Math.min(100, companion.connection + (update.connection || 0));
+    const newMastery = Math.min(100, companion.mastery + (update.mastery || 0));
+
+    // Determine stage based on total stats
+    const totalStats = newGrowth + newInspiration + newConnection + newMastery;
+    let stage = 'seedling';
+    if (totalStats >= 300) stage = 'radiant';
+    else if (totalStats >= 200) stage = 'flourishing';
+    else if (totalStats >= 120) stage = 'blooming';
+    else if (totalStats >= 50) stage = 'sprout';
+
+    // Update timestamp based on activity type
+    const timestamps: any = { updatedAt: new Date() };
+    if (update.activityType === 'journal') timestamps.lastFed = new Date();
+    if (update.activityType === 'learn') timestamps.lastPlayed = new Date();
+    if (update.activityType === 'socialize') timestamps.lastSocialized = new Date();
+
+    const result = await db
+      .update(companions)
+      .set({
+        growth: newGrowth,
+        inspiration: newInspiration,
+        connection: newConnection,
+        mastery: newMastery,
+        stage,
+        ...timestamps,
+      })
+      .where(eq(companions.userId, userId))
+      .returning();
+
+    // Log activity
+    const pointsGained = (update.growth || 0) + (update.inspiration || 0) +
+                        (update.connection || 0) + (update.mastery || 0);
+
+    await db.insert(companionActivities).values({
+      userId,
+      activityType: update.activityType,
+      statChanged: update.growth ? 'growth' : update.inspiration ? 'inspiration' :
+                   update.connection ? 'connection' : 'mastery',
+      pointsGained,
+    });
+
+    return result[0];
+  },
+
 
   async updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB> {
     const [updated] = await db
@@ -724,7 +826,7 @@ export class DatabaseStorage implements IStorage {
 
   async upsertCohortCapacity(capacityData: InsertCohortCapacity): Promise<CohortCapacityDB> {
     const existing = await this.getCohortCapacity(capacityData.cohortName);
-    
+
     if (existing) {
       const [updated] = await db
         .update(cohortCapacity)
@@ -750,7 +852,7 @@ export class DatabaseStorage implements IStorage {
   async incrementCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined> {
     const existing = await this.getCohortCapacity(cohortName);
     if (!existing) return undefined;
-    
+
     const [updated] = await db
       .update(cohortCapacity)
       .set({
@@ -870,11 +972,11 @@ export class DatabaseStorage implements IStorage {
   async getUpcomingGroupSessions(sessionType?: string, limit = 20): Promise<GroupSessionDB[]> {
     const now = new Date();
     const conditions = [sql`${groupSessions.scheduledDate} > ${now}`];
-    
+
     if (sessionType) {
       conditions.push(eq(groupSessions.sessionType, sessionType));
     }
-    
+
     return await db
       .select()
       .from(groupSessions)
@@ -886,11 +988,11 @@ export class DatabaseStorage implements IStorage {
   async getPastGroupSessions(sessionType?: string, limit = 20): Promise<GroupSessionDB[]> {
     const now = new Date();
     const conditions = [sql`${groupSessions.scheduledDate} <= ${now}`];
-    
+
     if (sessionType) {
       conditions.push(eq(groupSessions.sessionType, sessionType));
     }
-    
+
     return await db
       .select()
       .from(groupSessions)
@@ -950,11 +1052,11 @@ export class DatabaseStorage implements IStorage {
 
   async getUserSessionRegistrations(userId: string, status?: string): Promise<SessionRegistrationDB[]> {
     const conditions = [eq(sessionRegistrations.userId, userId)];
-    
+
     if (status) {
       conditions.push(eq(sessionRegistrations.status, status));
     }
-    
+
     return await db
       .select()
       .from(sessionRegistrations)
@@ -1011,11 +1113,11 @@ export class DatabaseStorage implements IStorage {
 
   async getUserOneOnOneBookings(userId: string, status?: string): Promise<OneOnOneBookingDB[]> {
     const conditions = [eq(oneOnOneBookings.userId, userId)];
-    
+
     if (status) {
       conditions.push(eq(oneOnOneBookings.status, status));
     }
-    
+
     return await db
       .select()
       .from(oneOnOneBookings)
@@ -1026,11 +1128,11 @@ export class DatabaseStorage implements IStorage {
   async getUpcomingOneOnOneBookings(userId?: string): Promise<OneOnOneBookingDB[]> {
     const now = new Date();
     const conditions = [sql`${oneOnOneBookings.scheduledDate} > ${now}`];
-    
+
     if (userId) {
       conditions.push(eq(oneOnOneBookings.userId, userId));
     }
-    
+
     return await db
       .select()
       .from(oneOnOneBookings)
@@ -1076,11 +1178,11 @@ export class DatabaseStorage implements IStorage {
 
   async getFounderInsights(minTierRequired?: string, limit = 20): Promise<FounderInsightDB[]> {
     const conditions = [eq(founderInsights.isPublished, true)];
-    
+
     if (minTierRequired) {
       conditions.push(eq(founderInsights.minTierRequired, minTierRequired));
     }
-    
+
     return await db
       .select()
       .from(founderInsights)
@@ -1126,7 +1228,7 @@ export class DatabaseStorage implements IStorage {
 
   async markInsightAsViewed(insightId: string, userId: string): Promise<void> {
     const existing = await this.getInsightInteraction(insightId, userId);
-    
+
     if (existing) {
       await db
         .update(insightInteractions)
@@ -1145,7 +1247,7 @@ export class DatabaseStorage implements IStorage {
           viewedAt: new Date(),
         });
     }
-    
+
     // Increment view count on the insight
     await db
       .update(founderInsights)
@@ -1157,7 +1259,7 @@ export class DatabaseStorage implements IStorage {
 
   async toggleInsightLike(insightId: string, userId: string): Promise<boolean> {
     const existing = await this.getInsightInteraction(insightId, userId);
-    
+
     if (existing) {
       const newLikedState = !existing.hasLiked;
       await db
@@ -1167,17 +1269,17 @@ export class DatabaseStorage implements IStorage {
           likedAt: newLikedState ? new Date() : null,
         })
         .where(eq(insightInteractions.id, existing.id));
-      
+
       // Update like count
       await db
         .update(founderInsights)
         .set({
-          likeCount: newLikedState 
+          likeCount: newLikedState
             ? sql`${founderInsights.likeCount} + 1`
             : sql`GREATEST(${founderInsights.likeCount} - 1, 0)`,
         })
         .where(eq(founderInsights.id, insightId));
-      
+
       return newLikedState;
     } else {
       await db
@@ -1188,7 +1290,7 @@ export class DatabaseStorage implements IStorage {
           hasLiked: true,
           likedAt: new Date(),
         });
-      
+
       // Increment like count
       await db
         .update(founderInsights)
@@ -1196,7 +1298,7 @@ export class DatabaseStorage implements IStorage {
           likeCount: sql`${founderInsights.likeCount} + 1`,
         })
         .where(eq(founderInsights.id, insightId));
-      
+
       return true;
     }
   }
@@ -1302,7 +1404,7 @@ export class DatabaseStorage implements IStorage {
       ));
     return progress?.personalizationAnswers || null;
   }
-  
+
   // App Atelier usage tracking operations
   async getAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB | undefined> {
     const [usage] = await db
@@ -1311,7 +1413,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(appAtelierUsage.userId, userId));
     return usage;
   }
-  
+
   async incrementAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB> {
     const [usage] = await db
       .insert(appAtelierUsage)

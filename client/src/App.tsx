@@ -50,6 +50,7 @@ const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
+const CompanionPage = lazy(() => import("@/pages/CompanionPage")); // Import the new page
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -87,7 +88,7 @@ function Router() {
         <Route path="/forgot-password" component={ForgotPasswordPage} />
         <Route path="/reset-password" component={ResetPasswordPage} />
         <Route path="/ai-glow-up-program" component={GlowUpLandingPage} />
-        
+
         {/* Public routes - accessible to everyone */}
         <Route path="/blog" component={BlogPage} />
         <Route path="/daily" component={DailyNewsPage} />
@@ -102,25 +103,25 @@ function Router() {
         <Route path="/app-atelier" component={AppAtelierPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
-        
+
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
-        
+
         {/* MetaHers World - Internal Hub */}
         <Route path="/world" component={MetaHersWorldPage} />
-        
+
         {/* Space Detail Pages - Public */}
         <Route path="/spaces/:slug" component={SpaceDetailPage} />
-        
+
         {/* Experience Detail Pages - Public */}
         <Route path="/experiences/:slug" component={ExperienceDetailPage} />
-        
+
         {/* Progress Dashboard - Public but enhanced for auth users */}
         <Route path="/progress" component={ProgressDashboardPage} />
-        
+
         {/* AI Prompt Library - Public resource */}
         <Route path="/ai-prompts" component={AIPromptLibraryPage} />
-        
+
         {isAuthenticated && (
           <>
             <Route path="/home" component={HomePage} />
@@ -139,6 +140,8 @@ function Router() {
             <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
           </>
         )}
+        {/* Add the companion route here */}
+        <Route path="/companion" component={CompanionPage} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

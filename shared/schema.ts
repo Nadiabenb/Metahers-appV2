@@ -314,6 +314,56 @@ export const insertThoughtLeadershipPostSchema = createInsertSchema(thoughtLeade
 export type InsertThoughtLeadershipPost = z.infer<typeof insertThoughtLeadershipPostSchema>;
 export type ThoughtLeadershipPostDB = typeof thoughtLeadershipPosts.$inferSelect;
 
+// Career Companion (Tamagotchi-style game)
+export const companions = pgTable("companions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  name: varchar("name").notNull().default("Muse"),
+  stage: varchar("stage").notNull().default("seedling"), // seedling, sprout, blooming, flourishing, radiant
+  currentMood: varchar("current_mood").default("curious"),
+  
+  // Stats (0-100)
+  growth: integer("growth").default(0).notNull(),
+  inspiration: integer("inspiration").default(0).notNull(),
+  connection: integer("connection").default(0).notNull(),
+  mastery: integer("mastery").default(0).notNull(),
+  
+  // Engagement tracking
+  lastFed: timestamp("last_fed"), // Fed by journaling
+  lastPlayed: timestamp("last_played"), // Played with by completing experiences
+  lastSocialized: timestamp("last_socialized"), // Socialized by community activity
+  
+  // Unlocks
+  unlockedAccessories: jsonb("unlocked_accessories").$type<string[]>().default(sql`'[]'::jsonb`),
+  equippedAccessories: jsonb("equipped_accessories").$type<Record<string, string>>().default(sql`'{}'::jsonb`),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_companion_user").on(table.userId),
+]);
+
+export const insertCompanionSchema = createInsertSchema(companions).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertCompanion = z.infer<typeof insertCompanionSchema>;
+export type CompanionDB = typeof companions.$inferSelect;
+
+// Companion activity log
+export const companionActivities = pgTable("companion_activities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  activityType: varchar("activity_type").notNull(), // "journal", "learn", "socialize", "achievement"
+  statChanged: varchar("stat_changed").notNull(), // "growth", "inspiration", "connection", "mastery"
+  pointsGained: integer("points_gained").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_companion_activity_user").on(table.userId),
+  index("idx_companion_activity_created").on(table.createdAt),
+]);
+
+export const insertCompanionActivitySchema = createInsertSchema(companionActivities).omit({ id: true, createdAt: true });
+export type InsertCompanionActivity = z.infer<typeof insertCompanionActivitySchema>;
+export type CompanionActivityDB = typeof companionActivities.$inferSelect;
+
 // Thought Leadership Journey - Progress tracking table
 export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

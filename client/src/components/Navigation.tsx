@@ -8,6 +8,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
@@ -42,7 +43,7 @@ export function Navigation() {
         method: 'POST',
         credentials: 'include',
       });
-      
+
       if (response.ok) {
         window.location.href = "/";
       }
@@ -126,7 +127,7 @@ export function Navigation() {
     const Icon = item.icon;
     const isActive = location === item.path || 
       (item.path !== "/" && location.startsWith(item.path));
-    
+
     return (
       <button
         onClick={() => handleNavClick(item.path, item.label)}
@@ -141,12 +142,12 @@ export function Navigation() {
         <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg flex-shrink-0`}>
           <Icon className="w-5 h-5 text-white" />
         </div>
-        
+
         {/* Label */}
         <span className="font-medium text-foreground flex-1 text-left">
           {item.label}
         </span>
-        
+
         {item.pro && (
           <Badge variant="secondary" className="text-xs px-1.5 py-0">
             PRO
@@ -160,7 +161,7 @@ export function Navigation() {
     <nav className="sticky top-0 z-50 w-full backdrop-blur-2xl bg-background/70 border-b border-white/10 shadow-[0_8px_32px_rgba(181,101,216,0.15)]">
       {/* Gradient accent line */}
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--liquid-gold))]/50 to-transparent" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -354,6 +355,16 @@ export function Navigation() {
                         gradient: "from-slate-500 to-gray-600",
                       }} />
                     )}
+                    
+                    {/* Companion Link */}
+                    <Link href="/companion" className="hover-elevate">
+                      <a className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                        location === "/companion" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
+                      }`}>
+                        <Sparkles className="w-5 h-5" />
+                        <span>Companion</span>
+                      </a>
+                    </Link>
                   </div>
 
                   {/* Auth buttons at bottom */}

@@ -576,6 +576,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== CAREER COMPANION ROUTES =====
+  
+  // Get user's companion
+  app.get('/api/companion', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      let companion = await storage.getCompanion(userId);
+      
+      // Create companion if doesn't exist
+      if (!companion) {
+        companion = await storage.createCompanion({ userId });
+      }
+      
+      res.json(companion);
+    } catch (error) {
+      console.error('Error fetching companion:', error);
+      res.status(500).json({ message: 'Failed to fetch companion' });
+    }
+  });
+
+  // Feed companion (journal activity)
+  app.post('/api/companion/feed', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const companion = await storage.updateCompanionStats(userId, {
+        inspiration: 5,
+        activityType: 'journal',
+      });
+      res.json(companion);
+    } catch (error) {
+      console.error('Error feeding companion:', error);
+      res.status(500).json({ message: 'Failed to feed companion' });
+    }
+  });
+
+  // Play with companion (learning activity)
+  app.post('/api/companion/play', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const companion = await storage.updateCompanionStats(userId, {
+        growth: 5,
+        mastery: 3,
+        activityType: 'learn',
+      });
+      res.json(companion);
+    } catch (error) {
+      console.error('Error playing with companion:', error);
+      res.status(500).json({ message: 'Failed to play with companion' });
+    }
+  });
+
+  // Socialize companion (community activity)
+  app.post('/api/companion/socialize', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId!;
+      const companion = await storage.updateCompanionStats(userId, {
+        connection: 5,
+        activityType: 'socialize',
+      });
+      res.json(companion);
+    } catch (error) {
+      console.error('Error socializing companion:', error);
+      res.status(500).json({ message: 'Failed to socialize companion' });
+    }
+  });
+
   // ===== METAHERS WORLD SPACES ROUTES =====
   app.get('/api/spaces', async (_req: Request, res) => {
     try {
