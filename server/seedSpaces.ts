@@ -67,6 +67,15 @@ const METAHERS_SPACES = [
     color: "liquid-gold",
     sortOrder: 7,
   },
+  {
+    id: "founders-club",
+    name: "Founder's Club",
+    slug: "founders-club",
+    description: "The 12-week accelerator where women turn business ideas into reality using AI, no-code tools, and Web3 mindset. Personal mentorship, community support, and everything you need to launch.",
+    icon: "Crown",
+    color: "cyber-fuchsia",
+    sortOrder: 8,
+  },
 ];
 
 export async function seedSpaces() {

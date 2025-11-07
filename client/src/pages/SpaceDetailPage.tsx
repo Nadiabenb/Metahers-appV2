@@ -133,6 +133,12 @@ export default function SpaceDetailPage() {
     );
   }
 
+  // Special redirect for Founder's Club - goes to dedicated landing page
+  if (space.slug === "founders-club") {
+    navigate("/founders-sanctuary");
+    return null;
+  }
+
   if (experiencesError) {
     return (
       <div className="min-h-screen bg-background">
