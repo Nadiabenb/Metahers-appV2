@@ -1,9 +1,14 @@
-import { motion, useScroll, useTransform, useSpring, useReducedMotion, useMotionValue } from "framer-motion";
-import { Globe, Sparkles, Lock, ArrowRight, Zap, Star, CheckCircle2, Phone, MessageCircle, GraduationCap, Users } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
+import { Globe, Sparkles, Lock, ArrowRight, Zap, Star, CheckCircle2, Phone, MessageCircle, GraduationCap, Users, ChevronRight, Crown } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { SEO } from "@/components/SEO";
 import { ChatbotPopup } from "@/components/ChatbotPopup";
 import { trackCTAClick } from "@/lib/analytics";
+import { TiltCard } from "@/components/metaverse/TiltCard";
+import { GradientOrbs } from "@/components/metaverse/GradientOrbs";
+import { ParticleField } from "@/components/metaverse/ParticleField";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import { useRef, useState, useEffect } from "react";
@@ -11,242 +16,6 @@ import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
 
-// Particle component
-function Particle({ index, mousePosRef }: { index: number; mousePosRef: React.RefObject<{ x: number; y: number }> }) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const [mounted, setMounted] = useState(false);
-  const [animateTargets] = useState(() => ({
-    xOffset: (Math.random() - 0.5) * 100,
-    yOffset: (Math.random() - 0.5) * 100,
-    duration: 10 + Math.random() * 10
-  }));
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      x.set(Math.random() * window.innerWidth);
-      y.set(Math.random() * window.innerHeight);
-      setMounted(true);
-    }
-  }, [x, y]);
-
-  useEffect(() => {
-    if (!mounted || !mousePosRef.current) return;
-
-    const interval = setInterval(() => {
-      const mousePos = mousePosRef.current;
-      if (!mousePos) return;
-
-      const dx = mousePos.x - x.get();
-      const dy = mousePos.y - y.get();
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      if (distance < 200 && distance > 0) {
-        const force = (200 - distance) / 200;
-        x.set(x.get() - dx * force * 0.1);
-        y.set(y.get() - dy * force * 0.1);
-      }
-    }, 16);
-
-    return () => clearInterval(interval);
-  }, [mounted, mousePosRef, x, y]);
-
-  if (!mounted) return null;
-
-  const initialX = x.get();
-  const initialY = y.get();
-
-  return (
-    <motion.div
-      style={{ x, y }}
-      animate={{
-        x: [initialX, initialX + animateTargets.xOffset],
-        y: [initialY, initialY + animateTargets.yOffset],
-      }}
-      transition={{
-        duration: animateTargets.duration,
-        repeat: Infinity,
-        repeatType: "reverse",
-        ease: "easeInOut"
-      }}
-      className="absolute w-1 h-1 bg-[hsl(var(--liquid-gold))] rounded-full blur-sm opacity-60"
-    />
-  );
-}
-
-// World Orb Component with Luxury Interactive Features
-function WorldOrb({ 
-  world, 
-  index, 
-  mousePosRef, 
-  prefersReducedMotion 
-}: { 
-  world: { name: string; route: string; gradient: string; glowColor: string; description?: string }; 
-  index: number; 
-  mousePosRef: React.RefObject<{ x: number; y: number }>; 
-  prefersReducedMotion: boolean;
-}) {
-  const [isHovered, setIsHovered] = useState(false);
-  const [, setLocation] = useLocation();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const orbRef = useRef<HTMLDivElement>(null);
-
-  // Clean constellation layout with no overlaps
-  const orbitalPositions = [
-    { x: '15%', y: '15%', scale: 0.85, z: 20 },   // Web3 - top left
-    { x: '42.5%', y: '8%', scale: 0.9, z: 25 },   // NFT/Blockchain - top center-left
-    { x: '70%', y: '15%', scale: 0.85, z: 20 },   // AI - top right
-    { x: '85%', y: '50%', scale: 0.8, z: 15 },    // Metaverse - middle right
-    { x: '15%', y: '85%', scale: 0.8, z: 15 },    // Branding - bottom left
-    { x: '42.5%', y: '92%', scale: 0.9, z: 25 },  // Moms - bottom center
-    { x: '70%', y: '85%', scale: 0.85, z: 20 },   // App Atelier - bottom right
-    { x: '57.5%', y: '50%', scale: 0.95, z: 30 }, // Founder's Club - center
-  ];
-
-  const position = orbitalPositions[index] || { x: '50%', y: '50%', scale: 1, z: 20 };
-
-  // Enhanced magnetic pull with depth influence
-  useEffect(() => {
-    if (prefersReducedMotion || !mousePosRef.current || !orbRef.current) return;
-
-    const interval = setInterval(() => {
-      const mousePos = mousePosRef.current;
-      const orbEl = orbRef.current;
-      if (!mousePos || !orbEl) return;
-
-      const rect = orbEl.getBoundingClientRect();
-      const orbCenterX = rect.left + rect.width / 2;
-      const orbCenterY = rect.top + rect.height / 2;
-
-      const dx = mousePos.x - orbCenterX;
-      const dy = mousePos.y - orbCenterY;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-
-      // Stronger magnetic pull based on depth (z-index)
-      const depthFactor = position.z / 40;
-      if (distance < 500) {
-        const factor = (500 - distance) / 500;
-        x.set(dx * factor * 0.08 * depthFactor);
-        y.set(dy * factor * 0.08 * depthFactor);
-      } else {
-        x.set(0);
-        y.set(0);
-      }
-    }, 16);
-
-    return () => clearInterval(interval);
-  }, [prefersReducedMotion, mousePosRef, x, y, position.z]);
-
-  // Smaller, more refined orbs
-  const baseSize = 120;
-  const orbSize = baseSize * position.scale;
-
-  return (
-      <motion.div
-        ref={orbRef}
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true }}
-        transition={{ 
-          delay: index * 0.08, 
-          duration: 0.6,
-          ease: "easeOut"
-        }}
-        style={{ 
-          x, 
-          y,
-          left: position.x,
-          top: position.y,
-          zIndex: position.z
-        }}
-        className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer"
-      >
-
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.98 }}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onClick={() => setLocation(world.route)}
-          className="relative group focus:outline-none focus-visible:ring-4 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-full block"
-          style={{
-            willChange: 'transform',
-          }}
-          data-testid={`world-orb-${world.route.split('/').pop()}`}
-          role="button"
-          tabIndex={0}
-          aria-label={`Explore ${world.name} learning space`}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              setLocation(world.route);
-            }
-          }}
-        >
-          {/* Subtle Glow */}
-          <motion.div
-            className="absolute inset-0 rounded-full blur-xl -z-10"
-            style={{
-              background: `radial-gradient(circle, rgba(${world.glowColor}, ${isHovered ? '0.5' : '0.25'}) 0%, transparent 70%)`,
-            }}
-            animate={
-              prefersReducedMotion 
-                ? {} 
-                : {
-                    scale: isHovered ? 1.2 : 1,
-                    opacity: isHovered ? 0.6 : 0.3,
-                  }
-            }
-            transition={{
-              duration: 0.3,
-              ease: "easeOut"
-            }}
-          />
-
-          <div 
-            className="relative" 
-            style={{ width: orbSize, height: orbSize }}
-          >
-            {/* Main Orb - Clean & Refined */}
-            <div
-              className={`absolute inset-0 rounded-full bg-gradient-to-br ${world.gradient} backdrop-blur-sm overflow-hidden`}
-              style={{
-                boxShadow: `0 10px 30px rgba(${world.glowColor}, 0.3)`,
-                border: `1.5px solid rgba(255,255,255,${isHovered ? '0.4' : '0.25'})`,
-              }}
-            >
-              {/* Subtle glossy highlight */}
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-transparent"
-              />
-            </div>
-
-            {/* Orb Label */}
-            <div className="absolute inset-0 flex items-center justify-center p-3">
-              <span
-                className="text-center font-semibold text-white drop-shadow-lg z-10"
-                style={{
-                  textShadow: `0 2px 8px rgba(0,0,0,0.8)`,
-                  fontSize: world.name.length > 15 ? '0.7rem' : '0.85rem',
-                  lineHeight: '1.2'
-                }}
-              >
-                {world.name}
-              </span>
-            </div>
-
-            {/* Top rim light */}
-            <div
-              className="absolute top-0 left-0 right-0 rounded-t-full bg-gradient-to-b from-white/30 to-transparent pointer-events-none"
-              style={{ height: `${orbSize * 0.33}px` }}
-            />
-          </div>
-
-        </motion.div>
-      </motion.div>
-  );
-}
 
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -471,13 +240,16 @@ export default function LandingPage() {
 
       </div>
 
-      {/* 2. SIGNATURE PROGRAM - 8 World Orbs */}
-      <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/95">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[#B565D8]/10 via-[#E935C1]/5 to-transparent rounded-full blur-3xl" />
+      {/* 2. SIGNATURE PROGRAM GALLERY - 8 Learning Spaces */}
+      <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/95 overflow-hidden">
+        {/* Ambient Background Elements */}
+        <div className="absolute inset-0 pointer-events-none -z-10">
+          <GradientOrbs prefersReducedMotion={prefersReducedMotion || false} />
         </div>
+        <ParticleField count={30} prefersReducedMotion={prefersReducedMotion || false} />
 
         <div className="max-w-7xl mx-auto relative z-10">
+          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -489,41 +261,97 @@ export default function LandingPage() {
               Your Signature Program
             </h2>
             <p className="text-xl sm:text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
-              Forbes-meets-Vogue learning. Choose your space and start your transformation.
+              Eight curated learning spaces. Choose your path to mastery.
             </p>
           </motion.div>
 
-          {/* Desktop: Orbital Celestial Promenade Layout */}
-          <div className="hidden md:block relative w-full mx-auto" style={{ height: '800px', maxWidth: '1200px' }}>
-            {/* Cinematic stage with energy ribbons */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-              <div className="absolute top-0 left-1/4 w-1 h-full bg-gradient-to-b from-transparent via-[#B565D8]/20 to-transparent blur-sm" />
-              <div className="absolute top-0 right-1/4 w-1 h-full bg-gradient-to-b from-transparent via-[#E935C1]/20 to-transparent blur-sm" />
-              <div className="absolute left-0 top-1/2 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            </div>
-            
-            {worldOrbs.map((world, index) => (
-              <WorldOrb
-                key={world.name}
-                world={world}
-                index={index}
-                mousePosRef={mousePosRef}
-                prefersReducedMotion={prefersReducedMotion || false}
-              />
-            ))}
-          </div>
+          {/* Luxury Staggered Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+            {worldOrbs?.map((space, index) => {
+              // Define taglines for each space
+              const taglineMap: Record<string, string> = {
+                "Web3": "Decode the decentralized future",
+                "NFT/Blockchain/Crypto": "Master digital assets & blockchain",
+                "AI": "Build with artificial intelligence",
+                "Metaverse": "Navigate virtual worlds",
+                "Branding": "Craft your digital identity",
+                "Moms": "Tech mastery for modern mothers",
+                "App Atelier": "AI-assisted app building",
+                "Founder's Club": "12-week startup accelerator"
+              };
 
-          {/* Mobile: Vertical Carousel Stack */}
-          <div className="md:hidden grid grid-cols-2 gap-6 max-w-md mx-auto">
-            {worldOrbs.map((world, index) => (
-              <WorldOrb
-                key={world.name}
-                world={world}
-                index={index}
-                mousePosRef={mousePosRef}
-                prefersReducedMotion={prefersReducedMotion || false}
-              />
-            ))}
+              // Define premium badges for specific spaces
+              const badgeMap: Record<string, { text: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
+                "Founder's Club": { text: "12 Weeks", variant: "default" },
+                "App Atelier": { text: "AI-Powered", variant: "secondary" }
+              };
+
+              const tagline = taglineMap[space.name] || "Explore this learning space";
+              const badge = badgeMap[space.name];
+
+              return (
+                <TiltCard
+                  key={space.slug}
+                  delay={index * 0.1}
+                  prefersReducedMotion={prefersReducedMotion || false}
+                  className="group"
+                >
+                  <Card 
+                    className="h-full border-0 bg-gradient-to-br from-background/95 to-background/80 backdrop-blur-xl hover-elevate active-elevate-2 overflow-hidden cursor-pointer transition-all duration-300"
+                    onClick={() => window.location.href = space.route}
+                    data-testid={`space-card-${space.slug}`}
+                  >
+                    <div className="p-8 flex flex-col h-full min-h-[280px]">
+                      {/* Space Badge (if applicable) */}
+                      {badge && (
+                        <div className="mb-4">
+                          <Badge variant={badge.variant} className="text-xs font-semibold">
+                            {badge.text}
+                          </Badge>
+                        </div>
+                      )}
+
+                      {/* Space Icon/Emoji Placeholder */}
+                      <div className="mb-6 flex items-center justify-between">
+                        <div 
+                          className="w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center text-2xl border border-white/10"
+                          style={{
+                            background: `linear-gradient(135deg, hsl(var(--${space.name === "AI" ? "cyber-fuchsia" : space.name === "Web3" ? "hyper-violet" : space.name === "Metaverse" ? "magenta-quartz" : space.name === "Branding" ? "aurora-teal" : "liquid-gold"})) 0%, hsl(var(--${space.name === "AI" ? "aurora-teal" : space.name === "Web3" ? "cyber-fuchsia" : space.name === "Metaverse" ? "hyper-violet" : space.name === "Branding" ? "liquid-gold" : "magenta-quartz"})) 100%)`
+                          }}
+                        >
+                          {space.name === "AI" && "🤖"}
+                          {space.name === "Web3" && "🌐"}
+                          {space.name === "NFT/Blockchain/Crypto" && "💎"}
+                          {space.name === "Metaverse" && "🔮"}
+                          {space.name === "Branding" && "✨"}
+                          {space.name === "Moms" && "💝"}
+                          {space.name === "App Atelier" && "🎨"}
+                          {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-white" />}
+                        </div>
+                        
+                        <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" />
+                      </div>
+
+                      {/* Space Title */}
+                      <h3 className="font-cormorant text-3xl font-bold mb-3 text-foreground group-hover:text-[hsl(var(--liquid-gold))] transition-colors">
+                        {space.name}
+                      </h3>
+
+                      {/* Space Tagline */}
+                      <p className="text-muted-foreground leading-relaxed font-light flex-1">
+                        {tagline}
+                      </p>
+
+                      {/* CTA indicator */}
+                      <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
+                        <span>Explore space</span>
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </Card>
+                </TiltCard>
+              );
+            })}
           </div>
         </div>
       </div>
