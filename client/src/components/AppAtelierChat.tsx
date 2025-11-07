@@ -47,21 +47,23 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Fetch usage stats
+  const fetchUsage = async () => {
+    try {
+      const response = await fetch('/api/app-atelier/usage', {
+        credentials: 'include'
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUsage(data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch usage:", error);
+    }
+  };
+
   // Fetch usage stats on mount
   useEffect(() => {
-    const fetchUsage = async () => {
-      try {
-        const response = await fetch('/api/app-atelier/usage', {
-          credentials: 'include'
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setUsage(data);
-        }
-      } catch (error) {
-        console.error("Failed to fetch usage:", error);
-      }
-    };
     fetchUsage();
   }, []);
 
@@ -96,14 +98,8 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
         // Add assistant response
         setMessages(prev => [...prev, { role: "assistant", content: data.response }]);
         
-        // Update usage stats
-        if (usage && !usage.hasFullAccess) {
-          setUsage(prev => prev ? {
-            ...prev,
-            messageCount: prev.messageCount + 1,
-            remainingMessages: prev.remainingMessages !== null ? prev.remainingMessages - 1 : null
-          } : null);
-        }
+        // Re-fetch usage stats to keep perfectly in sync
+        await fetchUsage();
       }
     } catch (error: any) {
       console.error("Chat error:", error);
@@ -284,13 +280,13 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ask me anything about building your app..."
-                  disabled={isLoading}
+                  disabled={isLoading || showUpgradePrompt}
                   className="flex-1 bg-white/5 border-white/20 focus:border-[hsl(var(--cyber-fuchsia))] transition-colors"
                   data-testid="input-chat-message"
                 />
                 <Button
                   onClick={handleSend}
-                  disabled={!input.trim() || isLoading}
+                  disabled={!input.trim() || isLoading || showUpgradePrompt}
                   className="bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] hover:opacity-90 transition-opacity"
                   data-testid="button-send-message"
                 >
