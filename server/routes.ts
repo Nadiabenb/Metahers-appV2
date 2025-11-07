@@ -2675,6 +2675,26 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           color: 'hyper-violet',
           sortOrder: 6,
           isActive: true
+        },
+        {
+          id: 'app-atelier',
+          name: 'App Atelier',
+          slug: 'app-atelier',
+          description: 'Build apps with AI assistance. Turn your ideas into reality with AI-powered development tools and no-code solutions.',
+          icon: 'Code',
+          color: 'aurora-teal',
+          sortOrder: 7,
+          isActive: true
+        },
+        {
+          id: 'founders-club',
+          name: 'Founder\'s Club',
+          slug: 'founders-club',
+          description: 'The 12-week accelerator where women turn business ideas into reality using AI, no-code tools, and Web3 mindset. Personal mentorship, community support, and everything you need to launch.',
+          icon: 'Crown',
+          color: 'cyber-fuchsia',
+          sortOrder: 8,
+          isActive: true
         }
       ];
 
