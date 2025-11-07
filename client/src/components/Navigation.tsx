@@ -23,6 +23,7 @@ export function Navigation() {
       { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, gradient: "from-pink-500 to-rose-600", glow: "233, 53, 193", pro: true },
     ],
     "Learning": [
+      { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, gradient: "from-pink-500 to-purple-600", glow: "233, 53, 193", featured: true },
       { path: "/app-atelier", label: "App Atelier", icon: Code2, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
       { path: "/discover", label: "Discover", icon: Compass, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216" },
       { path: "/rituals", label: "Rituals", icon: Zap, gradient: "from-amber-500 to-orange-600", glow: "255, 215, 0" },

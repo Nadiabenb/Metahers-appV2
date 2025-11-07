@@ -1982,3 +1982,93 @@ export function matchRitual(answers: Record<string, string>): string {
 export function getRitualBySlug(slug: string): Ritual | undefined {
   return rituals.find(r => r.slug === slug);
 }
+
+// ===== FOUNDER'S SANCTUARY ACCELERATOR =====
+
+// Accelerator cohorts table
+export const acceleratorCohorts = pgTable("accelerator_cohorts", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: varchar("name").notNull(), // e.g., "Winter 2026"
+  startDate: timestamp("start_date").notNull(),
+  endDate: timestamp("end_date").notNull(),
+  applicationDeadline: timestamp("application_deadline").notNull(),
+  maxParticipants: integer("max_participants").default(100).notNull(),
+  currentParticipants: integer("current_participants").default(0).notNull(),
+  price: integer("price").default(990).notNull(), // in dollars
+  status: varchar("status").default("upcoming").notNull(), // upcoming, active, completed
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertAcceleratorCohortSchema = createInsertSchema(acceleratorCohorts).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertAcceleratorCohort = z.infer<typeof insertAcceleratorCohortSchema>;
+export type AcceleratorCohortDB = typeof acceleratorCohorts.$inferSelect;
+
+// Accelerator milestones table
+export const acceleratorMilestones = pgTable("accelerator_milestones", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: varchar("title").notNull(),
+  description: text("description").notNull(),
+  stage: varchar("stage").notNull(), // clarity, creation, momentum
+  weekStart: integer("week_start").notNull(),
+  weekEnd: integer("week_end").notNull(),
+  order: integer("order").notNull(), // 1-11
+  resources: jsonb("resources").$type<{ title: string; url: string; type: string }[]>().default(sql`'[]'::jsonb`),
+  requiredFor: jsonb("required_for").$type<string[]>().default(sql`'[]'::jsonb`), // milestone IDs that depend on this one
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertAcceleratorMilestoneSchema = createInsertSchema(acceleratorMilestones).omit({ id: true, createdAt: true });
+export type InsertAcceleratorMilestone = z.infer<typeof insertAcceleratorMilestoneSchema>;
+export type AcceleratorMilestoneDB = typeof acceleratorMilestones.$inferSelect;
+
+// Accelerator enrollments table
+export const acceleratorEnrollments = pgTable("accelerator_enrollments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  cohortId: varchar("cohort_id").notNull().references(() => acceleratorCohorts.id, { onDelete: "cascade" }),
+  status: varchar("status").default("applied").notNull(), // applied, accepted, active, completed, withdrawn
+  applicationData: jsonb("application_data").$type<{
+    businessIdea?: string;
+    targetCustomer?: string;
+    weeklyCommitment?: number;
+    experience?: string;
+    goals?: string;
+  }>(),
+  paidAt: timestamp("paid_at"),
+  completedAt: timestamp("completed_at"),
+  milestonesCompleted: integer("milestones_completed").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_enrollment_user").on(table.userId),
+  index("idx_enrollment_cohort").on(table.cohortId),
+  uniqueIndex("idx_enrollment_user_cohort_unique").on(table.userId, table.cohortId),
+]);
+
+export const insertAcceleratorEnrollmentSchema = createInsertSchema(acceleratorEnrollments).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertAcceleratorEnrollment = z.infer<typeof insertAcceleratorEnrollmentSchema>;
+export type AcceleratorEnrollmentDB = typeof acceleratorEnrollments.$inferSelect;
+
+// Accelerator milestone progress table
+export const acceleratorMilestoneProgress = pgTable("accelerator_milestone_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  enrollmentId: varchar("enrollment_id").notNull().references(() => acceleratorEnrollments.id, { onDelete: "cascade" }),
+  milestoneId: varchar("milestone_id").notNull().references(() => acceleratorMilestones.id, { onDelete: "cascade" }),
+  status: varchar("status").default("not_started").notNull(), // not_started, in_progress, completed, blocked
+  progress: integer("progress").default(0).notNull(), // 0-100
+  notes: text("notes"),
+  completedAt: timestamp("completed_at"),
+  startedAt: timestamp("started_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_milestone_progress_enrollment").on(table.enrollmentId),
+  index("idx_milestone_progress_milestone").on(table.milestoneId),
+  uniqueIndex("idx_milestone_progress_enrollment_milestone_unique").on(table.enrollmentId, table.milestoneId),
+]);
+
+export const insertAcceleratorMilestoneProgressSchema = createInsertSchema(acceleratorMilestoneProgress).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertAcceleratorMilestoneProgress = z.infer<typeof insertAcceleratorMilestoneProgressSchema>;
+export type AcceleratorMilestoneProgressDB = typeof acceleratorMilestoneProgress.$inferSelect;

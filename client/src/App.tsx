@@ -50,7 +50,8 @@ const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
-const CompanionPage = lazy(() => import("@/pages/CompanionPage")); // Import the new page
+const CompanionPage = lazy(() => import("@/pages/CompanionPage"));
+const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -101,6 +102,7 @@ function Router() {
         <Route path="/executive" component={ExecutivePage} />
         <Route path="/ai-builder" component={AIBuilderRetreatPage} />
         <Route path="/app-atelier" component={AppAtelierPage} />
+        <Route path="/founders-sanctuary" component={FoundersSanctuaryPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
 
