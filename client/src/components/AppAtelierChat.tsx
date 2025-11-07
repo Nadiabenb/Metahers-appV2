@@ -1,13 +1,23 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Sparkles, X, Minimize2, Maximize2 } from "lucide-react";
+import { Send, Sparkles, X, Minimize2, Maximize2, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { apiRequest } from "@/lib/queryClient";
+import { Link } from "wouter";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+}
+
+interface UsageStats {
+  messageCount: number;
+  messageLimit: number | null;
+  hasFullAccess: boolean;
+  tier: string;
+  remainingMessages: number | null;
 }
 
 interface AppAtelierChatProps {
@@ -28,12 +38,32 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [usage, setUsage] = useState<UsageStats | null>(null);
+  const [showUpgradePrompt, setShowUpgradePrompt] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  // Fetch usage stats on mount
+  useEffect(() => {
+    const fetchUsage = async () => {
+      try {
+        const response = await fetch('/api/app-atelier/usage', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUsage(data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch usage:", error);
+      }
+    };
+    fetchUsage();
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -58,14 +88,36 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
 
       const data = await response.json();
       
-      // Add assistant response
-      setMessages(prev => [...prev, { role: "assistant", content: data.response }]);
-    } catch (error) {
+      if (data.limitReached) {
+        // Show upgrade prompt if limit reached
+        setShowUpgradePrompt(true);
+        setMessages(prev => prev.slice(0, -1)); // Remove user message
+      } else {
+        // Add assistant response
+        setMessages(prev => [...prev, { role: "assistant", content: data.response }]);
+        
+        // Update usage stats
+        if (usage && !usage.hasFullAccess) {
+          setUsage(prev => prev ? {
+            ...prev,
+            messageCount: prev.messageCount + 1,
+            remainingMessages: prev.remainingMessages !== null ? prev.remainingMessages - 1 : null
+          } : null);
+        }
+      }
+    } catch (error: any) {
       console.error("Chat error:", error);
-      setMessages(prev => [
-        ...prev,
-        { role: "assistant", content: "Oops! I had trouble responding. Can you try that again?" }
-      ]);
+      
+      // Check if it's a 403 (limit reached)
+      if (error.status === 403) {
+        setShowUpgradePrompt(true);
+        setMessages(prev => prev.slice(0, -1)); // Remove user message
+      } else {
+        setMessages(prev => [
+          ...prev,
+          { role: "assistant", content: "Oops! I had trouble responding. Can you try that again?" }
+        ]);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -110,6 +162,25 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            {usage && !usage.hasFullAccess && usage.remainingMessages !== null && (
+              <Badge 
+                variant="outline" 
+                className="bg-[hsl(var(--cyber-fuchsia))]/10 border-[hsl(var(--cyber-fuchsia))]/30 text-foreground"
+                data-testid="badge-remaining-messages"
+              >
+                {usage.remainingMessages} {usage.remainingMessages === 1 ? 'message' : 'messages'} left
+              </Badge>
+            )}
+            {usage && usage.hasFullAccess && (
+              <Badge 
+                variant="outline" 
+                className="bg-gradient-to-r from-[hsl(var(--liquid-gold))]/20 to-[hsl(var(--cyber-fuchsia))]/20 border-[hsl(var(--liquid-gold))]/30 text-foreground"
+                data-testid="badge-unlimited"
+              >
+                <Crown className="w-3 h-3 mr-1" />
+                Unlimited
+              </Badge>
+            )}
             <Button
               onClick={() => setIsMinimized(!isMinimized)}
               variant="ghost"
@@ -230,6 +301,63 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
           </>
         )}
       </motion.div>
+      
+      {/* Upgrade Prompt */}
+      <AnimatePresence>
+        {showUpgradePrompt && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowUpgradePrompt(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="max-w-md w-full backdrop-blur-2xl bg-background/95 border-2 border-[hsl(var(--cyber-fuchsia))]/30 rounded-3xl p-8 shadow-2xl"
+            >
+              <div className="text-center space-y-6">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] flex items-center justify-center mx-auto shadow-lg">
+                  <Crown className="w-8 h-8 text-white" />
+                </div>
+                
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-serif font-bold bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] bg-clip-text text-transparent">
+                    Unlock Unlimited Coaching
+                  </h3>
+                  <p className="text-foreground/70">
+                    You've used all your free messages! Join our Inner Circle or Executive Intensive to get unlimited AI coaching, personalized guidance, and exclusive access to premium features.
+                  </p>
+                </div>
+
+                <div className="space-y-3">
+                  <Link href="/upgrade">
+                    <Button 
+                      className="w-full bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] hover:opacity-90 transition-opacity"
+                      data-testid="button-upgrade-now"
+                    >
+                      <Crown className="w-4 h-4 mr-2" />
+                      Upgrade to Inner Circle
+                    </Button>
+                  </Link>
+                  
+                  <Button 
+                    variant="outline" 
+                    className="w-full"
+                    onClick={() => setShowUpgradePrompt(false)}
+                    data-testid="button-close-upgrade-prompt"
+                  >
+                    Maybe Later
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
