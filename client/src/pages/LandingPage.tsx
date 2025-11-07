@@ -335,7 +335,9 @@ export default function LandingPage() {
       "Metaverse": { gradient: "from-pink-500 to-rose-600", glowColor: "233, 53, 193" },
       "NFT/Blockchain/Crypto": { gradient: "from-amber-500 to-orange-600", glowColor: "255, 215, 0" },
       "Moms": { gradient: "from-violet-500 to-purple-600", glowColor: "181, 101, 216" },
-      "AI-Powered Branding": { gradient: "from-teal-500 to-cyan-600", glowColor: "0, 217, 255" },
+      "Branding": { gradient: "from-teal-500 to-cyan-600", glowColor: "0, 217, 255" },
+      "NFTs": { gradient: "from-yellow-500 to-amber-600", glowColor: "255, 215, 0" },
+      "Founder's Club": { gradient: "from-pink-500 to-purple-600", glowColor: "233, 53, 193" },
     };
 
     const colors = colorMap[space.name] || { gradient: "from-purple-600 to-pink-600", glowColor: "181, 101, 216" };
@@ -352,7 +354,7 @@ export default function LandingPage() {
     <div ref={containerRef} className="relative min-h-screen bg-background overflow-x-hidden">
       <SEO
         title="Master AI & Web3 With Personal Mentorship - MetaHers Mind Spa"
-        description="Luxury learning for women solopreneurs, moms & creatives. Six personalized learning spaces with AI coaching and real human support from founder Nadia. Start FREE—no credit card required."
+        description="Luxury learning for women solopreneurs, moms & creatives. Eight personalized learning spaces with AI coaching and real human support from founder Nadia. Start FREE—no credit card required."
         keywords="AI for women solopreneurs, AI for busy moms, AI learning for women, women in AI, AI education for women, Web3 for women, personal mentorship, human-powered AI, luxury learning platform"
         url="https://metahers.ai"
         schema={schema}
@@ -407,7 +409,7 @@ export default function LandingPage() {
                 textShadow: '0 2px 20px rgba(0,0,0,0.8)',
               }}
             >
-              Six learning spaces. 36 personalized rituals. Real human support when you need it.
+              Eight learning spaces. Personalized rituals. Real human support when you need it.
             </motion.p>
 
             <motion.div
@@ -466,7 +468,7 @@ export default function LandingPage() {
 
       </div>
 
-      {/* 2. SIGNATURE PROGRAM - 6 World Orbs */}
+      {/* 2. SIGNATURE PROGRAM - 8 World Orbs */}
       <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/95">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[#B565D8]/10 via-[#E935C1]/5 to-transparent rounded-full blur-3xl" />
