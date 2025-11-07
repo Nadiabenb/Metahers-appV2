@@ -728,18 +728,18 @@ export class DatabaseStorage implements IStorage {
 
   async getAllQuizSubmissions(): Promise<QuizSubmissionDB[]> {
     return db.select().from(quizSubmissions).orderBy(desc(quizSubmissions.createdAt));
-  },
+  }
 
   // ===== COMPANION METHODS =====
   async getCompanion(userId: string): Promise<CompanionDB | undefined> {
     const result = await db.select().from(companions).where(eq(companions.userId, userId)).limit(1);
     return result[0];
-  },
+  }
 
   async createCompanion(data: InsertCompanion): Promise<CompanionDB> {
-    const result = await db.insert(companions).values(data).returning();
-    return result[0];
-  },
+    const [result] = await db.insert(companions).values(data).returning();
+    return result;
+  }
 
   async updateCompanionStats(
     userId: string,
@@ -802,7 +802,7 @@ export class DatabaseStorage implements IStorage {
     });
 
     return result[0];
-  },
+  }
 
 
   async updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB> {
