@@ -124,6 +124,80 @@ interface BrandProfile {
   currentGoals?: string;
 }
 
+// App Atelier AI Coach
+interface AppAtelierMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+export async function chatWithAppAtelierCoach(
+  message: string,
+  conversationHistory: AppAtelierMessage[] = [],
+  userProfile?: {
+    name?: string;
+    experience?: string; // "beginner" | "intermediate" | "advanced"
+    goals?: string;
+  }
+): Promise<string> {
+  const profileContext = userProfile 
+    ? `\n\nUser Context:
+- Name: ${userProfile.name || 'Not provided'}
+- Coding Experience: ${userProfile.experience || 'Not specified'}
+- Goals: ${userProfile.goals || 'Build their own app'}`
+    : '';
+
+  const systemPrompt = `You are an encouraging AI coding coach at MetaHers Mind Spa's App Atelier.
+
+Your role is to help women founders and solopreneurs build real apps using AI-assisted "vibe coding."
+
+YOUR PERSONALITY:
+- Warm, supportive, and empowering (Forbes-meets-Vogue energy)
+- You celebrate their wins and normalize challenges
+- You're practical - focus on shipping, not perfectionism
+- You make coding feel accessible, not intimidating
+- You use metaphors from fashion, design, and entrepreneurship
+
+YOUR EXPERTISE:
+- AI-assisted coding with Claude, ChatGPT, v0, Cursor, Replit Agent
+- Full-stack JavaScript/TypeScript (React, Node, Express, PostgreSQL)
+- Deployment and production best practices
+- UI/UX design for founders
+- Turning business ideas into working prototypes
+
+HOW YOU HELP:
+1. Assess their experience level and goals
+2. Break down complex concepts into simple steps
+3. Suggest specific prompts they can use with AI coding tools
+4. Debug issues with patience and clear explanations
+5. Recommend what to build next based on their goals
+6. Keep responses concise (2-4 sentences) unless explaining code
+
+EXAMPLES OF YOUR VIBE:
+- "Think of components like fashion pieces you mix and match - each does one thing beautifully!"
+- "Let's start with your landing page - your app's storefront. What vibe are you going for?"
+- "That error just means the code needs to know WHERE to find that file. Like giving it GPS coordinates!"
+
+Remember: They're building REAL businesses. Focus on practical wins, not theoretical perfection.${profileContext}`;
+
+  const messages: any[] = [
+    { role: "system", content: systemPrompt },
+    ...conversationHistory.map(msg => ({
+      role: msg.role,
+      content: msg.content
+    })),
+    { role: "user", content: message }
+  ];
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
+    messages,
+    temperature: 0.8,
+    max_tokens: 500,
+  });
+
+  return response.choices[0].message.content?.trim() || "I'm here to help you build your app! What would you like to create?";
+}
+
 export async function generateThoughtLeadershipContent(
   dayNumber: number,
   brandProfile: BrandProfile,

@@ -7,7 +7,7 @@ import { sanitizeText, sanitizeHTML, sanitizeObject } from "./security";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import OpenAI from "openai";
-import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent } from "./aiService";
+import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent, chatWithAppAtelierCoach } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
@@ -1183,6 +1183,28 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     } catch (error) {
       console.error("Error fetching journal entries:", error);
       res.status(500).json({ message: "Failed to fetch journal entries" });
+    }
+  });
+
+  // ===== APP ATELIER AI COACH ROUTES =====
+  app.post('/api/app-atelier/chat', async (req: Request, res) => {
+    try {
+      const { message, conversationHistory, userProfile } = req.body;
+      
+      if (!message) {
+        return res.status(400).json({ message: "Message required" });
+      }
+
+      const response = await chatWithAppAtelierCoach(
+        message,
+        conversationHistory || [],
+        userProfile
+      );
+      
+      res.json({ response });
+    } catch (error) {
+      console.error("Error in App Atelier chat:", error);
+      res.status(500).json({ message: "Failed to get coach response" });
     }
   });
 

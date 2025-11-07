@@ -49,6 +49,7 @@ const SpaceDetailPage = lazy(() => import("@/pages/SpaceDetailPage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
+const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -98,6 +99,7 @@ function Router() {
         <Route path="/vip-cohort" component={VIPCohortPage} />
         <Route path="/executive" component={ExecutivePage} />
         <Route path="/ai-builder" component={AIBuilderRetreatPage} />
+        <Route path="/app-atelier" component={AppAtelierPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
         
