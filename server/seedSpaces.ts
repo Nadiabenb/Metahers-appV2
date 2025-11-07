@@ -59,12 +59,12 @@ const METAHERS_SPACES = [
     sortOrder: 6,
   },
   {
-    id: "nfts",
-    name: "NFTs",
-    slug: "nfts",
-    description: "Create, buy, sell, and leverage NFTs. Understand digital ownership and how to build value in the NFT economy.",
-    icon: "Image",
-    color: "liquid-gold",
+    id: "app-atelier",
+    name: "App Atelier",
+    slug: "app-atelier",
+    description: "Build apps with AI assistance. Turn your ideas into reality with AI-powered development tools and no-code solutions.",
+    icon: "Code",
+    color: "aurora-teal",
     sortOrder: 7,
   },
   {

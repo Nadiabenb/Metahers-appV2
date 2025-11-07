@@ -331,13 +331,13 @@ export default function LandingPage() {
   const worldOrbs = spaces?.map((space) => {
     const colorMap: Record<string, { gradient: string; glowColor: string }> = {
       "Web3": { gradient: "from-purple-600 to-pink-600", glowColor: "181, 101, 216" },
+      "NFT/Blockchain/Crypto": { gradient: "from-amber-500 to-orange-600", glowColor: "255, 215, 0" },
       "AI": { gradient: "from-cyan-500 to-blue-600", glowColor: "0, 217, 255" },
       "Metaverse": { gradient: "from-pink-500 to-rose-600", glowColor: "233, 53, 193" },
-      "NFT/Blockchain/Crypto": { gradient: "from-amber-500 to-orange-600", glowColor: "255, 215, 0" },
-      "Moms": { gradient: "from-violet-500 to-purple-600", glowColor: "181, 101, 216" },
       "Branding": { gradient: "from-teal-500 to-cyan-600", glowColor: "0, 217, 255" },
-      "NFTs": { gradient: "from-yellow-500 to-amber-600", glowColor: "255, 215, 0" },
-      "Founder's Club": { gradient: "from-pink-500 to-purple-600", glowColor: "233, 53, 193" },
+      "Moms": { gradient: "from-violet-500 to-purple-600", glowColor: "181, 101, 216" },
+      "App Atelier": { gradient: "from-emerald-500 to-teal-600", glowColor: "16, 185, 129" },
+      "Founder's Club": { gradient: "from-fuchsia-500 to-purple-600", glowColor: "217, 70, 239" },
     };
 
     const colors = colorMap[space.name] || { gradient: "from-purple-600 to-pink-600", glowColor: "181, 101, 216" };
