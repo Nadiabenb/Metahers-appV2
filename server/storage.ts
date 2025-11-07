@@ -211,6 +211,8 @@ export interface IStorage {
 
   // MetaHers World - Experience Progress operations
   getAllExperienceProgress(userId: string): Promise<ExperienceProgressDB[]>;
+  getExperienceProgress(userId: string, experienceId: string): Promise<ExperienceProgressDB | undefined>;
+  upsertExperienceProgress(progress: InsertExperienceProgress): Promise<ExperienceProgressDB>;
   savePersonalizationAnswers(userId: string, experienceId: string, answers: Record<string, any>): Promise<ExperienceProgressDB>;
   getPersonalizationAnswers(userId: string, experienceId: string): Promise<Record<string, any> | null>;
 
@@ -1371,6 +1373,44 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(experienceProgress)
       .where(eq(experienceProgress.userId, userId));
+    return progress;
+  }
+
+  async getExperienceProgress(userId: string, experienceId: string): Promise<ExperienceProgressDB | undefined> {
+    const [progress] = await db
+      .select()
+      .from(experienceProgress)
+      .where(and(
+        eq(experienceProgress.userId, userId),
+        eq(experienceProgress.experienceId, experienceId)
+      ));
+    return progress;
+  }
+
+  async upsertExperienceProgress(progressData: InsertExperienceProgress): Promise<ExperienceProgressDB> {
+    const [progress] = await db
+      .insert(experienceProgress)
+      .values({
+        ...progressData,
+        completedSections: sql`${JSON.stringify(progressData.completedSections)}::jsonb`,
+        milestonesAchieved: progressData.milestonesAchieved 
+          ? sql`${JSON.stringify(progressData.milestonesAchieved)}::jsonb`
+          : sql`'[]'::jsonb`,
+      })
+      .onConflictDoUpdate({
+        target: [experienceProgress.userId, experienceProgress.experienceId],
+        set: {
+          completedSections: sql`${JSON.stringify(progressData.completedSections)}::jsonb`,
+          confidenceScore: progressData.confidenceScore,
+          businessImpact: progressData.businessImpact,
+          milestonesAchieved: progressData.milestonesAchieved 
+            ? sql`${JSON.stringify(progressData.milestonesAchieved)}::jsonb`
+            : sql`'[]'::jsonb`,
+          completedAt: progressData.completedAt,
+          lastUpdated: new Date(),
+        },
+      })
+      .returning();
     return progress;
   }
 

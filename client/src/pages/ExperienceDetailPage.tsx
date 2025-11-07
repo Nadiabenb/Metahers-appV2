@@ -11,6 +11,8 @@ import PersonalizationQuestionsModal from "@/components/PersonalizationQuestions
 import InteractiveQuiz from "@/components/InteractiveQuiz";
 import DownloadableResources from "@/components/DownloadableResources";
 import AchievementShowcase from "@/components/AchievementShowcase";
+import ExperienceLearningPlayer from "@/components/learning/ExperienceLearningPlayer";
+import type { TransformationalExperienceDB } from "@shared/schema";
 
 type Experience = {
   id: string;
@@ -46,9 +48,10 @@ export default function ExperienceDetailPage() {
   const { user } = useAuth();
   const [showPersonalization, setShowPersonalization] = useState(false);
   const [personalizationCompleted, setPersonalizationCompleted] = useState(false);
+  const [showLearningPlayer, setShowLearningPlayer] = useState(false);
 
   // Fetch experience data
-  const { data: experience, isLoading, error } = useQuery<Experience>({
+  const { data: experience, isLoading, error } = useQuery<TransformationalExperienceDB>({
     queryKey: [`/api/experiences/${slug}`],
   });
 
@@ -301,7 +304,13 @@ export default function ExperienceDetailPage() {
               <Button
                 size="lg"
                 className={`bg-gradient-to-r ${gradientClass} text-white`}
-                onClick={() => setShowPersonalization(true)}
+                onClick={() => {
+                  if (experience.personalizationEnabled) {
+                    setShowPersonalization(true);
+                  } else {
+                    setShowLearningPlayer(true);
+                  }
+                }}
                 data-testid="button-start-experience"
               >
                 <Play className="w-5 h-5 mr-2" />
@@ -411,6 +420,7 @@ export default function ExperienceDetailPage() {
           onComplete={() => {
             setShowPersonalization(false);
             setPersonalizationCompleted(true);
+            setShowLearningPlayer(true);
           }}
           experienceId={experience.id}
           experienceTitle={experience.title}
@@ -441,6 +451,20 @@ export default function ExperienceDetailPage() {
             },
           ]}
         />
+      )}
+
+      {/* Learning Player */}
+      {showLearningPlayer && experience && space && (
+        <div className="fixed inset-0 z-50 bg-background">
+          <ExperienceLearningPlayer
+            experience={experience}
+            spaceColor={space.color}
+            onExit={() => {
+              setShowLearningPlayer(false);
+              setPersonalizationCompleted(true);
+            }}
+          />
+        </div>
       )}
     </div>
   );

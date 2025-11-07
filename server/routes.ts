@@ -774,6 +774,112 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // ===== EXPERIENCE PROGRESS ROUTES =====
+  app.get('/api/experiences/:experienceId/progress', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { experienceId } = req.params;
+
+      const progress = await storage.getExperienceProgress(userId, experienceId);
+      
+      if (!progress) {
+        return res.json({ 
+          experienceId, 
+          completedSections: [], 
+          confidenceScore: null,
+          startedAt: new Date().toISOString() 
+        });
+      }
+
+      res.json(progress);
+    } catch (error) {
+      console.error("Error fetching experience progress:", error);
+      res.status(500).json({ message: "Failed to fetch experience progress" });
+    }
+  });
+
+  app.post('/api/experiences/:experienceId/progress', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { experienceId } = req.params;
+      const { completedSections, confidenceScore, businessImpact, milestonesAchieved } = req.body;
+
+      // Get existing progress
+      const existingProgress = await storage.getExperienceProgress(userId, experienceId);
+
+      // Determine if experience is now complete
+      const experience = await storage.getExperienceById(experienceId);
+      const totalSections = experience?.content?.sections?.length || 0;
+      const isComplete = completedSections && completedSections.length === totalSections;
+
+      const progress = await storage.upsertExperienceProgress({
+        userId,
+        experienceId,
+        completedSections: completedSections !== undefined ? completedSections : existingProgress?.completedSections || [],
+        confidenceScore: confidenceScore !== undefined ? confidenceScore : existingProgress?.confidenceScore,
+        businessImpact: businessImpact !== undefined ? businessImpact : existingProgress?.businessImpact,
+        milestonesAchieved: milestonesAchieved !== undefined ? milestonesAchieved : existingProgress?.milestonesAchieved || [],
+        completedAt: isComplete ? new Date() : existingProgress?.completedAt,
+      });
+
+      res.json(progress);
+    } catch (error) {
+      console.error("Error saving experience progress:", error);
+      res.status(500).json({ message: "Failed to save experience progress" });
+    }
+  });
+
+  // ===== AI COACHING ROUTE =====
+  app.post('/api/ai/coach', isAuthenticated, async (req: Request, res) => {
+    try {
+      const { experienceTitle, sectionTitle, sectionContent, messages } = req.body;
+
+      if (!messages || !Array.isArray(messages)) {
+        return res.status(400).json({ message: "Messages are required" });
+      }
+
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+      const systemPrompt = `You are an encouraging AI learning coach for MetaHers Mind Spa, helping women solopreneurs learn AI and Web3 concepts.
+
+Current Learning Context:
+- Experience: ${experienceTitle}
+- Section: ${sectionTitle}
+- Section Content: ${sectionContent.substring(0, 500)}...
+
+Your role:
+- Answer questions about the current learning material
+- Provide clear, practical explanations
+- Encourage and motivate the learner
+- Relate concepts to real-world business applications
+- Keep responses concise (2-3 paragraphs max)
+- Be supportive and understanding
+- Use a Forbes-meets-Vogue tone: professional yet warm
+
+Always remember: The learner is investing time to build valuable skills. Your job is to make the learning journey enjoyable and effective.`;
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          { role: "system", content: systemPrompt },
+          ...messages.map((m: any) => ({
+            role: m.role,
+            content: m.content,
+          })),
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+      });
+
+      const response = completion.choices[0]?.message?.content || "I'm here to help! Could you rephrase your question?";
+
+      res.json({ response });
+    } catch (error) {
+      console.error("Error in AI coaching:", error);
+      res.status(500).json({ message: "Failed to get AI response" });
+    }
+  });
+
   // ===== RITUAL PROGRESS ROUTES =====
   app.get('/api/rituals/:slug/progress', isAuthenticated, async (req: Request, res) => {
     try {
