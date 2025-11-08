@@ -105,9 +105,9 @@ export default function LandingPage() {
           />
         </motion.div>
 
-        {/* Dark gradient wash for text readability (Editorial technique) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.7)_100%)]" />
+        {/* Subtle gradient wash for depth (Editorial technique) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-background/30" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background)/0.7)_100%)]" />
 
         {/* Hero Content - Asymmetric Layout */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full">
@@ -127,13 +127,13 @@ export default function LandingPage() {
                 className="flex items-center gap-3"
               >
                 <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
-                <span className="text-sm uppercase tracking-widest text-white/80 font-medium">
+                <span className="text-sm uppercase tracking-widest text-foreground/80 font-medium">
                   Luxury Learning for Women
                 </span>
               </motion.div>
 
               {/* Massive Editorial Headline */}
-              <h1 className="editorial-headline text-7xl lg:text-8xl xl:text-9xl text-white">
+              <h1 className="editorial-headline text-7xl lg:text-8xl xl:text-9xl text-foreground">
                 Master AI.<br />
                 Own Web3.<br />
                 <span className="text-[hsl(var(--liquid-gold))] inline-flex items-center gap-4">
@@ -143,7 +143,7 @@ export default function LandingPage() {
               </h1>
 
               {/* Editorial Subheading */}
-              <p className="text-xl lg:text-2xl text-white/90 max-w-2xl leading-relaxed font-light">
+              <p className="text-xl lg:text-2xl text-foreground/90 max-w-2xl leading-relaxed font-light">
                 Eight curated learning spaces. Personalized AI coaching. Direct access to founder Nadia when you need real human support.
               </p>
 
@@ -167,7 +167,7 @@ export default function LandingPage() {
                     trackCTAClick('hero_discover', '/discover', 'free');
                     window.location.href = "/discover";
                   }}
-                  className="px-12 py-5 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all text-white font-semibold text-lg"
+                  className="px-12 py-5 rounded-full border-2 border-border backdrop-blur-xl bg-card/40 hover-elevate active-elevate-2 transition-all text-foreground font-semibold text-lg"
                   data-testid="button-discover-spaces"
                 >
                   Explore Spaces
@@ -175,7 +175,7 @@ export default function LandingPage() {
               </div>
 
               {/* Social Proof - Magazine Caption Style */}
-              <p className="text-white/60 text-sm uppercase tracking-wider">
+              <p className="text-muted-foreground text-sm uppercase tracking-wider">
                 Join 2,500+ women • No credit card required • Personal mentorship included
               </p>
             </motion.div>
@@ -197,15 +197,15 @@ export default function LandingPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.6 + index * 0.15 }}
-                  className="kinetic-glass rounded-2xl p-6 border border-white/10"
+                  className="kinetic-glass rounded-2xl p-6 border border-card-border"
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center">
                       <stat.icon className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
                     </div>
                     <div>
-                      <div className="text-3xl font-serif font-bold text-white">{stat.number}</div>
-                      <div className="text-sm text-white/70 uppercase tracking-wider">{stat.label}</div>
+                      <div className="text-3xl font-serif font-bold text-foreground">{stat.number}</div>
+                      <div className="text-sm text-muted-foreground uppercase tracking-wider">{stat.label}</div>
                     </div>
                   </div>
                 </motion.div>
@@ -222,7 +222,7 @@ export default function LandingPage() {
           >
             <button
               onClick={handleLogin}
-              className="text-white/50 hover:text-white/80 transition-all duration-300 text-sm"
+              className="text-muted-foreground hover:text-foreground transition-all duration-300 text-sm"
               data-testid="button-login"
             >
               Already a member? Sign in
