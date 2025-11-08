@@ -15,10 +15,9 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check localStorage for saved preference, default to light
-    const savedTheme = localStorage.getItem("metahers-theme") as Theme | null;
-    const initialTheme = savedTheme || "light";
-    setTheme(initialTheme);
+    // FORCE light mode for Editorial Vogue redesign (clear old dark preference)
+    localStorage.setItem("metahers-theme", "light");
+    setTheme("light");
     setMounted(true);
   }, []);
 
