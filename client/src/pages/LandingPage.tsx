@@ -1,18 +1,15 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { Globe, Sparkles, Lock, ArrowRight, Zap, Star, CheckCircle2, Phone, MessageCircle, GraduationCap, Users, ChevronRight, Crown } from "lucide-react";
+import { Lock, ArrowRight, Star, CheckCircle2, Phone, MessageCircle, ChevronRight, Crown, Sparkles } from "lucide-react";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { SEO } from "@/components/SEO";
 import { ChatbotPopup } from "@/components/ChatbotPopup";
 import { trackCTAClick } from "@/lib/analytics";
-import { TiltCard } from "@/components/metaverse/TiltCard";
-import { GradientOrbs } from "@/components/metaverse/GradientOrbs";
-import { ParticleField } from "@/components/metaverse/ParticleField";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import { useRef, useState, useEffect } from "react";
-import { useLocation, Link } from "wouter";
+import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
 
@@ -33,10 +30,8 @@ export default function LandingPage() {
     restDelta: 0.001
   });
 
-  const heroY = useTransform(smoothProgress, [0, 1], prefersReducedMotion ? ["0%", "0%"] : ["0%", "60%"]);
-  const heroScale = useTransform(smoothProgress, [0, 1], [1, prefersReducedMotion ? 1 : 1.2]);
-  const titleY = useTransform(smoothProgress, [0, 1], ["0%", "100%"]);
-  const titleOpacity = useTransform(smoothProgress, [0, 0.3], [1, 0]);
+  const heroY = useTransform(smoothProgress, [0, 1], prefersReducedMotion ? ["0%", "0%"] : ["0%", "30%"]);
+  const heroScale = useTransform(smoothProgress, [0, 1], [1, prefersReducedMotion ? 1 : 1.1]);
 
   const { data: spaces } = useQuery<SpaceDB[]>({
     queryKey: ["spaces"],
@@ -83,30 +78,6 @@ export default function LandingPage() {
     ]
   };
 
-  // Map spaces to world orbs with descriptions
-  const worldOrbs = spaces?.map((space) => {
-    const colorMap: Record<string, { gradient: string; glowColor: string }> = {
-      "Web3": { gradient: "from-purple-600 to-pink-600", glowColor: "181, 101, 216" },
-      "NFT/Blockchain/Crypto": { gradient: "from-amber-500 to-orange-600", glowColor: "255, 215, 0" },
-      "AI": { gradient: "from-cyan-500 to-blue-600", glowColor: "0, 217, 255" },
-      "Metaverse": { gradient: "from-pink-500 to-rose-600", glowColor: "233, 53, 193" },
-      "Branding": { gradient: "from-teal-500 to-cyan-600", glowColor: "0, 217, 255" },
-      "Moms": { gradient: "from-violet-500 to-purple-600", glowColor: "181, 101, 216" },
-      "App Atelier": { gradient: "from-emerald-500 to-teal-600", glowColor: "16, 185, 129" },
-      "Founder's Club": { gradient: "from-fuchsia-500 to-purple-600", glowColor: "217, 70, 239" },
-    };
-
-    const colors = colorMap[space.name] || { gradient: "from-purple-600 to-pink-600", glowColor: "181, 101, 216" };
-
-    return {
-      name: space.name,
-      route: `/spaces/${space.slug}`,
-      gradient: colors.gradient,
-      glowColor: colors.glowColor,
-      description: space.description,
-    };
-  }) || [];
-
   return (
     <div ref={containerRef} className="relative min-h-screen bg-background overflow-x-hidden">
       <SEO
@@ -117,143 +88,177 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* 1. HERO - Minimalist */}
+      {/* HERO - Editorial Magazine Style */}
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Large Editorial Photography Background */}
         <motion.div
           style={{ y: heroY, scale: heroScale }}
           className="absolute inset-0"
         >
           <OptimizedImage
             src={heroImage}
-            alt="Luxury neon light trails representing MetaHers Mind Spa"
-            className="absolute inset-0 w-full h-full opacity-70"
+            alt="Luxury editorial photography for MetaHers Mind Spa"
+            className="absolute inset-0 w-full h-full"
             objectFit="cover"
             priority={true}
             optimizedBasename="Neon_light_trails_hero_2008ed57"
           />
         </motion.div>
 
-        {/* Soft static gradient wash - spa serenity */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#B565D8]/5 via-transparent to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]" />
+        {/* Dark gradient wash for text readability (Editorial technique) */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.7)_100%)]" />
 
-        <motion.div
-          style={{ y: titleY, opacity: titleOpacity }}
-          className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center"
-        >
+        {/* Hero Content - Asymmetric Layout */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Text Content - Takes 8 columns (2/3) */}
+            <motion.div
+              initial={{ opacity: 0, y: 60 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
+              className="lg:col-span-8 space-y-8"
+            >
+              {/* Magazine-style eyebrow */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="flex items-center gap-3"
+              >
+                <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
+                <span className="text-sm uppercase tracking-widest text-white/80 font-medium">
+                  Luxury Learning for Women
+                </span>
+              </motion.div>
+
+              {/* Massive Editorial Headline */}
+              <h1 className="editorial-headline text-7xl lg:text-8xl xl:text-9xl text-white">
+                Master AI.<br />
+                Own Web3.<br />
+                <span className="text-[hsl(var(--liquid-gold))] inline-flex items-center gap-4">
+                  Build Empire.
+                  <Sparkles className="w-16 h-16 lg:w-20 lg:h-20" />
+                </span>
+              </h1>
+
+              {/* Editorial Subheading */}
+              <p className="text-xl lg:text-2xl text-white/90 max-w-2xl leading-relaxed font-light">
+                Eight curated learning spaces. Personalized AI coaching. Direct access to founder Nadia when you need real human support.
+              </p>
+
+              {/* CTA Buttons - Magazine Style */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
+                <motion.button
+                  onClick={handleSignup}
+                  whileHover={{ 
+                    scale: 1.03,
+                    boxShadow: "0 0 40px rgba(255,215,0,0.4)"
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                  className="gold-shimmer group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--liquid-gold))]/90 text-black font-semibold text-lg transition-all duration-300"
+                  data-testid="button-start-free"
+                >
+                  <span className="relative z-10">Begin Your Journey — Free</span>
+                </motion.button>
+
+                <button
+                  onClick={() => {
+                    trackCTAClick('hero_discover', '/discover', 'free');
+                    window.location.href = "/discover";
+                  }}
+                  className="px-12 py-5 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all text-white font-semibold text-lg"
+                  data-testid="button-discover-spaces"
+                >
+                  Explore Spaces
+                </button>
+              </div>
+
+              {/* Social Proof - Magazine Caption Style */}
+              <p className="text-white/60 text-sm uppercase tracking-wider">
+                Join 2,500+ women • No credit card required • Personal mentorship included
+              </p>
+            </motion.div>
+
+            {/* Stats Column - Takes 4 columns (1/3) - Kinetic Glass Cards */}
+            <motion.div
+              initial={{ opacity: 0, x: 60 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+              className="lg:col-span-4 space-y-6 hidden lg:block"
+            >
+              {[
+                { number: "8", label: "Learning Spaces", icon: Star },
+                { number: "36", label: "Experiences", icon: Sparkles },
+                { number: "2.5K+", label: "Women Empowered", icon: CheckCircle2 }
+              ].map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.6 + index * 0.15 }}
+                  className="kinetic-glass rounded-2xl p-6 border border-white/10"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center">
+                      <stat.icon className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
+                    </div>
+                    <div>
+                      <div className="text-3xl font-serif font-bold text-white">{stat.number}</div>
+                      <div className="text-sm text-white/70 uppercase tracking-wider">{stat.label}</div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Login Link - Bottom of hero */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 1 }}
+            className="text-center mt-16"
           >
-            <motion.h1
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, delay: 0.5 }}
-              className="font-cormorant text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-gradient-gold"
+            <button
+              onClick={handleLogin}
+              className="text-white/50 hover:text-white/80 transition-all duration-300 text-sm"
+              data-testid="button-login"
             >
-              Master AI & Web3
-              <br />
-              <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl">With Personal Mentorship From a Founder Who Gets It</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.7 }}
-              className="text-lg sm:text-xl md:text-2xl text-foreground/90 mb-12 max-w-4xl mx-auto leading-relaxed"
-              style={{
-                textShadow: '0 2px 20px rgba(0,0,0,0.8)',
-              }}
-            >
-              Eight learning spaces. Personalized rituals. Real human support when you need it.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 1.1 }}
-              className="flex flex-col items-center justify-center gap-3 mb-10"
-            >
-              <motion.button
-                onClick={handleSignup}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-12 sm:px-16 py-5 sm:py-6 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all text-white font-semibold text-lg sm:text-xl"
-                data-testid="button-start-free"
-              >
-                Begin Your Journey — Free
-              </motion.button>
-
-              <button
-                onClick={() => {
-                  trackCTAClick('hero_discover', '/discover', 'free');
-                  window.location.href = "/discover";
-                }}
-                className="text-foreground/70 hover:text-[hsl(var(--liquid-gold))] transition-all duration-300 text-sm underline underline-offset-4"
-                data-testid="button-discover-spaces"
-              >
-                Explore learning spaces
-              </button>
-            </motion.div>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.9 }}
-              className="text-foreground/60 text-sm text-center mb-8"
-            >
-              Join 2,500+ women • No credit card required • Personal mentorship included
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 1.4 }}
-              className="text-center"
-            >
-              <button
-                onClick={handleLogin}
-                className="text-foreground/50 hover:text-foreground/80 transition-all duration-300 text-sm"
-                data-testid="button-login"
-              >
-                Already a member? Sign in
-              </button>
-            </motion.div>
+              Already a member? Sign in
+            </button>
           </motion.div>
-        </motion.div>
-
+        </div>
       </div>
 
-      {/* 2. SIGNATURE PROGRAM GALLERY - 8 Learning Spaces */}
-      <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/95 overflow-hidden">
-        {/* Ambient Background Elements */}
-        <div className="absolute inset-0 pointer-events-none -z-10">
-          <GradientOrbs prefersReducedMotion={prefersReducedMotion || false} />
-        </div>
-        <ParticleField count={30} prefersReducedMotion={prefersReducedMotion || false} />
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          {/* Section Header */}
+      {/* EIGHT LEARNING SPACES - Editorial Grid */}
+      <div className="relative py-32 px-6 lg:px-16 bg-background">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header - Magazine Style */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-20"
+            className="mb-24 max-w-3xl"
           >
-            <h2 className="font-cormorant text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FFD700] via-white to-[#E935C1] bg-clip-text text-transparent">
-              Your Signature Program
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
+              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                Your Signature Program
+              </span>
+            </div>
+            <h2 className="editorial-headline text-6xl lg:text-7xl mb-6">
+              Eight Curated<br />Learning Spaces
             </h2>
-            <p className="text-xl sm:text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
-              Eight curated learning spaces. Choose your path to mastery.
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Choose your path to mastery. Each space contains personalized transformational experiences designed for your success.
             </p>
           </motion.div>
 
-          {/* Luxury Staggered Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-            {worldOrbs?.map((space, index) => {
-              // Define taglines for each space
+          {/* Editorial Grid - Staggered Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {spaces?.map((space, index) => {
               const taglineMap: Record<string, string> = {
                 "Web3": "Decode the decentralized future",
                 "NFT/Blockchain/Crypto": "Master digital assets & blockchain",
@@ -265,48 +270,41 @@ export default function LandingPage() {
                 "Founder's Club": "12-week startup accelerator"
               };
 
-              // Define premium badges for specific spaces
-              const badgeMap: Record<string, { text: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
-                "Founder's Club": { text: "12 Weeks", variant: "default" },
-                "App Atelier": { text: "AI-Powered", variant: "secondary" }
+              const badgeMap: Record<string, { text: string }> = {
+                "Founder's Club": { text: "12 Weeks" },
+                "App Atelier": { text: "AI-Powered" }
               };
 
               const tagline = taglineMap[space.name] || "Explore this learning space";
               const badge = badgeMap[space.name];
 
               return (
-                <TiltCard
+                <motion.div
                   key={space.name}
-                  delay={index * 0.1}
-                  prefersReducedMotion={prefersReducedMotion || false}
-                  className="group h-full"
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  className="group"
                 >
                   <Link 
-                    href={space.route}
-                    className="block h-full focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-xl"
-                    data-testid={`space-card-${space.route.split('/').pop()}`}
+                    href={`/spaces/${space.slug}`}
+                    className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
+                    data-testid={`space-card-${space.slug}`}
                   >
-                    <Card 
-                      className="h-full border-0 bg-gradient-to-br from-background/95 to-background/80 backdrop-blur-xl hover-elevate active-elevate-2 overflow-hidden cursor-pointer transition-all duration-300"
-                    >
-                      <div className="p-8 flex flex-col h-full min-h-[280px]">
-                      {/* Space Badge (if applicable) */}
+                    <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full min-h-[280px] flex flex-col">
+                      {/* Space Badge */}
                       {badge && (
                         <div className="mb-4">
-                          <Badge variant={badge.variant} className="text-xs font-semibold">
+                          <Badge variant="default" className="text-xs font-semibold bg-[hsl(var(--liquid-gold))]/20 text-[hsl(var(--liquid-gold))] border-[hsl(var(--liquid-gold))]/30">
                             {badge.text}
                           </Badge>
                         </div>
                       )}
 
-                      {/* Space Icon/Emoji Placeholder */}
+                      {/* Icon & Arrow */}
                       <div className="mb-6 flex items-center justify-between">
-                        <div 
-                          className="w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center text-2xl border border-white/10"
-                          style={{
-                            background: `linear-gradient(135deg, hsl(var(--${space.name === "AI" ? "cyber-fuchsia" : space.name === "Web3" ? "hyper-violet" : space.name === "Metaverse" ? "magenta-quartz" : space.name === "Branding" ? "aurora-teal" : "liquid-gold"})) 0%, hsl(var(--${space.name === "AI" ? "aurora-teal" : space.name === "Web3" ? "cyber-fuchsia" : space.name === "Metaverse" ? "hyper-violet" : space.name === "Branding" ? "liquid-gold" : "magenta-quartz"})) 100%)`
-                          }}
-                        >
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-2xl border border-primary/10">
                           {space.name === "AI" && "🤖"}
                           {space.name === "Web3" && "🌐"}
                           {space.name === "NFT/Blockchain/Crypto" && "💎"}
@@ -314,98 +312,104 @@ export default function LandingPage() {
                           {space.name === "Branding" && "✨"}
                           {space.name === "Moms" && "💝"}
                           {space.name === "App Atelier" && "🎨"}
-                          {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-white" />}
+                          {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
                         </div>
                         
-                        <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-foreground group-hover:translate-x-1 transition-all" />
+                        <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                       </div>
 
-                      {/* Space Title */}
-                      <h3 className="font-cormorant text-3xl font-bold mb-3 text-foreground group-hover:text-[hsl(var(--liquid-gold))] transition-colors">
+                      {/* Title */}
+                      <h3 className="font-serif text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
                         {space.name}
                       </h3>
 
-                      {/* Space Tagline */}
-                      <p className="text-muted-foreground leading-relaxed font-light flex-1">
+                      {/* Tagline */}
+                      <p className="text-muted-foreground leading-relaxed flex-1">
                         {tagline}
                       </p>
 
-                      {/* CTA indicator */}
+                      {/* Footer */}
                       <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
-                        <span>Explore space</span>
+                        <span className="uppercase tracking-wider text-xs">Explore</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </div>
                     </div>
-                  </Card>
-                </Link>
-              </TiltCard>
-            );
-          })}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* 3. MEMBERSHIP TIERS - Free vs Pro */}
-      <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background/95 to-background">
-        <div className="max-w-5xl mx-auto">
+      {/* MEMBERSHIP TIERS - Editorial Clean Layout */}
+      <div className="relative py-32 px-6 lg:px-16 bg-muted/30">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <h2 className="font-cormorant text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FFD700] via-white to-[#FFD700] bg-clip-text text-transparent">
-              Start Free, Upgrade Anytime
+            <h2 className="editorial-headline text-6xl lg:text-7xl mb-6">
+              Start Free,<br />Upgrade Anytime
             </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Choose the membership that fits your journey
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
+            {/* Free Tier */}
             <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="backdrop-blur-xl bg-white/5 rounded-3xl p-10 border border-white/10"
+              className="kinetic-glass rounded-2xl p-12 border border-card-border"
             >
               <div className="mb-8">
-                <h3 className="text-3xl font-bold mb-4">Free Forever</h3>
-                <p className="text-foreground/80 text-lg leading-relaxed">
+                <h3 className="font-serif text-4xl font-bold mb-4">Free Forever</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
                   12 experiences, AI coaching, and personal calls with Nadia when you need support.
                 </p>
               </div>
               <motion.button
                 onClick={handleSignup}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-full px-8 py-4 rounded-xl border-2 border-white/30 backdrop-blur-xl bg-white/10 hover:bg-white/20 transition-all text-white font-semibold text-lg"
-                data-testid="button-start-free"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full px-8 py-5 rounded-full border-2 border-foreground/20 bg-card hover:bg-card/80 transition-all font-semibold text-lg"
+                data-testid="button-start-free-tier"
               >
                 Start Free
               </motion.button>
             </motion.div>
 
+            {/* Pro Tier */}
             <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="backdrop-blur-xl bg-gradient-to-br from-[#FFD700]/10 to-[#E935C1]/10 rounded-3xl p-10 border-2 border-[#FFD700]/50 relative overflow-hidden"
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="kinetic-glass rounded-2xl p-12 border-2 border-[hsl(var(--liquid-gold))]/30 relative overflow-hidden"
             >
-              <div className="absolute top-4 right-4">
-                <span className="bg-[hsl(var(--liquid-gold))] text-background px-4 py-1 rounded-full text-sm font-bold">
-                  POPULAR
-                </span>
+              {/* Popular Badge */}
+              <div className="absolute top-6 right-6">
+                <Badge className="bg-[hsl(var(--liquid-gold))] text-black border-0 px-4 py-1 text-xs font-bold uppercase tracking-wider">
+                  Popular
+                </Badge>
               </div>
+
               <div className="mb-8">
-                <h3 className="text-3xl font-bold mb-4">Pro Membership</h3>
-                <p className="text-foreground/80 text-lg leading-relaxed">
+                <h3 className="font-serif text-4xl font-bold mb-4">Pro Membership</h3>
+                <p className="text-muted-foreground text-lg leading-relaxed">
                   All 36 experiences, thought leadership journey, and priority access to Nadia.
                 </p>
               </div>
               <button
                 onClick={() => window.location.href = "/pricing"}
-                className="w-full px-8 py-4 rounded-xl bg-gradient-to-r from-[#FFD700] to-[#E935C1] hover:opacity-90 transition-all text-white font-semibold text-lg"
+                className="gold-shimmer w-full px-8 py-5 rounded-full bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--liquid-gold))]/90 hover:shadow-2xl hover:shadow-[hsl(var(--liquid-gold))]/20 transition-all font-semibold text-lg text-black"
                 data-testid="button-upgrade-pro"
               >
                 View Pro Benefits
@@ -415,29 +419,34 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* 4. MEET NADIA - Condensed Founder Story */}
-      <div className="relative py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-[#0A0118] to-background overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-[#B565D8]/20 via-[#E935C1]/10 to-transparent rounded-full blur-3xl" />
-        </div>
-
-        <div className="max-w-7xl mx-auto relative z-10">
+      {/* MEET NADIA - Editorial Feature Story */}
+      <div className="relative py-32 px-6 lg:px-16 bg-background overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="mb-20 max-w-3xl"
           >
-            <h2 className="font-cormorant text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#FFD700] via-white to-[#E935C1] bg-clip-text text-transparent">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
+              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                Human-Powered AI
+              </span>
+            </div>
+            <h2 className="editorial-headline text-6xl lg:text-7xl mb-6">
               Meet Nadia
             </h2>
-            <p className="text-xl sm:text-2xl text-foreground/80 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground leading-relaxed">
               Your personal guide. Text or call me anytime you need motivation—no extra charge.
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+          {/* Editorial Layout - Asymmetric */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Large Editorial Photo */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -445,61 +454,73 @@ export default function LandingPage() {
               transition={{ duration: 0.8 }}
               className="relative"
             >
-              <div className="relative rounded-3xl overflow-hidden border-2 border-[#B565D8]/30 shadow-2xl">
+              <div className="editorial-image relative rounded-lg overflow-hidden border border-card-border shadow-2xl">
                 <img 
                   src={nadiaPhoto} 
                   alt="Nadia - Founder of MetaHers, holding Join MetaHers sign in luxury purple dress" 
                   className="w-full h-auto object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#B565D8]/30 via-transparent to-transparent pointer-events-none" />
+                {/* Subtle overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
               </div>
               
+              {/* Floating Badge - Kinetic Glass */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="absolute -bottom-6 -right-6 backdrop-blur-xl bg-gradient-to-br from-[#FFD700]/90 to-[#E935C1]/90 px-8 py-4 rounded-2xl border border-white/20 shadow-2xl"
+                className="absolute -bottom-6 -right-6 kinetic-glass px-8 py-5 rounded-2xl border border-card-border shadow-2xl"
               >
                 <div className="flex items-center gap-3">
-                  <Phone className="w-6 h-6 text-white" />
+                  <div className="w-12 h-12 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center">
+                    <Phone className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
+                  </div>
                   <div>
-                    <p className="text-white font-bold text-lg">Free Personal Calls</p>
-                    <p className="text-white/80 text-sm">Text or Call Anytime</p>
+                    <p className="font-bold text-lg">Free Personal Calls</p>
+                    <p className="text-muted-foreground text-sm">Text or Call Anytime</p>
                   </div>
                 </div>
               </motion.div>
             </motion.div>
 
+            {/* Story Content */}
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="space-y-6"
+              className="space-y-8"
             >
-              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-white/10">
-                <p className="text-lg text-foreground/90 leading-relaxed mb-4">
+              {/* Pull Quote Style */}
+              <div className="pull-quote">
+                <p>
                   I'm Nadia "The Mompreneur." I built MetaHers because I remember what it's like to be a beginner.
                 </p>
-                <p className="text-foreground/80 leading-relaxed">
-                  <span className="font-semibold text-white">CS degree + MBA + Cornell Blockchain certified.</span> Fluent in English, French & Arabic. Former Hotel GM turned Web3 educator.
+              </div>
+
+              {/* Bio Card */}
+              <div className="kinetic-glass rounded-2xl p-8 border border-card-border">
+                <p className="text-lg leading-relaxed mb-4">
+                  <span className="font-semibold">CS degree + MBA + Cornell Blockchain certified.</span> Fluent in English, French & Arabic. Former Hotel GM turned Web3 educator.
                 </p>
               </div>
 
-              <div className="backdrop-blur-xl bg-white/5 rounded-2xl p-8 border border-white/10">
+              {/* Human-Powered Difference */}
+              <div className="kinetic-glass rounded-2xl p-8 border border-card-border">
                 <div className="flex items-center gap-3 mb-4">
-                  <MessageCircle className="w-6 h-6 text-[hsl(var(--aurora-teal))]" />
-                  <h3 className="text-xl font-bold">The Human-Powered Difference</h3>
+                  <MessageCircle className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-serif font-bold">The Human-Powered Difference</h3>
                 </div>
-                <p className="text-foreground/80 leading-relaxed">
-                  Unlike AI-only platforms, you get <span className="font-semibold text-white">direct access to me</span>. Call or text when you're stuck. No chatbots, no waiting. Just real human support from someone who remembers being a beginner in 2020.
+                <p className="text-muted-foreground leading-relaxed">
+                  Unlike AI-only platforms, you get <span className="font-semibold text-foreground">direct access to me</span>. Call or text when you're stuck. No chatbots, no waiting. Just real human support from someone who remembers being a beginner in 2020.
                 </p>
               </div>
 
+              {/* CTA */}
               <button
                 onClick={handleSignup}
-                className="w-full px-12 py-5 rounded-2xl border-2 border-white/30 backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all text-white font-semibold text-lg"
+                className="w-full px-12 py-5 rounded-full border-2 border-foreground/20 bg-card hover:bg-card/80 transition-all font-semibold text-lg"
                 data-testid="button-meet-nadia"
               >
                 Start Your Journey
