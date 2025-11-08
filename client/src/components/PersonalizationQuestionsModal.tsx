@@ -47,14 +47,6 @@ export default function PersonalizationQuestionsModal({
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const { toast } = useToast();
 
-  // Handle empty questions - skip directly to completion
-  if (questions.length === 0) {
-    if (open) {
-      onComplete();
-    }
-    return null;
-  }
-
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
