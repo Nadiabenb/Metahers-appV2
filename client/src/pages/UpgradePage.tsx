@@ -4,9 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlanBadge } from "@/components/PlanBadge";
 import { PRICING_PLANS, type SubscriptionTier, formatPrice } from "@shared/pricing";
-import { Check, Sparkles, Crown, Gem, Diamond, TrendingUp } from "lucide-react";
+import { Check, Sparkles, Crown, Gem, Diamond, TrendingUp, MessageCircle } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
 import { motion, useReducedMotion } from "framer-motion";
 import { ParticleField, GradientOrbs, TiltCard, ShimmerBadge, ImmersiveSection } from "@/components/metaverse";
+import { trackCTAClick } from "@/lib/analytics";
 
 // Only show the 3 main tiers to avoid confusion
 const TIER_ORDER: SubscriptionTier[] = ['pro_monthly', 'sanctuary', 'inner_circle'];
@@ -114,6 +116,62 @@ export default function UpgradePage() {
               )}
             </ImmersiveSection>
 
+            {/* Free WhatsApp Community - Human-Powered Feature */}
+            <ImmersiveSection className="max-w-4xl mx-auto mb-16" delay={0.1}>
+              <div className="backdrop-blur-2xl bg-gradient-to-br from-[#25D366]/10 to-white/5 rounded-3xl p-8 border border-[#25D366]/30 relative overflow-hidden group">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-[#25D366]/10 to-transparent opacity-0 group-hover:opacity-100"
+                  transition={{ duration: 0.5 }}
+                />
+                <div className="relative z-10 flex items-center justify-between flex-wrap gap-6">
+                  <div className="flex items-start gap-4 flex-1">
+                    <div className="p-3 rounded-full bg-[#25D366]/20 flex-shrink-0">
+                      <SiWhatsapp className="w-8 h-8 text-[#25D366]" />
+                    </div>
+                    <div>
+                      <h3 className="font-serif text-2xl font-bold text-foreground mb-2">Start Here: Free WhatsApp Lounge</h3>
+                      <p className="text-lg text-foreground/80 mb-3">
+                        Join our private WhatsApp community for daily insights, exclusive tips, and direct access to founder Nadia.
+                      </p>
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <div className="flex items-center gap-1 text-sm text-foreground/70">
+                          <Check className="w-4 h-4 text-[#25D366]" />
+                          Daily AI & Web3 insights
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-foreground/70">
+                          <Check className="w-4 h-4 text-[#25D366]" />
+                          Direct founder access
+                        </div>
+                        <div className="flex items-center gap-1 text-sm text-foreground/70">
+                          <Check className="w-4 h-4 text-[#25D366]" />
+                          Human-powered support
+                        </div>
+                      </div>
+                      <p className="text-sm text-foreground/60 italic">
+                        This is our human-powered feature—real connection, real mentorship from Nadia herself.
+                      </p>
+                    </div>
+                  </div>
+                  <a
+                    href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackCTAClick('pricing_whatsapp_lounge', 'whatsapp', 'free')}
+                    data-testid="link-whatsapp-pricing"
+                  >
+                    <Button
+                      size="lg"
+                      className="bg-[#25D366] text-white border border-[#25D366] shadow-lg"
+                      data-testid="button-whatsapp-pricing"
+                    >
+                      <SiWhatsapp className="w-5 h-5 mr-2" />
+                      Join Free Community
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </ImmersiveSection>
+
             {/* Pro Annual Savings Callout */}
             <ImmersiveSection className="max-w-4xl mx-auto mb-16" delay={0.2}>
               <div className="backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border border-[hsl(var(--liquid-gold))]/30 relative overflow-hidden group">
@@ -137,6 +195,12 @@ export default function UpgradePage() {
                 </div>
               </div>
             </ImmersiveSection>
+
+            {/* Paid Tier Heading */}
+            <div className="text-center mb-12">
+              <h2 className="font-serif text-3xl font-bold text-foreground mb-2">Premium Memberships</h2>
+              <p className="text-foreground/70">Unlock the full MetaHers experience with AI-powered learning</p>
+            </div>
 
             <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3 mb-16">
               {TIER_ORDER.map((tier, index) => {

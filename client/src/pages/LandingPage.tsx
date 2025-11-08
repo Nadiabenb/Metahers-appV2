@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
 import { Lock, ArrowRight, Star, CheckCircle2, Phone, MessageCircle, ChevronRight, Crown, Sparkles } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { SEO } from "@/components/SEO";
 import { ChatbotPopup } from "@/components/ChatbotPopup";
@@ -173,6 +174,23 @@ export default function LandingPage() {
                   Explore Spaces
                 </button>
               </div>
+
+              {/* WhatsApp Community CTA - Human-Powered Feature */}
+              <motion.a
+                href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-[#25D366]/30 bg-[#25D366]/10 backdrop-blur-sm hover:bg-[#25D366]/20 hover:border-[#25D366]/50 transition-all"
+                data-testid="button-whatsapp-community"
+                onClick={() => trackCTAClick('hero_whatsapp_lounge', 'whatsapp', 'free')}
+              >
+                <SiWhatsapp className="w-5 h-5 text-[#25D366]" />
+                <span className="text-white font-medium">
+                  Join Free WhatsApp Lounge — Direct Access to Nadia
+                </span>
+              </motion.a>
 
               {/* Social Proof - Magazine Caption Style */}
               <p className="text-white/60 text-sm uppercase tracking-wider">

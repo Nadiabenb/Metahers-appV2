@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
 import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -8,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
 import { motion, AnimatePresence } from "framer-motion";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
@@ -290,6 +292,30 @@ export function Navigation() {
               </Button>
             )}
 
+            {/* WhatsApp Community Link */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <a
+                  href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => trackCTAClick('nav_whatsapp_lounge', 'whatsapp', 'free')}
+                  data-testid="button-whatsapp-nav"
+                >
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-[#25D366]"
+                  >
+                    <SiWhatsapp className="w-5 h-5" />
+                  </Button>
+                </a>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Join Free WhatsApp Lounge</p>
+              </TooltipContent>
+            </Tooltip>
+
             {/* Theme Toggle */}
             <ThemeToggle />
           </div>
@@ -345,6 +371,28 @@ export function Navigation() {
                         gradient: "from-yellow-500 to-amber-600",
                       }} />
                     </div>
+
+                    {/* WhatsApp Community */}
+                    <a
+                      href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackCTAClick('mobile_whatsapp_lounge', 'whatsapp', 'free')}
+                      className="block"
+                      data-testid="link-mobile-whatsapp"
+                    >
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#25D366]/10 border-2 border-[#25D366]/30 hover-elevate active-elevate-2 transition-all">
+                        <div className="w-10 h-10 rounded-lg bg-[#25D366] flex items-center justify-center shadow-lg flex-shrink-0">
+                          <SiWhatsapp className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="font-medium text-foreground flex-1 text-left">
+                          Free WhatsApp Lounge
+                        </span>
+                        <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                          FREE
+                        </Badge>
+                      </div>
+                    </a>
 
                     {/* Account link if authenticated */}
                     {isAuthenticated && (
