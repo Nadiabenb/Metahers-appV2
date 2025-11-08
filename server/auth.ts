@@ -72,6 +72,15 @@ export const isProUser: RequestHandler = async (req, res, next) => {
   return next();
 };
 
+// Thought Leadership freemium access: Free users get days 1-3, Pro gets all 30 days
+export const canAccessThoughtLeadership: RequestHandler = async (req, res, next) => {
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  
+  return next();
+};
+
 export const isSanctuaryMember: RequestHandler = async (req, res, next) => {
   if (!req.session || !req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });

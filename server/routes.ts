@@ -2,7 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { randomBytes } from "crypto";
 import { storage } from "./storage";
-import { setupAuth, isAuthenticated, isProUser, isSanctuaryMember, isInnerCircleMember, isFoundersCircleMember, isAdmin, hashPassword, verifyPassword } from "./auth";
+import { setupAuth, isAuthenticated, isProUser, canAccessThoughtLeadership, isSanctuaryMember, isInnerCircleMember, isFoundersCircleMember, isAdmin, hashPassword, verifyPassword } from "./auth";
 import { sanitizeText, sanitizeHTML, sanitizeObject } from "./security";
 import Stripe from "stripe";
 import { Resend } from "resend";
@@ -2064,16 +2064,16 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // ===== THOUGHT LEADERSHIP JOURNEY ROUTES (PRO-ONLY) =====
+  // ===== THOUGHT LEADERSHIP JOURNEY ROUTES (FREEMIUM: Days 1-3 Free, 4-30 Pro) =====
 
   // Get user's journey progress
   // Get curriculum (all 30 days)
-  app.get('/api/thought-leadership/curriculum', isProUser, async (_req: Request, res) => {
+  app.get('/api/thought-leadership/curriculum', canAccessThoughtLeadership, async (_req: Request, res) => {
     res.json(CURRICULUM);
   });
 
   // Get specific curriculum day
-  app.get('/api/thought-leadership/curriculum/:day', isProUser, async (req: Request, res) => {
+  app.get('/api/thought-leadership/curriculum/:day', canAccessThoughtLeadership, async (req: Request, res) => {
     const day = parseInt(req.params.day);
     const curriculumDay = CURRICULUM.find(d => d.day === day);
     
@@ -2084,7 +2084,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     res.json(curriculumDay);
   });
 
-  app.get('/api/thought-leadership/progress', isProUser, async (req: Request, res) => {
+  app.get('/api/thought-leadership/progress', canAccessThoughtLeadership, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       const progress = await storage.getThoughtLeadershipProgress(userId);
@@ -2116,7 +2116,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // Update brand profile (onboarding)
-  app.put('/api/thought-leadership/brand-profile', isProUser, async (req: Request, res) => {
+  app.put('/api/thought-leadership/brand-profile', canAccessThoughtLeadership, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       const { brandExpertise, brandNiche, problemSolved, uniqueStory, currentGoals } = req.body;
@@ -2158,7 +2158,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // Generate new content for current day (or regenerate for specific day)
-  app.post('/api/thought-leadership/generate', isProUser, async (req: Request, res) => {
+  app.post('/api/thought-leadership/generate', canAccessThoughtLeadership, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       const { practiceReflection, dayNumber: requestedDay } = req.body;
@@ -2179,6 +2179,18 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       // Validate day number
       if (targetDay < 1 || targetDay > 30) {
         return res.status(400).json({ message: 'Invalid day number. Must be between 1 and 30.' });
+      }
+
+      // Check if user has Pro access for days 4-30
+      const user = await storage.getUser(userId);
+      const { isProTier } = await import("../shared/pricing");
+      const isPro = user && (user.isPro || isProTier(user.subscriptionTier as any));
+      
+      if (targetDay > 3 && !isPro) {
+        return res.status(403).json({ 
+          message: 'Pro subscription required',
+          reason: 'Free users can access days 1-3. Upgrade to Pro to unlock all 30 days.' 
+        });
       }
 
       // Get curriculum for target day
@@ -2307,7 +2319,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // Save or update a post
-  app.patch('/api/thought-leadership/posts/:id', isProUser, async (req: Request, res) => {
+  app.patch('/api/thought-leadership/posts/:id', canAccessThoughtLeadership, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       const { id } = req.params;
@@ -2332,7 +2344,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // Publish a post
-  app.post('/api/thought-leadership/posts/:id/publish', isProUser, async (req: Request, res) => {
+  app.post('/api/thought-leadership/posts/:id/publish', canAccessThoughtLeadership, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       const { id } = req.params;
@@ -2410,7 +2422,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // Get user's posts
-  app.get('/api/thought-leadership/posts', isProUser, async (req: Request, res) => {
+  app.get('/api/thought-leadership/posts', canAccessThoughtLeadership, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       const limit = parseInt(req.query.limit as string) || 30;
@@ -2423,7 +2435,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // Get a specific post
-  app.get('/api/thought-leadership/posts/:id', isProUser, async (req: Request, res) => {
+  app.get('/api/thought-leadership/posts/:id', canAccessThoughtLeadership, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       const { id } = req.params;

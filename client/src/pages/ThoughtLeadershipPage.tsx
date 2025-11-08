@@ -157,6 +157,14 @@ export default function ThoughtLeadershipPage() {
   const isPracticeSubmitted = progress?.practicesSubmitted?.includes(progress?.currentDay || 0);
   const existingReflection = progress?.practiceReflections?.[progress?.currentDay || 0];
 
+  // Check if user is Pro
+  const isProUser = user?.isPro || user?.subscriptionTier === 'pro' || 
+                    user?.subscriptionTier === 'sanctuary' || user?.subscriptionTier === 'inner_circle' || 
+                    user?.subscriptionTier === 'founders_circle';
+  
+  // Free users get days 1-3, Pro users get all 30
+  const currentDayLocked = (progress?.currentDay || 1) > 3 && !isProUser;
+
   // Show login prompt if not authenticated
   if (progressError && (progressError as any).message === 'Unauthorized') {
     return (
@@ -201,45 +209,6 @@ export default function ThoughtLeadershipPage() {
     );
   }
 
-  // Show Pro upsell if not Pro
-  if (progressError && (progressError as any).message === 'Pro subscription required') {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background py-12 px-6">
-        <SEO
-          title="30-Day Thought Leadership Journey - Pro Feature - MetaHers"
-          description="Build your online brand authority with our 30-day guided journey"
-        />
-        <Card className="max-w-lg editorial-card">
-          <CardHeader className="text-center">
-            <Lock className="w-16 h-16 mx-auto mb-4 text-primary" />
-            <CardTitle className="font-cormorant text-3xl mb-2">Pro Feature</CardTitle>
-            <p className="text-muted-foreground">
-              The 30-Day Brand Authority Journey is available exclusively for Pro members.
-            </p>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="text-sm text-foreground/80 space-y-2">
-              <p>Unlock access to:</p>
-              <ul className="list-disc list-inside space-y-1 text-muted-foreground">
-                <li>Personalized curriculum teaching brand fundamentals</li>
-                <li>Daily Discovery lessons from the founder</li>
-                <li>Guided Practice reflective exercises</li>
-                <li>AI-powered content generation for 3 platforms</li>
-                <li>30-day journey to build AI-searchable authority</li>
-              </ul>
-            </div>
-            <Link href="/pricing">
-              <Button className="w-full" size="lg" data-testid="button-upgrade">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Upgrade to Pro
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
   if (progressLoading || !progress || !curriculumDay) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -278,6 +247,60 @@ export default function ThoughtLeadershipPage() {
             Build your digital presence one intentional day at a time
           </p>
         </div>
+
+        {/* Freemium Banner for Non-Pro Users */}
+        {!isProUser && (
+          <Card className="mb-8 border-primary/30 bg-primary/5">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <Sparkles className="w-8 h-8 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-2">
+                    🎉 Try Days 1-3 Free
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    You're exploring the first 3 days of the journey for free. Upgrade to Pro to unlock all 30 days of personalized content, AI-powered writing, and brand-building curriculum.
+                  </p>
+                  <Link href="/pricing">
+                    <Button className="gold-shimmer" data-testid="button-upgrade-journey">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Unlock All 30 Days
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Locked Day Warning */}
+        {currentDayLocked && (
+          <Card className="mb-8 border-amber-500/30 bg-amber-500/10">
+            <CardContent className="p-6">
+              <div className="flex items-start gap-4">
+                <div className="flex-shrink-0">
+                  <Lock className="w-8 h-8 text-amber-600 dark:text-amber-400" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-2">
+                    Day {progress.currentDay} Requires Pro
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    You've completed the free trial (Days 1-3). Upgrade to Pro to continue your journey and access personalized AI-powered content for Days 4-30.
+                  </p>
+                  <Link href="/pricing">
+                    <Button variant="default" data-testid="button-upgrade-locked">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      Upgrade to Continue
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Progress Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
