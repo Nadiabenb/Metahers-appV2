@@ -89,25 +89,9 @@ export default function LandingPage() {
       />
 
       {/* HERO - Editorial Magazine Style */}
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Large Editorial Photography Background */}
-        <motion.div
-          style={{ y: heroY, scale: heroScale }}
-          className="absolute inset-0"
-        >
-          <OptimizedImage
-            src={heroImage}
-            alt="Luxury editorial photography for MetaHers Mind Spa"
-            className="absolute inset-0 w-full h-full"
-            objectFit="cover"
-            priority={true}
-            optimizedBasename="Neon_light_trails_hero_2008ed57"
-          />
-        </motion.div>
-
-        {/* Subtle gradient wash for depth (Editorial technique) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/60 to-background/30" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background)/0.7)_100%)]" />
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-muted/30 via-background to-muted/20">
+        {/* Subtle gold shimmer accent */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--liquid-gold))]/5 via-transparent to-[hsl(var(--liquid-gold))]/10 opacity-40" />
 
         {/* Hero Content - Asymmetric Layout */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full">
