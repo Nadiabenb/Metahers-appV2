@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { motion, AnimatePresence } from "framer-motion";
@@ -46,6 +46,18 @@ export default function PersonalizationQuestionsModal({
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const { toast } = useToast();
+
+  // Handle empty questions - skip personalization
+  useEffect(() => {
+    if (open && questions.length === 0) {
+      onComplete();
+    }
+  }, [open, questions.length, onComplete]);
+
+  // Don't render if no questions
+  if (questions.length === 0) {
+    return null;
+  }
 
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;

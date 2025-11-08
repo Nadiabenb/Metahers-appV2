@@ -281,10 +281,18 @@ export default function SpaceDetailPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1, duration: 0.6 }}
                 >
-                  <button
+                  <div
                     onClick={() => navigate(`/experiences/${experience.slug}`)}
-                    className="w-full text-left group focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
+                    className="w-full text-left group cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`card-experience-${experience.slug}`}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        navigate(`/experiences/${experience.slug}`);
+                      }
+                    }}
                   >
                     <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300">
                       <div className="flex items-start justify-between gap-6 mb-6">
@@ -334,7 +342,7 @@ export default function SpaceDetailPage() {
                         <Sparkles className="ml-2 w-4 h-4" />
                       </Button>
                     </div>
-                  </button>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -368,11 +376,18 @@ export default function SpaceDetailPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: (freeExperiences.length + index) * 0.1, duration: 0.6 }}
                 >
-                  <button
+                  <div
                     onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
-                    disabled={!isProUser}
-                    className={`w-full text-left h-full group focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg ${!isProUser ? 'opacity-75' : ''}`}
+                    className={`w-full text-left h-full group cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg ${!isProUser ? 'opacity-75' : ''}`}
                     data-testid={`card-experience-${experience.slug}`}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade");
+                      }
+                    }}
                   >
                     <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
                       <div className="flex items-center gap-3 mb-4">
@@ -409,7 +424,7 @@ export default function SpaceDetailPage() {
                         </ul>
                       </div>
                     </div>
-                  </button>
+                  </div>
                 </motion.div>
               ))}
             </div>
