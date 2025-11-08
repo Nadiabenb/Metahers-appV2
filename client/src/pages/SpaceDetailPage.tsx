@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowLeft, Lock, CheckCircle2, Clock, Trophy, Sparkles, Zap } from "lucide-react";
+import { ArrowLeft, Lock, CheckCircle2, Clock, Trophy, Sparkles, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,14 +29,6 @@ type Experience = {
   estimatedMinutes: number;
   sortOrder: number;
   isActive: boolean;
-};
-
-const COLOR_CLASSES: Record<string, string> = {
-  "hyper-violet": "from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))]",
-  "magenta-quartz": "from-[hsl(var(--magenta-quartz))] to-[hsl(var(--cyber-fuchsia))]",
-  "cyber-fuchsia": "from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))]",
-  "aurora-teal": "from-[hsl(var(--aurora-teal))] to-[hsl(var(--liquid-gold))]",
-  "liquid-gold": "from-[hsl(var(--liquid-gold))] to-[hsl(var(--hyper-violet))]",
 };
 
 export default function SpaceDetailPage() {
@@ -90,7 +82,7 @@ export default function SpaceDetailPage() {
     );
   }
 
-  if (spaceError) {
+  if (spaceError || !space) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <Card className="max-w-md text-center p-8">
@@ -113,27 +105,7 @@ export default function SpaceDetailPage() {
     );
   }
 
-  if (!space) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
-        <Card className="max-w-md text-center p-8">
-          <CardHeader>
-            <CardTitle className="text-2xl mb-2">Space Not Found</CardTitle>
-            <CardDescription>
-              The space you're looking for doesn't exist or has been moved.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => navigate("/world")} data-testid="button-back-to-world">
-              Back to MetaHers World
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  // Special redirect for Founder's Club - goes to dedicated landing page
+  // Special redirect for Founder's Club
   if (space.slug === "founders-club") {
     navigate("/founders-sanctuary");
     return null;
@@ -142,9 +114,8 @@ export default function SpaceDetailPage() {
   if (experiencesError) {
     return (
       <div className="min-h-screen bg-background">
-        <div className={`relative bg-gradient-to-br ${COLOR_CLASSES[space.color] || COLOR_CLASSES["hyper-violet"]} text-white py-16 px-6`}>
-          <div className="absolute inset-0 bg-black/20"></div>
-          <div className="container mx-auto max-w-6xl relative z-10">
+        <div className="bg-muted/30 py-16 px-6">
+          <div className="container mx-auto max-w-6xl">
             <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">{space.name}</h1>
           </div>
         </div>
@@ -173,18 +144,15 @@ export default function SpaceDetailPage() {
   const freeExperiences = experiences.filter(e => e.tier === "free");
   const proExperiences = experiences.filter(e => e.tier === "pro");
 
-  const gradientClass = COLOR_CLASSES[space.color] || COLOR_CLASSES["hyper-violet"];
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Header */}
-      <div className={`relative bg-gradient-to-br ${gradientClass} text-white py-16 px-6`}>
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="container mx-auto max-w-6xl relative z-10">
+      {/* Editorial Hero Header */}
+      <div className="relative bg-muted/30 py-20 px-6 lg:px-16">
+        <div className="container mx-auto max-w-6xl">
           <Link href="/world">
             <Button
               variant="ghost"
-              className="mb-6 text-white hover:bg-white/20"
+              className="mb-8 -ml-4"
               data-testid="button-back"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
@@ -195,20 +163,34 @@ export default function SpaceDetailPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-4xl"
           >
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">
+            {/* Eyebrow */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-12 bg-primary" />
+              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                Learning Space
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="editorial-headline text-6xl lg:text-7xl xl:text-8xl mb-6">
               {space.name}
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl mb-6">
+
+            {/* Description */}
+            <p className="text-2xl text-muted-foreground mb-8 leading-relaxed max-w-3xl">
               {space.description}
             </p>
+
+            {/* Badges */}
             <div className="flex flex-wrap gap-3">
-              <Badge variant="outline" className="text-white border-white/40 bg-white/10 gap-2">
+              <Badge variant="outline" className="gap-2 px-4 py-2 text-base">
                 <Trophy className="w-4 h-4" />
-                {experiences.length} Transformational Experiences
+                {experiences.length} Experiences
               </Badge>
-              <Badge variant="outline" className="text-white border-white/40 bg-white/10 gap-2">
+              <Badge variant="outline" className="gap-2 px-4 py-2 text-base bg-primary/10 text-primary border-primary/30">
                 <Sparkles className="w-4 h-4" />
                 {freeExperiences.length} Free to Start
               </Badge>
@@ -217,131 +199,142 @@ export default function SpaceDetailPage() {
         </div>
       </div>
 
-      {/* What You'll Accomplish Section */}
-      <div className="container mx-auto max-w-6xl px-6 py-12">
+      {/* What You'll Accomplish - Editorial */}
+      <div className="container mx-auto max-w-6xl px-6 lg:px-16 py-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
         >
-          <Card className="bg-gradient-to-br from-card/50 via-card to-primary/5 border-primary/20 backdrop-blur-sm">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-2">
-                <div className={`p-3 rounded-lg bg-gradient-to-br ${gradientClass}`}>
-                  <Sparkles className="w-6 h-6 text-white" />
-                </div>
-                <CardTitle className="text-2xl">What You'll Accomplish in This Space</CardTitle>
+          <div className="kinetic-glass rounded-2xl p-12 border border-card-border">
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Sparkles className="w-7 h-7 text-primary" />
               </div>
-              <CardDescription className="text-base">
-                Transformational outcomes designed for busy women who need results, not fluff.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10 mt-1">
-                    <Zap className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Save Time</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Cut learning time by 80% with AI-personalized experiences
-                    </p>
-                  </div>
+              <div>
+                <h2 className="font-serif text-3xl font-bold">What You'll Accomplish</h2>
+                <p className="text-muted-foreground mt-1">
+                  Transformational outcomes designed for busy women who need results, not fluff.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-xl bg-primary/10 mt-1">
+                  <Sparkles className="w-6 h-6 text-primary" />
                 </div>
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10 mt-1">
-                    <Trophy className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Build Confidence</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Go from confused to confident with hands-on practice
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10 mt-1">
-                    <CheckCircle2 className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Real Results</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Apply skills immediately to your business or career
-                    </p>
-                  </div>
+                <div>
+                  <h4 className="font-semibold mb-2 text-lg">Save Time</h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Cut learning time by 80% with AI-personalized experiences
+                  </p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-xl bg-primary/10 mt-1">
+                  <Trophy className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2 text-lg">Build Confidence</h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Go from confused to confident with hands-on practice
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-xl bg-primary/10 mt-1">
+                  <CheckCircle2 className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2 text-lg">Real Results</h4>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Apply skills immediately to your business or career
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </div>
 
-      {/* Experiences Grid */}
-      <div className="container mx-auto max-w-6xl px-6 pb-16">
-        {/* Free Experience (Lead Magnet) */}
+      {/* Experiences - Editorial Grid */}
+      <div className="container mx-auto max-w-6xl px-6 lg:px-16 pb-32">
+        {/* Free Experiences */}
         {freeExperiences.length > 0 && (
-          <div className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="font-serif text-3xl font-bold">Start Free</h2>
-              <Badge className="bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--hyper-violet))] text-white">
-                Free with Account
-              </Badge>
+          <div className="mb-20">
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-px w-12 bg-primary" />
+                <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                  Free Access
+                </span>
+              </div>
+              <h2 className="font-serif text-5xl font-bold">Start Your Journey</h2>
             </div>
-            <div className="grid gap-6">
+
+            <div className="grid gap-8">
               {freeExperiences.map((experience, index) => (
                 <motion.div
                   key={experience.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
                 >
-                  <Card 
-                    className="hover-elevate border-primary/20 bg-gradient-to-br from-card via-card/80 to-primary/5 cursor-pointer"
+                  <button
                     onClick={() => navigate(`/experiences/${experience.slug}`)}
+                    className="w-full text-left group focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`card-experience-${experience.slug}`}
                   >
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-4">
+                    <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300">
+                      <div className="flex items-start justify-between gap-6 mb-6">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
+                          <div className="flex items-center gap-3 mb-4">
+                            <Badge className="bg-primary/20 text-primary border-primary/30 px-4 py-1.5 text-sm font-semibold">
                               FREE
                             </Badge>
-                            <Badge variant="outline" className="gap-1">
-                              <Clock className="w-3 h-3" />
+                            <Badge variant="outline" className="gap-1.5 px-4 py-1.5">
+                              <Clock className="w-3.5 h-3.5" />
                               {experience.estimatedMinutes} min
                             </Badge>
                           </div>
-                          <CardTitle className="text-2xl mb-2">{experience.title}</CardTitle>
-                          <CardDescription className="text-base">{experience.description}</CardDescription>
+                          <h3 className="font-serif text-3xl font-bold mb-3 group-hover:text-primary transition-colors">
+                            {experience.title}
+                          </h3>
+                          <p className="text-lg text-muted-foreground leading-relaxed">
+                            {experience.description}
+                          </p>
                         </div>
-                        <Zap className="w-8 h-8 text-primary flex-shrink-0" />
+                        <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0" />
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="mb-4">
-                        <p className="text-sm font-medium mb-2">You'll learn to:</p>
-                        <ul className="space-y-1">
+
+                      <div className="mb-6">
+                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">
+                          Learning Objectives
+                        </p>
+                        <ul className="space-y-2">
                           {experience.learningObjectives.map((objective, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                              <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                              <span>{objective}</span>
+                            <li key={i} className="flex items-start gap-3">
+                              <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                              <span className="text-foreground/80">{objective}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
+
                       <Button
-                        className={`w-full bg-gradient-to-r ${gradientClass} text-white`}
-                        onClick={() => navigate(`/experiences/${experience.slug}`)}
+                        className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 w-full sm:w-auto px-8 py-6 text-base"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/experiences/${experience.slug}`);
+                        }}
                         data-testid={`button-start-${experience.slug}`}
                       >
                         Start Learning Free
                         <Sparkles className="ml-2 w-4 h-4" />
                       </Button>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </button>
                 </motion.div>
               ))}
             </div>
@@ -351,123 +344,103 @@ export default function SpaceDetailPage() {
         {/* Pro Experiences */}
         {proExperiences.length > 0 && (
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="font-serif text-3xl font-bold">Unlock with Pro</h2>
-              <Badge variant="outline" className="gap-2">
-                <Trophy className="w-4 h-4" />
-                {proExperiences.length} Premium Experiences
-              </Badge>
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-px w-12 bg-primary" />
+                <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                  Premium Content
+                </span>
+              </div>
+              <div className="flex items-center gap-4">
+                <h2 className="font-serif text-5xl font-bold">Unlock with Pro</h2>
+                <Badge variant="outline" className="gap-2 px-4 py-2">
+                  <Trophy className="w-4 h-4" />
+                  {proExperiences.length} Experiences
+                </Badge>
+              </div>
             </div>
-            <div className="grid md:grid-cols-2 gap-6">
+
+            <div className="grid md:grid-cols-2 gap-8">
               {proExperiences.map((experience, index) => (
                 <motion.div
                   key={experience.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: (freeExperiences.length + index) * 0.1 }}
+                  transition={{ delay: (freeExperiences.length + index) * 0.1, duration: 0.6 }}
                 >
-                  <Card 
-                    className={`hover-elevate h-full cursor-pointer ${!isProUser ? 'opacity-75' : ''}`}
+                  <button
                     onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
+                    disabled={!isProUser}
+                    className={`w-full text-left h-full group focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg ${!isProUser ? 'opacity-75' : ''}`}
                     data-testid={`card-experience-${experience.slug}`}
                   >
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            {!isProUser && (
-                              <Badge variant="outline" className="gap-1 border-amber-500/30 text-amber-600 dark:text-amber-400">
-                                <Lock className="w-3 h-3" />
-                                PRO
-                              </Badge>
-                            )}
-                            <Badge variant="outline" className="gap-1">
-                              <Clock className="w-3 h-3" />
-                              {experience.estimatedMinutes} min
-                            </Badge>
-                          </div>
-                          <CardTitle className="text-xl mb-2">{experience.title}</CardTitle>
-                          <CardDescription>{experience.description}</CardDescription>
-                        </div>
+                    <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
+                      <div className="flex items-center gap-3 mb-4">
+                        {!isProUser && (
+                          <Badge variant="outline" className="gap-1.5 border-amber-500/30 text-amber-600 dark:text-amber-400 px-4 py-1.5">
+                            <Lock className="w-3.5 h-3.5" />
+                            PRO
+                          </Badge>
+                        )}
+                        <Badge variant="outline" className="gap-1.5 px-4 py-1.5">
+                          <Clock className="w-3.5 h-3.5" />
+                          {experience.estimatedMinutes} min
+                        </Badge>
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="mb-4">
-                        <p className="text-sm font-medium mb-2">You'll learn to:</p>
-                        <ul className="space-y-1">
-                          {experience.learningObjectives.slice(0, 2).map((objective, i) => (
-                            <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+
+                      <h3 className="font-serif text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                        {experience.title}
+                      </h3>
+                      <p className="text-muted-foreground leading-relaxed mb-6 flex-1">
+                        {experience.description}
+                      </p>
+
+                      <div>
+                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">
+                          You'll Learn To
+                        </p>
+                        <ul className="space-y-2">
+                          {experience.learningObjectives.slice(0, 3).map((objective, i) => (
+                            <li key={i} className="flex items-start gap-3">
                               <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                              <span>{objective}</span>
+                              <span className="text-sm text-foreground/80">{objective}</span>
                             </li>
                           ))}
-                          {experience.learningObjectives.length > 2 && (
-                            <li className="text-sm text-muted-foreground italic">
-                              + {experience.learningObjectives.length - 2} more...
-                            </li>
-                          )}
                         </ul>
                       </div>
-                      {isProUser ? (
-                        <Button
-                          className="w-full"
-                          onClick={() => navigate(`/experiences/${experience.slug}`)}
-                          data-testid={`button-start-${experience.slug}`}
-                        >
-                          Start Experience
-                        </Button>
-                      ) : (
-                        <Button
-                          className="w-full"
-                          variant="outline"
-                          onClick={() => navigate("/upgrade")}
-                          data-testid={`button-upgrade-${experience.slug}`}
-                        >
-                          <Lock className="w-4 h-4 mr-2" />
-                          Upgrade to Unlock
-                        </Button>
-                      )}
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </button>
                 </motion.div>
               ))}
             </div>
-          </div>
-        )}
 
-        {/* CTA Section */}
-        {!isProUser && proExperiences.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5 }}
-            className="mt-16"
-          >
-            <Card className={`text-center p-8 bg-gradient-to-br ${gradientClass} text-white border-0`}>
-              <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
-              <div className="relative z-10">
-                <Trophy className="w-16 h-16 mx-auto mb-4 opacity-90" />
-                <h3 className="font-serif text-3xl font-bold mb-3">
-                  Ready to Master {space.name}?
-                </h3>
-                <p className="text-xl text-white/90 mb-6 max-w-2xl mx-auto">
-                  Unlock all {proExperiences.length} premium experiences and transform your skills
-                </p>
-                <div className="flex flex-wrap justify-center gap-4">
-                  <Link href="/upgrade">
-                    <Button
-                      size="lg"
-                      className="bg-white text-foreground hover:bg-white/90"
-                      data-testid="button-upgrade-cta"
-                    >
-                      Upgrade to Pro
-                      <Sparkles className="ml-2 w-5 h-5" />
-                    </Button>
-                  </Link>
+            {/* Upgrade CTA if not Pro */}
+            {!isProUser && (
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="mt-12 text-center"
+              >
+                <div className="kinetic-glass rounded-2xl p-12 border border-card-border max-w-2xl mx-auto">
+                  <h3 className="font-serif text-3xl font-bold mb-4">
+                    Ready to Unlock Everything?
+                  </h3>
+                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                    Get unlimited access to all premium experiences and transform your skills
+                  </p>
+                  <Button
+                    size="lg"
+                    onClick={() => navigate("/upgrade")}
+                    className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
+                    data-testid="button-upgrade-pro"
+                  >
+                    Upgrade to Pro
+                  </Button>
                 </div>
-              </div>
-            </Card>
-          </motion.div>
+              </motion.div>
+            )}
+          </div>
         )}
       </div>
     </div>

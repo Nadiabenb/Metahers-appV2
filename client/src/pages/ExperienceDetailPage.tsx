@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowLeft, Lock, CheckCircle2, Clock, BookOpen, Sparkles, Play } from "lucide-react";
+import { ArrowLeft, Lock, CheckCircle2, Clock, BookOpen, Sparkles, Play, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -32,14 +32,6 @@ type Space = {
   name: string;
   slug: string;
   color: string;
-};
-
-const COLOR_CLASSES: Record<string, string> = {
-  "hyper-violet": "from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))]",
-  "magenta-quartz": "from-[hsl(var(--magenta-quartz))] to-[hsl(var(--cyber-fuchsia))]",
-  "cyber-fuchsia": "from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))]",
-  "aurora-teal": "from-[hsl(var(--aurora-teal))] to-[hsl(var(--liquid-gold))]",
-  "liquid-gold": "from-[hsl(var(--liquid-gold))] to-[hsl(var(--hyper-violet))]",
 };
 
 export default function ExperienceDetailPage() {
@@ -78,20 +70,26 @@ export default function ExperienceDetailPage() {
     );
   }
 
-  if (error) {
+  if (error || !experience) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-6">
         <Card className="max-w-md text-center p-8">
           <CardHeader>
-            <CardTitle className="text-2xl mb-2">Unable to Load Experience</CardTitle>
+            <CardTitle className="text-2xl mb-2">
+              {error ? "Unable to Load Experience" : "Experience Not Found"}
+            </CardTitle>
             <CardDescription>
-              We encountered an error while loading this experience. Please try again.
+              {error 
+                ? "We encountered an error while loading this experience. Please try again."
+                : "The experience you're looking for doesn't exist or has been moved."}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button onClick={() => window.location.reload()} data-testid="button-retry">
-              Try Again
-            </Button>
+            {error && (
+              <Button onClick={() => window.location.reload()} data-testid="button-retry">
+                Try Again
+              </Button>
+            )}
             <Button variant="outline" onClick={() => navigate("/world")} data-testid="button-back-to-world">
               Back to MetaHers World
             </Button>
@@ -101,41 +99,16 @@ export default function ExperienceDetailPage() {
     );
   }
 
-  if (!experience) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
-        <Card className="max-w-md text-center p-8">
-          <CardHeader>
-            <CardTitle className="text-2xl mb-2">Experience Not Found</CardTitle>
-            <CardDescription>
-              The experience you're looking for doesn't exist or has been moved.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => navigate("/world")} data-testid="button-back-to-world">
-              Back to MetaHers World
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  const gradientClass = space?.color
-    ? COLOR_CLASSES[space.color] || COLOR_CLASSES["hyper-violet"]
-    : COLOR_CLASSES["hyper-violet"];
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Header */}
-      <div className={`relative bg-gradient-to-br ${gradientClass} text-white py-16 px-6`}>
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="container mx-auto max-w-4xl relative z-10">
+      {/* Editorial Hero Header */}
+      <div className="relative bg-muted/30 py-20 px-6 lg:px-16">
+        <div className="container mx-auto max-w-4xl">
           {space && (
             <Link href={`/spaces/${space.slug}`}>
               <Button
                 variant="ghost"
-                className="mb-6 text-white hover:bg-white/20"
+                className="mb-8 -ml-4"
                 data-testid="button-back"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -147,29 +120,42 @@ export default function ExperienceDetailPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6 }}
           >
-            <div className="flex items-center gap-3 mb-4">
+            {/* Badges */}
+            <div className="flex items-center gap-3 mb-8">
               {isPremiumExperience ? (
-                <Badge variant="outline" className="text-white border-white/40 bg-white/10 gap-1">
-                  <Lock className="w-3 h-3" />
+                <Badge variant="outline" className="gap-1.5 border-amber-500/30 text-amber-600 dark:text-amber-400 px-4 py-2 text-sm">
+                  <Lock className="w-3.5 h-3.5" />
                   PRO
                 </Badge>
               ) : (
-                <Badge className="bg-white text-foreground gap-1">
-                  <Sparkles className="w-3 h-3" />
+                <Badge className="bg-primary/20 text-primary border-primary/30 gap-1.5 px-4 py-2 text-sm font-semibold">
+                  <Sparkles className="w-3.5 h-3.5" />
                   FREE
                 </Badge>
               )}
-              <Badge variant="outline" className="text-white border-white/40 bg-white/10 gap-1">
-                <Clock className="w-3 h-3" />
+              <Badge variant="outline" className="gap-1.5 px-4 py-2">
+                <Clock className="w-3.5 h-3.5" />
                 {experience.estimatedMinutes} minutes
               </Badge>
             </div>
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">
+
+            {/* Eyebrow */}
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-12 bg-primary" />
+              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                Transformational Experience
+              </span>
+            </div>
+
+            {/* Headline */}
+            <h1 className="editorial-headline text-5xl lg:text-6xl xl:text-7xl mb-6">
               {experience.title}
             </h1>
-            <p className="text-xl text-white/90 max-w-3xl">
+
+            {/* Description */}
+            <p className="text-2xl text-muted-foreground leading-relaxed">
               {experience.description}
             </p>
           </motion.div>
@@ -177,111 +163,127 @@ export default function ExperienceDetailPage() {
       </div>
 
       {/* Main Content */}
-      <div className="container mx-auto max-w-4xl px-6 py-16">
+      <div className="container mx-auto max-w-4xl px-6 lg:px-16 py-20">
         {/* Access Gate for Pro Experiences or Unauthenticated Users */}
         {!hasAccess && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="mb-12"
+            transition={{ duration: 0.6 }}
+            className="mb-20"
           >
             {isPremiumExperience ? (
               // Pro Experience - Show Upgrade Gate
-              <Card className={`text-center p-8 bg-gradient-to-br ${gradientClass} text-white border-0`}>
-                <div className="absolute inset-0 bg-black/20 rounded-lg"></div>
-                <div className="relative z-10">
-                  <Lock className="w-16 h-16 mx-auto mb-4 opacity-90" />
-                  <h3 className="font-serif text-3xl font-bold mb-3">
-                    Unlock Premium Content
-                  </h3>
-                  <p className="text-xl text-white/90 mb-6 max-w-2xl mx-auto">
-                    This transformational experience is part of the MetaHers Pro subscription
-                  </p>
-                  {isAuthenticated ? (
-                    <Link href="/upgrade">
+              <div className="kinetic-glass rounded-2xl p-12 border border-card-border text-center">
+                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                  <Lock className="w-10 h-10 text-primary" />
+                </div>
+                <h3 className="font-serif text-4xl font-bold mb-4">
+                  Unlock Premium Content
+                </h3>
+                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+                  This transformational experience is part of the MetaHers Pro subscription
+                </p>
+                {isAuthenticated ? (
+                  <Link href="/upgrade">
+                    <Button
+                      size="lg"
+                      className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
+                      data-testid="button-upgrade-to-unlock"
+                    >
+                      Upgrade to Pro
+                      <Sparkles className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
+                ) : (
+                  <div className="flex flex-col sm:flex-row justify-center gap-4">
+                    <Link href="/signup">
                       <Button
                         size="lg"
-                        className="bg-white text-foreground hover:bg-white/90"
-                        data-testid="button-upgrade-to-unlock"
+                        className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
+                        data-testid="button-signup-to-unlock"
                       >
-                        Upgrade to Pro
+                        Sign Up for Pro
                         <Sparkles className="ml-2 w-5 h-5" />
                       </Button>
                     </Link>
-                  ) : (
-                    <div className="flex flex-wrap justify-center gap-4">
-                      <Link href="/signup">
-                        <Button
-                          size="lg"
-                          className="bg-white text-foreground hover:bg-white/90"
-                          data-testid="button-signup-to-unlock"
-                        >
-                          Sign Up for Pro
-                          <Sparkles className="ml-2 w-5 h-5" />
-                        </Button>
-                      </Link>
-                      <Link href="/login">
-                        <Button
-                          size="lg"
-                          variant="outline"
-                          className="text-white border-white/40 hover:bg-white/10"
-                          data-testid="button-login"
-                        >
-                          Log In
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              </Card>
+                    <Link href="/login">
+                      <Button
+                        size="lg"
+                        variant="outline"
+                        className="px-12 py-6 text-lg"
+                        data-testid="button-login"
+                      >
+                        Log In
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
             ) : (
               // Free Experience - Show Sign-Up Gate
-              <Card className="p-8 text-center">
-                <Sparkles className="w-16 h-16 mx-auto mb-4 text-primary" />
-                <h3 className="font-serif text-3xl font-bold mb-3">
+              <div className="kinetic-glass rounded-2xl p-12 border border-card-border text-center">
+                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                  <Sparkles className="w-10 h-10 text-primary" />
+                </div>
+                <h3 className="font-serif text-4xl font-bold mb-4">
                   Sign Up to Start Learning
                 </h3>
-                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
                   Create a free account to access this transformational experience - no credit card required
                 </p>
-                <div className="flex flex-wrap justify-center gap-4">
+                <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <Link href="/signup">
-                    <Button size="lg" data-testid="button-signup-free">
+                    <Button 
+                      size="lg"
+                      className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
+                      data-testid="button-signup-free"
+                    >
                       Create Free Account
                       <Sparkles className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
                   <Link href="/login">
-                    <Button size="lg" variant="outline" data-testid="button-login-free">
+                    <Button size="lg" variant="outline" className="px-12 py-6 text-lg" data-testid="button-login-free">
                       Log In
                     </Button>
                   </Link>
                 </div>
-              </Card>
+              </div>
             )}
           </motion.div>
         )}
 
-        {/* Learning Objectives */}
-        <div className="mb-12">
-          <h2 className="font-serif text-3xl font-bold mb-6 flex items-center gap-2">
-            <BookOpen className="w-8 h-8 text-primary" />
-            What You'll Master
-          </h2>
-          <div className="grid gap-4">
+        {/* Learning Objectives - Editorial */}
+        <div className="mb-20">
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px w-12 bg-primary" />
+              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                Learning Outcomes
+              </span>
+            </div>
+            <h2 className="font-serif text-5xl font-bold">What You'll Master</h2>
+          </div>
+
+          <div className="grid gap-6">
             {experience.learningObjectives.map((objective, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1, duration: 0.6 }}
               >
-                <Card className="p-4">
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <p className="text-base">{objective}</p>
+                <div className="kinetic-glass rounded-lg p-6 border border-card-border">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                    </div>
+                    <p className="text-lg text-foreground/90 leading-relaxed flex-1">
+                      {objective}
+                    </p>
                   </div>
-                </Card>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -289,182 +291,59 @@ export default function ExperienceDetailPage() {
 
         {/* CTA Section */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
         >
           {hasAccess ? (
-            <Card className="p-8 text-center bg-gradient-to-br from-card via-card/80 to-primary/5">
-              <h3 className="font-serif text-2xl font-bold mb-3">
+            <div className="kinetic-glass rounded-2xl p-12 border border-card-border text-center bg-gradient-to-br from-card via-card to-primary/5">
+              <h3 className="font-serif text-4xl font-bold mb-4">
                 Ready to Begin Your Transformation?
               </h3>
-              <p className="text-muted-foreground mb-6">
-                This AI-personalized learning experience adapts to your goals and pace
+              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+                Start this {experience.estimatedMinutes}-minute experience and master {experience.learningObjectives.length} essential skills
               </p>
+              
               <Button
                 size="lg"
-                className={`bg-gradient-to-r ${gradientClass} text-white`}
                 onClick={() => {
-                  if (experience.personalizationEnabled) {
-                    setShowPersonalization(true);
-                  } else {
-                    setShowLearningPlayer(true);
-                  }
+                  setShowPersonalization(true);
                 }}
+                className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg group"
                 data-testid="button-start-experience"
               >
-                <Play className="w-5 h-5 mr-2" />
                 Start Experience
+                <Play className="ml-2 w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
               </Button>
-            </Card>
-          ) : !isAuthenticated ? (
-            <Card className="p-8 text-center">
-              <h3 className="font-serif text-2xl font-bold mb-3">
-                Sign Up to Unlock
-              </h3>
-              <p className="text-muted-foreground mb-6">
-                Create a free account to access this transformational experience
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link href="/signup">
-                  <Button size="lg" data-testid="button-signup">
-                    Create Free Account
-                  </Button>
-                </Link>
-                <Link href="/login">
-                  <Button size="lg" variant="outline" data-testid="button-login">
-                    Log In
-                  </Button>
-                </Link>
-              </div>
-            </Card>
+            </div>
           ) : null}
         </motion.div>
-
-        {/* Demo: Downloadable Resources (only show if user has access) */}
-        {hasAccess && personalizationCompleted && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-12"
-          >
-            <DownloadableResources
-              experienceTitle={experience.title}
-              isProUser={isProUser}
-              resources={[
-                {
-                  id: "res-1",
-                  title: "Beginner's Checklist",
-                  description: "Step-by-step guide to get started",
-                  type: "checklist",
-                  isPro: false,
-                },
-                {
-                  id: "res-2",
-                  title: "Advanced Workbook",
-                  description: "In-depth exercises and templates",
-                  type: "workbook",
-                  isPro: true,
-                },
-              ]}
-            />
-          </motion.div>
-        )}
-
-        {/* Demo: Interactive Quiz (only show if user has access) */}
-        {hasAccess && personalizationCompleted && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="mt-12"
-          >
-            <h3 className="text-2xl font-serif font-bold mb-6">Knowledge Check</h3>
-            <InteractiveQuiz
-              questions={[
-                {
-                  id: "q1",
-                  question: "What is the primary benefit of using AI for personal branding?",
-                  options: [
-                    "It completely replaces human creativity",
-                    "It accelerates content creation while maintaining authenticity",
-                    "It makes everything automated",
-                    "It's only useful for technical tasks",
-                  ],
-                  correctAnswer: 1,
-                  explanation: "AI is most powerful when it amplifies your unique voice and accelerates content creation, not when it replaces your authentic perspective.",
-                },
-                {
-                  id: "q2",
-                  question: "When should you use AI prompts?",
-                  options: [
-                    "Only when you have no ideas",
-                    "As a starting point to customize for your needs",
-                    "Exactly as written without changes",
-                    "Never, they limit creativity",
-                  ],
-                  correctAnswer: 1,
-                  explanation: "AI prompts work best as templates you adapt to your specific situation, audience, and goals.",
-                },
-              ]}
-              onComplete={(score) => console.log(`Quiz completed with score: ${score}`)}
-            />
-          </motion.div>
-        )}
       </div>
 
-      {/* Personalization Modal */}
+      {/* Modals */}
       {experience && (
-        <PersonalizationQuestionsModal
-          open={showPersonalization}
-          onClose={() => setShowPersonalization(false)}
-          onComplete={() => {
-            setShowPersonalization(false);
-            setPersonalizationCompleted(true);
-            setShowLearningPlayer(true);
-          }}
-          experienceId={experience.id}
-          experienceTitle={experience.title}
-          questions={[
-            {
-              id: "pq-1",
-              questionText: "What's your primary goal for learning this topic?",
-              questionType: "multiple_choice",
-              options: [
-                "Building my personal brand",
-                "Growing my business",
-                "Career advancement",
-                "Personal interest",
-              ],
-              isRequired: true,
-            },
-            {
-              id: "pq-2",
-              questionText: "On a scale of 1-10, how confident are you with this topic currently?",
-              questionType: "scale",
-              isRequired: true,
-            },
-            {
-              id: "pq-3",
-              questionText: "What specific challenge are you hoping to solve?",
-              questionType: "textarea",
-              isRequired: false,
-            },
-          ]}
-        />
-      )}
-
-      {/* Learning Player */}
-      {showLearningPlayer && experience && space && (
-        <div className="fixed inset-0 z-50 bg-background">
-          <ExperienceLearningPlayer
-            experience={experience}
-            spaceColor={space.color}
-            onExit={() => {
-              setShowLearningPlayer(false);
+        <>
+          <PersonalizationQuestionsModal
+            open={showPersonalization}
+            onClose={() => setShowPersonalization(false)}
+            experienceId={experience.id}
+            experienceTitle={experience.title}
+            questions={[]}
+            onComplete={() => {
               setPersonalizationCompleted(true);
+              setShowPersonalization(false);
+              setShowLearningPlayer(true);
             }}
           />
-        </div>
+          
+          {showLearningPlayer && (
+            <ExperienceLearningPlayer
+              experience={experience}
+              spaceColor={space?.color || "liquid-gold"}
+              onExit={() => setShowLearningPlayer(false)}
+            />
+          )}
+        </>
       )}
     </div>
   );
