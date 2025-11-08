@@ -157,6 +157,40 @@ export default function ThoughtLeadershipPage() {
   const isPracticeSubmitted = progress?.practicesSubmitted?.includes(progress?.currentDay || 0);
   const existingReflection = progress?.practiceReflections?.[progress?.currentDay || 0];
 
+  // Show login prompt if not authenticated
+  if (progressError && (progressError as any).message === 'Unauthorized') {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background py-12 px-6">
+        <SEO
+          title="30-Day Thought Leadership Journey - MetaHers"
+          description="Build your online brand authority with our 30-day guided journey"
+        />
+        <Card className="max-w-lg editorial-card">
+          <CardHeader className="text-center">
+            <Lock className="w-16 h-16 mx-auto mb-4 text-primary" />
+            <CardTitle className="font-cormorant text-3xl mb-2">Sign In Required</CardTitle>
+            <p className="text-muted-foreground">
+              Please sign in to access your 30-Day Brand Authority Journey.
+            </p>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Link href="/login">
+              <Button className="w-full" size="lg" data-testid="button-login">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Sign In
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button variant="outline" className="w-full" size="lg" data-testid="button-signup">
+                Create Free Account
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   // Show brand onboarding if not completed
   if (progress && !progress.brandOnboardingCompleted) {
     return (
