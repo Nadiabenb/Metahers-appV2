@@ -297,7 +297,11 @@ export default function SpaceDetailPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="hover-elevate border-primary/20 bg-gradient-to-br from-card via-card/80 to-primary/5">
+                  <Card 
+                    className="hover-elevate border-primary/20 bg-gradient-to-br from-card via-card/80 to-primary/5 cursor-pointer"
+                    onClick={() => navigate(`/experiences/${experience.slug}`)}
+                    data-testid={`card-experience-${experience.slug}`}
+                  >
                     <CardHeader>
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
@@ -362,7 +366,11 @@ export default function SpaceDetailPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: (freeExperiences.length + index) * 0.1 }}
                 >
-                  <Card className={`hover-elevate h-full ${!isProUser ? 'opacity-75' : ''}`}>
+                  <Card 
+                    className={`hover-elevate h-full cursor-pointer ${!isProUser ? 'opacity-75' : ''}`}
+                    onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
+                    data-testid={`card-experience-${experience.slug}`}
+                  >
                     <CardHeader>
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
