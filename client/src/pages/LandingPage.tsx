@@ -151,44 +151,48 @@ export default function LandingPage() {
               {/* CTA Buttons - Magazine Style */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
                 <motion.button
-                  onClick={handleSignup}
+                  onClick={() => {
+                    trackCTAClick('hero_retreat', '/retreat', 'free');
+                    window.location.href = "/retreat";
+                  }}
                   whileHover={{ 
                     scale: 1.03,
-                    boxShadow: "0 0 40px rgba(255,215,0,0.4)"
+                    boxShadow: "0 0 40px rgba(16,185,129,0.4)"
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className="gold-shimmer group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--liquid-gold))]/90 text-black font-semibold text-lg transition-all duration-300"
-                  data-testid="button-start-free"
+                  className="group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-lg transition-all duration-300 shadow-2xl shadow-emerald-500/30"
+                  data-testid="button-join-retreat"
                 >
-                  <span className="relative z-10">Begin Your Journey — Free</span>
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Sparkles className="w-5 h-5" />
+                    Join Free 3-Day AI Retreat
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </motion.button>
 
                 <button
-                  onClick={() => {
-                    trackCTAClick('hero_discover', '/discover', 'free');
-                    window.location.href = "/discover";
-                  }}
+                  onClick={handleSignup}
                   className="px-12 py-5 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all text-white font-semibold text-lg"
-                  data-testid="button-discover-spaces"
+                  data-testid="button-start-free"
                 >
-                  Explore Spaces
+                  Start Free Account
                 </button>
               </div>
 
-              {/* WhatsApp Community CTA - Human-Powered Feature */}
+              {/* WhatsApp Retreat CTA - Human-Powered Feature */}
               <motion.a
-                href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-[#25D366]/30 bg-[#25D366]/10 backdrop-blur-sm hover:bg-[#25D366]/20 hover:border-[#25D366]/50 transition-all"
-                data-testid="button-whatsapp-community"
-                onClick={() => trackCTAClick('hero_whatsapp_lounge', 'whatsapp', 'free')}
+                data-testid="button-whatsapp-retreat-hero"
+                onClick={() => trackCTAClick('hero_whatsapp_retreat', 'whatsapp_retreat', 'free')}
               >
                 <SiWhatsapp className="w-5 h-5 text-[#25D366]" />
                 <span className="text-white font-medium">
-                  Join Free WhatsApp Lounge — Direct Access to Nadia
+                  Register via WhatsApp — Learn AI with Nadia in 3 Days
                 </span>
               </motion.a>
 

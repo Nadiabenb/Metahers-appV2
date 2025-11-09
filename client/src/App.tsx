@@ -52,6 +52,7 @@ const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
 const CompanionPage = lazy(() => import("@/pages/CompanionPage"));
 const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
+const RetreatPage = lazy(() => import("@/pages/RetreatPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -91,6 +92,7 @@ function Router() {
         <Route path="/ai-glow-up-program" component={GlowUpLandingPage} />
 
         {/* Public routes - accessible to everyone */}
+        <Route path="/retreat" component={RetreatPage} />
         <Route path="/blog" component={BlogPage} />
         <Route path="/daily" component={DailyNewsPage} />
         <Route path="/playground" component={PromptPlaygroundPage} />

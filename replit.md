@@ -44,6 +44,7 @@ All user and application data, including `users`, `ritual_progress`, `journal_en
 The architecture pivots to a structured learning academy, **MetaHers World**, a central hub connecting 6 specialized learning spaces. Each space contains 6 AI-personalized transformational experiences. Key tables include `Spaces`, `Transformational Experiences`, `Experience Progress`, and `Personalization Responses`. A multi-tier gating strategy controls access to spaces based on subscription level. This architecture emphasizes outcome-driven skill mastery and measurable transformation.
 
 ### Key Features
+- **3-Day AI Retreat (Primary Lead Magnet)**: Free virtual retreat following Tony Robbins event model. Features "Cleanse, Nourish, Transform" Mind Spa framework with personal teaching from founder Nadia. WhatsApp-based registration and delivery. Includes countdown timer, spots-remaining urgency, VIP upgrade path ($297), and post-retreat conversion funnel to paid tiers.
 - **Multi-Tier Pricing**: A 7-tier model (Free, Pro, AI Builder, VIP, Executive).
 - **Specialized Landing Pages**: Dedicated high-conversion pages for VIP Retreat, Executive Suite, and AI Builder's Retreat.
 - **30-Day Thought Leadership Journey** (Pro-Only): An AI-powered content generation feature for building authority, including gamification and streak tracking. Generates content in Substack, LinkedIn, and Twitter formats.

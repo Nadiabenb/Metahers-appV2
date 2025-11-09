@@ -129,34 +129,34 @@ export default function UpgradePage() {
                       <SiWhatsapp className="w-8 h-8 text-[#25D366]" />
                     </div>
                     <div>
-                      <h3 className="font-serif text-2xl font-bold text-foreground mb-2">Start Here: Free WhatsApp Lounge</h3>
+                      <h3 className="font-serif text-2xl font-bold text-foreground mb-2">Start Here: Free 3-Day AI Retreat</h3>
                       <p className="text-lg text-foreground/80 mb-3">
-                        Join our private WhatsApp community for daily insights, exclusive tips, and direct access to founder Nadia.
+                        Join Nadia's intimate 3-day AI training via WhatsApp. Learn ChatGPT, automation, and Web3 basics with zero tech overwhelm.
                       </p>
                       <div className="flex flex-wrap gap-2 mb-3">
                         <div className="flex items-center gap-1 text-sm text-foreground/70">
                           <Check className="w-4 h-4 text-[#25D366]" />
-                          Daily AI & Web3 insights
+                          3 days of live AI training
                         </div>
                         <div className="flex items-center gap-1 text-sm text-foreground/70">
                           <Check className="w-4 h-4 text-[#25D366]" />
-                          Direct founder access
+                          Personal mentorship from Nadia
                         </div>
                         <div className="flex items-center gap-1 text-sm text-foreground/70">
                           <Check className="w-4 h-4 text-[#25D366]" />
-                          Human-powered support
+                          Cleanse, Nourish, Transform
                         </div>
                       </div>
                       <p className="text-sm text-foreground/60 italic">
-                        This is our human-powered feature—real connection, real mentorship from Nadia herself.
+                        This retreat is our lead magnet—100% free access to experience Nadia's teaching firsthand.
                       </p>
                     </div>
                   </div>
                   <a
-                    href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                    href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => trackCTAClick('pricing_whatsapp_lounge', 'whatsapp', 'free')}
+                    onClick={() => trackCTAClick('pricing_whatsapp_retreat', 'whatsapp_retreat', 'free')}
                     data-testid="link-whatsapp-pricing"
                   >
                     <Button
@@ -165,7 +165,7 @@ export default function UpgradePage() {
                       data-testid="button-whatsapp-pricing"
                     >
                       <SiWhatsapp className="w-5 h-5 mr-2" />
-                      Join Free Community
+                      Join Free AI Retreat
                     </Button>
                   </a>
                 </div>

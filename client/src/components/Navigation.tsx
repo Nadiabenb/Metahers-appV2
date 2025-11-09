@@ -20,6 +20,7 @@ export function Navigation() {
   // Categorized navigation items for mega menu
   const navCategories = {
     "AI Tools": [
+      { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129", featured: true },
       { path: "/playground", label: "AI Tools", icon: Sparkles, gradient: "from-cyan-500 to-blue-600", glow: "0, 217, 255" },
       { path: "/career-path", label: "Career Path", icon: Target, gradient: "from-purple-500 to-pink-600", glow: "181, 101, 216" },
       { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, gradient: "from-pink-500 to-rose-600", glow: "233, 53, 193", pro: true },
@@ -292,14 +293,14 @@ export function Navigation() {
               </Button>
             )}
 
-            {/* WhatsApp Community Link */}
+            {/* WhatsApp Retreat Link */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <a
-                  href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                  href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => trackCTAClick('nav_whatsapp_lounge', 'whatsapp', 'free')}
+                  onClick={() => trackCTAClick('nav_whatsapp_retreat', 'whatsapp_retreat', 'free')}
                   data-testid="button-whatsapp-nav"
                 >
                   <Button
@@ -312,7 +313,7 @@ export function Navigation() {
                 </a>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Join Free WhatsApp Lounge</p>
+                <p>Join Free AI Retreat</p>
               </TooltipContent>
             </Tooltip>
 
@@ -372,12 +373,12 @@ export function Navigation() {
                       }} />
                     </div>
 
-                    {/* WhatsApp Community */}
+                    {/* WhatsApp Retreat */}
                     <a
-                      href="https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=wwt"
+                      href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
                       target="_blank"
                       rel="noopener noreferrer"
-                      onClick={() => trackCTAClick('mobile_whatsapp_lounge', 'whatsapp', 'free')}
+                      onClick={() => trackCTAClick('mobile_whatsapp_retreat', 'whatsapp_retreat', 'free')}
                       className="block"
                       data-testid="link-mobile-whatsapp"
                     >
@@ -386,7 +387,7 @@ export function Navigation() {
                           <SiWhatsapp className="w-5 h-5 text-white" />
                         </div>
                         <span className="font-medium text-foreground flex-1 text-left">
-                          Free WhatsApp Lounge
+                          Free AI Retreat
                         </span>
                         <Badge variant="secondary" className="text-xs px-1.5 py-0">
                           FREE
