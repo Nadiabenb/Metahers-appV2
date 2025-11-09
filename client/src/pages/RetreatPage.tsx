@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackCTAClick } from "@/lib/analytics";
 import { useRef, useState, useEffect } from "react";
-import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
+import heroImage from "@assets/Gemini_Generated_Image_8m25k88m25k88m25_1762658509547.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 
 const RETREAT_WHATSAPP = "https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt";
