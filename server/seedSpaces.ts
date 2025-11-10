@@ -76,6 +76,15 @@ const METAHERS_SPACES = [
     color: "cyber-fuchsia",
     sortOrder: 8,
   },
+  {
+    id: "digital-sales",
+    name: "Digital Sales Accelerator",
+    slug: "digital-sales",
+    description: "Launch your online store and start selling in 3 days. Master Shopify, Instagram Shopping, TikTok Shop, and automated marketing. Learn by DOING—not watching—in hands-on workshops where you build your e-commerce business in real-time.",
+    icon: "ShoppingBag",
+    color: "liquid-gold",
+    sortOrder: 9,
+  },
 ];
 
 export async function seedSpaces() {

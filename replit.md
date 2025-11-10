@@ -41,7 +41,18 @@ Custom email/password authentication uses bcrypt for password hashing and databa
 All user and application data, including `users`, `ritual_progress`, `journal_entries`, `achievements`, `subscriptions`, `thought_leadership_posts`, `thought_leadership_progress`, `spaces`, `transformational_experiences`, `experience_progress`, and `personalization_responses`, is persisted in a PostgreSQL database using Drizzle ORM. Zod is employed for client-side validation.
 
 ### MetaHers World Architecture (Hub-and-Spoke Model)
-The architecture pivots to a structured learning academy, **MetaHers World**, a central hub connecting 6 specialized learning spaces. Each space contains 6 AI-personalized transformational experiences. Key tables include `Spaces`, `Transformational Experiences`, `Experience Progress`, and `Personalization Responses`. A multi-tier gating strategy controls access to spaces based on subscription level. This architecture emphasizes outcome-driven skill mastery and measurable transformation.
+The architecture pivots to a structured learning academy, **MetaHers World**, a central hub connecting 9 specialized learning spaces. Each space contains 6 AI-personalized transformational experiences. Key tables include `Spaces`, `Transformational Experiences`, `Experience Progress`, and `Personalization Responses`. A multi-tier gating strategy controls access to spaces based on subscription level. This architecture emphasizes outcome-driven skill mastery and measurable transformation.
+
+**The 9 Learning Spaces:**
+1. **Web3** - Decentralized technologies and blockchain fundamentals
+2. **NFT/Blockchain/Crypto** - Digital assets, NFTs, and cryptocurrency
+3. **AI** - AI tools, custom GPTs, and automation
+4. **Metaverse** - Virtual worlds and digital ownership
+5. **Branding** - Personal and professional brand building
+6. **Moms** - Tech careers and entrepreneurship for mothers
+7. **App Atelier** - Building apps with AI and no-code tools
+8. **Founder's Club** - 12-week accelerator for turning ideas into reality
+9. **Digital Sales Accelerator** - E-commerce workshop series for launching online stores in 3 days (Shopify, Instagram Shopping, TikTok Shop, email marketing, paid ads)
 
 ### Key Features
 - **3-Day AI Retreat (Primary Lead Magnet)**: Free virtual retreat following Tony Robbins event model. Features "Cleanse, Nourish, Transform" Mind Spa framework with personal teaching from founder Nadia. WhatsApp-based registration and delivery. Includes countdown timer, spots-remaining urgency, VIP upgrade path ($297), and post-retreat conversion funnel to paid tiers.

@@ -644,7 +644,7 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   // ===== NFTs SPACE (6 experiences) =====
   {
     id: "nfts-1-basics",
-    spaceId: "nfts",
+    spaceId: "crypto",
     title: "NFT Essentials",
     slug: "nft-essentials",
     description: "Understand NFTs beyond the hype. Learn about digital ownership, utility, and real-world applications.",
@@ -670,7 +670,7 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   },
   {
     id: "nfts-2-collecting",
-    spaceId: "nfts",
+    spaceId: "crypto",
     title: "NFT Collecting & Investing",
     slug: "nft-collecting",
     description: "Start your NFT collection strategically. Learn how to evaluate projects, spot quality, and build value.",
@@ -696,7 +696,7 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   },
   {
     id: "nfts-3-creating",
-    spaceId: "nfts",
+    spaceId: "crypto",
     title: "Create & Mint Your NFTs",
     slug: "create-mint-nfts",
     description: "Turn your art, photos, or content into NFTs. Launch your first collection on OpenSea or Rarible.",
@@ -722,7 +722,7 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   },
   {
     id: "nfts-4-marketing",
-    spaceId: "nfts",
+    spaceId: "crypto",
     title: "NFT Marketing & Community",
     slug: "nft-marketing",
     description: "Build hype and community around your NFT project. From Discord to Twitter to launch success.",
@@ -748,7 +748,7 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   },
   {
     id: "nfts-5-utility",
-    spaceId: "nfts",
+    spaceId: "crypto",
     title: "Utility NFTs & Memberships",
     slug: "utility-nfts",
     description: "Create NFTs that unlock access, benefits, or experiences. Build membership and loyalty programs.",
@@ -774,7 +774,7 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   },
   {
     id: "nfts-6-launch",
-    spaceId: "nfts",
+    spaceId: "crypto",
     title: "Launch Your NFT Project",
     slug: "launch-nft-project",
     description: "Take your NFT project from concept to successful launch. Plan, build, and sell your collection.",
@@ -951,6 +951,254 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
           title: "Brand Launch Strategy",
           type: "hands_on_lab",
           content: "Launch your brand into the world.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+
+  // ===== DIGITAL SALES ACCELERATOR (6 experiences) =====
+  {
+    id: "digital-sales-1-shopify",
+    spaceId: "digital-sales",
+    title: "Launch Your Shopify Store",
+    slug: "launch-shopify-store",
+    description: "Build and launch your Shopify store LIVE in 2 hours. Set up payments, add products, and start taking orders. By the end, your store is live and ready to sell.",
+    learningObjectives: [
+      "Create and configure your Shopify store",
+      "Set up payment processing and shipping zones",
+      "Add your first 5 products with optimized descriptions",
+      "Launch your store and make it live",
+    ],
+    tier: "free", // FREE - Lead magnet
+    estimatedMinutes: 120,
+    sortOrder: 1,
+    content: {
+      sections: [
+        {
+          id: "shopify-setup",
+          title: "Shopify Quick Wins Setup",
+          type: "hands_on_lab",
+          content: "Follow along step-by-step as we build your Shopify store together. You'll sign up, pick a theme, configure essentials, and add products in real-time.",
+          resources: [
+            { title: "Shopify Setup Checklist", url: "/resources/shopify-checklist.pdf", type: "pdf" },
+            { title: "Product Description Templates", url: "/resources/product-templates.pdf", type: "pdf" },
+          ],
+        },
+        {
+          id: "store-polish",
+          title: "Polish & Launch",
+          type: "interactive",
+          content: "Customize your homepage, set up navigation, and do a mobile preview check. Then we celebrate—your store is LIVE!",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "digital-sales-2-instagram",
+    spaceId: "digital-sales",
+    title: "Instagram Shopping Activation",
+    slug: "instagram-shopping",
+    description: "Turn Instagram into a sales channel. Set up Instagram Shopping, create shoppable posts, and start selling where your customers already are.",
+    learningObjectives: [
+      "Activate Instagram Shopping for your account",
+      "Connect your Shopify catalog to Instagram",
+      "Create 3 shoppable posts with product tags",
+      "Use AI to generate captions and content ideas",
+    ],
+    tier: "free", // FREE - Lead magnet
+    estimatedMinutes: 120,
+    sortOrder: 2,
+    content: {
+      sections: [
+        {
+          id: "instagram-business",
+          title: "Instagram Business Setup",
+          type: "hands_on_lab",
+          content: "Convert to a Business account, connect your Facebook Page, link your Shopify catalog, and submit for Instagram Shopping approval.",
+        },
+        {
+          id: "shoppable-content",
+          title: "Create Shoppable Posts",
+          type: "interactive",
+          content: "Use proven content formulas to create 3 posts, tag products, and publish them live. Plus learn AI prompts for writing captions in 30 seconds.",
+          resources: [
+            { title: "Caption Templates", url: "/resources/caption-templates.pdf", type: "pdf" },
+            { title: "AI Prompt Library", url: "/resources/ai-prompts.pdf", type: "pdf" },
+          ],
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "digital-sales-3-tiktok",
+    spaceId: "digital-sales",
+    title: "TikTok Shop & Content Creation",
+    slug: "tiktok-shop-content",
+    description: "Launch TikTok Shop and create content that sells. Film your first 3 TikToks together using viral formulas, go LIVE, and plan 30 days of content with AI.",
+    learningObjectives: [
+      "Set up TikTok Business and TikTok Shop",
+      "Film and post 3 TikToks using proven selling formulas",
+      "Complete your first TikTok Live selling session",
+      "Generate 30 days of content ideas with AI in 5 minutes",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 120,
+    sortOrder: 3,
+    content: {
+      sections: [
+        {
+          id: "tiktok-setup",
+          title: "TikTok Business & Shop Launch",
+          type: "hands_on_lab",
+          content: "Create your TikTok Business account, apply for TikTok Shop, and connect your product catalog.",
+        },
+        {
+          id: "viral-content",
+          title: "Film Content That Sells",
+          type: "hands_on_lab",
+          content: "Learn 3 viral formulas (style/try-on, GRWM, behind-the-scenes), film your TikToks RIGHT NOW, edit them, and post them live during the workshop.",
+          resources: [
+            { title: "TikTok Viral Formulas", url: "/resources/tiktok-formulas.pdf", type: "pdf" },
+            { title: "Trending Sounds List", url: "/resources/trending-sounds.pdf", type: "pdf" },
+          ],
+        },
+        {
+          id: "content-planning",
+          title: "30-Day Content Plan with AI",
+          type: "interactive",
+          content: "Use AI to generate 30 days of content ideas in 5 minutes. Save your content calendar and never run out of ideas.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "digital-sales-4-email-ads",
+    spaceId: "digital-sales",
+    title: "Email Marketing & Paid Ads",
+    slug: "email-marketing-paid-ads",
+    description: "Activate email marketing automation and launch your first ad campaign. Set up welcome emails, abandoned cart recovery, and a $10/day Meta ad—all live during the workshop.",
+    learningObjectives: [
+      "Set up email marketing platform with 3 essential automations",
+      "Create email templates and pop-ups for list building",
+      "Launch your first Meta ad campaign with AI-written copy",
+      "Use AI to create 20 product descriptions and 14 days of captions",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 120,
+    sortOrder: 4,
+    content: {
+      sections: [
+        {
+          id: "email-setup",
+          title: "Email Marketing Activation",
+          type: "hands_on_lab",
+          content: "Choose your platform (Klaviyo or Mailchimp), create templates, and build 3 automations: Welcome, Abandoned Cart, and Thank You emails.",
+        },
+        {
+          id: "first-ad",
+          title: "Launch Your First Ad",
+          type: "hands_on_lab",
+          content: "Set up Meta Business Manager, install Facebook Pixel, create ad copy with AI, select your audience, and launch a $10/day campaign live.",
+          resources: [
+            { title: "Email Marketing Templates", url: "/resources/email-templates.pdf", type: "pdf" },
+            { title: "Ad Campaign Setup Guide", url: "/resources/ad-setup.pdf", type: "pdf" },
+          ],
+        },
+        {
+          id: "ai-automation",
+          title: "AI Content Automation Power Hour",
+          type: "interactive",
+          content: "Use AI together to create 20 product descriptions (5 min), 14 days of captions (5 min), 5 email subject lines (2 min), and 10 ad variations (3 min).",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "digital-sales-5-operations",
+    spaceId: "digital-sales",
+    title: "Operations & Analytics",
+    slug: "operations-analytics",
+    description: "Build systems that scale. Set up inventory sync, order management, customer service automation, and analytics dashboards so you can handle 50+ orders per day smoothly.",
+    learningObjectives: [
+      "Sync inventory across all platforms automatically",
+      "Set up order management and shipping workflows",
+      "Build analytics dashboard to track key metrics",
+      "Automate customer service with templates and FAQs",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 120,
+    sortOrder: 5,
+    content: {
+      sections: [
+        {
+          id: "inventory-fulfillment",
+          title: "Inventory & Fulfillment Systems",
+          type: "hands_on_lab",
+          content: "Set up inventory sync, order management workflow, packaging strategy, shipping optimization, and return processes.",
+        },
+        {
+          id: "analytics-money",
+          title: "Analytics & Money Tracking",
+          type: "interactive",
+          content: "Create your dashboard using our template. Connect all platforms to see revenue by channel, best-sellers, CAC, and profit margins in one place.",
+          resources: [
+            { title: "Analytics Dashboard Template", url: "/resources/dashboard-template.pdf", type: "pdf" },
+            { title: "Key Metrics Guide", url: "/resources/key-metrics.pdf", type: "pdf" },
+          ],
+        },
+        {
+          id: "customer-service",
+          title: "Customer Service Automation",
+          type: "text",
+          content: "Build FAQs, automated responses, DM templates, and review response systems. Handle difficult customers with confidence.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "digital-sales-6-growth",
+    spaceId: "digital-sales",
+    title: "Growth Systems & Scaling",
+    slug: "growth-systems-scaling",
+    description: "Scale what works. Review your results, optimize winning strategies, build customer loyalty programs, and create your 90-day growth roadmap.",
+    learningObjectives: [
+      "Analyze first week results and identify what's working",
+      "Optimize ads and content that perform best",
+      "Build loyalty programs and referral systems",
+      "Create your personalized 90-day growth roadmap",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 120,
+    sortOrder: 6,
+    content: {
+      sections: [
+        {
+          id: "scaling-what-works",
+          title: "Scaling What Works",
+          type: "interactive",
+          content: "Review everyone's first week results together. Identify winning ads, viral content, and best-selling products. Make data-driven optimization decisions.",
+        },
+        {
+          id: "community-loyalty",
+          title: "Building Community & Loyalty",
+          type: "hands_on_lab",
+          content: "Create simple loyalty programs, user-generated content strategies, customer referral programs, VIP perks, and Instagram engagement tactics.",
+          resources: [
+            { title: "Loyalty Program Templates", url: "/resources/loyalty-templates.pdf", type: "pdf" },
+            { title: "Referral Program Guide", url: "/resources/referral-guide.pdf", type: "pdf" },
+          ],
+        },
+        {
+          id: "long-term-plan",
+          title: "Your 90-Day Roadmap",
+          type: "interactive",
+          content: "Build your personalized 90-day roadmap together. Plan when to hire help, seasonal strategies, work-life balance, and staying ahead of trends.",
         },
       ],
     },
