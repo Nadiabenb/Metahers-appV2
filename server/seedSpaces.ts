@@ -78,8 +78,8 @@ const METAHERS_SPACES = [
   },
   {
     id: "digital-sales",
-    name: "Digital Sales Accelerator",
-    slug: "digital-sales",
+    name: "Digital Boutique",
+    slug: "digital-boutique",
     description: "Launch your online store and start selling in 3 days. Master Shopify, Instagram Shopping, TikTok Shop, and automated marketing. Learn by DOING—not watching—in hands-on workshops where you build your e-commerce business in real-time.",
     icon: "ShoppingBag",
     color: "liquid-gold",

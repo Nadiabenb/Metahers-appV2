@@ -52,7 +52,7 @@ The architecture pivots to a structured learning academy, **MetaHers World**, a 
 6. **Moms** - Tech careers and entrepreneurship for mothers
 7. **App Atelier** - Building apps with AI and no-code tools
 8. **Founder's Club** - 12-week accelerator for turning ideas into reality
-9. **Digital Sales Accelerator** - E-commerce workshop series for launching online stores in 3 days (Shopify, Instagram Shopping, TikTok Shop, email marketing, paid ads)
+9. **Digital Boutique** - E-commerce workshop series for launching online stores in 3 days (Shopify, Instagram Shopping, TikTok Shop, email marketing, paid ads)
 
 ### Key Features
 - **3-Day AI Retreat (Primary Lead Magnet)**: Free virtual retreat following Tony Robbins event model. Features "Cleanse, Nourish, Transform" Mind Spa framework with personal teaching from founder Nadia. WhatsApp-based registration and delivery. Includes countdown timer, spots-remaining urgency, VIP upgrade path ($297), and post-retreat conversion funnel to paid tiers.
