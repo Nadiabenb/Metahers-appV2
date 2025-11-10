@@ -2813,6 +2813,16 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           color: 'cyber-fuchsia',
           sortOrder: 8,
           isActive: true
+        },
+        {
+          id: 'digital-sales',
+          name: 'Digital Boutique',
+          slug: 'digital-boutique',
+          description: 'Launch your online store and start selling in 3 days. Master Shopify, Instagram Shopping, TikTok Shop, and automated marketing. Learn by DOING—not watching—in hands-on workshops where you build your e-commerce business in real-time.',
+          icon: 'ShoppingBag',
+          color: 'liquid-gold',
+          sortOrder: 9,
+          isActive: true
         }
       ];
 
