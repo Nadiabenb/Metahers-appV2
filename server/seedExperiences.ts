@@ -957,6 +957,322 @@ const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
     personalizationEnabled: true,
   },
 
+  // ===== APP ATELIER SPACE (6 experiences) =====
+  {
+    id: "app-atelier-1-foundations",
+    spaceId: "app-atelier",
+    title: "No-Code App Foundations",
+    slug: "no-code-foundations",
+    description: "Discover how to build professional apps without writing code. Understand the tools, platforms, and mindset shift needed to become a no-code creator.",
+    learningObjectives: [
+      "Understand the no-code movement and its potential",
+      "Compare major no-code platforms (Bubble, Glide, Adalo)",
+      "Identify which platform fits your app idea",
+    ],
+    tier: "free", // FREE - Lead magnet
+    estimatedMinutes: 25,
+    sortOrder: 1,
+    content: {
+      sections: [
+        {
+          id: "intro",
+          title: "Welcome to No-Code",
+          type: "text",
+          content: "You don't need to be a programmer to build powerful applications. No-code tools democratize app development for everyone.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "app-atelier-2-mvp",
+    spaceId: "app-atelier",
+    title: "Design Your MVP",
+    slug: "design-mvp",
+    description: "Plan your Minimum Viable Product. Learn to identify core features, create user flows, and wireframe your first app.",
+    learningObjectives: [
+      "Define your MVP scope and features",
+      "Create user flows and wireframes",
+      "Validate your app idea with potential users",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 40,
+    sortOrder: 2,
+    content: {
+      sections: [
+        {
+          id: "mvp-planning",
+          title: "MVP Strategy",
+          type: "interactive",
+          content: "Start with the essentials. What's the ONE problem your app solves?",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "app-atelier-3-build",
+    spaceId: "app-atelier",
+    title: "Build Your First App",
+    slug: "build-first-app",
+    description: "Hands-on workshop: Build a functional app in 2 hours using Bubble or Glide. From blank canvas to working prototype.",
+    learningObjectives: [
+      "Set up your no-code development environment",
+      "Build core features and user interface",
+      "Deploy your first app to the web",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 120,
+    sortOrder: 3,
+    content: {
+      sections: [
+        {
+          id: "building",
+          title: "Build Workshop",
+          type: "hands_on_lab",
+          content: "Let's build together. You'll leave with a live, functional app.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "app-atelier-4-ai-integration",
+    spaceId: "app-atelier",
+    title: "AI-Powered Features",
+    slug: "ai-powered-features",
+    description: "Integrate AI capabilities into your app. Add chatbots, content generation, image creation, and smart recommendations.",
+    learningObjectives: [
+      "Connect OpenAI API to your no-code app",
+      "Build AI-powered features and workflows",
+      "Create personalized user experiences",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 50,
+    sortOrder: 4,
+    content: {
+      sections: [
+        {
+          id: "ai-features",
+          title: "AI Integration",
+          type: "interactive",
+          content: "Make your app intelligent with AI-powered features.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "app-atelier-5-monetization",
+    spaceId: "app-atelier",
+    title: "Monetize Your App",
+    slug: "monetize-app",
+    description: "Turn your app into a revenue stream. Implement subscriptions, one-time payments, and freemium models using Stripe.",
+    learningObjectives: [
+      "Set up Stripe payments in no-code apps",
+      "Design pricing tiers and subscription models",
+      "Create upgrade flows and paywalls",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 45,
+    sortOrder: 5,
+    content: {
+      sections: [
+        {
+          id: "monetization",
+          title: "Revenue Models",
+          type: "text",
+          content: "Your app can generate income. Let's set up payments.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "app-atelier-6-launch",
+    spaceId: "app-atelier",
+    title: "Launch & Scale Your App",
+    slug: "launch-scale-app",
+    description: "Go from prototype to production. Launch strategy, user acquisition, and scaling best practices for no-code apps.",
+    learningObjectives: [
+      "Prepare your app for public launch",
+      "Set up analytics and user feedback loops",
+      "Scale your app as users grow",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 60,
+    sortOrder: 6,
+    content: {
+      sections: [
+        {
+          id: "launch",
+          title: "Launch Strategy",
+          type: "hands_on_lab",
+          content: "Time to ship. Let's get your app in front of users.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+
+  // ===== FOUNDER'S CLUB SPACE (6 experiences) =====
+  {
+    id: "founders-club-1-ideation",
+    spaceId: "founders-club",
+    title: "Validate Your Business Idea",
+    slug: "validate-business-idea",
+    description: "Turn your idea into a viable business. Learn validation frameworks, customer research, and how to avoid building something nobody wants.",
+    learningObjectives: [
+      "Test your business idea with real customers",
+      "Identify your ideal customer and their pain points",
+      "Decide if your idea is worth pursuing",
+    ],
+    tier: "free", // FREE - Lead magnet
+    estimatedMinutes: 30,
+    sortOrder: 1,
+    content: {
+      sections: [
+        {
+          id: "validation",
+          title: "Idea Validation",
+          type: "text",
+          content: "Before you build, validate. Learn how to test ideas fast and cheap.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "founders-club-2-business-model",
+    spaceId: "founders-club",
+    title: "Design Your Business Model",
+    slug: "design-business-model",
+    description: "Map out how you'll make money. From pricing strategy to revenue streams—build a sustainable business model.",
+    learningObjectives: [
+      "Create your business model canvas",
+      "Define pricing and revenue streams",
+      "Calculate unit economics and break-even",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 45,
+    sortOrder: 2,
+    content: {
+      sections: [
+        {
+          id: "business-model",
+          title: "Revenue Strategy",
+          type: "interactive",
+          content: "How will you make money? Let's figure it out.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "founders-club-3-mvp-build",
+    spaceId: "founders-club",
+    title: "Build Your MVP in 30 Days",
+    slug: "build-mvp-30-days",
+    description: "Ship fast, iterate faster. Build a working MVP in 30 days using no-code tools and lean methodology.",
+    learningObjectives: [
+      "Scope your MVP features ruthlessly",
+      "Build with no-code/low-code tools",
+      "Launch before you're ready (and why that's good)",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 90,
+    sortOrder: 3,
+    content: {
+      sections: [
+        {
+          id: "mvp-build",
+          title: "30-Day Build Sprint",
+          type: "hands_on_lab",
+          content: "You have 30 days. Let's build something real.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "founders-club-4-first-customers",
+    spaceId: "founders-club",
+    title: "Get Your First 10 Customers",
+    slug: "first-10-customers",
+    description: "Customer acquisition from zero. Learn scrappy, founder-led sales tactics that work before you have a marketing budget.",
+    learningObjectives: [
+      "Find your first customers without ads",
+      "Perfect your pitch and close sales",
+      "Build word-of-mouth and referrals",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 50,
+    sortOrder: 4,
+    content: {
+      sections: [
+        {
+          id: "first-customers",
+          title: "Customer Acquisition",
+          type: "interactive",
+          content: "Get scrappy. Let's find your first paying customers.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "founders-club-5-operations",
+    spaceId: "founders-club",
+    title: "Set Up Business Operations",
+    slug: "business-operations",
+    description: "Legal, finance, and systems. Set up your LLC, business bank account, accounting software, and essential tools.",
+    learningObjectives: [
+      "Choose the right business structure (LLC, C-Corp, etc.)",
+      "Set up business banking and accounting",
+      "Implement essential tools and workflows",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 60,
+    sortOrder: 5,
+    content: {
+      sections: [
+        {
+          id: "operations",
+          title: "Business Foundations",
+          type: "text",
+          content: "Set up your business infrastructure the right way.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "founders-club-6-scaling",
+    spaceId: "founders-club",
+    title: "Scale from $0 to $10K MRR",
+    slug: "scale-to-10k-mrr",
+    description: "Growth strategies that work. Marketing, sales systems, and scaling operations to hit your first $10K monthly recurring revenue.",
+    learningObjectives: [
+      "Build repeatable marketing and sales systems",
+      "Hire your first team member or contractor",
+      "Scale without burning out",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 75,
+    sortOrder: 6,
+    content: {
+      sections: [
+        {
+          id: "scaling",
+          title: "Growth Playbook",
+          type: "hands_on_lab",
+          content: "From traction to growth. Let's scale your business.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+
   // ===== DIGITAL SALES ACCELERATOR (6 experiences) =====
   {
     id: "digital-sales-1-shopify",

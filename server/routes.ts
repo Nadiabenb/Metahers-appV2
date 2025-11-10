@@ -86,34 +86,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication middleware
   await setupAuth(app);
 
-  // ===== AUTH ROUTES =====
-  
+  // ===== AUTHROUTES =====
+
   // Signup endpoint
   app.post('/api/auth/signup', async (req, res) => {
     try {
       const { email, password, firstName, lastName, quizUnlockedRitual } = req.body;
-      
+
       // Validate input
       if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
       }
-      
+
       if (password.length < 8) {
         return res.status(400).json({ message: "Password must be at least 8 characters" });
       }
-      
+
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(email);
-      if (existingUser) {
+      if (ExistingUser) {
         return res.status(409).json({ message: "User with this email already exists" });
       }
-      
+
       // Check if user has completed the quiz
       const quizSubmission = await storage.getQuizSubmissionByEmail(email);
-      
+
       // Use quiz ritual from request body if provided, otherwise from quiz submission
       const unlockedRitual = quizUnlockedRitual || quizSubmission?.matchedRitual || null;
-      
+
       // Hash password and create user
       const passwordHash = await hashPassword(password);
       const user = await storage.createUser({
@@ -124,48 +124,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
         quizUnlockedRitual: unlockedRitual,
         quizCompletedAt: quizSubmission ? new Date() : null,
       });
-      
+
       // Set up session
       req.session!.userId = user.id;
-      
+
       res.status(201).json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
     } catch (error) {
       console.error("Error during signup:", error);
       res.status(500).json({ message: "Failed to create account" });
     }
   });
-  
+
   // Login endpoint
   app.post('/api/auth/login', async (req, res) => {
     try {
       const { email, password } = req.body;
-      
+
       if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
       }
-      
+
       // Find user by email
       const user = await storage.getUserByEmail(email);
       if (!user) {
         return res.status(401).json({ message: "Invalid email or password" });
       }
-      
+
       // Verify password
       const isValid = await verifyPassword(password, user.passwordHash);
       if (!isValid) {
         return res.status(401).json({ message: "Invalid email or password" });
       }
-      
+
       // Set up session
       req.session!.userId = user.id;
-      
+
       res.json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
     } catch (error) {
       console.error("Error during login:", error);
       res.status(500).json({ message: "Login failed" });
     }
   });
-  
+
   // Logout endpoint
   app.post('/api/auth/logout', async (req, res) => {
     req.session?.destroy((err) => {
@@ -177,7 +177,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true });
     });
   });
-  
+
   app.get('/api/auth/user', isAuthenticated, async (req, res) => {
     try {
       const userId = req.session!.userId as string;
@@ -211,20 +211,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/email-leads', async (req: Request, res) => {
     try {
       const { email } = req.body;
-      
+
       if (!email) {
         return res.status(400).json({ message: "Email is required" });
       }
-      
+
       // Basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ message: "Invalid email address" });
       }
-      
+
       // Save email lead
       await storage.createEmailLead({ email, source: "email_capture_modal" });
-      
+
       res.json({ success: true, message: "Thank you for signing up!" });
     } catch (error) {
       console.error("Error saving email lead:", error);
@@ -238,29 +238,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session!.userId as string;
       const { code } = req.body;
-      
+
       if (!code) {
         return res.status(400).json({ message: "Beta code is required" });
       }
-      
+
       // Check if code is valid (case-insensitive)
       if (code.trim().toUpperCase() !== "METAMUSE2025") {
         return res.status(400).json({ message: "Invalid beta code" });
       }
-      
+
       // Get user and check if already Pro
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       if (user.isPro) {
         return res.status(400).json({ message: "You already have Pro access" });
       }
-      
+
       // Grant Pro access
       await storage.updateUserProStatus(userId, true);
-      
+
       res.json({ success: true, message: "Pro access activated! Welcome to MetaHers Pro." });
     } catch (error) {
       console.error("Error activating beta code:", error);
@@ -272,24 +272,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/request-password-reset', async (req: Request, res) => {
     try {
       const { email } = req.body;
-      
+
       if (!email) {
         return res.status(400).json({ message: "Email is required" });
       }
-      
+
       // Find user by email
       const user = await storage.getUserByEmail(email);
       if (!user) {
         // Don't reveal if user exists for security
         return res.json({ success: true, message: "If an account exists with that email, a password reset link has been sent." });
       }
-      
+
       // Delete any existing reset tokens for this user
       await storage.deleteUserPasswordResetTokens(user.id);
-      
+
       // Generate a random token
       const resetToken = randomBytes(32).toString('hex');
-      
+
       // Create reset token with 1 hour expiration
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour from now
       await storage.createPasswordResetToken({
@@ -297,10 +297,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         token: resetToken,
         expiresAt,
       });
-      
+
       // Generate reset link
       const resetLink = `${req.protocol}://${req.get('host')}/reset-password?token=${resetToken}`;
-      
+
       // Send password reset email via Resend (if configured)
       const resendClient = await getUncachableResendClient();
       if (!resendClient) {
@@ -334,7 +334,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               <div style="height: 2px; width: 60px; background: linear-gradient(90deg, #8B5CF6, #EC4899); margin: 20px auto;"></div>
             </td>
           </tr>
-          
+
           <!-- Content -->
           <tr>
             <td style="padding: 20px 40px;">
@@ -344,7 +344,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               <p style="margin: 0 0 20px; font-size: 16px; color: #D4D4D8; line-height: 1.6;">
                 We received a request to reset your password for your MetaHers account. Click the button below to create a new password:
               </p>
-              
+
               <!-- CTA Button -->
               <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
                 <tr>
@@ -355,18 +355,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   </td>
                 </tr>
               </table>
-              
+
               <p style="margin: 20px 0; font-size: 14px; color: #A1A1AA; line-height: 1.6;">
                 This link will expire in 1 hour for your security.
               </p>
-              
+
               <p style="margin: 20px 0; font-size: 14px; color: #A1A1AA; line-height: 1.6;">
                 If you didn't request this password reset, you can safely ignore this email. Your password will remain unchanged.
               </p>
-              
+
               <!-- Divider -->
               <div style="height: 1px; background: linear-gradient(90deg, transparent, #8B5CF6, transparent); margin: 30px 0;"></div>
-              
+
               <p style="margin: 0; font-size: 13px; color: #71717A; line-height: 1.6;">
                 If the button doesn't work, copy and paste this link into your browser:
               </p>
@@ -375,7 +375,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               </p>
             </td>
           </tr>
-          
+
           <!-- Footer -->
           <tr>
             <td style="padding: 30px 40px; text-align: center; border-top: 1px solid #27272A;">
@@ -396,7 +396,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 </html>
           `,
         });
-        
+
           console.log(`✅ Password reset email sent to ${email}`);
         } catch (emailError) {
           console.error("Error sending password reset email:", emailError);
@@ -404,7 +404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // User can contact support if they don't receive the email
         }
       }
-      
+
       res.json({ 
         success: true, 
         message: "If an account exists with that email, a password reset link has been sent."
@@ -419,45 +419,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/auth/reset-password', async (req: Request, res) => {
     try {
       const { token, newPassword } = req.body;
-      
+
       if (!token || !newPassword) {
         return res.status(400).json({ message: "Token and new password are required" });
       }
-      
+
       if (newPassword.length < 8) {
         return res.status(400).json({ message: "Password must be at least 8 characters" });
       }
-      
+
       // Find the reset token
       const resetToken = await storage.getPasswordResetToken(token);
       if (!resetToken) {
         return res.status(400).json({ message: "Invalid or expired reset token" });
       }
-      
+
       // Check if token has expired
       if (new Date() > new Date(resetToken.expiresAt)) {
         await storage.deletePasswordResetToken(token);
         return res.status(400).json({ message: "Reset token has expired" });
       }
-      
+
       // Get the user
       const user = await storage.getUser(resetToken.userId);
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      
+
       // Hash the new password
       const passwordHash = await hashPassword(newPassword);
-      
+
       // Update user's password
       await storage.upsertUser({
         ...user,
         passwordHash,
       });
-      
+
       // Delete the used reset token
       await storage.deletePasswordResetToken(token);
-      
+
       res.json({ success: true, message: "Password has been reset successfully" });
     } catch (error) {
       console.error("Error resetting password:", error);
@@ -465,25 +465,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ===== QUIZ ROUTES =====
-  
+  // ===== QUIZROUTES =====
+
   // Submit quiz (public route - no auth required)
   app.post('/api/quiz/submit', async (req: Request, res) => {
     try {
       const { name, email, answers } = req.body;
-      
+
       // Validate input
       if (!name || !email || !answers) {
         return res.status(400).json({ message: "Name, email, and answers are required" });
       }
-      
+
       // Import matching function
       const { matchRitual } = await import('../shared/schema');
       const matchedRitual = matchRitual(answers);
-      
+
       // Check if user is logged in
       const userId = req.session?.userId as string | undefined;
-      
+
       // Create quiz submission
       const submission = await storage.createQuizSubmission({
         userId: userId || null,
@@ -495,7 +495,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ritualCompleted: false,
         oneOnOneBooked: false,
       });
-      
+
       // If user is logged in, update their profile with the unlocked ritual
       if (userId) {
         const user = await storage.getUser(userId);
@@ -507,7 +507,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
         }
       }
-      
+
       res.json({ 
         success: true, 
         submissionId: submission.id,
@@ -518,14 +518,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to submit quiz" });
     }
   });
-  
+
   // Get quiz results (for retake or viewing)
   app.get('/api/quiz/results/:email', async (req: Request, res) => {
     try {
       const { email } = req.params;
-      
+
       const submissions = await storage.getQuizSubmissionsByEmail(email);
-      
+
       res.json({ submissions });
     } catch (error) {
       console.error("Error fetching quiz results:", error);
@@ -538,37 +538,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-      
+
       // Simple admin check - only allow specific emails
       if (user?.email !== "hello@metahers.ai" && user?.email !== "metahers@gmail.com") {
         return res.status(403).json({ message: "Access denied" });
       }
-      
+
       const submissions = await storage.getAllQuizSubmissions();
-      
+
       res.json(submissions);
     } catch (error) {
       console.error("Error fetching all quiz submissions:", error);
       res.status(500).json({ message: "Failed to fetch quiz submissions" });
     }
   });
-  
+
   // Update quiz submission status (admin only)
   app.patch('/api/admin/quiz-submissions/:id', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-      
+
       // TODO: Add admin check when we have admin roles
       if (user?.email !== 'admin@metahers.ai') {
         return res.status(403).json({ message: "Forbidden" });
       }
-      
+
       const { id } = req.params;
       const { oneOnOneBooked } = req.body;
-      
+
       await storage.updateQuizSubmission(id, { oneOnOneBooked });
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Error updating quiz submission:", error);
@@ -577,18 +577,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // ===== CAREER COMPANION ROUTES =====
-  
+
   // Get user's companion
   app.get('/api/companion', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
       let companion = await storage.getCompanion(userId);
-      
+
       // Create companion if doesn't exist
       if (!companion) {
         companion = await storage.createCompanion({ userId });
       }
-      
+
       res.json(companion);
     } catch (error) {
       console.error('Error fetching companion:', error);
@@ -642,7 +642,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // ===== METAHERS WORLD SPACES ROUTES =====
+  // ===== METAHERS WORLD SPACESROUTES =====
   app.get('/api/spaces', async (_req: Request, res) => {
     try {
       const spaces = await storage.getSpaces();
@@ -657,11 +657,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { slug } = req.params;
       const space = await storage.getSpaceBySlug(slug);
-      
+
       if (!space) {
         return res.status(404).json({ message: "Space not found" });
       }
-      
+
       res.json(space);
     } catch (error) {
       console.error("Error fetching space:", error);
@@ -686,11 +686,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { slug } = req.params;
       const experience = await storage.getExperienceBySlug(slug);
-      
+
       if (!experience) {
         return res.status(404).json({ message: "Experience not found" });
       }
-      
+
       res.json(experience);
     } catch (error) {
       console.error("Error fetching experience:", error);
@@ -702,11 +702,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { id } = req.params;
       const experience = await storage.getExperienceById(id);
-      
+
       if (!experience) {
         return res.status(404).json({ message: "Experience not found" });
       }
-      
+
       res.json(experience);
     } catch (error) {
       console.error("Error fetching experience:", error);
@@ -731,7 +731,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!req.session?.userId) {
         return res.json([]); // Return empty array for non-authenticated users
       }
-      
+
       const userId = req.session.userId as string;
       const progress = await storage.getAllExperienceProgress(userId);
       res.json(progress);
@@ -781,7 +781,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { experienceId } = req.params;
 
       const progress = await storage.getExperienceProgress(userId, experienceId);
-      
+
       if (!progress) {
         return res.json({ 
           experienceId, 
@@ -885,13 +885,13 @@ Always remember: The learner is investing time to build valuable skills. Your jo
     try {
       const userId = req.session!.userId as string;
       const { slug } = req.params;
-      
+
       const progress = await storage.getRitualProgress(userId, slug);
-      
+
       if (!progress) {
         return res.json({ slug, completedSteps: [], lastUpdated: new Date().toISOString() });
       }
-      
+
       res.json({
         slug: progress.ritualSlug,
         completedSteps: progress.completedSteps,
@@ -929,24 +929,24 @@ Always remember: The learner is investing time to build valuable skills. Your jo
   // ===== PUBLIC PLAYGROUND API =====
   // Simple rate limiting for playground (max 10 prompts per IP per hour)
   const playgroundRateLimit = new Map<string, { count: number; resetTime: number }>();
-  
+
   app.post('/api/playground/run-prompt', async (req: Request, res) => {
     try {
       const { prompt } = req.body;
-      
+
       if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
         return res.status(400).json({ message: "Prompt is required" });
       }
-      
+
       if (prompt.length > 2000) {
         return res.status(400).json({ message: "Prompt is too long. Maximum 2000 characters." });
       }
-      
+
       // Simple rate limiting by IP
       const clientIP = req.ip || req.socket.remoteAddress || 'unknown';
       const now = Date.now();
       const hourInMs = 60 * 60 * 1000;
-      
+
       const rateLimitData = playgroundRateLimit.get(clientIP);
       if (rateLimitData) {
         if (now < rateLimitData.resetTime) {
@@ -962,7 +962,7 @@ Always remember: The learner is investing time to build valuable skills. Your jo
       } else {
         playgroundRateLimit.set(clientIP, { count: 1, resetTime: now + hourInMs });
       }
-      
+
       // Clean up old entries (optional, prevents memory leak)
       if (playgroundRateLimit.size > 1000) {
         const entries = Array.from(playgroundRateLimit.entries());
@@ -972,10 +972,10 @@ Always remember: The learner is investing time to build valuable skills. Your jo
           }
         }
       }
-      
+
       // Use OpenAI to generate response
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-      
+
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         messages: [
@@ -991,9 +991,9 @@ Always remember: The learner is investing time to build valuable skills. Your jo
         temperature: 0.8,
         max_tokens: 500
       });
-      
+
       const response = completion.choices[0].message.content || "I apologize, but I couldn't generate a response. Please try again.";
-      
+
       res.json({ response });
     } catch (error: any) {
       console.error("Playground API error:", error);
@@ -1003,26 +1003,26 @@ Always remember: The learner is investing time to build valuable skills. Your jo
 
   // Career Path Generator API with rate limiting
   const careerPathRateLimit = new Map<string, { count: number; resetTime: number }>();
-  
+
   app.post('/api/career-path/generate', async (req: Request, res) => {
     try {
       const { answers } = req.body;
-      
+
       if (!answers || typeof answers !== 'object') {
         return res.status(400).json({ message: "Answers are required" });
       }
-      
+
       // Validate input size
       const answersString = JSON.stringify(answers);
       if (answersString.length > 5000) {
         return res.status(400).json({ message: "Answers are too long. Please be more concise." });
       }
-      
+
       // Rate limiting by IP (max 3 career paths per hour per IP)
       const clientIP = req.ip || req.socket.remoteAddress || 'unknown';
       const now = Date.now();
       const hourInMs = 60 * 60 * 1000;
-      
+
       const rateLimitData = careerPathRateLimit.get(clientIP);
       if (rateLimitData) {
         if (now < rateLimitData.resetTime) {
@@ -1038,7 +1038,7 @@ Always remember: The learner is investing time to build valuable skills. Your jo
       } else {
         careerPathRateLimit.set(clientIP, { count: 1, resetTime: now + hourInMs });
       }
-      
+
       // Clean up old entries
       if (careerPathRateLimit.size > 1000) {
         const entries = Array.from(careerPathRateLimit.entries());
@@ -1110,14 +1110,14 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId as string;
       const month = req.query.month as string; // Expected format: YYYY-MM
-      
+
       if (!month || !/^\d{4}-\d{2}$/.test(month)) {
         return res.status(400).json({ message: "Invalid month format. Use YYYY-MM" });
       }
-      
+
       // Get all entries for the user
       const allEntries = await storage.getAllJournalEntries(userId, 100);
-      
+
       // Filter entries for the requested month and include mood
       const monthEntries = allEntries
         .filter(entry => entry.date.startsWith(month))
@@ -1125,7 +1125,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           date: entry.date,
           mood: entry.mood || null
         }));
-      
+
       res.json(monthEntries);
     } catch (error) {
       console.error("Error fetching journal list:", error);
@@ -1139,7 +1139,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       // Get date from query param, default to today
       const date = (req.query.date as string) || new Date().toISOString().split('T')[0];
       const entry = await storage.getJournalEntryByDate(userId, date);
-      
+
       if (!entry) {
         return res.json({ 
           content: "", 
@@ -1152,7 +1152,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           aiInsights: null,
         });
       }
-      
+
       res.json({
         content: entry.content,
         structuredContent: entry.structuredContent,
@@ -1173,7 +1173,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   app.post('/api/journal', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
-      
+
       // Validate request body
       const bodySchema = z.object({
         content: z.string().optional(),
@@ -1254,17 +1254,17 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "This feature requires a Pro subscription" });
       }
-      
+
       const ritualContext = req.query.ritual as string | undefined;
-      
+
       // Get recent entries for context
       const recentEntries = await storage.getRecentJournalEntries(userId, 3);
       const previousEntries = recentEntries.map((e: { content: string }) => e.content.substring(0, 100));
-      
+
       const prompt = await generateJournalPrompt(ritualContext, previousEntries);
       res.json({ prompt });
     } catch (error) {
@@ -1278,11 +1278,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "AI insights require a Pro subscription" });
       }
-      
+
       // Validate request body
       const bodySchema = z.object({
         content: z.string().min(20, "Content must be at least 20 characters"),
@@ -1309,13 +1309,13 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "AI Journal Coach is a Pro feature" });
       }
-      
+
       const { message } = req.body;
-      
+
       if (!message) {
         return res.status(400).json({ message: "Message required" });
       }
@@ -1323,7 +1323,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       // Get recent entries for context
       const recentEntries = await storage.getRecentJournalEntries(userId, 3);
       const journalHistory = recentEntries.map((e: { content: string }) => e.content);
-      
+
       const response = await chatWithJournalCoach(message, journalHistory);
       res.json({ response });
     } catch (error) {
@@ -1338,9 +1338,9 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       const userId = req.session!.userId as string;
       const limit = parseInt(req.query.limit as string) || 30;
       const mood = req.query.mood as string | undefined;
-      
+
       const entries = await storage.getAllJournalEntries(userId, limit, mood);
-      
+
       res.json(entries.map((entry: any) => ({
         id: entry.id,
         content: entry.content,
@@ -1359,13 +1359,13 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // ===== APP ATELIER AI COACH ROUTES =====
-  
+
   // Get user's App Atelier usage status
   app.get('/api/app-atelier/usage', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-      
+
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -1373,12 +1373,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       // Get usage stats
       const usage = await storage.getAppAtelierUsage(userId);
       const messageCount = usage?.messageCount || 0;
-      
+
       // Determine limits based on subscription tier
       const tier = user.subscriptionTier;
       const hasFullAccess = tier === 'vip_cohort' || tier === 'executive';
       const messageLimit = hasFullAccess ? null : 5; // Free tier gets 5 messages
-      
+
       res.json({
         messageCount,
         messageLimit,
@@ -1391,12 +1391,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       res.status(500).json({ message: "Failed to fetch usage" });
     }
   });
-  
+
   app.post('/api/app-atelier/chat', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const { message, conversationHistory, userProfile } = req.body;
-      
+
       if (!message) {
         return res.status(400).json({ message: "Message required" });
       }
@@ -1409,13 +1409,13 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
 
       // Check if user has full access (Inner Circle or Executive Intensive)
       const hasFullAccess = user.subscriptionTier === 'vip_cohort' || user.subscriptionTier === 'executive';
-      
+
       // For free tier users, check message limit
       if (!hasFullAccess) {
         const usage = await storage.getAppAtelierUsage(userId);
         const messageCount = usage?.messageCount || 0;
         const MESSAGE_LIMIT = 5;
-        
+
         if (messageCount >= MESSAGE_LIMIT) {
           return res.status(403).json({ 
             message: "Message limit reached",
@@ -1431,10 +1431,10 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         conversationHistory || [],
         userProfile
       );
-      
+
       // Track message usage
       await storage.incrementAppAtelierUsage(userId);
-      
+
       res.json({ response });
     } catch (error) {
       console.error("Error in App Atelier chat:", error);
@@ -1446,7 +1446,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   app.get('/api/stats', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
-      
+
       const allProgress = await storage.getAllUserRitualProgress(userId);
       const journalEntry = await storage.getLatestJournalEntry(userId);
 
@@ -1494,11 +1494,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   app.post('/api/achievements/check', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
-      
+
       // Get journal stats to check achievements
       const stats = await storage.getJournalStats(userId);
       const newlyUnlocked: any[] = [];
-      
+
       // Check and unlock achievements based on stats
       const achievementsToCheck = [
         { key: 'first_entry', condition: stats.totalEntries >= 1 },
@@ -1511,7 +1511,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         { key: 'tag_explorer', condition: stats.allTags.length >= 10 },
         { key: 'consistent_writer', condition: stats.totalEntries >= 10 },
       ];
-      
+
       for (const achievement of achievementsToCheck) {
         if (achievement.condition) {
           const unlocked = await storage.unlockAchievement(userId, achievement.key);
@@ -1520,7 +1520,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           }
         }
       }
-      
+
       res.json({ 
         newlyUnlocked,
         message: newlyUnlocked.length > 0 
@@ -1538,7 +1538,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-      
+
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
@@ -1604,7 +1604,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId as string;
       const { tier } = req.body as { tier: string };
-      
+
       if (!tier) {
         return res.status(400).json({ message: "Tier is required" });
       }
@@ -1636,12 +1636,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
 
       // Check for existing subscription
       const existingSubscription = await storage.getSubscription(userId);
-      
+
       // If user has active subscription, upgrade it directly (not via checkout)
       if (existingSubscription?.status === 'active' && existingSubscription.stripeSubscriptionId) {
         // Get current subscription from Stripe
         const subscription = await stripe.subscriptions.retrieve(existingSubscription.stripeSubscriptionId);
-        
+
         // Update subscription with new price (proration automatic)
         const updatedSubscription = await stripe.subscriptions.update(
           existingSubscription.stripeSubscriptionId,
@@ -1690,7 +1690,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         });
         customerId = customer.id;
       }
-      
+
       // Create checkout session for new subscription
       const session = await stripe.checkout.sessions.create({
         customer: customerId,
@@ -1731,11 +1731,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
       }
-      
+
       const profile = await storage.getGlowUpProfile(userId);
       res.json(profile || null);
     } catch (error) {
@@ -1749,11 +1749,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
       }
-      
+
       const { name, brandType, niche, platform, goal } = req.body;
 
       if (!name || !brandType || !niche || !platform || !goal) {
@@ -1791,11 +1791,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
       }
-      
+
       const progress = await storage.getGlowUpProgress(userId);
       res.json(progress || null);
     } catch (error) {
@@ -1809,11 +1809,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
       }
-      
+
       const { day } = req.body;
 
       if (!day || day < 1 || day > 14) {
@@ -1853,11 +1853,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
       }
-      
+
       const entries = await storage.getAllGlowUpJournalEntries(userId);
       res.json(entries);
     } catch (error) {
@@ -1871,11 +1871,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
       }
-      
+
       const day = parseInt(req.params.day);
 
       if (isNaN(day) || day < 1 || day > 14) {
@@ -1895,11 +1895,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const user = await storage.getUser(userId);
-      
+
       if (!user?.isPro) {
         return res.status(403).json({ message: "The AI Glow-Up Program is a Pro feature" });
       }
-      
+
       const { day, gptResponse, publicPostDraft, notes } = req.body;
 
       if (!day || day < 1 || day > 14) {
@@ -1930,19 +1930,19 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // ===== NEWS ROUTES (Public) =====
-  
+  // ===== NEWSROUTES (Public) =====
+
   // Get daily tech news from RSS feeds
   app.get('/api/news', async (req, res) => {
     try {
       const category = req.query.category as NewsCategory | undefined;
-      
+
       // Validate category if provided
       const validCategories: NewsCategory[] = ["AI", "Crypto", "NFT", "Blockchain", "Metaverse", "Social"];
       if (category && !validCategories.includes(category)) {
         return res.status(400).json({ message: "Invalid category" });
       }
-      
+
       const news = await fetchNewsByCategory(category);
       res.json(news);
     } catch (error) {
@@ -1952,19 +1952,19 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // ===== COHORT CAPACITY ROUTES (Public) =====
-  
+
   // Get cohort capacity by name (vip_cohort or executive)
   app.get('/api/cohort-capacity/:cohortName', async (req, res) => {
     try {
       const { cohortName } = req.params;
-      
+
       // Validate cohort name
       if (cohortName !== 'vip_cohort' && cohortName !== 'executive') {
         return res.status(400).json({ message: "Invalid cohort name" });
       }
-      
+
       const capacity = await storage.getCohortCapacity(cohortName);
-      
+
       // Return default if not found
       if (!capacity) {
         return res.json({
@@ -1975,7 +1975,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           isActive: true,
         });
       }
-      
+
       res.json({
         ...capacity,
         spotsRemaining: capacity.totalSpots - capacity.takenSpots,
@@ -1989,7 +1989,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   // Stripe webhook handler
   app.post('/api/webhooks/stripe', async (req, res) => {
     const sig = req.headers['stripe-signature'];
-    
+
     if (!sig) {
       return res.status(400).send('No signature provided');
     }
@@ -2015,7 +2015,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           const subscription = event.data.object as Stripe.Subscription;
           const userId = subscription.metadata?.userId || 
             (await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer).metadata?.userId;
-          
+
           if (userId) {
             await storage.upsertSubscription({
               userId,
@@ -2033,12 +2033,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           }
           break;
         }
-        
+
         case 'customer.subscription.deleted': {
           const subscription = event.data.object as Stripe.Subscription;
           const userId = subscription.metadata?.userId ||
             (await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer).metadata?.userId;
-          
+
           if (userId) {
             await storage.upsertSubscription({
               userId,
@@ -2076,11 +2076,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   app.get('/api/thought-leadership/curriculum/:day', canAccessThoughtLeadership, async (req: Request, res) => {
     const day = parseInt(req.params.day);
     const curriculumDay = CURRICULUM.find(d => d.day === day);
-    
+
     if (!curriculumDay) {
       return res.status(404).json({ message: 'Day not found' });
     }
-    
+
     res.json(curriculumDay);
   });
 
@@ -2088,7 +2088,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const progress = await storage.getThoughtLeadershipProgress(userId);
-      
+
       if (!progress) {
         // Create initial progress for new user
         const newProgress = await storage.createThoughtLeadershipProgress({
@@ -2107,7 +2107,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         });
         return res.json(newProgress);
       }
-      
+
       res.json(progress);
     } catch (error) {
       console.error('Error fetching TL progress:', error);
@@ -2123,7 +2123,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
 
       // Get or create progress record
       let progress = await storage.getThoughtLeadershipProgress(userId);
-      
+
       if (!progress) {
         progress = await storage.createThoughtLeadershipProgress({
           userId,
@@ -2185,7 +2185,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       const user = await storage.getUser(userId);
       const { isProTier } = await import("../shared/pricing");
       const isPro = user && (user.isPro || isProTier(user.subscriptionTier as any));
-      
+
       if (targetDay > 3 && !isPro) {
         return res.status(403).json({ 
           message: 'Pro subscription required',
@@ -2261,13 +2261,13 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       if (progress) {
         const practiceReflections = progress.practiceReflections || {};
         practiceReflections[actualDayNumber] = practiceReflection;
-        
+
         const practicesSubmitted = [...(progress.practicesSubmitted || []), actualDayNumber]
           .filter((v, i, a) => a.indexOf(v) === i)
           .sort((a, b) => a - b);
         const today = new Date().toISOString().split('T')[0];
         const completedDays = [...progress.completedDays, actualDayNumber].filter((v, i, a) => a.indexOf(v) === i).sort((a, b) => a - b);
-        
+
         // Only update streak and advance day if this is a new completion (not regenerating)
         const progressUpdates: any = {
           completedDays,
@@ -2286,7 +2286,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
             const lastDate = new Date(progress.lastActivityDate);
             const todayDate = new Date(today);
             const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
-            
+
             if (daysDiff === 1) {
               newStreak = progress.currentStreak + 1;
             } else if (daysDiff > 1) {
@@ -2385,14 +2385,14 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       if (progress) {
         const today = new Date().toISOString().split('T')[0];
         const completedDays = [...progress.completedDays, post.dayNumber].filter((v, i, a) => a.indexOf(v) === i);
-        
+
         // Calculate streak
         let newStreak = 1;
         if (progress.lastActivityDate) {
           const lastDate = new Date(progress.lastActivityDate);
           const todayDate = new Date(today);
           const daysDiff = Math.floor((todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24));
-          
+
           if (daysDiff === 1) {
             newStreak = progress.currentStreak + 1;
           } else if (daysDiff > 1) {
@@ -2439,12 +2439,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const { id } = req.params;
-      
+
       const post = await storage.getThoughtLeadershipPostById(id);
       if (!post || post.userId !== userId) {
         return res.status(404).json({ message: 'Post not found' });
       }
-      
+
       res.json(post);
     } catch (error) {
       console.error('Error fetching TL post:', error);
@@ -2469,7 +2469,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const { slug } = req.params;
       const post = await storage.getThoughtLeadershipPostBySlug(slug);
-      
+
       if (!post || !post.isPublic) {
         return res.status(404).json({ message: 'Post not found' });
       }
@@ -2486,8 +2486,8 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // ===== MEMBERSHIP TIER ROUTES =====
-  
+  // ===== MEMBERSHIP TIERROUTES =====
+
   // GROUP SESSIONS (Sanctuary tier and above)
   app.get('/api/sessions/upcoming', isSanctuaryMember, async (req: Request, res) => {
     try {
@@ -2517,11 +2517,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const { id } = req.params;
       const session = await storage.getGroupSessionById(id);
-      
+
       if (!session) {
         return res.status(404).json({ message: 'Session not found' });
       }
-      
+
       res.json(session);
     } catch (error) {
       console.error('Error fetching session:', error);
@@ -2534,34 +2534,34 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const { id: sessionId } = req.params;
-      
+
       // Check if session exists
       const session = await storage.getGroupSessionById(sessionId);
       if (!session) {
         return res.status(404).json({ message: 'Session not found' });
       }
-      
+
       // Check if user is already registered
       const existingRegistrations = await storage.getSessionRegistrations(sessionId);
       const alreadyRegistered = existingRegistrations.some(r => r.userId === userId);
-      
+
       if (alreadyRegistered) {
         return res.status(400).json({ message: 'Already registered for this session' });
       }
-      
+
       // Check capacity
       const activeRegistrations = existingRegistrations.filter(r => r.status === 'confirmed');
       if (activeRegistrations.length >= session.maxCapacity) {
         return res.status(400).json({ message: 'Session is full' });
       }
-      
+
       // Create registration
       const registration = await storage.createSessionRegistration({
         userId,
         sessionId,
         status: 'confirmed',
       });
-      
+
       res.json(registration);
     } catch (error) {
       console.error('Error registering for session:', error);
@@ -2573,14 +2573,14 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const { id: sessionId } = req.params;
-      
+
       const registrations = await storage.getUserSessionRegistrations(userId);
       const registration = registrations.find(r => r.sessionId === sessionId);
-      
+
       if (!registration) {
         return res.status(404).json({ message: 'Registration not found' });
       }
-      
+
       await storage.cancelSessionRegistration(registration.id);
       res.json({ message: 'Registration cancelled' });
     } catch (error) {
@@ -2606,11 +2606,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const { scheduledDate, sessionType, notes } = req.body;
-      
+
       if (!scheduledDate || !sessionType) {
         return res.status(400).json({ message: 'Scheduled date and session type are required' });
       }
-      
+
       const booking = await storage.createOneOnOneBooking({
         userId,
         scheduledDate: new Date(scheduledDate),
@@ -2619,7 +2619,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         status: 'pending',
         duration: 30,
       });
-      
+
       res.json(booking);
     } catch (error) {
       console.error('Error creating booking:', error);
@@ -2654,12 +2654,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const { id } = req.params;
-      
+
       const booking = await storage.getOneOnOneBookingById(id);
       if (!booking || booking.userId !== userId) {
         return res.status(404).json({ message: 'Booking not found' });
       }
-      
+
       const updated = await storage.updateOneOnOneBooking(id, req.body);
       res.json(updated);
     } catch (error) {
@@ -2672,12 +2672,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId!;
       const { id } = req.params;
-      
+
       const booking = await storage.getOneOnOneBookingById(id);
       if (!booking || booking.userId !== userId) {
         return res.status(404).json({ message: 'Booking not found' });
       }
-      
+
       await storage.updateOneOnOneBooking(id, { status: 'cancelled' });
       res.json({ message: 'Booking cancelled' });
     } catch (error) {
@@ -2702,16 +2702,16 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const { id } = req.params;
       const insight = await storage.getFounderInsightById(id);
-      
+
       if (!insight || !insight.isPublished) {
         return res.status(404).json({ message: 'Insight not found' });
       }
-      
+
       // Increment view count
       await storage.updateFounderInsight(id, {
         viewCount: insight.viewCount + 1,
       });
-      
+
       res.json(insight);
     } catch (error) {
       console.error('Error fetching insight:', error);
@@ -2726,7 +2726,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   app.post('/api/admin/populate-database', isAuthenticated, isAdmin, async (_req: Request, res) => {
     try {
       console.log('Starting database population...');
-      
+
       // Check if spaces already exist
       const existingSpaces = await storage.getSpaces();
       if (existingSpaces && existingSpaces.length > 0) {
@@ -3408,7 +3408,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       }
 
       console.log(`✅ Database population complete: ${spacesCreated} spaces, ${experiencesCreated} experiences`);
-      
+
       res.json({
         success: true,
         message: 'Database populated successfully',
