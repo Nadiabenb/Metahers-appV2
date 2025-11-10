@@ -7,7 +7,7 @@ import { ChatbotPopup } from "@/components/ChatbotPopup";
 import { trackCTAClick } from "@/lib/analytics";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
+import heroImage from "@assets/generated_images/Luxury_editorial_hero_image_f61a3159.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
@@ -98,11 +98,11 @@ export default function LandingPage() {
         >
           <OptimizedImage
             src={heroImage}
-            alt="Luxury editorial photography for MetaHers Mind Spa"
+            alt="Woman entrepreneur in luxury workspace - MetaHers Mind Spa editorial photography"
             className="absolute inset-0 w-full h-full"
             objectFit="cover"
             priority={true}
-            optimizedBasename="Neon_light_trails_hero_2008ed57"
+            optimizedBasename="Luxury_editorial_hero_image_f61a3159"
           />
         </motion.div>
 
