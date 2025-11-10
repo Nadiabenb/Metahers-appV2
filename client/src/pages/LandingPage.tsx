@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
+import nadiaHeroPhoto from "@assets/IMG_1295_1762750477236.jpeg";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -202,36 +203,28 @@ export default function LandingPage() {
               </p>
             </motion.div>
 
-            {/* Stats Column - Takes 4 columns (1/3) - Kinetic Glass Cards */}
+            {/* Founder Photo - Takes 4 columns (1/3) */}
             <motion.div
-              initial={{ opacity: 0, x: 60 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 1, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-              className="lg:col-span-4 space-y-6 hidden lg:block"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
+              className="lg:col-span-4 hidden lg:block"
             >
-              {[
-                { number: "8", label: "Learning Spaces", icon: Star },
-                { number: "36", label: "Experiences", icon: Sparkles },
-                { number: "2.5K+", label: "Women Empowered", icon: CheckCircle2 }
-              ].map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: 0.6 + index * 0.15 }}
-                  className="kinetic-glass rounded-2xl p-6 border border-white/10"
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[hsl(var(--gold))]/20 flex items-center justify-center">
-                      <stat.icon className="w-6 h-6 text-[hsl(var(--gold))]" />
-                    </div>
-                    <div>
-                      <div className="text-3xl font-serif font-bold text-white">{stat.number}</div>
-                      <div className="text-sm text-white/70 uppercase tracking-wider">{stat.label}</div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+              <div className="relative">
+                {/* Neon glow effect behind photo */}
+                <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/30 via-[hsl(var(--magenta-quartz))]/20 to-transparent blur-3xl" />
+                
+                {/* Photo */}
+                <div className="relative rounded-3xl overflow-hidden border-2 border-[hsl(var(--gold))]/30 shadow-2xl shadow-[hsl(var(--gold))]/20">
+                  <OptimizedImage
+                    src={nadiaHeroPhoto}
+                    alt="Nadia - Founder of MetaHers, teaching AI and Web3 to women"
+                    className="w-full h-auto"
+                    objectFit="cover"
+                    priority={true}
+                  />
+                </div>
+              </div>
             </motion.div>
           </div>
 
