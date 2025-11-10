@@ -127,7 +127,7 @@ export default function LandingPage() {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="flex items-center gap-3"
               >
-                <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
+                <div className="h-px w-12 bg-[hsl(var(--gold))]" />
                 <span className="text-sm uppercase tracking-widest text-white/80 font-medium">
                   Luxury Learning for Women
                 </span>
@@ -137,7 +137,7 @@ export default function LandingPage() {
               <h1 className="editorial-headline text-7xl lg:text-8xl xl:text-9xl text-white">
                 Master AI.<br />
                 Own Web3.<br />
-                <span className="text-[hsl(var(--liquid-gold))] inline-flex items-center gap-4">
+                <span className="text-[hsl(var(--gold))] inline-flex items-center gap-4">
                   Build Empire.
                   <Sparkles className="w-16 h-16 lg:w-20 lg:h-20" />
                 </span>
@@ -157,17 +157,17 @@ export default function LandingPage() {
                   }}
                   whileHover={{ 
                     scale: 1.03,
-                    boxShadow: "0 0 40px rgba(16,185,129,0.4)"
+                    boxShadow: "0 0 40px hsl(var(--gold) / 0.4)"
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-lg transition-all duration-300 shadow-2xl shadow-emerald-500/30"
+                  className="group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold))]/90 text-black font-semibold text-lg transition-all duration-300 shadow-2xl shadow-[hsl(var(--gold))]/20"
                   data-testid="button-join-retreat"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <Sparkles className="w-5 h-5" />
                     Join Free 3-Day AI Retreat
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </motion.button>
 
                 <button
@@ -222,8 +222,8 @@ export default function LandingPage() {
                   className="kinetic-glass rounded-2xl p-6 border border-white/10"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center">
-                      <stat.icon className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
+                    <div className="w-12 h-12 rounded-full bg-[hsl(var(--gold))]/20 flex items-center justify-center">
+                      <stat.icon className="w-6 h-6 text-[hsl(var(--gold))]" />
                     </div>
                     <div>
                       <div className="text-3xl font-serif font-bold text-white">{stat.number}</div>
@@ -265,7 +265,7 @@ export default function LandingPage() {
             className="mb-24 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
+              <div className="h-px w-12 bg-[hsl(var(--gold))]" />
               <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
                 Your Signature Program
               </span>
@@ -318,7 +318,7 @@ export default function LandingPage() {
                       {/* Space Badge */}
                       {badge && (
                         <div className="mb-4">
-                          <Badge variant="default" className="text-xs font-semibold bg-[hsl(var(--liquid-gold))]/20 text-[hsl(var(--liquid-gold))] border-[hsl(var(--liquid-gold))]/30">
+                          <Badge variant="default" className="text-xs font-semibold bg-[hsl(var(--gold))]/20 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/30">
                             {badge.text}
                           </Badge>
                         </div>
@@ -414,11 +414,11 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="kinetic-glass rounded-2xl p-12 border-2 border-[hsl(var(--liquid-gold))]/30 relative overflow-hidden"
+              className="kinetic-glass rounded-2xl p-12 border-2 border-[hsl(var(--gold))]/30 relative overflow-hidden"
             >
               {/* Popular Badge */}
               <div className="absolute top-6 right-6">
-                <Badge className="bg-[hsl(var(--liquid-gold))] text-black border-0 px-4 py-1 text-xs font-bold uppercase tracking-wider">
+                <Badge className="bg-[hsl(var(--gold))] text-black border-0 px-4 py-1 text-xs font-bold uppercase tracking-wider">
                   Popular
                 </Badge>
               </div>
@@ -431,7 +431,7 @@ export default function LandingPage() {
               </div>
               <button
                 onClick={() => window.location.href = "/pricing"}
-                className="gold-shimmer w-full px-8 py-5 rounded-full bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--liquid-gold))]/90 hover:shadow-2xl hover:shadow-[hsl(var(--liquid-gold))]/20 transition-all font-semibold text-lg text-black"
+                className="gold-shimmer w-full px-8 py-5 rounded-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold))]/90 hover:shadow-2xl hover:shadow-[hsl(var(--gold))]/20 transition-all font-semibold text-lg text-black"
                 data-testid="button-upgrade-pro"
               >
                 View Pro Benefits
@@ -453,7 +453,7 @@ export default function LandingPage() {
             className="mb-20 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
+              <div className="h-px w-12 bg-[hsl(var(--gold))]" />
               <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
                 Human-Powered AI
               </span>
@@ -495,8 +495,8 @@ export default function LandingPage() {
                 className="absolute -bottom-6 -right-6 kinetic-glass px-8 py-5 rounded-2xl border border-card-border shadow-2xl"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
+                  <div className="w-12 h-12 rounded-full bg-[hsl(var(--gold))]/20 flex items-center justify-center">
+                    <Phone className="w-6 h-6 text-[hsl(var(--gold))]" />
                   </div>
                   <div>
                     <p className="font-bold text-lg">Free Personal Calls</p>

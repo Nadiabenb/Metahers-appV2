@@ -87,7 +87,7 @@ export default function UpgradePage() {
           <div className="relative z-10 max-w-7xl mx-auto">
             <ImmersiveSection className="text-center mb-32">
               <ShimmerBadge
-                icon={<TrendingUp className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />}
+                icon={<TrendingUp className="w-6 h-6 text-[hsl(var(--gold))]" />}
                 className="mb-12"
               >
                 Membership Tiers
@@ -105,7 +105,7 @@ export default function UpgradePage() {
               <p className="text-2xl sm:text-3xl text-foreground/90 max-w-4xl mx-auto leading-relaxed font-light mb-6">
                 Three simple tiers designed for your learning journey.
                 <br />
-                <span className="text-[hsl(var(--liquid-gold))]">From self-paced mastery to concierge-level guidance.</span>
+                <span className="text-[hsl(var(--gold))]">From self-paced mastery to concierge-level guidance.</span>
               </p>
               
               {currentTier !== 'free' && (
@@ -174,20 +174,20 @@ export default function UpgradePage() {
 
             {/* Pro Annual Savings Callout */}
             <ImmersiveSection className="max-w-4xl mx-auto mb-16" delay={0.2}>
-              <div className="backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border border-[hsl(var(--liquid-gold))]/30 relative overflow-hidden group">
+              <div className="backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border border-[hsl(var(--gold))]/30 relative overflow-hidden group">
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/10 to-transparent opacity-0 group-hover:opacity-100"
                   transition={{ duration: 0.5 }}
                 />
                 <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
                   <div>
-                    <h3 className="font-serif text-2xl font-bold text-[hsl(var(--liquid-gold))] mb-2">Save with Annual Billing</h3>
+                    <h3 className="font-serif text-2xl font-bold text-[hsl(var(--gold))] mb-2">Save with Annual Billing</h3>
                     <p className="text-lg text-foreground/80">Get 2 months free when you choose Pro Annual ($199/year)</p>
                   </div>
                   <Button
                     onClick={() => handleUpgrade('pro_annual')}
                     variant="outline"
-                    className="border-[hsl(var(--liquid-gold))]/50 hover:bg-[hsl(var(--liquid-gold))]/10"
+                    className="border-[hsl(var(--gold))]/50 hover:bg-[hsl(var(--gold))]/10"
                     data-testid="button-annual-upgrade"
                   >
                     View Annual Option
@@ -218,8 +218,8 @@ export default function UpgradePage() {
                   >
                     <div 
                       className={`relative h-full flex flex-col backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border ${
-                        isHighlighted ? 'border-[hsl(var(--liquid-gold))] shadow-[0_0_60px_rgba(255,215,0,0.3)]' : 'border-white/10'
-                      } ${isCurrentTier ? 'ring-2 ring-[hsl(var(--liquid-gold))]' : ''} overflow-hidden group`}
+                        isHighlighted ? 'border-[hsl(var(--gold))] shadow-[0_0_60px_rgba(255,215,0,0.3)]' : 'border-white/10'
+                      } ${isCurrentTier ? 'ring-2 ring-[hsl(var(--gold))]' : ''} overflow-hidden group`}
                       data-testid={`card-tier-${tier}`}
                     >
                     {plan.badge && (

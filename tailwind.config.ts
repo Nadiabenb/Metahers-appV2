@@ -17,8 +17,11 @@ export default {
         border: "hsl(var(--border) / <alpha-value>)",
         input: "hsl(var(--input) / <alpha-value>)",
         blush: "hsl(var(--blush) / <alpha-value>)",
+        mauve: "hsl(var(--mauve) / <alpha-value>)",
         champagne: "hsl(var(--champagne) / <alpha-value>)",
-        mint: "hsl(var(--mint) / <alpha-value>)",
+        "rose-gold": "hsl(var(--rose-gold) / <alpha-value>)",
+        ivory: "hsl(var(--ivory) / <alpha-value>)",
+        linen: "hsl(var(--linen) / <alpha-value>)",
         onyx: "hsl(var(--onyx) / <alpha-value>)",
         gold: "hsl(var(--gold) / <alpha-value>)",
         card: {

@@ -10,14 +10,14 @@ type ThemeContextType = {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Default to dark mode (Web3 aesthetic)
-  const [theme, setTheme] = useState<Theme>("dark");
+  // Default to light mode (Editorial Luxury aesthetic)
+  const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check localStorage for saved preference, default to dark
+    // Check localStorage for saved preference, default to light
     const savedTheme = localStorage.getItem("metahers-theme") as Theme | null;
-    const initialTheme = savedTheme || "dark";
+    const initialTheme = savedTheme || "light";
     setTheme(initialTheme);
     setMounted(true);
   }, []);

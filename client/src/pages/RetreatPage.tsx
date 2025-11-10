@@ -203,23 +203,23 @@ export default function RetreatPage() {
 
             {/* Eyebrow */}
             <div className="flex items-center justify-center gap-3">
-              <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
-              <p className="text-[hsl(var(--liquid-gold))] uppercase tracking-[0.3em] text-sm font-semibold">
+              <div className="h-px w-12 bg-[hsl(var(--gold))]" />
+              <p className="text-[hsl(var(--gold))] uppercase tracking-[0.3em] text-sm font-semibold">
                 Free 3-Day Virtual Retreat
               </p>
-              <div className="h-px w-12 bg-[hsl(var(--liquid-gold))]" />
+              <div className="h-px w-12 bg-[hsl(var(--gold))]" />
             </div>
 
             {/* Headline */}
             <h1 className="font-serif text-6xl sm:text-7xl lg:text-8xl xl:text-9xl font-bold leading-[0.95] tracking-tight text-white">
               Master AI.<br />
               In Just<br />
-              <span className="text-[hsl(var(--liquid-gold))]">3 Days.</span>
+              <span className="text-[hsl(var(--gold))]">3 Days.</span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-xl sm:text-2xl lg:text-3xl text-white/90 leading-relaxed max-w-3xl mx-auto font-light">
-              Join founder <span className="font-semibold text-[hsl(var(--liquid-gold))]">Nadia</span> for an intimate AI retreat where you'll learn ChatGPT, automation, and Web3 basics—with zero tech overwhelm.
+              Join founder <span className="font-semibold text-[hsl(var(--gold))]">Nadia</span> for an intimate AI retreat where you'll learn ChatGPT, automation, and Web3 basics—with zero tech overwhelm.
             </p>
 
             {/* Social Proof */}
@@ -317,7 +317,7 @@ export default function RetreatPage() {
                         {/* Left: Day Info */}
                         <div className="lg:col-span-4 space-y-4">
                           <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 rounded-2xl bg-[hsl(var(--liquid-gold))] flex items-center justify-center">
+                            <div className="w-16 h-16 rounded-2xl bg-[hsl(var(--gold))] flex items-center justify-center">
                               <Icon className="w-8 h-8 text-black" />
                             </div>
                             <div>
@@ -348,7 +348,7 @@ export default function RetreatPage() {
                           <div className="grid sm:grid-cols-2 gap-4">
                             {day.outcomes.map((outcome, i) => (
                               <div key={i} className="flex items-start gap-3">
-                                <Check className="w-5 h-5 text-[hsl(var(--liquid-gold))] flex-shrink-0 mt-0.5" />
+                                <Check className="w-5 h-5 text-[hsl(var(--gold))] flex-shrink-0 mt-0.5" />
                                 <p className="text-foreground/90">{outcome}</p>
                               </div>
                             ))}
@@ -395,16 +395,16 @@ export default function RetreatPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <Card className="relative overflow-hidden border-2 border-[hsl(var(--liquid-gold))]/30 shadow-2xl">
+            <Card className="relative overflow-hidden border-2 border-[hsl(var(--gold))]/30 shadow-2xl">
               {/* Luxury background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--liquid-gold))]/10 via-transparent to-[hsl(var(--liquid-gold))]/5" />
+              <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--gold))]/10 via-transparent to-[hsl(var(--gold))]/5" />
               
               <div className="relative p-8 lg:p-16">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                   
                   {/* Left: VIP Info */}
                   <div className="space-y-6">
-                    <Badge className="bg-[hsl(var(--liquid-gold))] text-black px-4 py-2 text-sm font-bold border-0">
+                    <Badge className="bg-[hsl(var(--gold))] text-black px-4 py-2 text-sm font-bold border-0">
                       <Crown className="w-4 h-4 mr-2" />
                       VIP UPGRADE AVAILABLE
                     </Badge>
@@ -421,8 +421,8 @@ export default function RetreatPage() {
                     <div className="space-y-3">
                       {vipBonuses.map((bonus, i) => (
                         <div key={i} className="flex items-start gap-3">
-                          <div className="w-6 h-6 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                            <Check className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
+                          <div className="w-6 h-6 rounded-full bg-[hsl(var(--gold))]/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Check className="w-4 h-4 text-[hsl(var(--gold))]" />
                           </div>
                           <p className="text-foreground/90 font-medium">{bonus}</p>
                         </div>
@@ -444,7 +444,7 @@ export default function RetreatPage() {
                           trackCTAClick('retreat_vip_upgrade', '/upgrade', 'paid');
                           window.location.href = "/upgrade";
                         }}
-                        className="w-full bg-[hsl(var(--liquid-gold))] text-black text-lg py-7 rounded-full border border-[hsl(var(--liquid-gold))] shadow-xl group relative overflow-hidden"
+                        className="w-full bg-[hsl(var(--gold))] text-black text-lg py-7 rounded-full border border-[hsl(var(--gold))] shadow-xl group relative overflow-hidden"
                         data-testid="button-vip-upgrade"
                       >
                         <span className="relative z-10">Upgrade to VIP Access</span>
@@ -507,7 +507,7 @@ export default function RetreatPage() {
           >
             <h2 className="font-serif text-5xl lg:text-6xl font-bold">
               Your AI Journey<br />
-              Starts <span className="text-[hsl(var(--liquid-gold))]">This Week</span>
+              Starts <span className="text-[hsl(var(--gold))]">This Week</span>
             </h2>
             
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
