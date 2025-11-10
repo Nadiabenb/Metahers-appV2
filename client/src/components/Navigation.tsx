@@ -20,23 +20,23 @@ export function Navigation() {
   // Categorized navigation items for mega menu
   const navCategories = {
     "AI Tools": [
-      { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, featured: true },
-      { path: "/playground", label: "AI Tools", icon: Sparkles },
-      { path: "/career-path", label: "Career Path", icon: Target },
-      { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, pro: true },
+      { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129", featured: true },
+      { path: "/playground", label: "AI Tools", icon: Sparkles, gradient: "from-cyan-500 to-blue-600", glow: "0, 217, 255" },
+      { path: "/career-path", label: "Career Path", icon: Target, gradient: "from-purple-500 to-pink-600", glow: "181, 101, 216" },
+      { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, gradient: "from-pink-500 to-rose-600", glow: "233, 53, 193", pro: true },
     ],
     "Learning": [
-      { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, featured: true },
-      { path: "/app-atelier", label: "App Atelier", icon: Code2 },
-      { path: "/discover", label: "Discover", icon: Compass },
-      { path: "/rituals", label: "Rituals", icon: Zap },
-      { path: "/blog", label: "Resources", icon: BookOpen },
+      { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, gradient: "from-pink-500 to-purple-600", glow: "233, 53, 193", featured: true },
+      { path: "/app-atelier", label: "App Atelier", icon: Code2, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
+      { path: "/discover", label: "Discover", icon: Compass, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216" },
+      { path: "/rituals", label: "Rituals", icon: Zap, gradient: "from-amber-500 to-orange-600", glow: "255, 215, 0" },
+      { path: "/blog", label: "Resources", icon: BookOpen, gradient: "from-teal-500 to-cyan-600", glow: "0, 217, 255" },
     ],
     "Workspace": isAuthenticated ? [
-      { path: "/workspace", label: "Workspace", icon: Briefcase },
-      { path: "/journal", label: "Journal", icon: BookOpen },
-      { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, pro: true },
-      { path: "/events", label: "Events", icon: Calendar },
+      { path: "/workspace", label: "Workspace", icon: Briefcase, gradient: "from-blue-500 to-indigo-600", glow: "59, 130, 246" },
+      { path: "/journal", label: "Journal", icon: BookOpen, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129" },
+      { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216", pro: true },
+      { path: "/events", label: "Events", icon: Calendar, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
     ] : [],
   };
 
