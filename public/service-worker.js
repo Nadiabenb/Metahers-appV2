@@ -1,44 +1,50 @@
-const CACHE_NAME = 'metahers-v3-offline';
-const urlsToCache = [
+const CACHE_NAME = 'metahers-v1';
+const OFFLINE_URL = '/';
+
+const STATIC_ASSETS = [
   '/',
-  '/index.html',
-  '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
+  '/manifest.json',
 ];
 
+// Install event - cache static assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(urlsToCache))
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.addAll(STATIC_ASSETS);
+    })
   );
+  self.skipWaiting();
 });
 
+// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            return caches.delete(cacheName);
-          }
-        })
+        cacheNames
+          .filter((name) => name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
       );
-    }).then(() => self.clients.claim())
+    })
   );
+  self.clients.claim();
 });
 
+// Fetch event - network first, fallback to cache
 self.addEventListener('fetch', (event) => {
+  // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
-  // API requests - network first, fallback to cache
+  // API requests - network first
   if (event.request.url.includes('/api/')) {
     event.respondWith(
       fetch(event.request)
         .then((response) => {
+          // Clone and cache successful GET requests
           if (event.request.method === 'GET' && response.ok) {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
@@ -48,31 +54,34 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() => {
+          // Return cached version if available
           return caches.match(event.request);
         })
     );
     return;
   }
 
-  // Static assets - cache first
+  // Static assets - cache first, fallback to network
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => {
-        if (response) {
+    caches.match(event.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
+      return fetch(event.request).then((response) => {
+        // Don't cache non-successful responses
+        if (!response || response.status !== 200 || response.type === 'error') {
           return response;
         }
-        return fetch(event.request).then((response) => {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
-          const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
-          return response;
+
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(event.request, responseClone);
         });
-      })
+
+        return response;
+      });
+    })
   );
 });
 
@@ -84,51 +93,59 @@ self.addEventListener('sync', (event) => {
 });
 
 async function syncJournalEntries() {
-  // Feature detection
-  if (typeof indexedDB === 'undefined') {
-    console.warn('IndexedDB not available for background sync');
-    return;
-  }
-
   try {
-    const db = await openDB();
-    const entries = await getEntries(db);
+    // Get pending journal entries from IndexedDB
+    const db = await openIndexedDB();
+    const entries = await getPendingEntries(db);
 
+    if (entries.length === 0) {
+      return;
+    }
+
+    // Try to sync each entry
     for (const entry of entries) {
       try {
         const response = await fetch('/api/journal', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify(entry.data),
           credentials: 'include',
         });
 
         if (response.ok) {
-          await deleteEntry(db, entry.id);
-          if (self.registration && self.registration.showNotification) {
+          // Remove from pending queue
+          await removeEntry(db, entry.id);
+          
+          // Show success notification
+          if (self.registration.showNotification) {
             self.registration.showNotification('Journal Synced', {
-              body: 'Your offline entry has been saved',
+              body: 'Your offline journal entry has been saved',
               icon: '/icon-192.png',
+              badge: '/icon-192.png',
               tag: 'journal-sync',
             });
           }
         }
-      } catch (err) {
-        console.error('Sync failed:', err);
+      } catch (error) {
+        console.error('Failed to sync entry:', error);
       }
     }
   } catch (error) {
-    console.error('Background sync error:', error);
+    console.error('Background sync failed:', error);
   }
 }
 
-function openDB() {
+function openIndexedDB() {
   return new Promise((resolve, reject) => {
     const request = indexedDB.open('MetaHersOffline', 1);
+
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
-    request.onupgradeneeded = (e) => {
-      const db = e.target.result;
+
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
       if (!db.objectStoreNames.contains('pendingJournalEntries')) {
         db.createObjectStore('pendingJournalEntries', { keyPath: 'id', autoIncrement: true });
       }
@@ -136,21 +153,23 @@ function openDB() {
   });
 }
 
-function getEntries(db) {
+function getPendingEntries(db) {
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(['pendingJournalEntries'], 'readonly');
-    const store = tx.objectStore('pendingJournalEntries');
+    const transaction = db.transaction(['pendingJournalEntries'], 'readonly');
+    const store = transaction.objectStore('pendingJournalEntries');
     const request = store.getAll();
+
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
   });
 }
 
-function deleteEntry(db, id) {
+function removeEntry(db, id) {
   return new Promise((resolve, reject) => {
-    const tx = db.transaction(['pendingJournalEntries'], 'readwrite');
-    const store = tx.objectStore('pendingJournalEntries');
+    const transaction = db.transaction(['pendingJournalEntries'], 'readwrite');
+    const store = transaction.objectStore('pendingJournalEntries');
     const request = store.delete(id);
+
     request.onsuccess = () => resolve();
     request.onerror = () => reject(request.error);
   });

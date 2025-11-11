@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Settings, Crown, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { User, Settings, Crown, Sparkles, Volume2, VolumeX, Bell, BellOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ProgressChart } from "@/components/stats/ProgressChart";
 import { MoodChart } from "@/components/stats/MoodChart";
 import { useSoundEffects } from "@/hooks/useSoundEffects";
+import { useNotifications } from "@/hooks/useNotifications";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -21,6 +22,7 @@ export default function AccountPage() {
   const { toast } = useToast();
   const [betaCode, setBetaCode] = useState("");
   const { soundsEnabled, toggleSounds, playSound } = useSoundEffects();
+  const { notificationsEnabled, permission, toggleNotifications, isSupported } = useNotifications();
 
   const { data: journalStats } = useQuery<{ moodDistribution: Record<string, number> }>({
     queryKey: ['/api/journal/stats'],
@@ -209,6 +211,38 @@ export default function AccountPage() {
                       data-testid="switch-sound-effects"
                     />
                   </div>
+
+                  {isSupported && (
+                    <div className="flex items-center justify-between p-4 rounded-lg bg-background/50 border border-border/50">
+                      <div className="flex items-center gap-3">
+                        {notificationsEnabled ? (
+                          <Bell className="w-5 h-5 text-primary" />
+                        ) : (
+                          <BellOff className="w-5 h-5 text-muted-foreground" />
+                        )}
+                        <div>
+                          <Label htmlFor="notification-toggle" className="text-sm font-medium text-foreground cursor-pointer">
+                            Push Notifications
+                          </Label>
+                          <p className="text-xs text-muted-foreground">
+                            {permission === 'denied' 
+                              ? 'Notifications blocked - enable in browser settings'
+                              : 'Get notified about achievements and milestones'}
+                          </p>
+                        </div>
+                      </div>
+                      <Switch
+                        id="notification-toggle"
+                        checked={notificationsEnabled}
+                        disabled={permission === 'denied'}
+                        onCheckedChange={() => {
+                          playSound('click');
+                          toggleNotifications();
+                        }}
+                        data-testid="switch-notifications"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -18,6 +18,18 @@ export function useSoundEffects() {
       const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
       setAudioContext(ctx);
     }
+
+    // Cleanup: close AudioContext when disabled or unmounting
+    if (!soundsEnabled && audioContext && audioContext.state !== 'closed') {
+      audioContext.close().catch(console.error);
+      setAudioContext(null);
+    }
+
+    return () => {
+      if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close().catch(console.error);
+      }
+    };
   }, [soundsEnabled, audioContext]);
 
   const playSound = useCallback((type: SoundType) => {
