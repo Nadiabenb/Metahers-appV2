@@ -9,7 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { heroImage, spaceImages } from "@/lib/imageManifest";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
-import nadiaHeroPhoto from "@assets/IMG_1295_1762750477236.jpeg";
+import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
