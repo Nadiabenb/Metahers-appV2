@@ -7,7 +7,7 @@ import { sanitizeText, sanitizeHTML, sanitizeObject } from "./security";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import OpenAI from "openai";
-import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent, chatWithAppAtelierCoach } from "./aiService";
+import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent, chatWithAppAtelierCoach, generateRecommendations, type Recommendation } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
@@ -73,6 +73,10 @@ async function getUncachableResendClient() {
   };
 }
 
+// Simple in-memory cache for recommendations
+const recommendationCache = new Map<string, { data: Recommendation; timestamp: number }>();
+const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment
   app.get('/health', (_req, res) => {
@@ -104,7 +108,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(email);
-      if (ExistingUser) {
+      if (existingUser) {
         return res.status(409).json({ message: "User with this email already exists" });
       }
 
@@ -168,11 +172,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Logout endpoint
   app.post('/api/auth/logout', async (req, res) => {
+    const userId = req.session?.userId as string;
+    
     req.session?.destroy((err) => {
       if (err) {
         console.error("Error during logout:", err);
         return res.status(500).json({ message: "Logout failed" });
       }
+      
+      // Clear user's recommendation cache on logout
+      if (userId) {
+        recommendationCache.delete(userId);
+      }
+      
       res.clearCookie('connect.sid');
       res.json({ success: true });
     });
@@ -1101,6 +1113,76 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     } catch (error: any) {
       console.error("Career path generation error:", error);
       res.status(500).json({ message: "Failed to generate career path. Please try again." });
+    }
+  });
+
+  // ===== AI RECOMMENDATIONS ROUTE =====
+  app.get('/api/recommendations', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+
+      // Check cache first
+      const cached = recommendationCache.get(userId);
+      const now = Date.now();
+      if (cached && (now - cached.timestamp) < CACHE_TTL) {
+        return res.json(cached.data);
+      }
+
+      // Fetch user data (only aggregates, no PII)
+      const journalEntries = await storage.getAllJournalEntries(userId, 10);
+      const experienceProgress = await storage.getAllExperienceProgress(userId);
+      const achievements = await storage.getUserAchievements(userId);
+
+      // Extract themes from journal AI insights (robust extraction)
+      const recentThemes: string[] = [];
+      journalEntries.slice(0, 5).forEach(entry => {
+        if (entry.aiInsights) {
+          const insights = typeof entry.aiInsights === 'string' 
+            ? JSON.parse(entry.aiInsights) 
+            : entry.aiInsights;
+          if (insights && Array.isArray(insights.themes)) {
+            recentThemes.push(...insights.themes);
+          }
+        }
+      });
+
+      // Build context for AI (data minimization - only aggregates)
+      const context = {
+        recentMoods: journalEntries.map(e => e.mood),
+        journalStreak: journalEntries[0]?.streak || 0,
+        completedExperiences: experienceProgress.filter(p => p.completedAt).length,
+        totalExperiences: 54, // Total experiences across all 9 spaces
+        recentThemes: recentThemes.slice(0, 5),
+        achievementCount: achievements.length,
+        hasJournalEntries: journalEntries.length > 0
+      };
+
+      // Generate recommendations using AI
+      const recommendations = await generateRecommendations(context);
+
+      // Cache the result
+      recommendationCache.set(userId, {
+        data: recommendations,
+        timestamp: now
+      });
+
+      // Clean up stale cache entries (simple cleanup)
+      if (recommendationCache.size > 100) {
+        const entriesToDelete: string[] = [];
+        recommendationCache.forEach((value, key) => {
+          if (now - value.timestamp > CACHE_TTL) {
+            entriesToDelete.push(key);
+          }
+        });
+        entriesToDelete.forEach(key => recommendationCache.delete(key));
+      }
+
+      res.json(recommendations);
+    } catch (error) {
+      console.error('Failed to generate recommendations:', error);
+      res.status(503).json({ 
+        message: 'Recommendations temporarily unavailable. Please try again later.' 
+      });
     }
   });
 

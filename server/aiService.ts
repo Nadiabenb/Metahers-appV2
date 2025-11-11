@@ -313,3 +313,132 @@ This is THEIR learning journey, THEIR insights, THEIR voice. Make it personal, v
     contentShort: content.short || topic,
   };
 }
+
+// AI-Powered Recommendations
+interface UserContext {
+  recentMoods: (string | null)[];
+  journalStreak: number;
+  completedExperiences: number;
+  totalExperiences: number;
+  recentThemes: string[];
+  achievementCount: number;
+  hasJournalEntries: boolean;
+}
+
+export interface Recommendation {
+  nextExperience: {
+    title: string;
+    slug: string;
+    reason: string;
+    space: string;
+  } | null;
+  journalPrompt: string;
+  achievementTip: {
+    name: string;
+    description: string;
+    progress: string;
+  } | null;
+  insights: string[];
+}
+
+export async function generateRecommendations(context: UserContext): Promise<Recommendation> {
+  // Fallback for users with no activity
+  if (!context.hasJournalEntries && context.completedExperiences === 0) {
+    return {
+      nextExperience: {
+        title: "Start Your AI Journey",
+        slug: "ai",
+        reason: "Begin with foundational AI concepts perfect for creative entrepreneurs",
+        space: "AI"
+      },
+      journalPrompt: "What tech skills would transform your business or creative work?",
+      achievementTip: null,
+      insights: [
+        "Welcome to your sanctuary of tech learning",
+        "Your journey begins with one small step",
+        "Consistency matters more than speed"
+      ]
+    };
+  }
+
+  try {
+    const systemPrompt = `You are a personalized learning coach for MetaHers Mind Spa, an AI and Web3 education platform for women entrepreneurs.
+
+Your role:
+- Analyze user progress and recommend next learning steps
+- Provide warm, encouraging insights
+- Maintain luxury spa aesthetic in tone
+- Be specific and actionable`;
+
+    const userPrompt = `Analyze this user's learning journey and generate personalized recommendations:
+
+**Progress:**
+- Recent moods: ${context.recentMoods.filter(Boolean).join(', ') || 'Not available'}
+- Journal streak: ${context.journalStreak} days
+- Completed: ${context.completedExperiences} of ${context.totalExperiences} experiences
+- Recent themes: ${context.recentThemes.join(', ') || 'exploration, learning'}
+- Achievements unlocked: ${context.achievementCount}
+
+Generate JSON recommendations:
+{
+  "nextExperience": {
+    "title": "Specific experience title",
+    "slug": "space-slug (web3, ai, nft-blockchain-crypto, metaverse, branding, moms, app-atelier, founders-club, digital-boutique)",
+    "reason": "1 sentence why this fits their journey",
+    "space": "Space name"
+  },
+  "journalPrompt": "One inspiring reflection question (1-2 sentences)",
+  "achievementTip": {
+    "name": "Achievement name",
+    "description": "What they're close to unlocking",
+    "progress": "How close they are"
+  },
+  "insights": [
+    "Observation 1 about their progress",
+    "Observation 2 about their momentum",
+    "Encouraging statement about next steps"
+  ]
+}
+
+Return only valid JSON.`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ],
+      temperature: 0.7,
+      max_tokens: 400,
+      response_format: { type: "json_object" }
+    });
+
+    const content = response.choices[0].message.content || "{}";
+    const result = JSON.parse(content);
+
+    return {
+      nextExperience: result.nextExperience || null,
+      journalPrompt: result.journalPrompt || "What insights did you discover today?",
+      achievementTip: result.achievementTip || null,
+      insights: result.insights || ["You're making wonderful progress!", "Keep going!"]
+    };
+  } catch (error) {
+    console.error('Failed to generate AI recommendations:', error);
+    
+    // Graceful fallback
+    return {
+      nextExperience: {
+        title: "Continue Your Journey",
+        slug: "ai",
+        reason: "Build on your learning momentum",
+        space: "AI"
+      },
+      journalPrompt: "What tech concept sparked your curiosity this week?",
+      achievementTip: null,
+      insights: [
+        "Your learning journey is unique and valuable",
+        "Small consistent steps lead to big transformations"
+      ]
+    };
+  }
+}

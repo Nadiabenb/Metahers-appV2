@@ -6,6 +6,7 @@ import { WelcomeModal } from "@/components/WelcomeModal";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { SEO } from "@/components/SEO";
 import { OptimizedImage } from "@/components/OptimizedImage";
+import { RecommendationWidget } from "@/components/RecommendationWidget";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
@@ -119,6 +120,15 @@ export default function HomePage() {
           onComplete={handleCompleteOnboarding}
           userName={user?.firstName || undefined}
         />
+      )}
+
+      {/* AI Recommendations - Only for authenticated users */}
+      {user && (
+        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background border-b border-border/50">
+          <div className="max-w-7xl mx-auto">
+            <RecommendationWidget />
+          </div>
+        </section>
       )}
 
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
