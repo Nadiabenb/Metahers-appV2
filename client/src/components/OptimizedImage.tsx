@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface OptimizedImageProps {
   src: string;
@@ -9,9 +9,12 @@ interface OptimizedImageProps {
   objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
   onLoad?: () => void;
   optimizedBasename?: string;
+  blurDataURL?: string;
 }
 
 const BREAKPOINTS = [400, 800, 1200, 1600, 2400];
+
+const DEFAULT_BLUR_DATA_URL = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'%3E%3Cfilter id='b' color-interpolation-filters='sRGB'%3E%3CfeGaussianBlur stdDeviation='20'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23100321' filter='url(%23b)'/%3E%3C/svg%3E";
 
 export function OptimizedImage({
   src,
@@ -21,6 +24,7 @@ export function OptimizedImage({
   objectFit = "cover",
   onLoad,
   optimizedBasename,
+  blurDataURL = DEFAULT_BLUR_DATA_URL,
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -71,19 +75,27 @@ export function OptimizedImage({
     const fallbackSrc = `/optimized/${optimizedBasename}-fallback.jpg`;
 
     return (
-      <>
-        {!isLoaded && (
-          <div
-            className={`absolute inset-0 bg-muted/20 animate-pulse ${className}`}
-            aria-hidden="true"
-          />
-        )}
+      <div className="relative overflow-hidden">
+        <AnimatePresence>
+          {!isLoaded && (
+            <motion.img
+              key="blur-placeholder"
+              src={blurDataURL}
+              alt=""
+              aria-hidden="true"
+              className={`absolute inset-0 ${className} ${objectFitClass} blur-xl scale-110`}
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+            />
+          )}
+        </AnimatePresence>
 
         <motion.picture
           ref={pictureRef}
           initial={{ opacity: 0 }}
           animate={{ opacity: isLoaded ? 1 : 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <source
             type="image/avif"
@@ -98,40 +110,44 @@ export function OptimizedImage({
           <img
             src={fallbackSrc}
             alt={alt}
-            className={`${className} ${objectFitClass} ${
-              isLoaded ? "opacity-100" : "opacity-0"
-            } transition-opacity duration-300`}
+            className={`${className} ${objectFitClass} relative z-10`}
             loading={priority ? "eager" : "lazy"}
             onLoad={handleLoad}
           />
         </motion.picture>
-      </>
+      </div>
     );
   }
 
   return (
-    <>
-      {!isLoaded && (
-        <div
-          className={`absolute inset-0 bg-muted/20 animate-pulse ${className}`}
-          aria-hidden="true"
-        />
-      )}
+    <div className="relative overflow-hidden">
+      <AnimatePresence>
+        {!isLoaded && (
+          <motion.img
+            key="blur-placeholder"
+            src={blurDataURL}
+            alt=""
+            aria-hidden="true"
+            className={`absolute inset-0 ${className} ${objectFitClass} blur-xl scale-110`}
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4 }}
+          />
+        )}
+      </AnimatePresence>
 
       <motion.img
         ref={pictureRef as any}
         src={isInView ? src : undefined}
         alt={alt}
-        className={`${className} ${objectFitClass} ${
-          isLoaded ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-300`}
+        className={`${className} ${objectFitClass} relative z-10`}
         loading={priority ? "eager" : "lazy"}
         onLoad={handleLoad}
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
       />
-    </>
+    </div>
   );
 }
 

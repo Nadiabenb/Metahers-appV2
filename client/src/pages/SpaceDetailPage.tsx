@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 type Space = {
   id: string;
@@ -35,6 +36,7 @@ export default function SpaceDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const [, navigate] = useLocation();
   const { user } = useAuth();
+  const prefersReducedMotion = useReducedMotion();
 
   const { data: space, isLoading: spaceLoading, error: spaceError } = useQuery<Space>({
     queryKey: [`/api/spaces/${slug}`],
@@ -202,12 +204,19 @@ export default function SpaceDetailPage() {
       {/* What You'll Accomplish - Editorial */}
       <div className="container mx-auto max-w-6xl px-6 lg:px-16 py-20">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8 }}
         >
           <div className="kinetic-glass rounded-2xl p-12 border border-card-border">
-            <div className="flex items-center gap-4 mb-8">
+            <motion.div 
+              className="flex items-center gap-4 mb-8"
+              initial={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.6, delay: 0.2 }}
+            >
               <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Sparkles className="w-7 h-7 text-primary" />
               </div>
@@ -217,42 +226,45 @@ export default function SpaceDetailPage() {
                   Transformational outcomes designed for busy women who need results, not fluff.
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-primary/10 mt-1">
-                  <Sparkles className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2 text-lg">Save Time</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Cut learning time by 80% with AI-personalized experiences
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-primary/10 mt-1">
-                  <Trophy className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2 text-lg">Build Confidence</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Go from confused to confident with hands-on practice
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-primary/10 mt-1">
-                  <CheckCircle2 className="w-6 h-6 text-primary" />
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2 text-lg">Real Results</h4>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Apply skills immediately to your business or career
-                  </p>
-                </div>
-              </div>
+              {[
+                {
+                  icon: Sparkles,
+                  title: "Save Time",
+                  description: "Cut learning time by 80% with AI-personalized experiences"
+                },
+                {
+                  icon: Trophy,
+                  title: "Build Confidence",
+                  description: "Go from confused to confident with hands-on practice"
+                },
+                {
+                  icon: CheckCircle2,
+                  title: "Real Results",
+                  description: "Apply skills immediately to your business or career"
+                }
+              ].map((item, index) => (
+                <motion.div
+                  key={item.title}
+                  className="flex items-start gap-4"
+                  initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.6, delay: 0.3 + (index * 0.1) }}
+                >
+                  <div className="p-3 rounded-xl bg-primary/10 mt-1">
+                    <item.icon className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-lg">{item.title}</h4>
+                    <p className="text-muted-foreground leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </motion.div>
@@ -277,9 +289,11 @@ export default function SpaceDetailPage() {
               {freeExperiences.map((experience, index) => (
                 <motion.div
                   key={experience.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-100px" }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { delay: index * 0.15, duration: 0.7 }}
+                  style={!prefersReducedMotion ? { willChange: 'transform' } : undefined}
                 >
                   <div
                     onClick={() => navigate(`/experiences/${experience.slug}`)}
@@ -372,9 +386,11 @@ export default function SpaceDetailPage() {
               {proExperiences.map((experience, index) => (
                 <motion.div
                   key={experience.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: (freeExperiences.length + index) * 0.1, duration: 0.6 }}
+                  initial={prefersReducedMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.95 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={prefersReducedMotion ? { duration: 0 } : { delay: index * 0.1, duration: 0.7 }}
+                  style={!prefersReducedMotion ? { willChange: 'transform' } : undefined}
                 >
                   <div
                     onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
