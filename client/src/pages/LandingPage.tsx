@@ -274,8 +274,8 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          {/* Editorial Grid - Compact 3-Column Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* Editorial Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {spaces?.map((space, index) => {
               const taglineMap: Record<string, string> = {
                 "Web3": "Decode the decentralized future",
@@ -314,58 +314,60 @@ export default function LandingPage() {
                     <div className="kinetic-glass rounded-lg overflow-visible border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
                       {/* Cover Image */}
                       {spaceImage && (
-                        <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-lg">
+                        <div className="relative w-full aspect-[4/3] overflow-hidden">
                           <img
                             src={spaceImage.src}
                             alt={spaceImage.alt}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            className="w-full h-full object-cover"
                             loading="lazy"
                           />
-                          {/* Gradient overlay with badge */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/30 to-transparent" />
-                          
-                          {/* Badge on image */}
-                          {badge && (
-                            <div className="absolute top-3 right-3">
-                              <Badge variant="default" className="text-xs font-semibold bg-purple-500/90 text-white border-purple-400/50 backdrop-blur-sm">
-                                {badge.text}
-                              </Badge>
-                            </div>
-                          )}
+                          {/* Subtle gradient overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                         </div>
                       )}
 
-                      {/* Card Content - Compact */}
-                      <div className="p-5 flex flex-col flex-1">
-                        {/* Icon & Title Row */}
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-xl border border-primary/10 flex-shrink-0">
-                            {space.name === "AI" && "🤖"}
-                            {space.name === "Web3" && "🌐"}
-                            {space.name === "NFT/Blockchain/Crypto" && "💎"}
-                            {space.name === "Metaverse" && "🔮"}
-                            {space.name === "Branding" && "✨"}
-                            {space.name === "Moms" && "💝"}
-                            {space.name === "App Atelier" && "🎨"}
-                            {space.name === "Founder's Club" && <Crown className="w-5 h-5 text-primary" />}
-                            {space.name === "Digital Boutique" && "🛍️"}
+                      {/* Card Content */}
+                      <div className="p-8 flex flex-col flex-1">
+                        {/* Space Badge */}
+                        {badge && (
+                          <div className="mb-4">
+                            <Badge variant="secondary" className="text-xs font-semibold">
+                              {badge.text}
+                            </Badge>
                           </div>
+                        )}
 
-                          {/* Title */}
-                          <h3 className="font-serif text-xl font-bold text-foreground group-hover:text-primary transition-colors flex-1 leading-tight">
-                            {space.name}
-                          </h3>
+                      {/* Icon & Arrow */}
+                      <div className="mb-6 flex items-center justify-between">
+                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-2xl border border-primary/10">
+                          {space.name === "AI" && "🤖"}
+                          {space.name === "Web3" && "🌐"}
+                          {space.name === "NFT/Blockchain/Crypto" && "💎"}
+                          {space.name === "Metaverse" && "🔮"}
+                          {space.name === "Branding" && "✨"}
+                          {space.name === "Moms" && "💝"}
+                          {space.name === "App Atelier" && "🎨"}
+                          {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
+                          {space.name === "Digital Boutique" && "🛍️"}
                         </div>
 
-                        {/* Tagline */}
-                        <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">
-                          {tagline}
-                        </p>
+                        <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                      </div>
 
-                        {/* Footer - Minimal */}
-                        <div className="flex items-center justify-between text-xs text-muted-foreground/60 group-hover:text-primary/80 transition-colors">
-                          <span className="uppercase tracking-wider font-medium">Explore Space</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      {/* Title */}
+                      <h3 className="font-serif text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
+                        {space.name}
+                      </h3>
+
+                      {/* Tagline */}
+                      <p className="text-muted-foreground leading-relaxed flex-1">
+                        {tagline}
+                      </p>
+
+                        {/* Footer */}
+                        <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
+                          <span className="uppercase tracking-wider text-xs">Explore</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
                     </div>
