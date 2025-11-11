@@ -2,7 +2,7 @@ import { db } from "./db";
 import { transformationalExperiences } from "../shared/schema";
 import { sql } from "drizzle-orm";
 
-const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
+export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   // ===== WEB3 SPACE (6 experiences) =====
   {
     id: "web3-1-foundations",

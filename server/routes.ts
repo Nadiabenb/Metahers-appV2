@@ -15,7 +15,7 @@ import { db } from "./db";
 import { spaces, transformationalExperiences } from "@shared/schema";
 import { sql as drizzleSql } from "drizzle-orm";
 // Import all 54 experiences from seed file
-import { EXPERIENCES } from "@shared/seedExperiences";
+import { EXPERIENCES } from "./seedExperiences";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
