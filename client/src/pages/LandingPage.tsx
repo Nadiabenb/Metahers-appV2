@@ -118,45 +118,45 @@ export default function LandingPage() {
         />
 
         {/* Hero Content - Asymmetric Layout */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Text Content - Takes 8 columns (2/3) */}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 w-full py-16 sm:py-20 lg:py-0">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-8 sm:gap-12 lg:gap-16 items-center">
+            {/* Text Content - Takes larger portion on desktop */}
             <motion.div
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-              className="lg:col-span-8 space-y-8"
+              className="space-y-6 sm:space-y-8 text-center sm:text-left"
             >
               {/* Sanctuary-style eyebrow */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
-                className="flex items-center gap-3"
+                className="flex items-center gap-3 justify-center sm:justify-start"
               >
                 <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
-                <span className="text-sm uppercase tracking-widest text-white/80 font-medium">
+                <span className="text-xs sm:text-sm uppercase tracking-widest text-white/80 font-medium">
                   Your Digital Sanctuary
                 </span>
               </motion.div>
 
-              {/* Gradient Headline */}
-              <h1 className="sanctuary-headline text-6xl lg:text-7xl xl:text-8xl font-bold">
+              {/* Gradient Headline - Fluid Typography */}
+              <h1 className="sanctuary-headline font-bold leading-[1.08]" style={{ fontSize: 'clamp(2.5rem, 5vw + 1rem, 4.75rem)' }}>
                 <span className="text-white">Master AI.</span><br />
                 <span className="text-white">Own Web3.</span><br />
-                <span className="text-gradient-shimmer inline-flex items-center gap-4">
+                <span className="text-gradient-shimmer inline-flex items-center gap-3 sm:gap-4 justify-center sm:justify-start flex-wrap">
                   Build Empire.
-                  <Sparkles className="w-12 h-12 lg:w-16 lg:h-16 text-[#F8D57E]" />
+                  <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 text-[#F8D57E]" />
                 </span>
               </h1>
 
               {/* Editorial Subheading */}
-              <p className="text-xl lg:text-2xl text-white/90 max-w-2xl leading-relaxed font-light">
+              <p className="text-base sm:text-lg lg:text-2xl text-white/90 max-w-2xl mx-auto sm:mx-0 leading-relaxed font-light px-2 sm:px-0">
                 Eight curated learning spaces. Personalized AI coaching. Direct access to founder Nadia when you need real human support.
               </p>
 
               {/* CTA Buttons - Sanctuary Style */}
-              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-4 px-2 sm:px-0">
                 <motion.button
                   onClick={() => {
                     trackCTAClick('hero_retreat', '/retreat', 'free');
@@ -167,10 +167,10 @@ export default function LandingPage() {
                     boxShadow: "0 0 40px rgba(139, 92, 246, 0.4)"
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-lg transition-all duration-300 shadow-2xl shadow-purple-500/30"
+                  className="group relative px-8 sm:px-12 py-4 sm:py-5 rounded-full overflow-hidden bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-base sm:text-lg transition-all duration-300 shadow-2xl shadow-purple-500/30 w-full sm:w-auto"
                   data-testid="button-join-retreat"
                 >
-                  <span className="relative z-10 flex items-center gap-2">
+                  <span className="relative z-10 flex items-center gap-2 justify-center">
                     <Sparkles className="w-5 h-5" />
                     Enter the Sanctuary
                   </span>
@@ -179,7 +179,7 @@ export default function LandingPage() {
 
                 <button
                   onClick={handleSignup}
-                  className="px-12 py-5 rounded-full border-2 border-purple-400/30 backdrop-blur-xl bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400/50 transition-all text-white font-semibold text-lg"
+                  className="px-8 sm:px-12 py-4 sm:py-5 rounded-full border-2 border-purple-400/30 backdrop-blur-xl bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400/50 transition-all text-white font-semibold text-base sm:text-lg w-full sm:w-auto"
                   data-testid="button-start-free"
                 >
                   Start Free Journey
@@ -193,28 +193,28 @@ export default function LandingPage() {
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-[#25D366]/30 bg-[#25D366]/10 backdrop-blur-sm hover:bg-[#25D366]/20 hover:border-[#25D366]/50 transition-all"
+                className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 rounded-full border border-[#25D366]/30 bg-[#25D366]/10 backdrop-blur-sm hover:bg-[#25D366]/20 hover:border-[#25D366]/50 transition-all mx-auto sm:mx-0"
                 data-testid="button-whatsapp-retreat-hero"
                 onClick={() => trackCTAClick('hero_whatsapp_retreat', 'whatsapp_retreat', 'free')}
               >
                 <SiWhatsapp className="w-5 h-5 text-[#25D366]" />
-                <span className="text-white font-medium">
+                <span className="text-white font-medium text-sm sm:text-base">
                   Register via WhatsApp — Learn AI with Nadia in 3 Days
                 </span>
               </motion.a>
 
               {/* Social Proof - Magazine Caption Style */}
-              <p className="text-white/60 text-sm uppercase tracking-wider">
+              <p className="text-white/60 text-xs sm:text-sm uppercase tracking-wider px-2 sm:px-0">
                 Join 2,500+ women • No credit card required • Personal mentorship included
               </p>
             </motion.div>
 
-            {/* Founder Photo - Takes 4 columns (1/3) */}
+            {/* Founder Photo - Responsive reveal */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
-              className="lg:col-span-4 hidden lg:block"
+              className="hidden md:block mt-10 md:mt-0"
             >
               <div className="relative">
                 {/* Purple-pink glow effect behind photo */}
@@ -239,11 +239,11 @@ export default function LandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 1 }}
-            className="text-center mt-16"
+            className="text-center mt-12 sm:mt-16"
           >
             <button
               onClick={handleLogin}
-              className="text-white/50 hover:text-white/80 transition-all duration-300 text-sm"
+              className="text-white/50 hover:text-white/80 transition-all duration-300 text-xs sm:text-sm"
               data-testid="button-login"
             >
               Already a member? Sign in
