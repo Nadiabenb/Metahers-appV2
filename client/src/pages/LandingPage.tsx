@@ -14,6 +14,8 @@ import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
+import { TiltCard } from "@/components/metaverse/TiltCard";
+import { RippleButton } from "@/components/effects/RippleButton";
 
 
 export default function LandingPage() {
@@ -315,12 +317,9 @@ export default function LandingPage() {
               const optimizedBasename = optimizedBasenameMap[space.slug];
 
               return (
-                <motion.div
+                <TiltCard
                   key={space.name}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  delay={index * 0.1}
                   className="group"
                 >
                   <Link 
@@ -328,7 +327,7 @@ export default function LandingPage() {
                     className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`space-card-${space.slug}`}
                   >
-                    <div className="kinetic-glass rounded-lg overflow-hidden border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
+                    <div className="kinetic-glass rounded-lg overflow-visible border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
                       {/* Cover Image */}
                       {spaceImage && (
                         <div className="relative w-full aspect-[4/3] overflow-hidden">
@@ -389,7 +388,7 @@ export default function LandingPage() {
                       </div>
                     </div>
                   </Link>
-                </motion.div>
+                </TiltCard>
               );
             })}
           </div>

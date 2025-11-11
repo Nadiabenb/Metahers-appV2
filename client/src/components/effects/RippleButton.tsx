@@ -21,8 +21,18 @@ export function RippleButton({
 }: RippleButtonProps) {
   const [ripples, setRipples] = useState<Ripple[]>([]);
   const rippleIdRef = useRef(0);
+  const lastClickRef = useRef(0);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const now = Date.now();
+    
+    // Throttle rapid clicks to avoid render thrash
+    if (now - lastClickRef.current < 100) {
+      onClick?.(e);
+      return;
+    }
+    lastClickRef.current = now;
+
     const button = e.currentTarget;
     const rect = button.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -34,7 +44,11 @@ export function RippleButton({
       id: rippleIdRef.current++,
     };
 
-    setRipples((prev) => [...prev, newRipple]);
+    setRipples((prev) => {
+      // Limit to 3 concurrent ripples for performance
+      const limited = prev.length >= 3 ? prev.slice(1) : prev;
+      return [...limited, newRipple];
+    });
 
     setTimeout(() => {
       setRipples((prev) => prev.filter((r) => r.id !== newRipple.id));

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface BreathingLoaderProps {
   size?: "sm" | "md" | "lg";
@@ -11,6 +11,16 @@ export function BreathingLoader({ size = "md", className = "" }: BreathingLoader
     md: "w-16 h-16",
     lg: "w-24 h-24",
   };
+  
+  const prefersReducedMotion = useReducedMotion();
+
+  if (prefersReducedMotion) {
+    return (
+      <div className={`flex items-center justify-center ${className}`} data-testid="breathing-loader">
+        <div className={`${sizeMap[size]} rounded-full bg-gradient-to-br from-primary via-secondary to-accent opacity-70`} />
+      </div>
+    );
+  }
 
   return (
     <div className={`flex items-center justify-center ${className}`} data-testid="breathing-loader">

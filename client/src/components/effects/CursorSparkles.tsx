@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 interface Sparkle {
   id: number;
@@ -12,8 +12,16 @@ export function CursorSparkles() {
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
   const sparkleIdRef = useRef(0);
   const lastSparkleTimeRef = useRef(0);
+  const prefersReducedMotion = useReducedMotion();
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || isTouchDevice) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       const now = Date.now();
       if (now - lastSparkleTimeRef.current < 50) return;
@@ -40,7 +48,9 @@ export function CursorSparkles() {
       window.removeEventListener("mousemove", handleMouseMove);
       clearInterval(cleanupInterval);
     };
-  }, []);
+  }, [prefersReducedMotion, isTouchDevice]);
+
+  if (prefersReducedMotion || isTouchDevice) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-50">

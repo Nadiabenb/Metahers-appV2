@@ -9,6 +9,8 @@ import { trackPageView } from "@/lib/analytics";
 import { Navigation } from "@/components/Navigation";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { CursorSparkles } from "@/components/effects/CursorSparkles";
+import { BreathingLoader } from "@/components/effects/BreathingLoader";
 import { initializeApp } from "@/lib/storage";
 
 import LandingPage from "@/pages/LandingPage";
@@ -58,7 +60,7 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 function LoadingFallback() {
   return (
     <div className="flex items-center justify-center py-20">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      <BreathingLoader size="lg" />
     </div>
   );
 }
@@ -75,8 +77,8 @@ function Router() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-foreground/70">Loading...</p>
+          <BreathingLoader size="lg" className="mb-4" />
+          <p className="text-foreground/70">Preparing your sanctuary...</p>
         </div>
       </div>
     );
@@ -173,6 +175,7 @@ function App() {
       <ThemeProvider>
         <TooltipProvider>
           <div className="min-h-screen bg-background overflow-x-hidden">
+            <CursorSparkles />
             <Navigation />
             <Router />
             <InstallPrompt />
