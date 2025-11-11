@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useToast } from "@/hooks/use-toast";
+import { ShareButton } from "@/components/ShareButton";
 
 type Space = {
   id: string;
@@ -155,16 +156,24 @@ export default function SpaceDetailPage() {
       {/* Editorial Hero Header */}
       <div className="relative bg-muted/30 py-20 px-6 lg:px-16">
         <div className="container mx-auto max-w-6xl">
-          <Link href="/world">
-            <Button
+          <div className="flex items-center justify-between mb-8">
+            <Link href="/world">
+              <Button
+                variant="ghost"
+                className="-ml-4"
+                data-testid="button-back"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to All Spaces
+              </Button>
+            </Link>
+            <ShareButton
+              title={space.name}
+              text={`Check out ${space.name} on MetaHers Mind Spa - ${space.description}`}
+              url={`/spaces/${slug}`}
               variant="ghost"
-              className="mb-8 -ml-4"
-              data-testid="button-back"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to All Spaces
-            </Button>
-          </Link>
+            />
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
