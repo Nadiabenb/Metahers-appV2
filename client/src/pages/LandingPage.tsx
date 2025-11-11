@@ -86,7 +86,7 @@ export default function LandingPage() {
     <div ref={containerRef} className="relative min-h-screen bg-background overflow-x-hidden">
       <SEO
         title="Master AI & Web3 With Personal Mentorship - MetaHers Mind Spa"
-        description="Luxury learning for women solopreneurs, moms & creatives. Eight personalized learning spaces with AI coaching and real human support from founder Nadia. Start FREE—no credit card required."
+        description="Luxury learning for women solopreneurs, moms & creatives. Nine personalized learning spaces with AI coaching and real human support from founder Nadia. Start FREE—no credit card required."
         keywords="AI for women solopreneurs, AI for busy moms, AI learning for women, women in AI, AI education for women, Web3 for women, personal mentorship, human-powered AI, luxury learning platform"
         url="https://metahers.ai"
         schema={schema}
@@ -149,7 +149,7 @@ export default function LandingPage() {
 
               {/* Editorial Subheading */}
               <p className="text-base sm:text-lg lg:text-2xl text-white/90 max-w-2xl mx-auto sm:mx-0 leading-relaxed font-light px-2 sm:px-0">
-                Eight curated learning spaces. Personalized AI coaching. Direct access to founder Nadia when you need real human support.
+                Nine curated learning spaces. Personalized AI coaching. Direct access to founder Nadia when you need real human support.
               </p>
 
               {/* CTA Buttons - Sanctuary Style */}
@@ -249,33 +249,33 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* EIGHT LEARNING SPACES - Editorial Grid */}
-      <div className="relative py-32 px-6 lg:px-16 bg-background">
-        <div className="max-w-7xl mx-auto">
+      {/* NINE LEARNING SPACES - Editorial Grid */}
+      <div className="relative py-24 px-6 lg:px-16 bg-background">
+        <div className="max-w-[1400px] mx-auto">
           {/* Section Header - Magazine Style */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="mb-24 max-w-3xl"
+            className="mb-16 max-w-3xl"
           >
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-4">
               <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+              <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
                 Your Signature Program
               </span>
             </div>
-            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient-purple-pink">Eight Curated</span><br />Learning Spaces
+            <h2 className="sanctuary-headline text-4xl lg:text-5xl font-bold mb-4">
+              <span className="text-gradient-purple-pink">Nine Curated</span><br />Learning Spaces
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-lg text-muted-foreground leading-relaxed">
               Choose your path to mastery. Each space contains personalized transformational experiences designed for your success.
             </p>
           </motion.div>
 
-          {/* Editorial Grid - Staggered Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {/* Editorial Grid - Compact 3-Column Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {spaces?.map((space, index) => {
               const taglineMap: Record<string, string> = {
                 "Web3": "Decode the decentralized future",
@@ -314,60 +314,58 @@ export default function LandingPage() {
                     <div className="kinetic-glass rounded-lg overflow-visible border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
                       {/* Cover Image */}
                       {spaceImage && (
-                        <div className="relative w-full aspect-[4/3] overflow-hidden">
+                        <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-lg">
                           <img
                             src={spaceImage.src}
                             alt={spaceImage.alt}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                           />
-                          {/* Subtle gradient overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+                          {/* Gradient overlay with badge */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/30 to-transparent" />
+                          
+                          {/* Badge on image */}
+                          {badge && (
+                            <div className="absolute top-3 right-3">
+                              <Badge variant="default" className="text-xs font-semibold bg-purple-500/90 text-white border-purple-400/50 backdrop-blur-sm">
+                                {badge.text}
+                              </Badge>
+                            </div>
+                          )}
                         </div>
                       )}
 
-                      {/* Card Content */}
-                      <div className="p-8 flex flex-col flex-1">
-                        {/* Space Badge */}
-                        {badge && (
-                          <div className="mb-4">
-                            <Badge variant="default" className="text-xs font-semibold bg-purple-500/20 text-purple-300 border-purple-400/30">
-                              {badge.text}
-                            </Badge>
+                      {/* Card Content - Compact */}
+                      <div className="p-5 flex flex-col flex-1">
+                        {/* Icon & Title Row */}
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-xl border border-primary/10 flex-shrink-0">
+                            {space.name === "AI" && "🤖"}
+                            {space.name === "Web3" && "🌐"}
+                            {space.name === "NFT/Blockchain/Crypto" && "💎"}
+                            {space.name === "Metaverse" && "🔮"}
+                            {space.name === "Branding" && "✨"}
+                            {space.name === "Moms" && "💝"}
+                            {space.name === "App Atelier" && "🎨"}
+                            {space.name === "Founder's Club" && <Crown className="w-5 h-5 text-primary" />}
+                            {space.name === "Digital Boutique" && "🛍️"}
                           </div>
-                        )}
 
-                      {/* Icon & Arrow */}
-                      <div className="mb-6 flex items-center justify-between">
-                        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-2xl border border-primary/10">
-                          {space.name === "AI" && "🤖"}
-                          {space.name === "Web3" && "🌐"}
-                          {space.name === "NFT/Blockchain/Crypto" && "💎"}
-                          {space.name === "Metaverse" && "🔮"}
-                          {space.name === "Branding" && "✨"}
-                          {space.name === "Moms" && "💝"}
-                          {space.name === "App Atelier" && "🎨"}
-                          {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
-                          {space.name === "Digital Boutique" && "🛍️"}
+                          {/* Title */}
+                          <h3 className="font-serif text-xl font-bold text-foreground group-hover:text-primary transition-colors flex-1 leading-tight">
+                            {space.name}
+                          </h3>
                         </div>
 
-                        <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                      </div>
+                        {/* Tagline */}
+                        <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">
+                          {tagline}
+                        </p>
 
-                      {/* Title */}
-                      <h3 className="font-serif text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
-                        {space.name}
-                      </h3>
-
-                      {/* Tagline */}
-                      <p className="text-muted-foreground leading-relaxed flex-1">
-                        {tagline}
-                      </p>
-
-                        {/* Footer */}
-                        <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
-                          <span className="uppercase tracking-wider text-xs">Explore</span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        {/* Footer - Minimal */}
+                        <div className="flex items-center justify-between text-xs text-muted-foreground/60 group-hover:text-primary/80 transition-colors">
+                          <span className="uppercase tracking-wider font-medium">Explore Space</span>
+                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
                     </div>
