@@ -138,7 +138,7 @@ export default function LandingPage() {
               <h1 className="editorial-headline text-7xl lg:text-8xl xl:text-9xl text-white">
                 Master AI.<br />
                 Own Web3.<br />
-                <span className="text-[hsl(var(--gold))] inline-flex items-center gap-4">
+                <span className="text-gradient-gold-shimmer inline-flex items-center gap-4">
                   Build Empire.
                   <Sparkles className="w-16 h-16 lg:w-20 lg:h-20" />
                 </span>
