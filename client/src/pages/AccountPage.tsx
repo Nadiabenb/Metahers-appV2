@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Settings, Crown, Sparkles } from "lucide-react";
+import { User, Settings, Crown, Sparkles, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
@@ -11,12 +11,16 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { ProgressChart } from "@/components/stats/ProgressChart";
 import { MoodChart } from "@/components/stats/MoodChart";
+import { useSoundEffects } from "@/hooks/useSoundEffects";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 export default function AccountPage() {
   const { data: stats, isLoading } = useStats();
   const { user } = useAuth();
   const { toast } = useToast();
   const [betaCode, setBetaCode] = useState("");
+  const { soundsEnabled, toggleSounds, playSound } = useSoundEffects();
 
   const { data: journalStats } = useQuery<{ moodDistribution: Record<string, number> }>({
     queryKey: ['/api/journal/stats'],
@@ -162,6 +166,52 @@ export default function AccountPage() {
                 )}
               </div>
             )}
+
+            <div className="editorial-card p-8 relative overflow-hidden">
+              <div className="absolute inset-0 gradient-teal-gold opacity-5" />
+              <div className="relative z-10">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
+                      App Settings
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Customize your MetaHers experience
+                    </p>
+                  </div>
+                  <Settings className="w-5 h-5 text-muted-foreground" />
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 rounded-lg bg-background/50 border border-border/50">
+                    <div className="flex items-center gap-3">
+                      {soundsEnabled ? (
+                        <Volume2 className="w-5 h-5 text-primary" />
+                      ) : (
+                        <VolumeX className="w-5 h-5 text-muted-foreground" />
+                      )}
+                      <div>
+                        <Label htmlFor="sound-toggle" className="text-sm font-medium text-foreground cursor-pointer">
+                          Sound Effects
+                        </Label>
+                        <p className="text-xs text-muted-foreground">
+                          Subtle audio feedback for interactions
+                        </p>
+                      </div>
+                    </div>
+                    <Switch
+                      id="sound-toggle"
+                      checked={soundsEnabled}
+                      onCheckedChange={() => {
+                        toggleSounds();
+                        playSound('click');
+                      }}
+                      data-testid="switch-sound-effects"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div className="editorial-card p-8 relative overflow-hidden">
               <div className="absolute inset-0 gradient-teal-gold opacity-5" />
