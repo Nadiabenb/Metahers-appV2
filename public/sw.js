@@ -1,5 +1,7 @@
-const CACHE_NAME = 'metahers-v4-fresh';
+const CACHE_NAME = 'metahers-v3-offline';
 const urlsToCache = [
+  '/',
+  '/index.html',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
@@ -52,20 +54,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // HTML pages - ALWAYS network first (never cache)
-  if (event.request.mode === 'navigate' || event.request.destination === 'document' || 
-      event.request.headers.get('accept').includes('text/html')) {
-    event.respondWith(
-      fetch(event.request)
-        .catch(() => {
-          // Only use cache for offline fallback
-          return caches.match('/index.html');
-        })
-    );
-    return;
-  }
-
-  // Static assets (JS, CSS, images) - cache first
+  // Static assets - cache first
   event.respondWith(
     caches.match(event.request)
       .then((response) => {
