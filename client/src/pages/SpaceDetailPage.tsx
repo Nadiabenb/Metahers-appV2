@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowLeft, Lock, CheckCircle2, Clock, Trophy, Sparkles, ChevronRight } from "lucide-react";
+import { ArrowLeft, Lock, CheckCircle2, Clock, Trophy, Sparkles, ChevronRight, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useBookmarks } from "@/hooks/useBookmarks";
+import { useToast } from "@/hooks/use-toast";
 
 type Space = {
   id: string;
@@ -37,6 +39,8 @@ export default function SpaceDetailPage() {
   const [, navigate] = useLocation();
   const { user } = useAuth();
   const prefersReducedMotion = useReducedMotion();
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  const { toast } = useToast();
 
   const { data: space, isLoading: spaceLoading, error: spaceError } = useQuery<Space>({
     queryKey: [`/api/spaces/${slug}`],
@@ -344,17 +348,35 @@ export default function SpaceDetailPage() {
                         </ul>
                       </div>
 
-                      <Button
-                        className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 w-full sm:w-auto px-8 py-6 text-base"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/experiences/${experience.slug}`);
-                        }}
-                        data-testid={`button-start-${experience.slug}`}
-                      >
-                        Start Learning Free
-                        <Sparkles className="ml-2 w-4 h-4" />
-                      </Button>
+                      <div className="flex gap-3">
+                        <Button
+                          className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 flex-1 sm:flex-initial px-8 py-6 text-base"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/experiences/${experience.slug}`);
+                          }}
+                          data-testid={`button-start-${experience.slug}`}
+                        >
+                          Start Learning Free
+                          <Sparkles className="ml-2 w-4 h-4" />
+                        </Button>
+                        <Button
+                          size="lg"
+                          variant={isBookmarked(experience.id) ? "default" : "outline"}
+                          className="px-6 py-6"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleBookmark(experience.id);
+                            toast({
+                              title: isBookmarked(experience.id) ? "Removed from bookmarks" : "Added to bookmarks",
+                              description: experience.title,
+                            });
+                          }}
+                          data-testid={`button-bookmark-${experience.slug}`}
+                        >
+                          <Bookmark className={`w-4 h-4 ${isBookmarked(experience.id) ? 'fill-current' : ''}`} />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>

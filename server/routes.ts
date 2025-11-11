@@ -1530,12 +1530,14 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       const userId = req.session!.userId as string;
 
       const allProgress = await storage.getAllUserRitualProgress(userId);
-      const journalEntry = await storage.getLatestJournalEntry(userId);
+      const allJournalEntries = await storage.getAllJournalEntries(userId, 100);
 
       const totalRituals = allProgress.length;
       const completedRituals = allProgress.filter(p => p.completedSteps.length > 0).length;
-      const journalEntries = journalEntry && journalEntry.content.trim().length > 0 ? 1 : 0;
-      const streak = journalEntry?.streak || 0;
+      const journalEntries = allJournalEntries.length;
+      
+      const latestEntry = allJournalEntries[0];
+      const streak = latestEntry?.streak || 0;
 
       res.json({
         totalRituals,
@@ -1558,6 +1560,42 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     } catch (error) {
       console.error("Error fetching journal stats:", error);
       res.status(500).json({ message: "Failed to fetch journal stats" });
+    }
+  });
+
+  app.get('/api/analytics/progress', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const entries = await storage.getAllJournalEntries(userId, 30);
+      
+      // Group by date with actual Date objects for proper sorting
+      const progressByDate: Map<string, { date: Date; count: number; label: string }> = new Map();
+      
+      entries.forEach(entry => {
+        if (entry.createdAt) {
+          const dateObj = new Date(entry.createdAt);
+          const dateKey = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD for grouping
+          const label = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          
+          if (progressByDate.has(dateKey)) {
+            progressByDate.get(dateKey)!.count++;
+          } else {
+            progressByDate.set(dateKey, { date: dateObj, count: 1, label });
+          }
+        }
+      });
+      
+      // Sort by date descending and take most recent 14 days
+      const progressData = Array.from(progressByDate.values())
+        .sort((a, b) => b.date.getTime() - a.date.getTime())
+        .slice(0, 14)
+        .reverse() // Reverse to show oldest -> newest on chart
+        .map(({ label, count }) => ({ date: label, count }));
+      
+      res.json(progressData);
+    } catch (error) {
+      console.error("Error fetching progress analytics:", error);
+      res.status(500).json({ message: "Failed to fetch progress analytics" });
     }
   });
 

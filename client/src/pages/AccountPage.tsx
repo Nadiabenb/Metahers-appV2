@@ -6,15 +6,27 @@ import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
 import { useStats } from "@/hooks/useStats";
 import { useAuth } from "@/hooks/useAuth";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { ProgressChart } from "@/components/stats/ProgressChart";
+import { MoodChart } from "@/components/stats/MoodChart";
 
 export default function AccountPage() {
   const { data: stats, isLoading } = useStats();
   const { user } = useAuth();
   const { toast } = useToast();
   const [betaCode, setBetaCode] = useState("");
+
+  const { data: journalStats } = useQuery<{ moodDistribution: Record<string, number> }>({
+    queryKey: ['/api/journal/stats'],
+    enabled: !!user,
+  });
+
+  const { data: progressData } = useQuery<Array<{ date: string; count: number }>>({
+    queryKey: ['/api/analytics/progress'],
+    enabled: !!user,
+  });
 
   const activateBetaCodeMutation = useMutation({
     mutationFn: (code: string) =>
@@ -131,6 +143,25 @@ export default function AccountPage() {
                 )}
               </div>
             </div>
+
+            {/* Analytics Charts */}
+            {progressData && progressData.length > 0 && (
+              <div className="grid md:grid-cols-2 gap-6">
+                <ProgressChart
+                  data={progressData}
+                  title="Journal Activity (Last 14 Days)"
+                  color="hsl(var(--hyper-violet))"
+                />
+                {journalStats?.moodDistribution && Object.keys(journalStats.moodDistribution).length > 0 && (
+                  <MoodChart
+                    data={Object.entries(journalStats.moodDistribution).map(([mood, count]) => ({
+                      mood: mood.charAt(0).toUpperCase() + mood.slice(1),
+                      count
+                    }))}
+                  />
+                )}
+              </div>
+            )}
 
             <div className="editorial-card p-8 relative overflow-hidden">
               <div className="absolute inset-0 gradient-teal-gold opacity-5" />
