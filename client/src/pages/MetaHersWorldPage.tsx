@@ -282,11 +282,11 @@ export default function MetaHersWorldPage() {
                         {/* Cover Image */}
                         {spaceImages[space.slug] && (
                           <div className="relative w-full aspect-[4/3] overflow-hidden">
-                            <OptimizedImage
+                            <img
                               src={spaceImages[space.slug].src}
                               alt={spaceImages[space.slug].alt}
-                              className="w-full h-full"
-                              objectFit="cover"
+                              className="w-full h-full object-cover"
+                              loading="lazy"
                             />
                             {/* Subtle gradient overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />

@@ -300,20 +300,6 @@ export default function LandingPage() {
               // Get cover image for this space
               const spaceImage = spaceImages[space.slug];
 
-              // Map slugs to optimized basenames
-              const optimizedBasenameMap: Record<string, string> = {
-                "web3": "Web3_blockchain_woman_tech_18d40367",
-                "ai": "AI_neural_network_woman_7b5da9b3",
-                "nft-blockchain-crypto": "NFT_digital_art_woman_c4093fda",
-                "metaverse": "Metaverse_virtual_world_woman_989cc16d",
-                "branding": "Personal_branding_woman_tech_03a081e8",
-                "moms": "Tech_mom_entrepreneur_balance_14af09c8",
-                "app-atelier": "App_building_woman_designer_72d3791d",
-                "founders-club": "Founder_startup_woman_CEO_582afaaf",
-                "digital-boutique": "Digital_boutique_e-commerce_woman_c3bd40e7"
-              };
-              const optimizedBasename = optimizedBasenameMap[space.slug];
-
               return (
                 <TiltCard
                   key={space.name}
@@ -329,12 +315,11 @@ export default function LandingPage() {
                       {/* Cover Image */}
                       {spaceImage && (
                         <div className="relative w-full aspect-[4/3] overflow-hidden">
-                          <OptimizedImage
+                          <img
                             src={spaceImage.src}
                             alt={spaceImage.alt}
-                            className="w-full h-full"
-                            objectFit="cover"
-                            optimizedBasename={optimizedBasename}
+                            className="w-full h-full object-cover"
+                            loading="lazy"
                           />
                           {/* Subtle gradient overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
