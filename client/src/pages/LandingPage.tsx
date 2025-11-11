@@ -90,26 +90,16 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* HERO - Editorial Magazine Style */}
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Large Editorial Photography Background */}
-        <motion.div
-          style={{ y: heroY, scale: heroScale }}
-          className="absolute inset-0"
-        >
-          <OptimizedImage
-            src={heroImage}
-            alt="Luxury editorial photography for MetaHers Mind Spa"
-            className="absolute inset-0 w-full h-full"
-            objectFit="cover"
-            priority={true}
-            optimizedBasename="Neon_light_trails_hero_2008ed57"
-          />
-        </motion.div>
-
-        {/* Dark gradient wash for text readability (Editorial technique) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.7)_100%)]" />
+      {/* HERO - Violet Sanctuary Style */}
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#100321] via-[#2B0A55] to-[#100321]">
+        {/* Subtle neon glow orbs in background */}
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl" />
+        
+        {/* Grain texture overlay for depth */}
+        <div className="absolute inset-0 opacity-[0.015] mix-blend-overlay"
+          style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }}
+        />
 
         {/* Hero Content - Asymmetric Layout */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-16 w-full">
@@ -121,26 +111,26 @@ export default function LandingPage() {
               transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
               className="lg:col-span-8 space-y-8"
             >
-              {/* Magazine-style eyebrow */}
+              {/* Sanctuary-style eyebrow */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="flex items-center gap-3"
               >
-                <div className="h-px w-12 bg-[hsl(var(--gold))]" />
+                <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
                 <span className="text-sm uppercase tracking-widest text-white/80 font-medium">
-                  Luxury Learning for Women
+                  Your Digital Sanctuary
                 </span>
               </motion.div>
 
-              {/* Massive Editorial Headline */}
-              <h1 className="editorial-headline text-7xl lg:text-8xl xl:text-9xl text-white">
-                Master AI.<br />
-                Own Web3.<br />
-                <span className="text-gradient-gold-shimmer inline-flex items-center gap-4">
+              {/* Gradient Headline */}
+              <h1 className="sanctuary-headline text-6xl lg:text-7xl xl:text-8xl font-bold">
+                <span className="text-white">Master AI.</span><br />
+                <span className="text-white">Own Web3.</span><br />
+                <span className="text-gradient-shimmer inline-flex items-center gap-4">
                   Build Empire.
-                  <Sparkles className="w-16 h-16 lg:w-20 lg:h-20" />
+                  <Sparkles className="w-12 h-12 lg:w-16 lg:h-16 text-[#F8D57E]" />
                 </span>
               </h1>
 
@@ -149,7 +139,7 @@ export default function LandingPage() {
                 Eight curated learning spaces. Personalized AI coaching. Direct access to founder Nadia when you need real human support.
               </p>
 
-              {/* CTA Buttons - Magazine Style */}
+              {/* CTA Buttons - Sanctuary Style */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-4">
                 <motion.button
                   onClick={() => {
@@ -158,25 +148,25 @@ export default function LandingPage() {
                   }}
                   whileHover={{ 
                     scale: 1.03,
-                    boxShadow: "0 0 40px hsl(var(--gold) / 0.4)"
+                    boxShadow: "0 0 40px rgba(139, 92, 246, 0.4)"
                   }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold))]/90 text-black font-semibold text-lg transition-all duration-300 shadow-2xl shadow-[hsl(var(--gold))]/20"
+                  className="group relative px-12 py-5 rounded-full overflow-hidden bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-lg transition-all duration-300 shadow-2xl shadow-purple-500/30"
                   data-testid="button-join-retreat"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     <Sparkles className="w-5 h-5" />
-                    Join Free 3-Day AI Retreat
+                    Enter the Sanctuary
                   </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </motion.button>
 
                 <button
                   onClick={handleSignup}
-                  className="px-12 py-5 rounded-full border-2 border-white/30 backdrop-blur-xl bg-white/5 hover:bg-white/10 hover:border-white/50 transition-all text-white font-semibold text-lg"
+                  className="px-12 py-5 rounded-full border-2 border-purple-400/30 backdrop-blur-xl bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400/50 transition-all text-white font-semibold text-lg"
                   data-testid="button-start-free"
                 >
-                  Start Free Account
+                  Start Free Journey
                 </button>
               </div>
 
@@ -211,11 +201,11 @@ export default function LandingPage() {
               className="lg:col-span-4 hidden lg:block"
             >
               <div className="relative">
-                {/* Neon glow effect behind photo */}
-                <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/30 via-[hsl(var(--magenta-quartz))]/20 to-transparent blur-3xl" />
+                {/* Purple-pink glow effect behind photo */}
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 via-pink-500/20 to-transparent blur-3xl" />
                 
                 {/* Photo */}
-                <div className="relative rounded-3xl overflow-hidden border-2 border-[hsl(var(--gold))]/30 shadow-2xl shadow-[hsl(var(--gold))]/20">
+                <div className="relative rounded-3xl overflow-hidden border-2 border-purple-400/30 shadow-2xl shadow-purple-500/20">
                   <OptimizedImage
                     src={nadiaHeroPhoto}
                     alt="Nadia - Founder of MetaHers, teaching AI and Web3 to women"
@@ -258,13 +248,13 @@ export default function LandingPage() {
             className="mb-24 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-[hsl(var(--gold))]" />
+              <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
               <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
                 Your Signature Program
               </span>
             </div>
-            <h2 className="editorial-headline text-6xl lg:text-7xl mb-6">
-              Eight Curated<br />Learning Spaces
+            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-gradient-purple-pink">Eight Curated</span><br />Learning Spaces
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
               Choose your path to mastery. Each space contains personalized transformational experiences designed for your success.
@@ -311,7 +301,7 @@ export default function LandingPage() {
                       {/* Space Badge */}
                       {badge && (
                         <div className="mb-4">
-                          <Badge variant="default" className="text-xs font-semibold bg-[hsl(var(--gold))]/20 text-[hsl(var(--gold))] border-[hsl(var(--gold))]/30">
+                          <Badge variant="default" className="text-xs font-semibold bg-purple-500/20 text-purple-300 border-purple-400/30">
                             {badge.text}
                           </Badge>
                         </div>
@@ -367,8 +357,8 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-20"
           >
-            <h2 className="editorial-headline text-6xl lg:text-7xl mb-6">
-              Start Free,<br />Upgrade Anytime
+            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-gradient-purple-pink">Start Free,</span><br />Upgrade Anytime
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Choose the membership that fits your journey
@@ -407,11 +397,11 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="kinetic-glass rounded-2xl p-12 border-2 border-[hsl(var(--gold))]/30 relative overflow-hidden"
+              className="sanctuary-card p-12 border-2 border-purple-400/30 relative overflow-hidden shadow-2xl shadow-purple-500/10"
             >
               {/* Popular Badge */}
               <div className="absolute top-6 right-6">
-                <Badge className="bg-[hsl(var(--gold))] text-black border-0 px-4 py-1 text-xs font-bold uppercase tracking-wider">
+                <Badge className="bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0 px-4 py-1 text-xs font-bold uppercase tracking-wider">
                   Popular
                 </Badge>
               </div>
@@ -424,7 +414,7 @@ export default function LandingPage() {
               </div>
               <button
                 onClick={() => window.location.href = "/pricing"}
-                className="gold-shimmer w-full px-8 py-5 rounded-full bg-gradient-to-r from-[hsl(var(--gold))] to-[hsl(var(--gold))]/90 hover:shadow-2xl hover:shadow-[hsl(var(--gold))]/20 transition-all font-semibold text-lg text-black"
+                className="purple-shimmer w-full px-8 py-5 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:shadow-2xl hover:shadow-purple-500/40 transition-all font-semibold text-lg text-white"
                 data-testid="button-upgrade-pro"
               >
                 View Pro Benefits
@@ -446,13 +436,13 @@ export default function LandingPage() {
             className="mb-20 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-[hsl(var(--gold))]" />
+              <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
               <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
                 Human-Powered AI
               </span>
             </div>
-            <h2 className="editorial-headline text-6xl lg:text-7xl mb-6">
-              Meet Nadia
+            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
+              <span className="text-gradient-purple-pink">Meet Nadia</span>
             </h2>
             <p className="text-xl text-muted-foreground leading-relaxed">
               Your personal guide. Text or call me anytime you need motivation—no extra charge.
@@ -488,8 +478,8 @@ export default function LandingPage() {
                 className="absolute -bottom-6 -right-6 kinetic-glass px-8 py-5 rounded-2xl border border-card-border shadow-2xl"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-[hsl(var(--gold))]/20 flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-[hsl(var(--gold))]" />
+                  <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+                    <Phone className="w-6 h-6 text-purple-400" />
                   </div>
                   <div>
                     <p className="font-bold text-lg">Free Personal Calls</p>
