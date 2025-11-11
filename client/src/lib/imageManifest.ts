@@ -1,7 +1,7 @@
 // MetaHers Image Manifest - Violet Sanctuary Assets
 // Maps slugs to generated image filenames for hero, spaces, blog, and achievements
 
-import heroSanctuaryImage from "@assets/IMG_1295_1762876265856.jpg";
+import heroSanctuaryImage from "@assets/hero-ai-web3-woman_1762876953575.jpg";
 import web3SpaceImage from "@assets/generated_images/Web3_blockchain_woman_tech_18d40367.png";
 import aiSpaceImage from "@assets/generated_images/AI_neural_network_woman_7b5da9b3.png";
 import nftSpaceImage from "@assets/generated_images/NFT_digital_art_woman_c4093fda.png";
@@ -24,7 +24,7 @@ import achievementDiamondImage from "@assets/generated_images/Diamond_gem_purple
 
 export const heroImage = {
   src: heroSanctuaryImage,
-  alt: "Nadia presenting AI and Web3 with holographic interface in gold dress - MetaHers founder and mentor",
+  alt: "Woman in gold dress presenting AI and Web3 with holographic blockchain interface on purple background - MetaHers Mind Spa",
 };
 
 // Map space slugs to cover images (4:3 aspect ratio)
