@@ -96,13 +96,10 @@ export default function LandingPage() {
       <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Hero Background Image Layer */}
         <div className="absolute inset-0">
-          <OptimizedImage
-            src={"/images/hero-ai-web3-woman.jpg"}
-            alt={"AI and Web3 woman learning"}
-            className="w-full h-full"
-            objectFit="cover"
-            priority={true}
-            optimizedBasename="hero-ai-web3-woman"
+          <img
+            src={heroImage.src}
+            alt={heroImage.alt}
+            className="w-full h-full object-cover"
           />
           {/* Dark gradient overlay for text contrast */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#100321]/90 via-[#2B0A55]/85 to-[#100321]/90" />
