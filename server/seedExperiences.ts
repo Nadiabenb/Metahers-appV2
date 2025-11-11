@@ -1520,6 +1520,206 @@ export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
     },
     personalizationEnabled: true,
   },
+
+  // ===== MOMS SPACE (6 experiences) =====
+  {
+    id: "moms-1-ai-foundations",
+    spaceId: "moms",
+    title: "AI for Busy Moms: Your Digital Life Assistant",
+    slug: "ai-for-busy-moms",
+    description: "Master AI tools that give you back 10+ hours every week. Learn practical AI shortcuts for meal planning, homework help, scheduling, and running your household like a CEO.",
+    learningObjectives: [
+      "Use ChatGPT for meal planning, grocery lists, and recipe modifications",
+      "Automate scheduling with AI calendar assistants",
+      "Get instant homework help and educational support for your kids",
+      "Create AI systems for household management",
+    ],
+    tier: "free", // FREE - Lead magnet
+    estimatedMinutes: 30,
+    sortOrder: 1,
+    content: {
+      sections: [
+        {
+          id: "ai-intro-moms",
+          title: "AI: Your New Best Friend",
+          type: "text",
+          content: "Discover how AI can be your 24/7 personal assistant, helping you manage family life, save time, and reduce mental load.",
+        },
+        {
+          id: "practical-prompts",
+          title: "Mom-Tested AI Prompts",
+          type: "interactive",
+          content: "Get our library of ready-to-use prompts for meal planning, kid activities, birthday party planning, school forms, and more.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "moms-2-time-automation",
+    spaceId: "moms",
+    title: "Time-Saving Automation",
+    slug: "time-saving-automation",
+    description: "Build your automated home office. Set up AI tools that handle repetitive tasks, manage your email, organize photos, and keep your digital life running smoothly.",
+    learningObjectives: [
+      "Automate email inbox management and responses",
+      "Set up AI photo organization and family memory books",
+      "Create automated shopping lists and reorder systems",
+      "Build digital systems for household routines",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 45,
+    sortOrder: 2,
+    content: {
+      sections: [
+        {
+          id: "automation-basics",
+          title: "Automation for Non-Techies",
+          type: "text",
+          content: "Simple automation tools that work for busy moms. No coding required.",
+        },
+        {
+          id: "email-sanity",
+          title: "Email Inbox Zero",
+          type: "hands_on_lab",
+          content: "Set up AI email filters, auto-responses, and smart folders to tame your inbox in 15 minutes a day.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "moms-3-side-hustles",
+    spaceId: "moms",
+    title: "Mom-Friendly Side Hustles",
+    slug: "mom-side-hustles",
+    description: "Launch a flexible side hustle that fits your life. Explore AI-powered business ideas you can start during nap time, with minimal startup costs and maximum schedule flexibility.",
+    learningObjectives: [
+      "Identify profitable side hustles that fit mom life",
+      "Use AI to create digital products in hours (not months)",
+      "Set up simple sales systems that run on autopilot",
+      "Balance business goals with family priorities",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 60,
+    sortOrder: 3,
+    content: {
+      sections: [
+        {
+          id: "side-hustle-ideas",
+          title: "20 Mom-Tested Business Ideas",
+          type: "interactive",
+          content: "From digital downloads to coaching, find the perfect side hustle for your skills, schedule, and goals.",
+        },
+        {
+          id: "first-product",
+          title: "Create Your First Product",
+          type: "hands_on_lab",
+          content: "Use AI to create your first digital product (template, guide, or course) in one focused session.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "moms-4-content-creation",
+    spaceId: "moms",
+    title: "AI Content for Mom Creators",
+    slug: "ai-content-mom-creators",
+    description: "Build your personal brand without the overwhelm. Use AI to create authentic content, grow your Instagram/TikTok, and connect with other moms—all while staying true to yourself.",
+    learningObjectives: [
+      "Create 30 days of social content in one afternoon with AI",
+      "Find your authentic voice and niche as a mom creator",
+      "Batch create content during kid-free hours",
+      "Grow your following with AI-optimized captions and hashtags",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 50,
+    sortOrder: 4,
+    content: {
+      sections: [
+        {
+          id: "content-strategy",
+          title: "Your Mom Creator Strategy",
+          type: "interactive",
+          content: "Define your niche, message, and content pillars. Stand out without copying other creators.",
+        },
+        {
+          id: "batch-content",
+          title: "Batch Content Creation",
+          type: "hands_on_lab",
+          content: "Film and edit 2 weeks of content in 2 hours. Use AI for captions, hashtags, and scheduling.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "moms-5-kids-education",
+    spaceId: "moms",
+    title: "AI for Kids Education",
+    slug: "ai-kids-education",
+    description: "Support your child's learning with AI. Get homework help, create custom learning materials, make school projects easier, and give your kids an edge in their education.",
+    learningObjectives: [
+      "Use AI as a homework tutor (without doing the work for them)",
+      "Create custom learning materials for your child's level",
+      "Make school projects more creative with AI tools",
+      "Teach your kids safe, responsible AI use",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 40,
+    sortOrder: 5,
+    content: {
+      sections: [
+        {
+          id: "homework-helper",
+          title: "AI Homework Assistant",
+          type: "text",
+          content: "Help your kids understand concepts without just giving answers. AI prompts for every grade level.",
+        },
+        {
+          id: "learning-materials",
+          title: "Custom Learning Materials",
+          type: "hands_on_lab",
+          content: "Create worksheets, flashcards, and study guides tailored to your child's needs and interests.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "moms-6-community",
+    spaceId: "moms",
+    title: "Build Your Mom Tribe Online",
+    slug: "build-mom-tribe",
+    description: "Find and grow your support network. Use AI tools to build an engaged community of like-minded moms, whether it's a Facebook group, Discord server, or local meetup group.",
+    learningObjectives: [
+      "Start and grow an online community of supportive moms",
+      "Use AI to moderate, engage, and create community content",
+      "Plan virtual and in-person events that people actually show up to",
+      "Monetize your community (if you want to)",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 55,
+    sortOrder: 6,
+    content: {
+      sections: [
+        {
+          id: "community-launch",
+          title: "Launch Your Tribe",
+          type: "interactive",
+          content: "Choose your platform, set community guidelines, and invite your first members.",
+        },
+        {
+          id: "engagement-strategy",
+          title: "Keep Them Coming Back",
+          type: "hands_on_lab",
+          content: "Create content calendars, conversation starters, and events that build real connections.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
 ];
 
 export async function seedExperiences() {
