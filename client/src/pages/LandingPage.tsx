@@ -285,7 +285,8 @@ export default function LandingPage() {
                 "Branding": "Craft your digital identity",
                 "Moms": "Tech mastery for modern mothers",
                 "App Atelier": "AI-assisted app building",
-                "Founder's Club": "12-week startup accelerator"
+                "Founder's Club": "12-week startup accelerator",
+                "Digital Boutique": "E-commerce workshop series"
               };
 
               const badgeMap: Record<string, { text: string }> = {
@@ -362,6 +363,7 @@ export default function LandingPage() {
                           {space.name === "Moms" && "💝"}
                           {space.name === "App Atelier" && "🎨"}
                           {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
+                          {space.name === "Digital Boutique" && "🛍️"}
                         </div>
 
                         <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />

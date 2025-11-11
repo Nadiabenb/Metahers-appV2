@@ -6,6 +6,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
+import { OptimizedImage } from "@/components/OptimizedImage";
+import { spaceImages } from "@/lib/imageManifest";
 
 type Space = {
   id: string;
@@ -276,54 +278,78 @@ export default function MetaHersWorldPage() {
                       disabled={isLocked}
                       className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                      <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full min-h-[280px] flex flex-col">
-                        {/* Lock Badge or Pro Badge */}
-                        {isLocked ? (
-                          <div className="mb-4">
-                            <Badge variant="secondary" className="text-xs font-semibold">
-                              Pro Only
-                            </Badge>
+                      <div className="kinetic-glass rounded-lg overflow-hidden border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
+                        {/* Cover Image */}
+                        {spaceImages[space.slug] && (
+                          <div className="relative w-full aspect-[4/3] overflow-hidden">
+                            <OptimizedImage
+                              src={spaceImages[space.slug].src}
+                              alt={spaceImages[space.slug].alt}
+                              className="w-full h-full"
+                              objectFit="cover"
+                            />
+                            {/* Subtle gradient overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                           </div>
-                        ) : space.name === "Founder's Club" ? (
-                          <div className="mb-4">
-                            <Badge variant="default" className="text-xs font-semibold bg-primary/20 text-primary border-primary/30">
-                              12 Weeks
-                            </Badge>
+                        )}
+
+                        {/* Card Content */}
+                        <div className="p-8 flex flex-col flex-1">
+                          {/* Lock Badge or Pro Badge */}
+                          {isLocked ? (
+                            <div className="mb-4">
+                              <Badge variant="secondary" className="text-xs font-semibold">
+                                Pro Only
+                              </Badge>
+                            </div>
+                          ) : space.name === "Founder's Club" ? (
+                            <div className="mb-4">
+                              <Badge variant="default" className="text-xs font-semibold bg-primary/20 text-primary border-primary/30">
+                                12 Weeks
+                              </Badge>
+                            </div>
+                          ) : space.name === "App Atelier" ? (
+                            <div className="mb-4">
+                              <Badge variant="default" className="text-xs font-semibold bg-purple-500/20 text-purple-300 border-purple-400/30">
+                                AI-Powered
+                              </Badge>
+                            </div>
+                          ) : null}
+
+                          {/* Icon & Arrow */}
+                          <div className="mb-6 flex items-center justify-between">
+                            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl border border-primary/10">
+                              {space.name === "AI" && "🤖"}
+                              {space.name === "Web3" && "🌐"}
+                              {space.name === "NFT/Blockchain/Crypto" && "💎"}
+                              {space.name === "Metaverse" && "🔮"}
+                              {space.name === "Branding" && "✨"}
+                              {space.name === "Moms" && "💝"}
+                              {space.name === "App Atelier" && "🎨"}
+                              {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
+                              {space.name === "Digital Boutique" && "🛍️"}
+                            </div>
+                            
+                            <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                           </div>
-                        ) : null}
 
-                        {/* Icon & Arrow */}
-                        <div className="mb-6 flex items-center justify-between">
-                          <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl border border-primary/10">
-                            {space.name === "AI" && "🤖"}
-                            {space.name === "Web3" && "🌐"}
-                            {space.name === "NFT/Blockchain/Crypto" && "💎"}
-                            {space.name === "Metaverse" && "🔮"}
-                            {space.name === "Branding" && "✨"}
-                            {space.name === "Moms" && "💝"}
-                            {space.name === "App Atelier" && "🎨"}
-                            {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
+                          {/* Title */}
+                          <h3 className="font-serif text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
+                            {space.name}
+                          </h3>
+
+                          {/* Description */}
+                          <p className="text-muted-foreground leading-relaxed flex-1 line-clamp-2">
+                            {space.description}
+                          </p>
+
+                          {/* Footer */}
+                          <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
+                            <span className="uppercase tracking-wider text-xs">
+                              {isLocked ? "Unlock with Pro" : "Explore"}
+                            </span>
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                           </div>
-                          
-                          <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                        </div>
-
-                        {/* Title */}
-                        <h3 className="font-serif text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
-                          {space.name}
-                        </h3>
-
-                        {/* Description */}
-                        <p className="text-muted-foreground leading-relaxed flex-1 line-clamp-2">
-                          {space.description}
-                        </p>
-
-                        {/* Footer */}
-                        <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
-                          <span className="uppercase tracking-wider text-xs">
-                            {isLocked ? "Unlock with Pro" : "Explore"}
-                          </span>
-                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </div>
                       </div>
                     </button>
