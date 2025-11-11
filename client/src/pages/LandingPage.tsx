@@ -50,9 +50,9 @@ export default function LandingPage() {
 
   useEffect(() => {
     if (prefersReducedMotion) return;
-    
+
     const enableAnimations = () => setAnimationsReady(true);
-    
+
     if ('requestIdleCallback' in window) {
       requestIdleCallback(enableAnimations, { timeout: 1500 });
     } else {
@@ -97,21 +97,21 @@ export default function LandingPage() {
         {/* Hero Background Image Layer */}
         <div className="absolute inset-0">
           <OptimizedImage
-            src={heroImage.src}
-            alt={heroImage.alt}
+            src={"/images/hero-ai-web3-woman.jpg"}
+            alt={"AI and Web3 woman learning"}
             className="w-full h-full"
             objectFit="cover"
             priority={true}
-            optimizedBasename="Hero_sanctuary_tech_woman_dcb2080b"
+            optimizedBasename="hero-ai-web3-woman"
           />
           {/* Dark gradient overlay for text contrast */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#100321]/90 via-[#2B0A55]/85 to-[#100321]/90" />
         </div>
-        
+
         {/* Subtle neon glow orbs in background */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl z-[1]" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl z-[1]" />
-        
+
         {/* Grain texture overlay for depth */}
         <div className="absolute inset-0 opacity-[0.015] mix-blend-overlay"
           style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 400 400\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }}
@@ -219,7 +219,7 @@ export default function LandingPage() {
               <div className="relative">
                 {/* Purple-pink glow effect behind photo */}
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-500/30 via-pink-500/20 to-transparent blur-3xl" />
-                
+
                 {/* Photo */}
                 <div className="relative rounded-3xl overflow-hidden border-2 border-purple-400/30 shadow-2xl shadow-purple-500/20">
                   <OptimizedImage
@@ -298,10 +298,10 @@ export default function LandingPage() {
 
               const tagline = taglineMap[space.name] || "Explore this learning space";
               const badge = badgeMap[space.name];
-              
+
               // Get cover image for this space
               const spaceImage = spaceImages[space.slug];
-              
+
               // Map slugs to optimized basenames
               const optimizedBasenameMap: Record<string, string> = {
                 "web3": "Web3_blockchain_woman_tech_18d40367",
@@ -342,7 +342,7 @@ export default function LandingPage() {
                           <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                         </div>
                       )}
-                      
+
                       {/* Card Content */}
                       <div className="p-8 flex flex-col flex-1">
                         {/* Space Badge */}
@@ -366,7 +366,7 @@ export default function LandingPage() {
                           {space.name === "App Atelier" && "🎨"}
                           {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
                         </div>
-                        
+
                         <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                       </div>
 
@@ -516,7 +516,7 @@ export default function LandingPage() {
                 {/* Subtle overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
               </div>
-              
+
               {/* Floating Badge - Kinetic Glass */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
