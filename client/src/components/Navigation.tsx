@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { GlobalSearch } from "@/components/GlobalSearch";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
 import { motion, AnimatePresence } from "framer-motion";
@@ -179,6 +180,11 @@ export function Navigation() {
 
           {/* Desktop Navigation - Mega Menu */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* Global Search */}
+            <div className="w-64">
+              <GlobalSearch />
+            </div>
+
             {/* Explore Menu Button */}
             <div className="relative">
               <Button

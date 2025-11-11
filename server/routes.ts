@@ -1599,6 +1599,28 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
+  // ===== SEARCH ROUTE =====
+  app.get('/api/experiences/all', async (req: Request, res) => {
+    try {
+      const experiences = await storage.getAllExperiences();
+      
+      const enriched = await Promise.all(
+        experiences.map(async (exp) => {
+          const space = await storage.getSpaceById(exp.spaceId);
+          return {
+            ...exp,
+            spaceName: space?.name || "Unknown Space",
+          };
+        })
+      );
+      
+      res.json(enriched);
+    } catch (error) {
+      console.error("Error fetching all experiences:", error);
+      res.status(500).json({ message: "Failed to fetch experiences" });
+    }
+  });
+
   // ===== ACHIEVEMENTS ROUTES =====
   app.get('/api/achievements', isAuthenticated, async (req: Request, res) => {
     try {
