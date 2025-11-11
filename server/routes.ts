@@ -14,6 +14,8 @@ import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
 import { spaces, transformationalExperiences } from "@shared/schema";
 import { sql as drizzleSql } from "drizzle-orm";
+// Import all 54 experiences from seed file
+import { EXPERIENCES } from "@shared/seedExperiences";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -173,18 +175,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Logout endpoint
   app.post('/api/auth/logout', async (req, res) => {
     const userId = req.session?.userId as string;
-    
+
     req.session?.destroy((err) => {
       if (err) {
         console.error("Error during logout:", err);
         return res.status(500).json({ message: "Logout failed" });
       }
-      
+
       // Clear user's recommendation cache on logout
       if (userId) {
         recommendationCache.delete(userId);
       }
-      
+
       res.clearCookie('connect.sid');
       res.json({ success: true });
     });
@@ -1535,7 +1537,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       const totalRituals = allProgress.length;
       const completedRituals = allProgress.filter(p => p.completedSteps.length > 0).length;
       const journalEntries = allJournalEntries.length;
-      
+
       const latestEntry = allJournalEntries[0];
       const streak = latestEntry?.streak || 0;
 
@@ -1567,16 +1569,16 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     try {
       const userId = req.session!.userId as string;
       const entries = await storage.getAllJournalEntries(userId, 30);
-      
+
       // Group by date with actual Date objects for proper sorting
       const progressByDate: Map<string, { date: Date; count: number; label: string }> = new Map();
-      
+
       entries.forEach(entry => {
         if (entry.createdAt) {
           const dateObj = new Date(entry.createdAt);
           const dateKey = dateObj.toISOString().split('T')[0]; // YYYY-MM-DD for grouping
           const label = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          
+
           if (progressByDate.has(dateKey)) {
             progressByDate.get(dateKey)!.count++;
           } else {
@@ -1584,14 +1586,14 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           }
         }
       });
-      
+
       // Sort by date descending and take most recent 14 days
       const progressData = Array.from(progressByDate.values())
         .sort((a, b) => b.date.getTime() - a.date.getTime())
         .slice(0, 14)
         .reverse() // Reverse to show oldest -> newest on chart
         .map(({ label, count }) => ({ date: label, count }));
-      
+
       res.json(progressData);
     } catch (error) {
       console.error("Error fetching progress analytics:", error);
@@ -1603,7 +1605,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   app.get('/api/experiences/all', async (req: Request, res) => {
     try {
       const experiences = await storage.getAllExperiences();
-      
+
       const enriched = await Promise.all(
         experiences.map(async (exp) => {
           const space = await storage.getSpaceById(exp.spaceId);
@@ -1613,7 +1615,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           };
         })
       );
-      
+
       res.json(enriched);
     } catch (error) {
       console.error("Error fetching all experiences:", error);
@@ -2968,516 +2970,20 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         }
       ];
 
-      const experiencesData = [
-        {
-          id: 'ai-1-foundations',
-          spaceId: 'ai',
-          title: 'AI Essentials',
-          slug: 'ai-essentials',
-          description: 'Understand AI, machine learning, and how to use these tools to multiply your productivity and creativity.',
-          learningObjectives: ['Explain AI and machine learning clearly', 'Identify AI tools for your workflow', 'Start using AI ethically and effectively'],
-          tier: 'free' as const,
-          estimatedMinutes: 20,
-          sortOrder: 1,
-          content: { sections: [{ id: 'ai-intro', type: 'text', title: 'AI Demystified', content: 'AI isn\'t magic - it\'s a powerful tool you can master.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'ai-2-chatgpt',
-          spaceId: 'ai',
-          title: 'Master ChatGPT & Custom GPTs',
-          slug: 'master-chatgpt',
-          description: 'Go beyond basic prompts. Create custom GPTs, build AI assistants, and automate your workflow.',
-          learningObjectives: ['Write advanced prompts that get results', 'Build your first custom GPT', 'Automate repetitive tasks with AI'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 2,
-          content: { sections: [{ id: 'prompting', type: 'interactive', title: 'Prompt Engineering Mastery', content: 'The art and science of talking to AI.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'ai-3-content',
-          spaceId: 'ai',
-          title: 'AI-Powered Content Creation',
-          slug: 'ai-content-creation',
-          description: 'Create blog posts, social media, newsletters, and more - faster and better than ever with AI as your co-pilot.',
-          learningObjectives: ['Generate high-quality content with AI', 'Maintain your unique voice and style', 'Build a content system that scales'],
-          tier: 'pro' as const,
-          estimatedMinutes: 30,
-          sortOrder: 3,
-          content: { sections: [{ id: 'content-intro', type: 'text', title: 'AI as Your Content Partner', content: 'Create more, stress less - AI handles the heavy lifting.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'ai-4-automation',
-          spaceId: 'ai',
-          title: 'AI Automation & Workflows',
-          slug: 'ai-automation',
-          description: 'Connect AI tools to automate your business processes. From email to social media to client onboarding.',
-          learningObjectives: ['Map your automation opportunities', 'Connect AI tools with no-code platforms', 'Build workflows that run on autopilot'],
-          tier: 'pro' as const,
-          estimatedMinutes: 40,
-          sortOrder: 4,
-          content: { sections: [{ id: 'automation-intro', type: 'text', title: 'Automation Foundations', content: 'Work smarter, not harder - let AI handle the busywork.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'ai-5-image-gen',
-          spaceId: 'ai',
-          title: 'AI Image & Video Generation',
-          slug: 'ai-image-video',
-          description: 'Create stunning visuals with Midjourney, DALL-E, and AI video tools. Design like a pro, no design skills required.',
-          learningObjectives: ['Generate professional images with AI', 'Create video content faster', 'Build a visual content library'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 5,
-          content: { sections: [{ id: 'image-gen', type: 'interactive', title: 'AI Visual Creation', content: 'Turn your ideas into stunning visuals instantly.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'ai-6-product',
-          spaceId: 'ai',
-          title: 'Build Your AI-Powered Product',
-          slug: 'build-ai-product',
-          description: 'Launch an AI tool, service, or product. From idea to MVP - ship something people will pay for.',
-          learningObjectives: ['Validate your AI product idea', 'Build an MVP with no-code tools', 'Launch and get your first customers'],
-          tier: 'pro' as const,
-          estimatedMinutes: 60,
-          sortOrder: 6,
-          content: { sections: [{ id: 'product-planning', type: 'hands_on_lab', title: 'AI Product Strategy', content: 'Time to build and ship your AI product.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'branding-1-strategy',
-          spaceId: 'branding',
-          title: 'AI Branding Fundamentals',
-          slug: 'ai-branding-fundamentals',
-          description: 'Build a powerful brand with AI tools. From positioning to messaging to visual identity.',
-          learningObjectives: ['Define your brand strategy with AI', 'Create compelling brand messaging', 'Position yourself in the market'],
-          tier: 'free' as const,
-          estimatedMinutes: 25,
-          sortOrder: 1,
-          content: { sections: [{ id: 'branding-intro', type: 'text', title: 'Brand Strategy with AI', content: 'Build a brand that stands out with AI power.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'branding-2-content',
-          spaceId: 'branding',
-          title: 'AI Content Strategy',
-          slug: 'ai-content-strategy',
-          description: 'Create a content system that builds your brand on autopilot. Blog, social, email, and more.',
-          learningObjectives: ['Build your AI content engine', 'Create content pillars and calendars', 'Maintain consistency across platforms'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 2,
-          content: { sections: [{ id: 'content-strategy', type: 'interactive', title: 'Content System Building', content: 'Create content that builds your brand.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'branding-3-social',
-          spaceId: 'branding',
-          title: 'AI-Powered Social Media',
-          slug: 'ai-social-media',
-          description: 'Grow your audience with AI. Create engaging content, optimize posting, and build community.',
-          learningObjectives: ['Generate social content with AI', 'Optimize posting times and frequency', 'Grow your following strategically'],
-          tier: 'pro' as const,
-          estimatedMinutes: 30,
-          sortOrder: 3,
-          content: { sections: [{ id: 'social-media', type: 'text', title: 'Social Media with AI', content: 'Grow your social presence efficiently.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'branding-4-thought-leadership',
-          spaceId: 'branding',
-          title: 'AI Thought Leadership',
-          slug: 'ai-thought-leadership',
-          description: 'Position yourself as an authority. Use AI to research, write, and publish thought leadership content.',
-          learningObjectives: ['Develop your unique point of view', 'Create high-quality thought leadership', 'Build authority in your niche'],
-          tier: 'pro' as const,
-          estimatedMinutes: 40,
-          sortOrder: 4,
-          content: { sections: [{ id: 'thought-leadership', type: 'text', title: 'Becoming a Thought Leader', content: 'Build authority with AI-assisted content.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'branding-5-community',
-          spaceId: 'branding',
-          title: 'AI Community Building',
-          slug: 'ai-community-building',
-          description: 'Build and nurture an engaged community. Use AI to manage conversations, create experiences, and grow together.',
-          learningObjectives: ['Design your community strategy', 'Use AI to engage and moderate', 'Create community-driven growth'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 5,
-          content: { sections: [{ id: 'community', type: 'interactive', title: 'Community Building Basics', content: 'Build community with AI tools.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'branding-6-launch',
-          spaceId: 'branding',
-          title: 'Launch Your Brand with AI',
-          slug: 'launch-brand-ai',
-          description: 'Take your brand from concept to market. Build your complete brand ecosystem with AI assistance.',
-          learningObjectives: ['Create your complete brand identity', 'Build your online presence', 'Launch and grow your brand'],
-          tier: 'pro' as const,
-          estimatedMinutes: 50,
-          sortOrder: 6,
-          content: { sections: [{ id: 'brand-launch', type: 'hands_on_lab', title: 'Brand Launch Strategy', content: 'Launch your brand into the world.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        // Crypto/NFT/Blockchain experiences
-        {
-          id: 'crypto-1-foundations',
-          spaceId: 'crypto',
-          title: 'NFT & Blockchain Basics',
-          slug: 'nft-blockchain-basics',
-          description: 'Understand blockchain technology and NFTs from the ground up. Learn what they are, how they work, and why they matter for your future.',
-          learningObjectives: ['Explain blockchain in simple terms', 'Understand how NFTs work', 'Identify real-world use cases'],
-          tier: 'free' as const,
-          estimatedMinutes: 25,
-          sortOrder: 1,
-          content: { sections: [{ id: 'blockchain-intro', type: 'text', title: 'Blockchain Demystified', content: 'The technology that is changing everything.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'crypto-2-wallets',
-          spaceId: 'crypto',
-          title: 'Digital Wallets & Security',
-          slug: 'digital-wallets-security',
-          description: 'Set up and secure your crypto wallet. Learn best practices for protecting your digital assets and avoiding common pitfalls.',
-          learningObjectives: ['Create and secure a crypto wallet', 'Understand private keys and seed phrases', 'Protect yourself from scams'],
-          tier: 'pro' as const,
-          estimatedMinutes: 30,
-          sortOrder: 2,
-          content: { sections: [{ id: 'wallet-setup', type: 'interactive', title: 'Your First Wallet', content: 'Security first, always.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'crypto-3-nfts',
-          spaceId: 'crypto',
-          title: 'NFT Creation & Trading',
-          slug: 'nft-creation-trading',
-          description: 'Create, buy, and sell NFTs. Understand marketplaces, gas fees, and how to build or invest in digital collectibles.',
-          learningObjectives: ['Create your first NFT', 'Navigate NFT marketplaces', 'Understand NFT valuation'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 3,
-          content: { sections: [{ id: 'nft-creation', type: 'interactive', title: 'Launch Your NFT', content: 'Turn your creativity into digital assets.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'crypto-4-defi',
-          spaceId: 'crypto',
-          title: 'DeFi Fundamentals',
-          slug: 'defi-fundamentals',
-          description: 'Explore decentralized finance. Learn about lending, staking, yield farming, and how to make your crypto work for you.',
-          learningObjectives: ['Understand DeFi protocols', 'Learn about staking and yield', 'Assess DeFi risks and rewards'],
-          tier: 'pro' as const,
-          estimatedMinutes: 40,
-          sortOrder: 4,
-          content: { sections: [{ id: 'defi-intro', type: 'text', title: 'Banking Without Banks', content: 'Financial freedom through DeFi.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'crypto-5-trading',
-          spaceId: 'crypto',
-          title: 'Crypto Trading Basics',
-          slug: 'crypto-trading-basics',
-          description: 'Learn to trade cryptocurrency safely and strategically. Understand market analysis, risk management, and trading psychology.',
-          learningObjectives: ['Read crypto charts and indicators', 'Develop a trading strategy', 'Manage risk effectively'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 5,
-          content: { sections: [{ id: 'trading-intro', type: 'interactive', title: 'Trading Smart', content: 'Strategy over speculation.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'crypto-6-portfolio',
-          spaceId: 'crypto',
-          title: 'Build Your Crypto Portfolio',
-          slug: 'build-crypto-portfolio',
-          description: 'Create a diversified crypto investment strategy. Learn portfolio management, tax considerations, and long-term wealth building.',
-          learningObjectives: ['Build a balanced crypto portfolio', 'Understand crypto taxes', 'Plan for long-term success'],
-          tier: 'pro' as const,
-          estimatedMinutes: 40,
-          sortOrder: 6,
-          content: { sections: [{ id: 'portfolio-building', type: 'text', title: 'Your Crypto Future', content: 'Build wealth, not just holdings.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        // Metaverse experiences
-        {
-          id: 'metaverse-1-intro',
-          spaceId: 'metaverse',
-          title: 'Metaverse Basics',
-          slug: 'metaverse-basics',
-          description: 'Navigate virtual worlds, understand spatial computing, and see where digital experiences are heading.',
-          learningObjectives: ['Understand what the metaverse actually is', 'Explore major metaverse platforms', 'Identify opportunities in virtual spaces'],
-          tier: 'free' as const,
-          estimatedMinutes: 25,
-          sortOrder: 1,
-          content: { sections: [{ id: 'metaverse-intro', type: 'text', title: 'Welcome to the Metaverse', content: 'Virtual worlds where real business happens.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'metaverse-2-platforms',
-          spaceId: 'metaverse',
-          title: 'Platform Deep Dive',
-          slug: 'platform-deep-dive',
-          description: 'Explore Decentraland, The Sandbox, Spatial, and more. Find the right virtual home for your brand.',
-          learningObjectives: ['Compare major metaverse platforms', 'Create your first avatar and presence', 'Navigate virtual spaces confidently'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 2,
-          content: { sections: [{ id: 'platforms', type: 'interactive', title: 'Metaverse Platforms', content: 'Find your virtual home base.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'metaverse-3-events',
-          spaceId: 'metaverse',
-          title: 'Virtual Events & Experiences',
-          slug: 'virtual-events',
-          description: 'Host conferences, workshops, and networking events in virtual spaces. Reach a global audience.',
-          learningObjectives: ['Plan and host virtual events', 'Engage attendees in 3D spaces', 'Monetize virtual experiences'],
-          tier: 'pro' as const,
-          estimatedMinutes: 30,
-          sortOrder: 3,
-          content: { sections: [{ id: 'events', type: 'text', title: 'Hosting Virtual Events', content: 'Bring people together in immersive spaces.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'metaverse-4-land',
-          spaceId: 'metaverse',
-          title: 'Virtual Real Estate',
-          slug: 'virtual-real-estate',
-          description: 'Understand virtual land, digital property, and how to buy, sell, or lease metaverse real estate.',
-          learningObjectives: ['Evaluate virtual land opportunities', 'Understand digital property rights', 'Explore metaverse real estate platforms'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 4,
-          content: { sections: [{ id: 'land-intro', type: 'text', title: 'Virtual Land Explained', content: 'Digital property is real business.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'metaverse-5-commerce',
-          spaceId: 'metaverse',
-          title: 'Metaverse Commerce',
-          slug: 'metaverse-commerce',
-          description: 'Sell products and services in virtual worlds. From digital goods to virtual storefronts.',
-          learningObjectives: ['Set up a virtual storefront', 'Sell digital and physical goods', 'Accept crypto payments seamlessly'],
-          tier: 'pro' as const,
-          estimatedMinutes: 40,
-          sortOrder: 5,
-          content: { sections: [{ id: 'commerce', type: 'interactive', title: 'Virtual Commerce Basics', content: 'Build your business in virtual worlds.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'metaverse-6-brand',
-          spaceId: 'metaverse',
-          title: 'Build Your Metaverse Presence',
-          slug: 'metaverse-presence',
-          description: 'Establish your brand in the metaverse. Create immersive experiences that people remember.',
-          learningObjectives: ['Design your metaverse brand strategy', 'Create immersive experiences', 'Build community in virtual spaces'],
-          tier: 'pro' as const,
-          estimatedMinutes: 45,
-          sortOrder: 6,
-          content: { sections: [{ id: 'brand-strategy', type: 'hands_on_lab', title: 'Metaverse Branding', content: 'Establish your presence in virtual worlds.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        // Moms experiences
-        {
-          id: 'moms-1-foundations',
-          spaceId: 'moms',
-          title: 'AI for Busy Moms',
-          slug: 'ai-for-busy-moms',
-          description: 'Discover how AI can give you back hours every week. From meal planning to homework help, learn the tools that make motherhood easier.',
-          learningObjectives: ['Use AI for daily mom tasks', 'Automate family scheduling', 'Save 10+ hours weekly'],
-          tier: 'free' as const,
-          estimatedMinutes: 20,
-          sortOrder: 1,
-          content: { sections: [{ id: 'mom-ai-intro', type: 'text', title: 'Your AI Mom Assistant', content: 'Technology that understands your chaos.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'moms-2-time',
-          spaceId: 'moms',
-          title: 'Time-Saving Automation',
-          slug: 'time-saving-automation',
-          description: 'Automate the repetitive tasks that drain your energy. Set up systems for meal planning, grocery ordering, and household management.',
-          learningObjectives: ['Build AI meal planning systems', 'Automate household tasks', 'Create time for what matters'],
-          tier: 'pro' as const,
-          estimatedMinutes: 30,
-          sortOrder: 2,
-          content: { sections: [{ id: 'automation-setup', type: 'interactive', title: 'Reclaim Your Time', content: 'Less managing, more living.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'moms-3-business',
-          spaceId: 'moms',
-          title: 'Mom-Friendly Side Hustles',
-          slug: 'mom-side-hustles',
-          description: 'Launch a flexible business that works around your family. Learn what sells, how to market, and how to scale without sacrificing family time.',
-          learningObjectives: ['Identify profitable mom businesses', 'Market during naptime', 'Scale without overwhelm'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 3,
-          content: { sections: [{ id: 'side-hustle', type: 'interactive', title: 'Mompreneur Launch', content: 'Build income on your terms.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'moms-4-content',
-          spaceId: 'moms',
-          title: 'AI Content for Mom Creators',
-          slug: 'ai-content-mom-creators',
-          description: 'Create blogs, social media, and newsletters with AI. Build your mom brand and monetize your parenting expertise.',
-          learningObjectives: ['Use AI to create mom content', 'Build a following fast', 'Monetize your mom journey'],
-          tier: 'pro' as const,
-          estimatedMinutes: 30,
-          sortOrder: 4,
-          content: { sections: [{ id: 'mom-content', type: 'text', title: 'Share Your Story', content: 'Your experience is valuable.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'moms-5-education',
-          spaceId: 'moms',
-          title: 'AI for Kids Education',
-          slug: 'ai-kids-education',
-          description: 'Use AI to support your children learning. Homework help, personalized tutoring, and educational activities powered by AI.',
-          learningObjectives: ['Get AI homework assistance', 'Create personalized learning', 'Support your kids education'],
-          tier: 'pro' as const,
-          estimatedMinutes: 25,
-          sortOrder: 5,
-          content: { sections: [{ id: 'kids-learning', type: 'interactive', title: 'AI Tutoring', content: 'Better learning outcomes for your kids.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'moms-6-community',
-          spaceId: 'moms',
-          title: 'Build Your Mom Tribe Online',
-          slug: 'build-mom-tribe',
-          description: 'Create and grow an online community of moms. Use AI to manage, engage, and monetize your mom community.',
-          learningObjectives: ['Build an engaged mom community', 'Use AI for community management', 'Create income from community'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 6,
-          content: { sections: [{ id: 'community-building', type: 'text', title: 'Your Mom Network', content: 'Together we are stronger.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        // Web3 experiences
-        {
-          id: 'web3-1-foundations',
-          spaceId: 'web3',
-          title: 'Web3 Foundations',
-          slug: 'web3-foundations',
-          description: 'Master the fundamentals of decentralized tech. Understand what Web3 is and why it matters for your future.',
-          learningObjectives: ['Explain Web3 in simple terms', 'Understand decentralization', 'Identify Web3 opportunities'],
-          tier: 'free' as const,
-          estimatedMinutes: 25,
-          sortOrder: 1,
-          content: { sections: [{ id: 'web3-intro', type: 'text', title: 'Welcome to Web3', content: 'The future of the internet is decentralized.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'web3-2-wallets',
-          spaceId: 'web3',
-          title: 'Digital Wallets Decoded',
-          slug: 'digital-wallets-decoded',
-          description: 'Set up your Web3 wallet and understand how to interact with decentralized applications safely.',
-          learningObjectives: ['Create your first secure crypto wallet', 'Understand private keys and seed phrases', 'Implement security best practices'],
-          tier: 'pro' as const,
-          estimatedMinutes: 30,
-          sortOrder: 2,
-          content: { sections: [{ id: 'wallet-basics', type: 'interactive', title: 'Your Web3 Wallet', content: 'Your gateway to the decentralized web.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'web3-3-smart-contracts',
-          spaceId: 'web3',
-          title: 'Smart Contracts 101',
-          slug: 'smart-contracts-101',
-          description: 'Understand smart contracts and how they power Web3 applications. No coding required.',
-          learningObjectives: ['Explain how smart contracts work', 'Interact with smart contracts safely', 'Identify use cases for automation'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 3,
-          content: { sections: [{ id: 'smart-contracts', type: 'text', title: 'Smart Contracts Explained', content: 'Code that executes automatically.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'web3-4-defi',
-          spaceId: 'web3',
-          title: 'DeFi Demystified',
-          slug: 'defi-demystified',
-          description: 'Navigate decentralized finance protocols. Understand lending, borrowing, and earning in DeFi.',
-          learningObjectives: ['Use DeFi protocols safely', 'Understand yield farming and staking', 'Assess DeFi opportunities'],
-          tier: 'pro' as const,
-          estimatedMinutes: 40,
-          sortOrder: 4,
-          content: { sections: [{ id: 'defi-basics', type: 'interactive', title: 'DeFi Fundamentals', content: 'Financial services without intermediaries.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'web3-5-daos',
-          spaceId: 'web3',
-          title: 'DAOs & Community',
-          slug: 'daos-community',
-          description: 'Explore decentralized autonomous organizations. Join or create communities governed by code.',
-          learningObjectives: ['Understand how DAOs work', 'Participate in DAO governance', 'Explore community-owned projects'],
-          tier: 'pro' as const,
-          estimatedMinutes: 35,
-          sortOrder: 5,
-          content: { sections: [{ id: 'dao-intro', type: 'text', title: 'DAOs Explained', content: 'Organizations without bosses.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        },
-        {
-          id: 'web3-6-build',
-          spaceId: 'web3',
-          title: 'Build Your Web3 Project',
-          slug: 'build-web3-project',
-          description: 'Launch your Web3 project. From idea to deployment using no-code tools and community support.',
-          learningObjectives: ['Plan your Web3 project', 'Use no-code Web3 tools', 'Launch and grow your project'],
-          tier: 'pro' as const,
-          estimatedMinutes: 50,
-          sortOrder: 6,
-          content: { sections: [{ id: 'web3-project', type: 'hands_on_lab', title: 'Launch Your Web3 Project', content: 'Build the decentralized future.' }] },
-          personalizationEnabled: true,
-          isActive: true
-        }
-      ];
+      const experiencesData = EXPERIENCES.map(exp => ({
+        id: exp.id,
+        spaceId: exp.spaceId,
+        title: exp.title,
+        slug: exp.slug,
+        description: exp.description,
+        learningObjectives: exp.learningObjectives,
+        tier: exp.tier,
+        estimatedMinutes: exp.estimatedMinutes,
+        sortOrder: exp.sortOrder,
+        content: exp.content,
+        personalizationEnabled: exp.personalizationEnabled,
+        isActive: true
+      }));
 
       // Populate spaces
       let spacesCreated = 0;
