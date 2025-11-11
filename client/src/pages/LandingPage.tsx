@@ -7,7 +7,7 @@ import { ChatbotPopup } from "@/components/ChatbotPopup";
 import { trackCTAClick } from "@/lib/analytics";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import heroImage from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
+import { heroImage, spaceImages } from "@/lib/imageManifest";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762750477236.jpeg";
 import { useRef, useState, useEffect } from "react";
@@ -91,10 +91,24 @@ export default function LandingPage() {
       />
 
       {/* HERO - Violet Sanctuary Style */}
-      <div className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#100321] via-[#2B0A55] to-[#100321]">
+      <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Hero Background Image Layer */}
+        <div className="absolute inset-0">
+          <OptimizedImage
+            src={heroImage.src}
+            alt={heroImage.alt}
+            className="w-full h-full"
+            objectFit="cover"
+            priority={true}
+            optimizedBasename="Hero_sanctuary_tech_woman_dcb2080b"
+          />
+          {/* Dark gradient overlay for text contrast */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#100321]/90 via-[#2B0A55]/85 to-[#100321]/90" />
+        </div>
+        
         {/* Subtle neon glow orbs in background */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl z-[1]" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl z-[1]" />
         
         {/* Grain texture overlay for depth */}
         <div className="absolute inset-0 opacity-[0.015] mix-blend-overlay"
@@ -282,6 +296,23 @@ export default function LandingPage() {
 
               const tagline = taglineMap[space.name] || "Explore this learning space";
               const badge = badgeMap[space.name];
+              
+              // Get cover image for this space
+              const spaceImage = spaceImages[space.slug];
+              
+              // Map slugs to optimized basenames
+              const optimizedBasenameMap: Record<string, string> = {
+                "web3": "Web3_blockchain_woman_tech_18d40367",
+                "ai": "AI_neural_network_woman_7b5da9b3",
+                "nft-blockchain-crypto": "NFT_digital_art_woman_c4093fda",
+                "metaverse": "Metaverse_virtual_world_woman_989cc16d",
+                "branding": "Personal_branding_woman_tech_03a081e8",
+                "moms": "Tech_mom_entrepreneur_balance_14af09c8",
+                "app-atelier": "App_building_woman_designer_72d3791d",
+                "founders-club": "Founder_startup_woman_CEO_582afaaf",
+                "digital-boutique": "Digital_boutique_e-commerce_woman_c3bd40e7"
+              };
+              const optimizedBasename = optimizedBasenameMap[space.slug];
 
               return (
                 <motion.div
@@ -297,15 +328,32 @@ export default function LandingPage() {
                     className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`space-card-${space.slug}`}
                   >
-                    <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full min-h-[280px] flex flex-col">
-                      {/* Space Badge */}
-                      {badge && (
-                        <div className="mb-4">
-                          <Badge variant="default" className="text-xs font-semibold bg-purple-500/20 text-purple-300 border-purple-400/30">
-                            {badge.text}
-                          </Badge>
+                    <div className="kinetic-glass rounded-lg overflow-hidden border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
+                      {/* Cover Image */}
+                      {spaceImage && (
+                        <div className="relative w-full aspect-[4/3] overflow-hidden">
+                          <OptimizedImage
+                            src={spaceImage.src}
+                            alt={spaceImage.alt}
+                            className="w-full h-full"
+                            objectFit="cover"
+                            optimizedBasename={optimizedBasename}
+                          />
+                          {/* Subtle gradient overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
                         </div>
                       )}
+                      
+                      {/* Card Content */}
+                      <div className="p-8 flex flex-col flex-1">
+                        {/* Space Badge */}
+                        {badge && (
+                          <div className="mb-4">
+                            <Badge variant="default" className="text-xs font-semibold bg-purple-500/20 text-purple-300 border-purple-400/30">
+                              {badge.text}
+                            </Badge>
+                          </div>
+                        )}
 
                       {/* Icon & Arrow */}
                       <div className="mb-6 flex items-center justify-between">
@@ -333,10 +381,11 @@ export default function LandingPage() {
                         {tagline}
                       </p>
 
-                      {/* Footer */}
-                      <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
-                        <span className="uppercase tracking-wider text-xs">Explore</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        {/* Footer */}
+                        <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
+                          <span className="uppercase tracking-wider text-xs">Explore</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </div>
                       </div>
                     </div>
                   </Link>

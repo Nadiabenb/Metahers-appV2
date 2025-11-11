@@ -3,8 +3,18 @@ import { readdirSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 const CRITICAL_IMAGES = [
-  'Neon_light_trails_hero_2008ed57.png',
-  '3D_isometric_luxury_spa_6_rooms_52f40b1c.png',
+  // Hero background (above-the-fold, priority)
+  'Hero_sanctuary_tech_woman_dcb2080b.png',
+  // Learning space covers (near above-the-fold)
+  'Web3_blockchain_woman_tech_18d40367.png',
+  'AI_neural_network_woman_7b5da9b3.png',
+  'NFT_digital_art_woman_c4093fda.png',
+  'Metaverse_virtual_world_woman_989cc16d.png',
+  'Personal_branding_woman_tech_03a081e8.png',
+  'Tech_mom_entrepreneur_balance_14af09c8.png',
+  'App_building_woman_designer_72d3791d.png',
+  'Founder_startup_woman_CEO_582afaaf.png',
+  'Digital_boutique_e-commerce_woman_c3bd40e7.png',
 ];
 
 const BREAKPOINTS = [400, 800, 1200, 1600, 2400];
