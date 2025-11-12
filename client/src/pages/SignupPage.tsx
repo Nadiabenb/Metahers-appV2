@@ -119,7 +119,7 @@ export default function SignupPage() {
   const matchedRitualData = quizRitual ? getRitualBySlug(quizRitual) : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       <SEO
         title="Join MetaHers - Start Your AI & Web3 Journey Free"
         description="Create your free account at MetaHers Mind Spa. Join thousands of women mastering AI and Web3 through luxury guided experiences. Start learning today."
@@ -149,51 +149,52 @@ export default function SignupPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-lg mx-auto relative z-10"
+        className="w-full h-full min-h-screen flex flex-col items-center justify-center relative z-10 px-4 py-8 md:px-8 md:py-12"
       >
-        {quizRitual && matchedRitualData && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="mb-6 p-4 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl"
-          >
-            <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-[hsl(var(--liquid-gold))] flex-shrink-0 mt-0.5" />
-              <div className="flex-1">
-                <p className="text-sm font-semibold text-foreground mb-1">
-                  Quiz Match: {matchedRitualData.title}
-                </p>
-                <p className="text-xs text-foreground/80">
-                  Create your account to unlock this ritual + your FREE 1:1 session!
-                </p>
+        <div className="w-full max-w-2xl">
+          {quizRitual && matchedRitualData && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="mb-6 p-5 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl"
+            >
+              <div className="flex items-start gap-3">
+                <CheckCircle className="w-6 h-6 text-[hsl(var(--liquid-gold))] flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <p className="text-base font-semibold text-foreground mb-1">
+                    Quiz Match: {matchedRitualData.title}
+                  </p>
+                  <p className="text-sm text-foreground/80">
+                    Create your account to unlock this ritual + your FREE 1:1 session!
+                  </p>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        )}
+            </motion.div>
+          )}
 
-        <Card className="editorial-card p-6 sm:p-8 md:p-10 relative overflow-hidden">
-          <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
-          
-          <div className="relative z-10">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-4">
-                <Sparkles className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
+          <div className="editorial-card p-8 sm:p-12 md:p-16 relative overflow-hidden">
+            <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
+            
+            <div className="relative z-10">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-6">
+                <Sparkles className="w-10 h-10 text-[hsl(var(--liquid-gold))]" />
               </div>
               
-              <h1 className="font-cormorant text-3xl md:text-4xl font-bold metallic-text mb-2">
+              <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-3">
                 Join MetaHers
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-lg">
                 Create your account to begin your learning journey
               </p>
-              <p className="text-xs text-muted-foreground mt-2 flex items-center justify-center gap-1">
-                <Lock className="w-3 h-3" />
+              <p className="text-sm text-muted-foreground mt-3 flex items-center justify-center gap-1">
+                <Lock className="w-4 h-4" />
                 Your information is safe and secure
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-2">
                   <label htmlFor="firstName" className="text-sm font-medium">
@@ -291,7 +292,7 @@ export default function SignupPage() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-muted-foreground">
+            <div className="mt-8 text-center text-base text-muted-foreground">
               Already have an account?{" "}
               <a
                 href="/login"
@@ -301,8 +302,9 @@ export default function SignupPage() {
                 Sign in
               </a>
             </div>
+            </div>
           </div>
-        </Card>
+        </div>
       </motion.div>
     </div>
   );

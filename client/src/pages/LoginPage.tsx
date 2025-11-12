@@ -48,7 +48,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       <SEO
         title="Login - Access Your Learning Sanctuary"
         description="Sign in to MetaHers Mind Spa to continue your AI and Web3 learning journey. Access your personalized experiences, journal, and progress tracking."
@@ -68,26 +68,27 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-lg mx-auto relative z-10"
+        className="w-full h-full min-h-screen flex items-center justify-center relative z-10 px-4 py-8 md:px-8 md:py-12"
       >
-        <Card className="editorial-card p-6 sm:p-8 md:p-10 relative overflow-hidden">
-          <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
-          
-          <div className="relative z-10">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-4">
-                <Sparkles className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
+        <div className="w-full max-w-2xl">
+          <div className="editorial-card p-8 sm:p-12 md:p-16 relative overflow-hidden">
+            <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
+            
+            <div className="relative z-10">
+            <div className="text-center mb-10">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-6">
+                <Sparkles className="w-10 h-10 text-[hsl(var(--liquid-gold))]" />
               </div>
               
-              <h1 className="font-cormorant text-3xl md:text-4xl font-bold metallic-text mb-2">
+              <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-3">
                 Welcome Back
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-lg">
                 Sign in to continue your journey
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">
                   Email
@@ -152,7 +153,7 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-muted-foreground">
+            <div className="mt-8 text-center text-base text-muted-foreground">
               Don't have an account?{" "}
               <a
                 href="/signup"
@@ -162,8 +163,9 @@ export default function LoginPage() {
                 Create one
               </a>
             </div>
+            </div>
           </div>
-        </Card>
+        </div>
       </motion.div>
     </div>
   );
