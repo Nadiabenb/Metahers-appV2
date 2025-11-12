@@ -80,7 +80,8 @@ const recommendationCache = new Map<string, { data: Recommendation; timestamp: n
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Health check endpoints for deployment
+  // Health check endpoints for deployment monitoring
+  // Note: Root "/" is handled by static file serving (index.html) which also returns 200
   app.get('/health', (_req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });

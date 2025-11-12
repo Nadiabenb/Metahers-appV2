@@ -1557,14 +1557,6 @@ export async function seedExperiences() {
   }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  seedExperiences()
-    .then(() => {
-      console.log("Seed completed!");
-      process.exit(0);
-    })
-    .catch((error) => {
-      console.error("Seed failed:", error);
-      process.exit(1);
-    });
-}
+// Note: Removed auto-execution block to prevent deployment issues
+// To manually seed: npx tsx server/seedExperiences.ts
+// The seed will run automatically during first-time database initialization via registerRoutes
