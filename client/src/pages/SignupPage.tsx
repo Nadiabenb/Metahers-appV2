@@ -149,9 +149,9 @@ export default function SignupPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full h-full min-h-screen flex flex-col items-center justify-center relative z-10 px-4 py-8 md:px-8 md:py-12"
+        className="w-full h-full min-h-screen flex flex-col items-center justify-center relative z-10"
       >
-        <div className="w-full max-w-2xl">
+        <div className="w-full h-full flex flex-col items-center justify-center px-6 py-12 sm:px-12 sm:py-16 md:px-20 md:py-20">
           {quizRitual && matchedRitualData && (
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -173,111 +173,112 @@ export default function SignupPage() {
             </motion.div>
           )}
 
-          <div className="editorial-card p-8 sm:p-12 md:p-16 relative overflow-hidden">
+          <div className="w-full editorial-card p-10 sm:p-16 md:p-20 lg:p-24 relative overflow-hidden">
             <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
             
             <div className="relative z-10">
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-6">
-                <Sparkles className="w-10 h-10 text-[hsl(var(--liquid-gold))]" />
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-8">
+                <Sparkles className="w-12 h-12 sm:w-14 sm:h-14 text-[hsl(var(--liquid-gold))]" />
               </div>
               
-              <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-3">
+              <h1 className="font-cormorant text-5xl sm:text-6xl md:text-7xl font-bold metallic-text mb-6">
                 Join MetaHers
               </h1>
-              <p className="text-muted-foreground text-lg">
+              <p className="text-muted-foreground text-xl sm:text-2xl">
                 Create your account to begin your learning journey
               </p>
-              <p className="text-sm text-muted-foreground mt-3 flex items-center justify-center gap-1">
-                <Lock className="w-4 h-4" />
+              <p className="text-base text-muted-foreground mt-4 flex items-center justify-center gap-2">
+                <Lock className="w-5 h-5" />
                 Your information is safe and secure
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="space-y-2">
-                  <label htmlFor="firstName" className="text-sm font-medium">
+            <form onSubmit={handleSubmit} className="space-y-8 max-w-xl mx-auto">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <label htmlFor="firstName" className="text-base font-medium">
                     First Name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="firstName"
                       type="text"
                       placeholder="Jane"
                       value={formData.firstName}
                       onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                      className="pl-10"
+                      className="pl-12 h-14 text-lg"
                       data-testid="input-first-name"
                     />
                   </div>
                 </div>
                 
-                <div className="space-y-2">
-                  <label htmlFor="lastName" className="text-sm font-medium">
+                <div className="space-y-3">
+                  <label htmlFor="lastName" className="text-base font-medium">
                     Last Name
                   </label>
                   <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <Input
                       id="lastName"
                       type="text"
                       placeholder="Doe"
                       value={formData.lastName}
                       onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                      className="pl-10"
+                      className="pl-12 h-14 text-lg"
                       data-testid="input-last-name"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">
+              <div className="space-y-3">
+                <label htmlFor="email" className="text-base font-medium">
                   Email
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="you@example.com"
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-10"
+                    className="pl-12 h-14 text-lg"
                     required
                     data-testid="input-email"
                   />
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">
+              <div className="space-y-3">
+                <label htmlFor="password" className="text-base font-medium">
                   Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="8+ characters"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-10"
+                    className="pl-12 h-14 text-lg"
                     required
                     minLength={8}
                     data-testid="input-password"
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   Must be at least 8 characters long
                 </p>
               </div>
 
               <Button
                 type="submit"
-                className="w-full gap-2"
+                size="lg"
+                className="w-full gap-2 h-14 text-lg"
                 disabled={isLoading}
                 data-testid="button-signup"
               >
@@ -286,17 +287,17 @@ export default function SignupPage() {
                 ) : (
                   <>
                     Create Account
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-5 h-5" />
                   </>
                 )}
               </Button>
             </form>
 
-            <div className="mt-8 text-center text-base text-muted-foreground">
+            <div className="mt-10 text-center text-lg text-muted-foreground">
               Already have an account?{" "}
               <a
                 href="/login"
-                className="text-primary hover:underline font-medium"
+                className="text-primary hover:underline font-medium text-xl"
                 data-testid="link-login"
               >
                 Sign in
