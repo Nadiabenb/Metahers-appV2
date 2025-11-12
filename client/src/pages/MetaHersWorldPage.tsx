@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { spaceImages } from "@/lib/imageManifest";
+import { SEO } from "@/components/SEO";
 
 type Space = {
   id: string;
@@ -67,6 +68,25 @@ export default function MetaHersWorldPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="MetaHers World - 9 Learning Spaces for AI & Web3 Mastery"
+        description="Master AI and Web3 through 9 specialized learning spaces with 54 transformational experiences. Forbes-meets-Vogue luxury education for women solopreneurs."
+        keywords="AI learning, Web3 education, women in tech, blockchain courses, metaverse training, NFT education, AI for business, tech careers for women"
+        type="website"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          "name": "MetaHers Mind Spa",
+          "description": "Luxury learning sanctuary for women mastering AI and Web3",
+          "url": "https://metahers.com/metahers-world",
+          "courseMode": "online",
+          "teaches": ["Artificial Intelligence", "Web3", "Blockchain", "NFT", "Metaverse", "Personal Branding", "App Development"],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Women Solopreneurs"
+          }
+        }}
+      />
       {/* HERO - Editorial Magazine Style */}
       <section className="relative py-32 px-6 lg:px-16 bg-muted/20">
         <div className="max-w-7xl mx-auto">
