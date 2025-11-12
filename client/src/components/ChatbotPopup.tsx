@@ -12,7 +12,7 @@ export function ChatbotPopup() {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    // Show chatbot 9 seconds after user reaches the bottom of the page
+    // Show chatbot 6 seconds after user reaches the bottom of the page
     const hasSeenBot = localStorage.getItem('metahers_chatbot_seen');
     
     if (hasSeenBot) return;
@@ -29,12 +29,12 @@ export function ChatbotPopup() {
         // Clear any existing timer
         if (timer) clearTimeout(timer);
         
-        // Start 9-second timer
+        // Start 6-second timer
         timer = setTimeout(() => {
           setIsOpen(true);
           setHasShown(true);
           localStorage.setItem('metahers_chatbot_seen', 'true');
-        }, 9000);
+        }, 6000);
       } else if (distanceFromBottom > 100 && timer) {
         // User scrolled away from bottom, clear timer
         clearTimeout(timer);
@@ -43,6 +43,10 @@ export function ChatbotPopup() {
     };
 
     window.addEventListener('scroll', handleScroll);
+    
+    // Also trigger initial check in case user is already at bottom
+    handleScroll();
+    
     return () => {
       window.removeEventListener('scroll', handleScroll);
       if (timer) clearTimeout(timer);
