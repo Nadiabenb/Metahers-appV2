@@ -9,6 +9,7 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
+import { SEO } from "@/components/SEO";
 
 export default function LoginPage() {
   const [, setLocation] = useLocation();
@@ -48,6 +49,12 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      <SEO
+        title="Login - Access Your Learning Sanctuary"
+        description="Sign in to MetaHers Mind Spa to continue your AI and Web3 learning journey. Access your personalized experiences, journal, and progress tracking."
+        keywords="login, sign in, member access, AI learning platform, Web3 education"
+        type="website"
+      />
       <OptimizedImage
         src={heroBackground}
         alt="Luxury background for login"

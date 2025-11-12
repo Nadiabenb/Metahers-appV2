@@ -4,6 +4,7 @@ import { shopProducts } from "@shared/schema";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, CheckCircle2, ShoppingBag, Package, Flame, Droplets, Flower2, Shirt, Wind, Blend, Gem, Zap, Crown, Calendar, BookOpen, MessageSquare } from "lucide-react";
+import { SEO } from "@/components/SEO";
 
 // Product image mapping - 3 images per product for carousel
 const productImageSets: Record<string, string[]> = {
@@ -112,6 +113,33 @@ export default function ShopPage() {
 
   return (
     <div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-background">
+      <SEO
+        title="Shop MetaHers - Limited Edition Ritual Kits"
+        description="Handmade luxury ritual kits with AI-guided experiences. Each purchase includes MetaHers Pro membership. Limited to 18 exclusive pieces across 3 designs."
+        keywords="luxury ritual kits, metahers shop, AI learning tools, meditation bags, tech gifts for women, limited edition products"
+        type="website"
+        url="https://metahers.com/shop"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Store",
+          "name": "MetaHers Mind Spa Shop",
+          "description": "Limited edition ritual kits with AI-guided experiences",
+          "url": "https://shop.metahers.ai",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "MetaHers Ritual Kits",
+            "itemListElement": shopProducts.map(product => ({
+              "@type": "Offer",
+              "itemOffered": {
+                "@type": "Product",
+                "name": product.name,
+                "description": product.description,
+                "category": "Ritual Kit"
+              }
+            }))
+          }
+        }}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Drop 001 Hero */}
         <motion.div

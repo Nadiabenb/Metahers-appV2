@@ -11,6 +11,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { getRitualBySlug } from "@shared/schema";
 import { trackSignup } from "@/lib/analytics";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
+import { SEO } from "@/components/SEO";
 
 export default function SignupPage() {
   const [, setLocation] = useLocation();
@@ -119,6 +120,22 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      <SEO
+        title="Join MetaHers - Start Your AI & Web3 Journey Free"
+        description="Create your free account at MetaHers Mind Spa. Join thousands of women mastering AI and Web3 through luxury guided experiences. Start learning today."
+        keywords="sign up, join metahers, free AI learning, Web3 for women, tech education for women, AI courses"
+        type="website"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "WebPage",
+          "name": "Join MetaHers Mind Spa",
+          "description": "Create a free account to start your AI and Web3 learning journey",
+          "potentialAction": {
+            "@type": "RegisterAction",
+            "target": "https://metahers.com/signup"
+          }
+        }}
+      />
       <OptimizedImage
         src={heroBackground}
         alt="Luxury background for signup"
