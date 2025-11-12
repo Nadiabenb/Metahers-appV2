@@ -728,17 +728,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // GET all experiences (for progress dashboard)
-  app.get('/api/experiences/all', async (_req: Request, res) => {
-    try {
-      const experiences = await storage.getAllExperiences();
-      res.json(experiences);
-    } catch (error) {
-      console.error("Error fetching all experiences:", error);
-      res.status(500).json({ message: "Failed to fetch experiences" });
-    }
-  });
-
   // GET all progress for current user (for progress dashboard)
   app.get('/api/progress/all', async (req: Request, res) => {
     try {

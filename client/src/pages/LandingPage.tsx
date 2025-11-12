@@ -14,8 +14,6 @@ import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
-import { TiltCard } from "@/components/metaverse/TiltCard";
-import { RippleButton } from "@/components/effects/RippleButton";
 
 
 export default function LandingPage() {
@@ -23,19 +21,7 @@ export default function LandingPage() {
   const prefersReducedMotion = useReducedMotion();
   const [animationsReady, setAnimationsReady] = useState(false);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  const heroY = useTransform(smoothProgress, [0, 1], prefersReducedMotion ? ["0%", "0%"] : ["0%", "30%"]);
-  const heroScale = useTransform(smoothProgress, [0, 1], [1, prefersReducedMotion ? 1 : 1.1]);
+  // Simplified - remove heavy parallax animations for better performance
 
   const { data: spaces } = useQuery<SpaceDB[]>({
     queryKey: ["spaces"],
@@ -301,11 +287,7 @@ export default function LandingPage() {
               const spaceImage = spaceImages[space.slug];
 
               return (
-                <TiltCard
-                  key={space.name}
-                  delay={index * 0.1}
-                  className="group"
-                >
+                <div key={space.name} className="group">
                   <Link 
                     href={`/spaces/${space.slug}`}
                     className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
@@ -370,7 +352,7 @@ export default function LandingPage() {
                       </div>
                     </div>
                   </Link>
-                </TiltCard>
+                </div>
               );
             })}
           </div>
