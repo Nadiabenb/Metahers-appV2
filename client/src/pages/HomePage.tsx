@@ -94,7 +94,7 @@ export default function HomePage() {
             <CTAButton
               href="/rituals/ai-glow-up-facial"
               size="lg"
-              className="text-lg px-10 py-6 bg-[hsl(var(--liquid-gold))] text-background hover:neon-glow-violet font-semibold"
+              className="text-lg px-10 py-6 bg-[hsl(var(--gold-highlight))] text-black hover:neon-glow-violet font-semibold"
               dataTestId="button-cta-start"
             >
               Start your AI Glow-Up (Free)

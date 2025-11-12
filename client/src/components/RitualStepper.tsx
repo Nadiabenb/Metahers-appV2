@@ -137,7 +137,7 @@ export function RitualStepper({
                       isLocked
                         ? "bg-muted border-muted text-muted-foreground cursor-not-allowed"
                         : isCompleted
-                        ? "bg-[hsl(var(--aurora-teal))] border-[hsl(var(--aurora-teal))] text-background"
+                        ? "bg-[hsl(var(--aurora-teal))] border-[hsl(var(--aurora-teal))] text-black"
                         : "border-border hover:border-[hsl(var(--aurora-teal))] cursor-pointer hover-elevate active-elevate-2"
                     }`}
                     data-testid={`button-step-${index}`}
@@ -216,7 +216,7 @@ export function RitualStepper({
               >
                 <Button
                   size="lg"
-                  className="gap-2 shadow-lg bg-[hsl(var(--liquid-gold))] text-background"
+                  className="gap-2 shadow-lg bg-[hsl(var(--gold-highlight))] text-black"
                   onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
                   data-testid="button-unlock-pro"
                 >

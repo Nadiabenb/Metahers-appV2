@@ -215,7 +215,7 @@ export default function ShopPage() {
                 className="relative"
               >
                 {/* Limited Edition Badge */}
-                <div className="absolute -top-3 -right-3 z-20 bg-[hsl(var(--liquid-gold))] text-background px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                <div className="absolute -top-3 -right-3 z-20 bg-[hsl(var(--gold-highlight))] text-black px-3 py-1 rounded-full text-xs font-bold shadow-lg">
                   Only {product.stock} left
                 </div>
 

@@ -172,7 +172,7 @@ export default function RitualDetailPage() {
                     <Button
                       size="lg"
                       onClick={() => window.open('https://calendly.com/metahers/discovery', '_blank')}
-                      className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
+                      className="gap-2 bg-[hsl(var(--gold-highlight))] text-black"
                       data-testid="button-book-calendly"
                     >
                       Book Your Session

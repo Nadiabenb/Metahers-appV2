@@ -68,7 +68,7 @@ export function ShopCard({ product, onClick }: ShopCardProps) {
       data-testid={`card-product-${product.id}`}
     >
       {isBundle && (
-        <div className="absolute -top-3 -right-3 bg-[hsl(var(--liquid-gold))] text-background px-3 py-1 rounded-full text-xs font-semibold shadow-md">
+        <div className="absolute -top-3 -right-3 bg-[hsl(var(--gold-highlight))] text-black px-3 py-1 rounded-full text-xs font-semibold shadow-md">
           Save $98
         </div>
       )}

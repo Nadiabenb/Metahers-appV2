@@ -196,7 +196,7 @@ export default function DiscoverPage() {
             <Button
               size="lg"
               onClick={handleStartQuiz}
-              className="gap-2 px-8 py-6 text-lg bg-[hsl(var(--liquid-gold))] text-background rounded-full shadow-xl hover:scale-105 transition-transform"
+              className="gap-2 px-8 py-6 text-lg bg-[hsl(var(--gold-highlight))] text-black rounded-full shadow-xl hover:scale-105 transition-transform"
               data-testid="button-start-quiz"
             >
               Start Quiz - 90 Seconds
@@ -353,7 +353,7 @@ export default function DiscoverPage() {
                   size="lg"
                   onClick={handleEmailSubmit}
                   disabled={isSubmitting || !email || !email.includes('@')}
-                  className="w-full gap-2 bg-[hsl(var(--liquid-gold))] text-background hover:scale-105 transition-transform"
+                  className="w-full gap-2 bg-[hsl(var(--gold-highlight))] text-black hover:scale-105 transition-transform"
                   data-testid="button-unlock-results"
                 >
                   {isSubmitting ? "Unlocking..." : "Unlock My Results"}
@@ -457,7 +457,7 @@ export default function DiscoverPage() {
                   <Button
                     size="lg"
                     onClick={() => window.location.href = "/rituals"}
-                    className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
+                    className="gap-2 bg-[hsl(var(--gold-highlight))] text-black"
                     data-testid="button-go-to-rituals"
                   >
                     Start Your Ritual
@@ -474,7 +474,7 @@ export default function DiscoverPage() {
                         localStorage.setItem('quiz_name', name);
                         window.location.href = "/signup";
                       }}
-                      className="gap-2 bg-[hsl(var(--liquid-gold))] text-background"
+                      className="gap-2 bg-[hsl(var(--gold-highlight))] text-black"
                       data-testid="button-signup-claim"
                     >
                       Create Free Account

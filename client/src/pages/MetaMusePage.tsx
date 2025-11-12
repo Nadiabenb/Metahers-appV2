@@ -60,7 +60,7 @@ export default function MetaMusePage() {
             <CTAButton
               onClick={handleOpenMetaMuse}
               size="lg"
-              className="text-lg px-8 py-6 bg-[hsl(var(--liquid-gold))] text-background"
+              className="text-lg px-8 py-6 bg-[hsl(var(--gold-highlight))] text-black"
               dataTestId="button-open-metamuse"
             >
               <MessageSquare className="mr-2 w-5 h-5" />

@@ -212,7 +212,7 @@ export function AchievementsBadges() {
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <Badge variant="default" className="bg-[hsl(var(--liquid-gold))] text-background">
+                      <Badge variant="default" className="bg-[hsl(var(--gold-highlight))] text-black">
                         NEW!
                       </Badge>
                     </motion.div>
