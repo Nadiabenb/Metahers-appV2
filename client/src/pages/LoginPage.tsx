@@ -48,7 +48,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-hidden">
       <SEO
         title="Login - Access Your Learning Sanctuary"
         description="Sign in to MetaHers Mind Spa to continue your AI and Web3 learning journey. Access your personalized experiences, journal, and progress tracking."
@@ -68,9 +68,9 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-md relative z-10"
+        className="w-full max-w-lg mx-auto relative z-10"
       >
-        <Card className="editorial-card p-8 md:p-10 relative overflow-hidden">
+        <Card className="editorial-card p-6 sm:p-8 md:p-10 relative overflow-hidden">
           <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
           
           <div className="relative z-10">

@@ -119,7 +119,7 @@ export default function SignupPage() {
   const matchedRitualData = quizRitual ? getRitualBySlug(quizRitual) : null;
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 relative overflow-hidden">
       <SEO
         title="Join MetaHers - Start Your AI & Web3 Journey Free"
         description="Create your free account at MetaHers Mind Spa. Join thousands of women mastering AI and Web3 through luxury guided experiences. Start learning today."
@@ -149,7 +149,7 @@ export default function SignupPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full max-w-md relative z-10"
+        className="w-full max-w-lg mx-auto relative z-10"
       >
         {quizRitual && matchedRitualData && (
           <motion.div
@@ -172,7 +172,7 @@ export default function SignupPage() {
           </motion.div>
         )}
 
-        <Card className="editorial-card p-8 md:p-10 relative overflow-hidden">
+        <Card className="editorial-card p-6 sm:p-8 md:p-10 relative overflow-hidden">
           <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
           
           <div className="relative z-10">
