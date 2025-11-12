@@ -751,22 +751,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/experiences/:id', async (req: Request, res) => {
-    try {
-      const { id } = req.params;
-      const experience = await storage.getExperienceById(id);
-
-      if (!experience) {
-        return res.status(404).json({ message: "Experience not found" });
-      }
-
-      res.json(experience);
-    } catch (error) {
-      console.error("Error fetching experience:", error);
-      res.status(500).json({ message: "Failed to fetch experience" });
-    }
-  });
-
   // GET all progress for current user (for progress dashboard)
   app.get('/api/progress/all', async (req: Request, res) => {
     try {
