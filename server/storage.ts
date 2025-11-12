@@ -1358,13 +1358,30 @@ export class DatabaseStorage implements IStorage {
     return experience;
   }
 
-  async getAllExperiences(): Promise<TransformationalExperienceDB[]> {
+  async getAllExperiences(): Promise<(TransformationalExperienceDB & { spaceName: string })[]> {
     const experiences = await db
-      .select()
+      .select({
+        id: transformationalExperiences.id,
+        spaceId: transformationalExperiences.spaceId,
+        title: transformationalExperiences.title,
+        slug: transformationalExperiences.slug,
+        description: transformationalExperiences.description,
+        learningObjectives: transformationalExperiences.learningObjectives,
+        tier: transformationalExperiences.tier,
+        estimatedMinutes: transformationalExperiences.estimatedMinutes,
+        sortOrder: transformationalExperiences.sortOrder,
+        content: transformationalExperiences.content,
+        personalizationEnabled: transformationalExperiences.personalizationEnabled,
+        isActive: transformationalExperiences.isActive,
+        createdAt: transformationalExperiences.createdAt,
+        updatedAt: transformationalExperiences.updatedAt,
+        spaceName: spaces.name,
+      })
       .from(transformationalExperiences)
+      .innerJoin(spaces, eq(transformationalExperiences.spaceId, spaces.id))
       .where(eq(transformationalExperiences.isActive, true))
       .orderBy(transformationalExperiences.sortOrder);
-    return experiences;
+    return experiences as any;
   }
 
   // MetaHers World - Experience Progress operations

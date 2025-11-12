@@ -529,6 +529,7 @@ export const spaces = pgTable("spaces", {
 }, (table) => [
   index("idx_space_slug").on(table.slug),
   index("idx_space_active").on(table.isActive),
+  index("idx_space_active_sort").on(table.isActive, table.sortOrder),
 ]);
 
 export const insertSpaceSchema = createInsertSchema(spaces).omit({ createdAt: true, updatedAt: true });
@@ -562,6 +563,8 @@ export const transformationalExperiences = pgTable("transformational_experiences
 }, (table) => [
   index("idx_experience_space").on(table.spaceId),
   index("idx_experience_tier").on(table.tier),
+  index("idx_experience_space_active_sort").on(table.spaceId, table.isActive, table.sortOrder),
+  index("idx_experience_active_sort").on(table.isActive, table.sortOrder),
 ]);
 
 export const insertTransformationalExperienceSchema = createInsertSchema(transformationalExperiences).omit({ id: true, createdAt: true, updatedAt: true });

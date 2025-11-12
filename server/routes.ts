@@ -79,6 +79,11 @@ async function getUncachableResendClient() {
 const recommendationCache = new Map<string, { data: Recommendation; timestamp: number }>();
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
+// Simple in-memory cache for spaces and experiences (read-heavy, rarely changes)
+let spacesCache: { data: any[]; timestamp: number } | null = null;
+let experiencesCache: { data: any[]; timestamp: number } | null = null;
+const DATA_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment monitoring
   // Note: Root "/" is handled by static file serving (index.html) which also returns 200
@@ -660,7 +665,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== METAHERS WORLD SPACESROUTES =====
   app.get('/api/spaces', async (_req: Request, res) => {
     try {
+      // Check cache first
+      const now = Date.now();
+      if (spacesCache && (now - spacesCache.timestamp) < DATA_CACHE_TTL) {
+        return res.json(spacesCache.data);
+      }
+
+      // Fetch from database
       const spaces = await storage.getSpaces();
+      
+      // Update cache
+      spacesCache = { data: spaces, timestamp: now };
+      
       res.json(spaces);
     } catch (error) {
       console.error("Error fetching spaces:", error);
@@ -699,18 +715,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // GET all experiences (must be before :slug/:id routes)
   app.get('/api/experiences/all', async (req: Request, res) => {
     try {
+      // Check cache first
+      const now = Date.now();
+      if (experiencesCache && (now - experiencesCache.timestamp) < DATA_CACHE_TTL) {
+        return res.json(experiencesCache.data);
+      }
+
+      // Fetch from database with JOIN
       const experiences = await storage.getAllExperiences();
-      const spaces = await storage.getSpaces();
       
-      // Create a map of space IDs to space names for quick lookup
-      const spaceMap = new Map(spaces.map(s => [s.id, s.name]));
-
-      const enriched = experiences.map(exp => ({
-        ...exp,
-        spaceName: spaceMap.get(exp.spaceId) || "Unknown Space",
-      }));
-
-      res.json(enriched);
+      // Update cache
+      experiencesCache = { data: experiences, timestamp: now };
+      
+      res.json(experiences);
     } catch (error) {
       console.error("Error fetching all experiences:", error);
       res.status(500).json({ message: "Failed to fetch experiences" });
