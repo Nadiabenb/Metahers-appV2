@@ -260,7 +260,7 @@ export default function SignupPage() {
                   <Input
                     id="password"
                     type="password"
-                    placeholder="At least 8 characters"
+                    placeholder="8+ characters"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     className="pl-10"
