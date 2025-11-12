@@ -13,6 +13,7 @@ import DownloadableResources from "@/components/DownloadableResources";
 import AchievementShowcase from "@/components/AchievementShowcase";
 import ExperienceLearningPlayer from "@/components/learning/ExperienceLearningPlayer";
 import type { TransformationalExperienceDB } from "@shared/schema";
+import { SEO } from "@/components/SEO";
 
 type Experience = {
   id: string;
@@ -101,6 +102,33 @@ export default function ExperienceDetailPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={`${experience.title} - ${space?.name || 'Learning'} Experience`}
+        description={experience.description}
+        keywords={`${experience.title}, ${space?.name || ''} learning, AI education, Web3 training, women in tech, ${experience.tier === 'pro' ? 'premium course' : 'free course'}`}
+        type="article"
+        url={`https://metahers.com/experiences/${experience.slug}`}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "LearningResource",
+          "name": experience.title,
+          "description": experience.description,
+          "educationalLevel": experience.tier === "pro" ? "Advanced" : "Beginner",
+          "timeRequired": `PT${experience.estimatedMinutes}M`,
+          "learningResourceType": "Interactive Experience",
+          "teaches": experience.learningObjectives,
+          "provider": {
+            "@type": "Organization",
+            "name": "MetaHers Mind Spa",
+            "sameAs": "https://metahers.com"
+          },
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Women Solopreneurs"
+          },
+          "isAccessibleForFree": experience.tier === "free"
+        }}
+      />
       {/* Editorial Hero Header */}
       <div className="relative bg-muted/30 py-20 px-6 lg:px-16">
         <div className="container mx-auto max-w-4xl">

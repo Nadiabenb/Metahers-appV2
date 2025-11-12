@@ -10,6 +10,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useBookmarks } from "@/hooks/useBookmarks";
 import { useToast } from "@/hooks/use-toast";
 import { ShareButton } from "@/components/ShareButton";
+import { SEO } from "@/components/SEO";
 
 type Space = {
   id: string;
@@ -153,6 +154,34 @@ export default function SpaceDetailPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={`${space.name} Learning Space - Master AI & Web3`}
+        description={`${space.description} Explore ${experiences.length} transformational experiences designed for women solopreneurs.`}
+        keywords={`${space.name} learning, ${space.name} courses, AI education, Web3 training, women in tech`}
+        type="website"
+        url={`https://metahers.com/spaces/${space.slug}`}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Course",
+          "name": `${space.name} Learning Space`,
+          "description": space.description,
+          "provider": {
+            "@type": "Organization",
+            "name": "MetaHers Mind Spa",
+            "sameAs": "https://metahers.com"
+          },
+          "hasCourseInstance": experiences.map(exp => ({
+            "@type": "CourseInstance",
+            "name": exp.title,
+            "courseMode": "online",
+            "timeRequired": `PT${exp.estimatedMinutes}M`
+          })),
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Women Solopreneurs"
+          }
+        }}
+      />
       {/* Editorial Hero Header */}
       <div className="relative bg-muted/30 py-20 px-6 lg:px-16">
         <div className="container mx-auto max-w-6xl">
