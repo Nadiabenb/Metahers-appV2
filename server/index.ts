@@ -3,6 +3,8 @@ import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { setupSecurityHeaders, setupCORS, setupRateLimiting } from "./security";
+import { seedSpaces } from "./seedSpaces";
+import { seedExperiences } from "./seedExperiences";
 
 const app = express();
 
@@ -113,6 +115,26 @@ app.use((req, res, next) => {
       log(`✓ Server successfully listening on 0.0.0.0:${port}`);
       log(`✓ Environment: ${app.get("env")}`);
       log(`✓ Ready to accept traffic`);
+      
+      // Seed database asynchronously after server is ready (production-safe, idempotent)
+      // This ensures health checks pass immediately while database initializes in background
+      if (app.get("env") === "production") {
+        (async () => {
+          try {
+            // IMPORTANT: Sequential seeding to respect foreign key constraints (experiences -> spaces)
+            log("⏳ Starting database seeding...");
+            await seedSpaces();
+            log("✓ Spaces seeded");
+            await seedExperiences();
+            log("✓ Experiences seeded");
+            log("✅ Database seeding completed successfully");
+          } catch (error) {
+            log(`❌ Database seeding failed: ${error instanceof Error ? error.message : String(error)}`);
+            console.error("Database seeding error details:", error);
+            // Non-fatal - server continues running, admin can seed manually via /api/admin/populate-db
+          }
+        })();
+      }
     });
 
     server.on('error', (error: NodeJS.ErrnoException) => {
