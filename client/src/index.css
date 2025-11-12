@@ -15,14 +15,14 @@ body {
 }
 
 :root {
-  /* Light Mode - Violet Sanctuary */
-  --button-outline: rgba(139, 92, 246, 0.2);
-  --badge-outline: rgba(139, 92, 246, 0.15);
+  /* Dark Mode Only - Violet Sanctuary */
+  --button-outline: rgba(255, 255, 255, 0.12);
+  --badge-outline: rgba(255, 255, 255, 0.08);
 
   --opaque-button-border-intensity: 6;
 
-  --elevate-1: rgba(139, 92, 246, 0.05);
-  --elevate-2: rgba(139, 92, 246, 0.1);
+  --elevate-1: rgba(255, 255, 255, 0.04);
+  --elevate-2: rgba(255, 255, 255, 0.10);
 
   /* Core Violet Sanctuary Palette */
   --deep-violet: 270 90% 6%;
@@ -33,47 +33,47 @@ body {
   --coral: 20 100% 67%;
   --gold-highlight: 45 95% 73%;
 
-  /* Core Theme Colors - Light Mode */
-  --background: 0 0% 100%;
-  --foreground: 270 90% 6%;
-  --border: 270 30% 85%;
+  /* Core Theme Colors - Dark Mode */
+  --background: 270 90% 6%;
+  --foreground: 0 0% 100%;
+  --border: 270 50% 22%;
 
-  --card: 0 0% 98%;
-  --card-foreground: 270 90% 6%;
-  --card-border: 270 20% 88%;
+  --card: 270 85% 19%;
+  --card-foreground: 0 0% 100%;
+  --card-border: 270 60% 30%;
 
-  --sidebar: 270 50% 96%;
-  --sidebar-foreground: 270 90% 6%;
-  --sidebar-border: 270 30% 85%;
-  --sidebar-primary: 270 85% 36%;
+  --sidebar: 270 90% 8%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 270 50% 18%;
+  --sidebar-primary: 270 85% 55%;
   --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 325 95% 62%;
   --sidebar-accent-foreground: 0 0% 100%;
-  --sidebar-ring: 270 85% 36%;
+  --sidebar-ring: 270 85% 55%;
 
-  --popover: 0 0% 98%;
-  --popover-foreground: 270 90% 6%;
-  --popover-border: 270 20% 88%;
+  --popover: 270 85% 15%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border: 270 50% 25%;
 
-  --primary: 270 85% 36%;
+  --primary: 270 85% 55%;
   --primary-foreground: 0 0% 100%;
 
   --secondary: 325 95% 62%;
   --secondary-foreground: 0 0% 100%;
 
-  --muted: 270 20% 90%;
-  --muted-foreground: 270 20% 45%;
-
   --accent: 325 95% 62%;
   --accent-foreground: 0 0% 100%;
 
-  --destructive: 0 72% 55%;
-  --destructive-foreground: 0 0% 100%;
+  --destructive: 0 68% 52%;
+  --destructive-foreground: 0 0% 98%;
 
-  --input: 270 20% 90%;
-  --ring: 270 85% 36%;
+  --muted: 270 40% 24%;
+  --muted-foreground: 0 0% 85%;
+
+  --input: 270 40% 26%;
+  --ring: 270 85% 55%;
   
-  --chart-1: 270 85% 36%;
+  --chart-1: 270 85% 55%;
   --chart-2: 325 95% 62%;
   --chart-3: 20 100% 67%;
   --chart-4: 45 95% 73%;
@@ -114,53 +114,6 @@ body {
 
   --destructive-border: hsl(var(--destructive));
   --destructive-border: hsl(from hsl(var(--destructive)) h s calc(l + var(--opaque-button-border-intensity)) / alpha);
-}
-
-.dark {
-  /* Dark Mode - Violet Sanctuary (Primary) */
-  --button-outline: rgba(255, 255, 255, 0.12);
-  --badge-outline: rgba(255, 255, 255, 0.08);
-
-  --elevate-1: rgba(255, 255, 255, 0.04);
-  --elevate-2: rgba(255, 255, 255, 0.10);
-
-  --background: 270 90% 6%;
-  --foreground: 0 0% 100%;
-  --border: 270 50% 22%;
-
-  --card: 270 85% 19%;
-  --card-foreground: 0 0% 100%;
-  --card-border: 270 60% 30%;
-
-  --sidebar: 270 90% 8%;
-  --sidebar-foreground: 0 0% 100%;
-  --sidebar-border: 270 50% 18%;
-  --sidebar-primary: 270 85% 55%;
-  --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 325 95% 62%;
-  --sidebar-accent-foreground: 0 0% 100%;
-
-  --popover: 270 85% 15%;
-  --popover-foreground: 0 0% 100%;
-  --popover-border: 270 50% 25%;
-
-  --primary: 270 85% 55%;
-  --primary-foreground: 0 0% 100%;
-
-  --secondary: 325 95% 62%;
-  --secondary-foreground: 0 0% 100%;
-
-  --accent: 325 95% 62%;
-  --accent-foreground: 0 0% 100%;
-
-  --destructive: 0 68% 52%;
-  --destructive-foreground: 0 0% 98%;
-
-  --muted: 270 40% 24%;
-  --muted-foreground: 0 0% 85%;
-
-  --input: 270 40% 26%;
-  --ring: 270 85% 55%;
 }
 
 @layer base {

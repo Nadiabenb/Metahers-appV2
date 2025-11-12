@@ -5,7 +5,6 @@ import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { GlobalSearch } from "@/components/GlobalSearch";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
@@ -322,14 +321,10 @@ export function Navigation() {
                 <p>Join Free AI Retreat</p>
               </TooltipContent>
             </Tooltip>
-
-            {/* Theme Toggle */}
-            <ThemeToggle />
           </div>
 
-          {/* Mobile Menu Button & Theme Toggle */}
+          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center gap-2">
-            <ThemeToggle />
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button 
