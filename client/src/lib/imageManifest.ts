@@ -37,7 +37,7 @@ export const spaceImages: Record<string, { src: string; alt: string }> = {
     src: aiSpaceImage,
     alt: "Woman surrounded by AI neural network visualizations and machine learning interfaces",
   },
-  "nft-blockchain-crypto": {
+  "crypto": {
     src: nftSpaceImage,
     alt: "Woman holding glowing NFT digital art in luxury virtual gallery",
   },
