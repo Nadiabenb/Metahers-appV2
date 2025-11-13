@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Check, ChevronLeft, ChevronRight, Sparkles, Trophy, 
   BookOpen, PlayCircle, Code, ClipboardCheck, Lightbulb,
-  MessageCircle, ArrowLeft
+  MessageCircle, ArrowLeft, Target, Award
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -43,6 +43,17 @@ const SECTION_ICONS = {
   hands_on_lab: Code,
 };
 
+// Map space color strings to actual CSS variable names (verified in index.css)
+const SPACE_COLOR_MAP: Record<string, string> = {
+  "liquid-gold": "gold-highlight",      // --gold-highlight: 45 95% 73%
+  "magenta-quartz": "magenta",          // --magenta: 325 95% 62%
+  "cyber-fuchsia": "primary-violet",    // --primary-violet: 270 85% 36%
+  "aurora-teal": "vibrant-purple",      // --vibrant-purple: 270 85% 36%
+  "hyper-violet": "primary-violet",     // --primary-violet: 270 85% 36%
+  // Fallback for any unmapped colors
+  "primary": "primary-violet",
+};
+
 export default function ExperienceLearningPlayer({ 
   experience, 
   spaceColor,
@@ -62,6 +73,10 @@ export default function ExperienceLearningPlayer({
   const isCurrentSectionComplete = currentSection && completedSections.includes(currentSection.id);
   const allSectionsComplete = completedSections.length === totalSections;
 
+  // Map space color to actual CSS variable (e.g., "liquid-gold" -> "gold-highlight")
+  const mappedColor = SPACE_COLOR_MAP[spaceColor] || SPACE_COLOR_MAP["liquid-gold"];
+  const spaceColorVar = `var(--${mappedColor})`;
+
   useEffect(() => {
     // Auto-scroll to top when section changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -72,20 +87,20 @@ export default function ExperienceLearningPlayer({
     
     await completeSection(currentSection.id);
     
-    // Show celebration
+    // Show celebration (user-dismissible, no auto-advance)
     const isLastSection = currentSectionIndex === totalSections - 1;
     setCelebrationData({
       title: currentSection.title,
       isComplete: isLastSection,
     });
     setShowCelebration(true);
-    
-    // Auto-advance after celebration if not the last section
-    if (!isLastSection) {
-      setTimeout(() => {
-        setCurrentSectionIndex(prev => prev + 1);
-        setShowCelebration(false);
-      }, 3000);
+  };
+
+  const handleCelebrationClose = () => {
+    setShowCelebration(false);
+    // Advance to next section if not the last one
+    if (celebrationData && !celebrationData.isComplete && currentSectionIndex < totalSections - 1) {
+      setCurrentSectionIndex(prev => prev + 1);
     }
   };
 
@@ -149,8 +164,8 @@ export default function ExperienceLearningPlayer({
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header with Progress */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border">
+      {/* Header with Progress - Luxury Edition */}
+      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border shadow-lg shadow-primary/5">
         <div className="container mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between gap-4 mb-3">
             <div className="flex items-center gap-3">
@@ -199,7 +214,93 @@ export default function ExperienceLearningPlayer({
         </div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 py-8 max-w-4xl">
+      <div className="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
+        {/* Section Navigation Map - Visual Stepper */}
+        <div className="mb-12">
+          <div className="kinetic-glass rounded-2xl p-6 border border-border/50 bg-gradient-to-br from-card via-card to-primary/5">
+            <div className="flex items-center gap-2 mb-4">
+              <BookOpen className="w-4 h-4 text-primary" />
+              <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
+                Your Learning Journey
+              </h3>
+            </div>
+            
+            {/* Stepper - Horizontal on desktop, vertical on mobile */}
+            <div className="relative">
+              {/* Progress line background */}
+              <div className="absolute top-6 left-0 right-0 h-0.5 bg-border hidden sm:block" />
+              <div 
+                className="absolute top-6 left-0 h-0.5 bg-gradient-to-r from-primary to-primary/50 hidden sm:block transition-all duration-500"
+                style={{ width: `${progressPercentage}%` }}
+              />
+              
+              {/* Sections */}
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between relative">
+                {sections.map((section, index) => {
+                  const isComplete = completedSections.includes(section.id);
+                  const isCurrent = index === currentSectionIndex;
+                  const Icon = SECTION_ICONS[section.type];
+                  
+                  return (
+                    <button
+                      key={section.id}
+                      onClick={() => setCurrentSectionIndex(index)}
+                      className={`
+                        group flex items-center gap-3 sm:flex-col sm:items-center sm:gap-2 
+                        p-3 sm:p-4 rounded-xl transition-all duration-300
+                        ${isCurrent ? 'bg-primary/10 border border-primary/30' : 'hover-elevate border border-transparent'}
+                        ${isComplete && !isCurrent ? 'opacity-60 hover:opacity-100' : ''}
+                      `}
+                      data-testid={`section-nav-${index}`}
+                    >
+                      {/* Icon circle */}
+                      <div 
+                        className={`
+                          relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 flex-shrink-0
+                          ${isCurrent ? 'border-primary scale-110 shadow-lg' : ''}
+                          ${isComplete && !isCurrent ? 'border-emerald-500 bg-emerald-500/10' : 'border-border bg-card'}
+                          ${!isComplete && !isCurrent ? 'group-hover:border-primary/50' : ''}
+                        `}
+                        style={isCurrent ? {
+                          background: `linear-gradient(135deg, hsl(${spaceColorVar} / 0.2), hsl(${spaceColorVar} / 0.05))`,
+                          borderColor: `hsl(${spaceColorVar})`,
+                          boxShadow: `0 0 20px hsl(${spaceColorVar} / 0.3)`,
+                        } : {}}
+                      >
+                        {isComplete && !isCurrent ? (
+                          <Check className="w-5 h-5 text-emerald-500" />
+                        ) : (
+                          <Icon 
+                            className={`w-5 h-5 ${isCurrent ? '' : 'text-muted-foreground group-hover:text-foreground'}`}
+                            style={isCurrent ? { color: `hsl(${spaceColorVar})` } : {}}
+                          />
+                        )}
+                        
+                        {/* Number badge for incomplete sections */}
+                        {!isComplete && !isCurrent && (
+                          <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-bold">
+                            {index + 1}
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Section info */}
+                      <div className="flex-1 sm:flex-initial text-left sm:text-center min-w-0">
+                        <div className="text-xs font-medium text-muted-foreground mb-1 uppercase tracking-wide">
+                          Section {index + 1}
+                        </div>
+                        <div className={`text-sm font-semibold truncate ${isCurrent ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                          {section.title}
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSection.id}
@@ -208,34 +309,64 @@ export default function ExperienceLearningPlayer({
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Section Header */}
-            <div className="mb-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className={`p-3 rounded-xl bg-gradient-to-br from-${spaceColor}/20 to-${spaceColor}/10 border border-${spaceColor}/30`}>
-                  <SectionIcon className={`w-6 h-6 text-${spaceColor}`} />
+            {/* Section Header - Luxury Edition with proper gradients */}
+            <div className="mb-8 relative">
+              {/* Ambient glow background */}
+              <div className="absolute -inset-x-4 -inset-y-2 bg-gradient-to-r from-transparent via-primary/5 to-transparent blur-3xl pointer-events-none" />
+              
+              <div className="flex items-center gap-4 mb-4 relative">
+                {/* Icon with proper gradient backplate */}
+                <div 
+                  className="p-4 rounded-2xl border backdrop-blur-sm relative overflow-hidden group"
+                  style={{
+                    background: `linear-gradient(135deg, hsl(${spaceColorVar} / 0.15), hsl(${spaceColorVar} / 0.05))`,
+                    borderColor: `hsl(${spaceColorVar} / 0.25)`,
+                  }}
+                >
+                  {/* Glow effect on hover */}
+                  <div 
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
+                    style={{ background: `radial-gradient(circle, hsl(${spaceColorVar} / 0.3) 0%, transparent 70%)` }}
+                  />
+                  <SectionIcon 
+                    className="w-7 h-7 relative z-10" 
+                    style={{ color: `hsl(${spaceColorVar})` }}
+                  />
                 </div>
+                
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <Badge variant="outline" className="text-xs">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge 
+                      variant="outline" 
+                      className="text-xs font-medium"
+                      style={{
+                        borderColor: `hsl(${spaceColorVar} / 0.3)`,
+                        color: `hsl(${spaceColorVar})`,
+                      }}
+                    >
                       {currentSection.type.replace(/_/g, ' ').toUpperCase()}
                     </Badge>
                     {isCurrentSectionComplete && (
-                      <Badge className="text-xs bg-[hsl(var(--aurora-teal))] gap-1">
+                      <Badge className="text-xs bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-400 gap-1.5">
                         <Check className="w-3 h-3" />
                         Complete
                       </Badge>
                     )}
                   </div>
-                  <h2 className="font-serif text-3xl font-bold">
+                  <h2 className="font-serif text-3xl lg:text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
                     {currentSection.title}
                   </h2>
                 </div>
               </div>
             </div>
 
-            {/* Section Content */}
-            <Card className="p-6 sm:p-8 mb-8">
-              {renderSectionContent()}
+            {/* Section Content - Luxury Card with ambient texture */}
+            <Card className="p-6 sm:p-10 mb-8 relative overflow-hidden border-border/50 shadow-xl shadow-black/5">
+              {/* Subtle spa-inspired texture overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-transparent pointer-events-none" />
+              <div className="relative z-10">
+                {renderSectionContent()}
+              </div>
             </Card>
 
             {/* Navigation */}
@@ -302,17 +433,106 @@ export default function ExperienceLearningPlayer({
         )}
       </AnimatePresence>
 
-      {/* Celebration Modal */}
+      {/* Celebration Modal - User Dismissible */}
       <AnimatePresence>
         {showCelebration && celebrationData && (
           <SectionCompleteCelebration
             sectionTitle={celebrationData.title}
             isExperienceComplete={celebrationData.isComplete}
-            onClose={() => setShowCelebration(false)}
+            onClose={handleCelebrationClose}
             spaceColor={spaceColor}
           />
         )}
       </AnimatePresence>
+
+      {/* Floating Progress Capsule - Mobile Optimized */}
+      <motion.div
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.5 }}
+        className="fixed bottom-6 right-6 z-30 hidden lg:block"
+      >
+        <Link href="/world">
+          <button 
+            className="group kinetic-glass rounded-2xl p-4 border border-border/50 hover-elevate active-elevate-2 shadow-2xl shadow-black/20 backdrop-blur-xl"
+            data-testid="button-progress-capsule"
+          >
+            <div className="flex items-center gap-4">
+              {/* Progress Circle */}
+              <div className="relative w-16 h-16">
+                <svg className="w-16 h-16 -rotate-90">
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    className="text-border"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="28"
+                    fill="none"
+                    stroke="url(#progress-gradient)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    strokeDasharray={`${progressPercentage * 1.75} 175`}
+                    className="transition-all duration-500"
+                  />
+                  <defs>
+                    <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="hsl(var(--primary))" />
+                      <stop offset="100%" stopColor="hsl(var(--primary) / 0.5)" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Target className="w-6 h-6 text-primary" />
+                </div>
+              </div>
+
+              {/* Stats */}
+              <div className="text-left pr-2">
+                <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                  Your Journey
+                </div>
+                <div className="font-semibold text-sm flex items-center gap-2">
+                  <span>{completedSections.length}/{totalSections} Complete</span>
+                  <Award className="w-3.5 h-3.5 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Back to World
+                </div>
+              </div>
+            </div>
+          </button>
+        </Link>
+      </motion.div>
+
+      {/* Mobile-Optimized Progress Bar (replaces floating capsule on mobile) */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-xl border-t border-border p-4 safe-bottom">
+        <div className="flex items-center justify-between gap-3 mb-2">
+          <div className="flex-1">
+            <div className="text-xs text-muted-foreground mb-1">
+              Section {currentSectionIndex + 1} of {totalSections}
+            </div>
+            <Progress value={progressPercentage} className="h-1.5" />
+          </div>
+          <Link href="/world">
+            <Button 
+              variant="ghost" 
+              size="sm"
+              className="flex-shrink-0 gap-2 min-h-10"
+              data-testid="button-back-to-world-mobile"
+            >
+              <Award className="w-4 h-4" />
+              <span className="text-xs">World</span>
+            </Button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

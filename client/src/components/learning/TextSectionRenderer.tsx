@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles, Quote, Lightbulb, CheckCircle2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
+import { useState } from "react";
 
 type Resource = {
   title: string;
@@ -29,12 +31,34 @@ export default function TextSectionRenderer({
 }: TextSectionRendererProps) {
   return (
     <div className="space-y-6">
-      {/* Content */}
-      <div className="prose prose-lg max-w-none dark:prose-invert">
-        <div 
-          className="leading-relaxed whitespace-pre-wrap"
-          dangerouslySetInnerHTML={{ __html: section.content }}
-        />
+      {/* Enhanced Content with preserved HTML - Luxury Typography */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="prose prose-lg max-w-none dark:prose-invert"
+      >
+        {/* Ambient background for luxury feel */}
+        <div className="relative">
+          <div className="absolute -inset-4 bg-gradient-to-br from-primary/[0.02] via-transparent to-transparent pointer-events-none rounded-2xl" />
+          <div 
+            className="relative leading-relaxed prose-headings:font-serif prose-headings:font-bold prose-p:text-foreground/90 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-em:text-foreground/80"
+            style={{ 
+              fontSize: '1.125rem',
+              lineHeight: '1.8'
+            }}
+            dangerouslySetInnerHTML={{ __html: section.content }}
+          />
+        </div>
+      </motion.div>
+
+      {/* Optional: Add breathing room after content */}
+      <div className="py-4 flex items-center justify-center">
+        <div className="flex gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+          <div className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+          <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+        </div>
       </div>
 
       {/* Resources - MetaHers Blog Only */}

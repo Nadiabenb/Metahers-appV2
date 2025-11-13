@@ -54,12 +54,7 @@ export default function ExperienceDetailPage() {
   // Free experiences are publicly accessible, Pro experiences require Pro subscription
   const hasAccess = !isPremiumExperience || (isAuthenticated && isProUser);
 
-  // Auto-start learning player for users with access
-  useEffect(() => {
-    if (experience && hasAccess && !showLearningPlayer) {
-      setShowLearningPlayer(true);
-    }
-  }, [experience, hasAccess]);
+  // REMOVED: Auto-start - let users click "Start" deliberately to build anticipation
 
   if (isLoading) {
     return (
@@ -318,30 +313,61 @@ export default function ExperienceDetailPage() {
           </div>
         </div>
 
-        {/* CTA Section */}
+        {/* Enhanced CTA Section with Preview */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.6 }}
         >
           {hasAccess ? (
-            <div className="kinetic-glass rounded-2xl p-12 border border-card-border text-center bg-gradient-to-br from-card via-card to-primary/5">
-              <h3 className="font-serif text-4xl font-bold mb-4">
-                Ready to Begin Your Transformation?
-              </h3>
-              <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-                Start this {experience.estimatedMinutes}-minute experience and master {experience.learningObjectives.length} essential skills
-              </p>
+            <div className="kinetic-glass rounded-2xl p-12 lg:p-16 border border-card-border text-center bg-gradient-to-br from-card via-card to-primary/5 relative overflow-hidden">
+              {/* Ambient glow effect */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
               
-              <Button
-                size="lg"
-                onClick={() => setShowLearningPlayer(true)}
-                className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg group"
-                data-testid="button-start-experience"
-              >
-                Start Experience
-                <Play className="ml-2 w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
-              </Button>
+              <div className="relative z-10">
+                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/20">
+                  <Play className="w-10 h-10 text-primary" />
+                </div>
+                
+                <h3 className="font-serif text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                  Ready to Begin Your Transformation?
+                </h3>
+                
+                <p className="text-lg lg:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
+                  A carefully crafted {experience.estimatedMinutes}-minute journey designed to help you master {experience.learningObjectives.length} essential skills
+                </p>
+
+                {/* Experience Preview Stats */}
+                <div className="flex flex-wrap items-center justify-center gap-6 mb-10 text-sm">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <BookOpen className="w-4 h-4 text-primary" />
+                    <span>Interactive sections with AI coaching</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <CheckCircle2 className="w-4 h-4 text-primary" />
+                    <span>Progress tracking & achievements</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Sparkles className="w-4 h-4 text-primary" />
+                    <span>Personal mentorship available</span>
+                  </div>
+                </div>
+                
+                <Button
+                  size="lg"
+                  onClick={() => setShowLearningPlayer(true)}
+                  className="gold-shimmer bg-gradient-to-r from-primary via-primary/90 to-primary hover:shadow-2xl hover:shadow-primary/30 px-16 py-7 text-lg font-semibold group transition-all duration-300"
+                  data-testid="button-start-experience"
+                >
+                  <Play className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform" />
+                  Start Your Transformation
+                  <ChevronRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+
+                <p className="mt-6 text-sm text-muted-foreground/70">
+                  You can pause and resume anytime
+                </p>
+              </div>
             </div>
           ) : null}
         </motion.div>
