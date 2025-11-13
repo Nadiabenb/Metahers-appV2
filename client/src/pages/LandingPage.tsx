@@ -273,6 +273,16 @@ export default function LandingPage() {
               const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
               const totalExperiencesCount = spaceExperiences.length;
 
+              // Find the first experience for direct navigation (prioritize free tier, then by sortOrder)
+              const firstExperience = spaceExperiences
+                .sort((a, b) => {
+                  // Free experiences first
+                  if (a.tier === 'free' && b.tier !== 'free') return -1;
+                  if (a.tier !== 'free' && b.tier === 'free') return 1;
+                  // Then by id/creation order
+                  return a.id.localeCompare(b.id);
+                })[0];
+
               const badgeMap: Record<string, { text: string }> = {
                 "Founder's Club": { text: "12 Weeks" },
                 "App Atelier": { text: "AI-Powered" }
@@ -296,10 +306,15 @@ export default function LandingPage() {
                 space.name === "Digital Boutique" ? ShoppingCart :
                 Sparkles;
 
+              // Navigation: go to first experience, or fallback to world page if no experiences
+              const navigationHref = firstExperience 
+                ? `/experiences/${firstExperience.slug}`
+                : "/world";
+
               return (
                 <div key={space.name} className="group">
                   <Link 
-                    href="/world"
+                    href={navigationHref}
                     className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`space-card-${space.slug}`}
                   >
