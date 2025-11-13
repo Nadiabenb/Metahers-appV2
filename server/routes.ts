@@ -717,17 +717,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       // Check cache first
       const now = Date.now();
+      let experiences: any[];
+      
       if (experiencesCache && (now - experiencesCache.timestamp) < DATA_CACHE_TTL) {
-        return res.json(experiencesCache.data);
+        experiences = experiencesCache.data;
+      } else {
+        // Fetch from database with JOIN
+        experiences = await storage.getAllExperiences();
+        
+        // Update cache
+        experiencesCache = { data: experiences, timestamp: now };
       }
 
-      // Fetch from database with JOIN
-      const experiences = await storage.getAllExperiences();
+      // Check if user has Pro access
+      const userId = req.session?.userId;
+      const user = userId ? await storage.getUser(userId) : null;
+      const isProUser = user?.isPro || user?.subscriptionTier === "pro";
+
+      // Filter Pro content for non-Pro users
+      const filteredExperiences = experiences.map(exp => {
+        if (exp.tier === "pro" && !isProUser) {
+          // Redact sensitive Pro content for non-Pro users
+          return {
+            id: exp.id,
+            spaceId: exp.spaceId,
+            spaceName: exp.spaceName,
+            title: exp.title,
+            slug: exp.slug,
+            description: exp.description,
+            tier: exp.tier,
+            estimatedMinutes: exp.estimatedMinutes,
+            sortOrder: exp.sortOrder,
+            isActive: exp.isActive,
+            // Omit: content, learningObjectives, personalizationEnabled
+            _accessRestricted: true
+          };
+        }
+        return exp;
+      });
       
-      // Update cache
-      experiencesCache = { data: experiences, timestamp: now };
-      
-      res.json(experiences);
+      res.json(filteredExperiences);
     } catch (error) {
       console.error("Error fetching all experiences:", error);
       res.status(500).json({ message: "Failed to fetch experiences" });
@@ -744,6 +773,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Experience not found" });
       }
 
+      // Server-side authorization: Check if Pro experience requires Pro access
+      if (experience.tier === "pro") {
+        const userId = req.session?.userId;
+        const user = userId ? await storage.getUser(userId) : null;
+        const isProUser = user?.isPro || user?.subscriptionTier === "pro";
+        
+        if (!isProUser) {
+          // Unauthorized access to Pro content - return 403 with minimal metadata
+          return res.status(403).json({
+            id: experience.id,
+            spaceId: experience.spaceId,
+            title: experience.title,
+            slug: experience.slug,
+            description: experience.description,
+            tier: experience.tier,
+            estimatedMinutes: experience.estimatedMinutes,
+            isActive: experience.isActive,
+            // Omit: content, learningObjectives, personalizationEnabled
+            error: "pro_subscription_required",
+            message: userId 
+              ? "This experience requires a Pro subscription"
+              : "Please sign up and upgrade to Pro to access this content"
+          });
+        }
+      }
+
+      // Free experience or authorized Pro user - return full data
       res.json(experience);
     } catch (error) {
       console.error("Error fetching experience:", error);

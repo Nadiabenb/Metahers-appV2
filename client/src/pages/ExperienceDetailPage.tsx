@@ -57,8 +57,8 @@ export default function ExperienceDetailPage() {
   const isAuthenticated = !!user;
   const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
   const isPremiumExperience = experience?.tier === "pro";
-  // Free experiences require authentication (sign up), Pro experiences require Pro subscription
-  const hasAccess = isAuthenticated && (!isPremiumExperience || isProUser);
+  // Free experiences are publicly accessible, Pro experiences require Pro subscription
+  const hasAccess = !isPremiumExperience || (isAuthenticated && isProUser);
 
   if (isLoading) {
     return (
