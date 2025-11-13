@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
@@ -53,6 +53,13 @@ export default function ExperienceDetailPage() {
   const isPremiumExperience = experience?.tier === "pro";
   // Free experiences are publicly accessible, Pro experiences require Pro subscription
   const hasAccess = !isPremiumExperience || (isAuthenticated && isProUser);
+
+  // Auto-start learning player for users with access
+  useEffect(() => {
+    if (experience && hasAccess && !showLearningPlayer) {
+      setShowLearningPlayer(true);
+    }
+  }, [experience, hasAccess]);
 
   if (isLoading) {
     return (

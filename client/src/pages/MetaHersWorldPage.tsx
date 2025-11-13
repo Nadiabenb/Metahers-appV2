@@ -23,6 +23,7 @@ type Space = {
 
 type Experience = {
   id: string;
+  slug: string; // Used for URL navigation
   spaceId: string; // API returns camelCase via storage serializer
   title: string;
   tier: string;
@@ -483,7 +484,12 @@ export default function MetaHersWorldPage() {
 
                         {/* Main Card */}
                         <button
-                          onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
+                          onClick={() => {
+                            if (!isLocked && spaceExperiences.length > 0 && spaceExperiences[0].slug) {
+                              // Navigate to first experience in this space using slug
+                              setLocation(`/experiences/${spaceExperiences[0].slug}`);
+                            }
+                          }}
                           disabled={isLocked}
                           className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
                         >
