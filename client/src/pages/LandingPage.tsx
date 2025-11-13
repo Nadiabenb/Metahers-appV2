@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { Lock, ArrowRight, Star, CheckCircle2, Phone, MessageCircle, ChevronRight, Crown, Sparkles } from "lucide-react";
+import { Lock, ArrowRight, Star, CheckCircle2, Phone, MessageCircle, ChevronRight, Crown, Sparkles, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, ShoppingCart } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { SEO } from "@/components/SEO";
@@ -32,6 +32,11 @@ export default function LandingPage() {
       }
       return response.json();
     },
+  });
+
+  // Fetch all experiences to show real counts and content
+  const { data: experiences = [] } = useQuery<Array<{ id: string; slug: string; spaceId: string; title: string; tier: string }>>({
+    queryKey: ["/api/experiences/all"],
   });
 
   useEffect(() => {
@@ -263,33 +268,38 @@ export default function LandingPage() {
           {/* Editorial Grid - Compact 3-Column Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {spaces?.map((space, index) => {
-              const taglineMap: Record<string, string> = {
-                "Web3": "Decode the decentralized future",
-                "NFT/Blockchain/Crypto": "Master digital assets & blockchain",
-                "AI": "Build with artificial intelligence",
-                "Metaverse": "Navigate virtual worlds",
-                "Branding": "Craft your digital identity",
-                "Moms": "Tech mastery for modern mothers",
-                "App Atelier": "AI-assisted app building",
-                "Founder's Club": "12-week startup accelerator",
-                "Digital Boutique": "E-commerce workshop series"
-              };
+              // Get real experience data for this space
+              const spaceExperiences = experiences.filter(e => e.spaceId === space.id);
+              const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
+              const totalExperiencesCount = spaceExperiences.length;
 
               const badgeMap: Record<string, { text: string }> = {
                 "Founder's Club": { text: "12 Weeks" },
                 "App Atelier": { text: "AI-Powered" }
               };
 
-              const tagline = taglineMap[space.name] || "Explore this learning space";
               const badge = badgeMap[space.name];
 
               // Get cover image for this space
               const spaceImage = spaceImages[space.slug];
 
+              // Map space names to Lucide icons (NO EMOJIS per design guidelines)
+              const SpaceIcon = 
+                space.name === "AI" ? Bot :
+                space.name === "Web3" ? Globe :
+                space.name === "NFT/Blockchain/Crypto" ? Gem :
+                space.name === "Metaverse" ? CompassIcon :
+                space.name === "Branding" ? Palette :
+                space.name === "Moms" ? Heart :
+                space.name === "App Atelier" ? Code2 :
+                space.name === "Founder's Club" ? Crown :
+                space.name === "Digital Boutique" ? ShoppingCart :
+                Sparkles;
+
               return (
                 <div key={space.name} className="group">
                   <Link 
-                    href={`/spaces/${space.slug}`}
+                    href="/world"
                     className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`space-card-${space.slug}`}
                   >
@@ -321,16 +331,8 @@ export default function LandingPage() {
                       <div className="p-5 flex flex-col flex-1">
                         {/* Icon & Title Row */}
                         <div className="flex items-start gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center text-xl border border-primary/10 flex-shrink-0">
-                            {space.name === "AI" && "🤖"}
-                            {space.name === "Web3" && "🌐"}
-                            {space.name === "NFT/Blockchain/Crypto" && "💎"}
-                            {space.name === "Metaverse" && "🔮"}
-                            {space.name === "Branding" && "✨"}
-                            {space.name === "Moms" && "💝"}
-                            {space.name === "App Atelier" && "🎨"}
-                            {space.name === "Founder's Club" && <Crown className="w-5 h-5 text-primary" />}
-                            {space.name === "Digital Boutique" && "🛍️"}
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-primary/10 flex-shrink-0">
+                            <SpaceIcon className="w-5 h-5 text-primary" />
                           </div>
 
                           {/* Title */}
@@ -339,10 +341,21 @@ export default function LandingPage() {
                           </h3>
                         </div>
 
-                        {/* Tagline */}
+                        {/* Description */}
                         <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">
-                          {tagline}
+                          {space.description}
                         </p>
+
+                        {/* Experience Count */}
+                        <div className="flex items-center gap-2 mb-4 text-xs text-muted-foreground">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          <span>{totalExperiencesCount} transformational experiences</span>
+                          {freeExperiencesCount > 0 && (
+                            <Badge variant="outline" className="text-xs bg-primary/10 border-primary/30">
+                              {freeExperiencesCount} Free
+                            </Badge>
+                          )}
+                        </div>
 
                         {/* Footer - Minimal */}
                         <div className="flex items-center justify-between text-xs text-muted-foreground/60 group-hover:text-primary/80 transition-colors">
