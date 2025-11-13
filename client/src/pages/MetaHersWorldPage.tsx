@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
-import { Sparkles, CheckCircle2, Star, Users, TrendingUp, ArrowRight, Crown, ChevronRight } from "lucide-react";
+import { Sparkles, CheckCircle2, Star, Users, TrendingUp, ArrowRight, Crown, ChevronRight, Lock, Unlock, Zap, Target, Award, PlayCircle, BookOpen, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, Briefcase, ShoppingCart } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { spaceImages } from "@/lib/imageManifest";
 import { SEO } from "@/components/SEO";
@@ -19,6 +19,62 @@ type Space = {
   color: string;
   sortOrder: number;
   isActive: boolean;
+};
+
+type Experience = {
+  id: string;
+  spaceId: string; // API returns camelCase via storage serializer
+  title: string;
+  tier: string;
+};
+
+// Value propositions for each space
+const SPACE_VALUE_PROPS: Record<string, { outcomes: string[]; experienceCount: number; highlight: string }> = {
+  "web3": {
+    outcomes: ["Understand blockchain fundamentals", "Navigate Web3 confidently", "Build your first dApp"],
+    experienceCount: 6,
+    highlight: "Perfect Starting Point"
+  },
+  "crypto": {
+    outcomes: ["Master NFT creation & trading", "Understand cryptocurrency", "Launch digital collections"],
+    experienceCount: 12,
+    highlight: "Most Comprehensive"
+  },
+  "ai": {
+    outcomes: ["Build AI-powered workflows", "Master ChatGPT & tools", "Automate your business"],
+    experienceCount: 6,
+    highlight: "Highly Practical"
+  },
+  "metaverse": {
+    outcomes: ["Navigate virtual worlds", "Understand digital ownership", "Create metaverse presence"],
+    experienceCount: 6,
+    highlight: "Future-Ready"
+  },
+  "branding": {
+    outcomes: ["Build magnetic personal brand", "Stand out as thought leader", "Attract ideal clients"],
+    experienceCount: 6,
+    highlight: "Career Accelerator"
+  },
+  "moms": {
+    outcomes: ["Balance tech career & family", "Build flexible income", "Join supportive community"],
+    experienceCount: 6,
+    highlight: "Mom-Focused"
+  },
+  "app-atelier": {
+    outcomes: ["Build apps with AI", "No coding required", "Launch in days, not months"],
+    experienceCount: 6,
+    highlight: "No-Code Power"
+  },
+  "founders-club": {
+    outcomes: ["Turn idea into reality", "Build profitable business", "Get founder mentorship"],
+    experienceCount: 6,
+    highlight: "12-Week Accelerator"
+  },
+  "digital-sales": {
+    outcomes: ["Launch online store in 3 days", "Master Instagram Shopping", "Scale with paid ads"],
+    experienceCount: 6,
+    highlight: "Quick Launch"
+  },
 };
 
 const TESTIMONIALS = [
@@ -45,15 +101,25 @@ const TESTIMONIALS = [
 export default function MetaHersWorldPage() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
+  const [filter, setFilter] = useState<'all' | 'free' | 'pro'>('all');
   
-  const { data: spaces = [], isLoading } = useQuery<Space[]>({
+  const { data: spaces = [], isLoading: spacesLoading } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
+  });
+
+  const { data: experiences = [], isLoading: experiencesLoading } = useQuery<Experience[]>({
+    queryKey: ["/api/experiences/all"],
   });
 
   const isAuthenticated = !!user;
   const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
 
-  if (isLoading) {
+  // Calculate free vs pro counts
+  const freeSpacesCount = spaces.filter(s => s.sortOrder <= 2).length;
+  const totalSpacesCount = spaces.length;
+  const lockedSpacesCount = totalSpacesCount - freeSpacesCount;
+
+  if (spacesLoading || experiencesLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
@@ -65,6 +131,13 @@ export default function MetaHersWorldPage() {
       </div>
     );
   }
+
+  // Filter spaces based on selected filter
+  const filteredSpaces = spaces.filter(space => {
+    if (filter === 'free') return space.sortOrder <= 2;
+    if (filter === 'pro') return space.sortOrder > 2;
+    return true;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -251,132 +324,253 @@ export default function MetaHersWorldPage() {
         </div>
       </section>
 
-      {/* EIGHT LEARNING SPACES - Editorial Grid */}
+      {/* PROGRESS RIBBON - Shows access status */}
+      {!isProUser && (
+        <div className="sticky top-16 z-40 backdrop-blur-xl bg-background/80 border-b border-border/40">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Unlock className="w-5 h-5 text-primary" />
+                  <span className="font-semibold">{freeSpacesCount} Free Spaces</span>
+                </div>
+                <div className="h-4 w-px bg-border" />
+                <div className="flex items-center gap-2 text-muted-foreground">
+                  <Lock className="w-4 h-4" />
+                  <span className="text-sm">{lockedSpacesCount} PRO Spaces</span>
+                </div>
+              </div>
+              <Button 
+                size="sm" 
+                onClick={() => setLocation("/upgrade")}
+                className="gold-shimmer text-black"
+                data-testid="button-unlock-all"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Unlock All {totalSpacesCount} Spaces
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NINE LEARNING SPACES - Enhanced Editorial Grid */}
       <section className="relative py-32 px-6 lg:px-16 bg-muted/30">
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
+          {/* Section Header with Filter */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="mb-24 max-w-3xl"
+            className="mb-16"
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-primary" />
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
-                Your Meta Sanctuary
-              </span>
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
+              <div className="max-w-3xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-px w-12 bg-primary" />
+                  <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                    Choose Your Sanctuary
+                  </span>
+                </div>
+                <h2 className="editorial-headline text-5xl lg:text-7xl mb-6">
+                  Nine Learning<br />Spaces
+                </h2>
+                <p className="text-xl text-muted-foreground leading-relaxed">
+                  60 AI-guided transformational experiences to master AI, Web3, and the future
+                </p>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="flex gap-2 bg-card/50 backdrop-blur-sm border border-border/40 rounded-xl p-1">
+                {[
+                  { value: 'all', label: 'All Spaces', count: totalSpacesCount },
+                  { value: 'free', label: 'Free', count: freeSpacesCount },
+                  { value: 'pro', label: 'PRO', count: lockedSpacesCount }
+                ].map((tab) => (
+                  <button
+                    key={tab.value}
+                    onClick={() => setFilter(tab.value as typeof filter)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      filter === tab.value
+                        ? 'bg-primary text-primary-foreground shadow-lg'
+                        : 'text-muted-foreground hover:text-foreground hover-elevate'
+                    }`}
+                    data-testid={`filter-${tab.value}`}
+                  >
+                    {tab.label} ({tab.count})
+                  </button>
+                ))}
+              </div>
             </div>
-            <h2 className="editorial-headline text-6xl lg:text-7xl mb-6">
-              Eight Learning<br />Spaces
-            </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Transformational portals to master AI, Web3, and the future of technology
-            </p>
           </motion.div>
 
-          {/* Editorial Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {spaces
-              .sort((a, b) => a.sortOrder - b.sortOrder)
-              .map((space, index) => {
-                const isLocked = isAuthenticated && !isProUser && space.sortOrder > 2;
+          {/* Enhanced Space Cards Grid */}
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={filter}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {filteredSpaces
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .map((space, index) => {
+                  const isLocked = !isProUser && space.sortOrder > 2;
+                  const valueProp = SPACE_VALUE_PROPS[space.slug] || { 
+                    outcomes: ["Master core concepts", "Build practical skills", "Transform your career"], 
+                    experienceCount: 6, 
+                    highlight: "Learning Path" 
+                  };
+                  // Calculate real counts from fetched data
+                  const spaceExperiences = experiences.filter(e => e.spaceId === space.id);
+                  const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
+                  const actualExperienceCount = spaceExperiences.length;
 
-                return (
-                  <motion.div
-                    key={space.id}
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-100px" }}
-                    transition={{ duration: 0.8, delay: index * 0.1 }}
-                    className="group"
-                    data-testid={`space-card-${space.slug}`}
-                  >
-                    <button
-                      onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
-                      disabled={isLocked}
-                      className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg disabled:opacity-60 disabled:cursor-not-allowed"
+                  // Map space names to Lucide icons (NO EMOJIS per design guidelines)
+                  const SpaceIcon = 
+                    space.name === "AI" ? Bot :
+                    space.name === "Web3" ? Globe :
+                    space.name === "NFT/Blockchain/Crypto" ? Gem :
+                    space.name === "Metaverse" ? CompassIcon :
+                    space.name === "Branding" ? Palette :
+                    space.name === "Moms" ? Heart :
+                    space.name === "App Atelier" ? Code2 :
+                    space.name === "Founder's Club" ? Crown :
+                    space.name === "Digital Boutique" ? ShoppingCart :
+                    Sparkles;
+
+                  return (
+                    <motion.div
+                      key={space.id}
+                      initial={{ opacity: 0, y: 40 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.5, delay: index * 0.08 }}
+                      className="group relative"
+                      data-testid={`space-card-${space.slug}`}
                     >
-                      <div className="kinetic-glass rounded-lg overflow-hidden border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
-                        {/* Cover Image */}
-                        {spaceImages[space.slug] && (
-                          <div className="relative w-full aspect-[4/3] overflow-hidden">
-                            <img
-                              src={spaceImages[space.slug].src}
-                              alt={spaceImages[space.slug].alt}
-                              className="w-full h-full object-cover"
-                              loading="lazy"
-                            />
-                            {/* Subtle gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-card via-card/20 to-transparent" />
+                      <div className={`relative h-full ${isLocked ? 'opacity-90' : ''}`}>
+                        {/* Locked Overlay */}
+                        {isLocked && (
+                          <div className="absolute inset-0 z-10 rounded-2xl bg-gradient-to-br from-background/60 via-background/40 to-background/60 backdrop-blur-sm border-2 border-primary/30 flex items-center justify-center">
+                            <motion.div
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.3 }}
+                              className="text-center px-6"
+                            >
+                              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary/40">
+                                <Lock className="w-8 h-8 text-primary" />
+                              </div>
+                              <p className="font-semibold text-lg mb-2">PRO Access Required</p>
+                              <Button
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLocation("/upgrade");
+                                }}
+                                className="gold-shimmer text-black"
+                                data-testid={`unlock-${space.slug}`}
+                              >
+                                Unlock Space
+                              </Button>
+                            </motion.div>
                           </div>
                         )}
 
-                        {/* Card Content */}
-                        <div className="p-8 flex flex-col flex-1">
-                          {/* Lock Badge or Pro Badge */}
-                          {isLocked ? (
-                            <div className="mb-4">
-                              <Badge variant="secondary" className="text-xs font-semibold">
-                                Pro Only
-                              </Badge>
-                            </div>
-                          ) : space.name === "Founder's Club" ? (
-                            <div className="mb-4">
-                              <Badge variant="default" className="text-xs font-semibold bg-primary/20 text-primary border-primary/30">
-                                12 Weeks
-                              </Badge>
-                            </div>
-                          ) : space.name === "App Atelier" ? (
-                            <div className="mb-4">
-                              <Badge variant="default" className="text-xs font-semibold bg-purple-500/20 text-purple-300 border-purple-400/30">
-                                AI-Powered
-                              </Badge>
-                            </div>
-                          ) : null}
+                        {/* Main Card */}
+                        <button
+                          onClick={() => !isLocked && setLocation(`/spaces/${space.slug}`)}
+                          disabled={isLocked}
+                          className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
+                        >
+                          <div className="kinetic-glass rounded-2xl overflow-hidden border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
+                            {/* Header Image with Overlay Info */}
+                            {spaceImages[space.slug] && (
+                              <div className="relative w-full aspect-[4/3] overflow-hidden">
+                                <img
+                                  src={spaceImages[space.slug].src}
+                                  alt={spaceImages[space.slug].alt}
+                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                                
+                                {/* Floating Badges */}
+                                <div className="absolute top-4 left-4 flex gap-2">
+                                  {valueProp.highlight && (
+                                    <Badge className="backdrop-blur-md bg-primary/20 border-primary/40 text-white font-semibold">
+                                      {valueProp.highlight}
+                                    </Badge>
+                                  )}
+                                  {!isLocked && !experiencesLoading && freeExperiencesCount > 0 && (
+                                    <Badge className="backdrop-blur-md bg-emerald-500/20 border-emerald-400/40 text-emerald-100 font-semibold">
+                                      {freeExperiencesCount} Free
+                                    </Badge>
+                                  )}
+                                </div>
 
-                          {/* Icon & Arrow */}
-                          <div className="mb-6 flex items-center justify-between">
-                            <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center text-2xl border border-primary/10">
-                              {space.name === "AI" && "🤖"}
-                              {space.name === "Web3" && "🌐"}
-                              {space.name === "NFT/Blockchain/Crypto" && "💎"}
-                              {space.name === "Metaverse" && "🔮"}
-                              {space.name === "Branding" && "✨"}
-                              {space.name === "Moms" && "💝"}
-                              {space.name === "App Atelier" && "🎨"}
-                              {space.name === "Founder's Club" && <Crown className="w-7 h-7 text-primary" />}
-                              {space.name === "Digital Boutique" && "🛍️"}
+                                {/* Experience Count */}
+                                <div className="absolute bottom-4 right-4 backdrop-blur-md bg-background/30 rounded-lg px-3 py-1.5 border border-white/20">
+                                  <div className="flex items-center gap-2 text-white">
+                                    <BookOpen className="w-4 h-4" />
+                                    <span className="text-sm font-semibold">{actualExperienceCount} Experiences</span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Card Content */}
+                            <div className="p-6 flex flex-col flex-1">
+                              {/* Title & Icon */}
+                              <div className="flex items-start justify-between mb-4">
+                                <div className="flex-1">
+                                  <h3 className="font-serif text-2xl font-bold text-foreground group-hover:text-primary transition-colors mb-2">
+                                    {space.name}
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground line-clamp-2">
+                                    {space.description}
+                                  </p>
+                                </div>
+                                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 flex-shrink-0 ml-3">
+                                  <SpaceIcon className="w-6 h-6 text-primary" />
+                                </div>
+                              </div>
+
+                              {/* Learning Outcomes */}
+                              <div className="flex-1 mb-4">
+                                <h4 className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-3">You'll Learn:</h4>
+                                <ul className="space-y-2">
+                                  {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
+                                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                                      <span>{outcome}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {/* CTA Footer */}
+                              <div className="pt-4 border-t border-border/40">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-sm font-semibold text-primary">
+                                    {isLocked ? "Unlock to Explore" : "Start Learning"}
+                                  </span>
+                                  <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                                </div>
+                              </div>
                             </div>
-                            
-                            <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                           </div>
-
-                          {/* Title */}
-                          <h3 className="font-serif text-3xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors">
-                            {space.name}
-                          </h3>
-
-                          {/* Description */}
-                          <p className="text-muted-foreground leading-relaxed flex-1 line-clamp-2">
-                            {space.description}
-                          </p>
-
-                          {/* Footer */}
-                          <div className="mt-6 pt-4 border-t border-border/40 flex items-center justify-between text-sm text-muted-foreground">
-                            <span className="uppercase tracking-wider text-xs">
-                              {isLocked ? "Unlock with Pro" : "Explore"}
-                            </span>
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </div>
-                        </div>
+                        </button>
                       </div>
-                    </button>
-                  </motion.div>
-                );
-              })}
-          </div>
+                    </motion.div>
+                  );
+                })}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
