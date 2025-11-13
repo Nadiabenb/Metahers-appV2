@@ -7,10 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
-import PersonalizationQuestionsModal from "@/components/PersonalizationQuestionsModal";
-import InteractiveQuiz from "@/components/InteractiveQuiz";
-import DownloadableResources from "@/components/DownloadableResources";
-import AchievementShowcase from "@/components/AchievementShowcase";
 import ExperienceLearningPlayer from "@/components/learning/ExperienceLearningPlayer";
 import type { TransformationalExperienceDB } from "@shared/schema";
 import { SEO } from "@/components/SEO";
@@ -39,8 +35,6 @@ export default function ExperienceDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const [, navigate] = useLocation();
   const { user } = useAuth();
-  const [showPersonalization, setShowPersonalization] = useState(false);
-  const [personalizationCompleted, setPersonalizationCompleted] = useState(false);
   const [showLearningPlayer, setShowLearningPlayer] = useState(false);
 
   // Fetch experience data
@@ -334,9 +328,7 @@ export default function ExperienceDetailPage() {
               
               <Button
                 size="lg"
-                onClick={() => {
-                  setShowPersonalization(true);
-                }}
+                onClick={() => setShowLearningPlayer(true)}
                 className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg group"
                 data-testid="button-start-experience"
               >
@@ -348,30 +340,13 @@ export default function ExperienceDetailPage() {
         </motion.div>
       </div>
 
-      {/* Modals */}
-      {experience && (
-        <>
-          <PersonalizationQuestionsModal
-            open={showPersonalization}
-            onClose={() => setShowPersonalization(false)}
-            experienceId={experience.id}
-            experienceTitle={experience.title}
-            questions={[]}
-            onComplete={() => {
-              setPersonalizationCompleted(true);
-              setShowPersonalization(false);
-              setShowLearningPlayer(true);
-            }}
-          />
-          
-          {showLearningPlayer && (
-            <ExperienceLearningPlayer
-              experience={experience}
-              spaceColor={space?.color || "liquid-gold"}
-              onExit={() => setShowLearningPlayer(false)}
-            />
-          )}
-        </>
+      {/* Learning Player */}
+      {experience && showLearningPlayer && (
+        <ExperienceLearningPlayer
+          experience={experience}
+          spaceColor={space?.color || "liquid-gold"}
+          onExit={() => setShowLearningPlayer(false)}
+        />
       )}
     </div>
   );
