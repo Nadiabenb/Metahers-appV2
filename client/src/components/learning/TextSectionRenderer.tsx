@@ -51,8 +51,8 @@ export default function TextSectionRenderer({
           </h4>
           <div className="grid gap-3">
             {section.resources.map((resource, index) => {
-              // Convert to MetaHers blog path
-              const blogPath = `/blog`;
+              // Convert to MetaHers blog path - use specific article if blogSlug exists
+              const blogPath = resource.blogSlug ? `/blog/${resource.blogSlug}` : `/blog`;
               
               return (
                 <Link
