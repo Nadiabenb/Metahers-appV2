@@ -1,5 +1,5 @@
 // Increment version whenever code changes to force cache refresh
-const CACHE_VERSION = '1.2.0'; // Updated: 2025-11-14 - Fixed layout overlapping
+const CACHE_VERSION = '1.2.1'; // Updated: 2025-11-14 - Fixed quiz content, added real quizzes
 const CACHE_NAME = `metahers-v${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 

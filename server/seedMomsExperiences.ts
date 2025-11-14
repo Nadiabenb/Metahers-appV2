@@ -72,9 +72,62 @@ const MOMS_EXPERIENCES = [
           content: "**Plan birthday parties stress-free:**\n\n\"Help me plan a birthday party for my [age]-year-old. Theme: [theme]\n- Budget: $[amount]\n- Number of kids: [number]\n- Duration: [hours]\n\nProvide:\n1. Complete shopping list with estimated costs\n2. Timeline for the day-of\n3. Game ideas and activities\n4. Food menu (allergy-friendly options)\n5. Decoration ideas\n6. Party favor suggestions\""
         },
         {
+          id: "knowledge-check",
+          title: "AI for Moms - Knowledge Check",
+          type: "quiz",
+          content: JSON.stringify({
+            questions: [
+              {
+                question: "What's the best way to use AI as a busy mom?",
+                options: [
+                  "Use it to completely replace parenting decisions",
+                  "Use it as a tool to save time on routine tasks so you can be more present",
+                  "Only use it for work, never for family life",
+                  "Avoid it completely because it's too complicated"
+                ],
+                correctAnswer: 1,
+                explanation: "AI is most powerful when used as a time-saving assistant for routine tasks like meal planning and scheduling, freeing you to be more present with your family."
+              },
+              {
+                question: "Which of these is the BEST prompt for meal planning with AI?",
+                options: [
+                  "Give me dinner ideas",
+                  "What should I cook?",
+                  "Create a 5-day dinner plan for a family of 4, budget $200, with 2 vegetarian meals, using ingredients I can buy at Costco. Include prep time under 30 minutes.",
+                  "Help me with food"
+                ],
+                correctAnswer: 2,
+                explanation: "Specific prompts with details about family size, budget, dietary needs, and time constraints get much better results than vague questions."
+              },
+              {
+                question: "What's the smartest way to use AI for homework help?",
+                options: [
+                  "Have AI do your child's homework for them",
+                  "Use AI to explain concepts in kid-friendly ways and create practice problems",
+                  "Ignore AI completely for education",
+                  "Only use it for high school students"
+                ],
+                correctAnswer: 1,
+                explanation: "AI is excellent for explaining concepts differently and creating personalized practice materials, but kids should still do their own work to actually learn."
+              },
+              {
+                question: "How much time could AI realistically save you per week?",
+                options: [
+                  "30 seconds",
+                  "5-8 hours on meal planning, scheduling, and organizing",
+                  "AI doesn't actually save time",
+                  "50+ hours"
+                ],
+                correctAnswer: 1,
+                explanation: "Most busy moms save 5-8 hours weekly by automating meal planning (2-3 hrs), grocery lists (1-2 hrs), calendar management (1 hr), and organization tasks."
+              }
+            ]
+          })
+        },
+        {
           id: "action-plan",
           title: "Your AI Mom-Life Action Plan",
-          type: "quiz",
+          type: "interactive",
           content: "**Start using AI today:**\n\n1. Set up your free ChatGPT account\n2. Save your top 3 favorite prompts from this lesson\n3. Use AI for at least one task this week (meal planning, homework, or scheduling)\n4. Track the time you save\n5. Share what worked in the MetaHers community\n\n**Remember:** AI is your assistant, not a replacement for your parenting instincts. Use it to free up mental space so you can be more present with your family."
         }
       ]
@@ -357,7 +410,7 @@ const MOMS_EXPERIENCES = [
         {
           id: "action-plan",
           title: "Your Home Automation Action Plan",
-          type: "quiz",
+          type: "interactive",
           content: "**Start automating this week:**\n\n**Week 1: Voice Assistant Setup**\n- ✓ Set up morning routine\n- ✓ Create bedtime routine\n- ✓ Connect shopping list\n- ✓ Set up family announcements\n\n**Week 2: Meal & Shopping Automation**\n- ✓ Create first AI meal plan\n- ✓ Set up grocery delivery\n- ✓ Organize recipes digitally\n- ✓ Schedule meal prep time\n\n**Week 3: Cleaning & Maintenance**\n- ✓ Create cleaning schedule\n- ✓ Set automated reminders\n- ✓ Delegate tasks to family\n- ✓ Set up robot vacuum (if you have one)\n\n**Week 4: Family Command Center**\n- ✓ Consolidate calendars\n- ✓ Set up visual dashboard\n- ✓ Create shared to-do lists\n- ✓ Automate morning/evening reviews\n\n**Bonus: Budget Automation**\n- ✓ Choose budget app\n- ✓ Connect accounts\n- ✓ Set up auto-savings\n- ✓ Automate bill pay\n\n**Time Saved:**\n- Meal planning: 2-3 hours/week\n- Grocery shopping: 1-2 hours/week\n- Cleaning coordination: 1 hour/week\n- Calendar management: 1 hour/week\n- Budget tracking: 30 min/week\n\n**Total: 5-8 hours back in your week!**\n\nWhat will you do with your extra time?"
         }
       ]
@@ -426,7 +479,7 @@ const MOMS_EXPERIENCES = [
         {
           id: "your-system",
           title: "Build YOUR Personalized Productivity System",
-          type: "quiz",
+          type: "interactive",
           content: "**Your custom productivity system:**\n\n**Morning (15-30 min):**\n- [ ] Review today's schedule\n- [ ] Identify 3 must-do tasks\n- [ ] Check calendar/kids' needs\n- [ ] Set intention for the day\n- [ ] Power Hour (if morning person)\n\n**During Day:**\n- [ ] Work in themed blocks\n- [ ] Batch similar tasks\n- [ ] Use AI for repetitive work\n- [ ] Take actual breaks\n- [ ] Protect Power Hour\n\n**Evening (10-15 min):**\n- [ ] Review what you accomplished\n- [ ] Prep for tomorrow\n- [ ] Clear workspace\n- [ ] Plan tomorrow's top 3\n- [ ] Release the day\n\n**Weekly:**\n- [ ] Sunday planning session\n- [ ] Meal prep\n- [ ] Review calendar\n- [ ] Batch content (if needed)\n- [ ] Self-care activity\n\n**Tools You Need:**\n- AI assistant (ChatGPT)\n- Calendar (Google Calendar)\n- Task manager (Notion, Todoist, or TickTick)\n- Notes app (Notion or Evernote)\n- Voice assistant (Alexa/Google)\n- Timer (phone or Alexa)\n\n**Your Productivity Promise:**\n\n'I promise to:\n- Use AI to work smarter, not harder\n- Protect my time and energy\n- Say no to what doesn't serve me\n- Batch and automate where possible\n- Forgive myself when life happens\n- Prioritize what matters most\n- Take care of myself\n- Celebrate small wins'\n\n**Start This Week:**\n1. Do the 3-day time audit\n2. Create your first themed week\n3. Set up 3 AI automations\n4. Block your Power Hour\n5. Do one weekly planning session\n\n**Remember:** Your system should work FOR you, not create more stress. Adjust as needed. There's no perfect system - only what works for your life right now."
         }
       ]
