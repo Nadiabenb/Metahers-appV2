@@ -89,9 +89,10 @@ const recommendationCache = new Map<string, { data: Recommendation; timestamp: n
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
 // Simple in-memory cache for spaces and experiences (read-heavy, rarely changes)
+// DISABLED in development for instant updates during development
 let spacesCache: { data: any[]; timestamp: number } | null = null;
 let experiencesCache: { data: any[]; timestamp: number } | null = null;
-const DATA_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+const DATA_CACHE_TTL = process.env.NODE_ENV === 'development' ? 0 : 5 * 60 * 1000; // No cache in dev, 5 min in production
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment monitoring
@@ -204,6 +205,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     });
   }
+
+  // Admin reseed endpoint - re-runs full seeding logic
+  app.post('/api/admin/reseed', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const user = await storage.getUser(userId);
+
+      // Only allow nadia@metahers.ai to trigger re-seeding
+      if (user?.email !== "nadia@metahers.ai") {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      console.log("🔄 Manual reseed triggered by admin...");
+      
+      // Clear all caches first
+      spacesCache = null;
+      experiencesCache = null;
+      recommendationCache.clear();
+      console.log("✓ Caches cleared");
+      
+      // Import seed functions
+      const { seedSpaces } = await import("./seedSpaces");
+      const { seedExperiences } = await import("./seedExperiences");
+      
+      // Sequential seeding
+      await seedSpaces();
+      console.log("✓ Spaces reseeded (9 total)");
+      
+      await seedExperiences();
+      console.log("✓ Experiences reseeded (54 total)");
+      
+      // Verify counts
+      const spacesCount = await db.select().from(spaces);
+      const experiencesCount = await db.select().from(transformationalExperiences);
+      
+      console.log("✅ Reseed complete");
+      
+      res.json({
+        success: true,
+        message: "Database reseeded successfully",
+        stats: {
+          spaces: spacesCount.length,
+          experiences: experiencesCount.length
+        }
+      });
+    } catch (error) {
+      console.error("Error reseeding database:", error);
+      res.status(500).json({ 
+        message: "Failed to reseed database",
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
   
   // Manually populate database (admin only - use nadia@metahers.ai account)
   app.post('/api/admin/populate-db', isAuthenticated, async (req: Request, res) => {

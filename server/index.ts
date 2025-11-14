@@ -116,36 +116,35 @@ app.use((req, res, next) => {
       log(`✓ Environment: ${app.get("env")}`);
       log(`✓ Ready to accept traffic`);
 
-      // Seed database in production to ensure all 54 experiences are present
-      if (app.get("env") === "production") {
-        try {
-          // IMPORTANT: Sequential seeding to respect foreign key constraints (spaces -> experiences)
-          log("⏳ Starting database seeding...");
-          await seedSpaces();
-          log("✓ Spaces seeded (9 total)");
-          await seedExperiences();
-          log("✓ Experiences seeded (54 total)");
-          log("✅ Database seeding completed successfully");
+      // ALWAYS seed database on startup to ensure latest data
+      // This ensures production deployments pick up updated seed files
+      try {
+        // IMPORTANT: Sequential seeding to respect foreign key constraints (spaces -> experiences)
+        log("⏳ Starting database seeding...");
+        await seedSpaces();
+        log("✓ Spaces seeded (9 total)");
+        await seedExperiences();
+        log("✓ Experiences seeded (54 total)");
+        log("✅ Database seeding completed successfully");
 
-          // Verify seeding worked
-          const { db } = await import("./db");
-          const { transformationalExperiences } = await import("@shared/schema");
-          const count = await db.select().from(transformationalExperiences);
-          log(`📊 Verification: ${count.length} experiences in database`);
+        // Verify seeding worked
+        const { db } = await import("./db");
+        const { transformationalExperiences } = await import("@shared/schema");
+        const count = await db.select().from(transformationalExperiences);
+        log(`📊 Verification: ${count.length} experiences in database`);
 
-          if (count.length !== 54) {
-            log(`⚠️ WARNING: Expected 54 experiences, found ${count.length}`);
-          }
-
-          // Clear any cached data after seeding
-          log("🔄 Clearing application caches...");
-          // The cache clearing will happen automatically on first request since server just started
-
-        } catch (error) {
-          log(`❌ Database seeding failed: ${error instanceof Error ? error.message : String(error)}`);
-          console.error("Database seeding error details:", error);
-          // Non-fatal - server continues running
+        if (count.length !== 54) {
+          log(`⚠️ WARNING: Expected 54 experiences, found ${count.length}`);
         }
+
+        // Clear any cached data after seeding
+        log("🔄 Clearing application caches...");
+        // The cache clearing will happen automatically on first request since server just started
+
+      } catch (error) {
+        log(`❌ Database seeding failed: ${error instanceof Error ? error.message : String(error)}`);
+        console.error("Database seeding error details:", error);
+        // Non-fatal - server continues running
       }
     });
 
