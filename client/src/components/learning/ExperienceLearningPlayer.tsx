@@ -214,9 +214,13 @@ export default function ExperienceLearningPlayer({
         </div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 pt-8 pb-32 lg:pb-8 max-w-6xl">
-        {/* Section Navigation Map - Visual Stepper */}
-        <div className="mb-12">
+      {/* Main Content Grid - Desktop has sticky right column for progress */}
+      <div className="container mx-auto px-4 sm:px-6 pt-8 pb-32 lg:pb-8 max-w-6xl lg:grid lg:grid-cols-[1fr_280px] lg:gap-8">
+        
+        {/* Main Content Column */}
+        <div className="min-w-0">
+          {/* Section Navigation Map - Visual Stepper */}
+          <div className="mb-12">
           <div className="kinetic-glass rounded-2xl p-6 border border-border/50 bg-gradient-to-br from-card via-card to-primary/5">
             <div className="flex items-center gap-2 mb-4">
               <BookOpen className="w-4 h-4 text-primary" />
@@ -419,39 +423,17 @@ export default function ExperienceLearningPlayer({
             </div>
           </motion.div>
         </AnimatePresence>
-      </div>
+        </div>
+        {/* End Main Content Column */}
 
-      {/* AI Coaching Sidebar */}
-      <AnimatePresence>
-        {showAICoach && (
-          <AICoachingSidebar
-            experienceTitle={experience.title}
-            currentSection={currentSection}
-            onClose={() => setShowAICoach(false)}
-            spaceColor={spaceColor}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Celebration Modal - User Dismissible */}
-      <AnimatePresence>
-        {showCelebration && celebrationData && (
-          <SectionCompleteCelebration
-            sectionTitle={celebrationData.title}
-            isExperienceComplete={celebrationData.isComplete}
-            onClose={handleCelebrationClose}
-            spaceColor={spaceColor}
-          />
-        )}
-      </AnimatePresence>
-
-      {/* Floating Progress Capsule - Mobile Optimized */}
-      <motion.div
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="fixed bottom-6 right-6 z-30 hidden lg:block"
-      >
+        {/* Sticky Progress Sidebar - Desktop Only */}
+        <div className="hidden lg:block">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+            className="sticky top-24"
+          >
         <Link href="/world">
           <button 
             className="group kinetic-glass rounded-2xl p-4 border border-border/50 hover-elevate active-elevate-2 shadow-2xl shadow-black/20 backdrop-blur-xl"
@@ -509,7 +491,35 @@ export default function ExperienceLearningPlayer({
             </div>
           </button>
         </Link>
-      </motion.div>
+          </motion.div>
+        </div>
+        {/* End Sticky Progress Sidebar */}
+      </div>
+      {/* End Main Content Grid */}
+
+      {/* AI Coaching Sidebar */}
+      <AnimatePresence>
+        {showAICoach && (
+          <AICoachingSidebar
+            experienceTitle={experience.title}
+            currentSection={currentSection}
+            onClose={() => setShowAICoach(false)}
+            spaceColor={spaceColor}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Celebration Modal - User Dismissible */}
+      <AnimatePresence>
+        {showCelebration && celebrationData && (
+          <SectionCompleteCelebration
+            sectionTitle={celebrationData.title}
+            isExperienceComplete={celebrationData.isComplete}
+            onClose={handleCelebrationClose}
+            spaceColor={spaceColor}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Mobile-Optimized Progress Bar (replaces floating capsule on mobile) */}
       <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-xl border-t border-border p-4 safe-bottom">
