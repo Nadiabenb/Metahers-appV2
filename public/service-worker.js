@@ -1,10 +1,10 @@
 // Increment version whenever code changes to force cache refresh
-const CACHE_VERSION = '1.2.1'; // Updated: 2025-11-14 - Fixed quiz content, added real quizzes
+const CACHE_VERSION = '1.3.0'; // Updated: 2025-11-14 - Fixed cache strategy: network-first for HTML
 const CACHE_NAME = `metahers-v${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
+// Only cache truly static assets (not HTML)
 const STATIC_ASSETS = [
-  '/',
   '/icon-192.png',
   '/icon-512.png',
   '/manifest.json',
@@ -34,43 +34,71 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch event - network first, fallback to cache
+// Fetch event - smart caching strategy
 self.addEventListener('fetch', (event) => {
   // Skip cross-origin requests
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
 
-  // API requests - network first
-  if (event.request.url.includes('/api/')) {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // API requests - network first with cache fallback
+  if (url.pathname.startsWith('/api/')) {
     event.respondWith(
-      fetch(event.request)
+      fetch(request)
         .then((response) => {
           // Clone and cache successful GET requests
-          if (event.request.method === 'GET' && response.ok) {
+          if (request.method === 'GET' && response.ok) {
             const responseClone = response.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseClone);
+              cache.put(request, responseClone);
             });
           }
           return response;
         })
         .catch(() => {
           // Return cached version if available
-          return caches.match(event.request);
+          return caches.match(request);
         })
     );
     return;
   }
 
-  // Static assets - cache first, fallback to network
+  // HTML/Navigation requests - ALWAYS network first (critical for updates)
+  if (request.mode === 'navigate' || request.destination === 'document' || 
+      url.pathname.endsWith('.html') || url.pathname === '/') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Cache the fresh HTML for offline use
+          if (response.ok) {
+            const responseClone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cached version if offline
+          return caches.match(request).then((cachedResponse) => {
+            return cachedResponse || caches.match(OFFLINE_URL);
+          });
+        })
+    );
+    return;
+  }
+
+  // Static assets (images, fonts, CSS, JS) - cache first for performance
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+    caches.match(request).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
 
-      return fetch(event.request).then((response) => {
+      return fetch(request).then((response) => {
         // Don't cache non-successful responses
         if (!response || response.status !== 200 || response.type === 'error') {
           return response;
@@ -78,7 +106,7 @@ self.addEventListener('fetch', (event) => {
 
         const responseClone = response.clone();
         caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseClone);
+          cache.put(request, responseClone);
         });
 
         return response;
