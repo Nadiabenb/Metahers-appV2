@@ -164,7 +164,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       experiencesCache = null;
       recommendationCache.clear();
       
-      log("🔄 All caches cleared by admin");
+      console.log("🔄 All caches cleared by admin");
       
       res.json({
         success: true,
@@ -179,6 +179,137 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error("Error clearing cache:", error);
       res.status(500).json({ 
         message: "Failed to clear cache",
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
+  // Regenerate Harvard-style content for all experiences (admin only)
+  app.post('/api/admin/regenerate-content', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const user = await storage.getUser(userId);
+
+      // Only allow nadia@metahers.ai
+      if (user?.email !== "nadia@metahers.ai") {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      const batchSize = req.body.batchSize || 10;
+      console.log(`🎓 Starting content regeneration (batch size: ${batchSize})...`);
+
+      const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+      // Get experiences that need content (< 5 sections)
+      const needsUpdate = await db
+        .select()
+        .from(transformationalExperiences)
+        .where(drizzleSql`jsonb_array_length(content->'sections') < 5`)
+        .limit(batchSize);
+
+      if (needsUpdate.length === 0) {
+        return res.json({
+          success: true,
+          message: "All experiences already have comprehensive content!",
+          stats: { processed: 0, remaining: 0 }
+        });
+      }
+
+      // Get all spaces for context
+      const allSpaces = await db.select().from(spaces);
+      const spaceMap = new Map(allSpaces.map(s => [s.id, s]));
+
+      let successCount = 0;
+      let failCount = 0;
+
+      for (const exp of needsUpdate) {
+        try {
+          const space = spaceMap.get(exp.spaceId);
+          const spaceContext = space ? `${space.name}: ${space.description}` : exp.spaceId;
+          const sectionCount = exp.tier === "pro" ? 7 : 5;
+
+          const prompt = `Create a comprehensive ${sectionCount}-section learning curriculum for "${exp.title}".
+
+Context: MetaHers Mind Spa - AI learning platform for women solopreneurs
+Space: ${spaceContext}
+Description: ${exp.description}
+Objectives: ${(exp.learningObjectives as string[]).join(", ")}
+Tier: ${exp.tier.toUpperCase()} (${exp.tier === "pro" ? "7 advanced sections" : "5 foundational sections"})
+
+Create ${sectionCount} sections:
+1. Foundation (type: text) - Core concepts
+2-${sectionCount - 2}. Mix of text, interactive, quiz, hands_on_lab sections
+${sectionCount}. Final project (type: hands_on_lab)
+
+Each section needs:
+- id: kebab-case
+- title: Clear, actionable
+- type: text | interactive | quiz | hands_on_lab
+- content: 600-900 words (Harvard Business School style - research-backed, practical)
+- resources: 2-4 external resources
+
+Forbes-meets-Vogue tone: professional, empowering, practical.
+
+Return ONLY valid JSON:
+{
+  "sections": [{"id": "...", "title": "...", "type": "...", "content": "...", "resources": [...]}]
+}`;
+
+          const completion = await openai.chat.completions.create({
+            model: "gpt-4o",
+            messages: [
+              {
+                role: "system",
+                content: "Expert curriculum designer for MetaHers. Create Harvard-quality learning content for women solopreneurs. Return only valid JSON."
+              },
+              { role: "user", content: prompt }
+            ],
+            temperature: 0.7,
+            max_tokens: 4000,
+            response_format: { type: "json_object" }
+          });
+
+          const response = completion.choices[0]?.message?.content;
+          if (!response) throw new Error("No response from OpenAI");
+
+          const content = JSON.parse(response);
+
+          await db
+            .update(transformationalExperiences)
+            .set({ content, updatedAt: new Date() })
+            .where(drizzleSql`id = ${exp.id}`);
+
+          console.log(`   ✅ ${exp.title}: ${content.sections.length} sections`);
+          successCount++;
+
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Rate limiting
+
+        } catch (error) {
+          console.log(`   ❌ Failed: ${exp.title}`);
+          failCount++;
+        }
+      }
+
+      // Check remaining
+      const remaining = await db
+        .select({ count: drizzleSql<number>`count(*)` })
+        .from(transformationalExperiences)
+        .where(drizzleSql`jsonb_array_length(content->'sections') < 5`);
+
+      res.json({
+        success: true,
+        message: `Batch complete! ${successCount}/${needsUpdate.length} successful`,
+        stats: {
+          processed: successCount,
+          failed: failCount,
+          remaining: remaining[0].count
+        }
+      });
+
+    } catch (error) {
+      console.error("Error regenerating content:", error);
+      res.status(500).json({
+        message: "Failed to regenerate content",
         error: error instanceof Error ? error.message : String(error)
       });
     }
