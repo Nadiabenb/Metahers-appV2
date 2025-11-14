@@ -1524,8 +1524,7 @@ export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
 
 export async function seedExperiences() {
   try {
-    const deploymentTime = new Date().toISOString();
-    console.log(`Seeding transformational experiences... (Deployment: ${deploymentTime})`);
+    console.log("Seeding transformational experiences...");
     
     for (const experience of EXPERIENCES) {
       await db
