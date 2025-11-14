@@ -214,7 +214,7 @@ export default function ExperienceLearningPlayer({
         </div>
       </div>
 
-      <div className="container mx-auto px-4 sm:px-6 py-8 max-w-6xl">
+      <div className="container mx-auto px-4 sm:px-6 pt-8 pb-32 lg:pb-8 max-w-6xl">
         {/* Section Navigation Map - Visual Stepper */}
         <div className="mb-12">
           <div className="kinetic-glass rounded-2xl p-6 border border-border/50 bg-gradient-to-br from-card via-card to-primary/5">
