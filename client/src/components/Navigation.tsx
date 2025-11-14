@@ -34,7 +34,7 @@ export function Navigation() {
       { path: "/blog", label: "Resources", icon: BookOpen, gradient: "from-teal-500 to-cyan-600", glow: "0, 217, 255" },
     ],
     "Workspace": isAuthenticated ? [
-      { path: "/workspace", label: "Workspace", icon: Briefcase, gradient: "from-blue-500 to-indigo-600", glow: "59, 130, 246" },
+      { path: "/dashboard", label: "Dashboard", icon: Briefcase, gradient: "from-blue-500 to-indigo-600", glow: "59, 130, 246" },
       { path: "/journal", label: "Journal", icon: BookOpen, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129" },
       { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216", pro: true },
       { path: "/events", label: "Events", icon: Calendar, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },

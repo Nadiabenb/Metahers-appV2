@@ -20,6 +20,7 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
+const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const RitualsPage = lazy(() => import("@/pages/RitualsPage"));
 const RitualDetailPage = lazy(() => import("@/pages/RitualDetailPage"));
 const ShopPage = lazy(() => import("@/pages/ShopPage"));
@@ -42,14 +43,12 @@ const AIBuilderRetreatPage = lazy(() => import("@/pages/AIBuilderRetreatPage"));
 const ThoughtLeadershipPage = lazy(() => import("@/pages/ThoughtLeadershipPage"));
 const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
 const AdminQuizResultsPage = lazy(() => import("@/pages/AdminQuizResultsPage"));
-const MemberWorkspacePage = lazy(() => import("@/pages/MemberWorkspacePage"));
 const UpgradePage = lazy(() => import("@/pages/UpgradePage"));
 const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
 const CareerPathGeneratorPage = lazy(() => import("@/pages/CareerPathGeneratorPage"));
 const MetaHersWorldPage = lazy(() => import("@/pages/MetaHersWorldPage"));
 const SpaceDetailPage = lazy(() => import("@/pages/SpaceDetailPage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
-const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
 const CompanionPage = lazy(() => import("@/pages/CompanionPage"));
@@ -63,6 +62,16 @@ function LoadingFallback() {
       <BreathingLoader size="lg" />
     </div>
   );
+}
+
+function Redirect({ to }: { to: string }) {
+  const [, setLocation] = useLocation();
+  
+  useEffect(() => {
+    setLocation(to);
+  }, [to, setLocation]);
+  
+  return <LoadingFallback />;
 }
 
 function Router() {
@@ -122,16 +131,23 @@ function Router() {
         {/* Experience Detail Pages - Public */}
         <Route path="/experiences/:slug" component={ExperienceDetailPage} />
 
-        {/* Progress Dashboard - Public but enhanced for auth users */}
-        <Route path="/progress" component={ProgressDashboardPage} />
-
         {/* AI Prompt Library - Public resource */}
         <Route path="/ai-prompts" component={AIPromptLibraryPage} />
 
-        {isAuthenticated && (
+        {/* Companion - Public */}
+        <Route path="/companion" component={CompanionPage} />
+
+        {isAuthenticated ? (
           <>
-            <Route path="/home" component={HomePage} />
-            <Route path="/workspace" component={MemberWorkspacePage} />
+            {/* Main Dashboard - Unified view */}
+            <Route path="/dashboard" component={DashboardPage} />
+            
+            {/* Redirect legacy routes to dashboard */}
+            <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>
+            <Route path="/workspace">{() => <Redirect to="/dashboard" />}</Route>
+            <Route path="/progress">{() => <Redirect to="/dashboard" />}</Route>
+
+            {/* Authenticated routes */}
             <Route path="/rituals/:slug" component={RitualDetailPage} />
             <Route path="/journal" component={JournalPage} />
             <Route path="/journal/history" component={JournalHistoryPage} />
@@ -145,9 +161,15 @@ function Router() {
             <Route path="/thought-leadership" component={ThoughtLeadershipPage} />
             <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
           </>
+        ) : (
+          <>
+            {/* Public fallback for legacy routes when not authenticated */}
+            <Route path="/dashboard">{() => <Redirect to="/login" />}</Route>
+            <Route path="/home" component={HomePage} />
+            <Route path="/workspace">{() => <Redirect to="/login" />}</Route>
+            <Route path="/progress">{() => <Redirect to="/login" />}</Route>
+          </>
         )}
-        {/* Add the companion route here */}
-        <Route path="/companion" component={CompanionPage} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
