@@ -27,6 +27,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 let connectionSettings: any;
 
 async function getResendCredentials() {
+  // Fallback: Check for direct RESEND_API_KEY environment variable first
+  if (process.env.RESEND_API_KEY) {
+    return {
+      apiKey: process.env.RESEND_API_KEY,
+      fromEmail: process.env.RESEND_FROM_EMAIL || 'MetaHers Mind Spa <help@metahers.ai>'
+    };
+  }
+
+  // Try Replit connector
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
   const xReplitToken = process.env.REPL_IDENTITY 
     ? 'repl ' + process.env.REPL_IDENTITY 
