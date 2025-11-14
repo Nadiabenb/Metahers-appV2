@@ -54,6 +54,7 @@ const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
 const CompanionPage = lazy(() => import("@/pages/CompanionPage"));
 const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
 const RetreatPage = lazy(() => import("@/pages/RetreatPage"));
+const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
