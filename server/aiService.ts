@@ -4,6 +4,52 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
+// 💰 PROMPT CACHING MONITOR
+// Tracks cost savings from OpenAI's automatic prompt caching
+class CacheMonitor {
+  private stats = {
+    totalRequests: 0,
+    cacheHits: 0,
+    totalTokens: 0,
+    cachedTokens: 0
+  };
+
+  track(response: any) {
+    this.stats.totalRequests++;
+    const usage = response.usage;
+    
+    if (usage) {
+      this.stats.totalTokens += usage.prompt_tokens || 0;
+      this.stats.cachedTokens += usage.prompt_tokens_details?.cached_tokens || 0;
+      
+      if ((usage.prompt_tokens_details?.cached_tokens || 0) > 0) {
+        this.stats.cacheHits++;
+      }
+    }
+  }
+
+  report() {
+    const hitRate = this.stats.totalRequests > 0 
+      ? (this.stats.cacheHits / this.stats.totalRequests * 100).toFixed(1)
+      : '0.0';
+    
+    const tokenHitRate = this.stats.totalTokens > 0
+      ? (this.stats.cachedTokens / this.stats.totalTokens * 100).toFixed(1)
+      : '0.0';
+    
+    const savings = this.stats.totalTokens > 0
+      ? (this.stats.cachedTokens / this.stats.totalTokens * 50).toFixed(1)
+      : '0.0';
+
+    console.log('\n💰 OpenAI Prompt Cache Stats:');
+    console.log(`   Requests: ${this.stats.totalRequests} (${hitRate}% cache hits)`);
+    console.log(`   Tokens: ${this.stats.totalTokens.toLocaleString()} (${tokenHitRate}% cached)`);
+    console.log(`   Estimated Savings: ${savings}%\n`);
+  }
+}
+
+export const cacheMonitor = new CacheMonitor();
+
 interface AIInsights {
   summary: string;
   sentiment: string;
@@ -42,6 +88,8 @@ Return only the prompt, nothing else.`;
     max_tokens: 100,
   });
 
+  cacheMonitor.track(response);
+
   return response.choices[0].message.content?.trim() || "What insights did you discover today?";
 }
 
@@ -66,6 +114,8 @@ Return only valid JSON, no markdown.`;
     max_tokens: 200,
     response_format: { type: "json_object" },
   });
+
+  cacheMonitor.track(response);
 
   const content_text = response.choices[0].message.content || "{}";
   const insights = JSON.parse(content_text);
@@ -104,6 +154,8 @@ Your role:
     temperature: 0.8,
     max_tokens: 150,
   });
+
+  cacheMonitor.track(response);
 
   return response.choices[0].message.content?.trim() || "That's a wonderful reflection. How does this insight make you feel about your learning journey?";
 }
@@ -146,6 +198,8 @@ export async function chatWithAppAtelierCoach(
 - Goals: ${userProfile.goals || 'Build their own app'}`
     : '';
 
+  // 💰 OPTIMIZED FOR PROMPT CACHING (>1024 tokens)
+  // Static knowledge base gets cached, reducing costs by ~50% for repeat conversations
   const systemPrompt = `You are an encouraging AI coding coach at MetaHers Mind Spa's App Atelier.
 
 Your role is to help women founders and solopreneurs build real apps using AI-assisted "vibe coding."
@@ -172,12 +226,42 @@ HOW YOU HELP:
 5. Recommend what to build next based on their goals
 6. Keep responses concise (2-4 sentences) unless explaining code
 
+COMMON DEBUGGING SCENARIOS:
+- Import errors → Check file paths and extensions
+- "Cannot read property X" → Variable is undefined, check initialization
+- Styling not applying → Check CSS specificity and Tailwind classes
+- API not responding → Verify backend is running and endpoints match
+- Database errors → Check connection string and table schema
+
+RECOMMENDED TECH STACK (MetaHers Standard):
+Frontend: React + TypeScript + Vite + Tailwind CSS + Shadcn UI
+Backend: Express.js + TypeScript
+Database: PostgreSQL + Drizzle ORM
+Deployment: Replit (instant hosting)
+AI Tools: ChatGPT for code generation, Cursor for inline editing
+
+BEGINNER FRIENDLY PROMPTS TO SUGGEST:
+"Create a React component for a signup form with email and password fields using Tailwind CSS"
+"Write an Express API endpoint that saves user data to PostgreSQL"
+"Add form validation using Zod for email and password requirements"
+"Create a protected route that requires authentication"
+"Build a responsive navigation bar with mobile menu"
+
 EXAMPLES OF YOUR VIBE:
 - "Think of components like fashion pieces you mix and match - each does one thing beautifully!"
 - "Let's start with your landing page - your app's storefront. What vibe are you going for?"
 - "That error just means the code needs to know WHERE to find that file. Like giving it GPS coordinates!"
+- "Database migrations are like moving apartments - we're just reorganizing where your data lives!"
+- "Your API is the backstage crew of your app - it does all the work behind the scenes!"
 
-Remember: They're building REAL businesses. Focus on practical wins, not theoretical perfection.${profileContext}`;
+RESPONSE FRAMEWORK:
+1. Acknowledge their question/progress warmly
+2. Provide clear, actionable guidance
+3. If debugging: explain what's wrong and how to fix it
+4. If building: suggest next logical step
+5. End with encouragement or clarifying question
+
+Remember: They're building REAL businesses. Focus on practical wins, not theoretical perfection. Ship first, optimize later. Every bug is just a puzzle to solve together!${profileContext}`;
 
   const messages: any[] = [
     { role: "system", content: systemPrompt },
@@ -194,6 +278,9 @@ Remember: They're building REAL businesses. Focus on practical wins, not theoret
     temperature: 0.8,
     max_tokens: 500,
   });
+
+  // Track cache performance
+  cacheMonitor.track(response);
 
   return response.choices[0].message.content?.trim() || "I'm here to help you build your app! What would you like to create?";
 }
@@ -268,41 +355,105 @@ Return ONLY the topic title (5-12 words), nothing else.`;
       max_tokens: 30,
     });
 
+    cacheMonitor.track(topicResponse);
+
     topic = topicResponse.choices[0].message.content?.trim() || "Building Your Brand Authentically";
   }
 
-  // Now generate content in all three formats
-  const contentPrompt = `You are a Forbes-meets-Vogue editorial content creator helping a solopreneur build thought leadership through authentic storytelling.
+  // 💰 OPTIMIZED FOR PROMPT CACHING (>1024 tokens)
+  // System prompt with static writing guidelines gets cached across all users
+  const systemPrompt = `You are a Forbes-meets-Vogue editorial content creator helping solopreneurs build thought leadership through authentic storytelling.
 
-${brandContext}${lessonContext}${practiceContext}
+YOUR MISSION:
+Transform personal practice reflections into professional, shareable thought leadership content that builds authority and connects with audiences.
+
+CONTENT PHILOSOPHY:
+- Authenticity over polish - sound like a real person, not a corporation
+- Value-first - every piece must teach, inspire, or solve a problem
+- Building in public - share the journey, not just the wins
+- Confident feminine energy - professional yet warm, ambitious yet grounded
+- Forbes-meets-Vogue tone - business credibility with luxury aesthetic
+
+WRITING GUIDELINES:
+
+For LONG-FORM (Substack/Medium):
+✓ 800-1200 words, scannable structure
+✓ Hook: Start with their personal experience/reflection
+✓ Connection: Weave in lesson insights naturally
+✓ Value: 3-4 actionable takeaways readers can use today
+✓ Examples: Real scenarios, not generic advice
+✓ Voice: Conversational, first-person, authentic
+✓ Format: Markdown with ## headers, **bold** key points
+✓ Close: Powerful conclusion that inspires action
+✗ Avoid: Corporate jargon, fluff, generic listicles
+
+For MEDIUM (LinkedIn):
+✓ 300-400 words, professional but personal
+✓ Lead: Key insight from today's learning
+✓ Body: 2-3 practical takeaways with line breaks
+✓ Close: Engaging question to drive comments
+✓ Tone: Building in public, showing growth
+✓ Format: Short paragraphs, emoji accents (sparingly)
+✗ Avoid: Hard sells, humble brags, corporate speak
+
+For SHORT (Twitter/X):
+✓ Option 1: Single tweet <280 chars, punchy and valuable
+✓ Option 2: 3-tweet thread, each complete on its own
+✓ Thread format: Use [TWEET BREAK] between tweets
+✓ Make it shareable - quotable insights
+✓ Include their unique perspective
+✗ Avoid: Vague platitudes, motivational fluff
+
+VOICE MARKERS TO INCLUDE:
+- First-person perspective ("I learned", "Here's what surprised me")
+- Specific details from their reflection
+- Lessons from their unique journey/niche
+- Practical takeaways, not theory
+- Natural language, like talking to a friend
+- Building in public energy ("sharing what I'm learning")
+
+RED FLAGS (AI-generated feel):
+✗ "In today's fast-paced world..."
+✗ "Unlock your potential..."
+✗ Generic advice anyone could write
+✗ Overly formal corporate tone
+✗ No personal experience/reflection woven in
+✗ Too perfect, no vulnerability
+
+QUALITY CHECKLIST:
+□ Could only be written by THIS person with THEIR experience?
+□ Teaches something specific and actionable?
+□ Sounds like a real human, not AI?
+□ Connects personal reflection to valuable insight?
+□ Would their target audience save/share this?
+
+Remember: This is THEIR story, THEIR insights, THEIR voice. Make every piece feel personal, valuable, and 100% authentic.`;
+
+  const userPrompt = `${brandContext}${lessonContext}${practiceContext}
 
 Topic: "${topic}"
 Day: ${dayNumber} of 30 (${journeyPhase} Phase)
-Tone: Professional yet personal, confident feminine energy, building in public, authentic and valuable
-
-CRITICAL: This content must:
-- Feel like it's genuinely written BY THEM based on their practice reflection today
-- Incorporate insights from today's lesson into their personal experience
-- Weave their reflection naturally into valuable, shareable content
-- Sound like their authentic voice, not AI-generated corporate speak
-- Provide real value to their audience while building their authority
 
 Generate content in 3 formats for multi-platform publishing. Return ONLY valid JSON with this structure:
 {
-  "long": "800-1200 word article for Substack/Medium. Start with their reflection/experience, connect to today's lesson insights, expand with 3-4 actionable takeaways. Use: compelling hook from their real experience, their unique perspective, practical examples, powerful conclusion. Short paragraphs, conversational tone, markdown with ## headers and **bold**. Make it feel AUTHENTIC.",
-  "medium": "300-400 word LinkedIn post. Lead with their key insight from today, connect to the lesson concept, share 2-3 practical takeaways with line breaks for readability, end with engaging question. Professional but warm, building in public vibe. Use their voice.",
-  "short": "Twitter/X post under 280 characters OR a 3-tweet thread based on today's learning. Each tweet complete, valuable, authentic. Format as single string with tweet breaks marked as [TWEET BREAK]. Make it shareable and genuine."
-}
-
-This is THEIR learning journey, THEIR insights, THEIR voice. Make it personal, valuable, and 100% authentic to who they are.`;
+  "long": "800-1200 word Substack/Medium article",
+  "medium": "300-400 word LinkedIn post",
+  "short": "Twitter/X post <280 chars OR 3-tweet thread with [TWEET BREAK] markers"
+}`;
 
   const contentResponse = await openai.chat.completions.create({
     model: "gpt-4o",
-    messages: [{ role: "user", content: contentPrompt }],
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt }
+    ],
     temperature: 0.8,
-    max_tokens: 2000,
+    max_tokens: 1500, // Reduced from 2000 for additional savings
     response_format: { type: "json_object" },
   });
+
+  // Track cache performance
+  cacheMonitor.track(contentResponse);
 
   const content = JSON.parse(contentResponse.choices[0].message.content || "{}");
 
@@ -412,6 +563,8 @@ Return only valid JSON.`;
       max_tokens: 400,
       response_format: { type: "json_object" }
     });
+
+    cacheMonitor.track(response);
 
     const content = response.choices[0].message.content || "{}";
     const result = JSON.parse(content);

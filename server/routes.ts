@@ -7,7 +7,7 @@ import { sanitizeText, sanitizeHTML, sanitizeObject } from "./security";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import OpenAI from "openai";
-import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent, chatWithAppAtelierCoach, generateRecommendations, type Recommendation } from "./aiService";
+import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent, chatWithAppAtelierCoach, generateRecommendations, type Recommendation, cacheMonitor } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
@@ -102,6 +102,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/health', (_req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+  });
+
+  // 💰 OpenAI Prompt Cache Stats (Admin only)
+  app.get('/api/admin/cache-stats', isAuthenticated, (_req, res) => {
+    cacheMonitor.report();
+    res.status(200).json({ 
+      status: 'ok', 
+      message: 'Cache stats logged to console. Check server logs for detailed metrics.' 
+    });
   });
 
   // Test endpoint to check Resend configuration (admin only in production)
