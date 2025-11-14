@@ -187,7 +187,7 @@ export default function GlowUpJournalPage() {
                           Edit
                         </Button>
                       )}
-                    </div>
+                    </div>div>
 
                     {entry.gptResponse && (
                       <div>

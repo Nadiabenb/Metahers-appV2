@@ -1343,11 +1343,16 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       const recentThemes: string[] = [];
       journalEntries.slice(0, 5).forEach(entry => {
         if (entry.aiInsights) {
-          const insights = typeof entry.aiInsights === 'string' 
-            ? JSON.parse(entry.aiInsights) 
-            : entry.aiInsights;
-          if (insights && Array.isArray(insights.themes)) {
-            recentThemes.push(...insights.themes);
+          try {
+            const insights = typeof entry.aiInsights === 'string' 
+              ? JSON.parse(entry.aiInsights) 
+              : entry.aiInsights;
+            if (insights && Array.isArray(insights.themes)) {
+              recentThemes.push(...insights.themes);
+            }
+          } catch (error) {
+            // Skip invalid JSON entries
+            console.warn('Failed to parse aiInsights JSON:', error);
           }
         }
       });
