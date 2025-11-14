@@ -104,6 +104,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   });
 
+  // Test endpoint to check Resend configuration (admin only in production)
+  app.get('/api/test-resend', async (req, res) => {
+    try {
+      const credentials = await getResendCredentials();
+      
+      if (!credentials) {
+        return res.json({ 
+          status: 'not_configured',
+          message: 'Resend credentials not found',
+          hasApiKey: !!process.env.RESEND_API_KEY,
+          hasHostname: !!process.env.REPLIT_CONNECTORS_HOSTNAME,
+          hasToken: !!(process.env.REPL_IDENTITY || process.env.WEB_REPL_RENEWAL)
+        });
+      }
+
+      // Try to get a client
+      const resendClient = await getUncachableResendClient();
+      if (!resendClient) {
+        return res.json({ 
+          status: 'client_creation_failed',
+          message: 'Failed to create Resend client'
+        });
+      }
+
+      return res.json({ 
+        status: 'configured',
+        message: 'Resend is properly configured',
+        fromEmail: resendClient.fromEmail,
+        hasApiKey: !!credentials.apiKey
+      });
+    } catch (error) {
+      return res.status(500).json({ 
+        status: 'error',
+        message: error instanceof Error ? error.message : 'Unknown error',
+        error: String(error)
+      });
+    }
+  });
+
   // Setup authentication middleware
   await setupAuth(app);
 
@@ -337,7 +376,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         console.warn('Reset link (for development/testing):', resetLink);
       } else {
         try {
-          await resendClient.client.emails.send({
+          console.log(`📧 Attempting to send password reset email to: ${email}`);
+          const result = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: email,
           subject: 'Reset Your MetaHers Password',
@@ -426,11 +466,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           `,
         });
 
-          console.log(`✅ Password reset email sent to ${email}`);
+          console.log(`✅ Password reset email sent successfully to ${email}`);
+          console.log(`   Result:`, JSON.stringify(result, null, 2));
         } catch (emailError) {
-          console.error("Error sending password reset email:", emailError);
+          console.error("❌ Error sending password reset email:", emailError);
+          console.error("   Email address:", email);
+          console.error("   Full error:", JSON.stringify(emailError, null, 2));
           // Don't fail the request if email fails - token is still valid
           // User can contact support if they don't receive the email
+          console.warn('⚠️ Reset link (for recovery):', resetLink);
         }
       }
 
