@@ -1,4 +1,6 @@
-const CACHE_NAME = 'metahers-v1';
+// Increment version whenever code changes to force cache refresh
+const CACHE_VERSION = '1.2.0'; // Updated: 2025-11-14 - Fixed layout overlapping
+const CACHE_NAME = `metahers-v${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
 const STATIC_ASSETS = [
