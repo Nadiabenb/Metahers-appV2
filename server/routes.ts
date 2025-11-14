@@ -183,6 +183,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+
+  // DEV ONLY: Clear cache without authentication (for development)
+  if (process.env.NODE_ENV === 'development') {
+    app.post('/api/dev/clear-cache', async (_req: Request, res) => {
+      spacesCache = null;
+      experiencesCache = null;
+      recommendationCache.clear();
+      
+      console.log("🔄 [DEV] All caches cleared");
+      
+      res.json({
+        success: true,
+        message: "Development caches cleared",
+        cleared: {
+          spacesCache: true,
+          experiencesCache: true,
+          recommendationCache: true
+        }
+      });
+    });
+  }
   
   // Manually populate database (admin only - use nadia@metahers.ai account)
   app.post('/api/admin/populate-db', isAuthenticated, async (req: Request, res) => {
