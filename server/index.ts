@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 (async () => {
   try {
     log(`Starting server in ${app.get("env")} mode...`);
-    
+
     // Verify critical environment variables
     if (!process.env.DATABASE_URL) {
       throw new Error("DATABASE_URL is not set - database connection will fail");
@@ -106,7 +106,7 @@ app.use((req, res, next) => {
     // this serves both the API and the client.
     // It is the only port that is not firewalled.
     const port = parseInt(process.env.PORT || '5000', 10);
-    
+
     server.listen({
       port,
       host: "0.0.0.0",
@@ -115,7 +115,7 @@ app.use((req, res, next) => {
       log(`✓ Server successfully listening on 0.0.0.0:${port}`);
       log(`✓ Environment: ${app.get("env")}`);
       log(`✓ Ready to accept traffic`);
-      
+
       // Seed database in production to ensure all 54 experiences are present
       if (app.get("env") === "production") {
         try {
@@ -126,21 +126,21 @@ app.use((req, res, next) => {
           await seedExperiences();
           log("✓ Experiences seeded (54 total)");
           log("✅ Database seeding completed successfully");
-          
+
           // Verify seeding worked
           const { db } = await import("./db");
           const { transformationalExperiences } = await import("@shared/schema");
           const count = await db.select().from(transformationalExperiences);
           log(`📊 Verification: ${count.length} experiences in database`);
-          
+
           if (count.length !== 54) {
             log(`⚠️ WARNING: Expected 54 experiences, found ${count.length}`);
           }
-          
+
           // Clear any cached data after seeding
           log("🔄 Clearing application caches...");
           // The cache clearing will happen automatically on first request since server just started
-          
+
         } catch (error) {
           log(`❌ Database seeding failed: ${error instanceof Error ? error.message : String(error)}`);
           console.error("Database seeding error details:", error);
