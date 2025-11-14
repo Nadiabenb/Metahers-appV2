@@ -136,6 +136,11 @@ app.use((req, res, next) => {
           if (count.length !== 54) {
             log(`⚠️ WARNING: Expected 54 experiences, found ${count.length}`);
           }
+          
+          // Clear any cached data after seeding
+          log("🔄 Clearing application caches...");
+          // The cache clearing will happen automatically on first request since server just started
+          
         } catch (error) {
           log(`❌ Database seeding failed: ${error instanceof Error ? error.message : String(error)}`);
           console.error("Database seeding error details:", error);

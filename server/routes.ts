@@ -148,6 +148,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // ===== ADMIN ROUTES =====
   
+  // Clear all caches (admin only)
+  app.post('/api/admin/clear-cache', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const user = await storage.getUser(userId);
+
+      // Only allow nadia@metahers.ai
+      if (user?.email !== "nadia@metahers.ai") {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      // Clear all caches
+      spacesCache = null;
+      experiencesCache = null;
+      recommendationCache.clear();
+      
+      log("🔄 All caches cleared by admin");
+      
+      res.json({
+        success: true,
+        message: "All caches cleared successfully",
+        cleared: {
+          spacesCache: true,
+          experiencesCache: true,
+          recommendationCache: true
+        }
+      });
+    } catch (error) {
+      console.error("Error clearing cache:", error);
+      res.status(500).json({ 
+        message: "Failed to clear cache",
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+  
   // Manually populate database (admin only - use nadia@metahers.ai account)
   app.post('/api/admin/populate-db', isAuthenticated, async (req: Request, res) => {
     try {
