@@ -185,6 +185,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Regenerate Harvard-style content for all experiences (admin only)
+  // ⚠️ CRITICAL DATA PROTECTION: This endpoint modifies the CORE VALUE of MetaHers Mind Spa
+  // Harvard-style learning content should NEVER be removed without explicit approval
   app.post('/api/admin/regenerate-content', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
@@ -195,8 +197,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Access denied" });
       }
 
+      // 🔒 PROTECTION LAYER 1: Require explicit confirmation
+      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const expectedPhrase = `APPROVE-REGENERATE-${today}`;
+      const confirmationPhrase = req.body.confirmationPhrase;
+
+      if (confirmationPhrase !== expectedPhrase) {
+        return res.status(400).json({
+          success: false,
+          message: "Confirmation required. This operation will regenerate Harvard-style content.",
+          requiredPhrase: expectedPhrase,
+          instructions: `To proceed, send: { "confirmationPhrase": "${expectedPhrase}", "batchSize": 10 }`
+        });
+      }
+
+      console.log(`\n⚠️  CRITICAL OPERATION: Content regeneration approved by ${user.email}`);
+      console.log(`⚠️  Confirmation phrase validated: ${confirmationPhrase}`);
+
+      // 🔒 PROTECTION LAYER 2: Create backup before proceeding
+      console.log(`🔒 Creating pre-operation backup...`);
+      const { execSync } = await import('child_process');
+      try {
+        const backupOutput = execSync('tsx server/backupTransformationalContent.ts', { encoding: 'utf-8' });
+        console.log(backupOutput);
+      } catch (backupError) {
+        console.error('❌ Backup failed:', backupError);
+        return res.status(500).json({
+          success: false,
+          message: "Pre-operation backup failed. Aborting for safety.",
+          error: backupError instanceof Error ? backupError.message : String(backupError)
+        });
+      }
+
       const batchSize = req.body.batchSize || 10;
-      console.log(`🎓 Starting content regeneration (batch size: ${batchSize})...`);
+      console.log(`\n🎓 Starting content regeneration (batch size: ${batchSize})...`);
 
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -274,6 +308,22 @@ Return ONLY valid JSON:
 
           const content = JSON.parse(response);
 
+          // 🔒 PROTECTION LAYER 3: Validate section count before update
+          const minimumSections = exp.tier === "pro" ? 7 : 5;
+          const actualSections = content.sections?.length || 0;
+          
+          if (actualSections < minimumSections) {
+            console.log(`   ⚠️  VALIDATION FAILED: ${exp.title} has ${actualSections} sections (requires ${minimumSections})`);
+            console.log(`   🔒 SAFETY: Skipping update to prevent content degradation`);
+            failCount++;
+            continue; // Skip this experience, don't update
+          }
+
+          // 🔒 PROTECTION LAYER 4: Audit log before update
+          const oldSectionCount = (exp.content as any)?.sections?.length || 0;
+          console.log(`   📝 AUDIT: ${exp.title} - Updating from ${oldSectionCount} to ${actualSections} sections`);
+          console.log(`   📝 AUDIT: Modified by ${user.email} at ${new Date().toISOString()}`);
+
           await db
             .update(transformationalExperiences)
             .set({ content, updatedAt: new Date() })
@@ -337,6 +387,8 @@ Return ONLY valid JSON:
   }
   
   // Manually populate database (admin only - use nadia@metahers.ai account)
+  // ⚠️ CRITICAL WARNING: This endpoint can overwrite Harvard-style content if not careful!
+  // Only use this for initial setup or when specifically instructed
   app.post('/api/admin/populate-db', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
@@ -347,6 +399,34 @@ Return ONLY valid JSON:
         return res.status(403).json({ message: "Access denied" });
       }
 
+      // 🔒 PROTECTION: Require explicit confirmation
+      const today = new Date().toISOString().split('T')[0];
+      const expectedPhrase = `APPROVE-POPULATE-${today}`;
+      const confirmationPhrase = req.body.confirmationPhrase;
+
+      if (confirmationPhrase !== expectedPhrase) {
+        // Check if there's existing Harvard-style content
+        const existingExperiences = await db.select().from(transformationalExperiences);
+        const hasFullContent = existingExperiences.some(exp => {
+          const sections = (exp.content as any)?.sections || [];
+          return sections.length >= 5;
+        });
+
+        return res.status(400).json({
+          success: false,
+          message: hasFullContent 
+            ? "⚠️ DANGER: Database contains Harvard-style content! This operation will OVERWRITE it with minimal seed data."
+            : "Confirmation required. This will populate the database with initial seed data.",
+          warning: hasFullContent 
+            ? "You will LOSE all existing Harvard-style learning content. Consider backing up first with: tsx server/backupTransformationalContent.ts"
+            : null,
+          requiredPhrase: expectedPhrase,
+          instructions: `To proceed, send: { "confirmationPhrase": "${expectedPhrase}" }`
+        });
+      }
+
+      console.log(`\n⚠️  CRITICAL OPERATION: Database population approved by ${user.email}`);
+      console.log(`⚠️  Confirmation phrase validated: ${confirmationPhrase}`);
       console.log("🔄 Manual database population triggered by admin...");
       
       // Import seed functions

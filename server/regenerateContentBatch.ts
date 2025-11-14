@@ -2,6 +2,21 @@ import OpenAI from "openai";
 import { db } from "./db";
 import { transformationalExperiences, spaces } from "@shared/schema";
 import { eq, sql } from "drizzle-orm";
+import { execSync } from "child_process";
+
+/**
+ * ⚠️ CRITICAL DATA PROTECTION WARNING ⚠️
+ * 
+ * This script modifies Harvard-style learning content - the CORE VALUE of MetaHers Mind Spa.
+ * 
+ * BEFORE RUNNING THIS SCRIPT:
+ * 1. Create a backup: tsx server/backupTransformationalContent.ts
+ * 2. Understand that this will regenerate content using AI
+ * 3. Get explicit approval from founder (nadia@metahers.ai)
+ * 
+ * To restore from backup if something goes wrong:
+ * tsx server/restoreTransformationalContent.ts <backup-filename>
+ */
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -98,6 +113,16 @@ Return ONLY valid JSON matching this exact structure:
 async function regenerateBatch() {
   console.log(`🎓 Regenerating Harvard-style content (Batch of ${BATCH_SIZE})...\n`);
 
+  // 🔒 PROTECTION: Create pre-operation backup
+  console.log("🔒 Creating automatic backup before regeneration...");
+  try {
+    execSync("tsx server/backupTransformationalContent.ts", { encoding: "utf-8", stdio: "inherit" });
+    console.log("✅ Backup complete\n");
+  } catch (error) {
+    console.error("❌ Backup failed. Aborting for safety.");
+    throw error;
+  }
+
   // Get all spaces for context
   const allSpaces = await db.select().from(spaces);
   const spaceMap = new Map(allSpaces.map(s => [s.id, s]));
@@ -135,6 +160,17 @@ async function regenerateBatch() {
         spaceContext,
         exp.tier as "free" | "pro"
       );
+
+      // 🔒 PROTECTION: Validate section count before update
+      const minimumSections = exp.tier === "pro" ? 7 : 5;
+      const actualSections = content.sections?.length || 0;
+
+      if (actualSections < minimumSections) {
+        console.log(`   ⚠️  VALIDATION FAILED: Only ${actualSections} sections (requires ${minimumSections})`);
+        console.log(`   🔒 SAFETY: Skipping update to prevent content degradation\n`);
+        failCount++;
+        continue;
+      }
 
       await db
         .update(transformationalExperiences)
