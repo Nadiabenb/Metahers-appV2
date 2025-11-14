@@ -111,29 +111,36 @@ app.use((req, res, next) => {
       port,
       host: "0.0.0.0",
       reusePort: true,
-    }, () => {
+    }, async () => {
       log(`✓ Server successfully listening on 0.0.0.0:${port}`);
       log(`✓ Environment: ${app.get("env")}`);
       log(`✓ Ready to accept traffic`);
       
-      // Seed database asynchronously after server is ready (production-safe, idempotent)
-      // This ensures health checks pass immediately while database initializes in background
+      // Seed database in production to ensure all 54 experiences are present
       if (app.get("env") === "production") {
-        (async () => {
-          try {
-            // IMPORTANT: Sequential seeding to respect foreign key constraints (experiences -> spaces)
-            log("⏳ Starting database seeding...");
-            await seedSpaces();
-            log("✓ Spaces seeded");
-            await seedExperiences();
-            log("✓ Experiences seeded");
-            log("✅ Database seeding completed successfully");
-          } catch (error) {
-            log(`❌ Database seeding failed: ${error instanceof Error ? error.message : String(error)}`);
-            console.error("Database seeding error details:", error);
-            // Non-fatal - server continues running, admin can seed manually via /api/admin/populate-db
+        try {
+          // IMPORTANT: Sequential seeding to respect foreign key constraints (spaces -> experiences)
+          log("⏳ Starting database seeding...");
+          await seedSpaces();
+          log("✓ Spaces seeded (9 total)");
+          await seedExperiences();
+          log("✓ Experiences seeded (54 total)");
+          log("✅ Database seeding completed successfully");
+          
+          // Verify seeding worked
+          const { db } = await import("./db");
+          const { transformationalExperiences } = await import("@shared/schema");
+          const count = await db.select().from(transformationalExperiences);
+          log(`📊 Verification: ${count.length} experiences in database`);
+          
+          if (count.length !== 54) {
+            log(`⚠️ WARNING: Expected 54 experiences, found ${count.length}`);
           }
-        })();
+        } catch (error) {
+          log(`❌ Database seeding failed: ${error instanceof Error ? error.message : String(error)}`);
+          console.error("Database seeding error details:", error);
+          // Non-fatal - server continues running
+        }
       }
     });
 

@@ -146,6 +146,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication middleware
   await setupAuth(app);
 
+  // ===== ADMIN ROUTES =====
+  
+  // Manually populate database (admin only - use nadia@metahers.ai account)
+  app.post('/api/admin/populate-db', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const user = await storage.getUser(userId);
+
+      // Only allow nadia@metahers.ai to trigger re-seeding
+      if (user?.email !== "nadia@metahers.ai") {
+        return res.status(403).json({ message: "Access denied" });
+      }
+
+      console.log("🔄 Manual database population triggered by admin...");
+      
+      // Import seed functions
+      const { seedSpaces } = await import("./seedSpaces");
+      const { seedExperiences } = await import("./seedExperiences");
+      
+      // Sequential seeding
+      await seedSpaces();
+      console.log("✓ Spaces populated (9 total)");
+      
+      await seedExperiences();
+      console.log("✓ Experiences populated (54 total)");
+      
+      // Verify counts
+      const spacesCount = await db.select().from(spaces);
+      const experiencesCount = await db.select().from(transformationalExperiences);
+      
+      res.json({
+        success: true,
+        message: "Database populated successfully",
+        stats: {
+          spaces: spacesCount.length,
+          experiences: experiencesCount.length
+        }
+      });
+    } catch (error) {
+      console.error("Error populating database:", error);
+      res.status(500).json({ 
+        message: "Failed to populate database",
+        error: error instanceof Error ? error.message : String(error)
+      });
+    }
+  });
+
   // ===== AUTHROUTES =====
 
   // Signup endpoint
