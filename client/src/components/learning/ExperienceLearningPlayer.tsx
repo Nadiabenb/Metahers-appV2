@@ -163,7 +163,13 @@ export default function ExperienceLearningPlayer({
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <motion.div 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-background"
+    >
       {/* Header with Progress - Luxury Edition */}
       <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border shadow-lg shadow-primary/5">
         <div className="container mx-auto px-4 sm:px-6 py-4">
@@ -543,6 +549,6 @@ export default function ExperienceLearningPlayer({
           </Link>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

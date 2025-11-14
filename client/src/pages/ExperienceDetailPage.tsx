@@ -54,7 +54,16 @@ export default function ExperienceDetailPage() {
   // Free experiences are publicly accessible, Pro experiences require Pro subscription
   const hasAccess = !isPremiumExperience || (isAuthenticated && isProUser);
 
-  // REMOVED: Auto-start - let users click "Start" deliberately to build anticipation
+  // AUTO-LAUNCH: If user has access, automatically open the immersive workshop
+  useEffect(() => {
+    if (experience && hasAccess && !showLearningPlayer) {
+      // Small delay for smooth transition
+      const timer = setTimeout(() => {
+        setShowLearningPlayer(true);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [experience, hasAccess, showLearningPlayer]);
 
   if (isLoading) {
     return (
@@ -125,252 +134,152 @@ export default function ExperienceDetailPage() {
           "isAccessibleForFree": experience.tier === "free"
         }}
       />
-      {/* Editorial Hero Header */}
-      <div className="relative bg-muted/30 py-20 px-6 lg:px-16">
-        <div className="container mx-auto max-w-4xl">
-          {space && (
-            <Link href={`/spaces/${space.slug}`}>
-              <Button
-                variant="ghost"
-                className="mb-8 -ml-4"
-                data-testid="button-back"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to {space.name}
-              </Button>
-            </Link>
-          )}
-
+      {/* Immersive Workshop Preview - Only shown for non-authenticated users */}
+      <div className="relative min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex items-center justify-center px-6">
+        <div className="container mx-auto max-w-5xl">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
           >
-            {/* Badges */}
-            <div className="flex items-center gap-3 mb-8">
-              {isPremiumExperience ? (
-                <Badge variant="outline" className="gap-1.5 border-amber-500/30 text-amber-600 dark:text-amber-400 px-4 py-2 text-sm">
-                  <Lock className="w-3.5 h-3.5" />
-                  PRO
-                </Badge>
-              ) : (
-                <Badge className="bg-primary/20 text-primary border-primary/30 gap-1.5 px-4 py-2 text-sm font-semibold">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  FREE
-                </Badge>
-              )}
-              <Badge variant="outline" className="gap-1.5 px-4 py-2">
-                <Clock className="w-3.5 h-3.5" />
-                {experience.estimatedMinutes} minutes
+            {/* Back button - minimal */}
+            {space && (
+              <Link href={`/spaces/${space.slug}`}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="mb-8"
+                  data-testid="button-back"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  {space.name}
+                </Button>
+              </Link>
+            )}
+
+            {/* Workshop Badge */}
+            <div className="flex items-center justify-center gap-3 mb-8">
+              <Badge className="gap-2 px-6 py-3 text-base bg-gradient-to-r from-primary/20 to-primary/10 border-primary/30">
+                <Sparkles className="w-5 h-5" />
+                {isPremiumExperience ? "PRO WORKSHOP" : "FREE WORKSHOP"}
+              </Badge>
+              <Badge variant="outline" className="gap-2 px-6 py-3 text-base">
+                <Clock className="w-5 h-5" />
+                {experience.estimatedMinutes} min
               </Badge>
             </div>
 
-            {/* Eyebrow */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-primary" />
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
-                Transformational Experience
-              </span>
-            </div>
-
-            {/* Headline */}
-            <h1 className="editorial-headline text-5xl lg:text-6xl xl:text-7xl mb-6">
+            {/* Title - Larger, more impactful */}
+            <h1 className="editorial-headline text-6xl lg:text-7xl xl:text-8xl mb-8 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
               {experience.title}
             </h1>
 
             {/* Description */}
-            <p className="text-2xl text-muted-foreground leading-relaxed">
+            <p className="text-2xl lg:text-3xl text-muted-foreground leading-relaxed mb-12 max-w-3xl mx-auto">
               {experience.description}
             </p>
-          </motion.div>
-        </div>
-      </div>
+        {/* Quick preview of what they'll learn */}
+            <div className="mb-12">
+              <h3 className="text-sm uppercase tracking-widest text-muted-foreground mb-6 font-medium">
+                You'll Master
+              </h3>
+              <div className="grid gap-4 max-w-2xl mx-auto">
+                {experience.learningObjectives.slice(0, 3).map((objective, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+                    className="flex items-center gap-3 text-left"
+                  >
+                    <CheckCircle2 className="w-6 h-6 text-primary flex-shrink-0" />
+                    <span className="text-lg text-foreground/90">{objective}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto max-w-4xl px-6 lg:px-16 py-20">
-        {/* Access Gate for Pro Experiences or Unauthenticated Users */}
-        {!hasAccess && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            className="mb-20"
-          >
-            {isPremiumExperience ? (
-              // Pro Experience - Show Upgrade Gate
-              <div className="kinetic-glass rounded-2xl p-12 border border-card-border text-center">
-                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <Lock className="w-10 h-10 text-primary" />
-                </div>
-                <h3 className="font-serif text-4xl font-bold mb-4">
-                  Unlock Premium Content
-                </h3>
-                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-                  This transformational experience is part of the MetaHers Pro subscription
-                </p>
-                {isAuthenticated ? (
-                  <Link href="/upgrade">
-                    <Button
-                      size="lg"
-                      className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
-                      data-testid="button-upgrade-to-unlock"
-                    >
-                      Upgrade to Pro
-                      <Sparkles className="ml-2 w-5 h-5" />
-                    </Button>
-                  </Link>
-                ) : (
-                  <div className="flex flex-col sm:flex-row justify-center gap-4">
-                    <Link href="/signup">
-                      <Button
-                        size="lg"
-                        className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
-                        data-testid="button-signup-to-unlock"
-                      >
-                        Sign Up for Pro
-                        <Sparkles className="ml-2 w-5 h-5" />
-                      </Button>
-                    </Link>
-                    <Link href="/login">
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="px-12 py-6 text-lg"
-                        data-testid="button-login"
-                      >
-                        Log In
-                      </Button>
-                    </Link>
+            {/* Single powerful CTA */}
+            {!hasAccess && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.7, duration: 0.5 }}
+              >
+                {isPremiumExperience ? (
+                  <div className="space-y-6">
+                    {isAuthenticated ? (
+                      <Link href="/upgrade">
+                        <Button
+                          size="lg"
+                          className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-2xl hover:shadow-primary/30 px-20 py-8 text-xl font-bold"
+                          data-testid="button-upgrade-to-unlock"
+                        >
+                          <Lock className="mr-3 w-6 h-6" />
+                          Unlock PRO Workshop
+                          <Sparkles className="ml-3 w-6 h-6" />
+                        </Button>
+                      </Link>
+                    ) : (
+                      <>
+                        <Link href="/signup">
+                          <Button
+                            size="lg"
+                            className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-2xl hover:shadow-primary/30 px-20 py-8 text-xl font-bold"
+                            data-testid="button-signup-to-unlock"
+                          >
+                            <Sparkles className="mr-3 w-6 h-6" />
+                            Enter Workshop
+                            <ChevronRight className="ml-3 w-6 h-6" />
+                          </Button>
+                        </Link>
+                        <div>
+                          <Link href="/login">
+                            <Button
+                              size="lg"
+                              variant="ghost"
+                              className="text-lg"
+                              data-testid="button-login"
+                            >
+                              Already a member? Log in
+                            </Button>
+                          </Link>
+                        </div>
+                      </>
+                    )}
                   </div>
+                ) : (
+                  <>
+                    <Link href="/signup">
+                      <Button 
+                        size="lg"
+                        className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-2xl hover:shadow-primary/30 px-20 py-8 text-xl font-bold group"
+                        data-testid="button-signup-free"
+                      >
+                        <Play className="mr-3 w-6 h-6 group-hover:scale-110 transition-transform" />
+                        Enter Free Workshop
+                        <ChevronRight className="ml-3 w-6 h-6 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                    <div className="mt-6">
+                      <Link href="/login">
+                        <Button
+                          size="lg"
+                          variant="ghost"
+                          className="text-lg"
+                          data-testid="button-login-free"
+                        >
+                          Already a member? Log in
+                        </Button>
+                      </Link>
+                    </div>
+                  </>
                 )}
-              </div>
-            ) : (
-              // Free Experience - Show Sign-Up Gate
-              <div className="kinetic-glass rounded-2xl p-12 border border-card-border text-center">
-                <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                  <Sparkles className="w-10 h-10 text-primary" />
-                </div>
-                <h3 className="font-serif text-4xl font-bold mb-4">
-                  Sign Up to Start Learning
-                </h3>
-                <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-                  Create a free account to access this transformational experience - no credit card required
-                </p>
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                  <Link href="/signup">
-                    <Button 
-                      size="lg"
-                      className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
-                      data-testid="button-signup-free"
-                    >
-                      Create Free Account
-                      <Sparkles className="ml-2 w-5 h-5" />
-                    </Button>
-                  </Link>
-                  <Link href="/login">
-                    <Button size="lg" variant="outline" className="px-12 py-6 text-lg" data-testid="button-login-free">
-                      Log In
-                    </Button>
-                  </Link>
-                </div>
-              </div>
+              </motion.div>
             )}
           </motion.div>
-        )}
-
-        {/* Learning Objectives - Editorial */}
-        <div className="mb-20">
-          <div className="mb-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-px w-12 bg-primary" />
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
-                Learning Outcomes
-              </span>
-            </div>
-            <h2 className="font-serif text-5xl font-bold">What You'll Master</h2>
-          </div>
-
-          <div className="grid gap-6">
-            {experience.learningObjectives.map((objective, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1, duration: 0.6 }}
-              >
-                <div className="kinetic-glass rounded-lg p-6 border border-card-border">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <CheckCircle2 className="w-5 h-5 text-primary" />
-                    </div>
-                    <p className="text-lg text-foreground/90 leading-relaxed flex-1">
-                      {objective}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
-
-        {/* Enhanced CTA Section with Preview */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-        >
-          {hasAccess ? (
-            <div className="kinetic-glass rounded-2xl p-12 lg:p-16 border border-card-border text-center bg-gradient-to-br from-card via-card to-primary/5 relative overflow-hidden">
-              {/* Ambient glow effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
-              
-              <div className="relative z-10">
-                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 flex items-center justify-center mx-auto mb-6 border border-primary/20">
-                  <Play className="w-10 h-10 text-primary" />
-                </div>
-                
-                <h3 className="font-serif text-4xl lg:text-5xl font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
-                  Ready to Begin Your Transformation?
-                </h3>
-                
-                <p className="text-lg lg:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-                  A carefully crafted {experience.estimatedMinutes}-minute journey designed to help you master {experience.learningObjectives.length} essential skills
-                </p>
-
-                {/* Experience Preview Stats */}
-                <div className="flex flex-wrap items-center justify-center gap-6 mb-10 text-sm">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <BookOpen className="w-4 h-4 text-primary" />
-                    <span>Interactive sections with AI coaching</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <CheckCircle2 className="w-4 h-4 text-primary" />
-                    <span>Progress tracking & achievements</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Sparkles className="w-4 h-4 text-primary" />
-                    <span>Personal mentorship available</span>
-                  </div>
-                </div>
-                
-                <Button
-                  size="lg"
-                  onClick={() => setShowLearningPlayer(true)}
-                  className="gold-shimmer bg-gradient-to-r from-primary via-primary/90 to-primary hover:shadow-2xl hover:shadow-primary/30 px-16 py-7 text-lg font-semibold group transition-all duration-300"
-                  data-testid="button-start-experience"
-                >
-                  <Play className="mr-3 w-5 h-5 group-hover:scale-110 transition-transform" />
-                  Start Your Transformation
-                  <ChevronRight className="ml-3 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-
-                <p className="mt-6 text-sm text-muted-foreground/70">
-                  You can pause and resume anytime
-                </p>
-              </div>
-            </div>
-          ) : null}
-        </motion.div>
       </div>
 
       {/* Learning Player */}
