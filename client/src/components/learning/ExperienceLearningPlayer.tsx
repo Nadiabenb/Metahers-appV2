@@ -170,27 +170,27 @@ export default function ExperienceLearningPlayer({
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-background"
     >
-      {/* Header with Progress - Luxury Edition */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-xl border-b border-border shadow-lg shadow-primary/5">
-        <div className="container mx-auto px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between gap-4 mb-3">
-            <div className="flex items-center gap-3">
+      {/* Header with Progress - Replit-Quality Premium Edition */}
+      <div className="sticky top-0 z-40 bg-background/98 backdrop-blur-2xl border-b border-border/50 shadow-2xl shadow-primary/5">
+        <div className="container mx-auto px-4 sm:px-6 py-5">
+          <div className="flex items-center justify-between gap-4 mb-4">
+            <div className="flex items-center gap-4">
               {onExit && (
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={onExit}
                   data-testid="button-exit-player"
-                  className="flex-shrink-0"
+                  className="flex-shrink-0 hover-elevate"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
               )}
               <div className="min-w-0">
-                <h1 className="font-serif text-xl sm:text-2xl font-bold truncate">
+                <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold truncate bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
                   {experience.title}
                 </h1>
-                <p className="text-sm text-muted-foreground truncate">
+                <p className="text-sm text-muted-foreground truncate font-medium mt-0.5">
                   Section {currentSectionIndex + 1} of {totalSections}
                 </p>
               </div>
@@ -200,22 +200,25 @@ export default function ExperienceLearningPlayer({
               variant="outline"
               size="sm"
               onClick={() => setShowAICoach(!showAICoach)}
-              className="flex-shrink-0 gap-2"
+              className="flex-shrink-0 gap-2 px-4 hover-elevate shadow-md"
               data-testid="button-toggle-ai-coach"
             >
               <MessageCircle className="w-4 h-4" />
-              <span className="hidden sm:inline">AI Coach</span>
+              <span className="hidden sm:inline font-medium">AI Coach</span>
             </Button>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
-              <span className="font-semibold">
+              <span className="text-muted-foreground font-medium">Overall Progress</span>
+              <span className="font-bold text-foreground">
                 {completedSections.length} / {totalSections} sections
               </span>
             </div>
-            <Progress value={progressPercentage} className="h-2" />
+            <div className="relative">
+              <Progress value={progressPercentage} className="h-2.5" />
+              <div className="absolute top-0 left-0 right-0 h-2.5 rounded-full bg-gradient-to-r from-primary/20 via-primary/10 to-transparent pointer-events-none" />
+            </div>
           </div>
         </div>
       </div>
@@ -225,27 +228,34 @@ export default function ExperienceLearningPlayer({
         
         {/* Main Content Column */}
         <div className="min-w-0">
-          {/* Section Navigation Map - Visual Stepper */}
+          {/* Section Navigation Map - Replit-Quality Visual Stepper */}
           <div className="mb-12">
-          <div className="kinetic-glass rounded-2xl p-6 border border-border/50 bg-gradient-to-br from-card via-card to-primary/5">
-            <div className="flex items-center gap-2 mb-4">
-              <BookOpen className="w-4 h-4 text-primary" />
-              <h3 className="font-semibold text-sm uppercase tracking-wider text-muted-foreground">
-                Your Learning Journey
-              </h3>
+          <div className="rounded-2xl p-8 border border-border/30 bg-gradient-to-br from-card/80 via-card to-card/60 backdrop-blur-sm shadow-2xl shadow-black/5 hover-elevate">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-primary/10">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                </div>
+                <h3 className="font-semibold text-base text-foreground">
+                  Your Learning Journey
+                </h3>
+              </div>
+              <div className="text-sm text-muted-foreground font-medium">
+                {Math.round(progressPercentage)}% Complete
+              </div>
             </div>
             
             {/* Stepper - Horizontal on desktop, vertical on mobile */}
             <div className="relative">
               {/* Progress line background */}
-              <div className="absolute top-6 left-0 right-0 h-0.5 bg-border hidden sm:block" />
+              <div className="absolute top-8 left-0 right-0 h-1 bg-border/50 rounded-full hidden sm:block" />
               <div 
-                className="absolute top-6 left-0 h-0.5 bg-gradient-to-r from-primary to-primary/50 hidden sm:block transition-all duration-500"
+                className="absolute top-8 left-0 h-1 rounded-full bg-gradient-to-r from-primary via-primary to-primary/50 hidden sm:block transition-all duration-700 ease-out shadow-lg shadow-primary/20"
                 style={{ width: `${progressPercentage}%` }}
               />
               
               {/* Sections */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:justify-between relative">
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between relative">
                 {sections.map((section, index) => {
                   const isComplete = completedSections.includes(section.id);
                   const isCurrent = index === currentSectionIndex;
@@ -256,50 +266,60 @@ export default function ExperienceLearningPlayer({
                       key={section.id}
                       onClick={() => setCurrentSectionIndex(index)}
                       className={`
-                        group flex items-center gap-3 sm:flex-col sm:items-center sm:gap-2 
-                        p-3 sm:p-4 rounded-xl transition-all duration-300
-                        ${isCurrent ? 'bg-primary/10 border border-primary/30' : 'hover-elevate border border-transparent'}
-                        ${isComplete && !isCurrent ? 'opacity-60 hover:opacity-100' : ''}
+                        group flex items-center gap-4 sm:flex-col sm:items-center sm:gap-3 
+                        p-4 sm:p-0 rounded-xl sm:rounded-none transition-all duration-300
+                        ${isCurrent ? 'bg-primary/5 sm:bg-transparent' : 'hover-elevate sm:hover-elevate-0'}
+                        ${isComplete && !isCurrent ? 'opacity-70 hover:opacity-100' : ''}
                       `}
                       data-testid={`section-nav-${index}`}
                     >
-                      {/* Icon circle */}
+                      {/* Icon circle - ENHANCED */}
                       <div 
                         className={`
-                          relative flex items-center justify-center w-12 h-12 rounded-full border-2 transition-all duration-300 flex-shrink-0
-                          ${isCurrent ? 'border-primary scale-110 shadow-lg' : ''}
-                          ${isComplete && !isCurrent ? 'border-emerald-500 bg-emerald-500/10' : 'border-border bg-card'}
-                          ${!isComplete && !isCurrent ? 'group-hover:border-primary/50' : ''}
+                          relative flex items-center justify-center w-16 h-16 rounded-full border-2 transition-all duration-500 flex-shrink-0
+                          ${isCurrent ? 'scale-110' : 'scale-100 group-hover:scale-105'}
+                          ${isComplete && !isCurrent ? 'border-emerald-500/50 bg-emerald-500/10' : 'border-border/50 bg-card'}
+                          ${!isComplete && !isCurrent ? 'group-hover:border-primary/30 group-hover:bg-primary/5' : ''}
                         `}
                         style={isCurrent ? {
-                          background: `linear-gradient(135deg, hsl(${spaceColorVar} / 0.2), hsl(${spaceColorVar} / 0.05))`,
-                          borderColor: `hsl(${spaceColorVar})`,
-                          boxShadow: `0 0 20px hsl(${spaceColorVar} / 0.3)`,
+                          background: `linear-gradient(135deg, hsl(${spaceColorVar} / 0.25), hsl(${spaceColorVar} / 0.05))`,
+                          borderColor: `hsl(${spaceColorVar} / 0.6)`,
+                          boxShadow: `0 8px 32px hsl(${spaceColorVar} / 0.25), 0 0 0 4px hsl(${spaceColorVar} / 0.1)`,
                         } : {}}
                       >
+                        {/* Pulse animation for current */}
+                        {isCurrent && (
+                          <div 
+                            className="absolute inset-0 rounded-full animate-pulse"
+                            style={{
+                              background: `radial-gradient(circle, hsl(${spaceColorVar} / 0.4) 0%, transparent 70%)`,
+                            }}
+                          />
+                        )}
+                        
                         {isComplete && !isCurrent ? (
-                          <Check className="w-5 h-5 text-emerald-500" />
+                          <Check className="w-6 h-6 text-emerald-500 relative z-10" />
                         ) : (
                           <Icon 
-                            className={`w-5 h-5 ${isCurrent ? '' : 'text-muted-foreground group-hover:text-foreground'}`}
+                            className={`w-6 h-6 relative z-10 transition-transform duration-300 ${isCurrent ? 'scale-110' : 'group-hover:scale-110'} ${isCurrent ? '' : 'text-muted-foreground group-hover:text-foreground'}`}
                             style={isCurrent ? { color: `hsl(${spaceColorVar})` } : {}}
                           />
                         )}
                         
                         {/* Number badge for incomplete sections */}
                         {!isComplete && !isCurrent && (
-                          <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-bold">
+                          <div className="absolute -top-1 -right-1 w-6 h-6 rounded-full bg-muted border-2 border-background flex items-center justify-center text-xs font-bold shadow-lg">
                             {index + 1}
                           </div>
                         )}
                       </div>
                       
-                      {/* Section info */}
-                      <div className="flex-1 sm:flex-initial text-left sm:text-center min-w-0">
-                        <div className="text-xs font-medium text-muted-foreground mb-1 uppercase tracking-wide">
+                      {/* Section info - ENHANCED */}
+                      <div className="flex-1 sm:flex-initial text-left sm:text-center min-w-0 max-w-[140px]">
+                        <div className={`text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest ${isCurrent ? 'text-primary' : ''}`}>
                           Section {index + 1}
                         </div>
-                        <div className={`text-sm font-semibold truncate ${isCurrent ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                        <div className={`text-sm font-semibold leading-tight transition-colors duration-300 ${isCurrent ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'}`}>
                           {section.title}
                         </div>
                       </div>
@@ -319,88 +339,94 @@ export default function ExperienceLearningPlayer({
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Section Header - Luxury Edition with proper gradients */}
-            <div className="mb-8 relative">
-              {/* Ambient glow background */}
-              <div className="absolute -inset-x-4 -inset-y-2 bg-gradient-to-r from-transparent via-primary/5 to-transparent blur-3xl pointer-events-none" />
+            {/* Section Header - Replit-Quality Premium Design */}
+            <div className="mb-10 relative">
+              {/* Ambient glow background - ENHANCED */}
+              <div className="absolute -inset-x-8 -inset-y-4 bg-gradient-to-r from-transparent via-primary/8 to-transparent blur-3xl pointer-events-none opacity-60" />
               
-              <div className="flex items-center gap-4 mb-4 relative">
-                {/* Icon with proper gradient backplate */}
+              <div className="flex items-start gap-5 relative">
+                {/* Icon with enhanced gradient backplate */}
                 <div 
-                  className="p-4 rounded-2xl border backdrop-blur-sm relative overflow-hidden group"
+                  className="p-5 rounded-2xl border-2 backdrop-blur-md relative overflow-hidden group shadow-2xl transition-all duration-500 hover:scale-105"
                   style={{
-                    background: `linear-gradient(135deg, hsl(${spaceColorVar} / 0.15), hsl(${spaceColorVar} / 0.05))`,
-                    borderColor: `hsl(${spaceColorVar} / 0.25)`,
+                    background: `linear-gradient(135deg, hsl(${spaceColorVar} / 0.2), hsl(${spaceColorVar} / 0.08))`,
+                    borderColor: `hsl(${spaceColorVar} / 0.35)`,
+                    boxShadow: `0 8px 24px hsl(${spaceColorVar} / 0.15)`,
                   }}
                 >
-                  {/* Glow effect on hover */}
+                  {/* Animated glow effect on hover */}
                   <div 
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
-                    style={{ background: `radial-gradient(circle, hsl(${spaceColorVar} / 0.3) 0%, transparent 70%)` }}
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-2xl"
+                    style={{ background: `radial-gradient(circle at center, hsl(${spaceColorVar} / 0.4) 0%, transparent 70%)` }}
                   />
                   <SectionIcon 
-                    className="w-7 h-7 relative z-10" 
+                    className="w-8 h-8 relative z-10 transition-transform duration-500 group-hover:scale-110" 
                     style={{ color: `hsl(${spaceColorVar})` }}
                   />
                 </div>
                 
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
+                <div className="flex-1 pt-1">
+                  <div className="flex items-center gap-3 mb-3">
                     <Badge 
                       variant="outline" 
-                      className="text-xs font-medium"
+                      className="text-xs font-bold px-3 py-1"
                       style={{
-                        borderColor: `hsl(${spaceColorVar} / 0.3)`,
+                        borderColor: `hsl(${spaceColorVar} / 0.4)`,
                         color: `hsl(${spaceColorVar})`,
+                        background: `hsl(${spaceColorVar} / 0.08)`,
                       }}
                     >
                       {currentSection.type.replace(/_/g, ' ').toUpperCase()}
                     </Badge>
                     {isCurrentSectionComplete && (
-                      <Badge className="text-xs bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-500/30 text-emerald-400 gap-1.5">
-                        <Check className="w-3 h-3" />
-                        Complete
+                      <Badge className="text-xs bg-gradient-to-r from-emerald-500/20 to-teal-500/20 border-emerald-500/40 text-emerald-400 gap-1.5 px-3 py-1 shadow-lg shadow-emerald-500/10">
+                        <Check className="w-3.5 h-3.5" />
+                        Completed
                       </Badge>
                     )}
                   </div>
-                  <h2 className="font-serif text-3xl lg:text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                  <h2 className="font-serif text-3xl lg:text-5xl font-bold bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text leading-tight mb-1">
                     {currentSection.title}
                   </h2>
                 </div>
               </div>
             </div>
 
-            {/* Section Content - Luxury Card with ambient texture */}
-            <Card className="p-6 sm:p-10 mb-8 relative overflow-hidden border-border/50 shadow-xl shadow-black/5">
-              {/* Subtle spa-inspired texture overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-transparent pointer-events-none" />
+            {/* Section Content - Premium Card with enhanced design */}
+            <Card className="p-8 sm:p-12 mb-10 relative overflow-hidden border border-border/40 shadow-2xl shadow-black/10 hover-elevate transition-all duration-500">
+              {/* Multi-layer gradient texture overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.03] via-transparent to-primary/[0.01] pointer-events-none" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/[0.02] via-transparent to-transparent pointer-events-none" />
+              
               <div className="relative z-10">
                 {renderSectionContent()}
               </div>
             </Card>
 
-            {/* Navigation */}
-            <div className="flex items-center justify-between gap-4">
+            {/* Navigation - Enhanced Replit-Quality Buttons */}
+            <div className="flex items-center justify-between gap-4 flex-wrap">
               <Button
                 variant="outline"
+                size="lg"
                 onClick={goToPreviousSection}
                 disabled={currentSectionIndex === 0}
                 data-testid="button-previous-section"
-                className="gap-2"
+                className="gap-2 px-6 group"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
                 Previous
               </Button>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3 flex-wrap">
                 {!isCurrentSectionComplete && (
                   <Button
                     onClick={handleSectionComplete}
                     disabled={isUpdating}
-                    className="gap-2"
+                    size="lg"
+                    className="gap-2 px-8 shadow-lg"
                     data-testid="button-mark-complete"
                   >
-                    <Check className="w-4 h-4" />
+                    <Check className="w-5 h-5" />
                     Mark Complete
                   </Button>
                 )}
@@ -408,20 +434,22 @@ export default function ExperienceLearningPlayer({
                 {currentSectionIndex < totalSections - 1 ? (
                   <Button
                     onClick={goToNextSection}
+                    size="lg"
                     variant={isCurrentSectionComplete ? "default" : "outline"}
                     data-testid="button-next-section"
-                    className="gap-2"
+                    className="gap-2 px-8 group shadow-lg"
                   >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
+                    Next Section
+                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
                   </Button>
                 ) : allSectionsComplete && onExit ? (
                   <Button
                     onClick={onExit}
-                    className="gap-2 bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--aurora-teal))] text-white"
+                    size="lg"
+                    className="gap-3 px-10 bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--aurora-teal))] hover:shadow-2xl hover:shadow-primary/30 text-white shadow-xl transition-all duration-300"
                     data-testid="button-experience-complete"
                   >
-                    <Trophy className="w-4 h-4" />
+                    <Trophy className="w-5 h-5" />
                     Experience Complete!
                   </Button>
                 ) : null}

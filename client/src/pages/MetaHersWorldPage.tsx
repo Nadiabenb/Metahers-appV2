@@ -474,7 +474,7 @@ export default function MetaHersWorldPage() {
                           </div>
                         )}
 
-                        {/* Main Card */}
+                        {/* Main Card - REPLIT-QUALITY ENHANCED */}
                         <button
                           onClick={() => {
                             if (!isLocked && spaceExperiences.length > 0 && spaceExperiences[0].slug) {
@@ -485,17 +485,17 @@ export default function MetaHersWorldPage() {
                           disabled={isLocked}
                           className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
                         >
-                          <div className="kinetic-glass rounded-2xl overflow-hidden border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
-                            {/* Header Image with Overlay Info */}
+                          <div className="rounded-2xl overflow-hidden border border-border/40 hover-elevate active-elevate-2 transition-all duration-500 h-full flex flex-col bg-gradient-to-br from-card/95 via-card to-card/90 backdrop-blur-sm shadow-2xl shadow-black/10 group-hover:shadow-3xl group-hover:shadow-primary/10">
+                            {/* Header Image with Overlay Info - ENHANCED */}
                             {spaceImages[space.slug] && (
                               <div className="relative w-full aspect-[4/3] overflow-hidden">
                                 <img
                                   src={spaceImages[space.slug].src}
                                   alt={spaceImages[space.slug].alt}
-                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                                   loading="lazy"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-500 group-hover:from-black/80" />
                                 
                                 {/* Floating Badges */}
                                 <div className="absolute top-4 left-4 flex gap-2">
@@ -521,43 +521,50 @@ export default function MetaHersWorldPage() {
                               </div>
                             )}
 
-                            {/* Card Content */}
-                            <div className="p-6 flex flex-col flex-1">
-                              {/* Title & Icon */}
-                              <div className="flex items-start justify-between mb-4">
-                                <div className="flex-1">
-                                  <h3 className="font-serif text-2xl font-bold text-foreground group-hover:text-primary transition-colors mb-2">
-                                    {space.name}
-                                  </h3>
-                                  <p className="text-sm text-muted-foreground line-clamp-2">
-                                    {space.description}
-                                  </p>
+                            {/* Card Content - REPLIT-QUALITY ENHANCED */}
+                            <div className="p-7 flex flex-col flex-1 relative">
+                              {/* Subtle gradient overlay */}
+                              <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] to-transparent pointer-events-none" />
+                              
+                              <div className="relative z-10">
+                                {/* Title & Icon - ENHANCED */}
+                                <div className="flex items-start justify-between mb-5">
+                                  <div className="flex-1">
+                                    <h3 className="font-serif text-2xl lg:text-3xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 mb-3 leading-tight">
+                                      {space.name}
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                                      {space.description}
+                                    </p>
+                                  </div>
+                                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/20 flex-shrink-0 ml-4 shadow-lg shadow-primary/5 group-hover:shadow-xl group-hover:shadow-primary/10 group-hover:scale-105 transition-all duration-500">
+                                    <SpaceIcon className="w-7 h-7 text-primary group-hover:scale-110 transition-transform duration-500" />
+                                  </div>
                                 </div>
-                                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/10 flex-shrink-0 ml-3">
-                                  <SpaceIcon className="w-6 h-6 text-primary" />
+
+                                {/* Learning Outcomes - ENHANCED */}
+                                <div className="flex-1 mb-5">
+                                  <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-4">You'll Master:</h4>
+                                  <ul className="space-y-2.5">
+                                    {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
+                                      <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/90 group/item">
+                                        <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform duration-300" />
+                                        <span className="leading-snug">{outcome}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
                                 </div>
-                              </div>
 
-                              {/* Learning Outcomes */}
-                              <div className="flex-1 mb-4">
-                                <h4 className="text-xs uppercase tracking-wider text-muted-foreground font-semibold mb-3">You'll Learn:</h4>
-                                <ul className="space-y-2">
-                                  {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
-                                      <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                                      <span>{outcome}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* CTA Footer */}
-                              <div className="pt-4 border-t border-border/40">
-                                <div className="flex items-center justify-between">
-                                  <span className="text-sm font-semibold text-primary">
-                                    {isLocked ? "Unlock to Explore" : "Start Learning"}
-                                  </span>
-                                  <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                                {/* CTA Footer - ENHANCED */}
+                                <div className="pt-5 border-t border-border/50">
+                                  <div className="flex items-center justify-between group/cta">
+                                    <span className="text-sm font-bold text-primary group-hover/cta:tracking-wide transition-all duration-300">
+                                      {isLocked ? "Unlock to Explore" : "Start Learning"}
+                                    </span>
+                                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
+                                      <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                             </div>
