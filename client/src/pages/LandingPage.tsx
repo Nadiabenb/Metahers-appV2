@@ -14,6 +14,7 @@ import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
+import { SpaceCardSkeleton } from "@/components/LoadingSkeleton";
 
 
 export default function LandingPage() {
@@ -23,7 +24,7 @@ export default function LandingPage() {
 
   // Simplified - remove heavy parallax animations for better performance
 
-  const { data: spaces } = useQuery<SpaceDB[]>({
+  const { data: spaces, isLoading: spacesLoading } = useQuery<SpaceDB[]>({
     queryKey: ["spaces"],
     queryFn: async () => {
       const response = await fetch("/api/spaces");
@@ -35,7 +36,7 @@ export default function LandingPage() {
   });
 
   // Fetch all experiences to show real counts and content
-  const { data: experiences = [] } = useQuery<Array<{ id: string; slug: string; spaceId: string; title: string; tier: string }>>({
+  const { data: experiences = [], isLoading: experiencesLoading } = useQuery<Array<{ id: string; slug: string; spaceId: string; title: string; tier: string }>>({
     queryKey: ["/api/experiences/all"],
   });
 
@@ -267,7 +268,16 @@ export default function LandingPage() {
 
           {/* Editorial Grid - Compact 3-Column Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {spaces?.map((space, index) => {
+            {spacesLoading || experiencesLoading ? (
+              <>
+                <SpaceCardSkeleton />
+                <SpaceCardSkeleton />
+                <SpaceCardSkeleton />
+                <SpaceCardSkeleton />
+                <SpaceCardSkeleton />
+                <SpaceCardSkeleton />
+              </>
+            ) : spaces?.map((space, index) => {
               // Get real experience data for this space
               const spaceExperiences = experiences.filter(e => e.spaceId === space.id);
               const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
@@ -382,7 +392,8 @@ export default function LandingPage() {
                   </Link>
                 </div>
               );
-            })}
+            })
+            }
           </div>
         </div>
       </div>
