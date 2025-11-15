@@ -49,33 +49,41 @@ Custom email/password authentication uses bcrypt for password hashing and databa
 All user and application data, including `users`, `ritual_progress`, `journal_entries`, `achievements`, `subscriptions`, `thought_leadership_posts`, `thought_leadership_progress`, `spaces`, `transformational_experiences`, `experience_progress`, and `personalization_responses`, is persisted in a PostgreSQL database using Drizzle ORM. Zod is employed for client-side validation.
 
 ### 🔒 CRITICAL DATA PROTECTION SYSTEM
-**The Harvard-style learning content in `transformational_experiences` is the CORE VALUE of MetaHers Mind Spa and is protected by a 5-layer safeguard system:**
+**The Harvard-style learning content in `transformational_experiences` is the CORE VALUE of MetaHers Mind Spa and is protected by a 6-layer safeguard system:**
 
 **⚠️ ABSOLUTE RULE: NEVER remove or modify this content without explicit user approval and big warning.**
 
+**🛡️ FIXED (2025-11-15): Changed `seedExperiences()` from `onConflictDoUpdate` → `onConflictDoNothing` to prevent auto-overwrite on server restart.**
+
 #### Protection Layers:
 
-1. **Admin Confirmation Required**
+1. **Auto-Seeding Protection (NEW FIX)**
+   - `seedExperiences()` now uses `onConflictDoNothing` instead of `onConflictDoUpdate`
+   - Server restarts NO LONGER overwrite existing content
+   - Only inserts if experience doesn't exist, preserves all existing data
+   - This was the ROOT CAUSE of the 2025-11-15 content loss incident
+
+2. **Admin Confirmation Required**
    - `/api/admin/regenerate-content` requires date-based confirmation phrase: `APPROVE-REGENERATE-YYYY-MM-DD`
    - `/api/admin/populate-db` requires confirmation phrase: `APPROVE-POPULATE-YYYY-MM-DD`
    - Both endpoints detect existing Harvard-style content and warn before proceeding
 
-2. **Pre-Operation Backup**
+3. **Pre-Operation Backup**
    - Automatic backup created before any content regeneration
    - Backups stored in `/backups` directory with timestamps
    - 30-day retention policy (auto-cleanup of older backups)
 
-3. **Section Count Validation**
+4. **Section Count Validation**
    - Rejects updates that reduce sections below minimum (5 for free tier, 7 for pro tier)
    - Skips invalid AI responses to prevent content degradation
    - Validation happens before database write
 
-4. **Audit Logging**
+5. **Audit Logging**
    - All content modifications logged with timestamp, user, before/after counts
    - Console logs track who approved what operations and when
    - Provides accountability trail for all changes
 
-5. **Backup & Restore Scripts**
+6. **Backup & Restore Scripts**
    - `tsx server/backupTransformationalContent.ts` - Manual backup (630KB for 65 experiences)
    - `tsx server/restoreTransformationalContent.ts <filename>` - Restore from backup
    - All 65 experiences, 430 sections (avg 6.62 per experience) are backed up

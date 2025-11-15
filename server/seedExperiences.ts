@@ -1526,31 +1526,23 @@ export async function seedExperiences() {
   try {
     console.log("Seeding transformational experiences...");
     
+    // ⚠️  CRITICAL CHANGE: Use onConflictDoNothing to PRESERVE existing Harvard-style content
+    // This prevents overwriting curated learning content on every server restart
     for (const experience of EXPERIENCES) {
       await db
         .insert(transformationalExperiences)
         .values(experience)
-        .onConflictDoUpdate({
+        .onConflictDoNothing({
           target: transformationalExperiences.id,
-          set: {
-            title: experience.title,
-            description: experience.description,
-            learningObjectives: experience.learningObjectives,
-            tier: experience.tier,
-            estimatedMinutes: experience.estimatedMinutes,
-            sortOrder: experience.sortOrder,
-            content: experience.content,
-            personalizationEnabled: experience.personalizationEnabled,
-            updatedAt: sql`now()`,
-          },
         });
       
-      console.log(`✓ Seeded experience: ${experience.title} (${experience.tier})`);
+      console.log(`✓ Checked experience: ${experience.title} (${experience.tier})`);
     }
     
-    console.log(`✓ All ${EXPERIENCES.length} transformational experiences seeded successfully!`);
+    console.log(`✓ All ${EXPERIENCES.length} transformational experiences checked!`);
     console.log(`  - ${EXPERIENCES.filter(e => e.tier === 'free').length} FREE lead magnets`);
     console.log(`  - ${EXPERIENCES.filter(e => e.tier === 'pro').length} PRO experiences`);
+    console.log(`⚠️  Note: Existing content is PRESERVED. Use /api/admin/populate-db to force refresh.`);
   } catch (error) {
     console.error("Error seeding experiences:", error);
     throw error;
