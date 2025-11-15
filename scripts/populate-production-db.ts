@@ -1,8 +1,5 @@
 import { neon } from '@neondatabase/serverless';
 import { EXPERIENCES } from '../server/seedExperiences';
-// Import MOMS_EXPERIENCES here
-import { MOMS_EXPERIENCES } from '../server/seedMomsExperiences';
-
 
 // This script populates the production database with spaces and experiences
 // Run this ONCE after deploying to production to fix empty database
@@ -142,61 +139,41 @@ async function populateProductionDB() {
     }
 
     // Insert experiences from the full seed data
-    console.log('\n📚 Step 2: Populating Transformational Experiences...');
-    let successCount = 0;
-    let errorCount = 0;
-
-    // Combine all experiences from both seed files
-    const allExperiences = [...EXPERIENCES, ...MOMS_EXPERIENCES];
-
-    for (const exp of allExperiences) {
-      try {
-        await sql`
-          INSERT INTO transformational_experiences (
-            id, space_id, title, slug, description, learning_objectives, 
-            tier, estimated_minutes, sort_order, content, personalization_enabled, is_active
-          )
-          VALUES (
-            ${exp.id}, ${exp.spaceId}, ${exp.title}, ${exp.slug}, ${exp.description}, 
-            ${JSON.stringify(exp.learningObjectives)}, ${exp.tier}, ${exp.estimatedMinutes}, 
-            ${exp.sortOrder}, ${JSON.stringify(exp.content)}, ${exp.personalizationEnabled}, true
-          )
-          ON CONFLICT (id) DO UPDATE SET
-            space_id = EXCLUDED.space_id,
-            title = EXCLUDED.title,
-            slug = EXCLUDED.slug,
-            description = EXCLUDED.description,
-            learning_objectives = EXCLUDED.learning_objectives,
-            tier = EXCLUDED.tier,
-            estimated_minutes = EXCLUDED.estimated_minutes,
-            sort_order = EXCLUDED.sort_order,
-            content = EXCLUDED.content,
-            personalization_enabled = EXCLUDED.personalization_enabled,
-            is_active = EXCLUDED.is_active,
-            updated_at = NOW()
-        `;
-        console.log(`✓ Inserted experience: ${exp.title}`);
-        successCount++;
-      } catch (error) {
-        console.error(`❌ ERROR inserting experience ${exp.title}:`, error);
-        errorCount++;
-      }
+    console.log('\nInserting transformational experiences...');
+    for (const exp of EXPERIENCES) {
+      await sql`
+        INSERT INTO transformational_experiences (
+          id, space_id, title, slug, description, learning_objectives, 
+          tier, estimated_minutes, sort_order, content, personalization_enabled, is_active
+        )
+        VALUES (
+          ${exp.id}, ${exp.spaceId}, ${exp.title}, ${exp.slug}, ${exp.description}, 
+          ${JSON.stringify(exp.learningObjectives)}, ${exp.tier}, ${exp.estimatedMinutes}, 
+          ${exp.sortOrder}, ${JSON.stringify(exp.content)}, ${exp.personalizationEnabled}, true
+        )
+        ON CONFLICT (id) DO UPDATE SET
+          space_id = EXCLUDED.space_id,
+          title = EXCLUDED.title,
+          slug = EXCLUDED.slug,
+          description = EXCLUDED.description,
+          learning_objectives = EXCLUDED.learning_objectives,
+          tier = EXCLUDED.tier,
+          estimated_minutes = EXCLUDED.estimated_minutes,
+          sort_order = EXCLUDED.sort_order,
+          content = EXCLUDED.content,
+          personalization_enabled = EXCLUDED.personalization_enabled,
+          is_active = EXCLUDED.is_active,
+          updated_at = NOW()
+      `;
+      console.log(`✓ Inserted experience: ${exp.title}`);
     }
 
-    const allExperiencesStats = [...EXPERIENCES, ...MOMS_EXPERIENCES];
-
-    console.log('\n✅ DATABASE POPULATION COMPLETE!');
-    console.log('━'.repeat(60));
-    console.log(`📍 Spaces: ${spaces.length} total`);
-    console.log(`📚 Experiences: ${successCount} inserted successfully`);
-    console.log(`   ├─ FREE: ${allExperiencesStats.filter(e => e.tier === 'free').length}`);
-    console.log(`   └─ PRO: ${allExperiencesStats.filter(e => e.tier === 'pro').length}`);
+    console.log('\n✅ SUCCESS! Production database populated with:');
+    console.log(`   - ${spaces.length} spaces`);
+    console.log(`   - ${EXPERIENCES.length} transformational experiences`);
+    console.log(`   - ${EXPERIENCES.filter(e => e.tier === 'free').length} FREE experiences`);
+    console.log(`   - ${EXPERIENCES.filter(e => e.tier === 'pro').length} PRO experiences`);
     console.log('\nYour production app should now work correctly!');
-
-    if (errorCount > 0) {
-      console.error(`\n⚠️ WARNING: ${errorCount} experiences failed to insert.`);
-      process.exit(1);
-    }
 
   } catch (error) {
     console.error('❌ ERROR populating database:', error);
