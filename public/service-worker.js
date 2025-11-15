@@ -1,10 +1,11 @@
 // Increment version whenever code changes to force cache refresh
-const CACHE_VERSION = '1.3.0'; // Updated: 2025-11-14 - Fixed cache strategy: network-first for HTML
+const CACHE_VERSION = '1.3.1'; // Updated: 2025-11-14 - Added apple-touch-icon to cache
 const CACHE_NAME = `metahers-v${CACHE_VERSION}`;
 const OFFLINE_URL = '/';
 
 // Only cache truly static assets (not HTML)
 const STATIC_ASSETS = [
+  '/apple-touch-icon.png',
   '/icon-192.png',
   '/icon-512.png',
   '/manifest.json',
