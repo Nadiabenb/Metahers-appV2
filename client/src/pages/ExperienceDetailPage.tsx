@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, useLocation } from "wouter";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Lock, CheckCircle2, Clock, BookOpen, Sparkles, Play, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -10,6 +10,7 @@ import { useAuth } from "@/hooks/useAuth";
 import ExperienceLearningPlayer from "@/components/learning/ExperienceLearningPlayer";
 import type { TransformationalExperienceDB } from "@shared/schema";
 import { SEO } from "@/components/SEO";
+import { ExperienceDetailSkeleton } from "@/components/LoadingSkeleton";
 
 type Experience = {
   id: string;
@@ -66,14 +67,7 @@ export default function ExperienceDetailPage() {
   }, [experience, hasAccess, showLearningPlayer]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading experience...</p>
-        </div>
-      </div>
-    );
+    return <ExperienceDetailSkeleton />;
   }
 
   if (error || !experience) {
@@ -106,7 +100,13 @@ export default function ExperienceDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="min-h-screen bg-background"
+    >
       <SEO
         title={`${experience.title} - ${space?.name || 'Learning'} Experience`}
         description={experience.description}
@@ -134,8 +134,23 @@ export default function ExperienceDetailPage() {
           "isAccessibleForFree": experience.tier === "free"
         }}
       />
-      {/* Immersive Workshop Preview - Only shown for non-authenticated users */}
-      <div className="relative min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex items-center justify-center px-6">
+      
+      <AnimatePresence mode="wait">
+        {showLearningPlayer && hasAccess ? (
+          <ExperienceLearningPlayer 
+            experience={experience} 
+            spaceColor={space?.color || "liquid-gold"}
+            onExit={() => setShowLearningPlayer(false)} 
+          />
+        ) : (
+          <motion.div
+            key="preview"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="relative min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex items-center justify-center px-6"
+          >
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -280,16 +295,9 @@ export default function ExperienceDetailPage() {
             )}
           </motion.div>
         </div>
-      </div>
-
-      {/* Learning Player */}
-      {experience && showLearningPlayer && (
-        <ExperienceLearningPlayer
-          experience={experience}
-          spaceColor={space?.color || "liquid-gold"}
-          onExit={() => setShowLearningPlayer(false)}
-        />
-      )}
-    </div>
+      </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
