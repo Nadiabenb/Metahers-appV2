@@ -137,11 +137,19 @@ export default function ExperienceDetailPage() {
       
       <AnimatePresence mode="wait">
         {showLearningPlayer && hasAccess ? (
-          <ExperienceLearningPlayer 
-            experience={experience} 
-            spaceColor={space?.color || "liquid-gold"}
-            onExit={() => setShowLearningPlayer(false)} 
-          />
+          <motion.div
+            key="player"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <ExperienceLearningPlayer 
+              experience={experience} 
+              spaceColor={space?.color || "liquid-gold"}
+              onExit={() => setShowLearningPlayer(false)} 
+            />
+          </motion.div>
         ) : (
           <motion.div
             key="preview"

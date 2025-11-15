@@ -1,13 +1,20 @@
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Skeleton } from "@/components/ui/skeleton";
 
-// Repl it-quality skeleton loading states with MetaHers luxury aesthetic
+// Replit-quality skeleton loading states with MetaHers luxury aesthetic
 
 export function ExperienceCardSkeleton() {
+  const prefersReducedMotion = useReducedMotion();
+  
+  const Wrapper = prefersReducedMotion ? "div" : motion.div;
+  const animationProps = prefersReducedMotion ? {} : {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 }
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <Wrapper
+      {...animationProps}
       className="rounded-lg border border-border bg-card p-6 space-y-4"
     >
       <div className="flex items-center justify-between">
@@ -22,15 +29,22 @@ export function ExperienceCardSkeleton() {
         <Skeleton className="h-4 w-4/6" />
       </div>
       <Skeleton className="h-10 w-full" />
-    </motion.div>
+    </Wrapper>
   );
 }
 
 export function SpaceCardSkeleton() {
+  const prefersReducedMotion = useReducedMotion();
+  
+  const Wrapper = prefersReducedMotion ? "div" : motion.div;
+  const animationProps = prefersReducedMotion ? {} : {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 }
+  };
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+    <Wrapper
+      {...animationProps}
       className="rounded-xl border border-border bg-card overflow-hidden"
     >
       <Skeleton className="h-48 w-full" />
@@ -46,7 +60,7 @@ export function SpaceCardSkeleton() {
         </div>
         <Skeleton className="h-11 w-full" />
       </div>
-    </motion.div>
+    </Wrapper>
   );
 }
 
