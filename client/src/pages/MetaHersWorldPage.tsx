@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { spaceImages } from "@/lib/imageManifest";
 import { SEO } from "@/components/SEO";
+import { WorldPageSkeleton } from "@/components/LoadingSkeleton";
 
 type Space = {
   id: string;
@@ -121,16 +122,7 @@ export default function MetaHersWorldPage() {
   const lockedSpacesCount = totalSpacesCount - freeSpacesCount;
 
   if (spacesLoading || experiencesLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="text-2xl font-serif mb-4 text-muted-foreground">
-            Loading your sanctuary...
-          </div>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
-        </div>
-      </div>
-    );
+    return <WorldPageSkeleton />;
   }
 
   // Filter spaces based on selected filter

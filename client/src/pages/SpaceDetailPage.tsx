@@ -11,6 +11,7 @@ import { useBookmarks } from "@/hooks/useBookmarks";
 import { useToast } from "@/hooks/use-toast";
 import { ShareButton } from "@/components/ShareButton";
 import { SEO } from "@/components/SEO";
+import { SpaceDetailSkeleton } from "@/components/LoadingSkeleton";
 
 type Space = {
   id: string;
@@ -80,14 +81,7 @@ export default function SpaceDetailPage() {
   }
 
   if (spaceLoading || experiencesLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading experiences...</p>
-        </div>
-      </div>
-    );
+    return <SpaceDetailSkeleton />;
   }
 
   if (spaceError || !space) {
