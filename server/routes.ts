@@ -105,7 +105,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // 💰 OpenAI Prompt Cache Stats (Admin only)
-  app.get('/api/admin/cache-stats', isAuthenticated, (_req, res) => {
+  app.get('/api/admin/cache-stats', isAuthenticated, isAdmin, (_req, res) => {
     cacheMonitor.report();
     res.status(200).json({ 
       status: 'ok', 
@@ -158,15 +158,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // ===== ADMIN ROUTES =====
   
   // Clear all caches (admin only)
-  app.post('/api/admin/clear-cache', isAuthenticated, async (req: Request, res) => {
+  app.post('/api/admin/clear-cache', isAuthenticated, isAdmin, async (req: Request, res) => {
     try {
-      const userId = req.session!.userId as string;
-      const user = await storage.getUser(userId);
-
-      // Only allow nadia@metahers.ai
-      if (user?.email !== "nadia@metahers.ai") {
-        return res.status(403).json({ message: "Access denied" });
-      }
 
       // Clear all caches
       spacesCache = null;
@@ -196,15 +189,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Regenerate Harvard-style content for all experiences (admin only)
   // ⚠️ CRITICAL DATA PROTECTION: This endpoint modifies the CORE VALUE of MetaHers Mind Spa
   // Harvard-style learning content should NEVER be removed without explicit approval
-  app.post('/api/admin/regenerate-content', isAuthenticated, async (req: Request, res) => {
+  app.post('/api/admin/regenerate-content', isAuthenticated, isAdmin, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-
-      // Only allow nadia@metahers.ai
-      if (user?.email !== "nadia@metahers.ai") {
-        return res.status(403).json({ message: "Access denied" });
-      }
 
       // 🔒 PROTECTION LAYER 1: Require explicit confirmation
       const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
@@ -398,15 +386,10 @@ Return ONLY valid JSON:
   // Manually populate database (admin only - use nadia@metahers.ai account)
   // ⚠️ CRITICAL WARNING: This endpoint can overwrite Harvard-style content if not careful!
   // Only use this for initial setup or when specifically instructed
-  app.post('/api/admin/populate-db', isAuthenticated, async (req: Request, res) => {
+  app.post('/api/admin/populate-db', isAuthenticated, isAdmin, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-
-      // Only allow nadia@metahers.ai to trigger re-seeding
-      if (user?.email !== "nadia@metahers.ai") {
-        return res.status(403).json({ message: "Access denied" });
-      }
 
       // 🔒 PROTECTION: Require explicit confirmation
       const today = new Date().toISOString().split('T')[0];
@@ -951,7 +934,7 @@ Return ONLY valid JSON:
   });
 
   // Update quiz submission status (admin only)
-  app.patch('/api/admin/quiz-submissions/:id', isAuthenticated, async (req: Request, res) => {
+  app.patch('/api/admin/quiz-submissions/:id', isAuthenticated, isAdmin, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
