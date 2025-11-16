@@ -1,17 +1,19 @@
 
 import React, { Component, ReactNode } from 'react';
-import { AlertCircle, RefreshCw } from 'lucide-react';
+import { AlertCircle, RefreshCw, Home, Mail } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
+  onReset?: () => void;
 }
 
 interface State {
   hasError: boolean;
   error?: Error;
+  errorInfo?: React.ErrorInfo;
 }
 
 export class ErrorBoundary extends Component<Props, State> {
@@ -27,18 +29,39 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
     
+    this.setState({ errorInfo });
+
     // Log to analytics if available
     if (window.gtag) {
       window.gtag('event', 'exception', {
         description: error.message,
-        fatal: false,
+        fatal: true,
       });
     }
   }
 
   handleReset = () => {
-    this.setState({ hasError: false, error: undefined });
+    this.setState({ hasError: false, error: undefined, errorInfo: undefined });
+    
+    if (this.props.onReset) {
+      this.props.onReset();
+    } else {
+      window.location.href = '/';
+    }
+  };
+
+  handleGoHome = () => {
     window.location.href = '/';
+  };
+
+  handleReportError = () => {
+    const subject = encodeURIComponent('MetaHers Error Report');
+    const body = encodeURIComponent(
+      `Error: ${this.state.error?.message}\n\n` +
+      `Stack: ${this.state.error?.stack}\n\n` +
+      `Component Stack: ${this.state.errorInfo?.componentStack}`
+    );
+    window.location.href = `mailto:hello@metahers.ai?subject=${subject}&body=${body}`;
   };
 
   render() {
@@ -67,10 +90,34 @@ export class ErrorBoundary extends Component<Props, State> {
                   {this.state.error.message}
                 </div>
               )}
-              <Button onClick={this.handleReset} className="w-full gap-2">
-                <RefreshCw className="w-4 h-4" />
-                Return to Home
-              </Button>
+              
+              <div className="flex flex-col gap-2">
+                <Button onClick={this.handleReset} className="w-full gap-2">
+                  <RefreshCw className="w-4 h-4" />
+                  Try Again
+                </Button>
+                
+                <Button onClick={this.handleGoHome} variant="outline" className="w-full gap-2">
+                  <Home className="w-4 h-4" />
+                  Go to Dashboard
+                </Button>
+
+                <Button onClick={this.handleReportError} variant="ghost" className="w-full gap-2">
+                  <Mail className="w-4 h-4" />
+                  Report This Error
+                </Button>
+              </div>
+
+              {process.env.NODE_ENV === 'development' && this.state.errorInfo && (
+                <details className="mt-4">
+                  <summary className="cursor-pointer text-sm text-muted-foreground">
+                    Component Stack
+                  </summary>
+                  <pre className="mt-2 p-2 text-xs bg-muted rounded overflow-auto max-h-40">
+                    {this.state.errorInfo.componentStack}
+                  </pre>
+                </details>
+              )}
             </CardContent>
           </Card>
         </div>

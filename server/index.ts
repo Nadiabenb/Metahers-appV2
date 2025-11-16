@@ -5,6 +5,7 @@ import { setupVite, serveStatic, log } from "./vite";
 import { setupSecurityHeaders, setupCORS, setupRateLimiting } from "./security";
 import { seedSpaces } from "./seedSpaces";
 import { seedExperiences } from "./seedExperiences";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 
@@ -81,14 +82,8 @@ app.use((req, res, next) => {
     const server = await registerRoutes(app);
     log("✓ Routes registered");
 
-    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-      const status = err.status || err.statusCode || 500;
-      const message = err.message || "Internal Server Error";
-
-      log(`Error: ${status} - ${message}`);
-      res.status(status).json({ message });
-      throw err;
-    });
+    // Global error handler (must be after routes)
+    app.use(errorHandler);
 
     // importantly only setup vite in development and after
     // setting up all the other routes so the catch-all route

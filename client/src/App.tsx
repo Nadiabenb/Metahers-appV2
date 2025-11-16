@@ -14,6 +14,8 @@ import { BreathingLoader } from "@/components/effects/BreathingLoader";
 import { initializeApp } from "@/lib/storage";
 import { CustomCursor } from "@/components/effects/CustomCursor";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AlertCircle, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
@@ -200,14 +202,28 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider defaultTheme="dark" storageKey="metahers-theme">
           <TooltipProvider>
-            <div className="min-h-screen bg-background overflow-x-hidden">
-              <CursorSparkles />
-              <CustomCursor />
-              <Navigation />
-              <Router />
-              <InstallPrompt />
-            </div>
-            <Toaster />
+            <ErrorBoundary fallback={
+              <div className="min-h-screen flex items-center justify-center p-4">
+                <div className="text-center">
+                  <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
+                  <h2 className="text-xl font-semibold mb-2">Unable to load app</h2>
+                  <p className="text-muted-foreground mb-4">Please refresh the page</p>
+                  <Button onClick={() => window.location.reload()}>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Refresh
+                  </Button>
+                </div>
+              </div>
+            }>
+              <div className="min-h-screen bg-background overflow-x-hidden">
+                <CursorSparkles />
+                <CustomCursor />
+                <Navigation />
+                <Router />
+                <InstallPrompt />
+              </div>
+              <Toaster />
+            </ErrorBoundary>
           </TooltipProvider>
         </ThemeProvider>
       </QueryClientProvider>
