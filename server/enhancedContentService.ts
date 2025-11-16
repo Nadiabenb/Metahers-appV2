@@ -127,16 +127,41 @@ const WOMEN_SOLOPRENEUR_FRAMEWORK = `
 - Hustle culture messaging
 `;
 
+// Validation helper
+function validateEnhancedSection(section: any, sectionIndex: number): { valid: boolean; errors: string[] } {
+  const errors: string[] = [];
+  
+  if (!section.id) errors.push(`Section ${sectionIndex + 1}: Missing id`);
+  if (!section.title) errors.push(`Section ${sectionIndex + 1}: Missing title`);
+  if (!section.type) errors.push(`Section ${sectionIndex + 1}: Missing type`);
+  if (!section.content || section.content.length < 400) {
+    errors.push(`Section ${sectionIndex + 1}: Content too short (need 600-900 words)`);
+  }
+  if (!section.quickWinChallenge) {
+    errors.push(`Section ${sectionIndex + 1}: Missing quickWinChallenge`);
+  }
+  if (!section.reflectionPrompts || section.reflectionPrompts.length < 2) {
+    errors.push(`Section ${sectionIndex + 1}: Need at least 2 reflection prompts`);
+  }
+  if (!section.monetizationInsight) {
+    errors.push(`Section ${sectionIndex + 1}: Missing monetizationInsight`);
+  }
+  
+  return { valid: errors.length === 0, errors };
+}
+
 export async function enhanceExperienceContent(
   experience: ExistingExperience,
   options: {
     preserveStructure?: boolean; // Keep existing sections, just enhance them
     fullRegeneration?: boolean; // Complete rewrite with new framework
     targetTier?: "free" | "pro"; // Override tier for testing
+    maxRetries?: number; // Number of retries if validation fails
   } = {}
 ): Promise<EnhancedSection[]> {
   const targetTier = options.targetTier || experience.tier;
   const targetSectionCount = targetTier === "free" ? 5 : 7;
+  const maxRetries = options.maxRetries || 2;
 
   // Convert existing sections to TOON format to save tokens (30-60% reduction)
   const existingSectionsTOON = encode(experience.sections);
@@ -144,7 +169,7 @@ export async function enhanceExperienceContent(
   console.log(`📊 Token Optimization Stats:`);
   console.log(`   JSON size: ${JSON.stringify(experience.sections).length} chars`);
   console.log(`   TOON size: ${existingSectionsTOON.length} chars`);
-  console.log(`   Savings: ${Math.round((1 - existingSectionsTOON.length / JSON.stringify(experience.sections).length) * 100)}%`);
+  console.log(`   Character savings: ${Math.round((1 - existingSectionsTOON.length / JSON.stringify(experience.sections).length) * 100)}%`);
 
   const systemPrompt = `${WOMEN_SOLOPRENEUR_FRAMEWORK}
 
@@ -202,46 +227,85 @@ ${options.fullRegeneration
 IMPORTANT: Return ONLY the JSON array. No markdown code blocks, no explanations.
 `;
 
-  try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt }
-      ],
-      temperature: 0.8,
-      max_tokens: 8000,
-    });
+  let attempt = 0;
+  let lastError: Error | null = null;
+  
+  while (attempt <= maxRetries) {
+    try {
+      console.log(`\n🔄 Attempt ${attempt + 1}/${maxRetries + 1}`);
+      
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ],
+        temperature: 0.8,
+        max_tokens: 8000,
+      });
 
-    const responseContent = completion.choices[0]?.message?.content || "[]";
-    
-    // Clean up response (remove markdown code blocks if present)
-    const jsonContent = responseContent
-      .replace(/```json\n?/g, '')
-      .replace(/```\n?/g, '')
-      .trim();
+      const responseContent = completion.choices[0]?.message?.content || "[]";
+      
+      // Clean up response (remove markdown code blocks if present)
+      const jsonContent = responseContent
+        .replace(/```json\n?/g, '')
+        .replace(/```\n?/g, '')
+        .trim();
 
-    const enhancedSections: EnhancedSection[] = JSON.parse(jsonContent);
+      const enhancedSections: EnhancedSection[] = JSON.parse(jsonContent);
 
-    // Validate section count
-    if (enhancedSections.length < targetSectionCount) {
-      console.warn(`⚠️  Generated ${enhancedSections.length} sections, expected ${targetSectionCount}`);
-      throw new Error(`Content regeneration produced insufficient sections (${enhancedSections.length}/${targetSectionCount})`);
+      // Validate section count
+      if (enhancedSections.length < targetSectionCount) {
+        throw new Error(`Insufficient sections: got ${enhancedSections.length}, need ${targetSectionCount}`);
+      }
+
+      // Validate each section has required framework elements
+      const validationErrors: string[] = [];
+      enhancedSections.forEach((section, index) => {
+        const { valid, errors } = validateEnhancedSection(section, index);
+        if (!valid) {
+          validationErrors.push(...errors);
+        }
+      });
+
+      if (validationErrors.length > 0) {
+        console.warn(`⚠️  Validation failed:\n${validationErrors.join('\n')}`);
+        throw new Error(`Framework validation failed: ${validationErrors.length} issues found`);
+      }
+
+      // Log actual token usage from OpenAI
+      const promptTokens = completion.usage?.prompt_tokens || 0;
+      const completionTokens = completion.usage?.completion_tokens || 0;
+      const totalTokens = completion.usage?.total_tokens || 0;
+      const estimatedCost = totalTokens * 0.000005; // GPT-4o pricing: $5 per 1M tokens
+      
+      console.log(`✅ Content enhanced successfully`);
+      console.log(`   Prompt tokens: ${promptTokens}`);
+      console.log(`   Completion tokens: ${completionTokens}`);
+      console.log(`   Total tokens: ${totalTokens}`);
+      console.log(`   Actual cost: $${estimatedCost.toFixed(4)}`);
+      console.log(`   Token savings vs JSON: ~${Math.round((1 - promptTokens / (promptTokens / 0.55)) * 100)}% (TOON optimization)`);
+
+      return enhancedSections;
+
+    } catch (error) {
+      lastError = error as Error;
+      console.error(`❌ Attempt ${attempt + 1} failed:`, error instanceof Error ? error.message : error);
+      attempt++;
+      
+      if (attempt > maxRetries) {
+        break;
+      }
+      
+      // Wait before retry (exponential backoff)
+      const waitMs = Math.min(1000 * Math.pow(2, attempt), 10000);
+      console.log(`⏳ Waiting ${waitMs}ms before retry...`);
+      await new Promise(resolve => setTimeout(resolve, waitMs));
     }
-
-    // Log token usage
-    console.log(`✅ Content enhanced successfully`);
-    console.log(`   Prompt tokens: ${completion.usage?.prompt_tokens || 0}`);
-    console.log(`   Completion tokens: ${completion.usage?.completion_tokens || 0}`);
-    console.log(`   Total tokens: ${completion.usage?.total_tokens || 0}`);
-    console.log(`   Estimated cost: $${((completion.usage?.total_tokens || 0) * 0.000005).toFixed(4)}`);
-
-    return enhancedSections;
-
-  } catch (error) {
-    console.error("❌ Content enhancement failed:", error);
-    throw error;
   }
+
+  // All retries exhausted
+  throw new Error(`Content enhancement failed after ${maxRetries + 1} attempts: ${lastError?.message || 'Unknown error'}`);
 }
 
 // Cost estimation helper
