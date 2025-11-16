@@ -423,6 +423,25 @@ export const insertSectionCompletionSchema = createInsertSchema(sectionCompletio
 export type InsertSectionCompletion = z.infer<typeof insertSectionCompletionSchema>;
 export type SectionCompletionDB = typeof sectionCompletions.$inferSelect;
 
+// ===== ADMIN AUDIT LOGS =====
+export const auditLogs = pgTable('audit_logs', {
+  id: serial('id').primaryKey(),
+  adminId: varchar('admin_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  action: varchar('action', { length: 100 }).notNull(), // 'create', 'update', 'delete'
+  entityType: varchar('entity_type', { length: 50 }).notNull(), // 'user', 'experience', 'space'
+  entityId: varchar('entity_id', { length: 100 }),
+  changes: jsonb('changes'), // Store what was changed
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => [
+  index('idx_audit_admin').on(table.adminId),
+  index('idx_audit_entity').on(table.entityType, table.entityId),
+  index('idx_audit_created').on(table.createdAt),
+]);
+
+export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({ id: true, createdAt: true });
+export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
+export type AuditLogDB = typeof auditLogs.$inferSelect;
+
 // Thought Leadership Journey - Progress tracking table
 export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

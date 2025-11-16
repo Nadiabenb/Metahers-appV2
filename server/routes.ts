@@ -17,6 +17,8 @@ import { spaces, transformationalExperiences } from "@shared/schema";
 import { sql as drizzleSql } from "drizzle-orm";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
+// Import admin routes
+import adminRoutes from "./adminRoutes";
 
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -150,7 +152,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/test-resend', async (req, res) => {
     try {
       const credentials = await getResendCredentials();
-      
+
       if (!credentials) {
         return res.json({ 
           status: 'not_configured',
@@ -188,8 +190,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup authentication middleware
   await setupAuth(app);
 
-  // ===== ADMIN ROUTES =====
-  
+  // Admin routes (protected by requireAdmin middleware)
+  app.use('/api/admin', adminRoutes);
+
+  // ===== ADMINROUTES =====
+
   // Clear all caches (admin only)
   app.post('/api/admin/clear-cache', isAuthenticated, isAdmin, async (req: Request, res) => {
     try {
@@ -198,9 +203,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       spacesCache = null;
       experiencesCache = null;
       recommendationCache.clear();
-      
+
       console.log("🔄 All caches cleared by admin");
-      
+
       res.json({
         success: true,
         message: "All caches cleared successfully",
@@ -341,7 +346,7 @@ Return ONLY valid JSON:
           // 🔒 PROTECTION LAYER 3: Validate section count before update
           const minimumSections = exp.tier === "pro" ? 7 : 5;
           const actualSections = content.sections?.length || 0;
-          
+
           if (actualSections < minimumSections) {
             console.log(`   ⚠️  VALIDATION FAILED: ${exp.title} has ${actualSections} sections (requires ${minimumSections})`);
             console.log(`   🔒 SAFETY: Skipping update to prevent content degradation`);
@@ -401,9 +406,9 @@ Return ONLY valid JSON:
       spacesCache = null;
       experiencesCache = null;
       recommendationCache.clear();
-      
+
       console.log("🔄 [DEV] All caches cleared");
-      
+
       res.json({
         success: true,
         message: "Development caches cleared",
@@ -415,7 +420,7 @@ Return ONLY valid JSON:
       });
     });
   }
-  
+
   // Manually populate database (admin only - use nadia@metahers.ai account)
   // ⚠️ CRITICAL WARNING: This endpoint can overwrite Harvard-style content if not careful!
   // Only use this for initial setup or when specifically instructed
@@ -453,22 +458,22 @@ Return ONLY valid JSON:
       console.log(`\n⚠️  CRITICAL OPERATION: Database population approved by ${user.email}`);
       console.log(`⚠️  Confirmation phrase validated: ${confirmationPhrase}`);
       console.log("🔄 Manual database population triggered by admin...");
-      
+
       // Import seed functions
       const { seedSpaces } = await import("./seedSpaces");
       const { seedExperiences } = await import("./seedExperiences");
-      
+
       // Sequential seeding
       await seedSpaces();
       console.log("✓ Spaces populated (9 total)");
-      
+
       await seedExperiences();
       console.log("✓ Experiences populated (54 total)");
-      
+
       // Verify counts
       const spacesCount = await db.select().from(spaces);
       const experiencesCount = await db.select().from(transformationalExperiences);
-      
+
       res.json({
         success: true,
         message: "Database populated successfully",
@@ -1066,10 +1071,10 @@ Return ONLY valid JSON:
     // Fetch from database
     try {
       const spaces = await storage.getSpaces();
-      
+
       // Update cache
       spacesCache = { data: spaces, timestamp: now };
-      
+
       res.json(spaces);
     } catch (error) {
       throw new DatabaseError("Failed to fetch learning spaces", error);
@@ -1110,13 +1115,13 @@ Return ONLY valid JSON:
       // Check cache first
       const now = Date.now();
       let experiences: any[];
-      
+
       if (experiencesCache && (now - experiencesCache.timestamp) < DATA_CACHE_TTL) {
         experiences = experiencesCache.data;
       } else {
         // Fetch from database with JOIN
         experiences = await storage.getAllExperiences();
-        
+
         // Update cache
         experiencesCache = { data: experiences, timestamp: now };
       }
@@ -1147,7 +1152,7 @@ Return ONLY valid JSON:
         }
         return exp;
       });
-      
+
       res.json(filteredExperiences);
     } catch (error) {
       console.error("Error fetching all experiences:", error);
@@ -1170,7 +1175,7 @@ Return ONLY valid JSON:
         const userId = req.session?.userId;
         const user = userId ? await storage.getUser(userId) : null;
         const isProUser = user?.isPro || user?.subscriptionTier === "pro";
-        
+
         if (!isProUser) {
           // Unauthorized access to Pro content - return 403 with minimal metadata
           return res.status(403).json({
