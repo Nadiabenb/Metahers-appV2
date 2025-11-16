@@ -105,6 +105,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
   }));
 
+  // Client-side logging endpoint
+  app.post('/api/logs/client', asyncHandler(async (req: Request, res) => {
+    const { logs } = req.body;
+    const userId = req.session?.userId;
+
+    if (!Array.isArray(logs)) {
+      return res.status(400).json({ message: 'Invalid logs format' });
+    }
+
+    // Log each client error with context
+    logs.forEach((log: any) => {
+      const logData = {
+        client_log: true,
+        userId: userId || 'anonymous',
+        level: log.level,
+        message: log.message,
+        context: log.context,
+        error: log.error,
+        timestamp: log.timestamp,
+        userAgent: req.get('user-agent'),
+      };
+
+      if (log.level === 'error') {
+        logger.error(logData, `Client error: ${log.message}`);
+      } else if (log.level === 'warn') {
+        logger.warn(logData, `Client warning: ${log.message}`);
+      }
+    });
+
+    res.status(200).json({ received: logs.length });
+  }));
+
   // 💰 OpenAI Prompt Cache Stats (Admin only)
   app.get('/api/admin/cache-stats', isAuthenticated, isAdmin, asyncHandler(async (_req, res) => {
     cacheMonitor.report();

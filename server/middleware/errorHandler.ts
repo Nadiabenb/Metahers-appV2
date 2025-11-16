@@ -1,5 +1,6 @@
 
 import { Request, Response, NextFunction } from 'express';
+import { logger } from '../lib/logger';
 
 export class AppError extends Error {
   constructor(
@@ -73,14 +74,22 @@ export function errorHandler(
   res: Response,
   next: NextFunction
 ) {
-  // Log error for debugging
-  console.error('Error caught by handler:', {
-    name: err.name,
-    message: err.message,
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
-    path: req.path,
-    method: req.method,
-  });
+  // Log error with full context
+  logger.error({
+    requestId: (req as any).requestId,
+    error: {
+      name: err.name,
+      message: err.message,
+      stack: err.stack,
+      code: err instanceof AppError ? err.code : undefined,
+      statusCode: err instanceof AppError ? err.statusCode : 500,
+    },
+    request: {
+      method: req.method,
+      path: req.path,
+      userId: req.session?.userId,
+    },
+  }, 'Request error');
 
   // Handle AppError instances
   if (err instanceof AppError) {

@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { logger } from "./lib/logger";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -41,10 +42,17 @@ class CacheMonitor {
       ? (this.stats.cachedTokens / this.stats.totalTokens * 50).toFixed(1)
       : '0.0';
 
-    console.log('\n💰 OpenAI Prompt Cache Stats:');
-    console.log(`   Requests: ${this.stats.totalRequests} (${hitRate}% cache hits)`);
-    console.log(`   Tokens: ${this.stats.totalTokens.toLocaleString()} (${tokenHitRate}% cached)`);
-    console.log(`   Estimated Savings: ${savings}%\n`);
+    logger.info({
+      openai_cache: {
+        total_requests: this.stats.totalRequests,
+        cache_hits: this.stats.cacheHits,
+        hit_rate_percent: hitRate,
+        total_tokens: this.stats.totalTokens,
+        cached_tokens: this.stats.cachedTokens,
+        token_hit_rate_percent: tokenHitRate,
+        estimated_savings_percent: savings,
+      }
+    }, 'OpenAI Prompt Cache Stats');
   }
 }
 

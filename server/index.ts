@@ -6,6 +6,8 @@ import { setupSecurityHeaders, setupCORS, setupRateLimiting } from "./security";
 import { seedSpaces } from "./seedSpaces";
 import { seedExperiences } from "./seedExperiences";
 import { errorHandler } from "./middleware/errorHandler";
+import { logger } from "./lib/logger";
+import { requestLogger } from "./middleware/requestLogger";
 
 const app = express();
 
@@ -35,6 +37,9 @@ app.use('/api/webhooks/stripe', express.raw({ type: 'application/json' }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Request logging middleware
+app.use(requestLogger);
 
 app.use((req, res, next) => {
   const start = Date.now();
@@ -68,7 +73,7 @@ app.use((req, res, next) => {
 
 (async () => {
   try {
-    log(`Starting server in ${app.get("env")} mode...`);
+    logger.info({ mode: app.get("env") }, 'Starting server');
     
     // Verify critical environment variables
     if (!process.env.DATABASE_URL) {
@@ -77,10 +82,10 @@ app.use((req, res, next) => {
     if (!process.env.SESSION_SECRET) {
       throw new Error("SESSION_SECRET is not set - sessions will fail");
     }
-    log("✓ Environment variables validated");
+    logger.info('Environment variables validated');
 
     const server = await registerRoutes(app);
-    log("✓ Routes registered");
+    logger.info('Routes registered');
 
     // Global error handler (must be after routes)
     app.use(errorHandler);
@@ -90,10 +95,10 @@ app.use((req, res, next) => {
     // doesn't interfere with the other routes
     if (app.get("env") === "development") {
       await setupVite(app, server);
-      log("✓ Vite dev server setup");
+      logger.info('Vite dev server setup');
     } else {
       serveStatic(app);
-      log("✓ Static files configured for production");
+      logger.info('Static files configured for production');
     }
 
     // ALWAYS serve the app on the port specified in the environment variable PORT
@@ -107,9 +112,8 @@ app.use((req, res, next) => {
       host: "0.0.0.0",
       reusePort: true,
     }, async () => {
-      log(`✓ Server successfully listening on 0.0.0.0:${port}`);
-      log(`✓ Environment: ${app.get("env")}`);
-      log(`✓ Ready to accept traffic`);
+      logger.info({ port, host: '0.0.0.0', env: app.get("env") }, 'Server successfully started');
+      logger.info('Ready to accept traffic');
       
       // Seed database in production only if needed (check if data exists first)
       if (app.get("env") === "production") {
@@ -122,41 +126,42 @@ app.use((req, res, next) => {
           const existingSpaces = await db.select().from(spaces);
           
           if (existingSpaces.length === 0 || existingExperiences.length < 54) {
-            log("⏳ Database appears empty or incomplete. Starting seeding...");
+            logger.info('Database appears empty or incomplete. Starting seeding...');
             
             // IMPORTANT: Sequential seeding to respect foreign key constraints
             await seedSpaces();
-            log("✓ Spaces seeded");
+            logger.info('Spaces seeded');
             await seedExperiences();
-            log("✓ Experiences seeded");
+            logger.info('Experiences seeded');
             
             const count = await db.select().from(transformationalExperiences);
-            log(`✅ Database populated: ${existingSpaces.length} spaces, ${count.length} experiences`);
+            logger.info({ spaces: existingSpaces.length, experiences: count.length }, 'Database populated');
           } else {
-            log(`✓ Database already populated: ${existingSpaces.length} spaces, ${existingExperiences.length} experiences`);
+            logger.info({ spaces: existingSpaces.length, experiences: existingExperiences.length }, 'Database already populated');
           }
         } catch (error) {
-          log(`⚠️ Database seeding check failed: ${error instanceof Error ? error.message : String(error)}`);
-          console.error("Database seeding error:", error);
-          log("💡 TIP: Use /api/admin/populate-database endpoint to manually seed the database");
+          logger.error({ error: error instanceof Error ? error.message : String(error) }, 'Database seeding check failed');
+          logger.info('TIP: Use /api/admin/populate-database endpoint to manually seed the database');
         }
       }
     });
 
     server.on('error', (error: NodeJS.ErrnoException) => {
       if (error.code === 'EADDRINUSE') {
-        log(`ERROR: Port ${port} is already in use`);
+        logger.fatal({ port, error: error.message }, 'Port is already in use');
       } else if (error.code === 'EACCES') {
-        log(`ERROR: Permission denied to bind to port ${port}`);
+        logger.fatal({ port, error: error.message }, 'Permission denied to bind to port');
       } else {
-        log(`ERROR: Server failed to start - ${error.message}`);
+        logger.fatal({ error: error.message, stack: error.stack }, 'Server failed to start');
       }
       process.exit(1);
     });
 
   } catch (error) {
-    log(`FATAL ERROR during startup: ${error instanceof Error ? error.message : String(error)}`);
-    console.error(error);
+    logger.fatal({ 
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined
+    }, 'Fatal error during startup');
     process.exit(1);
   }
 })();

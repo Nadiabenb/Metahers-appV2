@@ -2,6 +2,7 @@ import * as bcrypt from "bcrypt";
 import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import connectPg from "connect-pg-simple";
+import { logger } from "./lib/logger";
 
 const SALT_ROUNDS = 12;
 
@@ -52,6 +53,13 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   if (req.session && req.session.userId) {
     return next();
   }
+  
+  logger.warn({
+    path: req.path,
+    method: req.method,
+    ip: req.ip,
+  }, 'Unauthorized access attempt');
+  
   return res.status(401).json({ message: "Unauthorized" });
 };
 
@@ -154,11 +162,21 @@ export const isAdmin: RequestHandler = async (req, res, next) => {
   const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
   
   if (!user || !adminEmails.includes(user.email.toLowerCase())) {
-    console.warn(`Admin access denied for user: ${user?.email || 'unknown'} from IP: ${req.ip}`);
+    logger.warn({
+      userId: user?.id,
+      email: user?.email,
+      ip: req.ip,
+      path: req.path,
+    }, 'Admin access denied');
     return res.status(403).json({ message: "Admin access required" });
   }
   
-  console.log(`Admin access granted for: ${user.email} from IP: ${req.ip}`);
+  logger.info({
+    userId: user.id,
+    email: user.email,
+    ip: req.ip,
+    path: req.path,
+  }, 'Admin access granted');
   return next();
 };
 
