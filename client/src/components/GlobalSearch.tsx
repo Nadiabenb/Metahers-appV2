@@ -130,13 +130,13 @@ export function GlobalSearch() {
       </button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-2xl p-0 gap-0 bg-card/95 backdrop-blur-xl border-primary/20">
+        <DialogContent className="sm:max-w-2xl p-0 gap-0 bg-card/95 backdrop-blur-xl border-primary/20" aria-describedby="search-description">
           <DialogHeader className="px-6 pt-6 pb-4 border-b border-border/50">
             <DialogTitle className="flex items-center gap-2 text-foreground">
               <Search className="w-5 h-5 text-primary" />
               Global Search
             </DialogTitle>
-            <DialogDescription className="sr-only">
+            <DialogDescription id="search-description">
               Search across all learning spaces and experiences
             </DialogDescription>
           </DialogHeader>

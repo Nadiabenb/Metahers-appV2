@@ -243,27 +243,23 @@ export function Navigation() {
                       {/* Quick Links */}
                       <div className="border-t border-white/10 pt-6 mt-6">
                         <div className="flex items-center gap-2">
-                          <Button
+                          <button
                             onClick={() => handleNavClick("/upgrade")}
-                            variant="default"
-                            size="sm"
-                            className="gap-2"
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2"
                             data-testid="mega-nav-pricing"
                           >
                             <Crown className="w-4 h-4" />
                             View Pricing
-                          </Button>
+                          </button>
                           {isAuthenticated && (
-                            <Button
+                            <button
                               onClick={() => handleNavClick("/account")}
-                              variant="ghost"
-                              size="sm"
-                              className="gap-2"
+                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
                               data-testid="mega-nav-account"
                             >
                               <User className="w-4 h-4" />
                               Account
-                            </Button>
+                            </button>
                           )}
                         </div>
                       </div>
