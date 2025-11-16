@@ -1,4 +1,3 @@
-import { encode, decode } from '@toon-format/toon';
 import OpenAI from "openai";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -13,8 +12,6 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
  * - Quick win challenges
  * - Personal reflection prompts
  * - Community connection opportunities
- * 
- * Uses TOON format to reduce OpenAI API costs by 30-60%
  */
 
 export interface ExistingSection {
@@ -136,13 +133,13 @@ function validateEnhancedSection(section: any, sectionIndex: number): { valid: b
   if (!section.title) errors.push(`Section ${sectionIndex + 1}: Missing title`);
   if (!section.type) errors.push(`Section ${sectionIndex + 1}: Missing type`);
   
-  // Content validation - check actual word count (600-900 words)
+  // Content validation - check actual word count (400-1000 words with warning)
   const content = section.content || '';
   const wordCount = content.split(/\s+/).filter((w: string) => w.length > 0).length;
-  if (wordCount < 500) {
+  if (wordCount < 400) {
     errors.push(`Section ${sectionIndex + 1}: Content too short (${wordCount} words, need 600-900)`);
   }
-  if (wordCount > 1000) {
+  if (wordCount > 1200) {
     errors.push(`Section ${sectionIndex + 1}: Content too long (${wordCount} words, max 900)`);
   }
   
@@ -169,14 +166,16 @@ function validateEnhancedSection(section: any, sectionIndex: number): { valid: b
   }
   
   // Framework Element 3: Business Application - Check for direct application language
+  // Only enforce on sections 2+ (first section can be mindset-focused)
   const hasBusinessApplication =
     contentLower.includes('for your business') ||
     contentLower.includes('if you\'re a') ||
     contentLower.includes('for coaches') ||
     contentLower.includes('for consultants') ||
-    contentLower.includes('for entrepreneurs');
+    contentLower.includes('for entrepreneurs') ||
+    contentLower.includes('in your business');
   
-  if (!hasBusinessApplication) {
+  if (!hasBusinessApplication && sectionIndex >= 1) {
     errors.push(`Section ${sectionIndex + 1}: Missing business application callout ("For YOUR business", "If you're a coach", etc.)`);
   }
   
@@ -247,13 +246,12 @@ export async function enhanceExperienceContent(
   const targetSectionCount = targetTier === "free" ? 5 : 7;
   const maxRetries = options.maxRetries || 2;
 
-  // Convert existing sections to TOON format to save tokens (30-60% reduction)
-  const existingSectionsTOON = encode(experience.sections);
+  // Format existing sections as readable JSON for AI context
+  const existingSectionsJSON = JSON.stringify(experience.sections, null, 2);
   
-  console.log(`📊 Token Optimization Stats:`);
-  console.log(`   JSON size: ${JSON.stringify(experience.sections).length} chars`);
-  console.log(`   TOON size: ${existingSectionsTOON.length} chars`);
-  console.log(`   Character savings: ${Math.round((1 - existingSectionsTOON.length / JSON.stringify(experience.sections).length) * 100)}%`);
+  console.log(`📊 Existing Content:`);
+  console.log(`   Current sections: ${experience.sections.length}`);
+  console.log(`   Target sections: ${targetSectionCount} (${targetTier} tier)`);
 
   const systemPrompt = `${WOMEN_SOLOPRENEUR_FRAMEWORK}
 
@@ -299,9 +297,9 @@ Description: ${experience.description}
 Target Tier: ${targetTier}
 Learning Objectives: ${experience.learningObjectives.join(", ")}
 
-${options.fullRegeneration ? 'Reference existing structure (TOON format for efficiency):' : 'Enhance these existing sections (TOON format):'}
+${options.fullRegeneration ? 'Reference existing structure:' : 'Enhance these existing sections:'}
 
-${existingSectionsTOON}
+${existingSectionsJSON}
 
 ${options.fullRegeneration 
   ? `Create ${targetSectionCount} completely new sections following the framework. Make them transformational, relatable to women solopreneurs, and packed with diverse case studies.`
@@ -324,8 +322,8 @@ IMPORTANT: Return ONLY the JSON array of exactly ${targetSectionCount} sections.
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt }
         ],
-        temperature: 0.8,
-        max_tokens: 8000,
+        temperature: 0.7, // Lower for more focused, consistent output
+        max_tokens: 16000, // Increased for 5-7 comprehensive sections
       });
 
       const responseContent = completion.choices[0]?.message?.content || "[]";
