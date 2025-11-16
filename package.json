@@ -5,6 +5,10 @@
   "license": "MIT",
   "scripts": {
     "dev": "NODE_ENV=development tsx server/index.ts",
+
+    "enhance:branding": "tsx server/brandingWorldEnhancement.ts",
+    "validate:content": "tsx server/contentQualityValidator.ts",
+
     "build": "vite build && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",

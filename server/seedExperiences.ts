@@ -799,20 +799,23 @@ export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
     personalizationEnabled: true,
   },
 
-  // ===== AI-POWERED BRANDING SPACE (6 experiences) =====
+  // ===== BRANDING WORLD: Thought Leadership Authority (6 experiences) =====
+  // Focus: Building personal brand authority WITHOUT quitting your job
+  // Differentiation: Authority building vs Founder's Club (business building)
   {
     id: "branding-1-strategy",
     spaceId: "branding",
-    title: "Personal Brand Foundation",
-    slug: "personal-brand-foundation",
-    description: "Define your unique positioning as a thought leader. Build the foundation for authority in your industry while keeping your job.",
+    title: "Build Your Thought Leadership Foundation",
+    slug: "thought-leadership-foundation",
+    description: "Establish yourself as an industry authority without quitting your job. Create the strategic foundation that attracts premium consulting clients, speaking opportunities, and media features.",
     learningObjectives: [
-      "Define your personal brand essence and unique angle",
-      "Identify your thought leadership pillars",
-      "Create your signature story and positioning statement",
+      "Define your unique thought leadership positioning in your industry",
+      "Identify your 3 core expertise pillars that differentiate you",
+      "Create your signature framework that makes you quotable and searchable",
+      "Build your authority roadmap from unknown to AI-searchable expert",
     ],
     tier: "free", // FREE - Lead magnet
-    estimatedMinutes: 30,
+    estimatedMinutes: 45,
     sortOrder: 1,
     content: {
       sections: [
@@ -829,16 +832,18 @@ export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   {
     id: "branding-2-content",
     spaceId: "branding",
-    title: "LinkedIn Thought Leadership System",
-    slug: "linkedin-thought-leadership",
-    description: "Build a content system for LinkedIn that positions you as an industry expert. From viral hooks to engagement strategies.",
+    title: "LinkedIn Authority System: Get Found by Opportunities",
+    slug: "linkedin-authority-system",
+    description: "Build a LinkedIn presence so strong that opportunities find YOU. Master the content formats, engagement strategies, and growth tactics that turn your profile into a client-attracting machine.",
     learningObjectives: [
-      "Master LinkedIn content formats that build authority",
-      "Create a sustainable content rhythm (3-5x/week)",
-      "Build engagement systems that grow your network",
+      "Create a LinkedIn content system that runs on 3 hours/week",
+      "Write posts that generate 10X+ engagement using proven frameworks",
+      "Build strategic relationships with decision-makers in your industry",
+      "Use AI to multiply your content output without losing your voice",
+      "Turn LinkedIn connections into $5K+ consulting contracts",
     ],
     tier: "pro", // PRO
-    estimatedMinutes: 40,
+    estimatedMinutes: 90,
     sortOrder: 2,
     content: {
       sections: [
