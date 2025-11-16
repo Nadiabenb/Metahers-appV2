@@ -364,6 +364,64 @@ export const insertCompanionActivitySchema = createInsertSchema(companionActivit
 export type InsertCompanionActivity = z.infer<typeof insertCompanionActivitySchema>;
 export type CompanionActivityDB = typeof companionActivities.$inferSelect;
 
+// ===== NORMALIZED EXPERIENCE SECTIONS =====
+
+// Experience sections (normalized from JSONB)
+export const experienceSections = pgTable('experience_sections', {
+  id: serial('id').primaryKey(),
+  experienceId: varchar('experience_id').notNull().references(() => transformationalExperiences.id, { onDelete: 'cascade' }),
+  type: varchar('type', { length: 50 }).notNull(), // 'text', 'quiz', 'video', 'interactive', 'hands_on_lab'
+  title: text('title').notNull(),
+  content: text('content'), // Main content
+  metadata: jsonb('metadata'), // Flexible fields like quiz questions, video URL
+  sortOrder: integer('sort_order').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+}, (table) => [
+  index('idx_section_experience').on(table.experienceId),
+  index('idx_section_sort').on(table.experienceId, table.sortOrder),
+]);
+
+export const insertExperienceSectionSchema = createInsertSchema(experienceSections).omit({ id: true, createdAt: true });
+export type InsertExperienceSection = z.infer<typeof insertExperienceSectionSchema>;
+export type ExperienceSectionDB = typeof experienceSections.$inferSelect;
+
+// Section resources (links, downloads, references)
+export const sectionResources = pgTable('section_resources', {
+  id: serial('id').primaryKey(),
+  sectionId: integer('section_id').notNull().references(() => experienceSections.id, { onDelete: 'cascade' }),
+  type: varchar('type', { length: 50 }).notNull(), // 'link', 'download', 'video', 'article', 'tool'
+  title: text('title').notNull(),
+  url: text('url'),
+  metadata: jsonb('metadata'), // Additional fields
+  sortOrder: integer('sort_order').notNull(),
+}, (table) => [
+  index('idx_resource_section').on(table.sectionId),
+]);
+
+export const insertSectionResourceSchema = createInsertSchema(sectionResources).omit({ id: true });
+export type InsertSectionResource = z.infer<typeof insertSectionResourceSchema>;
+export type SectionResourceDB = typeof sectionResources.$inferSelect;
+
+// User section completions (granular tracking)
+export const sectionCompletions = pgTable('section_completions', {
+  id: serial('id').primaryKey(),
+  userId: varchar('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  sectionId: integer('section_id').notNull().references(() => experienceSections.id, { onDelete: 'cascade' }),
+  experienceId: varchar('experience_id').notNull().references(() => transformationalExperiences.id, { onDelete: 'cascade' }),
+  completedAt: timestamp('completed_at').defaultNow().notNull(),
+  timeSpentSeconds: integer('time_spent_seconds'),
+  quizScore: integer('quiz_score'), // If section is a quiz
+}, (table) => [
+  index('idx_completion_user').on(table.userId),
+  index('idx_completion_section').on(table.sectionId),
+  index('idx_completion_experience').on(table.experienceId),
+  uniqueIndex('idx_completion_user_section_unique').on(table.userId, table.sectionId),
+]);
+
+export const insertSectionCompletionSchema = createInsertSchema(sectionCompletions).omit({ id: true, completedAt: true });
+export type InsertSectionCompletion = z.infer<typeof insertSectionCompletionSchema>;
+export type SectionCompletionDB = typeof sectionCompletions.$inferSelect;
+
 // Thought Leadership Journey - Progress tracking table
 export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
