@@ -412,14 +412,12 @@ export function Navigation() {
                     )}
 
                     {/* Companion Link */}
-                    <Link href="/companion" className="hover-elevate">
-                      <a className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                        location === "/companion" ? "bg-primary text-primary-foreground" : "hover:bg-muted"
-                      }`}>
-                        <Sparkles className="w-5 h-5" />
-                        <span>Companion</span>
-                      </a>
-                    </Link>
+                    <MobileNavItem item={{
+                      path: "/companion",
+                      label: "Companion",
+                      icon: Sparkles,
+                      gradient: "from-purple-500 to-pink-600",
+                    }} />
                   </div>
 
                   {/* Auth buttons at bottom */}
