@@ -403,56 +403,71 @@ export default function ExperienceLearningPlayer({
               </div>
             </Card>
 
-            {/* Navigation - Enhanced Replit-Quality Buttons */}
-            <div className="flex items-center justify-between gap-4 flex-wrap">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={goToPreviousSection}
-                disabled={currentSectionIndex === 0}
-                data-testid="button-previous-section"
-                className="gap-2 px-6 group"
-              >
-                <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-                Previous
-              </Button>
+            {/* Navigation with encouragement */}
+            <div className="space-y-4">
+              {/* Progress encouragement */}
+              {!isCurrentSectionComplete && currentSectionIndex > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="p-4 rounded-xl bg-gradient-to-r from-primary/5 to-accent/5 border border-primary/20"
+                >
+                  <p className="text-sm text-center">
+                    <span className="font-semibold">You're doing amazing!</span> You've already completed {completedSections.length} of {totalSections} sections. Keep going! 🌟
+                  </p>
+                </motion.div>
+              )}
 
-              <div className="flex items-center gap-3 flex-wrap">
-                {!isCurrentSectionComplete && (
-                  <Button
-                    onClick={handleSectionComplete}
-                    disabled={isUpdating}
-                    size="lg"
-                    className="gap-2 px-8 shadow-lg"
-                    data-testid="button-mark-complete"
-                  >
-                    <Check className="w-5 h-5" />
-                    Mark Complete
-                  </Button>
-                )}
-                
-                {currentSectionIndex < totalSections - 1 ? (
-                  <Button
-                    onClick={goToNextSection}
-                    size="lg"
-                    variant={isCurrentSectionComplete ? "default" : "outline"}
-                    data-testid="button-next-section"
-                    className="gap-2 px-8 group shadow-lg"
-                  >
-                    Next Section
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                  </Button>
-                ) : allSectionsComplete && onExit ? (
-                  <Button
-                    onClick={onExit}
-                    size="lg"
-                    className="gap-3 px-10 bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--aurora-teal))] hover:shadow-2xl hover:shadow-primary/30 text-white shadow-xl transition-all duration-300"
-                    data-testid="button-experience-complete"
-                  >
-                    <Trophy className="w-5 h-5" />
-                    Experience Complete!
-                  </Button>
-                ) : null}
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  onClick={goToPreviousSection}
+                  disabled={currentSectionIndex === 0}
+                  data-testid="button-previous-section"
+                  className="gap-2 px-6 group"
+                >
+                  <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+                  Previous
+                </Button>
+
+                <div className="flex items-center gap-3 flex-wrap">
+                  {!isCurrentSectionComplete && (
+                    <Button
+                      onClick={handleSectionComplete}
+                      disabled={isUpdating}
+                      size="lg"
+                      className="gap-2 px-8 shadow-lg"
+                      data-testid="button-mark-complete"
+                    >
+                      <Check className="w-5 h-5" />
+                      I Did This!
+                    </Button>
+                  )}
+                  
+                  {currentSectionIndex < totalSections - 1 ? (
+                    <Button
+                      onClick={goToNextSection}
+                      size="lg"
+                      variant={isCurrentSectionComplete ? "default" : "outline"}
+                      data-testid="button-next-section"
+                      className="gap-2 px-8 group shadow-lg"
+                    >
+                      Continue Your Journey
+                      <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                    </Button>
+                  ) : allSectionsComplete && onExit ? (
+                    <Button
+                      onClick={onExit}
+                      size="lg"
+                      className="gap-3 px-10 bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--aurora-teal))] hover:shadow-2xl hover:shadow-primary/30 text-white shadow-xl transition-all duration-300"
+                      data-testid="button-experience-complete"
+                    >
+                      <Trophy className="w-5 h-5" />
+                      You Did It! Celebrate Your Win!
+                    </Button>
+                  ) : null}
+                </div>
               </div>
             </div>
           </motion.div>

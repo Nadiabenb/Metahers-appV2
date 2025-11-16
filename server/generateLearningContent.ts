@@ -26,47 +26,103 @@ async function generateComprehensiveLearningContent(
   tier: "free" | "pro"
 ): Promise<LearningContent> {
   const sectionCount = tier === "pro" ? 7 : 5;
-  
-  const prompt = `Create a comprehensive ${sectionCount}-section learning curriculum for a course titled "${experienceTitle}".
 
-Context: This is for MetaHers Mind Spa, an AI-powered learning platform for women solopreneurs learning AI, Web3, and digital business skills.
+  const prompt = `You are creating a transformational learning experience for "${experienceTitle}" - designed specifically for non-tech women who are ready to step into their power in the digital age.
 
-Space: ${spaceContext}
-Description: ${experienceDescription}
-Tier: ${tier.toUpperCase()} (${tier === "pro" ? "advanced, in-depth content" : "foundational, accessible content"})
+**Your Mission:** Create content that makes women feel "I can do this" not "this is too technical for me."
 
-Create ${sectionCount} sections following this structure:
-1. Foundation section (type: text) - Core concepts and fundamentals
-2-${sectionCount - 2}. Mix of:
-   - "text" sections for concepts and frameworks
-   - "interactive" sections for hands-on exercises
-   - "quiz" sections for knowledge checks
-   - "hands_on_lab" sections for practical application
-${sectionCount}. Final section (type: hands_on_lab) - Real-world implementation project
+**Context:**
+- Platform: MetaHers Mind Spa - where luxury wellness meets cutting-edge tech education
+- Audience: Women solopreneurs, moms, career-changers who may have ZERO tech background
+- Space: ${spaceContext}
+- Description: ${experienceDescription}
+- Tier: ${tier === "pro" ? "PRO - Deep dive with advanced strategies" : "FREE - Welcoming introduction"}
 
-For each section, provide:
-- id: kebab-case identifier (e.g., "intro-foundations", "build-first-mvp")
-- title: Clear, actionable title (e.g., "Master the Fundamentals")
-- type: One of [text, video, interactive, quiz, hands_on_lab]
-- content: Rich, detailed content (500-800 words for text sections, clear instructions for interactive/quiz/lab sections)
-  - For "text": Comprehensive explanation with examples, analogies, and actionable insights
-  - For "interactive": Step-by-step exercises with clear objectives
-  - For "quiz": 4-6 multiple-choice questions with correct answers marked
-  - For "hands_on_lab": Practical project with clear deliverables and success criteria
-- resources (optional): Relevant external resources
+**Tone & Style Requirements:**
+- Write like you're talking to your smart, ambitious best friend over coffee
+- NO jargon without explanation. If you must use tech terms, define them like you're explaining to your mom
+- Use analogies women can relate to: makeup tutorials, closet organization, dinner party planning, running a household
+- Lead with WHY this matters to HER life, then HOW to do it
+- Celebrate small wins. Make every section feel like an achievement
+- Include real stories of women who've done this (even if hypothetical, make them feel real)
+- Address imposter syndrome directly: "You belong here. This is FOR you."
 
-Use a Forbes-meets-Vogue tone: professional, empowering, luxurious yet practical.
-Focus on real-world business applications for soloprene urs.
-Make it actionable and transformation-focused.
+**Content Structure (${sectionCount} sections):**
 
-Return ONLY valid JSON matching this structure:
+Section 1 (type: text) - "Your Invitation" 
+- Start with empathy: acknowledge her fears, her time constraints, her dreams
+- Paint the vision: what will her life look like after mastering this?
+- Break the myth: "You don't need to be technical to succeed here"
+- End with: "Here's exactly what we'll do together..."
+
+Sections 2-${sectionCount - 2} - Mix these thoughtfully:
+- "text" sections: Story-driven teaching with step-by-step breakdowns
+- "interactive" sections: Guided exercises with reflection prompts
+- "quiz" sections: Confidence-building knowledge checks with encouraging feedback
+- "hands_on_lab" sections: Real projects she can complete in 20-30 minutes
+
+Final Section (type: hands_on_lab) - "Your Victory Lap"
+- A practical project that creates something she can SHOW or USE immediately
+- Clear success criteria that celebrate her achievement
+- Next steps that feel exciting, not overwhelming
+
+**For Each Section Include:**
+- id: descriptive kebab-case (e.g., "breaking-tech-myths", "your-first-win")
+- title: Empowering, action-oriented (e.g., "You're More Tech-Savvy Than You Think")
+- type: text, interactive, quiz, or hands_on_lab
+- content: 
+  - **For text sections (600-900 words):**
+    * Hook: Start with a relatable scenario or question
+    * Story: Include a brief example of a woman who did this
+    * Teach: Break down the concept with analogies and plain language
+    * Action: End with 1-3 simple next steps
+    * Encouragement: Remind her she's got this
+
+  - **For interactive sections:**
+    * Clear objective: "By the end, you'll have..."
+    * Step-by-step guide with screenshots or descriptions
+    * Reflection questions to deepen learning
+    * Celebration prompt: "Acknowledge what you just accomplished!"
+
+  - **For quiz sections (4-5 questions):**
+    * Frame as "confidence check" not "test"
+    * Include encouraging explanations for ALL answers (right and wrong)
+    * End with: "You're learning! That's what matters."
+
+  - **For hands_on_lab sections:**
+    * "What you'll create: [tangible outcome]"
+    * Time estimate: realistic for busy women
+    * Step-by-step instructions as if teaching your sister
+    * Troubleshooting: "If this happens, try this..."
+    * Win moment: "Look what you just built!"
+
+- resources (optional but encouraged):
+  * Prioritize beginner-friendly, woman-led resources
+  * Include type: "article", "video", "tool", "community"
+  * Add one-line description: "Why this is helpful for you"
+
+**Transformation Focus:**
+Every section should answer:
+1. Why does this matter to MY life/business?
+2. What's the simplest way to understand this?
+3. What's one thing I can do RIGHT NOW?
+4. How will I know I'm succeeding?
+
+**Avoid:**
+- Corporate buzzwords and technical jargon without context
+- Assumptions that she knows anything about tech
+- Condescending "dumbing down" - she's smart, just new to this
+- Long paragraphs without breaks - keep it scannable
+- Fear-based motivation - focus on empowerment and possibility
+
+Return ONLY valid JSON:
 {
   "sections": [
     {
-      "id": "section-id",
-      "title": "Section Title",
+      "id": "section-kebab-case",
+      "title": "Empowering Title That Speaks to Her",
       "type": "text|interactive|quiz|hands_on_lab",
-      "content": "Detailed content here...",
+      "content": "Engaging, relatable, transformational content...",
       "resources": [{"title": "Resource Name", "url": "https://...", "type": "article|video|tool"}]
     }
   ]
@@ -136,7 +192,7 @@ export async function generateAllLearningContent() {
   for (const exp of experiences) {
     try {
       console.log(`📚 Generating content for: ${exp.title} (${exp.tier})...`);
-      
+
       const spaceContext = spaceContextMap[exp.spaceId] || exp.spaceId;
       const content = await generateComprehensiveLearningContent(
         exp.title,
@@ -146,10 +202,10 @@ export async function generateAllLearningContent() {
       );
 
       await updateExperienceContent(exp.id, content);
-      
+
       completed++;
       console.log(`   ✅ Complete! Generated ${content.sections.length} sections\n`);
-      
+
       // Rate limiting - wait 1 second between requests
       await new Promise(resolve => setTimeout(resolve, 1000));
     } catch (error) {

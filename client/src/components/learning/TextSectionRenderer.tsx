@@ -38,14 +38,15 @@ export default function TextSectionRenderer({
         transition={{ duration: 0.6 }}
         className="prose prose-lg max-w-none dark:prose-invert"
       >
-        {/* Ambient background for luxury feel */}
+        {/* Warm, inviting background */}
         <div className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-br from-primary/[0.02] via-transparent to-transparent pointer-events-none rounded-2xl" />
+          <div className="absolute -inset-6 bg-gradient-to-br from-primary/[0.03] via-accent/[0.02] to-transparent pointer-events-none rounded-3xl" />
           <div 
-            className="relative leading-relaxed prose-headings:font-serif prose-headings:font-bold prose-p:text-foreground/90 prose-p:leading-relaxed prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-foreground prose-em:text-foreground/80"
+            className="relative leading-relaxed prose-headings:font-serif prose-headings:font-bold prose-headings:text-foreground prose-p:text-foreground/90 prose-p:leading-[1.85] prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-strong:text-primary prose-strong:font-semibold prose-em:text-foreground/80 prose-em:italic prose-ul:list-disc prose-ul:ml-6 prose-li:text-foreground/90 prose-li:mb-2"
             style={{ 
-              fontSize: '1.125rem',
-              lineHeight: '1.8'
+              fontSize: '1.15rem',
+              lineHeight: '1.85',
+              letterSpacing: '0.01em'
             }}
             dangerouslySetInnerHTML={{ __html: section.content }}
           />
