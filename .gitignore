@@ -5,3 +5,13 @@ server/public
 vite.config.ts.*
 *.tar.gz
 backups/
+node_modules
+dist
+.DS_Store
+server/public
+vite.config.ts.*
+*.tar.gz
+backups/
+test-results/
+playwright-report/
+playwright/.cache/

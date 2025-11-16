@@ -17,7 +17,11 @@
     "backup-content": "tsx server/backupTransformationalContent.ts",
     "restore-content": "tsx server/restoreTransformationalContent.ts",
     "backup:db": "tsx server/scripts/backup-database.ts",
-    "restore:db": "tsx server/scripts/restore-database.ts"
+    "restore:db": "tsx server/scripts/restore-database.ts",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -112,6 +116,7 @@
     "zod-validation-error": "^3.4.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@replit/vite-plugin-cartographer": "^0.4.3",
     "@replit/vite-plugin-dev-banner": "^0.1.1",
     "@replit/vite-plugin-runtime-error-modal": "^0.0.3",
