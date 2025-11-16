@@ -127,24 +127,108 @@ const WOMEN_SOLOPRENEUR_FRAMEWORK = `
 - Hustle culture messaging
 `;
 
-// Validation helper
+// Validation helper - Comprehensive framework element checking
 function validateEnhancedSection(section: any, sectionIndex: number): { valid: boolean; errors: string[] } {
   const errors: string[] = [];
   
+  // Basic field validation
   if (!section.id) errors.push(`Section ${sectionIndex + 1}: Missing id`);
   if (!section.title) errors.push(`Section ${sectionIndex + 1}: Missing title`);
   if (!section.type) errors.push(`Section ${sectionIndex + 1}: Missing type`);
-  if (!section.content || section.content.length < 400) {
-    errors.push(`Section ${sectionIndex + 1}: Content too short (need 600-900 words)`);
+  
+  // Content validation - check actual word count (600-900 words)
+  const content = section.content || '';
+  const wordCount = content.split(/\s+/).filter((w: string) => w.length > 0).length;
+  if (wordCount < 500) {
+    errors.push(`Section ${sectionIndex + 1}: Content too short (${wordCount} words, need 600-900)`);
   }
-  if (!section.quickWinChallenge) {
-    errors.push(`Section ${sectionIndex + 1}: Missing quickWinChallenge`);
+  if (wordCount > 1000) {
+    errors.push(`Section ${sectionIndex + 1}: Content too long (${wordCount} words, max 900)`);
   }
+  
+  // Framework Element 1: Mindset Anchor - Check for empowering language
+  const contentLower = content.toLowerCase();
+  const hasMindsetLanguage = 
+    contentLower.includes('you belong') ||
+    contentLower.includes('you don\'t need') ||
+    contentLower.includes('your') && (contentLower.includes('superpower') || contentLower.includes('strength')) ||
+    contentLower.includes('women') && (contentLower.includes('excel') || contentLower.includes('positioned') || contentLower.includes('succeed'));
+  
+  if (sectionIndex === 0 && !hasMindsetLanguage) {
+    errors.push(`Section ${sectionIndex + 1}: First section must include mindset anchor language ("you belong", "you don't need X degree", etc.)`);
+  }
+  
+  // Framework Element 2: Diverse Women Case Studies - Check for actual names/stories
+  const hasWomenStories = 
+    /\b[A-Z][a-z]+ [A-Z][a-z]+\b/.test(content) || // Full names (e.g., "Sarah Johnson")
+    /\b(Meet|meet) [A-Z][a-z]+/.test(content) || // "Meet Sarah"
+    /\b\d{2}[-,]/.test(content); // Ages like "38," or "42-year-old"
+  
+  if (!hasWomenStories && sectionIndex >= 2) {
+    errors.push(`Section ${sectionIndex + 1}: Missing diverse women case studies (include names, ages, transformation stories)`);
+  }
+  
+  // Framework Element 3: Business Application - Check for direct application language
+  const hasBusinessApplication =
+    contentLower.includes('for your business') ||
+    contentLower.includes('if you\'re a') ||
+    contentLower.includes('for coaches') ||
+    contentLower.includes('for consultants') ||
+    contentLower.includes('for entrepreneurs');
+  
+  if (!hasBusinessApplication) {
+    errors.push(`Section ${sectionIndex + 1}: Missing business application callout ("For YOUR business", "If you're a coach", etc.)`);
+  }
+  
+  // Framework Element 4: Quick Win Challenge
+  if (!section.quickWinChallenge || section.quickWinChallenge.length < 20) {
+    errors.push(`Section ${sectionIndex + 1}: Missing or too short quickWinChallenge (need specific 15-30 min actionable task)`);
+  }
+  
+  // Framework Element 5: Personal Reflection Prompts
   if (!section.reflectionPrompts || section.reflectionPrompts.length < 2) {
     errors.push(`Section ${sectionIndex + 1}: Need at least 2 reflection prompts`);
+  } else {
+    // Check that prompts are actually questions
+    const hasQuestions = section.reflectionPrompts.some((p: string) => p.includes('?'));
+    if (!hasQuestions) {
+      errors.push(`Section ${sectionIndex + 1}: Reflection prompts should be questions (end with ?)`);
+    }
   }
-  if (!section.monetizationInsight) {
-    errors.push(`Section ${sectionIndex + 1}: Missing monetizationInsight`);
+  
+  // Framework Element 6: Monetization Insight
+  if (!section.monetizationInsight || section.monetizationInsight.length < 20) {
+    errors.push(`Section ${sectionIndex + 1}: Missing or too short monetizationInsight (need specific revenue connection)`);
+  }
+  
+  // Check monetization mentions revenue/money/income
+  const monetizationLower = (section.monetizationInsight || '').toLowerCase();
+  const hasMonetizationLanguage =
+    monetizationLower.includes('revenue') ||
+    monetizationLower.includes('income') ||
+    monetizationLower.includes('earn') ||
+    monetizationLower.includes('$') ||
+    monetizationLower.includes('money') ||
+    monetizationLower.includes('profit');
+  
+  if (!hasMonetizationLanguage) {
+    errors.push(`Section ${sectionIndex + 1}: Monetization insight must mention actual revenue/income/earnings`);
+  }
+  
+  // Framework Element 7: Community Connection (at least mentioned)
+  const hasCommunityMention =
+    contentLower.includes('community') ||
+    contentLower.includes('metahers') ||
+    contentLower.includes('together') ||
+    contentLower.includes('support') && contentLower.includes('network');
+  
+  if (!hasCommunityMention && sectionIndex >= 3) {
+    errors.push(`Section ${sectionIndex + 1}: Should mention community/support opportunities`);
+  }
+  
+  // Framework Element 8: Quality Resources
+  if (!section.resources || section.resources.length === 0) {
+    errors.push(`Section ${sectionIndex + 1}: Missing resources (need at least 1-2 quality links)`);
   }
   
   return { valid: errors.length === 0, errors };
@@ -209,7 +293,7 @@ Return ONLY valid JSON array of sections. Each section must include:
 - monetizationInsight (how this creates revenue)
 `;
 
-  const userPrompt = `
+  let userPrompt = `
 Experience Title: ${experience.title}
 Description: ${experience.description}
 Target Tier: ${targetTier}
@@ -221,10 +305,10 @@ ${existingSectionsTOON}
 
 ${options.fullRegeneration 
   ? `Create ${targetSectionCount} completely new sections following the framework. Make them transformational, relatable to women solopreneurs, and packed with diverse case studies.`
-  : `Enhance the existing sections by adding: mindset anchors, diverse women case studies, business applications, quick win challenges, reflection prompts, monetization insights, and community connections. Maintain core educational value while making it deeply transformational.`
+  : `Enhance the existing sections by adding: mindset anchors, diverse women case studies, business applications, quick win challenges, reflection prompts, monetization insights, and community connections. ${experience.sections.length < targetSectionCount ? `IMPORTANT: Expand to exactly ${targetSectionCount} sections by adding new sections as needed.` : 'Maintain core educational value while making it deeply transformational.'}`
 }
 
-IMPORTANT: Return ONLY the JSON array. No markdown code blocks, no explanations.
+IMPORTANT: Return ONLY the JSON array of exactly ${targetSectionCount} sections. No markdown code blocks, no explanations.
 `;
 
   let attempt = 0;
@@ -269,8 +353,19 @@ IMPORTANT: Return ONLY the JSON array. No markdown code blocks, no explanations.
       });
 
       if (validationErrors.length > 0) {
-        console.warn(`⚠️  Validation failed:\n${validationErrors.join('\n')}`);
-        throw new Error(`Framework validation failed: ${validationErrors.length} issues found`);
+        console.warn(`⚠️  Validation failed (${validationErrors.length} issues):`);
+        validationErrors.slice(0, 10).forEach(err => console.warn(`   - ${err}`));
+        if (validationErrors.length > 10) {
+          console.warn(`   ... and ${validationErrors.length - 10} more issues`);
+        }
+        
+        // Provide detailed feedback to AI for retry
+        if (attempt < maxRetries) {
+          const feedbackPrompt = `\n\nPREVIOUS ATTEMPT HAD ISSUES:\n${validationErrors.slice(0, 5).join('\n')}\n\nPlease fix these issues in your next response.`;
+          userPrompt += feedbackPrompt;
+        }
+        
+        throw new Error(`Framework validation failed: ${validationErrors.length} issues`);
       }
 
       // Log actual token usage from OpenAI

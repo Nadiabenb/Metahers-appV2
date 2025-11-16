@@ -3503,17 +3503,9 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // ADMIN: Test content enhancement with TOON optimization (Protected)
-  app.post('/api/admin/test-content-enhancement', isAuthenticated, async (req: Request, res) => {
+  // ADMIN: Test content enhancement with TOON optimization (Protected - Admin Only)
+  app.post('/api/admin/test-content-enhancement', isAuthenticated, isAdmin, async (req: Request, res) => {
     try {
-      // Additional admin check - only allow for authenticated users
-      // In production, you might want to add an isAdmin flag to users table
-      const userId = req.session!.userId as string;
-      const user = await storage.getUser(userId);
-      
-      if (!user) {
-        return res.status(403).json({ message: 'Access denied' });
-      }
 
       const { experienceSlug, mode } = req.body;
 

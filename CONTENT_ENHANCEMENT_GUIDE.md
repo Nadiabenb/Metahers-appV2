@@ -137,23 +137,32 @@ curl -X POST http://localhost:5000/api/admin/test-content-enhancement \
 
 ## 🔒 Built-in Safeguards
 
-### 1. Framework Validation
-Every generated section is validated for:
-- ✅ All 8 required elements present
-- ✅ Content length (600-900 words)
-- ✅ At least 2 reflection prompts
-- ✅ Monetization insight included
-- ✅ Resources provided
+### 1. Comprehensive Framework Validation
+Every generated section is validated for ALL 8 framework elements:
+- ✅ **Mindset Anchor** - Checks for empowering language ("you belong", "you don't need X degree")
+- ✅ **Diverse Women Case Studies** - Detects actual names, ages, transformation stories
+- ✅ **Business Application** - Looks for "For YOUR business", "If you're a coach", etc.
+- ✅ **Quick Win Challenge** - Validates 15-30 min actionable tasks
+- ✅ **Reflection Prompts** - Ensures at least 2 questions (with "?")
+- ✅ **Monetization Insight** - Checks for revenue/income/earnings mentions
+- ✅ **Community Connection** - Verifies community/support mentions
+- ✅ **Quality Resources** - Ensures resources are provided
+- ✅ **Word Count** - Enforces 600-900 words (actual word count, not characters)
 
-### 2. Auto-Retry Logic
+### 2. Intelligent Auto-Retry with Feedback
 - 3 attempts total (1 initial + 2 retries)
-- Exponential backoff between retries
-- Fails only after all attempts exhausted
+- Exponential backoff between retries (1s, 2s, 4s)
+- **AI receives validation feedback** between attempts to fix specific issues
+- Automatically requests additional sections if count is insufficient
+- Fails only after all attempts exhausted with detailed error report
 
-### 3. Authentication Required
-- Must be logged in to use admin endpoint
+### 3. Admin-Only Authorization
+- **Requires `isAdmin` middleware** - Not just any logged-in user
+- Checks if user email is in `ADMIN_EMAILS` environment variable
+- Logs all admin access attempts (approved and denied)
 - Prevents unauthorized OpenAI API spending
 - Protects sensitive content from public access
+- IP tracking for security audit trail
 
 ### 4. No Database Writes
 - Test endpoint never modifies database
