@@ -15,7 +15,7 @@ if (!process.env.DATABASE_URL) {
 
 console.log("✓ DATABASE_URL is configured");
 
-export const pool = new Pool({ 
+export const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   // Add connection timeout and retry settings for production
   connectionTimeoutMillis: 10000,

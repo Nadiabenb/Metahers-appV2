@@ -410,7 +410,7 @@ export function Navigation() {
                         gradient: "from-slate-500 to-gray-600",
                       }} />
                     )}
-                    
+
                     {/* Companion Link */}
                     <Link href="/companion" className="hover-elevate">
                       <a className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${

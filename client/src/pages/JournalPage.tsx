@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { BookOpen, Flame, History, Calendar } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { LuxuryJournalEditor } from "@/components/LuxuryJournalEditor";
+import { UnifiedJournalEditor } from "@/components/UnifiedJournalEditor";
 import { JournalCalendarPicker } from "@/components/JournalCalendarPicker";
 import { DailyCalendar } from "@/components/DailyCalendar";
 import { useJournal } from "@/hooks/useJournal";
@@ -131,7 +131,7 @@ export default function JournalPage() {
               )}
             </div>
 
-            <LuxuryJournalEditor selectedDate={dateStr} />
+            <UnifiedJournalEditor selectedDate={dateStr} />
           </div>
 
           <motion.div
