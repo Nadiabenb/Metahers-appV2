@@ -136,6 +136,9 @@ export function GlobalSearch() {
               <Search className="w-5 h-5 text-primary" />
               Global Search
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              Search across all learning spaces and experiences
+            </DialogDescription>
           </DialogHeader>
 
           <div className="p-6 space-y-4">
