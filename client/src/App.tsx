@@ -13,6 +13,7 @@ import { CursorSparkles } from "@/components/effects/CursorSparkles";
 import { BreathingLoader } from "@/components/effects/BreathingLoader";
 import { initializeApp } from "@/lib/storage";
 import { CustomCursor } from "@/components/effects/CustomCursor";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
@@ -195,20 +196,22 @@ function App() {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider defaultTheme="dark" storageKey="metahers-theme">
-        <TooltipProvider>
-          <div className="min-h-screen bg-background overflow-x-hidden">
-            <CursorSparkles />
-            <CustomCursor />
-            <Navigation />
-            <Router />
-            <InstallPrompt />
-          </div>
-          <Toaster />
-        </TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider defaultTheme="dark" storageKey="metahers-theme">
+          <TooltipProvider>
+            <div className="min-h-screen bg-background overflow-x-hidden">
+              <CursorSparkles />
+              <CustomCursor />
+              <Navigation />
+              <Router />
+              <InstallPrompt />
+            </div>
+            <Toaster />
+          </TooltipProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 
