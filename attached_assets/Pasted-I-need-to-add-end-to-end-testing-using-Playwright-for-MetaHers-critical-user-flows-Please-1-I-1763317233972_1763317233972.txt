@@ -1,0 +1,74 @@
+I need to add end-to-end testing using Playwright for MetaHers' critical user flows. Please:
+
+1. **Install Playwright:**
+   - npm install -D @playwright/test
+   - npx playwright install
+   - Create playwright.config.ts with:
+     * baseURL: http://localhost:5000
+     * Test timeout: 30 seconds
+     * Retries: 2 on CI
+     * Browsers: chromium, firefox, webkit
+
+2. **Create Test Utilities:**
+   - Create tests/helpers/auth.ts with:
+     * testUser credentials
+     * login() helper function
+     * logout() helper function
+   - Create tests/helpers/database.ts with:
+     * setupTestDatabase() - clear test data
+     * seedTestData() - create test user and experiences
+
+3. **Write Critical Path Tests:**
+
+   **Test 1: Authentication Flow** (tests/auth.spec.ts)
+   - Visit landing page
+   - Click "Get Started" button
+   - Fill registration form
+   - Verify redirect to dashboard
+   - Verify user is logged in
+   - Logout and verify redirect to landing page
+   - Login again with same credentials
+   - Verify dashboard loads
+
+   **Test 2: Experience Completion Flow** (tests/experience.spec.ts)
+   - Login as test user
+   - Navigate to a space (Web3)
+   - Click on first experience
+   - Read through each section
+   - Complete a quiz section
+   - Mark experience as complete
+   - Verify progress is saved
+   - Go back to dashboard
+   - Verify experience shows as completed
+
+   **Test 3: Journal Flow** (tests/journal.spec.ts)
+   - Login as test user
+   - Navigate to journal page
+   - Create new journal entry
+   - Add gratitude items
+   - Set mood
+   - Save entry
+   - Verify entry appears in history
+   - Edit the entry
+   - Delete the entry
+
+   **Test 4: Subscription Upgrade Flow** (tests/subscription.spec.ts)
+   - Login as free tier user
+   - Try to access Pro-only experience
+   - Verify paywall appears
+   - Click "Upgrade to Pro"
+   - Verify redirect to upgrade page
+   - Verify pricing displayed correctly
+   - (Don't actually process payment in test)
+
+4. **Add NPM Scripts:**
+   - "test:e2e": "playwright test"
+   - "test:e2e:ui": "playwright test --ui"
+   - "test:e2e:headed": "playwright test --headed"
+
+5. **CI Configuration:**
+   - Create .github/workflows/e2e.yml
+   - Run tests on PR to main branch
+   - Run tests before deployment
+
+Please create a comprehensive test suite with good assertions and error messages. Use page object pattern for reusable page interactions.
