@@ -1,4 +1,3 @@
-
 import { db } from "./db";
 import { spaces } from "../shared/schema";
 import { sql } from "drizzle-orm";
@@ -44,10 +43,11 @@ const METAHERS_SPACES = [
     id: "branding",
     name: "Branding",
     slug: "branding",
-    description: "Build your personal and professional brand with AI-powered tools. Master content creation, community building, and thought leadership for the digital age.",
-    icon: "Megaphone",
-    color: "liquid-gold",
+    description: "Build your personal brand and become a thought leader. Master LinkedIn, content systems, and authority positioning while keeping your job.",
+    icon: "✨",
+    color: "#E91E63",
     sortOrder: 5,
+    isActive: true,
   },
   {
     id: "moms",
@@ -71,10 +71,11 @@ const METAHERS_SPACES = [
     id: "founders-club",
     name: "Founder's Club",
     slug: "founders-club",
-    description: "The 12-week accelerator where women turn business ideas into reality using AI, no-code tools, and Web3 mindset. Personal mentorship, community support, and everything you need to launch.",
-    icon: "Crown",
-    color: "cyber-fuchsia",
+    description: "12-week business accelerator: Launch your startup from idea to $10K MRR. Build revenue systems, operations, and marketing with AI + no-code tools.",
+    icon: "👑",
+    color: "#FFD700",
     sortOrder: 8,
+    isActive: true,
   },
   {
     id: "digital-sales",
@@ -90,7 +91,7 @@ const METAHERS_SPACES = [
 export async function seedSpaces() {
   try {
     console.log("Seeding MetaHers World spaces...");
-    
+
     for (const space of METAHERS_SPACES) {
       await db
         .insert(spaces)
@@ -106,10 +107,10 @@ export async function seedSpaces() {
             updatedAt: sql`now()`,
           },
         });
-      
+
       console.log(`✓ Seeded space: ${space.name}`);
     }
-    
+
     console.log("✓ All MetaHers World spaces seeded successfully!");
   } catch (error) {
     console.error("Error seeding spaces:", error);

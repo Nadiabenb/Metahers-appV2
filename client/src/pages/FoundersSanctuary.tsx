@@ -170,7 +170,7 @@ export default function FoundersSanctuary() {
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/10 via-transparent to-[hsl(var(--cyber-fuchsia))]/10" />
-        
+
         <div className="relative max-w-6xl mx-auto px-4 py-20 md:py-32">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -181,18 +181,23 @@ export default function FoundersSanctuary() {
               <Crown className="w-3 h-3 mr-1" />
               Winter 2026 Cohort Now Accepting Applications
             </Badge>
-            
+
             <h1 className="font-cormorant text-5xl md:text-7xl font-bold metallic-text">
               Founder's Sanctuary
             </h1>
-            
+
             <p className="text-2xl md:text-3xl text-foreground/90 max-w-3xl mx-auto font-light leading-tight">
               The 12-Week Program Where Women Turn Business Ideas Into Reality—Using AI, No-Code Tools & Web3 Mindset
             </p>
-            
+
             <p className="text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
-              Whether you're launching a coaching practice, building a community, reviving a stuck business, or starting fresh—you'll learn to leverage AI and no-code tools to build it yourself. No technical co-founder. No expensive developers. Just you, proven systems, and a sanctuary of brilliant women.
+              This isn't personal branding (see our Branding Space for that). This is building an actual business: revenue systems, customer acquisition, operations, and scaling to $10K MRR. Whether you're launching a coaching practice, SaaS product, community, or service business—you'll learn to leverage AI and no-code tools to build it yourself.
             </p>
+
+            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 text-sm">
+              <span className="text-primary font-semibold">Not sure which path?</span>
+              <span className="text-foreground/70">Branding = Build authority. Founder's Club = Build business.</span>
+            </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
               <Button 
@@ -463,7 +468,7 @@ export default function FoundersSanctuary() {
               <Badge className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] text-white border-0">
                 Winter 2026 Cohort · Starts January 5
               </Badge>
-              
+
               <h3 className="font-cormorant text-3xl md:text-4xl font-bold metallic-text">
                 Ready to Launch Your Business?
               </h3>

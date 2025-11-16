@@ -803,24 +803,24 @@ export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   {
     id: "branding-1-strategy",
     spaceId: "branding",
-    title: "AI Branding Fundamentals",
-    slug: "ai-branding-fundamentals",
-    description: "Build a powerful brand with AI tools. From positioning to messaging to visual identity.",
+    title: "Personal Brand Foundation",
+    slug: "personal-brand-foundation",
+    description: "Define your unique positioning as a thought leader. Build the foundation for authority in your industry while keeping your job.",
     learningObjectives: [
-      "Define your brand strategy with AI",
-      "Create compelling brand messaging",
-      "Position yourself in the market",
+      "Define your personal brand essence and unique angle",
+      "Identify your thought leadership pillars",
+      "Create your signature story and positioning statement",
     ],
     tier: "free", // FREE - Lead magnet
-    estimatedMinutes: 25,
+    estimatedMinutes: 30,
     sortOrder: 1,
     content: {
       sections: [
         {
           id: "branding-intro",
-          title: "Brand Strategy with AI",
+          title: "Your Personal Brand Foundation",
           type: "text",
-          content: "Build a brand that stands out with AI power.",
+          content: "You don't need to quit your job to become a thought leader. You need a clear personal brand. This experience helps you define WHO you are, WHAT you stand for, and WHY people should listen to you. Whether you're a consultant, coach, executive, or aspiring speaker—your personal brand is your competitive advantage.",
         },
       ],
     },
@@ -829,24 +829,128 @@ export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   {
     id: "branding-2-content",
     spaceId: "branding",
-    title: "AI Content Strategy",
-    slug: "ai-content-strategy",
-    description: "Create a content system that builds your brand on autopilot. Blog, social, email, and more.",
+    title: "LinkedIn Thought Leadership System",
+    slug: "linkedin-thought-leadership",
+    description: "Build a content system for LinkedIn that positions you as an industry expert. From viral hooks to engagement strategies.",
     learningObjectives: [
-      "Build your AI content engine",
-      "Create content pillars and calendars",
-      "Maintain consistency across platforms",
+      "Master LinkedIn content formats that build authority",
+      "Create a sustainable content rhythm (3-5x/week)",
+      "Build engagement systems that grow your network",
     ],
     tier: "pro", // PRO
-    estimatedMinutes: 35,
+    estimatedMinutes: 40,
     sortOrder: 2,
     content: {
       sections: [
         {
           id: "content-strategy",
-          title: "Content System Building",
+          title: "LinkedIn Content Mastery",
           type: "interactive",
-          content: "Create content that builds your brand.",
+          content: "LinkedIn is the #1 platform for professional thought leadership. This system helps you show up consistently, build real relationships, and position yourself as the go-to expert in your field—without quitting your job.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "branding-3-authority",
+    spaceId: "branding",
+    title: "Build AI-Searchable Authority",
+    slug: "ai-searchable-authority",
+    description: "Become so visible that AI models reference your work. Long-form content, media features, and speaking opportunities.",
+    learningObjectives: [
+      "Create long-form content that builds lasting authority",
+      "Get featured in media and publications",
+      "Position yourself for speaking opportunities",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 45,
+    sortOrder: 3,
+    content: {
+      sections: [
+        {
+          id: "authority-building",
+          title: "AI-Searchable Thought Leadership",
+          type: "text",
+          content: "AI models learn from publicly available content. When you build deep, searchable authority—writing articles, getting media features, speaking at events—you train AI to reference YOU. This experience shows you how.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "branding-4-newsletter",
+    spaceId: "branding",
+    title: "Newsletter as Authority Engine",
+    slug: "newsletter-authority",
+    description: "Launch and grow a newsletter that builds your email list and positions you as an industry expert.",
+    learningObjectives: [
+      "Launch your thought leadership newsletter",
+      "Grow your subscriber base organically",
+      "Monetize your expertise through email",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 35,
+    sortOrder: 4,
+    content: {
+      sections: [
+        {
+          id: "newsletter-strategy",
+          title: "Email Authority Building",
+          type: "interactive",
+          content: "Social media is rented land. Your email list is yours forever. Build a newsletter that showcases your expertise and creates opportunities.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "branding-5-speaking",
+    spaceId: "branding",
+    title: "From Thought Leader to Speaker",
+    slug: "thought-leader-speaker",
+    description: "Get booked for podcasts, panels, and stages. Turn your expertise into speaking opportunities.",
+    learningObjectives: [
+      "Create your signature talk framework",
+      "Pitch podcasts and speaking events",
+      "Deliver compelling presentations",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 40,
+    sortOrder: 5,
+    content: {
+      sections: [
+        {
+          id: "speaking-strategy",
+          title: "Speaking as Authority Amplifier",
+          type: "text",
+          content: "Speaking creates instant authority and fills your pipeline faster than any other channel. Learn how to get booked and deliver talks that position you as THE expert.",
+        },
+      ],
+    },
+    personalizationEnabled: true,
+  },
+  {
+    id: "branding-6-monetize",
+    spaceId: "branding",
+    title: "Monetize Your Thought Leadership",
+    slug: "monetize-thought-leadership",
+    description: "Turn your personal brand into revenue: consulting, coaching, courses, and premium content.",
+    learningObjectives: [
+      "Create premium offers from your expertise",
+      "Build a funnel from content to clients",
+      "Price and package your knowledge",
+    ],
+    tier: "pro", // PRO
+    estimatedMinutes: 50,
+    sortOrder: 6,
+    content: {
+      sections: [
+        {
+          id: "monetization-strategy",
+          title: "Authority to Income",
+          type: "interactive",
+          content: "Thought leadership without revenue is just a hobby. Learn to package your expertise into consulting offers, coaching programs, and digital products that pay.",
         },
       ],
     },
