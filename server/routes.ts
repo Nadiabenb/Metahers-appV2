@@ -4,6 +4,7 @@ import { randomBytes } from "crypto";
 import { storage } from "./storage";
 import { setupAuth, isAuthenticated, isProUser, canAccessThoughtLeadership, isSanctuaryMember, isInnerCircleMember, isFoundersCircleMember, isAdmin, hashPassword, verifyPassword } from "./auth";
 import { sanitizeText, sanitizeHTML, sanitizeObject } from "./security";
+import { asyncHandler, DatabaseError, OpenAIError, OpenAITimeoutError, ValidationError, NotFoundError, AuthenticationError } from "./middleware/errorHandler";
 import Stripe from "stripe";
 import { Resend } from "resend";
 import OpenAI from "openai";
@@ -96,22 +97,22 @@ const DATA_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment monitoring
   // Note: Root "/" is handled by static file serving (index.html) which also returns 200
-  app.get('/health', (_req, res) => {
+  app.get('/health', asyncHandler(async (_req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
-  });
+  }));
 
-  app.get('/api/health', (_req, res) => {
+  app.get('/api/health', asyncHandler(async (_req, res) => {
     res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
-  });
+  }));
 
   // 💰 OpenAI Prompt Cache Stats (Admin only)
-  app.get('/api/admin/cache-stats', isAuthenticated, isAdmin, (_req, res) => {
+  app.get('/api/admin/cache-stats', isAuthenticated, isAdmin, asyncHandler(async (_req, res) => {
     cacheMonitor.report();
     res.status(200).json({ 
       status: 'ok', 
       message: 'Cache stats logged to console. Check server logs for detailed metrics.' 
     });
-  });
+  }));
 
   // Test endpoint to check Resend configuration (admin only in production)
   app.get('/api/test-resend', async (req, res) => {
@@ -1023,15 +1024,15 @@ Return ONLY valid JSON:
   });
 
   // ===== METAHERS WORLD SPACESROUTES =====
-  app.get('/api/spaces', async (_req: Request, res) => {
-    try {
-      // Check cache first
-      const now = Date.now();
-      if (spacesCache && (now - spacesCache.timestamp) < DATA_CACHE_TTL) {
-        return res.json(spacesCache.data);
-      }
+  app.get('/api/spaces', asyncHandler(async (_req: Request, res) => {
+    // Check cache first
+    const now = Date.now();
+    if (spacesCache && (now - spacesCache.timestamp) < DATA_CACHE_TTL) {
+      return res.json(spacesCache.data);
+    }
 
-      // Fetch from database
+    // Fetch from database
+    try {
       const spaces = await storage.getSpaces();
       
       // Update cache
@@ -1039,10 +1040,9 @@ Return ONLY valid JSON:
       
       res.json(spaces);
     } catch (error) {
-      console.error("Error fetching spaces:", error);
-      res.status(500).json({ message: "Failed to fetch spaces" });
+      throw new DatabaseError("Failed to fetch learning spaces", error);
     }
-  });
+  }));
 
   app.get('/api/spaces/:slug', async (req: Request, res) => {
     try {
@@ -1547,17 +1547,17 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // ===== AI RECOMMENDATIONS ROUTE =====
-  app.get('/api/recommendations', isAuthenticated, async (req: Request, res) => {
+  app.get('/api/recommendations', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+
+    // Check cache first
+    const cached = recommendationCache.get(userId);
+    const now = Date.now();
+    if (cached && (now - cached.timestamp) < CACHE_TTL) {
+      return res.json(cached.data);
+    }
+
     try {
-      const userId = req.session!.userId as string;
-
-      // Check cache first
-      const cached = recommendationCache.get(userId);
-      const now = Date.now();
-      if (cached && (now - cached.timestamp) < CACHE_TTL) {
-        return res.json(cached.data);
-      }
-
       // Fetch user data (only aggregates, no PII)
       const journalEntries = await storage.getAllJournalEntries(userId, 10);
       const experienceProgress = await storage.getAllExperienceProgress(userId);
@@ -1614,12 +1614,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
 
       res.json(recommendations);
     } catch (error) {
-      console.error('Failed to generate recommendations:', error);
-      res.status(503).json({ 
-        message: 'Recommendations temporarily unavailable. Please try again later.' 
-      });
+      if (error instanceof Error && error.message.includes('timeout')) {
+        throw new OpenAITimeoutError();
+      }
+      throw new OpenAIError('Recommendations temporarily unavailable', error);
     }
-  });
+  }));
 
   // ===== JOURNAL ROUTES =====
   // List journal entries for a month (for calendar view)
@@ -1767,17 +1767,17 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // AI Journal Prompt Generation (Pro only)
-  app.get('/api/journal/prompt', isAuthenticated, async (req: Request, res) => {
+  app.get('/api/journal/prompt', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const user = await storage.getUser(userId);
+
+    if (!user?.isPro) {
+      return res.status(403).json({ message: "This feature requires a Pro subscription" });
+    }
+
+    const ritualContext = req.query.ritual as string | undefined;
+
     try {
-      const userId = req.session!.userId as string;
-      const user = await storage.getUser(userId);
-
-      if (!user?.isPro) {
-        return res.status(403).json({ message: "This feature requires a Pro subscription" });
-      }
-
-      const ritualContext = req.query.ritual as string | undefined;
-
       // Get recent entries for context
       const recentEntries = await storage.getRecentJournalEntries(userId, 3);
       const previousEntries = recentEntries.map((e: { content: string }) => e.content.substring(0, 100));
@@ -1785,10 +1785,12 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       const prompt = await generateJournalPrompt(ritualContext, previousEntries);
       res.json({ prompt });
     } catch (error) {
-      console.error("Error generating prompt:", error);
-      res.status(500).json({ message: "Failed to generate prompt" });
+      if (error instanceof Error && error.message.includes('timeout')) {
+        throw new OpenAITimeoutError();
+      }
+      throw new OpenAIError("Failed to generate journal prompt", error);
     }
-  });
+  }));
 
   // AI Journal Analysis (Pro only)
   app.post('/api/journal/analyze', isAuthenticated, async (req: Request, res) => {

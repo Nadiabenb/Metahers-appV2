@@ -106,9 +106,22 @@ export const queryClient = new QueryClient({
           ? error.message 
           : error.message || 'An unexpected error occurred';
         
-        const description = error instanceof APIError && error.code
+        let description = error instanceof APIError && error.code
           ? `Error code: ${error.code}`
           : undefined;
+
+        // Add helpful guidance for common errors
+        if (error instanceof APIError) {
+          if (error.status === 401) {
+            description = 'Please log in to continue';
+          } else if (error.status === 403) {
+            description = 'You don\'t have permission for this action';
+          } else if (error.status === 429) {
+            description = 'Too many requests. Please wait a moment and try again';
+          } else if (error.status >= 500) {
+            description = 'Server error. Please try again in a moment';
+          }
+        }
 
         toast({
           variant: "destructive",
