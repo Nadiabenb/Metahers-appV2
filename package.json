@@ -15,7 +15,9 @@
     "regenerate-batch": "tsx server/regenerateContentBatch.ts",
     "generate-learning-content": "tsx server/generateLearningContent.ts",
     "backup-content": "tsx server/backupTransformationalContent.ts",
-    "restore-content": "tsx server/restoreTransformationalContent.ts"
+    "restore-content": "tsx server/restoreTransformationalContent.ts",
+    "backup:db": "tsx server/scripts/backup-database.ts",
+    "restore:db": "tsx server/scripts/restore-database.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
