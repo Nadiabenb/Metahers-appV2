@@ -3503,6 +3503,69 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
+  // ADMIN: Test content enhancement with TOON optimization
+  app.post('/api/admin/test-content-enhancement', async (req: Request, res) => {
+    try {
+      const { experienceSlug, mode } = req.body;
+
+      if (!experienceSlug) {
+        return res.status(400).json({ message: 'Experience slug is required' });
+      }
+
+      // Import the enhancement service
+      const { enhanceExperienceContent, estimateRegenerationCost } = await import('./enhancedContentService.js');
+
+      // Fetch the experience
+      const experience = await storage.getExperienceBySlug(experienceSlug);
+      if (!experience) {
+        return res.status(404).json({ message: 'Experience not found' });
+      }
+
+      // Prepare the experience data
+      const existingExperience = {
+        id: experience.id,
+        title: experience.title,
+        description: experience.description,
+        tier: experience.tier as "free" | "pro",
+        learningObjectives: experience.learningObjectives,
+        sections: experience.content.sections
+      };
+
+      // Enhance the content
+      const enhancedSections = await enhanceExperienceContent(existingExperience, {
+        fullRegeneration: mode === 'full',
+        preserveStructure: mode !== 'full'
+      });
+
+      // Calculate cost estimates for full regeneration
+      const costEstimate = estimateRegenerationCost(65, experience.tier as "free" | "pro");
+
+      res.json({
+        success: true,
+        experience: {
+          title: experience.title,
+          slug: experienceSlug,
+          tier: experience.tier
+        },
+        originalSectionCount: experience.content.sections.length,
+        enhancedSectionCount: enhancedSections.length,
+        enhancedSections,
+        costEstimate: {
+          message: 'Estimated cost to regenerate all 65 experiences',
+          ...costEstimate
+        }
+      });
+
+    } catch (error) {
+      console.error('❌ Content enhancement test failed:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Content enhancement failed',
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
