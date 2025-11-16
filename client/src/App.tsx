@@ -12,6 +12,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { CursorSparkles } from "@/components/effects/CursorSparkles";
 import { BreathingLoader } from "@/components/effects/BreathingLoader";
 import { initializeApp } from "@/lib/storage";
+import { CustomCursor } from "@/components/effects/CustomCursor";
 
 import LandingPage from "@/pages/LandingPage";
 import LoginPage from "@/pages/LoginPage";
@@ -67,11 +68,11 @@ function LoadingFallback() {
 
 function Redirect({ to }: { to: string }) {
   const [, setLocation] = useLocation();
-  
+
   useEffect(() => {
     setLocation(to);
   }, [to, setLocation]);
-  
+
   return <LoadingFallback />;
 }
 
@@ -142,7 +143,7 @@ function Router() {
           <>
             {/* Main Dashboard - Unified view */}
             <Route path="/dashboard" component={DashboardPage} />
-            
+
             {/* Redirect legacy routes to dashboard */}
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>
             <Route path="/workspace">{() => <Redirect to="/dashboard" />}</Route>
@@ -195,10 +196,11 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
+      <ThemeProvider defaultTheme="dark" storageKey="metahers-theme">
         <TooltipProvider>
           <div className="min-h-screen bg-background overflow-x-hidden">
             <CursorSparkles />
+            <CustomCursor />
             <Navigation />
             <Router />
             <InstallPrompt />
