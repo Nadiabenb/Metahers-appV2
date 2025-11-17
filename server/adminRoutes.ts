@@ -73,13 +73,13 @@ router.get('/stats', async (req, res) => {
       .where(sql`completed_at is not null`);
 
     res.json({
-      totalUsers: userStats[0].total,
-      freeUsers: userStats[0].free,
-      proUsers: userStats[0].pro,
-      vipUsers: userStats[0].vip,
-      activeUsers: userStats[0].active,
-      totalExperiences: experienceCount[0].count,
-      totalCompletions: completionCount[0].count,
+      totalUsers: userStats[0]?.total || 0,
+      freeUsers: userStats[0]?.free || 0,
+      proUsers: userStats[0]?.pro || 0,
+      vipUsers: userStats[0]?.vip || 0,
+      activeUsers: userStats[0]?.active || 0,
+      totalExperiences: experienceCount[0]?.count || 0,
+      totalCompletions: completionCount[0]?.count || 0,
     });
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch admin stats');
