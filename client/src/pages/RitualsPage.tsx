@@ -14,8 +14,8 @@ export default function RitualsPage() {
     <div className="relative min-h-screen bg-background overflow-x-hidden">
       <SEO
         title="AI & Web3 Learning Rituals"
-        description="Explore guided learning rituals for AI prompting, blockchain, cryptocurrency, NFTs, and the metaverse. Each ritual offers calm, structured tech education for women."
-        keywords="AI learning, Web3 courses, blockchain tutorial, NFT guide, crypto education, AI prompts course, metaverse guide"
+        description="Free AI & Web3 courses for women: Master ChatGPT prompts, learn blockchain basics, create NFTs, explore the metaverse. 20-minute beginner-friendly rituals."
+        keywords="AI learning, Web3 courses, blockchain tutorial, NFT guide, crypto education, AI prompts course, metaverse guide, women in tech, beginner blockchain, ChatGPT prompts"
       />
 
       {/* Particle field background */}
@@ -40,8 +40,8 @@ export default function RitualsPage() {
               Guided Learning Journeys
             </ShimmerBadge>
 
-            <h1 
-              className="font-serif text-7xl sm:text-8xl md:text-9xl font-bold mb-12 bg-gradient-to-r from-[#B565D8] via-[#FF00FF] to-[#E935C1] bg-clip-text text-transparent py-2 leading-tight" 
+            <h1
+              className="font-serif text-7xl sm:text-8xl md:text-9xl font-bold mb-12 bg-gradient-to-r from-[#B565D8] via-[#FF00FF] to-[#E935C1] bg-clip-text text-transparent py-2 leading-tight"
               data-testid="text-page-title"
               style={{
                 textShadow: '0 0 80px rgba(181,101,216,0.5), 0 0 120px rgba(233,53,193,0.3)',
@@ -49,7 +49,7 @@ export default function RitualsPage() {
             >
               Your Rituals
             </h1>
-            
+
             <p className="text-2xl sm:text-3xl text-foreground/90 max-w-4xl mx-auto leading-relaxed font-light" data-testid="text-page-subtitle">
               Each ritual is a guided journey through the future of technology.
               <br />
@@ -75,7 +75,7 @@ export default function RitualsPage() {
 
           {/* CTA Section */}
           <ImmersiveSection className="mt-40" delay={0.3}>
-            <div 
+            <div
               className="text-center backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-16 border border-white/10 relative overflow-hidden group"
               data-testid="card-upgrade-cta"
             >
@@ -83,7 +83,7 @@ export default function RitualsPage() {
                 className="absolute inset-0 bg-gradient-to-br from-[#B565D8]/20 to-transparent opacity-0 group-hover:opacity-100"
                 transition={{ duration: 0.5 }}
               />
-              
+
               <div className="relative z-10">
                 <h3 className="font-serif text-5xl font-bold bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-clip-text text-transparent mb-6 py-2 leading-tight">
                   Ready to unlock all rituals?
@@ -91,7 +91,7 @@ export default function RitualsPage() {
                 <p className="text-2xl text-foreground/80 mb-12 max-w-2xl mx-auto">
                   Get instant access to all Pro rituals plus exclusive Ritual Bags in our shop.
                 </p>
-                
+
                 <PortalButton
                   onClick={() => setLocation("/shop")}
                   testId="button-visit-shop"

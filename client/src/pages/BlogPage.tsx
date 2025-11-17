@@ -201,7 +201,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
             <h3 className="font-cormorant text-3xl md:text-4xl font-bold text-foreground">
               Ready to Transform Your Digital Journey?
             </h3>
-            
+
             {!isAuthenticated ? (
               <>
                 <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
@@ -304,7 +304,7 @@ export default function BlogPage() {
     <div className="min-h-screen bg-background pb-20">
       <SEO
         title="MetaHers Daily - AI & Web3 Blog for Women"
-        description="Discover AI and Web3 insights written for women in tech. Learn about AI prompts, blockchain, NFTs, crypto, and the metaverse with luxury editorial content."
+        description="AI prompts, Web3 careers, and blockchain tutorials for women. Daily expert insights, step-by-step guides, and success stories from women in tech."
         keywords="AI blog, Web3 blog, women in tech, AI articles, blockchain guide, NFT news, crypto for women, metaverse updates"
       />
       {/* Hero Header */}

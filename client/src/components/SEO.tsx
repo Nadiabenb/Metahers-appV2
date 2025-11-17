@@ -7,7 +7,7 @@ interface SEOProps {
   type?: "website" | "article";
   url?: string;
   keywords?: string;
-  schema?: Record<string, any>;
+  schema?: Record<string, any> | Record<string, any>[];
 }
 
 export function SEO({ 
@@ -56,20 +56,22 @@ export function SEO({
     updateMetaTag("twitter:description", description);
     updateMetaTag("twitter:image", imageUrl);
     
-    const schemaScript = document.getElementById("schema-org") as HTMLScriptElement;
+    // Remove all existing schema scripts
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(script => {
+      if (script.id?.startsWith('schema-org')) {
+        script.remove();
+      }
+    });
     
     if (schema) {
-      if (!schemaScript) {
+      const schemas = Array.isArray(schema) ? schema : [schema];
+      schemas.forEach((schemaObj, index) => {
         const newScript = document.createElement("script");
-        newScript.id = "schema-org";
+        newScript.id = `schema-org-${index}`;
         newScript.type = "application/ld+json";
-        newScript.textContent = JSON.stringify(schema);
+        newScript.textContent = JSON.stringify(schemaObj);
         document.head.appendChild(newScript);
-      } else {
-        schemaScript.textContent = JSON.stringify(schema);
-      }
-    } else if (schemaScript) {
-      schemaScript.remove();
+      });
     }
     
   }, [title, description, image, type, url, keywords, schema]);

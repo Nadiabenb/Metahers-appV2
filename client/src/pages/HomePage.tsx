@@ -11,6 +11,35 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "MetaHers Mind Spa",
+  "url": "https://metahers.ai",
+  "logo": "https://metahers.ai/icon-512.png",
+  "description": "Luxury AI and Web3 education platform for women. Learn through interactive rituals, personalized coaching, and thought leadership journeys.",
+  "sameAs": [
+    "https://twitter.com/metahers",
+    "https://linkedin.com/company/metahers"
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "US"
+  }
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "MetaHers Mind Spa",
+  "url": "https://metahers.ai",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://metahers.ai/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+};
+
 export default function HomePage() {
   const { user } = useAuth();
   const [showWelcome, setShowWelcome] = useState(false);
@@ -39,8 +68,9 @@ export default function HomePage() {
     <div className="min-h-screen bg-background">
       <SEO
         title="Learn AI & Web3 for Women"
-        description="MetaHers Mind Spa: Luxury meets literacy. Learn AI and Web3 through calm, guided rituals designed for modern women. Free AI Glow-Up ritual included."
-        keywords="AI for women, Web3 for women, AI course, blockchain tutorial, NFT guide, women in tech, AI prompts, ChatGPT for business"
+        description="Transform into a confident tech leader through luxury learning rituals. Master AI prompts, blockchain, NFTs & the metaverse with personalized coaching."
+        keywords="AI for women, Web3 education, blockchain for beginners, AI prompts, NFT learning, women in tech, luxury tech education"
+        schema={[organizationSchema, websiteSchema]}
       />
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <OptimizedImage

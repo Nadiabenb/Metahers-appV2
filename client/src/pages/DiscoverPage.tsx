@@ -29,10 +29,10 @@ export default function DiscoverPage() {
       setName(`${user.firstName || ""} ${user.lastName || ""}`.trim());
       setEmail(user.email);
     }
-    
+
     // Track quiz start
     trackCTAClick('quiz_start', '/discover', 'free');
-    
+
     setStage("quiz");
   };
 
@@ -126,7 +126,7 @@ export default function DiscoverPage() {
       <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
         <SEO
           title="Discover Your Perfect AI & Web3 Ritual - Free Quiz"
-          description="Take our personalized quiz to find your perfect learning ritual. Get matched to AI Prompting, Blockchain, Crypto, NFTs, or Metaverse education + unlock a FREE 1:1 founder session."
+          description="Discover your perfect AI & Web3 learning path in 2 minutes. Free personalized quiz matches you with hands-on rituals for beginners. Start learning today!"
           keywords="AI quiz, Web3 assessment, personalized learning, AI course finder, blockchain quiz, tech education quiz"
         />
         <div className="max-w-4xl mx-auto">
@@ -275,7 +275,7 @@ export default function DiscoverPage() {
   // Email capture stage (shown after quiz, before results for non-logged-in users)
   if (stage === "email-capture") {
     const matchedRitual = getRitualBySlug(matchedRitualSlug);
-    
+
     return (
       <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
@@ -403,7 +403,7 @@ export default function DiscoverPage() {
             <Badge className="mb-6" variant={matchedRitual?.tier === "pro" ? "default" : "secondary"}>
               {matchedRitual?.tier === "pro" ? "Pro Ritual" : "Free Ritual"}
             </Badge>
-            
+
             <p className="text-xl text-foreground/90 mb-6">
               {matchedRitual?.summary}
             </p>
