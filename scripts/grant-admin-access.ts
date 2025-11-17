@@ -1,5 +1,4 @@
 
-```typescript
 import { db } from "../server/db";
 import { users } from "../shared/schema";
 import { eq } from "drizzle-orm";
@@ -8,14 +7,15 @@ async function grantAdminAccess() {
   try {
     const email = "nadia@metahers.ai";
     
-    console.log(`Granting full access to ${email}...`);
+    console.log(`Granting admin access to ${email}...`);
     
-    // Update user to have executive tier (highest level)
+    // Update user to have admin privileges
     const result = await db
       .update(users)
       .set({
+        isAdmin: true,
         isPro: true,
-        subscriptionTier: "founders_circle", // Highest tier with all features
+        subscriptionTier: "founders_circle",
         updatedAt: new Date(),
       })
       .where(eq(users.email, email))
@@ -26,16 +26,15 @@ async function grantAdminAccess() {
       process.exit(1);
     }
     
-    console.log(`✅ Successfully granted full access to ${email}`);
+    console.log(`✅ Successfully granted admin access to ${email}`);
+    console.log(`   - isAdmin: true`);
     console.log(`   - isPro: true`);
     console.log(`   - subscriptionTier: founders_circle`);
-    console.log(`   - Admin access: enabled (via ADMIN_EMAILS)`);
-    console.log(`\n🎉 You now have access to:`);
-    console.log(`   - All 54 learning experiences`);
-    console.log(`   - Thought Leadership Journey (all 30 days)`);
-    console.log(`   - App Atelier (unlimited)`);
-    console.log(`   - AI Glow-Up Program`);
-    console.log(`   - Admin endpoints`);
+    console.log(`\n🎉 You now have full admin access to:`);
+    console.log(`   - Admin Dashboard (/admin)`);
+    console.log(`   - User Management (/admin/users)`);
+    console.log(`   - Experience Management (/admin/experiences)`);
+    console.log(`   - All admin endpoints`);
     console.log(`   - All membership features`);
     
     process.exit(0);
@@ -46,4 +45,3 @@ async function grantAdminAccess() {
 }
 
 grantAdminAccess();
-```
