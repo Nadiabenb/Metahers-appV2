@@ -11,6 +11,7 @@ import {
   varchar,
   boolean,
   uniqueIndex,
+  decimal, // Import decimal
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
@@ -322,22 +323,22 @@ export const companions = pgTable("companions", {
   name: varchar("name").notNull().default("Muse"),
   stage: varchar("stage").notNull().default("seedling"), // seedling, sprout, blooming, flourishing, radiant
   currentMood: varchar("current_mood").default("curious"),
-  
+
   // Stats (0-100)
   growth: integer("growth").default(0).notNull(),
   inspiration: integer("inspiration").default(0).notNull(),
   connection: integer("connection").default(0).notNull(),
   mastery: integer("mastery").default(0).notNull(),
-  
+
   // Engagement tracking
   lastFed: timestamp("last_fed"), // Fed by journaling
   lastPlayed: timestamp("last_played"), // Played with by completing experiences
   lastSocialized: timestamp("last_socialized"), // Socialized by community activity
-  
+
   // Unlocks
   unlockedAccessories: jsonb("unlocked_accessories").$type<string[]>().default(sql`'[]'::jsonb`),
   equippedAccessories: jsonb("equipped_accessories").$type<Record<string, string>>().default(sql`'{}'::jsonb`),
-  
+
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 }, (table) => [
@@ -425,28 +426,47 @@ export type SectionCompletionDB = typeof sectionCompletions.$inferSelect;
 
 // ===== ADMIN AUDIT LOGS =====
 export const auditLogs = pgTable('audit_logs', {
-  id: serial('id').primaryKey(),
-  adminId: varchar('admin_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
-  action: varchar('action', { length: 100 }).notNull(), // 'create', 'update', 'delete'
-  entityType: varchar('entity_type', { length: 50 }).notNull(), // 'user', 'experience', 'space'
-  entityId: varchar('entity_id', { length: 100 }),
-  changes: jsonb('changes'), // Store what was changed
+  id: varchar('id', { length: 255 }).primaryKey(),
+  userId: varchar('user_id', { length: 255 }).references(() => users.id, { onDelete: 'cascade' }),
+  action: varchar('action', { length: 100 }).notNull(),
+  resourceType: varchar('resource_type', { length: 50 }).notNull(),
+  resourceId: varchar('resource_id', { length: 255 }).notNull(),
+  metadata: jsonb('metadata'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-}, (table) => [
-  index('idx_audit_admin').on(table.adminId),
-  index('idx_audit_entity').on(table.entityType, table.entityId),
-  index('idx_audit_created').on(table.createdAt),
-]);
+});
 
 export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({ id: true, createdAt: true });
 export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
 export type AuditLogDB = typeof auditLogs.$inferSelect;
 
+// AI Usage Tracking Table
+export const aiUsage = pgTable('ai_usage', {
+  id: serial('id').primaryKey(),
+  userId: varchar('user_id', { length: 255 }).references(() => users.id, { onDelete: 'cascade' }),
+  promptType: varchar('prompt_type', { length: 50 }).notNull(),
+  promptVersion: varchar('prompt_version', { length: 10 }).notNull(),
+  model: varchar('model', { length: 50 }).notNull(),
+  promptTokens: integer('prompt_tokens').notNull(),
+  completionTokens: integer('completion_tokens').notNull(),
+  totalTokens: integer('total_tokens').notNull(),
+  cached: boolean('cached').default(false),
+  latencyMs: integer('latency_ms'),
+  cost: decimal('cost', { precision: 10, scale: 6 }), // Use decimal for cost
+  success: boolean('success').default(true),
+  errorMessage: text('error_message'),
+  timestamp: timestamp('timestamp').defaultNow().notNull(),
+});
+
+export const insertAiUsageSchema = createInsertSchema(aiUsage).omit({ id: true, createdAt: true });
+export type InsertAiUsage = z.infer<typeof insertAiUsageSchema>;
+export type AiUsageDB = typeof aiUsage.$inferSelect;
+
+
 // Thought Leadership Journey - Progress tracking table
 export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
-  
+
   // Brand Profile (Personal Storytelling)
   brandExpertise: text("brand_expertise"), // What's your expertise/zone of genius?
   brandNiche: text("brand_niche"), // What specific niche/industry?
@@ -454,7 +474,7 @@ export const thoughtLeadershipProgress = pgTable("thought_leadership_progress", 
   uniqueStory: text("unique_story"), // Your unique journey/background story
   currentGoals: text("current_goals"), // Current projects/goals
   brandOnboardingCompleted: boolean("brand_onboarding_completed").default(false).notNull(),
-  
+
   // Journey Progress
   currentDay: integer("current_day").default(1).notNull(), // 1-30
   completedDays: jsonb("completed_days").$type<number[]>().notNull().default(sql`'[]'::jsonb`), // [1, 2, 3, ...]
@@ -1024,7 +1044,7 @@ export const rituals: Ritual[] = [
         id: 1,
         title: "Visualize Your Digital Presence",
         summary: "Imagine your ideal virtual identity and space",
-        content: "Close your eyes. Imagine a space that's entirely yours—designed to your exact vision, where geography doesn't exist and your community can gather instantly. What does it look like? A serene virtual garden? A neon-lit gallery? A futuristic conference room? The metaverse is your blank canvas. Before diving into technology, get clear on intention: Why do you want a presence here? Networking? Education? Community? Commerce? Your 'why' shapes your 'how.' Spend 10 minutes journaling your metaverse vision.",
+        content: "Close your eyes. Imagine a space that's entirely yours—designed to your exact vision, where geography doesn't exist and your community can gather instantly. What does it look like? A serene virtual garden? A neon-lit gallery? A futuristic conference room? The metaverse is your blank canvas. Before diving into technology, get clear on intention: Why do you want a presence here? Networking? Education? Commerce? Your 'why' shapes your 'how.' Spend 10 minutes journaling your metaverse vision.",
         proOnly: false,
       },
       {
@@ -1201,7 +1221,7 @@ export const blogArticles: BlogArticle[] = [
       { type: "paragraph", text: "Whether you're drafting emails, designing presentations, or brainstorming your next big idea, AI tools like ChatGPT, Claude, and Midjourney are like having a brilliant assistant who never sleeps, never judges, and always has fresh ideas." },
       { type: "heading", text: "The Secret Sauce: Prompting" },
       { type: "paragraph", text: "Here's the thing most people miss: AI is only as good as your conversation with it. Think of prompting like explaining your vision to a makeup artist—the more specific you are ('dewy skin, bold lip, soft eye') the better the result." },
-      { type: "paragraph", text: "Instead of asking 'write me an email,' try 'write a warm but professional email to a potential client, introducing our new wellness retreat with a Forbes-meets-Vogue tone.' See the difference? Specificity is your superpower." },
+      { type: "paragraph", text: "Instead of asking 'write an email,' try 'write a warm but professional email to a potential client, introducing our new wellness retreat with a Forbes-meets-Vogue tone.' See the difference? Specificity is your superpower." },
       { type: "heading", text: "Your First AI Ritual" },
       { type: "list", text: "Start small and build from there:", items: [
         "Choose one repetitive task (scheduling, email responses, content creation)",
@@ -1209,7 +1229,7 @@ export const blogArticles: BlogArticle[] = [
         "Save your best prompts like recipes—you'll use them again",
         "Iterate and refine based on results"
       ]},
-      { type: "paragraph", text: "The women who will thrive in this new era aren't the ones who resist AI—they're the ones who treat it like the powerful tool it is, using it to amplify their unique voice and vision, not replace it." },
+      { type: "paragraph", text: "The women who will thrive in this new era aren't the ones resisting AI—they're the ones treating it like the powerful tool it is, using it to amplify their unique voice and vision, not replace it." },
       { type: "quote", text: "AI doesn't replace your creativity—it multiplies it. You're still the visionary; AI is just your incredibly efficient assistant." }
     ]
   },
@@ -1741,6 +1761,55 @@ export const blogArticles: BlogArticle[] = [
       { type: "paragraph", text: "Start today: (1) Set up a crypto wallet. (2) Join one Web3 community on Discord. (3) Follow 10 women working in Web3 on Twitter. (4) Read one article about blockchain fundamentals. That's it. Small steps, consistent progress. In 90 days, you could be earning in crypto from anywhere in the world." },
       { type: "quote", text: "Web3 isn't just about technology—it's about who gets to build the future of the internet. Women who enter Web3 now aren't late; they're early to the biggest wealth and career opportunity of the decade. The question is: will you be building it, or watching it happen?" }
     ]
+  },
+  {
+    slug: "web3-blockchain-ownership-economy",
+    title: "The Web3 Ownership Economy: Why Blockchain is Your Key to Digital Wealth",
+    subtitle: "Understanding the rise of decentralized ownership and how to claim your stake",
+    category: "Web3",
+    author: "MetaHers Editorial",
+    publishDate: "2025-10-29",
+    readTime: 8,
+    featured: true,
+    image: "web3-ownership-economy",
+    content: [
+      { type: "paragraph", text: "The internet we know today (Web2) is built on platforms. You create content, but the platform owns it. You build an audience, but the platform controls access. The emerging internet (Web3) flips this: You own your assets, your data, and your digital identity. This is the Ownership Economy." },
+      { type: "paragraph", text: "Blockchain technology is the engine of this shift. It allows for verifiable, decentralized ownership of digital and physical assets, creating new ways to earn, invest, and participate." },
+      { type: "heading", text: "What Does 'Ownership' Mean in Web3?" },
+      { type: "paragraph", text: "In Web2, you *use* services. In Web3, you *own* parts of them. This ownership comes in various forms:" },
+      { type: "list", text: "Types of Web3 Ownership:", items: [
+        "Cryptocurrencies: Owning digital money like Bitcoin or Ether, with value driven by supply, demand, and utility.",
+        "NFTs (Non-Fungible Tokens): Owning unique digital items – art, music, collectibles, virtual land, access passes – verified on the blockchain.",
+        "Tokens: Holding governance tokens for DAOs (Decentralized Autonomous Organizations), giving you voting rights and a stake in the project's future.",
+        "Decentralized Finance (DeFi) Assets: Earning yield on your crypto through lending, staking, or liquidity provision.",
+        "Digital Identity: Owning your data and reputation, controlled by you, not platforms."
+      ]},
+      { type: "paragraph", text: "This shift from renting to owning fundamentally changes the relationship between users, creators, and platforms. Value accrues to the participants, not just the intermediaries." },
+      { type: "heading", text: "Why Women Need to Embrace the Ownership Economy" },
+      { type: "paragraph", text: "Historically, women have faced systemic barriers to wealth creation. The Ownership Economy, with its emphasis on decentralized access and meritocracy, offers a powerful new pathway." },
+      { type: "list", text: "Benefits for women:", items: [
+        "Financial Sovereignty: Take control of your assets and investments, free from traditional financial gatekeepers.",
+        "Creator Economy Empowerment: Earn directly from your content and creations without platform fees or censorship.",
+        "Global Access: Participate in financial systems and investment opportunities regardless of your location or background.",
+        "Inclusive Governance: Influence the direction of projects and communities you care about through token-based voting in DAOs.",
+        "New Career Paths: Build careers in areas like DeFi, NFT creation, community management, and tokenomics."
+      ]},
+      { type: "paragraph", text: "The women who understand and engage with Web3 now are positioning themselves to benefit from the next major economic transformation." },
+      { type: "heading", text: "Getting Started: Claiming Your Stake" },
+      { type: "paragraph", text: "Don't be intimidated by the jargon. The first steps are simple and accessible:" },
+      { type: "list", text: "Actionable Steps:", items: [
+        "Get a Wallet: Set up a non-custodial wallet like MetaMask or Phantom. This is your gateway to Web3.",
+        "Acquire Crypto: Buy a small amount of a major cryptocurrency (like ETH) on a reputable exchange to learn how transactions work.",
+        "Explore NFTs: Browse NFT marketplaces (OpenSea, Foundation) to see what's being created and collected. Consider minting your own art or content.",
+        "Join a DAO: Find a DAO focused on your interests (e.g., women in tech, art, sustainability) and participate in discussions.",
+        "Learn DeFi Basics: Explore simple yield-generating strategies (like staking) with small amounts.",
+        "Stay Informed: Follow reputable Web3 news sources and thought leaders, especially women in the space."
+      ]},
+      { type: "paragraph", text: "The key is to start learning by doing. Treat it like exploring a new neighborhood – take small steps, observe, and gradually build confidence." },
+      { type: "heading", text: "The Future is Owned" },
+      { type: "paragraph", text: "The transition to a Web3 Ownership Economy is underway. It promises a more equitable, transparent, and user-centric digital world. For women, it represents an unprecedented opportunity to build wealth, influence, and freedom on their own terms." },
+      { type: "quote", text: "In the Ownership Economy, your participation is your power. Don't just be a user—be an owner. The future is decentralized, and it's yours to build." }
+    ]
   }
 ];
 
@@ -2048,7 +2117,7 @@ export function matchRitual(answers: Record<string, string>): string {
   // Find ritual with highest score
   let maxScore = -1;
   let matchedRitual = "ai-glow-up-facial"; // default fallback
-  
+
   Object.entries(scores).forEach(([ritual, score]) => {
     if (score > maxScore) {
       maxScore = score;

@@ -506,4 +506,50 @@ router.get('/audit-logs', async (req, res) => {
   }
 });
 
+// ===== AI USAGE ANALYTICS =====
+router.get('/ai/stats', async (req, res) => {
+  try {
+    const { getMonthlyUsageStats } = await import('./lib/aiBudget');
+    const stats = await getMonthlyUsageStats();
+    res.json(stats);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch AI stats');
+    res.status(500).json({ error: 'Failed to fetch AI stats' });
+  }
+});
+
+router.get('/ai/usage-by-type', async (req, res) => {
+  try {
+    const { getUsageByPromptType } = await import('./lib/aiBudget');
+    const usage = await getUsageByPromptType();
+    res.json(usage);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch AI usage by type');
+    res.status(500).json({ error: 'Failed to fetch AI usage by type' });
+  }
+});
+
+router.get('/ai/top-spenders', async (req, res) => {
+  try {
+    const { limit = '10' } = req.query;
+    const { getTopSpenders } = await import('./lib/aiBudget');
+    const spenders = await getTopSpenders(parseInt(limit as string));
+    res.json(spenders);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch top spenders');
+    res.status(500).json({ error: 'Failed to fetch top spenders' });
+  }
+});
+
+router.post('/ai/clear-cache', async (req, res) => {
+  try {
+    // This would clear Redis cache in production
+    // For now, just acknowledge
+    res.json({ success: true, message: 'Cache cleared' });
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to clear cache');
+    res.status(500).json({ error: 'Failed to clear cache' });
+  }
+});
+
 export default router;

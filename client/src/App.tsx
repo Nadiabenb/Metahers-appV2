@@ -156,6 +156,10 @@ function Router() {
             <Route path="/admin" component={AdminDashboardPage} />
             <Route path="/admin/users" component={AdminUsersPage} />
             <Route path="/admin/experiences" component={AdminExperiencesPage} />
+            <Route path="/admin/ai" component={() => {
+              const AIDashboard = lazy(() => import('@/pages/admin/AIDashboardPage'));
+              return <AIDashboard />;
+            }} />
 
             {/* Redirect legacy routes to dashboard */}
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>

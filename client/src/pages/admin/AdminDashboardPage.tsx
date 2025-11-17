@@ -325,6 +325,17 @@ export default function AdminDashboardPage() {
               <Button
                 className="w-full justify-start text-left h-auto py-4 px-4"
                 variant="outline"
+                onClick={() => setLocation('/admin/ai')}
+              >
+                <Zap className="h-5 w-5 mr-3 text-purple-600" />
+                <div>
+                  <div className="font-semibold">AI Usage Analytics</div>
+                  <div className="text-xs text-gray-500">Monitor costs, performance, and usage</div>
+                </div>
+              </Button>
+              <Button
+                className="w-full justify-start text-left h-auto py-4 px-4"
+                variant="outline"
                 onClick={() => {
                   toast({
                     title: 'Coming Soon',
