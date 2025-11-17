@@ -26,11 +26,13 @@ export function useExperienceProgress(experienceId: string) {
   });
 
   const completeSectionMutation = useMutation({
-    mutationFn: async (sectionId: string) => {
+    mutationFn: async (sectionId: string | number) => {
+      // Normalize section ID to string for consistency
+      const normalizedId = String(sectionId);
       const currentCompleted = query.data?.completedSections || [];
-      const newCompleted = currentCompleted.includes(sectionId)
+      const newCompleted = currentCompleted.includes(normalizedId)
         ? currentCompleted
-        : [...currentCompleted, sectionId];
+        : [...currentCompleted, normalizedId];
       
       const res = await apiRequest("POST", `/api/experiences/${experienceId}/progress`, {
         completedSections: newCompleted,

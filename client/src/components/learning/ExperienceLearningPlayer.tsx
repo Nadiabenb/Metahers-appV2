@@ -22,7 +22,7 @@ import AICoachingSidebar from "./AICoachingSidebar";
 import SectionCompleteCelebration from "./SectionCompleteCelebration";
 
 type Section = {
-  id: string;
+  id: string; // Can be string (legacy JSONB) or number (normalized)
   title: string;
   type: "text" | "video" | "interactive" | "quiz" | "hands_on_lab";
   content: string;
@@ -70,7 +70,8 @@ export default function ExperienceLearningPlayer({
   const currentSection = sections[currentSectionIndex];
   const totalSections = sections.length;
   const progressPercentage = (completedSections.length / totalSections) * 100;
-  const isCurrentSectionComplete = currentSection && completedSections.includes(currentSection.id);
+  // Normalize ID comparison - handle both string and number IDs
+  const isCurrentSectionComplete = currentSection && completedSections.includes(String(currentSection.id));
   const allSectionsComplete = completedSections.length === totalSections;
 
   // Map space color to actual CSS variable (e.g., "liquid-gold" -> "gold-highlight")
@@ -85,7 +86,9 @@ export default function ExperienceLearningPlayer({
   const handleSectionComplete = async () => {
     if (!currentSection || isCurrentSectionComplete) return;
     
-    await completeSection(currentSection.id);
+    // Ensure section ID is always a string for consistency
+    const sectionId = String(currentSection.id);
+    await completeSection(sectionId);
     
     // Show celebration (user-dismissible, no auto-advance)
     const isLastSection = currentSectionIndex === totalSections - 1;
@@ -257,7 +260,8 @@ export default function ExperienceLearningPlayer({
               {/* Sections */}
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-0 sm:justify-between relative">
                 {sections.map((section, index) => {
-                  const isComplete = completedSections.includes(section.id);
+                  // Normalize ID for completion check
+                  const isComplete = completedSections.includes(String(section.id));
                   const isCurrent = index === currentSectionIndex;
                   const Icon = SECTION_ICONS[section.type];
                   
