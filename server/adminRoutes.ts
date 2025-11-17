@@ -1,13 +1,12 @@
-
 import { Router } from 'express';
 import { db } from './db';
-import { 
-  users, 
-  transformationalExperiences, 
-  spaces, 
-  userProgress,
+import {
+  users,
+  transformationalExperiences,
+  spaces,
   sectionCompletions,
-  auditLogs 
+  auditLogs,
+  experienceProgress // Import experienceProgress
 } from '@shared/schema';
 import { eq, sql, and, gte, desc, asc, like, or } from 'drizzle-orm';
 import { isAuthenticated } from './auth';
@@ -99,9 +98,9 @@ router.get('/stats', async (req, res) => {
 // ===== USER MANAGEMENT =====
 router.get('/users', async (req, res) => {
   try {
-    const { 
-      tier, 
-      search, 
+    const {
+      tier,
+      search,
       active,
       limit = '50',
       offset = '0'
@@ -177,8 +176,8 @@ router.get('/users/:id', async (req, res) => {
     // Get user's progress
     const progress = await db
       .select()
-      .from(userProgress)
-      .where(eq(userProgress.userId, id));
+      .from(experienceProgress) // Use experienceProgress here
+      .where(eq(experienceProgress.userId, id));
 
     // Get completion count
     const [completions] = await db
@@ -531,6 +530,21 @@ router.post('/experiences/:id/duplicate', async (req, res) => {
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to duplicate experience');
     res.status(500).json({ error: 'Failed to duplicate experience' });
+  }
+});
+
+// ===== PROGRESS MANAGEMENT =====
+router.get('/progress', async (req, res) => {
+  try {
+    const progress = await db
+      .select()
+      .from(experienceProgress)
+      .orderBy(desc(experienceProgress.lastUpdated));
+
+    res.json(progress);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch progress');
+    res.status(500).json({ error: 'Failed to fetch progress' });
   }
 });
 
