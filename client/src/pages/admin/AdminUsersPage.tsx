@@ -28,7 +28,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, ArrowLeft, Eye, Edit, Trash2, Crown } from 'lucide-react';
+import { Search, ArrowLeft, Eye, Edit, Trash2, Crown, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface User {
@@ -135,6 +135,23 @@ export default function AdminUsersPage() {
             </Button>
             <h1 className="text-3xl font-bold">User Management</h1>
           </div>
+          <Button onClick={() => {
+            const newUser = {
+              id: '',
+              email: '',
+              fullName: '',
+              subscriptionTier: 'free',
+              isPro: false,
+              isAdmin: false,
+              createdAt: new Date().toISOString(),
+              lastLogin: null
+            };
+            setSelectedUser(newUser);
+            setEditDialogOpen(true);
+          }}>
+            <Plus className="h-4 w-4 mr-2" />
+            New User
+          </Button>
         </div>
 
         <Card>
@@ -257,25 +274,73 @@ export default function AdminUsersPage() {
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit User</DialogTitle>
+            <DialogTitle>{selectedUser?.id ? 'Edit User' : 'Create User'}</DialogTitle>
             <DialogDescription>
-              Update subscription tier for {selectedUser?.email}
+              {selectedUser?.id 
+                ? `Update subscription tier for ${selectedUser.email}`
+                : 'Create a new user account'}
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
-            <Select
-              defaultValue={selectedUser?.subscriptionTier}
-              onValueChange={handleUpdateUser}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="free">Free</SelectItem>
-                <SelectItem value="pro">Pro</SelectItem>
-                <SelectItem value="vip">VIP</SelectItem>
-              </SelectContent>
-            </Select>
+            {!selectedUser?.id && (
+              <>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Email</label>
+                  <Input
+                    type="email"
+                    placeholder="user@example.com"
+                    value={selectedUser?.email || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? {...prev, email: e.target.value} : null)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Full Name</label>
+                  <Input
+                    placeholder="Full Name"
+                    value={selectedUser?.fullName || ''}
+                    onChange={(e) => setSelectedUser(prev => prev ? {...prev, fullName: e.target.value} : null)}
+                  />
+                </div>
+              </>
+            )}
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Subscription Tier</label>
+              <Select
+                value={selectedUser?.subscriptionTier}
+                onValueChange={(value) => {
+                  if (selectedUser?.id) {
+                    handleUpdateUser(value);
+                  } else {
+                    setSelectedUser(prev => prev ? {...prev, subscriptionTier: value, isPro: value !== 'free'} : null);
+                  }
+                }}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="free">Free</SelectItem>
+                  <SelectItem value="pro">Pro</SelectItem>
+                  <SelectItem value="vip">VIP</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {!selectedUser?.id && (
+              <Button 
+                className="w-full" 
+                onClick={() => {
+                  if (selectedUser?.email) {
+                    toast({ 
+                      title: 'Info', 
+                      description: 'User creation requires backend implementation with password setup' 
+                    });
+                    setEditDialogOpen(false);
+                  }
+                }}
+              >
+                Create User
+              </Button>
+            )}
           </div>
         </DialogContent>
       </Dialog>

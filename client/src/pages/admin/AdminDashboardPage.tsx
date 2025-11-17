@@ -1,9 +1,9 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, BookOpen, CheckCircle, UserCheck, Crown, Star } from 'lucide-react';
+import { Users, BookOpen, CheckCircle, UserCheck, Crown, Star, Compass, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'wouter';
+import { useToast } from '@/components/ui/use-toast';
 
 interface AdminStats {
   totalUsers: number;
@@ -17,6 +17,7 @@ interface AdminStats {
 
 export default function AdminDashboardPage() {
   const [, setLocation] = useLocation();
+  const { toast } = useToast();
 
   const { data: stats, isLoading } = useQuery<AdminStats>({
     queryKey: ['admin-stats'],
@@ -142,37 +143,42 @@ export default function AdminDashboardPage() {
               <CardTitle>Quick Actions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <Button 
-                className="w-full justify-start" 
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => setLocation('/admin/users')}
+              >
+                <Users className="h-4 w-4 mr-2" />
+                Manage Users
+              </Button>
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => setLocation('/admin/experiences')}
+              >
+                <Compass className="h-4 w-4 mr-2" />
+                Manage Experiences
+              </Button>
+              <Button
+                className="w-full justify-start"
+                variant="outline"
+                onClick={() => {
+                  toast({
+                    title: 'Coming Soon',
+                    description: 'Space creation interface will be available soon'
+                  });
+                }}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                New Space
+              </Button>
+              <Button
+                className="w-full justify-start"
                 variant="outline"
                 onClick={() => setLocation('/admin/experiences?action=create')}
               >
-                <BookOpen className="mr-2 h-4 w-4" />
-                Create New Experience
-              </Button>
-              <Button 
-                className="w-full justify-start" 
-                variant="outline"
-                onClick={() => setLocation('/admin/spaces?action=create')}
-              >
-                <Star className="mr-2 h-4 w-4" />
-                Create New Space
-              </Button>
-              <Button 
-                className="w-full justify-start" 
-                variant="outline"
-                onClick={() => setLocation('/admin/users?filter=recent')}
-              >
-                <Users className="mr-2 h-4 w-4" />
-                View Recent Signups
-              </Button>
-              <Button 
-                className="w-full justify-start" 
-                variant="outline"
-                onClick={() => setLocation('/admin/audit-logs')}
-              >
-                <CheckCircle className="mr-2 h-4 w-4" />
-                View Audit Logs
+                <Plus className="h-4 w-4 mr-2" />
+                New Experience
               </Button>
             </CardContent>
           </Card>
@@ -191,8 +197,8 @@ export default function AdminDashboardPage() {
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-600">Avg Completions/User</span>
                 <span className="text-sm font-semibold text-blue-600">
-                  {stats && stats.totalUsers > 0 
-                    ? (stats.totalCompletions / stats.totalUsers).toFixed(1) 
+                  {stats && stats.totalUsers > 0
+                    ? (stats.totalCompletions / stats.totalUsers).toFixed(1)
                     : 0}
                 </span>
               </div>

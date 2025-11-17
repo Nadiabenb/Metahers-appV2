@@ -78,6 +78,29 @@ export default function AdminExperiencesPage() {
     },
   });
 
+  // Create experience mutation
+  const createExperienceMutation = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await fetch('/api/admin/experiences', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error('Failed to create experience');
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin-experiences'] });
+      toast({ title: 'Success', description: 'Experience created successfully' });
+      setEditDialogOpen(false);
+      setSelectedExperience(null);
+    },
+    onError: () => {
+      toast({ title: 'Error', description: 'Failed to create experience', variant: 'destructive' });
+    },
+  });
+
   // Update experience mutation
   const updateExperienceMutation = useMutation({
     mutationFn: async ({ experienceId, data }: { experienceId: string; data: any }) => {
@@ -163,16 +186,30 @@ export default function AdminExperiencesPage() {
 
   const handleUpdate = () => {
     if (!selectedExperience) return;
-    updateExperienceMutation.mutate({
-      experienceId: selectedExperience.id,
-      data: {
-        title: selectedExperience.title,
-        description: selectedExperience.description,
-        tier: selectedExperience.tier,
-        estimatedMinutes: selectedExperience.estimatedMinutes,
-        isActive: selectedExperience.isActive,
-      },
-    });
+    
+    const data = {
+      id: selectedExperience.id || crypto.randomUUID(),
+      spaceId: selectedExperience.spaceId,
+      title: selectedExperience.title,
+      slug: selectedExperience.slug || selectedExperience.title.toLowerCase().replace(/\s+/g, '-'),
+      description: selectedExperience.description,
+      tier: selectedExperience.tier,
+      estimatedMinutes: selectedExperience.estimatedMinutes,
+      sortOrder: selectedExperience.sortOrder,
+      isActive: selectedExperience.isActive,
+      learningObjectives: selectedExperience.learningObjectives || [],
+      content: selectedExperience.content || { sections: [] },
+      personalizationEnabled: false,
+    };
+
+    if (selectedExperience.id) {
+      updateExperienceMutation.mutate({
+        experienceId: selectedExperience.id,
+        data,
+      });
+    } else {
+      createExperienceMutation.mutate(data);
+    }
   };
 
   if (isLoading) {
@@ -206,6 +243,25 @@ export default function AdminExperiencesPage() {
             </Button>
             <h1 className="text-3xl font-bold">Experience Management</h1>
           </div>
+          <Button onClick={() => {
+            setSelectedExperience({
+              id: '',
+              spaceId: spaces[0]?.id || '',
+              title: '',
+              slug: '',
+              description: '',
+              tier: 'free',
+              estimatedMinutes: 30,
+              sortOrder: experiences.length + 1,
+              isActive: true,
+              learningObjectives: [],
+              content: { sections: [] }
+            } as Experience);
+            setEditDialogOpen(true);
+          }}>
+            <Plus className="h-4 w-4 mr-2" />
+            New Experience
+          </Button>
         </div>
 
         {/* Filters */}
@@ -349,6 +405,27 @@ export default function AdminExperiencesPage() {
 
             {selectedExperience && (
               <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="space">Space</Label>
+                  <Select
+                    value={selectedExperience.spaceId}
+                    onValueChange={(value) =>
+                      setSelectedExperience({ ...selectedExperience, spaceId: value })
+                    }
+                  >
+                    <SelectTrigger id="space">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {spaces.map((space) => (
+                        <SelectItem key={space.id} value={space.id}>
+                          {space.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="title">Title</Label>
                   <Input
