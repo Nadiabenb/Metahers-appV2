@@ -10,14 +10,14 @@ import {
   auditLogs 
 } from '@shared/schema';
 import { eq, sql, and, gte, desc, asc, like, or } from 'drizzle-orm';
-import { requireAuth } from './auth';
+import { isAuthenticated } from './auth';
 import { requireAdmin } from './middleware/requireAdmin';
 import { logger } from './lib/logger';
 
 const router = Router();
 
 // Apply authentication and admin check to all routes
-router.use(requireAuth);
+router.use(isAuthenticated);
 router.use(requireAdmin);
 
 // Helper function to log admin actions
