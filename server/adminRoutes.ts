@@ -4,7 +4,7 @@ import { db } from './db';
 import { 
   users, 
   transformationalExperiences, 
-  learningSpaces, 
+  spaces, 
   userProgress,
   sectionCompletions,
   auditLogs 
@@ -273,12 +273,12 @@ router.delete('/users/:id', async (req, res) => {
 // ===== SPACE MANAGEMENT =====
 router.get('/spaces', async (req, res) => {
   try {
-    const spaces = await db
+    const allSpaces = await db
       .select()
-      .from(learningSpaces)
-      .orderBy(asc(learningSpaces.sortOrder));
+      .from(spaces)
+      .orderBy(asc(spaces.sortOrder));
 
-    res.json(spaces);
+    res.json(allSpaces);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch spaces');
     res.status(500).json({ error: 'Failed to fetch spaces' });
@@ -290,7 +290,7 @@ router.post('/spaces', async (req, res) => {
     const { name, slug, description, icon, color, isActive, sortOrder } = req.body;
 
     const [space] = await db
-      .insert(learningSpaces)
+      .insert(spaces)
       .values({
         name,
         slug,
@@ -332,9 +332,9 @@ router.put('/spaces/:id', async (req, res) => {
     if (typeof sortOrder === 'number') updateData.sortOrder = sortOrder;
 
     const [updated] = await db
-      .update(learningSpaces)
+      .update(spaces)
       .set(updateData)
-      .where(eq(learningSpaces.id, id))
+      .where(eq(spaces.id, id))
       .returning();
 
     if (!updated) {
@@ -360,7 +360,7 @@ router.delete('/spaces/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    await db.delete(learningSpaces).where(eq(learningSpaces.id, id));
+    await db.delete(spaces).where(eq(spaces.id, id));
 
     await logAdminAction(
       req.user!.id,
