@@ -1,7 +1,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, BookOpen, CheckCircle, UserCheck, Crown, Star, Compass, Plus, TrendingUp, Activity, AlertCircle, Shield, BarChart3, Search, Filter, Download, RefreshCw, Settings } from 'lucide-react';
+import { Users, BookOpen, CheckCircle, UserCheck, Crown, Star, Compass, Plus, TrendingUp, Activity, AlertCircle, Shield, BarChart3, Search, Filter, Download, RefreshCw, Settings, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
