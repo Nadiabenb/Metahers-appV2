@@ -26,10 +26,12 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Search, ArrowLeft, Eye, Edit, Trash2, Crown, Plus } from 'lucide-react';
+import { Search, ArrowLeft, Edit, Trash2, Crown, Plus, Download, Filter, MoreVertical, UserCog, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { Label } from '@/components/ui/label';
 
 interface User {
   id: string;
@@ -48,15 +50,18 @@ export default function AdminUsersPage() {
   const queryClient = useQueryClient();
   const [search, setSearch] = useState('');
   const [tierFilter, setTierFilter] = useState<string>('');
+  const [statusFilter, setStatusFilter] = useState<string>('');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const { data: users = [], isLoading } = useQuery<User[]>({
-    queryKey: ['admin-users', search, tierFilter],
+    queryKey: ['admin-users', search, tierFilter, statusFilter],
     queryFn: async () => {
       const params = new URLSearchParams();
       if (search) params.append('search', search);
       if (tierFilter) params.append('tier', tierFilter);
+      if (statusFilter === 'active') params.append('active', 'true');
 
       const response = await fetch(`/api/admin/users?${params}`, {
         credentials: 'include',
@@ -99,6 +104,7 @@ export default function AdminUsersPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin-users'] });
       toast({ title: 'User deleted successfully' });
+      setDeleteDialogOpen(false);
     },
     onError: () => {
       toast({ title: 'Failed to delete user', variant: 'destructive' });
@@ -110,20 +116,39 @@ export default function AdminUsersPage() {
     setEditDialogOpen(true);
   };
 
-  const handleUpdateUser = (tier: string) => {
+  const handleDeleteUser = (user: User) => {
+    setSelectedUser(user);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleUpdateUser = () => {
     if (!selectedUser) return;
     updateUserMutation.mutate({
       userId: selectedUser.id,
       data: {
-        subscriptionTier: tier,
-        isPro: tier === 'pro' || tier === 'vip',
+        subscriptionTier: selectedUser.subscriptionTier,
+        isPro: selectedUser.subscriptionTier !== 'free',
+        isAdmin: selectedUser.isAdmin,
       },
     });
   };
 
+  const getTierBadge = (tier: string) => {
+    const variants: Record<string, any> = {
+      free: { variant: 'outline', color: 'text-gray-600' },
+      pro: { variant: 'secondary', color: 'text-purple-600' },
+      vip: { variant: 'default', color: 'text-amber-600' },
+      sanctuary: { variant: 'default', color: 'text-blue-600' },
+      inner_circle: { variant: 'default', color: 'text-indigo-600' },
+      founders_circle: { variant: 'default', color: 'text-pink-600' },
+    };
+    return variants[tier] || variants.free;
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8">
       <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
@@ -133,35 +158,72 @@ export default function AdminUsersPage() {
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
-            <h1 className="text-3xl font-bold">User Management</h1>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                <UserCog className="h-8 w-8 text-purple-600" />
+                User Management
+              </h1>
+              <p className="text-gray-600 mt-1">Manage user accounts and permissions</p>
+            </div>
           </div>
-          <Button onClick={() => {
-            const newUser = {
-              id: '',
-              email: '',
-              fullName: '',
-              subscriptionTier: 'free',
-              isPro: false,
-              isAdmin: false,
-              createdAt: new Date().toISOString(),
-              lastLogin: null
-            };
-            setSelectedUser(newUser);
-            setEditDialogOpen(true);
-          }}>
-            <Plus className="h-4 w-4 mr-2" />
-            New User
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Export
+            </Button>
+            <Button>
+              <Plus className="h-4 w-4 mr-2" />
+              Invite User
+            </Button>
+          </div>
         </div>
 
-        <Card>
+        {/* Stats Overview */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card className="border-none shadow-lg">
+            <CardContent className="p-6">
+              <div className="text-sm text-gray-600">Total Users</div>
+              <div className="text-2xl font-bold text-gray-900 mt-1">{users.length}</div>
+            </CardContent>
+          </Card>
+          <Card className="border-none shadow-lg">
+            <CardContent className="p-6">
+              <div className="text-sm text-gray-600">Pro Members</div>
+              <div className="text-2xl font-bold text-purple-600 mt-1">
+                {users.filter(u => u.subscriptionTier !== 'free').length}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-none shadow-lg">
+            <CardContent className="p-6">
+              <div className="text-sm text-gray-600">Active Today</div>
+              <div className="text-2xl font-bold text-green-600 mt-1">
+                {users.filter(u => u.lastLogin).length}
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border-none shadow-lg">
+            <CardContent className="p-6">
+              <div className="text-sm text-gray-600">Admins</div>
+              <div className="text-2xl font-bold text-blue-600 mt-1">
+                {users.filter(u => u.isAdmin).length}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Filters */}
+        <Card className="border-none shadow-lg">
           <CardHeader>
-            <CardTitle>Filters</CardTitle>
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Filter className="h-5 w-5" />
+              Filters
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
+          <CardContent>
+            <div className="grid md:grid-cols-3 gap-4">
               <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                 <Input
                   placeholder="Search by email or name..."
                   value={search}
@@ -171,99 +233,120 @@ export default function AdminUsersPage() {
               </div>
               <Select value={tierFilter} onValueChange={setTierFilter}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Filter by tier" />
+                  <SelectValue placeholder="All Tiers" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="">All Tiers</SelectItem>
                   <SelectItem value="free">Free</SelectItem>
                   <SelectItem value="pro">Pro</SelectItem>
-                  <SelectItem value="vip">VIP</SelectItem>
+                  <SelectItem value="sanctuary">Sanctuary</SelectItem>
+                  <SelectItem value="inner_circle">Inner Circle</SelectItem>
+                  <SelectItem value="founders_circle">Founders Circle</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger>
+                  <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="">All Status</SelectItem>
+                  <SelectItem value="active">Active</SelectItem>
+                  <SelectItem value="inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        {/* Users Table */}
+        <Card className="border-none shadow-lg">
           <CardContent className="p-0">
             <Table>
               <TableHeader>
-                <TableRow>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Tier</TableHead>
-                  <TableHead>Admin</TableHead>
-                  <TableHead>Joined</TableHead>
-                  <TableHead>Last Login</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                <TableRow className="bg-gray-50">
+                  <TableHead className="font-semibold">User</TableHead>
+                  <TableHead className="font-semibold">Tier</TableHead>
+                  <TableHead className="font-semibold">Status</TableHead>
+                  <TableHead className="font-semibold">Joined</TableHead>
+                  <TableHead className="font-semibold">Last Login</TableHead>
+                  <TableHead className="text-right font-semibold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
-                      Loading users...
+                    <TableCell colSpan={6} className="text-center py-8">
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ) : users.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8">
+                    <TableCell colSpan={6} className="text-center py-8 text-gray-500">
                       No users found
                     </TableCell>
                   </TableRow>
                 ) : (
-                  users.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell className="font-medium">{user.email}</TableCell>
-                      <TableCell>{user.fullName || '-'}</TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            user.subscriptionTier === 'vip'
-                              ? 'default'
-                              : user.subscriptionTier === 'pro'
-                              ? 'secondary'
-                              : 'outline'
-                          }
-                        >
-                          {user.subscriptionTier.toUpperCase()}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        {user.isAdmin && <Crown className="h-4 w-4 text-amber-500" />}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(user.createdAt).toLocaleDateString()}
-                      </TableCell>
-                      <TableCell>
-                        {user.lastLogin
-                          ? new Date(user.lastLogin).toLocaleDateString()
-                          : 'Never'}
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => handleEditUser(user)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              if (confirm('Are you sure you want to delete this user?')) {
-                                deleteUserMutation.mutate(user.id);
-                              }
-                            }}
-                          >
-                            <Trash2 className="h-4 w-4 text-red-500" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  users.map((user) => {
+                    const tierBadge = getTierBadge(user.subscriptionTier);
+                    return (
+                      <TableRow key={user.id} className="hover:bg-gray-50">
+                        <TableCell>
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-semibold">
+                              {user.email[0].toUpperCase()}
+                            </div>
+                            <div>
+                              <div className="font-medium">{user.fullName || 'N/A'}</div>
+                              <div className="text-sm text-gray-500">{user.email}</div>
+                            </div>
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={tierBadge.variant} className={tierBadge.color}>
+                            {user.subscriptionTier.toUpperCase()}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            {user.isAdmin && (
+                              <Shield className="h-4 w-4 text-amber-500" />
+                            )}
+                            <Badge variant={user.lastLogin ? 'default' : 'outline'}>
+                              {user.lastLogin ? 'Active' : 'Inactive'}
+                            </Badge>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-sm text-gray-600">
+                          {new Date(user.createdAt).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-sm text-gray-600">
+                          {user.lastLogin
+                            ? new Date(user.lastLogin).toLocaleDateString()
+                            : 'Never'}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end gap-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditUser(user)}
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteUser(user)}
+                            >
+                              <Trash2 className="h-4 w-4 text-red-500" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
                 )}
               </TableBody>
             </Table>
@@ -271,77 +354,86 @@ export default function AdminUsersPage() {
         </Card>
       </div>
 
+      {/* Edit Dialog */}
       <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{selectedUser?.id ? 'Edit User' : 'Create User'}</DialogTitle>
+            <DialogTitle>Edit User</DialogTitle>
             <DialogDescription>
-              {selectedUser?.id 
-                ? `Update subscription tier for ${selectedUser.email}`
-                : 'Create a new user account'}
+              Update user subscription and permissions
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            {!selectedUser?.id && (
-              <>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="user@example.com"
-                    value={selectedUser?.email || ''}
-                    onChange={(e) => setSelectedUser(prev => prev ? {...prev, email: e.target.value} : null)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Full Name</label>
-                  <Input
-                    placeholder="Full Name"
-                    value={selectedUser?.fullName || ''}
-                    onChange={(e) => setSelectedUser(prev => prev ? {...prev, fullName: e.target.value} : null)}
-                  />
-                </div>
-              </>
-            )}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Subscription Tier</label>
-              <Select
-                value={selectedUser?.subscriptionTier}
-                onValueChange={(value) => {
-                  if (selectedUser?.id) {
-                    handleUpdateUser(value);
-                  } else {
-                    setSelectedUser(prev => prev ? {...prev, subscriptionTier: value, isPro: value !== 'free'} : null);
+          {selectedUser && (
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Email</Label>
+                <Input value={selectedUser.email} disabled />
+              </div>
+              <div className="space-y-2">
+                <Label>Subscription Tier</Label>
+                <Select
+                  value={selectedUser.subscriptionTier}
+                  onValueChange={(value) =>
+                    setSelectedUser({ ...selectedUser, subscriptionTier: value })
                   }
-                }}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">Free</SelectItem>
-                  <SelectItem value="pro">Pro</SelectItem>
-                  <SelectItem value="vip">VIP</SelectItem>
-                </SelectContent>
-              </Select>
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="free">Free</SelectItem>
+                    <SelectItem value="pro">Pro</SelectItem>
+                    <SelectItem value="sanctuary">Sanctuary</SelectItem>
+                    <SelectItem value="inner_circle">Inner Circle</SelectItem>
+                    <SelectItem value="founders_circle">Founders Circle</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="isAdmin"
+                  checked={selectedUser.isAdmin}
+                  onChange={(e) =>
+                    setSelectedUser({ ...selectedUser, isAdmin: e.target.checked })
+                  }
+                  className="rounded"
+                />
+                <Label htmlFor="isAdmin">Admin Access</Label>
+              </div>
             </div>
-            {!selectedUser?.id && (
-              <Button 
-                className="w-full" 
-                onClick={() => {
-                  if (selectedUser?.email) {
-                    toast({ 
-                      title: 'Info', 
-                      description: 'User creation requires backend implementation with password setup' 
-                    });
-                    setEditDialogOpen(false);
-                  }
-                }}
-              >
-                Create User
-              </Button>
-            )}
-          </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdateUser}>
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete User</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this user? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => selectedUser && deleteUserMutation.mutate(selectedUser.id)}
+            >
+              Delete User
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
