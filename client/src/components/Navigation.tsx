@@ -334,6 +334,8 @@ export function Navigation() {
                 <Button 
                   variant="ghost" 
                   size="icon"
+                  aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+                  aria-expanded={mobileMenuOpen}
                   data-testid="button-mobile-menu"
                 >
                   {mobileMenuOpen ? (

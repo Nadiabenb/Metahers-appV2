@@ -10,6 +10,7 @@ interface OptimizedImageProps {
   onLoad?: () => void;
   optimizedBasename?: string;
   blurDataURL?: string;
+  fetchPriority?: 'high' | 'low' | 'auto';
 }
 
 const BREAKPOINTS = [400, 800, 1200, 1600, 2400];
@@ -25,6 +26,7 @@ export function OptimizedImage({
   onLoad,
   optimizedBasename,
   blurDataURL = DEFAULT_BLUR_DATA_URL,
+  fetchPriority,
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isInView, setIsInView] = useState(priority);
@@ -113,6 +115,7 @@ export function OptimizedImage({
             className={`${className} ${objectFitClass} relative z-10`}
             loading={priority ? "eager" : "lazy"}
             onLoad={handleLoad}
+            fetchpriority={fetchPriority || (priority ? 'high' : 'auto')}
           />
         </motion.picture>
       </div>
@@ -146,6 +149,7 @@ export function OptimizedImage({
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoaded ? 1 : 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
+        fetchpriority={fetchPriority || (priority ? 'high' : 'auto')}
       />
     </div>
   );
