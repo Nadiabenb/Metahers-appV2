@@ -1,4 +1,3 @@
-
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../lib/logger';
 
@@ -19,7 +18,7 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
       email: user.email, 
       path: req.path 
     }, 'Forbidden admin access attempt - user is not admin');
-    
+
     return res.status(403).json({ 
       error: 'Forbidden',
       message: 'You do not have permission to access this resource'
@@ -32,22 +31,6 @@ export function requireAdmin(req: Request, res: Response, next: NextFunction) {
     path: req.path,
     method: req.method
   }, 'Admin access granted');
-  
-  next();
-}
-import { Request, Response, NextFunction } from 'express';
-import { logger } from '../lib/logger';
-
-export function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  if (!req.user) {
-    logger.warn('Admin route accessed without authentication');
-    return res.status(401).json({ error: 'Authentication required' });
-  }
-
-  if (!req.user.isAdmin) {
-    logger.warn({ userId: req.user.id }, 'Non-admin user attempted to access admin route');
-    return res.status(403).json({ error: 'Admin access required' });
-  }
 
   next();
 }
