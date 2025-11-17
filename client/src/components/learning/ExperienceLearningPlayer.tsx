@@ -65,6 +65,7 @@ export default function ExperienceLearningPlayer({
   const [showAICoach, setShowAICoach] = useState(false);
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebrationData, setCelebrationData] = useState<{ title: string; isComplete: boolean } | null>(null);
+  const [sectionStartTime, setSectionStartTime] = useState<number>(Date.now());
 
   const sections = (experience.content?.sections || []) as Section[];
   const currentSection = sections[currentSectionIndex];
@@ -81,14 +82,19 @@ export default function ExperienceLearningPlayer({
   useEffect(() => {
     // Auto-scroll to top when section changes
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Reset section start time for tracking
+    setSectionStartTime(Date.now());
   }, [currentSectionIndex]);
 
-  const handleSectionComplete = async () => {
+  const handleSectionComplete = async (quizScore?: number) => {
     if (!currentSection || isCurrentSectionComplete) return;
     
-    // Ensure section ID is always a string for consistency
-    const sectionId = String(currentSection.id);
-    await completeSection(sectionId);
+    // Calculate time spent in seconds
+    const timeSpentSeconds = Math.floor((Date.now() - sectionStartTime) / 1000);
+    
+    // Complete section with analytics
+    const sectionId = currentSection.id;
+    await completeSection(sectionId, timeSpentSeconds, quizScore);
     
     // Show celebration (user-dismissible, no auto-advance)
     const isLastSection = currentSectionIndex === totalSections - 1;

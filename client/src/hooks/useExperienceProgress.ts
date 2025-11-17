@@ -26,14 +26,27 @@ export function useExperienceProgress(experienceId: string) {
   });
 
   const completeSectionMutation = useMutation({
-    mutationFn: async (sectionId: string | number) => {
+    mutationFn: async (params: { 
+      sectionId: string | number;
+      timeSpentSeconds?: number;
+      quizScore?: number;
+    }) => {
       // Normalize section ID to string for consistency
-      const normalizedId = String(sectionId);
+      const normalizedId = String(params.sectionId);
       const currentCompleted = query.data?.completedSections || [];
       const newCompleted = currentCompleted.includes(normalizedId)
         ? currentCompleted
         : [...currentCompleted, normalizedId];
       
+      // Track granular completion first (if sectionId is numeric - normalized schema)
+      if (!isNaN(Number(params.sectionId))) {
+        await apiRequest("POST", `/api/experiences/${experienceId}/sections/${params.sectionId}/complete`, {
+          timeSpentSeconds: params.timeSpentSeconds,
+          quizScore: params.quizScore,
+        });
+      }
+      
+      // Update legacy progress tracker
       const res = await apiRequest("POST", `/api/experiences/${experienceId}/progress`, {
         completedSections: newCompleted,
       });
@@ -52,7 +65,8 @@ export function useExperienceProgress(experienceId: string) {
     confidenceScore: query.data?.confidenceScore,
     isLoading: query.isLoading,
     updateProgress: (data: Parameters<typeof updateMutation.mutate>[0]) => updateMutation.mutate(data),
-    completeSection: (sectionId: string) => completeSectionMutation.mutate(sectionId),
+    completeSection: (sectionId: string | number, timeSpentSeconds?: number, quizScore?: number) => 
+      completeSectionMutation.mutate({ sectionId, timeSpentSeconds, quizScore }),
     isUpdating: updateMutation.isPending || completeSectionMutation.isPending,
   };
 }

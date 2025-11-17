@@ -25,6 +25,7 @@ import {
   appAtelierUsage,
   companions,
   companionActivities,
+  sectionCompletions, // Import sectionCompletions table
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -79,6 +80,8 @@ import type {
   CompanionDB,
   InsertCompanionActivity,
   CompanionActivityDB,
+  InsertSectionCompletion, // Import InsertSectionCompletion type
+  SectionCompletionDB, // Import SectionCompletionDB type
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -233,6 +236,16 @@ export interface IStorage {
       activityType: string;
     }
   ): Promise<CompanionDB>;
+
+  // Section completion tracking operations
+  recordSectionCompletion(data: {
+    userId: string;
+    experienceId: string;
+    sectionId: number;
+    timeSpentSeconds?: number | null;
+    quizScore?: number | null;
+  }): Promise<SectionCompletionDB>;
+  getSectionAnalytics(userId: string, experienceId: string): Promise<any>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1410,7 +1423,7 @@ export class DatabaseStorage implements IStorage {
       .values({
         ...progressData,
         completedSections: sql`${JSON.stringify(progressData.completedSections)}::jsonb`,
-        milestonesAchieved: progressData.milestonesAchieved 
+        milestonesAchieved: progressData.milestonesAchieved
           ? sql`${JSON.stringify(progressData.milestonesAchieved)}::jsonb`
           : sql`'[]'::jsonb`,
       })
@@ -1420,7 +1433,7 @@ export class DatabaseStorage implements IStorage {
           completedSections: sql`${JSON.stringify(progressData.completedSections)}::jsonb`,
           confidenceScore: progressData.confidenceScore,
           businessImpact: progressData.businessImpact,
-          milestonesAchieved: progressData.milestonesAchieved 
+          milestonesAchieved: progressData.milestonesAchieved
             ? sql`${JSON.stringify(progressData.milestonesAchieved)}::jsonb`
             : sql`'[]'::jsonb`,
           completedAt: progressData.completedAt,
@@ -1489,6 +1502,92 @@ export class DatabaseStorage implements IStorage {
       .returning();
     return usage;
   }
+
+  // ===== SECTION COMPLETION TRACKING =====
+
+  async recordSectionCompletion(data: {
+    userId: string;
+    experienceId: string;
+    sectionId: number;
+    timeSpentSeconds?: number | null;
+    quizScore?: number | null;
+  }) {
+    // Check if completion already exists (upsert behavior)
+    const existing = await db
+      .select()
+      .from(sectionCompletions)
+      .where(
+        and(
+          eq(sectionCompletions.userId, data.userId),
+          eq(sectionCompletions.sectionId, data.sectionId)
+        )
+      )
+      .limit(1);
+
+    if (existing.length > 0) {
+      // Update existing completion
+      await db
+        .update(sectionCompletions)
+        .set({
+          timeSpentSeconds: data.timeSpentSeconds,
+          quizScore: data.quizScore,
+          completedAt: new Date(), // Update timestamp
+        })
+        .where(eq(sectionCompletions.id, existing[0].id));
+
+      // Return the updated record
+      const [updatedRecord] = await db.select().from(sectionCompletions).where(eq(sectionCompletions.id, existing[0].id));
+      return updatedRecord;
+    }
+
+    // Create new completion
+    const [completion] = await db
+      .insert(sectionCompletions)
+      .values({
+        userId: data.userId,
+        experienceId: data.experienceId,
+        sectionId: data.sectionId,
+        timeSpentSeconds: data.timeSpentSeconds,
+        quizScore: data.quizScore,
+        completedAt: new Date(), // Set timestamp on creation
+      })
+      .returning();
+
+    return completion;
+  }
+
+  async getSectionAnalytics(userId: string, experienceId: string) {
+    const completions = await db
+      .select()
+      .from(sectionCompletions)
+      .where(
+        and(
+          eq(sectionCompletions.userId, userId),
+          eq(sectionCompletions.experienceId, experienceId)
+        )
+      )
+      .orderBy(sectionCompletions.completedAt);
+
+    // Calculate aggregate stats
+    const totalTimeSpent = completions.reduce(
+      (sum, c) => sum + (c.timeSpentSeconds || 0),
+      0
+    );
+    const totalQuizScore = completions
+      .filter(c => c.quizScore !== null && c.quizScore !== undefined)
+      .reduce((sum, c) => sum + (c.quizScore || 0), 0);
+    const numberOfQuizzes = completions.filter(c => c.quizScore !== null && c.quizScore !== undefined).length;
+    const averageQuizScore = numberOfQuizzes > 0 ? totalQuizScore / numberOfQuizzes : null;
+
+    return {
+      completions,
+      totalTimeSpent,
+      averageQuizScore: averageQuizScore,
+      sectionsCompleted: completions.length,
+    };
+  }
+
+  // ===== EXPERIENCE PROGRESS =====
 }
 
 export const storage = new DatabaseStorage();

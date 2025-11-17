@@ -1220,6 +1220,55 @@ Return ONLY valid JSON:
     }
   });
 
+  // POST section completion (granular tracking)
+  app.post('/api/experiences/:experienceId/sections/:sectionId/complete', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { experienceId, sectionId } = req.params;
+      const { timeSpentSeconds, quizScore } = req.body;
+
+      // Record granular completion
+      await storage.recordSectionCompletion({
+        userId,
+        experienceId,
+        sectionId: parseInt(sectionId),
+        timeSpentSeconds: timeSpentSeconds || null,
+        quizScore: quizScore || null,
+      });
+
+      // Also update legacy progress tracker
+      const currentProgress = await storage.getExperienceProgress(userId, experienceId);
+      const completedSections = currentProgress?.completedSections || [];
+      if (!completedSections.includes(sectionId)) {
+        completedSections.push(sectionId);
+        await storage.upsertExperienceProgress({
+          userId,
+          experienceId,
+          completedSections,
+        });
+      }
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error recording section completion:", error);
+      res.status(500).json({ message: "Failed to record completion" });
+    }
+  });
+
+  // GET section analytics for user
+  app.get('/api/experiences/:experienceId/analytics', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { experienceId } = req.params;
+
+      const analytics = await storage.getSectionAnalytics(userId, experienceId);
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error fetching section analytics:", error);
+      res.status(500).json({ message: "Failed to fetch analytics" });
+    }
+  });
+
   // POST personalization answers
   app.post('/api/experiences/:experienceId/personalization', isAuthenticated, async (req: Request, res) => {
     try {
