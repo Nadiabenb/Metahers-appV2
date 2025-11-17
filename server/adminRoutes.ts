@@ -12,6 +12,7 @@ import { eq, sql, and, gte, desc, asc, like, or } from 'drizzle-orm';
 import { isAuthenticated } from './auth';
 import { requireAdmin } from './middleware/requireAdmin';
 import { logger } from './lib/logger';
+import crypto from 'crypto';
 
 const router = Router();
 
@@ -21,74 +22,65 @@ router.use(requireAdmin);
 
 // Helper function to log admin actions
 async function logAdminAction(
-  adminId: string,
+  userId: string,
   action: string,
-  entityType: string,
-  entityId?: string,
-  changes?: any
+  resourceType: string,
+  resourceId: string,
+  metadata?: any
 ) {
   try {
     await db.insert(auditLogs).values({
-      adminId,
+      id: crypto.randomUUID(),
+      userId,
       action,
-      entityType,
-      entityId: entityId || null,
-      changes: changes || null,
+      resourceType,
+      resourceId,
+      metadata,
+      createdAt: new Date(),
     });
-  } catch (error) {
-    logger.error({ error, adminId, action, entityType }, 'Failed to log admin action');
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to log admin action');
   }
 }
 
 // ===== DASHBOARD STATS =====
 router.get('/stats', async (req, res) => {
   try {
-    const [totalUsersResult] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(users);
-
-    const [freeUsersResult] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(users)
-      .where(eq(users.subscriptionTier, 'free'));
-
-    const [proUsersResult] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(users)
-      .where(eq(users.subscriptionTier, 'pro'));
-
-    const [vipUsersResult] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(users)
-      .where(eq(users.subscriptionTier, 'vip'));
-
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    const [activeUsersResult] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(users)
-      .where(gte(users.lastLoginAt, sevenDaysAgo));
+    // Get user counts by tier
+    const userStats = await db
+      .select({
+        total: sql<number>`count(*)::int`,
+        free: sql<number>`count(*) filter (where subscription_tier = 'free')::int`,
+        pro: sql<number>`count(*) filter (where subscription_tier = 'pro')::int`,
+        vip: sql<number>`count(*) filter (where subscription_tier = 'vip')::int`,
+        active: sql<number>`count(*) filter (where last_login >= ${sevenDaysAgo})::int`,
+      })
+      .from(users);
 
-    const [totalExperiencesResult] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(transformationalExperiences);
+    // Get experience count
+    const experienceCount = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(transformationalExperiences)
+      .where(eq(transformationalExperiences.isActive, true));
 
-    const [totalCompletionsResult] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(sectionCompletions);
+    // Get total completions
+    const completionCount = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(experienceProgress)
+      .where(sql`completed_at is not null`);
 
-    const stats = {
-      totalUsers: totalUsersResult?.count || 0,
-      freeUsers: freeUsersResult?.count || 0,
-      proUsers: proUsersResult?.count || 0,
-      vipUsers: vipUsersResult?.count || 0,
-      activeUsers: activeUsersResult?.count || 0,
-      totalExperiences: totalExperiencesResult?.count || 0,
-      totalCompletions: totalCompletionsResult?.count || 0,
-    };
-
-    res.json(stats);
+    res.json({
+      totalUsers: userStats[0].total,
+      freeUsers: userStats[0].free,
+      proUsers: userStats[0].pro,
+      vipUsers: userStats[0].vip,
+      activeUsers: userStats[0].active,
+      totalExperiences: experienceCount[0].count,
+      totalCompletions: completionCount[0].count,
+    });
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch admin stats');
     res.status(500).json({ error: 'Failed to fetch stats' });
@@ -98,28 +90,21 @@ router.get('/stats', async (req, res) => {
 // ===== USER MANAGEMENT =====
 router.get('/users', async (req, res) => {
   try {
-    const {
-      tier,
-      search,
-      active,
-      limit = '50',
-      offset = '0'
-    } = req.query;
+    const { tier, search, active, page = '1', limit = '50' } = req.query;
+    const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
 
     let query = db.select().from(users);
     const conditions: any[] = [];
 
-    if (tier && tier !== 'all') {
+    if (tier) {
       conditions.push(eq(users.subscriptionTier, tier as string));
     }
 
     if (search) {
-      const searchTerm = `%${search}%`;
       conditions.push(
         or(
-          like(users.email, searchTerm),
-          like(users.username, searchTerm),
-          like(users.displayName, searchTerm)
+          like(users.email, `%${search}%`),
+          like(users.fullName, `%${search}%`)
         )
       );
     }
@@ -127,32 +112,19 @@ router.get('/users', async (req, res) => {
     if (active === 'true') {
       const sevenDaysAgo = new Date();
       sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-      conditions.push(gte(users.lastLoginAt, sevenDaysAgo));
+      conditions.push(gte(users.lastLogin, sevenDaysAgo));
     }
 
     if (conditions.length > 0) {
       query = query.where(and(...conditions)) as any;
     }
 
-    const usersList = await query
+    const allUsers = await query
       .orderBy(desc(users.createdAt))
       .limit(parseInt(limit as string))
-      .offset(parseInt(offset as string));
+      .offset(offset);
 
-    // Remove sensitive data
-    const sanitizedUsers = usersList.map(user => ({
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      displayName: user.displayName,
-      subscriptionTier: user.subscriptionTier,
-      isAdmin: user.isAdmin,
-      emailVerified: user.emailVerified,
-      lastLoginAt: user.lastLoginAt,
-      createdAt: user.createdAt,
-    }));
-
-    res.json(sanitizedUsers);
+    res.json(allUsers);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch users');
     res.status(500).json({ error: 'Failed to fetch users' });
@@ -163,11 +135,7 @@ router.get('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const [user] = await db
-      .select()
-      .from(users)
-      .where(eq(users.id, id))
-      .limit(1);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
@@ -176,58 +144,32 @@ router.get('/users/:id', async (req, res) => {
     // Get user's progress
     const progress = await db
       .select()
-      .from(experienceProgress) // Use experienceProgress here
+      .from(experienceProgress)
       .where(eq(experienceProgress.userId, id));
 
-    // Get completion count
-    const [completions] = await db
-      .select({ count: sql<number>`count(*)` })
-      .from(sectionCompletions)
-      .where(eq(sectionCompletions.userId, id));
-
-    const sanitizedUser = {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      displayName: user.displayName,
-      bio: user.bio,
-      avatarUrl: user.avatarUrl,
-      subscriptionTier: user.subscriptionTier,
-      isAdmin: user.isAdmin,
-      emailVerified: user.emailVerified,
-      lastLoginAt: user.lastLoginAt,
-      createdAt: user.createdAt,
-      progress,
-      completionCount: completions?.count || 0,
-    };
-
-    res.json(sanitizedUser);
+    res.json({ user, progress });
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch user details');
-    res.status(500).json({ error: 'Failed to fetch user' });
+    res.status(500).json({ error: 'Failed to fetch user details' });
   }
 });
 
 router.put('/users/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { subscriptionTier, isAdmin, emailVerified } = req.body;
+    const { subscriptionTier, isAdmin, isPro } = req.body;
 
     const updateData: any = {};
+
     if (subscriptionTier) updateData.subscriptionTier = subscriptionTier;
     if (typeof isAdmin === 'boolean') updateData.isAdmin = isAdmin;
-    if (typeof emailVerified === 'boolean') updateData.emailVerified = emailVerified;
-    updateData.updatedAt = new Date();
+    if (typeof isPro === 'boolean') updateData.isPro = isPro;
 
     const [updated] = await db
       .update(users)
       .set(updateData)
       .where(eq(users.id, id))
       .returning();
-
-    if (!updated) {
-      return res.status(404).json({ error: 'User not found' });
-    }
 
     await logAdminAction(
       req.user!.id,
@@ -237,7 +179,7 @@ router.put('/users/:id', async (req, res) => {
       { changes: updateData }
     );
 
-    res.json({ success: true, user: updated });
+    res.json(updated);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to update user');
     res.status(500).json({ error: 'Failed to update user' });
@@ -286,30 +228,30 @@ router.get('/spaces', async (req, res) => {
 
 router.post('/spaces', async (req, res) => {
   try {
-    const { name, slug, description, icon, color, isActive, sortOrder } = req.body;
+    const { name, slug, description, iconName, color, requiredTier, sortOrder } = req.body;
 
-    const [space] = await db
-      .insert(spaces)
-      .values({
-        name,
-        slug,
-        description,
-        icon,
-        color,
-        isActive: isActive ?? true,
-        sortOrder: sortOrder ?? 0,
-      })
-      .returning();
+    const [newSpace] = await db.insert(spaces).values({
+      id: crypto.randomUUID(),
+      name,
+      slug,
+      description,
+      iconName,
+      color,
+      requiredTier: requiredTier || 'free',
+      sortOrder: sortOrder || 999,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }).returning();
 
     await logAdminAction(
       req.user!.id,
       'create',
       'space',
-      space.id,
-      { name, slug }
+      newSpace.id
     );
 
-    res.json(space);
+    res.json(newSpace);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to create space');
     res.status(500).json({ error: 'Failed to create space' });
@@ -319,26 +261,23 @@ router.post('/spaces', async (req, res) => {
 router.put('/spaces/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, slug, description, icon, color, isActive, sortOrder } = req.body;
+    const { name, description, iconName, color, requiredTier, sortOrder, isActive } = req.body;
 
     const updateData: any = { updatedAt: new Date() };
+
     if (name) updateData.name = name;
-    if (slug) updateData.slug = slug;
-    if (description !== undefined) updateData.description = description;
-    if (icon) updateData.icon = icon;
+    if (description) updateData.description = description;
+    if (iconName) updateData.iconName = iconName;
     if (color) updateData.color = color;
-    if (typeof isActive === 'boolean') updateData.isActive = isActive;
+    if (requiredTier) updateData.requiredTier = requiredTier;
     if (typeof sortOrder === 'number') updateData.sortOrder = sortOrder;
+    if (typeof isActive === 'boolean') updateData.isActive = isActive;
 
     const [updated] = await db
       .update(spaces)
       .set(updateData)
       .where(eq(spaces.id, id))
       .returning();
-
-    if (!updated) {
-      return res.status(404).json({ error: 'Space not found' });
-    }
 
     await logAdminAction(
       req.user!.id,

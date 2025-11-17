@@ -8,6 +8,7 @@ import { seedExperiences } from "./seedExperiences";
 import { errorHandler } from "./middleware/errorHandler";
 import { logger } from "./lib/logger";
 import { requestLogger } from "./middleware/requestLogger";
+import adminRoutes from './adminRoutes';
 
 const app = express();
 
@@ -74,7 +75,7 @@ app.use((req, res, next) => {
 (async () => {
   try {
     logger.info({ mode: app.get("env") }, 'Starting server');
-    
+
     // Verify critical environment variables
     if (!process.env.DATABASE_URL) {
       throw new Error("DATABASE_URL is not set - database connection will fail");
@@ -86,6 +87,9 @@ app.use((req, res, next) => {
 
     const server = await registerRoutes(app);
     logger.info('Routes registered');
+
+    // Register admin routes
+    app.use('/api/admin', adminRoutes);
 
     // Global error handler (must be after routes)
     app.use(errorHandler);
@@ -106,7 +110,7 @@ app.use((req, res, next) => {
     // this serves both the API and the client.
     // It is the only port that is not firewalled.
     const port = parseInt(process.env.PORT || '5000', 10);
-    
+
     server.listen({
       port,
       host: "0.0.0.0",
@@ -114,26 +118,26 @@ app.use((req, res, next) => {
     }, async () => {
       logger.info({ port, host: '0.0.0.0', env: app.get("env") }, 'Server successfully started');
       logger.info('Ready to accept traffic');
-      
+
       // Seed database in production only if needed (check if data exists first)
       if (app.get("env") === "production") {
         try {
           const { db } = await import("./db");
           const { transformationalExperiences, spaces } = await import("@shared/schema");
-          
+
           // Check if database is already populated
           const existingExperiences = await db.select().from(transformationalExperiences);
           const existingSpaces = await db.select().from(spaces);
-          
+
           if (existingSpaces.length === 0 || existingExperiences.length < 54) {
             logger.info('Database appears empty or incomplete. Starting seeding...');
-            
+
             // IMPORTANT: Sequential seeding to respect foreign key constraints
             await seedSpaces();
             logger.info('Spaces seeded');
             await seedExperiences();
             logger.info('Experiences seeded');
-            
+
             const count = await db.select().from(transformationalExperiences);
             logger.info({ spaces: existingSpaces.length, experiences: count.length }, 'Database populated');
           } else {

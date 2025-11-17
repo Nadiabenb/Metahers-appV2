@@ -23,6 +23,11 @@ import SignupPage from "@/pages/SignupPage";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 
+// Admin Pages
+import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
+import AdminUsersPage from "@/pages/admin/AdminUsersPage";
+import AdminExperiencesPage from "@/pages/admin/AdminExperiencesPage";
+
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const RitualsPage = lazy(() => import("@/pages/RitualsPage"));
@@ -146,6 +151,11 @@ function Router() {
           <>
             {/* Main Dashboard - Unified view */}
             <Route path="/dashboard" component={DashboardPage} />
+
+            {/* Admin Routes */}
+            <Route path="/admin" component={AdminDashboardPage} />
+            <Route path="/admin/users" component={AdminUsersPage} />
+            <Route path="/admin/experiences" component={AdminExperiencesPage} />
 
             {/* Redirect legacy routes to dashboard */}
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>

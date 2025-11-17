@@ -22,6 +22,9 @@ export function Navigation() {
     ...(isAuthenticated ? {
       "Quick Access": [
         { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, gradient: "from-blue-500 to-indigo-600", glow: "59, 130, 246", featured: true },
+        ...(user?.isAdmin ? [
+          { path: "/admin", label: "Admin", icon: Crown, gradient: "from-amber-500 to-yellow-600", glow: "251, 191, 36", featured: true },
+        ] : []),
       ]
     } : {}),
     "AI Tools": [
