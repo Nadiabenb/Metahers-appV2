@@ -1418,11 +1418,18 @@ export class DatabaseStorage implements IStorage {
   }
 
   async upsertExperienceProgress(progressData: InsertExperienceProgress): Promise<ExperienceProgressDB> {
+    // Deduplicate completedSections array (case-insensitive, normalized to strings)
+    const deduplicatedSections = Array.from(
+      new Set(
+        progressData.completedSections.map(id => String(id).toLowerCase())
+      )
+    );
+    
     const [progress] = await db
       .insert(experienceProgress)
       .values({
         ...progressData,
-        completedSections: sql`${JSON.stringify(progressData.completedSections)}::jsonb`,
+        completedSections: sql`${JSON.stringify(deduplicatedSections)}::jsonb`,
         milestonesAchieved: progressData.milestonesAchieved
           ? sql`${JSON.stringify(progressData.milestonesAchieved)}::jsonb`
           : sql`'[]'::jsonb`,
@@ -1430,7 +1437,7 @@ export class DatabaseStorage implements IStorage {
       .onConflictDoUpdate({
         target: [experienceProgress.userId, experienceProgress.experienceId],
         set: {
-          completedSections: sql`${JSON.stringify(progressData.completedSections)}::jsonb`,
+          completedSections: sql`${JSON.stringify(deduplicatedSections)}::jsonb`,
           confidenceScore: progressData.confidenceScore,
           businessImpact: progressData.businessImpact,
           milestonesAchieved: progressData.milestonesAchieved

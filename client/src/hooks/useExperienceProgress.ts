@@ -34,7 +34,13 @@ export function useExperienceProgress(experienceId: string) {
       // Normalize section ID to string for consistency
       const normalizedId = String(params.sectionId);
       const currentCompleted = query.data?.completedSections || [];
-      const newCompleted = currentCompleted.includes(normalizedId)
+      
+      // Deduplicate: ensure we don't add if it already exists (case-insensitive)
+      const isDuplicate = currentCompleted.some(
+        id => String(id).toLowerCase() === normalizedId.toLowerCase()
+      );
+      
+      const newCompleted = isDuplicate
         ? currentCompleted
         : [...currentCompleted, normalizedId];
       
@@ -46,7 +52,7 @@ export function useExperienceProgress(experienceId: string) {
         });
       }
       
-      // Update legacy progress tracker
+      // Update legacy progress tracker with deduplicated array
       const res = await apiRequest("POST", `/api/experiences/${experienceId}/progress`, {
         completedSections: newCompleted,
       });
