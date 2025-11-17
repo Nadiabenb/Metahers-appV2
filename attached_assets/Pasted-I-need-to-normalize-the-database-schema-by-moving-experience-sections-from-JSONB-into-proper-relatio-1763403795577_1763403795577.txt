@@ -1,0 +1,82 @@
+I need to normalize the database schema by moving experience sections from JSONB into proper relational tables. This is a critical refactoring that will enable better querying and analytics. Please:
+
+1. **Create New Tables in shared/schema.ts:**
+
+```typescript
+// Experience sections (normalized from JSONB)
+export const experienceSections = pgTable('experience_sections', {
+  id: serial('id').primaryKey(),
+  experienceId: integer('experience_id').references(() => transformationalExperiences.id).notNull(),
+  type: varchar('type', { length: 50 }).notNull(), // 'text', 'quiz', 'video', 'lab', 'reflection'
+  title: text('title').notNull(),
+  content: text('content'), // Main content
+  metadata: jsonb('metadata'), // Flexible fields like quiz questions, video URL
+  sortOrder: integer('sort_order').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+});
+
+// Section resources (links, downloads, references)
+export const sectionResources = pgTable('section_resources', {
+  id: serial('id').primaryKey(),
+  sectionId: integer('section_id').references(() => experienceSections.id).notNull(),
+  type: varchar('type', { length: 50 }).notNull(), // 'link', 'download', 'video', 'article'
+  title: text('title').notNull(),
+  url: text('url'),
+  metadata: jsonb('metadata'), // Additional fields
+  sortOrder: integer('sort_order').notNull(),
+});
+
+// User section completions (granular tracking)
+export const sectionCompletions = pgTable('section_completions', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id).notNull(),
+  sectionId: integer('section_id').references(() => experienceSections.id).notNull(),
+  experienceId: integer('experience_id').references(() => transformationalExperiences.id).notNull(),
+  completedAt: timestamp('completed_at').defaultNow().notNull(),
+  timeSpentSeconds: integer('time_spent_seconds'),
+  quizScore: integer('quiz_score'), // If section is a quiz
+}, (table) => ({
+  userSectionUnique: unique().on(table.userId, table.sectionId),
+}));
+```
+
+2. **Create Migration Script:**
+   - Create server/migrations/normalize-sections.ts
+   - Read all existing experiences with JSONB content
+   - For each experience:
+     * Extract sections array from JSONB
+     * Insert into experience_sections table
+     * Extract resources from each section
+     * Insert into section_resources table
+   - Migrate existing progress data:
+     * Read completedSections arrays from experienceProgress
+     * Create section_completions records
+   - Keep old JSONB column temporarily (rename to content_legacy)
+
+3. **Update API Endpoints:**
+   - Modify GET /api/experiences/:id to:
+     * Join with experience_sections
+     * Join with section_resources
+     * Return structured data in same format as before
+   - Modify progress endpoints to:
+     * Use section_completions table
+     * Update queries to use new structure
+
+4. **Update Frontend Components:**
+   - Modify ExperienceLearningPlayer to work with new API response
+   - Update progress tracking to use section IDs instead of indices
+   - Ensure backward compatibility during migration
+
+5. **Test Migration:**
+   - Create test script to verify:
+     * All sections migrated correctly
+     * No data loss
+     * API responses match previous format
+     * Progress tracking works
+
+6. **Rollback Plan:**
+   - Document rollback procedure
+   - Keep content_legacy column for 2 weeks
+   - After verification, drop content_legacy column
+
+Please implement this migration carefully with extensive logging and verification at each step. This is a critical data migration.
