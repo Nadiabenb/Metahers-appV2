@@ -38,6 +38,15 @@ async function normalizeExperienceSections() {
         const section = sections[i];
         
         try {
+          // Prepare metadata (for quiz questions, video URLs, etc.)
+          const metadata: any = {};
+          if (section.quiz) metadata.quiz = section.quiz;
+          if (section.videoUrl) metadata.videoUrl = section.videoUrl;
+          if (section.interactiveElements) metadata.interactiveElements = section.interactiveElements;
+          if (section.quickWinChallenge) metadata.quickWinChallenge = section.quickWinChallenge;
+          if (section.monetizationInsight) metadata.monetizationInsight = section.monetizationInsight;
+          if (section.reflectionPrompts) metadata.reflectionPrompts = section.reflectionPrompts;
+
           // Insert section
           const [insertedSection] = await db
             .insert(experienceSections)
@@ -46,7 +55,7 @@ async function normalizeExperienceSections() {
               type: section.type || 'text',
               title: section.title || `Section ${i + 1}`,
               content: section.content || '',
-              metadata: section.quiz ? { quiz: section.quiz } : null,
+              metadata: Object.keys(metadata).length > 0 ? metadata : null,
               sortOrder: i + 1,
             })
             .returning();
