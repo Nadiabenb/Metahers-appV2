@@ -1,0 +1,140 @@
+I need to enhance the AI service layer with better prompt management, cost tracking, and reliability. Please:
+
+1. **Prompt Template System:**
+   - Create server/lib/prompts/ directory structure:
+     * server/lib/prompts/templates.ts - all prompt templates
+     * server/lib/prompts/versions.ts - version management
+   - Define prompt templates:
+```typescript
+export const promptTemplates = {
+  PERSONALIZATION: {
+    v1: {
+      system: "You are a career coach...",
+      user: "Based on these responses: {{responses}}, create a personalized learning path...",
+      model: "gpt-4-turbo-preview",
+      temperature: 0.7,
+      maxTokens: 1000,
+    },
+    v2: {
+      system: "You are an expert career advisor...",
+      user: "User profile: {{profile}}. Create detailed recommendations...",
+      model: "gpt-4-turbo-preview",
+      temperature: 0.6,
+      maxTokens: 1500,
+    }
+  },
+  JOURNAL_INSIGHTS: {
+    v1: {
+      system: "You analyze journal entries...",
+      user: "Entries: {{entries}}. Provide insights...",
+      model: "gpt-3.5-turbo",
+      temperature: 0.5,
+      maxTokens: 500,
+    }
+  },
+  COMPANION_CHAT: {
+    v1: {
+      system: "You are a supportive AI companion...",
+      user: "Conversation history: {{history}}. User: {{message}}",
+      model: "gpt-4-turbo-preview",
+      temperature: 0.8,
+      maxTokens: 800,
+    }
+  }
+};
+```
+
+2. **Enhanced AI Service:**
+   - Update server/aiService.ts
+   - Create AIService class with methods:
+     * generatePersonalization(experienceId, responses, version?)
+     * generateJournalInsights(entries, version?)
+     * chatWithCompanion(userId, message, history, version?)
+     * generateContent(promptType, variables, options?)
+   - Implement prompt variable interpolation
+   - Add retry logic with exponential backoff (3 retries)
+   - Add timeout handling (30 second max)
+
+3. **Response Caching Strategy:**
+   - Cache in Redis with smart keys:
+     * Personalization: ai:personalization:{{experienceId}}:{{hash(responses)}}:{{version}}
+     * Journal insights: ai:journal:{{userId}}:{{date}}:{{version}}
+     * TTL: 24 hours for most, 1 hour for companion chat
+   - Check cache before calling OpenAI
+   - Implement cache warming for common prompts
+
+4. **Token Usage Tracking:**
+   - Create ai_usage table:
+```typescript
+export const aiUsage = pgTable('ai_usage', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id').references(() => users.id),
+  promptType: varchar('prompt_type', { length: 50 }).notNull(),
+  promptVersion: varchar('prompt_version', { length: 10 }).notNull(),
+  model: varchar('model', { length: 50 }).notNull(),
+  promptTokens: integer('prompt_tokens').notNull(),
+  completionTokens: integer('completion_tokens').notNull(),
+  totalTokens: integer('total_tokens').notNull(),
+  cached: boolean('cached').default(false),
+  latencyMs: integer('latency_ms'),
+  cost: decimal('cost', { precision: 10, scale: 6 }), // Calculate based on model pricing
+  timestamp: timestamp('timestamp').defaultNow().notNull(),
+});
+```
+   - Log every API call (or cache hit)
+   - Calculate cost based on current OpenAI pricing:
+     * GPT-4 Turbo: $0.01/1K prompt tokens, $0.03/1K completion tokens
+     * GPT-3.5 Turbo: $0.0005/1K prompt tokens, $0.0015/1K completion tokens
+
+5. **Budget Management:**
+   - Create server/lib/aiBudget.ts
+   - Implement budget limits:
+     * Free tier: $0.50/month per user
+     * Pro tier: $10/month per user
+     * VIP tier: Unlimited
+   - Check budget before API calls
+   - Return error if budget exceeded
+   - Admin endpoint: GET /api/admin/ai/usage
+     * Total spend this month
+     * Spend by user
+     * Spend by prompt type
+     * Token usage trends
+
+6. **Fallback Strategies:**
+   - Create server/lib/aiFallbacks.ts
+   - Define fallback responses for common scenarios:
+     * If OpenAI API is down: return cached response or generic message
+     * If rate limited: use queue system (process later)
+     * If budget exceeded: return simplified response or prompt upgrade
+   - Track fallback usage
+
+7. **A/B Testing for Prompts:**
+   - Create server/lib/promptExperiments.ts
+   - Support running multiple prompt versions simultaneously
+   - Randomly assign users to versions (50/50 split)
+   - Track metrics per version:
+     * User satisfaction (explicit ratings)
+     * Engagement (response length, follow-up questions)
+     * Completion rate
+   - Admin UI to view experiment results
+
+8. **Admin AI Dashboard:**
+   - Create client/src/pages/admin/AIDashboardPage.tsx
+   - Show metrics:
+     * Total API calls (today, this week, this month)
+     * Total cost (today, this week, this month)
+     * Cache hit rate
+     * Average latency
+     * Most expensive users
+     * Most used prompt types
+   - Prompt version selector (switch between versions live)
+   - Cost projections (based on current usage)
+   - Alert thresholds (notify if daily cost > $X)
+
+9. **OpenAI API Health Check:**
+   - Create server/lib/openaiHealthCheck.ts
+   - Ping OpenAI API every 5 minutes
+   - Track uptime percentage
+   - Alert if availability < 95%
+
+Please implement with comprehensive error handling, logging, and monitoring. This is critical infrastructure for the app's core AI features.
