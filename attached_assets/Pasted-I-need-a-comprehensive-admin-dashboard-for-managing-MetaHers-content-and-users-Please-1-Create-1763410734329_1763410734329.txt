@@ -1,0 +1,132 @@
+I need a comprehensive admin dashboard for managing MetaHers content and users. Please:
+
+1. **Create Admin Routes & Protection:**
+   - Add admin check middleware: server/middleware/requireAdmin.ts
+   - Check user.isAdmin === true
+   - Return 403 if not admin
+   - Apply to all /api/admin/* routes
+
+2. **Admin Dashboard Pages:**
+
+   **Main Admin Dashboard** (client/src/pages/admin/AdminDashboardPage.tsx):
+   - Key metrics cards:
+     * Total users (total, free, pro, vip)
+     * Active users (logged in last 7 days)
+     * Total experiences
+     * Completion rate (avg % across all users)
+     * Revenue (if Stripe connected)
+   - Quick actions:
+     * Create new experience
+     * Create new space
+     * View recent signups
+     * View recent completions
+
+   **User Management** (client/src/pages/admin/AdminUsersPage.tsx):
+   - Searchable user table with columns:
+     * Email
+     * Subscription tier
+     * Signup date
+     * Last login
+     * Total completions
+     * Actions (view, edit, delete, impersonate)
+   - Filters:
+     * By subscription tier
+     * By signup date range
+     * By activity (active/inactive)
+   - Bulk actions:
+     * Export to CSV
+     * Send email
+   - User detail modal:
+     * View full profile
+     * View progress across all experiences
+     * View journal entries (if user grants access)
+     * Change subscription tier
+     * Reset password
+
+   **Space Management** (client/src/pages/admin/AdminSpacesPage.tsx):
+   - List all 9 spaces with:
+     * Name, icon, description
+     * Number of experiences
+     * Active/inactive toggle
+     * Reorder (drag & drop)
+     * Edit button
+   - Create/Edit Space form:
+     * Name, slug, description
+     * Icon selection (Lucide icons)
+     * Color picker
+     * Active/inactive toggle
+     * Sort order
+
+   **Experience Management** (client/src/pages/admin/AdminExperiencesPage.tsx):
+   - Table view of all experiences:
+     * Title
+     * Space
+     * Difficulty
+     * Est. minutes
+     * Completions count
+     * Published/Draft status
+     * Actions (edit, duplicate, delete)
+   - Filters:
+     * By space
+     * By difficulty
+     * By status
+   - Create/Edit Experience form:
+     * Basic info (title, description, difficulty)
+     * Space selection
+     * Section builder:
+       - Add section (text, quiz, video, lab, reflection)
+       - Reorder sections (drag & drop)
+       - Edit section content (rich text editor)
+       - Add resources to sections
+     * Preview mode
+     * Save as draft / Publish
+
+3. **API Endpoints:**
+   - GET /api/admin/stats - dashboard metrics
+   - GET /api/admin/users - list users with filters
+   - GET /api/admin/users/:id - user details
+   - PUT /api/admin/users/:id - update user
+   - DELETE /api/admin/users/:id - delete user
+   - GET /api/admin/spaces - list spaces
+   - POST /api/admin/spaces - create space
+   - PUT /api/admin/spaces/:id - update space
+   - DELETE /api/admin/spaces/:id - delete space
+   - GET /api/admin/experiences - list experiences
+   - POST /api/admin/experiences - create experience
+   - PUT /api/admin/experiences/:id - update experience
+   - DELETE /api/admin/experiences/:id - delete experience
+   - POST /api/admin/experiences/:id/duplicate - duplicate experience
+
+4. **Rich Text Editor for Content:**
+   - Install: npm install @tiptap/react @tiptap/starter-kit
+   - Create RichTextEditor component
+   - Support: bold, italic, lists, links, headings, code blocks
+   - Preview mode to see final rendering
+
+5. **Admin Navigation:**
+   - Add admin link to main navigation (only visible to admins)
+   - Create admin sidebar navigation:
+     * Dashboard
+     * Users
+     * Spaces
+     * Experiences
+     * Feature Flags
+     * Analytics
+     * Settings
+
+6. **Audit Log:**
+   - Create audit_logs table:
+     * adminId, action, entityType, entityId, changes (JSONB), timestamp
+   - Log all admin actions:
+     * User modifications
+     * Content changes
+     * Feature flag updates
+   - Create audit log viewer page
+
+7. **Security:**
+   - All admin API routes require authentication + isAdmin check
+   - Log all admin actions
+   - Add confirmation dialogs for destructive actions
+   - Implement CSRF protection on admin forms
+
+Please implement this with a clean, professional UI using the existing Radix UI components. Focus on usability and make bulk operations efficient.
