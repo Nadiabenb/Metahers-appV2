@@ -1,7 +1,7 @@
 import * as bcrypt from "bcrypt";
 import session from "express-session";
 import connectPg from "connect-pg-simple";
-import RedisStore from "connect-redis";
+import { RedisStore } from "connect-redis";
 import { pool } from "./db";
 import { getRedisClient } from "./lib/redis";
 import { users, passwordResetTokens, type User, type InsertUser, type InsertPasswordResetToken } from "@shared/schema";
