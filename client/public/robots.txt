@@ -3,4 +3,4 @@ Allow: /
 Disallow: /account
 Disallow: /admin
 
-Sitemap: https://metahers.replit.app/sitemap.xml
+Sitemap: https://app.metahers.ai/sitemap.xml

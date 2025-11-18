@@ -1,19 +1,19 @@
-# 🚀 Get MetaHers Replit App Indexed by Google FIRST
+# 🚀 Get MetaHers App Indexed by Google FIRST
 
-This guide ensures your Replit app (https://metahers.replit.app) gets indexed by Google **before** your main website (www.metahers.ai).
+This guide ensures your app (https://app.metahers.ai) gets indexed by Google **before** your main website (www.metahers.ai).
 
 ---
 
-## ✅ **STEP 1: Verify Your Replit App in Google Search Console** (5 minutes)
+## ✅ **STEP 1: Verify Your App in Google Search Console** (5 minutes)
 
 ### 1.1 Create/Login to Google Search Console
 - Go to https://search.google.com/search-console
 - Login with your Google account
 
-### 1.2 Add Your Replit Property
+### 1.2 Add Your App Property
 - Click **"Add Property"**
 - Choose **"URL prefix"** (not Domain)
-- Enter: `https://metahers.replit.app`
+- Enter: `https://app.metahers.ai`
 - Click **Continue**
 
 ### 1.3 Verify Ownership (Use HTML Tag Method)
@@ -22,7 +22,7 @@ This guide ensures your Replit app (https://metahers.replit.app) gets indexed by
    <meta name="google-site-verification" content="ABC123..." />
    ```
 2. Add this tag to `client/index.html` in the `<head>` section
-3. Publish your Replit deployment
+3. Publish your deployment
 4. Go back to Search Console and click **"Verify"**
 
 **✅ Once verified, you own this property and can control its indexing**
@@ -52,13 +52,13 @@ Google won't index everything immediately. Manually request indexing for your **
 
 ### 3.1 Priority Pages to Index First (in this order):
 
-1. **Homepage:** `https://metahers.replit.app/`
-2. **Quiz/Discover:** `https://metahers.replit.app/discover`
-3. **Thought Leadership:** `https://metahers.replit.app/thought-leadership`
+1. **Homepage:** `https://app.metahers.ai/`
+2. **Quiz/Discover:** `https://app.metahers.ai/discover`
+3. **Thought Leadership:** `https://app.metahers.ai/thought-leadership`
 4. **Top Blog Articles:**
-   - `https://metahers.replit.app/blog/ai-training-women-beginners-guide`
-   - `https://metahers.replit.app/blog/personal-branding-women-tech-30-day-guide`
-   - `https://metahers.replit.app/blog/women-web3-careers-complete-roadmap`
+   - `https://app.metahers.ai/blog/ai-training-women-beginners-guide`
+   - `https://app.metahers.ai/blog/personal-branding-women-tech-30-day-guide`
+   - `https://app.metahers.ai/blog/women-web3-careers-complete-roadmap`
 
 ### 3.2 How to Request Indexing:
 
@@ -78,7 +78,7 @@ For each URL:
 
 ## ✅ **STEP 4: Prevent www.metahers.ai from Being Indexed (Temporarily)**
 
-To ensure your Replit app gets indexed **first**, you need to **block** www.metahers.ai:
+To ensure your app gets indexed **first**, you need to **block** www.metahers.ai:
 
 ### Option A: Add Noindex Meta Tag to www.metahers.ai
 ```html
@@ -91,11 +91,11 @@ User-agent: *
 Disallow: /
 ```
 
-**Remove this block AFTER your Replit app is fully indexed (2-3 weeks)**
+**Remove this block AFTER your app is fully indexed (2-3 weeks)**
 
 ---
 
-## ✅ **STEP 5: Build Authority for Your Replit App** (Ongoing)
+## ✅ **STEP 5: Build Authority for Your App** (Ongoing)
 
 ### 5.1 Create Fresh, Quality Content
 - Publish 1-2 blog articles per week
@@ -104,7 +104,7 @@ Disallow: /
 
 ### 5.2 Build Backlinks
 - Share on social media (LinkedIn, Twitter)
-- Guest post on other platforms with links to your Replit app
+- Guest post on other platforms with links to your app
 - Get listed in directories:
   - Product Hunt
   - BetaList
@@ -152,7 +152,7 @@ Disallow: /
 You'll know it's working when:
 1. ✅ Google Search Console shows "Success" for your sitemap
 2. ✅ Index Coverage shows increasing green bars (indexed pages)
-3. ✅ Search `site:metahers.replit.app` on Google shows your pages
+3. ✅ Search `site:app.metahers.ai` on Google shows your pages
 4. ✅ You see impressions in the Performance Report
 
 ---
@@ -191,13 +191,13 @@ You'll know it's working when:
 
 If you see any errors in Google Search Console, check the specific error message and:
 1. Read Google's documentation for that error type
-2. Fix the issue on your Replit app
+2. Fix the issue on your app
 3. Click "Validate Fix" in Search Console
 4. Wait for Google to re-crawl
 
 ---
 
-**🎉 Final Note:** Your Replit app has excellent SEO fundamentals already in place:
+**🎉 Final Note:** Your app has excellent SEO fundamentals already in place:
 - ✅ robots.txt configured
 - ✅ Sitemap with 55 URLs
 - ✅ Mobile-friendly design
