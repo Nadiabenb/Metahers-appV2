@@ -1,0 +1,94 @@
+I need to optimize database queries in MetaHers Mind Spa for better performance. Please:
+
+1. **Add Critical Indexes:**
+
+Update shared/schema.ts to add indexes:
+```typescript
+// Users table
+export const users = pgTable('users', {
+  // ... existing columns
+}, (table) => ({
+  emailIdx: index('users_email_idx').on(table.email),
+  tierIdx: index('users_tier_idx').on(table.subscriptionTier),
+  createdAtIdx: index('users_created_at_idx').on(table.createdAt),
+}));
+
+// Experience progress
+export const experienceProgress = pgTable('experience_progress', {
+  // ... existing columns
+}, (table) => ({
+  userIdIdx: index('progress_user_id_idx').on(table.userId),
+  experienceIdIdx: index('progress_experience_id_idx').on(table.experienceId),
+  userExperienceIdx: index('progress_user_experience_idx').on(table.userId, table.experienceId),
+  completedAtIdx: index('progress_completed_at_idx').on(table.completedAt),
+}));
+
+// Journal entries
+export const journalEntries = pgTable('journal_entries', {
+  // ... existing columns
+}, (table) => ({
+  userIdIdx: index('journal_user_id_idx').on(table.userId),
+  dateIdx: index('journal_date_idx').on(table.date),
+  userDateIdx: index('journal_user_date_idx').on(table.userId, table.date),
+}));
+
+// AI usage
+export const aiUsage = pgTable('ai_usage', {
+  // ... existing columns
+}, (table) => ({
+  userIdIdx: index('ai_usage_user_id_idx').on(table.userId),
+  endpointIdx: index('ai_usage_endpoint_idx').on(table.endpoint),
+  createdAtIdx: index('ai_usage_created_at_idx').on(table.createdAt),
+}));
+```
+
+2. **Generate Migration:**
+   - Run: npx drizzle-kit generate
+   - Review generated migration in drizzle/ directory
+   - Apply migration: npx drizzle-kit push
+
+3. **Optimize Common Queries:**
+
+**User Dashboard Query:**
+- Currently: Multiple separate queries
+- Optimize: Single query with joins
+```typescript
+// In server/routes.ts - GET /api/dashboard
+const dashboardData = await db
+  .select({
+    user: users,
+    progressCount: count(experienceProgress.id),
+    recentProgress: experienceProgress,
+  })
+  .from(users)
+  .leftJoin(experienceProgress, eq(users.id, experienceProgress.userId))
+  .where(eq(users.id, userId))
+  .groupBy(users.id);
+```
+
+**Experience List with Progress:**
+- Add eager loading of user's progress
+- Single query instead of N+1
+
+4. **Add Query Performance Logging:**
+   - Log slow queries (>100ms) in development
+   - Add query duration to Pino logs
+   - Create GET /api/admin/slow-queries endpoint
+
+5. **Database Connection Pooling:**
+   - Verify Neon connection pooling is enabled
+   - Document optimal pool size in replit.md
+   - Monitor connection usage in logs
+
+6. **Analyze Query Plans:**
+   - Create server/scripts/analyze-queries.ts
+   - Use EXPLAIN ANALYZE for common queries
+   - Document findings in docs/QUERY_OPTIMIZATION.md
+
+7. **Add Pagination:**
+   - Update API endpoints that return lists:
+     * GET /api/journal/entries - add limit/offset
+     * GET /api/admin/users - add limit/offset
+     * GET /api/thought-leadership/posts - add limit/offset
+
+Please implement indexes first, test performance improvement, then optimize queries. Monitor query times before and after.
