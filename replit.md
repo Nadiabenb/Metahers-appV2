@@ -34,6 +34,7 @@ MetaHers Mind Spa is a production-ready Progressive Web App (PWA) that transform
 ### Infrastructure
 - **Hosting**: Replit Autoscale Deployments
 - **Database**: Neon PostgreSQL (serverless, auto-scaling)
+- **Cache**: Upstash Redis (serverless, optional)
 - **CDN**: Cloudflare (via Replit)
 - **SSL**: Automatic HTTPS
 - **Monitoring**: Pino logs + Replit analytics
@@ -391,13 +392,19 @@ Each experience contains **5-7 learning sections** with Harvard Business School-
 ## Performance Optimizations
 
 ### Caching Strategy
-- **In-Memory Caches**:
+- **Redis Cache (Primary - via Upstash)**:
+  - Spaces cache (1 hour TTL) - `spaces:all`
+  - Experience content (30 min TTL) - `experience:{slug}`
+  - AI responses (24 hours for prompts, 1 hour for chat) - `ai:{type}:{hash}`
+  - Session storage (7 days TTL) - `metahers:session:{id}`
+- **In-Memory Caches (Fallback)**:
   - Spaces cache (5 min TTL)
   - Experiences cache (5 min TTL)
   - Recommendations cache (10 min TTL)
 - **OpenAI Prompt Cache**: 65% cost reduction on repeated contexts
 - **Service Worker**: Offline-first PWA caching
 - **Database Caching**: Neon connection pooling
+- **Graceful Degradation**: App works normally if Redis is unavailable
 
 ### Image Optimization
 - **Format**: AVIF (primary), WebP (fallback), JPEG/PNG (legacy)
@@ -435,6 +442,7 @@ Each experience contains **5-7 learning sections** with Harvard Business School-
 NODE_ENV=production
 PORT=5000
 DATABASE_URL=postgresql://...
+REDIS_URL=redis://...upstash.io (optional - enables Redis caching)
 SESSION_SECRET=<random-secret>
 OPENAI_API_KEY=sk-...
 STRIPE_SECRET_KEY=sk_live_...
@@ -449,6 +457,13 @@ STRIPE_PRICE_ID_EXECUTIVE=price_...
 RESEND_API_KEY=re_...
 ADMIN_EMAILS=nadia@metahers.ai,hello@metahers.ai
 ```
+
+**Redis Setup (Optional but Recommended)**:
+1. Create free Upstash Redis account at https://upstash.com
+2. Create new Redis database
+3. Copy the Redis URL (starts with `redis://...`)
+4. Add to Replit Secrets as `REDIS_URL`
+5. Restart deployment - caching will automatically activate
 
 ## Data Flow Examples
 

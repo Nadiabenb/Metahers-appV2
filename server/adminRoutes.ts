@@ -251,6 +251,10 @@ router.post('/spaces', async (req, res) => {
       newSpace.id
     );
 
+    // Invalidate spaces cache
+    const { cacheDel } = await import('./lib/cache');
+    await cacheDel('spaces:all');
+
     res.json(newSpace);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to create space');
@@ -403,6 +407,10 @@ router.put('/experiences/:id', async (req, res) => {
       { title: updated.title }
     );
 
+    // Invalidate experience cache
+    const { cacheDel } = await import('./lib/cache');
+    await cacheDel(`experience:${updated.slug}`);
+
     res.json(updated);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to update experience');
@@ -543,12 +551,64 @@ router.get('/ai/top-spenders', async (req, res) => {
 
 router.post('/ai/clear-cache', async (req, res) => {
   try {
-    // This would clear Redis cache in production
-    // For now, just acknowledge
-    res.json({ success: true, message: 'Cache cleared' });
+    const { cacheDelPattern } = await import('./lib/cache');
+    const deleted = await cacheDelPattern('ai:*');
+    
+    res.json({ 
+      success: true, 
+      message: 'AI cache cleared',
+      keysDeleted: deleted
+    });
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to clear cache');
     res.status(500).json({ error: 'Failed to clear cache' });
+  }
+});
+
+// Get cache statistics
+router.get('/cache/stats', async (req, res) => {
+  try {
+    const { getCacheStats, getCacheMemoryUsage } = await import('./lib/cache');
+    const { checkRedisHealth } = await import('./lib/redis');
+    
+    const stats = getCacheStats();
+    const memory = await getCacheMemoryUsage();
+    const healthy = await checkRedisHealth();
+    
+    res.json({
+      healthy,
+      stats,
+      memory,
+    });
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to get cache stats');
+    res.status(500).json({ error: 'Failed to get cache stats' });
+  }
+});
+
+// Clear cache by pattern
+router.post('/cache/clear/:pattern', async (req, res) => {
+  try {
+    const { pattern } = req.params;
+    const { cacheDelPattern } = await import('./lib/cache');
+    
+    // Validate pattern to prevent dangerous wildcards
+    if (pattern === '*') {
+      return res.status(400).json({ 
+        error: 'Cannot clear all cache keys. Use specific patterns like "spaces:*" or "experience:*"' 
+      });
+    }
+    
+    const deleted = await cacheDelPattern(pattern);
+    
+    res.json({ 
+      success: true, 
+      message: `Cache cleared for pattern: ${pattern}`,
+      keysDeleted: deleted
+    });
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to clear cache pattern');
+    res.status(500).json({ error: 'Failed to clear cache pattern' });
   }
 });
 

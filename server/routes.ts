@@ -1062,7 +1062,15 @@ Return ONLY valid JSON:
 
   // ===== METAHERS WORLD SPACESROUTES =====
   app.get('/api/spaces', asyncHandler(async (_req: Request, res) => {
-    // Check cache first
+    const { cacheGet, cacheSet } = await import('./lib/cache');
+    
+    // Try Redis cache first
+    const cached = await cacheGet<any[]>('spaces:all');
+    if (cached) {
+      return res.json(cached);
+    }
+
+    // Check in-memory cache as secondary fallback
     const now = Date.now();
     if (spacesCache && (now - spacesCache.timestamp) < DATA_CACHE_TTL) {
       return res.json(spacesCache.data);
@@ -1072,8 +1080,9 @@ Return ONLY valid JSON:
     try {
       const spaces = await storage.getSpaces();
 
-      // Update cache
+      // Update both caches
       spacesCache = { data: spaces, timestamp: now };
+      await cacheSet('spaces:all', spaces, 3600); // 1 hour TTL
 
       res.json(spaces);
     } catch (error) {
@@ -1164,11 +1173,45 @@ Return ONLY valid JSON:
   app.get('/api/experiences/:slug', async (req: Request, res) => {
     try {
       const { slug } = req.params;
+      const { cacheGet, cacheSet } = await import('./lib/cache');
+      
+      // Try Redis cache first
+      const cacheKey = `experience:${slug}`;
+      const cached = await cacheGet<any>(cacheKey);
+      if (cached) {
+        const userId = req.session?.userId;
+        const user = userId ? await storage.getUser(userId) : null;
+        const isProUser = user?.isPro || user?.subscriptionTier === "pro";
+
+        // Still need to check Pro authorization for cached data
+        if (cached.tier === "pro" && !isProUser) {
+          return res.status(403).json({
+            id: cached.id,
+            spaceId: cached.spaceId,
+            title: cached.title,
+            slug: cached.slug,
+            description: cached.description,
+            tier: cached.tier,
+            estimatedMinutes: cached.estimatedMinutes,
+            isActive: cached.isActive,
+            error: "pro_subscription_required",
+            message: userId 
+              ? "This experience requires a Pro subscription"
+              : "Please sign up and upgrade to Pro to access this content"
+          });
+        }
+
+        return res.json(cached);
+      }
+
       const experience = await storage.getExperienceBySlug(slug);
 
       if (!experience) {
         return res.status(404).json({ message: "Experience not found" });
       }
+
+      // Cache the experience (30 minutes TTL)
+      await cacheSet(cacheKey, experience, 1800);
 
       // Server-side authorization: Check if Pro experience requires Pro access
       if (experience.tier === "pro") {

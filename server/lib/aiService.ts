@@ -6,6 +6,7 @@ import { aiUsage, users } from '@shared/schema';
 import { promptTemplates, PromptType } from './prompts/templates';
 import { getPromptVersion, interpolatePrompt } from './prompts/versions';
 import { logger } from './logger';
+import { cacheGet, cacheSet, hashInput } from './cache';
 import { eq, sql, and, gte } from 'drizzle-orm';
 
 const openai = new OpenAI({
@@ -198,12 +199,13 @@ export class AIService {
       }
     }
 
-    // Check cache
-    const cacheKey = this.generateCacheKey(promptType, variables, version);
+    // Check Redis cache first
+    const inputHash = hashInput(JSON.stringify(variables));
+    const redisCacheKey = `ai:${promptType}:${inputHash}:${version}`;
     if (!options.skipCache) {
-      const cached = await this.getCachedResponse(cacheKey);
+      const cached = await cacheGet<string>(redisCacheKey);
       if (cached) {
-        logger.info({ promptType, version, cached: true }, 'AI cache hit');
+        logger.info({ promptType, version, cached: true, source: 'redis' }, 'AI cache hit (Redis)');
         
         await this.logUsage({
           userId: options.userId || null,
@@ -218,6 +220,27 @@ export class AIService {
         });
 
         return cached;
+      }
+
+      // Check in-memory cache as fallback
+      const memCacheKey = this.generateCacheKey(promptType, variables, version);
+      const memCached = await this.getCachedResponse(memCacheKey);
+      if (memCached) {
+        logger.info({ promptType, version, cached: true, source: 'memory' }, 'AI cache hit (Memory)');
+        
+        await this.logUsage({
+          userId: options.userId || null,
+          promptType,
+          promptVersion: version,
+          model: template.model,
+          promptTokens: 0,
+          completionTokens: 0,
+          cached: true,
+          latencyMs: Date.now() - startTime,
+          success: true,
+        });
+
+        return memCached;
       }
     }
 
@@ -250,8 +273,13 @@ export class AIService {
         success: true,
       });
 
-      // Cache response
+      // Cache response in both Redis and memory
       const ttl = options.cacheTTL || (promptType === 'COMPANION_CHAT' ? 3600 : 86400);
+      
+      // Redis cache (primary)
+      await cacheSet(redisCacheKey, content, ttl);
+      
+      // Memory cache (fallback)
       this.setCachedResponse(cacheKey, content, ttl);
 
       logger.info({ promptType, version, latencyMs, tokens: usage }, 'AI generation successful');
