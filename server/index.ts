@@ -10,6 +10,8 @@ import { logger } from "./lib/logger";
 import { requestLogger } from "./middleware/requestLogger";
 import adminRoutes from './adminRoutes';
 
+console.log("PRODUCTION BUILD:", new Date().toISOString());
+
 const app = express();
 
 // Trust proxy for rate limiting and session security
