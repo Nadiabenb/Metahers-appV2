@@ -17,35 +17,48 @@ export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [megaMenuOpen, setMegaMenuOpen] = useState(false);
 
-  // Categorized navigation items for mega menu
+  // Streamlined navigation items for mega menu - 3 column layout
   const navCategories = {
-    ...(isAuthenticated ? {
-      "Quick Access": [
-        { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, gradient: "from-blue-500 to-indigo-600", glow: "59, 130, 246", featured: true },
-        ...(user?.isAdmin ? [
-          { path: "/admin", label: "Admin", icon: Crown, gradient: "from-amber-500 to-yellow-600", glow: "251, 191, 36", featured: true },
-        ] : []),
-      ]
-    } : {}),
-    "AI Tools": [
-      { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129", featured: true },
-      { path: "/playground", label: "AI Tools", icon: Sparkles, gradient: "from-cyan-500 to-blue-600", glow: "0, 217, 255" },
+    "Featured": [
+      { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129" },
+      { path: "/world", label: "MetaHers World", icon: Globe, gradient: "from-purple-500 via-fuchsia-500 to-pink-500", glow: "217, 70, 239" },
+      { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, gradient: "from-pink-500 to-purple-600", glow: "233, 53, 193" },
+      ...(isAuthenticated ? [
+        { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, gradient: "from-blue-500 to-indigo-600", glow: "59, 130, 246" },
+      ] : []),
+    ],
+    "AI & Tools": [
+      { path: "/playground", label: "AI Playground", icon: Sparkles, gradient: "from-cyan-500 to-blue-600", glow: "0, 217, 255" },
       { path: "/career-path", label: "Career Path", icon: Target, gradient: "from-purple-500 to-pink-600", glow: "181, 101, 216" },
       { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, gradient: "from-pink-500 to-rose-600", glow: "233, 53, 193", pro: true },
+      { path: "/companion", label: "AI Companion", icon: MessageSquare, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216" },
     ],
-    "Learning": [
-      { path: "/world", label: "MetaHers World", icon: Layers, gradient: "from-purple-500 via-fuchsia-500 to-pink-500", glow: "217, 70, 239", featured: true },
-      { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, gradient: "from-pink-500 to-purple-600", glow: "233, 53, 193", featured: true },
-      { path: "/app-atelier", label: "App Atelier", icon: Code2, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
+    "Learn & Grow": [
       { path: "/discover", label: "Discover", icon: Compass, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216" },
       { path: "/rituals", label: "Rituals", icon: Zap, gradient: "from-amber-500 to-orange-600", glow: "255, 215, 0" },
-      { path: "/blog", label: "Resources", icon: BookOpen, gradient: "from-teal-500 to-cyan-600", glow: "0, 217, 255" },
+      { path: "/app-atelier", label: "App Atelier", icon: Code2, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
+      { path: "/blog", label: "Blog & Resources", icon: BookOpen, gradient: "from-teal-500 to-cyan-600", glow: "0, 217, 255" },
     ],
-    "Workspace": isAuthenticated ? [
-      { path: "/journal", label: "Journal", icon: BookOpen, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129" },
-      { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216", pro: true },
-      { path: "/events", label: "Events", icon: Calendar, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
-    ] : [],
+    ...(isAuthenticated ? {
+      "Your Space": [
+        { path: "/journal", label: "Journal", icon: BookOpen, gradient: "from-emerald-500 to-teal-600", glow: "16, 185, 129" },
+        { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216", pro: true },
+        { path: "/events", label: "Events", icon: Calendar, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
+        { path: "/shop", label: "Shop", icon: ShoppingBag, gradient: "from-rose-500 to-pink-600", glow: "233, 53, 193" },
+      ],
+    } : {
+      "More": [
+        { path: "/shop", label: "Shop", icon: ShoppingBag, gradient: "from-rose-500 to-pink-600", glow: "233, 53, 193" },
+        { path: "/vip-cohort", label: "VIP Cohort", icon: Crown, gradient: "from-amber-500 to-yellow-600", glow: "251, 191, 36" },
+        { path: "/executive", label: "Executive", icon: Briefcase, gradient: "from-slate-500 to-gray-600", glow: "148, 163, 184" },
+        { path: "/ai-prompts", label: "AI Prompts", icon: Code2, gradient: "from-indigo-500 to-purple-600", glow: "99, 102, 241" },
+      ],
+    }),
+    ...(user?.isAdmin ? {
+      "Admin": [
+        { path: "/admin", label: "Admin Dashboard", icon: Shield, gradient: "from-amber-500 to-yellow-600", glow: "251, 191, 36" },
+      ],
+    } : {}),
   };
 
   const handleLogout = async () => {
@@ -80,55 +93,49 @@ export function Navigation() {
     return (
       <motion.button
         onClick={() => handleNavClick(item.path, item.label)}
-        whileHover={{ scale: 1.05, y: -4 }}
-        whileTap={{ scale: 0.95 }}
-        className={`relative group rounded-2xl p-6 backdrop-blur-xl border-2 overflow-hidden transition-all ${
+        whileHover={{ scale: 1.02, x: 4 }}
+        whileTap={{ scale: 0.98 }}
+        className={`relative group w-full rounded-xl p-3 backdrop-blur-xl border overflow-hidden transition-all text-left ${
           isActive 
-            ? 'border-white/50 bg-white/10' 
-            : 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10'
+            ? 'border-white/40 bg-white/10' 
+            : 'border-white/10 bg-white/5 hover:border-white/30 hover:bg-white/8'
         }`}
         data-testid={`mega-nav-${item.label.toLowerCase().replace(' ', '-')}`}
       >
-        {/* Animated glow background */}
+        {/* Subtle glow on hover */}
         <motion.div
-          className="absolute inset-0 rounded-2xl blur-xl -z-10"
+          className="absolute inset-0 rounded-xl blur-lg -z-10 opacity-0 group-hover:opacity-100"
           style={{
-            background: `rgba(${item.glow}, 0.2)`,
+            background: `rgba(${item.glow}, 0.15)`,
           }}
-          animate={{
-            opacity: [0.2, 0.4, 0.2],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
+          transition={{ duration: 0.3 }}
         />
 
-        {/* Icon with gradient */}
-        <div className={`mb-3 w-12 h-12 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg`}>
-          <Icon className="w-6 h-6 text-white" />
-        </div>
+        <div className="flex items-center gap-3">
+          {/* Icon with gradient */}
+          <div className={`w-9 h-9 rounded-lg bg-gradient-to-br ${item.gradient} flex items-center justify-center flex-shrink-0 shadow-md`}>
+            <Icon className="w-4 h-4 text-white" />
+          </div>
 
-        {/* Label */}
-        <div className="text-left">
-          <p className="font-semibold text-foreground mb-1 flex items-center gap-2">
-            {item.label}
-            {item.pro && (
-              <Badge variant="secondary" className="text-xs px-1.5 py-0">
-                PRO
-              </Badge>
-            )}
-          </p>
+          {/* Label */}
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-foreground truncate flex items-center gap-2">
+              {item.label}
+              {item.pro && (
+                <Badge variant="secondary" className="text-[10px] px-1 py-0">
+                  PRO
+                </Badge>
+              )}
+            </p>
+          </div>
         </div>
 
         {/* Shine effect on hover */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
           initial={{ x: '-100%', opacity: 0 }}
           whileHover={{ x: '100%', opacity: 1 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
         />
       </motion.button>
     );
@@ -225,30 +232,32 @@ export function Navigation() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full right-0 mt-2 w-[600px] max-w-[calc(100vw-2rem)] backdrop-blur-2xl bg-background/95 border border-white/20 rounded-3xl shadow-2xl p-8 z-50"
+                      className="absolute top-full right-0 mt-2 w-[900px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] backdrop-blur-2xl bg-background/95 border border-white/20 rounded-3xl shadow-2xl p-6 z-50 overflow-y-auto"
                     >
-                      {/* Categories */}
-                      {Object.entries(navCategories).map(([category, items]) => (
-                        items.length > 0 && (
-                          <div key={category} className="mb-8 last:mb-0">
-                            <h3 className="text-sm font-semibold text-foreground/60 uppercase tracking-wider mb-4">
-                              {category}
-                            </h3>
-                            <div className="grid grid-cols-3 gap-4">
-                              {items.map((item) => (
-                                <MegaMenuCard key={item.path} item={item} />
-                              ))}
+                      {/* 3-Column Grid Layout */}
+                      <div className="grid grid-cols-3 gap-6">
+                        {Object.entries(navCategories).map(([category, items]) => (
+                          items.length > 0 && (
+                            <div key={category}>
+                              <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-2">
+                                {category}
+                              </h3>
+                              <div className="space-y-2">
+                                {items.map((item) => (
+                                  <MegaMenuCard key={item.path} item={item} />
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )
-                      ))}
+                          )
+                        ))}
+                      </div>
 
-                      {/* Quick Links */}
-                      <div className="border-t border-white/10 pt-6 mt-6">
-                        <div className="flex items-center gap-2">
+                      {/* Quick Actions Footer */}
+                      <div className="border-t border-white/10 pt-4 mt-4">
+                        <div className="flex items-center justify-between gap-2">
                           <button
                             onClick={() => handleNavClick("/upgrade")}
-                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2"
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 flex-1"
                             data-testid="mega-nav-pricing"
                           >
                             <Crown className="w-4 h-4" />
@@ -257,7 +266,7 @@ export function Navigation() {
                           {isAuthenticated && (
                             <button
                               onClick={() => handleNavClick("/account")}
-                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 flex-1"
                               data-testid="mega-nav-account"
                             >
                               <User className="w-4 h-4" />
