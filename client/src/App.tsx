@@ -51,6 +51,7 @@ const ExecutivePage = lazy(() => import("@/pages/ExecutivePage"));
 const AIBuilderRetreatPage = lazy(() => import("@/pages/AIBuilderRetreatPage"));
 const ThoughtLeadershipPage = lazy(() => import("@/pages/ThoughtLeadershipPage"));
 const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
+const RetroCameraPage = lazy(() => import("@/pages/RetroCameraPage"));
 const AdminQuizResultsPage = lazy(() => import("@/pages/AdminQuizResultsPage"));
 const UpgradePage = lazy(() => import("@/pages/UpgradePage"));
 const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
@@ -65,7 +66,6 @@ const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
 const RetreatPage = lazy(() => import("@/pages/RetreatPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
-const RetroCameraPage = lazy(() => import("@/pages/RetroCameraPage"));
 
 function LoadingFallback() {
   return (
@@ -129,6 +129,7 @@ function Router() {
         <Route path="/founders-sanctuary" component={FoundersSanctuaryPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
+        <Route path="/retro-camera" component={RetroCameraPage} />
 
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
@@ -180,7 +181,6 @@ function Router() {
             <Route path="/glow-up/complete" component={GlowUpCompletePage} />
             <Route path="/thought-leadership" component={ThoughtLeadershipPage} />
             <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
-            <Route path="/retro-camera" component={RetroCameraPage} />
           </>
         ) : (
           <>

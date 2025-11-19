@@ -61,11 +61,7 @@ export default function RetroCameraPage() {
   const [caption, setCaption] = useState("");
   const [isPublic, setIsPublic] = useState(true);
 
-  useEffect(() => {
-    if (!user) {
-      setLocation("/login");
-    }
-  }, [user, setLocation]);
+  // Remove auto-redirect - let users see the page but prompt to sign in for posting
 
   // Fetch photo feed
   const { data: photoFeed = [] } = useQuery<Photo[]>({
@@ -218,6 +214,15 @@ export default function RetroCameraPage() {
   }, [capturedImage]);
 
   const handlePostPhoto = () => {
+    if (!user) {
+      toast({
+        title: "Sign In Required",
+        description: "Please sign in to post photos to the community feed.",
+        variant: "destructive",
+      });
+      setLocation("/login");
+      return;
+    }
     if (capturedImage) {
       setShowPostDialog(true);
     }
