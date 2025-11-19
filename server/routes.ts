@@ -497,6 +497,93 @@ Return ONLY valid JSON:
     }
   });
 
+  // ===== RETRO CAMERA PHOTO FEED ROUTES =====
+
+  // Get public photo feed
+  app.get('/api/retro-camera/feed', async (req: Request, res) => {
+    try {
+      const limit = parseInt(req.query.limit as string) || 50;
+      const photos = await storage.getRetroCameraPhotos(limit);
+      res.json(photos);
+    } catch (error) {
+      console.error("Error fetching photo feed:", error);
+      res.status(500).json({ message: "Failed to fetch photo feed" });
+    }
+  });
+
+  // Get user's own photos
+  app.get('/api/retro-camera/my-photos', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const photos = await storage.getUserRetroCameraPhotos(userId);
+      res.json(photos);
+    } catch (error) {
+      console.error("Error fetching user photos:", error);
+      res.status(500).json({ message: "Failed to fetch your photos" });
+    }
+  });
+
+  // Post a new photo
+  app.post('/api/retro-camera/post', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { imageUrl, filterName, caption, isPublic } = req.body;
+
+      if (!imageUrl || !filterName) {
+        return res.status(400).json({ message: "Image and filter are required" });
+      }
+
+      const photo = await storage.createRetroCameraPhoto({
+        userId,
+        imageUrl,
+        filterName,
+        caption: caption || null,
+        isPublic: isPublic !== false, // Default to public
+      });
+
+      res.json(photo);
+    } catch (error) {
+      console.error("Error posting photo:", error);
+      res.status(500).json({ message: "Failed to post photo" });
+    }
+  });
+
+  // Delete a photo
+  app.delete('/api/retro-camera/photos/:photoId', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { photoId } = req.params;
+
+      const deleted = await storage.deleteRetroCameraPhoto(photoId, userId);
+
+      if (!deleted) {
+        return res.status(404).json({ message: "Photo not found or unauthorized" });
+      }
+
+      res.json({ success: true, message: "Photo deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting photo:", error);
+      res.status(500).json({ message: "Failed to delete photo" });
+    }
+  });
+
+  // Like a photo
+  app.post('/api/retro-camera/photos/:photoId/like', isAuthenticated, async (req: Request, res) => {
+    try {
+      const { photoId } = req.params;
+      const updated = await storage.likeRetroCameraPhoto(photoId);
+
+      if (!updated) {
+        return res.status(404).json({ message: "Photo not found" });
+      }
+
+      res.json(updated);
+    } catch (error) {
+      console.error("Error liking photo:", error);
+      res.status(500).json({ message: "Failed to like photo" });
+    }
+  });
+
   // ===== AUTHROUTES =====
 
   // Signup endpoint

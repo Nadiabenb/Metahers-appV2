@@ -9,8 +9,8 @@ import {
   glowUpProgress,
   glowUpJournal,
   quizSubmissions,
-  passwordResetTokens,
   cohortCapacity,
+  passwordResetTokens,
   thoughtLeadershipPosts,
   thoughtLeadershipProgress,
   groupSessions,
@@ -26,6 +26,7 @@ import {
   companions,
   companionActivities,
   sectionCompletions, // Import sectionCompletions table
+  retroCameraPhotos, // Import retroCameraPhotos table
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -82,6 +83,8 @@ import type {
   CompanionActivityDB,
   InsertSectionCompletion, // Import InsertSectionCompletion type
   SectionCompletionDB, // Import SectionCompletionDB type
+  InsertRetroCameraPhoto, // Import InsertRetroCameraPhoto type
+  RetroCameraPhotoDB, // Import RetroCameraPhotoDB type
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -103,6 +106,7 @@ export interface IStorage {
   getLatestJournalEntry(userId: string): Promise<JournalEntryDB | undefined>;
   getJournalEntryByDate(userId: string, date: string): Promise<JournalEntryDB | undefined>;
   upsertJournalEntry(entry: InsertJournalEntry): Promise<JournalEntryDB>;
+  getRecentJournalEntries(userId: string, limit?: number): Promise<JournalEntryDB[]>;
 
   // Subscription operations
   getSubscription(userId: string): Promise<SubscriptionDB | undefined>;
@@ -210,7 +214,7 @@ export interface IStorage {
   getExperiencesBySpace(spaceId: string): Promise<TransformationalExperienceDB[]>;
   getExperienceById(id: string): Promise<TransformationalExperienceDB | undefined>;
   getExperienceBySlug(slug: string): Promise<TransformationalExperienceDB | undefined>;
-  getAllExperiences(): Promise<TransformationalExperienceDB[]>;
+  getAllExperiences(): Promise<(TransformationalExperienceDB & { spaceName: string })[]>;
 
   // MetaHers World - Experience Progress operations
   getAllExperienceProgress(userId: string): Promise<ExperienceProgressDB[]>;
@@ -246,6 +250,13 @@ export interface IStorage {
     quizScore?: number | null;
   }): Promise<SectionCompletionDB>;
   getSectionAnalytics(userId: string, experienceId: string): Promise<any>;
+
+  // Retro Camera Photos operations
+  createRetroCameraPhoto(data: InsertRetroCameraPhoto): Promise<RetroCameraPhotoDB>;
+  getRetroCameraPhotos(limit?: number): Promise<Array<RetroCameraPhotoDB & { userFirstName: string | null; userLastName: string | null }>>;
+  getUserRetroCameraPhotos(userId: string): Promise<RetroCameraPhotoDB[]>;
+  deleteRetroCameraPhoto(photoId: string, userId: string): Promise<RetroCameraPhotoDB | undefined>;
+  likeRetroCameraPhoto(photoId: string): Promise<RetroCameraPhotoDB | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1424,7 +1435,7 @@ export class DatabaseStorage implements IStorage {
         progressData.completedSections.map(id => String(id).toLowerCase())
       )
     );
-    
+
     const [progress] = await db
       .insert(experienceProgress)
       .values({
@@ -1487,27 +1498,35 @@ export class DatabaseStorage implements IStorage {
     const [usage] = await db
       .select()
       .from(appAtelierUsage)
-      .where(eq(appAtelierUsage.userId, userId));
-    return usage;
+      .where(eq(appAtelierUsage.userId, userId))
+      .limit(1);
+    return usage || null;
   }
 
   async incrementAppAtelierUsage(userId: string): Promise<AppAtelierUsageDB> {
-    const [usage] = await db
-      .insert(appAtelierUsage)
-      .values({
-        userId,
-        messageCount: 1,
-        lastMessageAt: new Date(),
-      })
-      .onConflictDoUpdate({
-        target: appAtelierUsage.userId,
-        set: {
-          messageCount: sql`${appAtelierUsage.messageCount} + 1`,
+    const existing = await this.getAppAtelierUsage(userId);
+
+    if (existing) {
+      const [updated] = await db
+        .update(appAtelierUsage)
+        .set({
+          messageCount: existing.messageCount + 1,
           lastMessageAt: new Date(),
-        },
-      })
-      .returning();
-    return usage;
+        })
+        .where(eq(appAtelierUsage.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(appAtelierUsage)
+        .values({
+          userId,
+          messageCount: 1,
+          lastMessageAt: new Date(),
+        })
+        .returning();
+      return created;
+    }
   }
 
   // ===== SECTION COMPLETION TRACKING =====
@@ -1592,6 +1611,71 @@ export class DatabaseStorage implements IStorage {
       averageQuizScore: averageQuizScore,
       sectionsCompleted: completions.length,
     };
+  }
+
+  // ===== RETRO CAMERA PHOTOS =====
+
+  async createRetroCameraPhoto(data: InsertRetroCameraPhoto): Promise<RetroCameraPhotoDB> {
+    const [photo] = await db
+      .insert(retroCameraPhotos)
+      .values(data)
+      .returning();
+    return photo;
+  }
+
+  async getRetroCameraPhotos(limit: number = 50): Promise<Array<RetroCameraPhotoDB & { userFirstName: string | null; userLastName: string | null }>> {
+    const photos = await db
+      .select({
+        id: retroCameraPhotos.id,
+        userId: retroCameraPhotos.userId,
+        imageUrl: retroCameraPhotos.imageUrl,
+        filterName: retroCameraPhotos.filterName,
+        caption: retroCameraPhotos.caption,
+        likeCount: retroCameraPhotos.likeCount,
+        isPublic: retroCameraPhotos.isPublic,
+        createdAt: retroCameraPhotos.createdAt,
+        userFirstName: users.firstName,
+        userLastName: users.lastName,
+      })
+      .from(retroCameraPhotos)
+      .leftJoin(users, eq(retroCameraPhotos.userId, users.id))
+      .where(eq(retroCameraPhotos.isPublic, true))
+      .orderBy(desc(retroCameraPhotos.createdAt))
+      .limit(limit);
+    return photos;
+  }
+
+  async getUserRetroCameraPhotos(userId: string): Promise<RetroCameraPhotoDB[]> {
+    const photos = await db
+      .select()
+      .from(retroCameraPhotos)
+      .where(eq(retroCameraPhotos.userId, userId))
+      .orderBy(desc(retroCameraPhotos.createdAt));
+    return photos;
+  }
+
+  async deleteRetroCameraPhoto(photoId: string, userId: string): Promise<RetroCameraPhotoDB | undefined> {
+    const [deleted] = await db
+      .delete(retroCameraPhotos)
+      .where(
+        and(
+          eq(retroCameraPhotos.id, photoId),
+          eq(retroCameraPhotos.userId, userId)
+        )
+      )
+      .returning();
+    return deleted;
+  }
+
+  async likeRetroCameraPhoto(photoId: string): Promise<RetroCameraPhotoDB | undefined> {
+    const [updated] = await db
+      .update(retroCameraPhotos)
+      .set({
+        likeCount: sql`${retroCameraPhotos.likeCount} + 1`,
+      })
+      .where(eq(retroCameraPhotos.id, photoId))
+      .returning();
+    return updated;
   }
 
   // ===== EXPERIENCE PROGRESS =====

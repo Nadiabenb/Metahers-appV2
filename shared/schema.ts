@@ -610,6 +610,26 @@ export const insertInsightInteractionSchema = createInsertSchema(insightInteract
 export type InsertInsightInteraction = z.infer<typeof insertInsightInteractionSchema>;
 export type InsightInteractionDB = typeof insightInteractions.$inferSelect;
 
+// Retro Camera Photos - User-generated photos with filters
+export const retroCameraPhotos = pgTable("retro_camera_photos", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  imageUrl: text("image_url").notNull(), // Base64 or cloud storage URL
+  filterName: varchar("filter_name").notNull(), // Which filter was applied
+  caption: text("caption"),
+  likeCount: integer("like_count").default(0).notNull(),
+  isPublic: boolean("is_public").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_retro_photo_user").on(table.userId),
+  index("idx_retro_photo_created").on(table.createdAt),
+  index("idx_retro_photo_public").on(table.isPublic),
+]);
+
+export const insertRetroCameraPhotoSchema = createInsertSchema(retroCameraPhotos).omit({ id: true, createdAt: true });
+export type InsertRetroCameraPhoto = z.infer<typeof insertRetroCameraPhotoSchema>;
+export type RetroCameraPhotoDB = typeof retroCameraPhotos.$inferSelect;
+
 // ===== METAHERS WORLD ARCHITECTURE =====
 
 // Spaces table (6 main learning spaces in MetaHers World)
