@@ -47,6 +47,7 @@ const GlowUpJournalPage = lazy(() => import("@/pages/GlowUpJournalPage"));
 const GlowUpCompletePage = lazy(() => import("@/pages/GlowUpCompletePage"));
 const DiscoverPage = lazy(() => import("@/pages/DiscoverPage"));
 const VIPCohortPage = lazy(() => import("@/pages/VIPCohortPage"));
+const ExecutivePage = lazy(() => import("@/pages/ExecutivePage"));
 const AIBuilderRetreatPage = lazy(() => import("@/pages/AIBuilderRetreatPage"));
 const ThoughtLeadershipPage = lazy(() => import("@/pages/ThoughtLeadershipPage"));
 const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
