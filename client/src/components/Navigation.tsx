@@ -50,6 +50,7 @@ export function Navigation() {
     } : {
       "More": [
         { path: "/shop", label: "Shop", icon: ShoppingBag, gradient: "from-rose-500 to-pink-600", glow: "233, 53, 193" },
+        { path: "/retro-camera", label: "Retro Camera", icon: Camera, gradient: "from-orange-500 to-red-600", glow: "255, 165, 0" },
         { path: "/vip-cohort", label: "VIP Cohort", icon: Crown, gradient: "from-amber-500 to-yellow-600", glow: "251, 191, 36" },
         { path: "/executive", label: "Executive", icon: Briefcase, gradient: "from-slate-500 to-gray-600", glow: "148, 163, 184" },
         { path: "/ai-prompts", label: "AI Prompts", icon: Code2, gradient: "from-indigo-500 to-purple-600", glow: "99, 102, 241" },
