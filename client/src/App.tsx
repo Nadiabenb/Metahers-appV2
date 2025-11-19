@@ -129,7 +129,6 @@ function Router() {
         <Route path="/founders-sanctuary" component={FoundersSanctuaryPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
-        <Route path="/retro-camera" component={RetroCameraPage} />
 
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
@@ -181,6 +180,7 @@ function Router() {
             <Route path="/glow-up/complete" component={GlowUpCompletePage} />
             <Route path="/thought-leadership" component={ThoughtLeadershipPage} />
             <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
+            <Route path="/retro-camera" component={RetroCameraPage} />
           </>
         ) : (
           <>
