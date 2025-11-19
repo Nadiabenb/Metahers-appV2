@@ -293,29 +293,70 @@ export default function RetroCameraPage() {
             >
               {/* Camera Body - Pink Polaroid */}
               <div className="relative bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500 rounded-3xl p-8 shadow-2xl border-4 border-pink-600">
-                {/* Camera Top Section */}
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-3 h-3 bg-green-400 rounded-full shadow-lg shadow-green-400/50 animate-pulse" />
-                      <span className="text-white text-sm font-bold">READY</span>
-                    </div>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={toggleCamera}
-                      className="text-white hover:bg-pink-600/30 rounded-full"
-                    >
-                      <RotateCcw className="w-5 h-5" />
-                    </Button>
-                  </div>
+                {/* Photo Ejection Slot at Top */}
+                <div className="relative h-2 mb-4">
+                  <div className="absolute inset-0 bg-black/20 rounded-sm" />
+                  <AnimatePresence>
+                    {(isPrinting || printedPhoto) && (
+                      <motion.div
+                        initial={{ y: -200, opacity: 0 }}
+                        animate={{ y: -10, opacity: 1 }}
+                        exit={{ y: -200, opacity: 0 }}
+                        transition={{ duration: isPrinting ? 2 : 0.5, ease: "easeOut" }}
+                        className="absolute -top-4 left-1/2 -translate-x-1/2 w-[90%] z-20"
+                      >
+                        {/* Polaroid Photo Frame */}
+                        <div className="bg-white p-2 pb-10 shadow-2xl rounded-sm">
+                          <div className="bg-gray-200 aspect-square rounded-sm overflow-hidden">
+                            {printedPhoto && (
+                              <motion.img
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                transition={{ delay: 1, duration: 2 }}
+                                src={printedPhoto}
+                                alt="Polaroid"
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                            {isPrinting && !printedPhoto && (
+                              <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-400 animate-pulse" />
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
-                  {/* Polaroid Branding */}
-                  <div className="text-center mb-2">
-                    <h2 className="font-bold text-2xl text-white tracking-wider" style={{ fontFamily: 'cursive' }}>
-                      Polaroid
-                    </h2>
-                    <p className="text-white/80 text-xs">MetaHers Edition</p>
+                {/* Camera Top Section with Flash and Viewfinder */}
+                <div className="mb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    {/* Left side - Flash indicator and viewfinder */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-6 bg-gray-100 rounded border border-gray-300" />
+                      <div className="flex flex-col items-center gap-1">
+                        <div className="w-2 h-2 bg-green-400 rounded-full shadow-lg shadow-green-400/50 animate-pulse" />
+                        <span className="text-white text-[10px] font-bold">READY</span>
+                      </div>
+                    </div>
+                    
+                    {/* Right side - Instax branding and flip camera */}
+                    <div className="flex items-center gap-2">
+                      <div className="text-right">
+                        <h2 className="font-bold text-lg text-white tracking-wide" style={{ fontFamily: 'cursive' }}>
+                          instax
+                        </h2>
+                        <p className="text-white/80 text-[10px] -mt-1">mini 12</p>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={toggleCamera}
+                        className="text-white hover:bg-pink-600/30 rounded-full h-8 w-8 p-0"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
@@ -376,53 +417,28 @@ export default function RetroCameraPage() {
                   </div>
                 )}
 
-                {/* Camera Button */}
+                {/* Camera Shutter Button - Bottom Left like Instax */}
                 {!capturedImage && !printedPhoto && (
-                  <div className="flex justify-center">
+                  <div className="absolute bottom-6 left-6">
                     <motion.button
                       whileTap={{ scale: 0.9 }}
                       onClick={capturePhoto}
                       disabled={!isCameraActive}
-                      className="w-20 h-20 rounded-full bg-gradient-to-br from-white to-gray-100 shadow-2xl border-4 border-pink-600 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-pink-400/50 transition-all"
+                      className="relative w-16 h-16 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 shadow-xl border-3 border-pink-400 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-pink-400/50 transition-all group"
                     >
-                      <div className="w-16 h-16 rounded-full bg-pink-600 flex items-center justify-center">
-                        <Camera className="w-8 h-8 text-white" />
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 to-transparent" />
+                      <div className="relative">
+                        <Camera className="w-6 h-6 text-pink-700" />
+                      </div>
+                      {/* Shutter Button Label */}
+                      <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                        <span className="text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                          SHUTTER
+                        </span>
                       </div>
                     </motion.button>
                   </div>
                 )}
-
-                {/* Photo Ejection Slot - Printing Animation */}
-                <AnimatePresence>
-                  {(isPrinting || printedPhoto) && (
-                    <motion.div
-                      initial={{ y: 100, opacity: 0 }}
-                      animate={{ y: 0, opacity: 1 }}
-                      exit={{ y: 100, opacity: 0 }}
-                      transition={{ duration: 2, ease: "easeOut" }}
-                      className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[85%]"
-                    >
-                      {/* Polaroid Photo Frame */}
-                      <div className="bg-white p-3 pb-12 shadow-2xl rounded-sm">
-                        <div className="bg-gray-200 aspect-square rounded-sm overflow-hidden">
-                          {printedPhoto && (
-                            <motion.img
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ delay: 1, duration: 2 }}
-                              src={printedPhoto}
-                              alt="Polaroid"
-                              className="w-full h-full object-cover"
-                            />
-                          )}
-                          {isPrinting && !printedPhoto && (
-                            <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-400 animate-pulse" />
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
               </div>
 
               {/* Action Buttons Below Camera */}
@@ -430,7 +446,7 @@ export default function RetroCameraPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-24 flex gap-3 justify-center flex-wrap"
+                  className="mt-6 flex gap-3 justify-center flex-wrap"
                 >
                   <Button
                     size="lg"
