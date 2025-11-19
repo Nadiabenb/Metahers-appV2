@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +45,7 @@ export function Navigation() {
         { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, gradient: "from-violet-500 to-purple-600", glow: "181, 101, 216", pro: true },
         { path: "/events", label: "Events", icon: Calendar, gradient: "from-pink-500 to-fuchsia-600", glow: "233, 53, 193" },
         { path: "/shop", label: "Shop", icon: ShoppingBag, gradient: "from-rose-500 to-pink-600", glow: "233, 53, 193" },
+        { path: "/retro-camera", label: "Retro Camera", icon: Camera, gradient: "from-orange-500 to-red-600", glow: "255, 165, 0" },
       ],
     } : {
       "More": [

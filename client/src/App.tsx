@@ -47,7 +47,6 @@ const GlowUpJournalPage = lazy(() => import("@/pages/GlowUpJournalPage"));
 const GlowUpCompletePage = lazy(() => import("@/pages/GlowUpCompletePage"));
 const DiscoverPage = lazy(() => import("@/pages/DiscoverPage"));
 const VIPCohortPage = lazy(() => import("@/pages/VIPCohortPage"));
-const ExecutivePage = lazy(() => import("@/pages/ExecutivePage"));
 const AIBuilderRetreatPage = lazy(() => import("@/pages/AIBuilderRetreatPage"));
 const ThoughtLeadershipPage = lazy(() => import("@/pages/ThoughtLeadershipPage"));
 const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
@@ -65,6 +64,7 @@ const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
 const RetreatPage = lazy(() => import("@/pages/RetreatPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
+const RetroCameraPage = lazy(() => import("@/pages/RetroCameraPage"));
 
 function LoadingFallback() {
   return (
@@ -128,6 +128,7 @@ function Router() {
         <Route path="/founders-sanctuary" component={FoundersSanctuaryPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
+        <Route path="/retro-camera" component={RetroCameraPage} />
 
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
