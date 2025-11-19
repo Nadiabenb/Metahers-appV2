@@ -60,13 +60,13 @@ export default function RetroCameraPage() {
   const [showPostDialog, setShowPostDialog] = useState(false);
   const [caption, setCaption] = useState("");
   const [isPublic, setIsPublic] = useState(true);
-
-  // Remove auto-redirect - let users see the page but prompt to sign in for posting
+  const [isPrinting, setIsPrinting] = useState(false);
+  const [printedPhoto, setPrintedPhoto] = useState<string | null>(null);
 
   // Fetch photo feed
   const { data: photoFeed = [] } = useQuery<Photo[]>({
     queryKey: ['/api/retro-camera/feed'],
-    refetchInterval: 30000, // Refresh every 30 seconds
+    refetchInterval: 30000,
   });
 
   // Fetch user's own photos
@@ -96,7 +96,6 @@ export default function RetroCameraPage() {
       });
       setShowPostDialog(false);
       setCaption("");
-      setCapturedImage(null);
     },
     onError: () => {
       toast({
@@ -174,10 +173,10 @@ export default function RetroCameraPage() {
   }, [stopCamera]);
 
   useEffect(() => {
-    if (facingMode && !capturedImage) {
+    if (facingMode && !capturedImage && !printedPhoto) {
       startCamera();
     }
-  }, [facingMode, startCamera, capturedImage]);
+  }, [facingMode, startCamera, capturedImage, printedPhoto]);
 
   const capturePhoto = useCallback(() => {
     if (videoRef.current && canvasRef.current) {
@@ -194,24 +193,33 @@ export default function RetroCameraPage() {
         
         const imageData = canvas.toDataURL("image/png");
         setCapturedImage(imageData);
+        setIsPrinting(true);
         stopCamera();
+
+        // Simulate Polaroid printing animation
+        setTimeout(() => {
+          setPrintedPhoto(imageData);
+          setIsPrinting(false);
+        }, 2000);
       }
     }
   }, [selectedFilter, stopCamera]);
 
   const retakePhoto = useCallback(() => {
     setCapturedImage(null);
+    setPrintedPhoto(null);
+    setIsPrinting(false);
     startCamera();
   }, [startCamera]);
 
   const downloadPhoto = useCallback(() => {
-    if (capturedImage) {
+    if (printedPhoto) {
       const link = document.createElement("a");
-      link.href = capturedImage;
-      link.download = `metahers-retro-${Date.now()}.png`;
+      link.href = printedPhoto;
+      link.download = `metahers-polaroid-${Date.now()}.png`;
       link.click();
     }
-  }, [capturedImage]);
+  }, [printedPhoto]);
 
   const handlePostPhoto = () => {
     if (!user) {
@@ -223,15 +231,15 @@ export default function RetroCameraPage() {
       setLocation("/login");
       return;
     }
-    if (capturedImage) {
+    if (printedPhoto) {
       setShowPostDialog(true);
     }
   };
 
   const confirmPost = () => {
-    if (capturedImage) {
+    if (printedPhoto) {
       postPhotoMutation.mutate({
-        imageUrl: capturedImage,
+        imageUrl: printedPhoto,
         filterName: selectedFilter.name,
         caption,
         isPublic,
@@ -246,7 +254,7 @@ export default function RetroCameraPage() {
   }, [stopCamera]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 dark:from-gray-900 dark:via-purple-900 dark:to-pink-900">
       <SEO
         title="Retro Camera - MetaHers Mind Spa"
         description="Capture moments with vintage filters and share with the community"
@@ -254,7 +262,7 @@ export default function RetroCameraPage() {
 
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Camera Section */}
+          {/* Polaroid Camera Section */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: -20 }}
@@ -263,41 +271,58 @@ export default function RetroCameraPage() {
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h1 className="font-serif text-4xl font-bold mb-2">
-                    Retro Camera
+                  <h1 className="font-serif text-4xl font-bold mb-2 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+                    Polaroid Camera
                   </h1>
                   <p className="text-muted-foreground">
-                    Capture & share your MetaHers moments
+                    📸 Capture & share your MetaHers moments
                   </p>
                 </div>
-                <Badge className="bg-primary/10 text-primary border-primary/20">
+                <Badge className="bg-pink-500/10 text-pink-600 border-pink-500/20">
                   <Sparkles className="w-4 h-4 mr-1" />
-                  Member Feature
+                  Vintage Vibes
                 </Badge>
               </div>
             </motion.div>
 
-            <Card className="overflow-hidden border-2 border-primary/20">
-              <CardHeader className="bg-gradient-to-r from-primary/5 to-primary/10">
-                <CardTitle className="flex items-center gap-2">
-                  <Camera className="w-5 h-5" />
-                  {capturedImage ? "Your Retro Photo" : "Live Camera"}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="relative bg-black aspect-[4/3] overflow-hidden">
+            {/* Pink Polaroid Camera Body */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="relative"
+            >
+              {/* Camera Body - Pink Polaroid */}
+              <div className="relative bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500 rounded-3xl p-8 shadow-2xl border-4 border-pink-600">
+                {/* Camera Top Section */}
+                <div className="mb-6">
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-green-400 rounded-full shadow-lg shadow-green-400/50 animate-pulse" />
+                      <span className="text-white text-sm font-bold">READY</span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={toggleCamera}
+                      className="text-white hover:bg-pink-600/30 rounded-full"
+                    >
+                      <RotateCcw className="w-5 h-5" />
+                    </Button>
+                  </div>
+
+                  {/* Polaroid Branding */}
+                  <div className="text-center mb-2">
+                    <h2 className="font-bold text-2xl text-white tracking-wider" style={{ fontFamily: 'cursive' }}>
+                      Polaroid
+                    </h2>
+                    <p className="text-white/80 text-xs">MetaHers Edition</p>
+                  </div>
+                </div>
+
+                {/* Viewfinder */}
+                <div className="relative bg-black rounded-2xl overflow-hidden shadow-inner border-4 border-pink-600 mb-6" style={{ aspectRatio: '4/3' }}>
                   <AnimatePresence mode="wait">
-                    {capturedImage ? (
-                      <motion.img
-                        key="captured"
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.9 }}
-                        src={capturedImage}
-                        alt="Captured"
-                        className="w-full h-full object-contain"
-                      />
-                    ) : (
+                    {!capturedImage && !printedPhoto ? (
                       <motion.video
                         key="video"
                         initial={{ opacity: 0 }}
@@ -310,29 +335,38 @@ export default function RetroCameraPage() {
                         className="w-full h-full object-cover"
                         style={{ filter: selectedFilter.effect }}
                       />
+                    ) : (
+                      <motion.div
+                        key="preview"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="w-full h-full flex items-center justify-center bg-gray-900"
+                      >
+                        <Camera className="w-16 h-16 text-pink-400/30" />
+                      </motion.div>
                     )}
                   </AnimatePresence>
 
                   <canvas ref={canvasRef} className="hidden" />
 
+                  {/* Viewfinder Frame */}
                   <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute inset-4 border-2 border-white/30 rounded-lg" />
-                    <div className="absolute top-8 left-8 w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                    <div className="absolute inset-4 border-2 border-white/20 rounded-lg" />
                   </div>
                 </div>
 
-                {!capturedImage && (
-                  <div className="p-4 bg-muted/50 border-t border-border">
-                    <p className="text-sm font-semibold mb-3">Choose Filter:</p>
-                    <div className="grid grid-cols-4 gap-2">
+                {/* Filter Selection Pills */}
+                {!capturedImage && !printedPhoto && (
+                  <div className="mb-6">
+                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                       {FILTERS.map((filter) => (
                         <button
                           key={filter.id}
                           onClick={() => setSelectedFilter(filter)}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                          className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                             selectedFilter.id === filter.id
-                              ? "bg-primary text-primary-foreground shadow-lg scale-105"
-                              : "bg-background hover:bg-muted"
+                              ? "bg-white text-pink-600 shadow-lg scale-105"
+                              : "bg-pink-600/30 text-white hover:bg-pink-600/50"
                           }`}
                         >
                           {filter.name}
@@ -342,59 +376,91 @@ export default function RetroCameraPage() {
                   </div>
                 )}
 
-                <div className="p-6 bg-gradient-to-b from-background to-muted/30">
-                  {capturedImage ? (
-                    <div className="flex gap-3 justify-center flex-wrap">
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        onClick={retakePhoto}
-                        className="flex-1 max-w-xs"
-                      >
-                        <RotateCcw className="w-5 h-5 mr-2" />
-                        Retake
-                      </Button>
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        onClick={downloadPhoto}
-                        className="flex-1 max-w-xs"
-                      >
-                        <Download className="w-5 h-5 mr-2" />
-                        Download
-                      </Button>
-                      <Button
-                        size="lg"
-                        onClick={handlePostPhoto}
-                        className="flex-1 max-w-xs bg-primary hover:bg-primary/90"
-                      >
-                        <Send className="w-5 h-5 mr-2" />
-                        Post to Feed
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="flex gap-3 justify-center">
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        onClick={toggleCamera}
-                        className="w-16 h-16 rounded-full p-0"
-                      >
-                        <RotateCcw className="w-6 h-6" />
-                      </Button>
-                      <Button
-                        size="lg"
-                        onClick={capturePhoto}
-                        disabled={!isCameraActive}
-                        className="w-20 h-20 rounded-full p-0 bg-primary hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all"
-                      >
-                        <Camera className="w-8 h-8" />
-                      </Button>
-                    </div>
+                {/* Camera Button */}
+                {!capturedImage && !printedPhoto && (
+                  <div className="flex justify-center">
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={capturePhoto}
+                      disabled={!isCameraActive}
+                      className="w-20 h-20 rounded-full bg-gradient-to-br from-white to-gray-100 shadow-2xl border-4 border-pink-600 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-pink-400/50 transition-all"
+                    >
+                      <div className="w-16 h-16 rounded-full bg-pink-600 flex items-center justify-center">
+                        <Camera className="w-8 h-8 text-white" />
+                      </div>
+                    </motion.button>
+                  </div>
+                )}
+
+                {/* Photo Ejection Slot - Printing Animation */}
+                <AnimatePresence>
+                  {(isPrinting || printedPhoto) && (
+                    <motion.div
+                      initial={{ y: 100, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: 100, opacity: 0 }}
+                      transition={{ duration: 2, ease: "easeOut" }}
+                      className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[85%]"
+                    >
+                      {/* Polaroid Photo Frame */}
+                      <div className="bg-white p-3 pb-12 shadow-2xl rounded-sm">
+                        <div className="bg-gray-200 aspect-square rounded-sm overflow-hidden">
+                          {printedPhoto && (
+                            <motion.img
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ delay: 1, duration: 2 }}
+                              src={printedPhoto}
+                              alt="Polaroid"
+                              className="w-full h-full object-cover"
+                            />
+                          )}
+                          {isPrinting && !printedPhoto && (
+                            <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-400 animate-pulse" />
+                          )}
+                        </div>
+                      </div>
+                    </motion.div>
                   )}
-                </div>
-              </CardContent>
-            </Card>
+                </AnimatePresence>
+              </div>
+
+              {/* Action Buttons Below Camera */}
+              {printedPhoto && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-24 flex gap-3 justify-center flex-wrap"
+                >
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={retakePhoto}
+                    className="flex-1 max-w-xs border-pink-300 hover:bg-pink-50"
+                  >
+                    <RotateCcw className="w-5 h-5 mr-2" />
+                    Retake
+                  </Button>
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={downloadPhoto}
+                    className="flex-1 max-w-xs border-pink-300 hover:bg-pink-50"
+                  >
+                    <Download className="w-5 h-5 mr-2" />
+                    Download
+                  </Button>
+                  <Button
+                    size="lg"
+                    onClick={handlePostPhoto}
+                    className="flex-1 max-w-xs bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                  >
+                    <Send className="w-5 h-5 mr-2" />
+                    Post to Feed
+                  </Button>
+                </motion.div>
+              )}
+            </motion.div>
           </div>
 
           {/* Photo Feed Section */}
@@ -421,11 +487,11 @@ export default function RetroCameraPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                   >
-                    <Card className="overflow-hidden">
+                    <Card className="overflow-hidden border-2 border-pink-100">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center text-white font-bold">
                               {(photo.userFirstName?.[0] || 'M').toUpperCase()}
                             </div>
                             <div>
@@ -449,25 +515,28 @@ export default function RetroCameraPage() {
                           )}
                         </div>
 
-                        <img
-                          src={photo.imageUrl}
-                          alt={photo.caption || 'Retro photo'}
-                          className="w-full rounded-lg mb-3"
-                        />
+                        {/* Polaroid-style photo display */}
+                        <div className="bg-white p-3 pb-12 shadow-lg rounded-sm mb-3">
+                          <img
+                            src={photo.imageUrl}
+                            alt={photo.caption || 'Polaroid photo'}
+                            className="w-full aspect-square object-cover rounded-sm"
+                          />
+                        </div>
 
                         {photo.caption && (
                           <p className="text-sm mb-3">{photo.caption}</p>
                         )}
 
                         <div className="flex items-center justify-between">
-                          <Badge variant="secondary" className="text-xs">
+                          <Badge variant="secondary" className="text-xs bg-pink-100 text-pink-700">
                             {photo.filterName} Filter
                           </Badge>
                           <Button
                             size="sm"
                             variant="ghost"
                             onClick={() => likePhotoMutation.mutate(photo.id)}
-                            className="gap-2"
+                            className="gap-2 hover:text-pink-600"
                           >
                             <Heart className="w-4 h-4" />
                             {photo.likeCount}
@@ -480,8 +549,8 @@ export default function RetroCameraPage() {
               })}
 
               {photoFeed.length === 0 && (
-                <Card className="p-8 text-center">
-                  <ImageIcon className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                <Card className="p-8 text-center border-2 border-pink-100">
+                  <ImageIcon className="w-12 h-12 mx-auto mb-4 text-pink-300" />
                   <p className="text-muted-foreground">
                     No photos yet. Be the first to share!
                   </p>
@@ -496,7 +565,7 @@ export default function RetroCameraPage() {
       <Dialog open={showPostDialog} onOpenChange={setShowPostDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Share Your Photo</DialogTitle>
+            <DialogTitle>Share Your Polaroid</DialogTitle>
             <DialogDescription>
               Add a caption and choose who can see your photo
             </DialogDescription>
@@ -546,7 +615,7 @@ export default function RetroCameraPage() {
               <Button
                 onClick={confirmPost}
                 disabled={postPhotoMutation.isPending}
-                className="flex-1"
+                className="flex-1 bg-gradient-to-r from-pink-500 to-purple-500"
               >
                 {postPhotoMutation.isPending ? "Posting..." : "Post Photo"}
               </Button>
