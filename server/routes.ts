@@ -96,6 +96,12 @@ let spacesCache: { data: any[]; timestamp: number } | null = null;
 let experiencesCache: { data: any[]; timestamp: number } | null = null;
 const DATA_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
+// CRITICAL: Clear all caches on server startup to ensure fresh Harvard-style content is served
+console.log('🔄 Clearing all caches on startup to serve fresh content...');
+spacesCache = null;
+experiencesCache = null;
+recommendationCache.clear();
+
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment monitoring
   // Note: Root "/" is handled by static file serving (index.html) which also returns 200
@@ -1063,7 +1069,7 @@ Return ONLY valid JSON:
   // ===== METAHERS WORLD SPACESROUTES =====
   app.get('/api/spaces', asyncHandler(async (_req: Request, res) => {
     const { cacheGet, cacheSet } = await import('./lib/cache');
-    
+
     // Try Redis cache first
     const cached = await cacheGet<any[]>('spaces:all');
     if (cached) {
@@ -1174,7 +1180,7 @@ Return ONLY valid JSON:
     try {
       const { slug } = req.params;
       const { cacheGet, cacheSet } = await import('./lib/cache');
-      
+
       // Try Redis cache first
       const cacheKey = `experience:${slug}`;
       const cached = await cacheGet<any>(cacheKey);
@@ -2962,7 +2968,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
           updatedAt: new Date(),
         };
 
-        // Only advance progress if this is the current day AND we're creating a new post
+        // Only only update streak and advance day if this is a new completion (not regenerating)
         const shouldAdvance = actualDayNumber === progress.currentDay && !existingPost;
 
         if (shouldAdvance) {
