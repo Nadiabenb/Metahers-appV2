@@ -1,5 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import { EXPERIENCES } from '../server/seedExperiences';
+import { MOMS_EXPERIENCES } from '../server/seedMomsExperiences';
 
 // This script populates the production database with spaces and experiences
 // Run this ONCE after deploying to production to fix empty database
@@ -140,7 +141,8 @@ async function populateProductionDB() {
 
     // Insert experiences from the full seed data
     console.log('\nInserting transformational experiences...');
-    for (const exp of EXPERIENCES) {
+    const allExperiences = [...EXPERIENCES, ...MOMS_EXPERIENCES];
+    for (const exp of allExperiences) {
       await sql`
         INSERT INTO transformational_experiences (
           id, space_id, title, slug, description, learning_objectives, 
@@ -168,11 +170,12 @@ async function populateProductionDB() {
       console.log(`✓ Inserted experience: ${exp.title}`);
     }
 
+    const allExperiences = [...EXPERIENCES, ...MOMS_EXPERIENCES];
     console.log('\n✅ SUCCESS! Production database populated with:');
     console.log(`   - ${spaces.length} spaces`);
-    console.log(`   - ${EXPERIENCES.length} transformational experiences`);
-    console.log(`   - ${EXPERIENCES.filter(e => e.tier === 'free').length} FREE experiences`);
-    console.log(`   - ${EXPERIENCES.filter(e => e.tier === 'pro').length} PRO experiences`);
+    console.log(`   - ${allExperiences.length} transformational experiences`);
+    console.log(`   - ${allExperiences.filter(e => e.tier === 'free').length} FREE experiences`);
+    console.log(`   - ${allExperiences.filter(e => e.tier === 'pro').length} PRO experiences`);
     console.log('\nYour production app should now work correctly!');
 
   } catch (error) {
