@@ -27,6 +27,13 @@ import {
   companionActivities,
   sectionCompletions, // Import sectionCompletions table
   retroCameraPhotos, // Import retroCameraPhotos table
+  womenProfiles,
+  profileSkills,
+  directMessages,
+  skillsTrades,
+  profileServices,
+  opportunities,
+  profileActivityFeed,
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -85,6 +92,20 @@ import type {
   SectionCompletionDB, // Import SectionCompletionDB type
   InsertRetroCameraPhoto, // Import InsertRetroCameraPhoto type
   RetroCameraPhotoDB, // Import RetroCameraPhotoDB type
+  InsertWomenProfile,
+  WomenProfileDB,
+  InsertProfileSkill,
+  ProfileSkillDB,
+  InsertDirectMessage,
+  DirectMessageDB,
+  InsertSkillsTrade,
+  SkillsTradeDB,
+  InsertProfileService,
+  ProfileServiceDB,
+  InsertOpportunity,
+  OpportunityDB,
+  InsertProfileActivityFeed,
+  ProfileActivityFeedDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
