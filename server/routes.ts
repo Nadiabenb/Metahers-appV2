@@ -1233,10 +1233,16 @@ Return ONLY valid JSON:
       const user = userId ? await storage.getUser(userId) : null;
       const isProUser = user?.isPro || user?.subscriptionTier === "pro";
 
-      // Filter Pro content for non-Pro users
+      // Filter experiences and ensure all have proper content structure
       const filteredExperiences = experiences.map(exp => {
+        // Validate content structure - ensure all experiences have 5+ sections
+        const sectionCount = exp.content?.sections?.length || 0;
+        if (sectionCount < 5) {
+          console.warn(`⚠️ Experience ${exp.slug} has only ${sectionCount} sections - needs regeneration`);
+        }
+
         if (exp.tier === "pro" && !isProUser) {
-          // Redact sensitive Pro content for non-Pro users
+          // Redact sensitive Pro content for non-Pro users, but keep metadata
           return {
             id: exp.id,
             spaceId: exp.spaceId,
@@ -1248,11 +1254,17 @@ Return ONLY valid JSON:
             estimatedMinutes: exp.estimatedMinutes,
             sortOrder: exp.sortOrder,
             isActive: exp.isActive,
-            // Omit: content, learningObjectives, personalizationEnabled
-            _accessRestricted: true
+            learningObjectives: exp.learningObjectives || [], // Keep objectives visible
+            // Omit: content, personalizationEnabled
+            _accessRestricted: true,
+            _sectionCount: sectionCount // For debugging
           };
         }
-        return exp;
+        // Free experiences or Pro users - return full content
+        return {
+          ...exp,
+          _sectionCount: sectionCount // For debugging
+        };
       });
 
       res.json(filteredExperiences);
