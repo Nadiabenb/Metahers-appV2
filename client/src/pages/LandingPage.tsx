@@ -107,15 +107,28 @@ export default function LandingPage() {
         />
 
         {/* Hero Content - Asymmetric Layout */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 w-full py-16 sm:py-20 lg:py-0">
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-8 sm:gap-12 lg:gap-16 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-16 w-full py-20 sm:py-28 lg:py-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] gap-12 sm:gap-16 lg:gap-20 items-center">
             {/* Text Content - Takes larger portion on desktop */}
             <motion.div
               initial={{ opacity: 0, y: 60 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
-              className="space-y-6 sm:space-y-8 text-center sm:text-left"
+              className="space-y-8 sm:space-y-10 text-center sm:text-left"
             >
+              {/* Luxury Exclusivity Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#F8D57E]/30 bg-[#F8D57E]/10 backdrop-blur-sm w-fit mx-auto sm:mx-0"
+              >
+                <span className="w-2 h-2 rounded-full bg-[#F8D57E] animate-pulse" />
+                <span className="text-xs sm:text-sm uppercase tracking-widest text-[#F8D57E] font-semibold">
+                  Limited Spots Available • Join Elite Circle
+                </span>
+              </motion.div>
+
               {/* Sanctuary-style eyebrow */}
               <motion.div
                 initial={{ opacity: 0 }}
@@ -125,77 +138,82 @@ export default function LandingPage() {
               >
                 <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
                 <span className="text-xs sm:text-sm uppercase tracking-widest text-white/80 font-medium">
-                  Your Digital Sanctuary
+                  Your Personal Sanctuary
                 </span>
               </motion.div>
 
-              {/* Gradient Headline - Fluid Typography */}
+              {/* Luxury Headline - Fluid Typography */}
               <h1 className="sanctuary-headline font-bold leading-[1.08]" style={{ fontSize: 'clamp(2.5rem, 5vw + 1rem, 4.75rem)' }}>
                 <span className="text-white">Master AI.</span><br />
                 <span className="text-white">Own Web3.</span><br />
                 <span className="text-gradient-shimmer inline-flex items-center gap-3 sm:gap-4 justify-center sm:justify-start flex-wrap">
-                  Build Empire.
+                  Build Your Empire.
                   <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 text-[#F8D57E]" />
                 </span>
               </h1>
 
-              {/* Editorial Subheading */}
+              {/* Luxury Editorial Subheading */}
               <p className="text-base sm:text-lg lg:text-2xl text-white/90 max-w-2xl mx-auto sm:mx-0 leading-relaxed font-light px-2 sm:px-0">
-                Nine curated learning spaces. Personalized AI coaching. Direct access to founder Nadia when you need real human support.
+                Nine curated learning spaces. Personalized AI coaching. Direct access to founder Nadia—whenever you need real human guidance.
               </p>
 
-              {/* CTA Buttons - Sanctuary Style */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-2 sm:pt-4 px-2 sm:px-0">
+              {/* Luxury CTA Buttons */}
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-5 pt-4 sm:pt-6 px-2 sm:px-0">
                 <motion.button
                   onClick={() => {
                     trackCTAClick('hero_retreat', '/retreat', 'free');
                     window.location.href = "/retreat";
                   }}
                   whileHover={{ 
-                    scale: 1.03,
-                    boxShadow: "0 0 40px rgba(139, 92, 246, 0.4)"
+                    scale: 1.04,
+                    boxShadow: "0 0 50px rgba(139, 92, 246, 0.5)"
                   }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative px-8 sm:px-12 py-4 sm:py-5 rounded-full overflow-hidden bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-base sm:text-lg transition-all duration-300 shadow-2xl shadow-purple-500/30 w-full sm:w-auto"
+                  whileTap={{ scale: 0.97 }}
+                  className="group relative px-8 sm:px-14 py-5 sm:py-6 rounded-full overflow-hidden bg-gradient-to-r from-purple-600 to-pink-500 text-white font-semibold text-base sm:text-lg transition-all duration-300 shadow-2xl shadow-purple-500/40 w-full sm:w-auto"
                   data-testid="button-join-retreat"
                 >
                   <span className="relative z-10 flex items-center gap-2 justify-center">
-                    <Sparkles className="w-5 h-5" />
-                    Enter the Sanctuary
+                    <Crown className="w-5 h-5" />
+                    Enter Your Sanctuary
                   </span>
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </motion.button>
 
                 <button
                   onClick={handleSignup}
-                  className="px-8 sm:px-12 py-4 sm:py-5 rounded-full border-2 border-purple-400/30 backdrop-blur-xl bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-400/50 transition-all text-white font-semibold text-base sm:text-lg w-full sm:w-auto"
+                  className="px-8 sm:px-14 py-5 sm:py-6 rounded-full border-2 border-purple-400/40 backdrop-blur-xl bg-purple-500/15 hover:bg-purple-500/25 hover:border-purple-400/60 transition-all text-white font-semibold text-base sm:text-lg w-full sm:w-auto"
                   data-testid="button-start-free"
                 >
-                  Start Free Journey
+                  Start Free (No Card)
                 </button>
               </div>
 
-              {/* WhatsApp Retreat CTA - Human-Powered Feature */}
+              {/* WhatsApp Retreat CTA */}
               <motion.a
                 href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
                 target="_blank"
                 rel="noopener noreferrer"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-3 rounded-full border border-[#25D366]/30 bg-[#25D366]/10 backdrop-blur-sm hover:bg-[#25D366]/20 hover:border-[#25D366]/50 transition-all mx-auto sm:mx-0"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-4 rounded-full border border-[#25D366]/40 bg-[#25D366]/15 backdrop-blur-sm hover:bg-[#25D366]/25 hover:border-[#25D366]/60 transition-all mx-auto sm:mx-0"
                 data-testid="button-whatsapp-retreat-hero"
                 onClick={() => trackCTAClick('hero_whatsapp_retreat', 'whatsapp_retreat', 'free')}
               >
                 <SiWhatsapp className="w-5 h-5 text-[#25D366]" />
                 <span className="text-white font-medium text-sm sm:text-base">
-                  Register via WhatsApp — Learn AI with Nadia in 3 Days
+                  3-Day AI Intensive with Nadia • WhatsApp Group
                 </span>
               </motion.a>
 
-              {/* Social Proof - Magazine Caption Style */}
-              <p className="text-white/60 text-xs sm:text-sm uppercase tracking-wider px-2 sm:px-0">
-                Join 2,500+ women • No credit card required • Personal mentorship included
-              </p>
+              {/* Premium Social Proof */}
+              <div className="pt-2 space-y-3">
+                <p className="text-white/70 text-sm uppercase tracking-widest font-medium">
+                  Join an Elite Circle of Women Leaders
+                </p>
+                <p className="text-white/50 text-xs sm:text-sm tracking-wider">
+                  2,500+ founders, CEOs & creators • No credit card • Direct access to Nadia included
+                </p>
+              </div>
             </motion.div>
 
             {/* Founder Photo - Responsive reveal */}
@@ -241,8 +259,66 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* PREMIUM MEMBER SPOTLIGHT - Social Proof */}
+      <div className="relative py-32 px-6 lg:px-16 bg-gradient-to-b from-purple-500/5 to-background border-t border-purple-500/10">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="sanctuary-headline text-4xl lg:text-5xl font-bold mb-4">
+              <span className="text-gradient-purple-pink">Elite Women Leaders</span><br />Are Already Building Their Empires
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Founder CEOs, solopreneurs & creators transforming their businesses with AI & Web3
+            </p>
+          </motion.div>
+
+          {/* Premium Member Cards - 3 Column Grid */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                name: "Sarah M.",
+                role: "Founder & CEO",
+                story: "Went from $0 → $50K ARR using AI strategies from MetaHers",
+                avatar: "👑"
+              },
+              {
+                name: "Jessica L.",
+                role: "Web3 Educator",
+                story: "Built her own NFT collection & community in 30 days",
+                avatar: "💎"
+              },
+              {
+                name: "Priya P.",
+                role: "AI Consultant",
+                story: "Landed 3 enterprise clients by positioning herself as AI expert",
+                avatar: "✨"
+              }
+            ].map((member, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                className="kinetic-glass rounded-2xl p-8 border border-card-border hover-elevate transition-all duration-300"
+              >
+                <div className="mb-4 text-4xl">{member.avatar}</div>
+                <h3 className="font-serif text-lg font-bold mb-1">{member.name}</h3>
+                <p className="text-sm text-primary font-semibold mb-4">{member.role}</p>
+                <p className="text-muted-foreground text-sm leading-relaxed">{member.story}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* NINE LEARNING SPACES - Editorial Grid */}
-      <div className="relative py-24 px-6 lg:px-16 bg-background">
+      <div className="relative py-40 px-6 lg:px-16 bg-background">
         <div className="max-w-[1400px] mx-auto">
           {/* Section Header - Magazine Style */}
           <motion.div
@@ -250,7 +326,7 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="mb-16 max-w-3xl"
+            className="mb-20 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
@@ -398,21 +474,21 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* MEMBERSHIP TIERS - Editorial Clean Layout */}
-      <div className="relative py-32 px-6 lg:px-16 bg-muted/30">
+      {/* MEMBERSHIP TIERS - Luxury Editorial Clean Layout */}
+      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-b from-background to-purple-500/5">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-20"
+            className="text-center mb-24"
           >
             <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient-purple-pink">Start Free,</span><br />Upgrade Anytime
+              <span className="text-gradient-purple-pink">Choose Your Path</span><br />to Mastery
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Choose the membership that fits your journey
+              Start free. Upgrade when you're ready. Luxury learning, always within reach.
             </p>
           </motion.div>
 
@@ -423,60 +499,62 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="kinetic-glass rounded-2xl p-12 border border-card-border"
+              className="kinetic-glass rounded-3xl p-12 border border-card-border hover-elevate transition-all duration-300"
             >
-              <div className="mb-8">
-                <h3 className="font-serif text-4xl font-bold mb-4">Free Forever</h3>
+              <div className="mb-10">
+                <h3 className="font-serif text-5xl font-bold mb-4">Free Forever</h3>
                 <p className="text-muted-foreground text-lg leading-relaxed">
-                  12 experiences, AI coaching, and personal calls with Nadia when you need support.
+                  12 transformational experiences, personalized AI coaching, and direct calls with Nadia.
                 </p>
               </div>
               <motion.button
                 onClick={handleSignup}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full px-8 py-5 rounded-full border-2 border-foreground/20 bg-card hover:bg-card/80 transition-all font-semibold text-lg"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="w-full px-8 py-6 rounded-full border-2 border-foreground/20 bg-card hover:bg-card/80 hover:border-foreground/40 transition-all font-semibold text-lg"
                 data-testid="button-start-free-tier"
               >
-                Start Free
+                Start Your Journey Free
               </motion.button>
             </motion.div>
 
-            {/* Pro Tier */}
+            {/* Pro Tier - Premium */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="sanctuary-card p-12 border-2 border-purple-400/30 relative overflow-hidden shadow-2xl shadow-purple-500/10"
+              className="sanctuary-card p-12 border-2 border-purple-400/40 relative overflow-hidden shadow-2xl shadow-purple-500/20 hover-elevate transition-all duration-300"
             >
-              {/* Popular Badge */}
+              {/* Exclusive Badge */}
               <div className="absolute top-6 right-6">
-                <Badge className="bg-gradient-to-r from-purple-600 to-pink-500 text-white border-0 px-4 py-1 text-xs font-bold uppercase tracking-wider">
-                  Popular
+                <Badge className="bg-gradient-to-r from-[#F8D57E] to-purple-400 text-purple-900 border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
+                  Most Popular
                 </Badge>
               </div>
 
-              <div className="mb-8">
-                <h3 className="font-serif text-4xl font-bold mb-4">Pro Membership</h3>
+              <div className="mb-10">
+                <h3 className="font-serif text-5xl font-bold mb-4">Inner Circle</h3>
                 <p className="text-muted-foreground text-lg leading-relaxed">
-                  All 36 experiences, thought leadership journey, and priority access to Nadia.
+                  All 36 experiences, thought leadership journey, priority access to Nadia + monthly group coaching.
                 </p>
               </div>
-              <button
+              <motion.button
                 onClick={() => window.location.href = "/pricing"}
-                className="purple-shimmer w-full px-8 py-5 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:shadow-2xl hover:shadow-purple-500/40 transition-all font-semibold text-lg text-white"
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className="purple-shimmer w-full px-8 py-6 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:shadow-2xl hover:shadow-purple-500/50 transition-all font-semibold text-lg text-white"
                 data-testid="button-upgrade-pro"
               >
-                View Pro Benefits
-              </button>
+                Unlock Inner Circle
+              </motion.button>
             </motion.div>
           </div>
         </div>
       </div>
 
       {/* MEET NADIA - Editorial Feature Story */}
-      <div className="relative py-32 px-6 lg:px-16 bg-background overflow-hidden">
+      <div className="relative py-40 px-6 lg:px-16 bg-background overflow-hidden">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <motion.div
