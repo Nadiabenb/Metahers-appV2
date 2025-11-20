@@ -22,16 +22,34 @@ export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
     content: {
       sections: [
         {
-          id: "intro",
-          title: "Welcome to Web3",
+          id: "section-1",
+          title: "Why You Belong Here: Mindset & Confidence",
           type: "text" as const,
-          content: "Let's cut through the jargon and understand what Web3 really means for you as a woman building in tech.",
+          content: "Welcome to Web3 Foundations. You're not here by accident—you're here because you're ready to understand the future of the internet. Let's cut through the jargon and understand what Web3 really means for you as a woman building in tech. This isn't just about technology—it's about ownership, empowerment, and claiming your place in the digital economy.",
         },
         {
-          id: "what-is-web3",
-          title: "What is Web3?",
+          id: "section-2",
+          title: "Core Concepts That Actually Matter",
+          type: "text" as const,
+          content: "Web3 is the internet where you own your data, your content, and your digital assets. Think of it as the difference between renting vs. owning. In Web2 (current internet), platforms own your content and profit from your data. In Web3, you control your digital identity, assets, and relationships directly on the blockchain.",
+        },
+        {
+          id: "section-3",
+          title: "Real Women, Real Results: Case Studies",
           type: "interactive" as const,
-          content: "Web3 is the internet where you own your data, your content, and your digital assets. Think of it as the difference between renting vs. owning.",
+          content: "See how women entrepreneurs are using Web3 to build businesses, create communities, and own their digital presence. From NFT artists earning royalties forever to DAO founders building decentralized organizations, Web3 is creating new opportunities for financial independence.",
+        },
+        {
+          id: "section-4",
+          title: "Your 15-Minute Quick Win Challenge",
+          type: "interactive" as const,
+          content: "Take action right now: Set up your first crypto wallet using MetaMask. This 15-minute exercise will give you hands-on experience with Web3 technology. You'll understand private keys, addresses, and how self-custody works—all foundational concepts for everything else in Web3.",
+        },
+        {
+          id: "section-5",
+          title: "Your Implementation Roadmap",
+          type: "text" as const,
+          content: "Now that you understand Web3 basics, here's your 30-day roadmap: Week 1 - Explore Web3 platforms and join communities. Week 2 - Learn about smart contracts and DAOs. Week 3 - Identify Web3 opportunities in your industry. Week 4 - Start your first Web3 project or investment. Remember: you don't need to be technical to thrive in Web3.",
         },
       ],
     },
