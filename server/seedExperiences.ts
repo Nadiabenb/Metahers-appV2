@@ -1,6 +1,7 @@
 import { db } from "./db";
 import { transformationalExperiences } from "../shared/schema";
-import { sql } from "drizzle-orm";
+import { sql as drizzleSql } from "drizzle-orm";
+import { sql as drizzleSql } from "drizzle-orm";
 
 export const EXPERIENCES: typeof transformationalExperiences.$inferInsert[] = [
   // ===== WEB3 SPACE (6 experiences) =====
@@ -1635,23 +1636,35 @@ export async function seedExperiences() {
   try {
     console.log("Seeding transformational experiences...");
     
-    // ⚠️  CRITICAL CHANGE: Use onConflictDoNothing to PRESERVE existing Harvard-style content
-    // This prevents overwriting curated learning content on every server restart
+    // Update existing experiences with latest seed data
     for (const experience of EXPERIENCES) {
       await db
         .insert(transformationalExperiences)
         .values(experience)
-        .onConflictDoNothing({
+        .onConflictDoUpdate({
           target: transformationalExperiences.id,
+          set: {
+            spaceId: drizzleSql`EXCLUDED.space_id`,
+            title: drizzleSql`EXCLUDED.title`,
+            slug: drizzleSql`EXCLUDED.slug`,
+            description: drizzleSql`EXCLUDED.description`,
+            learningObjectives: drizzleSql`EXCLUDED.learning_objectives`,
+            tier: drizzleSql`EXCLUDED.tier`,
+            estimatedMinutes: drizzleSql`EXCLUDED.estimated_minutes`,
+            sortOrder: drizzleSql`EXCLUDED.sort_order`,
+            content: drizzleSql`EXCLUDED.content`,
+            personalizationEnabled: drizzleSql`EXCLUDED.personalization_enabled`,
+            isActive: drizzleSql`EXCLUDED.is_active`,
+            updatedAt: drizzleSql`NOW()`
+          }
         });
       
-      console.log(`✓ Checked experience: ${experience.title} (${experience.tier})`);
+      console.log(`✓ Synced experience: ${experience.title} (${experience.tier})`);
     }
     
-    console.log(`✓ All ${EXPERIENCES.length} transformational experiences checked!`);
+    console.log(`✓ All ${EXPERIENCES.length} transformational experiences synced!`);
     console.log(`  - ${EXPERIENCES.filter(e => e.tier === 'free').length} FREE lead magnets`);
     console.log(`  - ${EXPERIENCES.filter(e => e.tier === 'pro').length} PRO experiences`);
-    console.log(`⚠️  Note: Existing content is PRESERVED. Use /api/admin/populate-db to force refresh.`);
   } catch (error) {
     console.error("Error seeding experiences:", error);
     throw error;
