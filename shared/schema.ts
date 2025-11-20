@@ -2242,3 +2242,133 @@ export const acceleratorMilestoneProgress = pgTable("accelerator_milestone_progr
 export const insertAcceleratorMilestoneProgressSchema = createInsertSchema(acceleratorMilestoneProgress).omit({ id: true, createdAt: true, updatedAt: true });
 export type InsertAcceleratorMilestoneProgress = z.infer<typeof insertAcceleratorMilestoneProgressSchema>;
 export type AcceleratorMilestoneProgressDB = typeof acceleratorMilestoneProgress.$inferSelect;
+
+// ===== METAHERS CIRCLE - WOMEN'S NETWORKING & MARKETPLACE =====
+
+// Women's profiles table
+export const womenProfiles = pgTable("women_profiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  headline: varchar("headline"),
+  bio: text("bio"),
+  location: varchar("location"),
+  profileImage: varchar("profile_image"),
+  visibility: varchar("visibility").default("public").notNull(),
+  lookingFor: jsonb("looking_for").$type<string[]>().default(sql`'[]'::jsonb`),
+  availability: varchar("availability").default("active").notNull(),
+  verifiedMember: boolean("verified_member").default(false).notNull(),
+  completionPercentage: integer("completion_percentage").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_profile_user").on(table.userId),
+  index("idx_profile_visibility").on(table.visibility),
+]);
+
+export const insertWomenProfileSchema = createInsertSchema(womenProfiles).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertWomenProfile = z.infer<typeof insertWomenProfileSchema>;
+export type WomenProfileDB = typeof womenProfiles.$inferSelect;
+
+// Profile skills table
+export const profileSkills = pgTable("profile_skills", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  profileId: varchar("profile_id").notNull().references(() => womenProfiles.id, { onDelete: "cascade" }),
+  skillName: varchar("skill_name").notNull(),
+  proficiency: varchar("proficiency").default("intermediate").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_skill_profile").on(table.profileId),
+]);
+
+export const insertProfileSkillSchema = createInsertSchema(profileSkills).omit({ id: true, createdAt: true });
+export type InsertProfileSkill = z.infer<typeof insertProfileSkillSchema>;
+export type ProfileSkillDB = typeof profileSkills.$inferSelect;
+
+// Direct messages table
+export const directMessages = pgTable("direct_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  senderId: varchar("sender_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  recipientId: varchar("recipient_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  message: text("message").notNull(),
+  read: boolean("read").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_message_sender").on(table.senderId),
+  index("idx_message_recipient").on(table.recipientId),
+]);
+
+export const insertDirectMessageSchema = createInsertSchema(directMessages).omit({ id: true, createdAt: true });
+export type InsertDirectMessage = z.infer<typeof insertDirectMessageSchema>;
+export type DirectMessageDB = typeof directMessages.$inferSelect;
+
+// Skills trading listings table
+export const skillsTrades = pgTable("skills_trades", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  profileId: varchar("profile_id").notNull().references(() => womenProfiles.id, { onDelete: "cascade" }),
+  havingSkill: varchar("having_skill").notNull(),
+  wantingSkill: varchar("wanting_skill").notNull(),
+  description: text("description"),
+  status: varchar("status").default("active").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_trade_profile").on(table.profileId),
+  index("idx_trade_status").on(table.status),
+]);
+
+export const insertSkillsTradeSchema = createInsertSchema(skillsTrades).omit({ id: true, createdAt: true });
+export type InsertSkillsTrade = z.infer<typeof insertSkillsTradeSchema>;
+export type SkillsTradeDB = typeof skillsTrades.$inferSelect;
+
+// Profile services table
+export const profileServices = pgTable("profile_services", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  profileId: varchar("profile_id").notNull().references(() => womenProfiles.id, { onDelete: "cascade" }),
+  title: varchar("title").notNull(),
+  description: text("description").notNull(),
+  category: varchar("category").notNull(),
+  rate: varchar("rate"),
+  featured: boolean("featured").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_service_profile").on(table.profileId),
+]);
+
+export const insertProfileServiceSchema = createInsertSchema(profileServices).omit({ id: true, createdAt: true });
+export type InsertProfileService = z.infer<typeof insertProfileServiceSchema>;
+export type ProfileServiceDB = typeof profileServices.$inferSelect;
+
+// Opportunities board table
+export const opportunities = pgTable("opportunities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  posterId: varchar("poster_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  title: varchar("title").notNull(),
+  description: text("description").notNull(),
+  type: varchar("type").notNull(),
+  compensation: varchar("compensation"),
+  featured: boolean("featured").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_opportunity_poster").on(table.posterId),
+]);
+
+export const insertOpportunitySchema = createInsertSchema(opportunities).omit({ id: true, createdAt: true });
+export type InsertOpportunity = z.infer<typeof insertOpportunitySchema>;
+export type OpportunityDB = typeof opportunities.$inferSelect;
+
+// Profile activity feed table
+export const profileActivityFeed = pgTable("profile_activity_feed", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  profileId: varchar("profile_id").notNull().references(() => womenProfiles.id, { onDelete: "cascade" }),
+  activityType: varchar("activity_type").notNull(),
+  title: varchar("title").notNull(),
+  description: text("description"),
+  visibility: varchar("visibility").default("public").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_activity_profile").on(table.profileId),
+  index("idx_activity_type").on(table.activityType),
+]);
+
+export const insertProfileActivityFeedSchema = createInsertSchema(profileActivityFeed).omit({ id: true, createdAt: true });
+export type InsertProfileActivityFeed = z.infer<typeof insertProfileActivityFeedSchema>;
+export type ProfileActivityFeedDB = typeof profileActivityFeed.$inferSelect;
