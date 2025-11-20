@@ -121,7 +121,7 @@ function Router() {
         <Route path="/career-path" component={CareerPathGeneratorPage} />
         <Route path="/upgrade" component={UpgradePage} />
         <Route path="/shop" component={ShopPage} />
-        <Route path="/discover" component={DiscoverPage} />
+        <Route path="/retro-camera" component={RetroCameraPage} />
         <Route path="/vip-cohort" component={VIPCohortPage} />
         <Route path="/executive" component={ExecutivePage} />
         <Route path="/ai-builder" component={AIBuilderRetreatPage} />
@@ -129,7 +129,6 @@ function Router() {
         <Route path="/founders-sanctuary" component={FoundersSanctuaryPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
-        <Route path="/retro-camera" component={RetroCameraPage} />
 
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
