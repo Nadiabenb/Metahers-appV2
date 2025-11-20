@@ -572,6 +572,77 @@ export class DatabaseStorage implements IStorage {
     return !!achievement;
   }
 
+  // Calculate real streak from journal entries
+  async calculateUserStreak(userId: string): Promise<number> {
+    const entries = await db
+      .select()
+      .from(journalEntries)
+      .where(eq(journalEntries.userId, userId))
+      .orderBy(desc(journalEntries.date));
+
+    if (entries.length === 0) return 0;
+
+    let streak = 0;
+    const today = new Date();
+    let currentDate = new Date(today);
+    currentDate.setHours(0, 0, 0, 0);
+
+    for (const entry of entries) {
+      const entryDate = new Date(entry.date);
+      entryDate.setHours(0, 0, 0, 0);
+
+      const diffTime = Math.abs(currentDate.getTime() - entryDate.getTime());
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays === 0 || diffDays === 1) {
+        streak++;
+        currentDate = new Date(entryDate);
+        currentDate.setDate(currentDate.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+
+    return streak;
+  }
+
+  // Get recent user activities for feed
+  async getRecentActivities(userId?: string, limit: number = 10): Promise<any[]> {
+    const activities: any[] = [];
+
+    // Get recent journal entries
+    const entries = userId
+      ? await db.select().from(journalEntries).where(eq(journalEntries.userId, userId)).orderBy(desc(journalEntries.createdAt)).limit(5)
+      : await db.select().from(journalEntries).orderBy(desc(journalEntries.createdAt)).limit(5);
+
+    entries.forEach((entry: any) => {
+      activities.push({
+        type: 'journal',
+        userId: entry.userId,
+        title: 'Journaled',
+        description: entry.content.substring(0, 100),
+        timestamp: entry.createdAt,
+      });
+    });
+
+    // Get recent achievements
+    const acheivements = userId
+      ? await db.select().from(achievements).where(eq(achievements.userId, userId)).orderBy(desc(achievements.unlockedAt)).limit(5)
+      : await db.select().from(achievements).orderBy(desc(achievements.unlockedAt)).limit(5);
+
+    acheivements.forEach((ach: any) => {
+      activities.push({
+        type: 'achievement',
+        userId: ach.userId,
+        title: 'Unlocked Achievement',
+        description: ach.achievementKey,
+        timestamp: ach.unlockedAt,
+      });
+    });
+
+    return activities.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()).slice(0, limit);
+  }
+
   // Password reset operations
   async createPasswordResetToken(tokenData: InsertPasswordResetToken): Promise<PasswordResetTokenDB> {
     const [token] = await db

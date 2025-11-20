@@ -2111,6 +2111,45 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
+  // ===== PROGRESS & ACHIEVEMENTS ROUTES =====
+  
+  // Calculate real user streak from journal entries
+  app.get('/api/progress/streak', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const streak = await storage.calculateUserStreak(userId);
+    res.json({ streak });
+  }));
+
+  // Get user achievements and badges
+  app.get('/api/achievements/user', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const achievements = await storage.getUserAchievements(userId);
+    res.json(achievements);
+  }));
+
+  // Get recent activities for feed
+  app.get('/api/activities', asyncHandler(async (req: Request, res) => {
+    const userId = req.query.userId as string | undefined;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const activities = await storage.getRecentActivities(userId, limit);
+    res.json(activities);
+  }));
+
+  // Get retreat spots remaining
+  app.get('/api/retreat/spots', asyncHandler(async (req: Request, res) => {
+    const TOTAL_SPOTS = 20;
+    // In a real implementation, query the database for bookings
+    // For now, return a dynamic count based on cohort capacity
+    const cohortData = await db.select().from(cohortCapacity).where(eq(cohortCapacity.cohortName, 'retreat_3day'));
+    const takenSpots = cohortData[0]?.takenSpots || 2;
+    const spotsRemaining = Math.max(0, TOTAL_SPOTS - takenSpots);
+    res.json({ 
+      totalSpots: TOTAL_SPOTS,
+      takenSpots,
+      spotsRemaining
+    });
+  }));
+
   // ===== APP ATELIER AI COACH ROUTES =====
 
   // Get user's App Atelier usage status
