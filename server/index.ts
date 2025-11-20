@@ -3,8 +3,6 @@ import compression from "compression";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { setupSecurityHeaders, setupCORS, setupRateLimiting } from "./security";
-import { seedSpaces } from "./seedSpaces";
-import { seedExperiences } from "./seedExperiences";
 import { errorHandler } from "./middleware/errorHandler";
 import { logger } from "./lib/logger";
 import { requestLogger } from "./middleware/requestLogger";
@@ -132,16 +130,7 @@ app.use((req, res, next) => {
           const existingSpaces = await db.select().from(spaces);
 
           if (existingSpaces.length === 0 || existingExperiences.length < 54) {
-            logger.info('Database appears empty or incomplete. Starting seeding...');
-
-            // IMPORTANT: Sequential seeding to respect foreign key constraints
-            await seedSpaces();
-            logger.info('Spaces seeded');
-            await seedExperiences();
-            logger.info('Experiences seeded');
-
-            const count = await db.select().from(transformationalExperiences);
-            logger.info({ spaces: existingSpaces.length, experiences: count.length }, 'Database populated');
+            logger.info('Database appears empty or incomplete. Use /api/admin/populate-database endpoint to seed data.');
           } else {
             logger.info({ spaces: existingSpaces.length, experiences: existingExperiences.length }, 'Database already populated');
           }
