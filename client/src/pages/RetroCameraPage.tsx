@@ -285,160 +285,164 @@ export default function RetroCameraPage() {
               </div>
             </motion.div>
 
-            {/* Pink Polaroid Camera Body */}
+            {/* Instax Mini 12 Camera Body */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               className="relative"
             >
-              {/* Camera Body - Pink Polaroid */}
-              <div className="relative bg-gradient-to-br from-pink-300 via-pink-400 to-pink-500 rounded-3xl p-8 shadow-2xl border-4 border-pink-600">
-                {/* Photo Ejection Slot at Top */}
-                <div className="relative h-2 mb-4">
-                  <div className="absolute inset-0 bg-black/20 rounded-sm" />
-                  <AnimatePresence>
-                    {(isPrinting || printedPhoto) && (
-                      <motion.div
-                        initial={{ y: -200, opacity: 0 }}
-                        animate={{ y: -10, opacity: 1 }}
-                        exit={{ y: -200, opacity: 0 }}
-                        transition={{ duration: isPrinting ? 2 : 0.5, ease: "easeOut" }}
-                        className="absolute -top-4 left-1/2 -translate-x-1/2 w-[90%] z-20"
-                      >
-                        {/* Polaroid Photo Frame */}
-                        <div className="bg-white p-2 pb-10 shadow-2xl rounded-sm">
-                          <div className="bg-gray-200 aspect-square rounded-sm overflow-hidden">
-                            {printedPhoto && (
-                              <motion.img
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ delay: 1, duration: 2 }}
-                                src={printedPhoto}
-                                alt="Polaroid"
-                                className="w-full h-full object-cover"
-                              />
-                            )}
-                            {isPrinting && !printedPhoto && (
-                              <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-400 animate-pulse" />
-                            )}
-                          </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Camera Top Section with Flash and Viewfinder */}
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    {/* Left side - Flash indicator and viewfinder */}
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-6 bg-gray-100 rounded border border-gray-300" />
-                      <div className="flex flex-col items-center gap-1">
-                        <div className="w-2 h-2 bg-green-400 rounded-full shadow-lg shadow-green-400/50 animate-pulse" />
-                        <span className="text-white text-[10px] font-bold">READY</span>
+              {/* Main Camera Body - Instax Mini 12 Style */}
+              <div className="relative w-96 h-96 mx-auto">
+                {/* Camera Body - Pink rounded rectangle */}
+                <div className="relative w-full h-full bg-gradient-to-br from-pink-200 via-pink-300 to-pink-400 rounded-3xl shadow-2xl overflow-hidden" style={{ boxShadow: '0 20px 60px rgba(236, 72, 153, 0.3)' }}>
+                  
+                  {/* Top Section - Controls */}
+                  <div className="absolute top-0 left-0 right-0 p-6 flex items-center justify-between">
+                    {/* Left: Flash indicator and small lens */}
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-6 bg-white/70 rounded-lg border-2 border-pink-300 shadow-md" />
+                      <div className="flex flex-col items-center gap-1.5">
+                        <div className="w-3 h-3 bg-green-400 rounded-full shadow-lg shadow-green-400/70 animate-pulse" />
+                        <span className="text-pink-700 text-[9px] font-bold">ON</span>
                       </div>
                     </div>
                     
-                    {/* Right side - Instax branding and flip camera */}
-                    <div className="flex items-center gap-2">
+                    {/* Right: Instax branding and flip camera */}
+                    <div className="flex items-center gap-3">
                       <div className="text-right">
-                        <h2 className="font-bold text-lg text-white tracking-wide" style={{ fontFamily: 'cursive' }}>
+                        <h2 className="font-bold text-lg text-pink-700 tracking-wide" style={{ fontFamily: 'cursive' }}>
                           instax
                         </h2>
-                        <p className="text-white/80 text-[10px] -mt-1">mini 12</p>
+                        <p className="text-pink-600 text-[10px] font-semibold -mt-1">mini 12</p>
                       </div>
                       <Button
                         size="sm"
                         variant="ghost"
                         onClick={toggleCamera}
-                        className="text-white hover:bg-pink-600/30 rounded-full h-8 w-8 p-0"
+                        className="text-pink-700 hover:bg-pink-300/50 rounded-full h-9 w-9 p-0 flex-shrink-0"
+                        data-testid="button-flip-camera"
                       >
-                        <RotateCcw className="w-4 h-4" />
+                        <RotateCcw className="w-5 h-5" />
                       </Button>
                     </div>
                   </div>
-                </div>
 
-                {/* Viewfinder */}
-                <div className="relative bg-black rounded-2xl overflow-hidden shadow-inner border-4 border-pink-600 mb-6" style={{ aspectRatio: '4/3' }}>
-                  <AnimatePresence mode="wait">
-                    {!capturedImage && !printedPhoto ? (
-                      <motion.video
-                        key="video"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        ref={videoRef}
-                        autoPlay
-                        playsInline
-                        muted
-                        className="w-full h-full object-cover"
-                        style={{ filter: selectedFilter.effect }}
-                      />
-                    ) : (
-                      <motion.div
-                        key="preview"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="w-full h-full flex items-center justify-center bg-gray-900"
-                      >
-                        <Camera className="w-16 h-16 text-pink-400/30" />
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {/* Main Circular Lens - Center */}
+                  <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    {/* Lens outer ring - darker */}
+                    <div className="relative w-56 h-56 rounded-full bg-gray-900 shadow-2xl" style={{ boxShadow: 'inset 0 0 20px rgba(0,0,0,0.5), 0 0 30px rgba(0,0,0,0.3)' }}>
+                      
+                      {/* Lens middle ring */}
+                      <div className="absolute inset-3 rounded-full border-4 border-gray-800/80 bg-black/20" />
+                      
+                      {/* Live camera feed inside */}
+                      <div className="absolute inset-4 rounded-full overflow-hidden bg-black border-2 border-gray-700/50">
+                        <AnimatePresence mode="wait">
+                          {!capturedImage && !printedPhoto ? (
+                            <motion.video
+                              key="video"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              ref={videoRef}
+                              autoPlay
+                              playsInline
+                              muted
+                              className="w-full h-full object-cover"
+                              style={{ filter: selectedFilter.effect }}
+                            />
+                          ) : (
+                            <motion.div
+                              key="preview"
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="w-full h-full flex items-center justify-center bg-gray-900"
+                            >
+                              <Camera className="w-16 h-16 text-pink-300/30" />
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                        <canvas ref={canvasRef} className="hidden" />
+                      </div>
 
-                  <canvas ref={canvasRef} className="hidden" />
+                      {/* Glossy lens effect */}
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 via-transparent to-black/20 pointer-events-none" />
+                    </div>
 
-                  {/* Viewfinder Frame */}
-                  <div className="absolute inset-0 pointer-events-none">
-                    <div className="absolute inset-4 border-2 border-white/20 rounded-lg" />
+                    {/* Focus ring detail below lens */}
+                    <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 w-64 h-3 rounded-full bg-pink-400 shadow-lg opacity-80" />
                   </div>
-                </div>
 
-                {/* Filter Selection Pills */}
-                {!capturedImage && !printedPhoto && (
-                  <div className="mb-6">
-                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                      {FILTERS.map((filter) => (
-                        <button
-                          key={filter.id}
-                          onClick={() => setSelectedFilter(filter)}
-                          className={`px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-                            selectedFilter.id === filter.id
-                              ? "bg-white text-pink-600 shadow-lg scale-105"
-                              : "bg-pink-600/30 text-white hover:bg-pink-600/50"
-                          }`}
-                        >
-                          {filter.name}
-                        </button>
-                      ))}
+                  {/* Bottom section - Photo ejection slot */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    {/* Ejection slot */}
+                    <div className="relative h-3 bg-gray-800/50 rounded-sm overflow-hidden">
+                      {/* Photo slides out here */}
+                      <AnimatePresence>
+                        {(isPrinting || printedPhoto) && (
+                          <motion.div
+                            initial={{ y: 0, opacity: 0 }}
+                            animate={{ y: 80, opacity: 1 }}
+                            exit={{ y: 0, opacity: 0 }}
+                            transition={{ duration: isPrinting ? 2.5 : 0.6, ease: "easeOut" }}
+                            className="absolute left-1/2 -translate-x-1/2 z-20 w-48"
+                          >
+                            {/* Instax Photo Frame - slides out bottom */}
+                            <div className="bg-white p-2 pb-16 shadow-2xl rounded-sm border-2 border-gray-100">
+                              <div className="bg-gray-200 aspect-square rounded-sm overflow-hidden">
+                                {printedPhoto && (
+                                  <motion.img
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 1.2, duration: 1.5 }}
+                                    src={printedPhoto}
+                                    alt="Instax"
+                                    className="w-full h-full object-cover"
+                                  />
+                                )}
+                                {isPrinting && !printedPhoto && (
+                                  <div className="w-full h-full bg-gradient-to-b from-gray-300 to-gray-400 animate-pulse" />
+                                )}
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </div>
-                )}
 
-                {/* Camera Shutter Button - Bottom Left like Instax */}
-                {!capturedImage && !printedPhoto && (
-                  <div className="absolute bottom-6 left-6">
-                    <motion.button
-                      whileTap={{ scale: 0.9 }}
-                      onClick={capturePhoto}
-                      disabled={!isCameraActive}
-                      className="relative w-16 h-16 rounded-full bg-gradient-to-br from-pink-200 to-pink-300 shadow-xl border-3 border-pink-400 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-pink-400/50 transition-all group"
-                    >
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/40 to-transparent" />
-                      <div className="relative">
-                        <Camera className="w-6 h-6 text-pink-700" />
-                      </div>
-                      {/* Shutter Button Label */}
-                      <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                        <span className="text-white text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                          SHUTTER
-                        </span>
-                      </div>
-                    </motion.button>
+                  {/* Shutter Button - Right side */}
+                  {!capturedImage && !printedPhoto && (
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 z-10">
+                      <motion.button
+                        whileTap={{ scale: 0.85 }}
+                        whileHover={{ scale: 1.1 }}
+                        onClick={capturePhoto}
+                        disabled={!isCameraActive}
+                        className="relative w-20 h-20 rounded-full bg-gradient-to-br from-pink-100 to-pink-200 shadow-xl border-4 border-pink-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed transition-all group focus:outline-none focus:ring-4 focus:ring-pink-400/50"
+                        data-testid="button-capture-photo"
+                      >
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/50 to-transparent" />
+                        <div className="relative">
+                          <Camera className="w-8 h-8 text-pink-600" />
+                        </div>
+                        
+                        {/* Shutter Label */}
+                        <div className="absolute -left-20 top-1/2 -translate-y-1/2 whitespace-nowrap">
+                          <span className="text-white text-sm font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                            SHUTTER
+                          </span>
+                        </div>
+                      </motion.button>
+                    </div>
+                  )}
+
+                  {/* Self-timer indicator */}
+                  <div className="absolute bottom-6 left-6 flex items-center gap-2">
+                    <div className="w-2 h-2 bg-yellow-400 rounded-full opacity-70" />
+                    <span className="text-pink-700 text-xs font-semibold opacity-70">SELF-TIMER</span>
                   </div>
-                )}
+                </div>
               </div>
 
               {/* Action Buttons Below Camera */}
