@@ -11,6 +11,8 @@ async function regenerateAllExperiences() {
   for (const exp of experiences) {
     console.log(`\n📝 Processing: ${exp.title} (${exp.tier})`);
     
+    const learningObjectives = exp.learningObjectives as string[] || [];
+    
     const sections = [
       {
         id: "section-1",
@@ -22,7 +24,7 @@ async function regenerateAllExperiences() {
         id: "section-2",
         title: "Core Concepts That Actually Matter",
         type: "text" as const,
-        content: `Understanding the fundamentals: ${exp.learningObjectives[0] || 'Core concepts explained clearly'}. We'll break down complex topics into actionable insights you can apply immediately to your business or career.`,
+        content: `Understanding the fundamentals: ${learningObjectives[0] || 'Core concepts explained clearly'}. We'll break down complex topics into actionable insights you can apply immediately to your business or career.`,
       },
       {
         id: "section-3",
@@ -34,13 +36,13 @@ async function regenerateAllExperiences() {
         id: "section-4",
         title: "Your 15-Minute Quick Win Challenge",
         type: "interactive" as const,
-        content: `Take action right now with this hands-on exercise. In just 15 minutes, you'll ${exp.learningObjectives[1] || 'apply what you learned'}. This quick win builds confidence and momentum.`,
+        content: `Take action right now with this hands-on exercise. In just 15 minutes, you'll ${learningObjectives[1] || 'apply what you learned'}. This quick win builds confidence and momentum.`,
       },
       {
         id: "section-5",
         title: "Your Implementation Roadmap",
         type: "text" as const,
-        content: `Your 30-day action plan: Week 1 - ${exp.learningObjectives[0]}. Week 2 - Practice and refine. Week 3 - ${exp.learningObjectives[1] || 'Build on your skills'}. Week 4 - ${exp.learningObjectives[2] || 'Launch your project'}. Stay consistent and watch your skills compound.`,
+        content: `Your 30-day action plan: Week 1 - ${learningObjectives[0] || 'Master the fundamentals'}. Week 2 - Practice and refine. Week 3 - ${learningObjectives[1] || 'Build on your skills'}. Week 4 - ${learningObjectives[2] || 'Launch your project'}. Stay consistent and watch your skills compound.`,
       },
     ];
 
@@ -48,7 +50,6 @@ async function regenerateAllExperiences() {
       .update(transformationalExperiences)
       .set({
         content: {
-          ...exp.content as any,
           sections: sections,
         },
       })
