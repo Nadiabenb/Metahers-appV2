@@ -149,6 +149,9 @@ function Router() {
         {/* Companion - Public */}
         <Route path="/companion" component={CompanionPage} />
 
+        {/* Circle - Networking (public accessible) */}
+        <Route path="/circle" component={CircleDiscoveryPage} />
+
         {isAuthenticated ? (
           <>
             {/* Main Dashboard - Unified view */}

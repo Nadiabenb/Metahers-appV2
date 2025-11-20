@@ -48,6 +48,9 @@ export function Navigation() {
         { path: "/retro-camera", label: "Retro Camera", icon: Camera, gradient: "from-orange-500 to-red-600", glow: "255, 165, 0" },
       ],
     } : {
+      "Community": [
+        { path: "/circle", label: "Circle", icon: Users, gradient: "from-violet-500 to-purple-600", glow: "139, 92, 246" },
+      ],
       "More": [
         { path: "/shop", label: "Shop", icon: ShoppingBag, gradient: "from-rose-500 to-pink-600", glow: "233, 53, 193" },
         { path: "/retro-camera", label: "Retro Camera", icon: Camera, gradient: "from-orange-500 to-red-600", glow: "255, 165, 0" },
