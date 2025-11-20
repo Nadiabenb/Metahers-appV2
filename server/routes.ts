@@ -13,8 +13,8 @@ import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
-import { spaces, transformationalExperiences } from "@shared/schema";
-import { sql as drizzleSql } from "drizzle-orm";
+import { spaces, transformationalExperiences, cohortCapacity } from "@shared/schema";
+import { sql as drizzleSql, eq } from "drizzle-orm";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
