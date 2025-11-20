@@ -3825,6 +3825,130 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
+  // ===== METAHERS CIRCLE ROUTES =====
+  
+  // Get all women profiles (public discovery)
+  app.get('/api/circle/profiles', asyncHandler(async (req: Request, res) => {
+    const profiles = await storage.getAllWomenProfiles();
+    res.json(profiles);
+  }));
+
+  // Search women profiles
+  app.get('/api/circle/search', asyncHandler(async (req: Request, res) => {
+    const { q, visibility } = req.query;
+    const profiles = await storage.searchProfiles(q as string, visibility as string);
+    res.json(profiles);
+  }));
+
+  // Get user's own profile
+  app.get('/api/circle/profile', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const profile = await storage.getUserWomenProfile(userId);
+    res.json(profile);
+  }));
+
+  // Create/update women profile
+  app.post('/api/circle/profile', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { headline, bio, location, visibility, lookingFor } = req.body;
+    
+    let profile = await storage.getUserWomenProfile(userId);
+    if (profile) {
+      profile = await storage.updateWomenProfile(profile.id, { headline, bio, location, visibility, lookingFor });
+    } else {
+      profile = await storage.createWomenProfile({ userId, headline, bio, location, visibility, lookingFor });
+    }
+    res.json(profile);
+  }));
+
+  // Get active skills trades
+  app.get('/api/circle/skills-trades', asyncHandler(async (req: Request, res) => {
+    const trades = await storage.getActiveSkillsTrades();
+    res.json(trades);
+  }));
+
+  // Create skills trade
+  app.post('/api/circle/skills-trade', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const profile = await storage.getUserWomenProfile(userId);
+    if (!profile) return res.status(404).json({ error: 'Profile not found' });
+    
+    const { havingSkill, wantingSkill, description } = req.body;
+    const trade = await storage.createSkillsTrade({ profileId: profile.id, havingSkill, wantingSkill, description });
+    res.json(trade);
+  }));
+
+  // Get user messages
+  app.get('/api/circle/messages', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const messages = await storage.getUserMessages(userId, 50);
+    res.json(messages);
+  }));
+
+  // Send direct message
+  app.post('/api/circle/message', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { recipientId, message } = req.body;
+    const dm = await storage.sendDirectMessage({ senderId: userId, recipientId, message });
+    res.json(dm);
+  }));
+
+  // Get conversation
+  app.get('/api/circle/conversation/:userId', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const currentUserId = req.session!.userId as string;
+    const otherUserId = req.params.userId;
+    const messages = await storage.getConversation(currentUserId, otherUserId, 50);
+    res.json(messages);
+  }));
+
+  // Get profile services
+  app.get('/api/circle/services/:profileId', asyncHandler(async (req: Request, res) => {
+    const services = await storage.getProfileServices(req.params.profileId);
+    res.json(services);
+  }));
+
+  // Create service
+  app.post('/api/circle/service', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const profile = await storage.getUserWomenProfile(userId);
+    if (!profile) return res.status(404).json({ error: 'Profile not found' });
+    
+    const { title, description, category, rate } = req.body;
+    const service = await storage.createProfileService({ profileId: profile.id, title, description, category, rate });
+    res.json(service);
+  }));
+
+  // Get opportunities
+  app.get('/api/circle/opportunities', asyncHandler(async (req: Request, res) => {
+    const opportunities = await storage.getAllOpportunities(20);
+    res.json(opportunities);
+  }));
+
+  // Post opportunity
+  app.post('/api/circle/opportunity', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { title, description, type, compensation } = req.body;
+    const opp = await storage.createOpportunity({ posterId: userId, title, description, type, compensation });
+    res.json(opp);
+  }));
+
+  // Get profile activity
+  app.get('/api/circle/activity/:profileId', asyncHandler(async (req: Request, res) => {
+    const activity = await storage.getProfileActivity(req.params.profileId, 20);
+    res.json(activity);
+  }));
+
+  // Add to activity feed
+  app.post('/api/circle/activity', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const profile = await storage.getUserWomenProfile(userId);
+    if (!profile) return res.status(404).json({ error: 'Profile not found' });
+    
+    const { activityType, title, description } = req.body;
+    const activity = await storage.addActivityFeed({ profileId: profile.id, activityType, title, description });
+    res.json(activity);
+  }));
+
   const httpServer = createServer(app);
   return httpServer;
 }
