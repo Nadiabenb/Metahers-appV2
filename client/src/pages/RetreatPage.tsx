@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { trackCTAClick } from "@/lib/analytics";
 import { useRef, useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import heroImage from "@assets/Gemini_Generated_Image_8m25k88m25k88m25_1762658509547.png";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 
@@ -71,9 +72,12 @@ export default function RetreatPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   
-  // TODO: Connect to backend API or database to track real spots remaining
-  // For now using static value - update manually or fetch from backend
-  const [spotsRemaining, setSpotsRemaining] = useState(18);
+  // Fetch real spots from API
+  const { data: spotsData } = useQuery<{ totalSpots: number; takenSpots: number; spotsRemaining: number }>({
+    queryKey: ["/api/retreat/spots"],
+  });
+  
+  const spotsRemaining = spotsData?.spotsRemaining ?? 18;
   
   // Set retreat start date (update this to the actual retreat date)
   const retreatStartDate = new Date('2025-11-20T10:00:00');

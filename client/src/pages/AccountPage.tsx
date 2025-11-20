@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { User, Settings, Crown, Sparkles, Volume2, VolumeX, Bell, BellOff } from "lucide-react";
+import { User, Settings, Crown, Sparkles, Volume2, VolumeX, Bell, BellOff, Trophy, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
@@ -15,6 +15,7 @@ import { useSoundEffects } from "@/hooks/useSoundEffects";
 import { useNotifications } from "@/hooks/useNotifications";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 export default function AccountPage() {
   const { data: stats, isLoading } = useStats();
@@ -31,6 +32,11 @@ export default function AccountPage() {
 
   const { data: progressData } = useQuery<Array<{ date: string; count: number }>>({
     queryKey: ['/api/analytics/progress'],
+    enabled: !!user,
+  });
+
+  const { data: achievements = [] } = useQuery<Array<{ achievementKey: string; unlockedAt: string }>>({
+    queryKey: ['/api/achievements/user'],
     enabled: !!user,
   });
 
@@ -149,6 +155,41 @@ export default function AccountPage() {
                 )}
               </div>
             </div>
+
+            {/* Achievements Section */}
+            {achievements && achievements.length > 0 && (
+              <div className="editorial-card p-8 relative overflow-hidden">
+                <div className="absolute inset-0 gradient-teal-gold opacity-5" />
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-6">
+                    <div>
+                      <h3 className="font-serif text-xl font-semibold text-foreground mb-2 flex items-center gap-2">
+                        <Trophy className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
+                        Your Achievements
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Badges unlocked on your MetaHers journey
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-3">
+                    {achievements.map((ach, idx) => (
+                      <motion.div
+                        key={ach.achievementKey}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: idx * 0.1 }}
+                      >
+                        <Badge className="bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white px-4 py-2 text-sm">
+                          <Zap className="w-3 h-3 mr-1" />
+                          {ach.achievementKey.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                        </Badge>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Analytics Charts */}
             {progressData && progressData.length > 0 && (

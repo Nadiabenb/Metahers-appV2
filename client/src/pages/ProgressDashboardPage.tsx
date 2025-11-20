@@ -51,7 +51,11 @@ export default function ProgressDashboardPage() {
     queryKey: ["/api/experiences/all"],
   });
 
-  const isLoading = spacesLoading || progressLoading || experiencesLoading;
+  const { data: streakData, isLoading: streakLoading } = useQuery<{ streak: number }>({
+    queryKey: ["/api/progress/streak"],
+  });
+
+  const isLoading = spacesLoading || progressLoading || experiencesLoading || streakLoading;
 
   // Calculate statistics
   const completedExperiences = allProgress.filter(p => p.completedAt).length;
@@ -67,7 +71,7 @@ export default function ProgressDashboardPage() {
     ? allProgress.reduce((sum, p) => sum + (p.confidenceScore || 0), 0) / allProgress.length
     : 0;
 
-  const currentStreak = 7; // TODO: Calculate from activity
+  const currentStreak = streakData?.streak || 0;
 
   // Calculate per-space progress
   const spaceProgress = spaces.map(space => {
