@@ -1,6 +1,7 @@
 
 import { db } from "./db";
 import { transformationalExperiences } from "../shared/schema";
+import { eq } from "drizzle-orm";
 
 async function regenerateAllExperiences() {
   console.log("🔄 Regenerating ALL experiences with 5-section structure...\n");
@@ -51,7 +52,7 @@ async function regenerateAllExperiences() {
           sections: sections,
         },
       })
-      .where(transformationalExperiences.id.eq(exp.id));
+      .where(eq(transformationalExperiences.id, exp.id));
     
     console.log(`   ✅ Updated to 5-section structure`);
   }
