@@ -278,6 +278,36 @@ export interface IStorage {
   getUserRetroCameraPhotos(userId: string): Promise<RetroCameraPhotoDB[]>;
   deleteRetroCameraPhoto(photoId: string, userId: string): Promise<RetroCameraPhotoDB | undefined>;
   likeRetroCameraPhoto(photoId: string): Promise<RetroCameraPhotoDB | undefined>;
+
+  // MetaHers Circle - Women's Profiles operations
+  createWomenProfile(profile: InsertWomenProfile): Promise<WomenProfileDB>;
+  getWomenProfile(profileId: string): Promise<WomenProfileDB | undefined>;
+  getUserWomenProfile(userId: string): Promise<WomenProfileDB | undefined>;
+  updateWomenProfile(profileId: string, updates: Partial<WomenProfileDB>): Promise<WomenProfileDB>;
+  getAllWomenProfiles(): Promise<WomenProfileDB[]>;
+  searchProfiles(searchTerm?: string, visibility?: string): Promise<WomenProfileDB[]>;
+
+  // MetaHers Circle - Skills Trades operations
+  createSkillsTrade(trade: InsertSkillsTrade): Promise<SkillsTradeDB>;
+  getActiveSkillsTrades(): Promise<SkillsTradeDB[]>;
+  getProfileSkillsTrades(profileId: string): Promise<SkillsTradeDB[]>;
+
+  // MetaHers Circle - Direct Messages operations
+  sendDirectMessage(message: InsertDirectMessage): Promise<DirectMessageDB>;
+  getConversation(userId1: string, userId2: string, limit?: number): Promise<DirectMessageDB[]>;
+  getUserMessages(userId: string, limit?: number): Promise<DirectMessageDB[]>;
+
+  // MetaHers Circle - Services operations
+  createProfileService(service: InsertProfileService): Promise<ProfileServiceDB>;
+  getProfileServices(profileId: string): Promise<ProfileServiceDB[]>;
+
+  // MetaHers Circle - Opportunities operations
+  createOpportunity(opportunity: InsertOpportunity): Promise<OpportunityDB>;
+  getAllOpportunities(limit?: number): Promise<OpportunityDB[]>;
+
+  // MetaHers Circle - Activity Feed operations
+  addActivityFeed(activity: InsertProfileActivityFeed): Promise<ProfileActivityFeedDB>;
+  getProfileActivity(profileId: string, limit?: number): Promise<ProfileActivityFeedDB[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1768,6 +1798,112 @@ export class DatabaseStorage implements IStorage {
       .where(eq(retroCameraPhotos.id, photoId))
       .returning();
     return updated;
+  }
+
+  // ===== METAHERS CIRCLE =====
+
+  async createWomenProfile(profile: InsertWomenProfile): Promise<WomenProfileDB> {
+    const [result] = await db.insert(womenProfiles).values(profile).returning();
+    return result;
+  }
+
+  async getWomenProfile(profileId: string): Promise<WomenProfileDB | undefined> {
+    const [result] = await db.select().from(womenProfiles).where(eq(womenProfiles.id, profileId));
+    return result;
+  }
+
+  async getUserWomenProfile(userId: string): Promise<WomenProfileDB | undefined> {
+    const [result] = await db.select().from(womenProfiles).where(eq(womenProfiles.userId, userId));
+    return result;
+  }
+
+  async updateWomenProfile(profileId: string, updates: Partial<WomenProfileDB>): Promise<WomenProfileDB> {
+    const [result] = await db.update(womenProfiles).set(updates).where(eq(womenProfiles.id, profileId)).returning();
+    return result;
+  }
+
+  async getAllWomenProfiles(): Promise<WomenProfileDB[]> {
+    return await db.select().from(womenProfiles).where(eq(womenProfiles.visibility, "public"));
+  }
+
+  async searchProfiles(searchTerm?: string, visibility?: string): Promise<WomenProfileDB[]> {
+    let query = db.select().from(womenProfiles);
+    if (visibility) {
+      query = query.where(eq(womenProfiles.visibility, visibility));
+    } else {
+      query = query.where(eq(womenProfiles.visibility, "public"));
+    }
+    const results = await query;
+    if (!searchTerm) return results;
+    return results.filter(p => 
+      p.headline?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      p.bio?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+
+  async createSkillsTrade(trade: InsertSkillsTrade): Promise<SkillsTradeDB> {
+    const [result] = await db.insert(skillsTrades).values(trade).returning();
+    return result;
+  }
+
+  async getActiveSkillsTrades(): Promise<SkillsTradeDB[]> {
+    return await db.select().from(skillsTrades).where(eq(skillsTrades.status, "active"));
+  }
+
+  async getProfileSkillsTrades(profileId: string): Promise<SkillsTradeDB[]> {
+    return await db.select().from(skillsTrades).where(eq(skillsTrades.profileId, profileId));
+  }
+
+  async sendDirectMessage(message: InsertDirectMessage): Promise<DirectMessageDB> {
+    const [result] = await db.insert(directMessages).values(message).returning();
+    return result;
+  }
+
+  async getConversation(userId1: string, userId2: string, limit: number = 50): Promise<DirectMessageDB[]> {
+    return await db.select().from(directMessages)
+      .where(
+        sql`(${directMessages.senderId} = ${userId1} AND ${directMessages.recipientId} = ${userId2}) OR 
+            (${directMessages.senderId} = ${userId2} AND ${directMessages.recipientId} = ${userId1})`
+      )
+      .orderBy(desc(directMessages.createdAt))
+      .limit(limit);
+  }
+
+  async getUserMessages(userId: string, limit: number = 50): Promise<DirectMessageDB[]> {
+    return await db.select().from(directMessages)
+      .where(eq(directMessages.recipientId, userId))
+      .orderBy(desc(directMessages.createdAt))
+      .limit(limit);
+  }
+
+  async createProfileService(service: InsertProfileService): Promise<ProfileServiceDB> {
+    const [result] = await db.insert(profileServices).values(service).returning();
+    return result;
+  }
+
+  async getProfileServices(profileId: string): Promise<ProfileServiceDB[]> {
+    return await db.select().from(profileServices).where(eq(profileServices.profileId, profileId));
+  }
+
+  async createOpportunity(opportunity: InsertOpportunity): Promise<OpportunityDB> {
+    const [result] = await db.insert(opportunities).values(opportunity).returning();
+    return result;
+  }
+
+  async getAllOpportunities(limit: number = 20): Promise<OpportunityDB[]> {
+    return await db.select().from(opportunities).orderBy(desc(opportunities.createdAt)).limit(limit);
+  }
+
+  async addActivityFeed(activity: InsertProfileActivityFeed): Promise<ProfileActivityFeedDB> {
+    const [result] = await db.insert(profileActivityFeed).values(activity).returning();
+    return result;
+  }
+
+  async getProfileActivity(profileId: string, limit: number = 20): Promise<ProfileActivityFeedDB[]> {
+    return await db.select().from(profileActivityFeed)
+      .where(eq(profileActivityFeed.profileId, profileId))
+      .orderBy(desc(profileActivityFeed.createdAt))
+      .limit(limit);
   }
 
   // ===== EXPERIENCE PROGRESS =====
