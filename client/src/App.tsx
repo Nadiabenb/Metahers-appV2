@@ -66,6 +66,9 @@ const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
 const RetreatPage = lazy(() => import("@/pages/RetreatPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
 const CircleDiscoveryPage = lazy(() => import("@/pages/CircleDiscoveryPage"));
+const CircleProfilePage = lazy(() => import("@/pages/CircleProfilePage"));
+const CircleServicesPage = lazy(() => import("@/pages/CircleServicesPage"));
+const CircleMessagingPage = lazy(() => import("@/pages/CircleMessagingPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -154,6 +157,11 @@ function Router() {
 
         {isAuthenticated ? (
           <>
+            {/* Circle - Authenticated Routes */}
+            <Route path="/circle-profile" component={CircleProfilePage} />
+            <Route path="/circle-services" component={CircleServicesPage} />
+            <Route path="/circle-messaging" component={CircleMessagingPage} />
+
             {/* Main Dashboard - Unified view */}
             <Route path="/dashboard" component={DashboardPage} />
 
