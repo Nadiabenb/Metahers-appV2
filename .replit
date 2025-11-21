@@ -55,7 +55,7 @@ args = "npm run dev"
 waitForPort = 5000
 
 [agent]
-integrations = ["javascript_log_in_with_replit:1.0.0", "javascript_database:1.0.0", "javascript_openai_ai_integrations:1.0.0", "resend:1.0.0"]
+integrations = ["javascript_log_in_with_replit:1.0.0", "javascript_database:1.0.0", "javascript_openai_ai_integrations:1.0.0", "resend:1.0.0", "stripe:1.0.0"]
 
 [objectStorage]
 defaultBucketID = "replit-objstore-ac1aa6a9-f90b-4ca3-bbfa-93aa89d93878"

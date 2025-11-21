@@ -40,6 +40,8 @@ export const users = pgTable("users", {
   onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
   quizUnlockedRitual: varchar("quiz_unlocked_ritual"), // Ritual unlocked via quiz
   quizCompletedAt: timestamp("quiz_completed_at"), // When they completed the quiz
+  stripeCustomerId: varchar("stripe_customer_id"), // Stripe customer ID for payments
+  stripeSubscriptionId: varchar("stripe_subscription_id"), // Current subscription ID
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

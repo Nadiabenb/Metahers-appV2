@@ -71,6 +71,7 @@ const CircleServicesPage = lazy(() => import("@/pages/CircleServicesPage"));
 const CircleMessagingPage = lazy(() => import("@/pages/CircleMessagingPage"));
 const NewsletterPage = lazy(() => import("@/pages/NewsletterPage"));
 const WaitlistPage = lazy(() => import("@/pages/WaitlistPage"));
+const CheckoutPage = lazy(() => import("@/pages/CheckoutPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -157,6 +158,11 @@ function Router() {
         {/* Newsletter & Waitlist - Public */}
         <Route path="/newsletter" component={NewsletterPage} />
         <Route path="/waitlist" component={WaitlistPage} />
+        <Route path="/checkout/:tier/:priceId" component={(props: any) => {
+          const tiers = { pro: { name: 'Pro', price: 29 }, sanctuary: { name: 'Sanctuary', price: 99 }, 'inner-circle': { name: 'Inner Circle', price: 299 } };
+          const tier = tiers[props.tier as keyof typeof tiers];
+          return tier ? <CheckoutPage tierName={tier.name} price={tier.price} priceId={props.priceId} /> : <NotFound />;
+        }} />
 
         {/* Circle - Networking (public accessible) */}
         <Route path="/circle" component={CircleDiscoveryPage} />

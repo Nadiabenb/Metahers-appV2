@@ -6,6 +6,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { SEO } from "@/components/SEO";
+import { useAuth } from "@/hooks/useAuth";
+import { useLocation } from "wouter";
 import { Sparkles, Crown, Shield, Zap, Users, CheckCircle, ArrowRight } from "lucide-react";
 
 export default function WaitlistPage() {
@@ -15,6 +17,14 @@ export default function WaitlistPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
+  const { isAuthenticated } = useAuth();
+  const [, setLocation] = useLocation();
+
+  const priceIds = {
+    pro: "price_1QgGgvQ8Fhg6rYZJ1K2L3M4N",
+    sanctuary: "price_1QgGgvQ8Fhg6rYZJ1K2L3M5O",
+    "inner-circle": "price_1QgGgvQ8Fhg6rYZJ1K2L3M6P",
+  };
 
   const handleJoinWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
