@@ -48,7 +48,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+    <div className="w-screen min-h-screen flex flex-col items-center justify-center relative overflow-auto bg-background">
       <SEO
         title="Login - Access Your Learning Sanctuary"
         description="Sign in to MetaHers Mind Spa to continue your AI and Web3 learning journey. Access your personalized experiences, journal, and progress tracking."
@@ -68,102 +68,102 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full h-full min-h-screen flex items-center justify-center relative z-10"
+        className="w-full relative z-10 flex flex-col items-center justify-center px-4 py-6 sm:py-12"
       >
-        <div className="w-full h-full flex items-center justify-center px-6 py-12 sm:px-12 sm:py-16 md:px-20 md:py-20">
-          <div className="w-full editorial-card p-10 sm:p-16 md:p-20 lg:p-24 relative overflow-hidden">
+        <div className="w-full max-w-xl">
+          <div className="editorial-card p-6 sm:p-10 md:p-16 relative overflow-hidden">
             <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
             
             <div className="relative z-10">
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-8">
-                <Sparkles className="w-12 h-12 sm:w-14 sm:h-14 text-[hsl(var(--liquid-gold))]" />
-              </div>
-              
-              <h1 className="font-cormorant text-5xl sm:text-6xl md:text-7xl font-bold metallic-text mb-6">
-                Welcome Back
-              </h1>
-              <p className="text-muted-foreground text-xl sm:text-2xl">
-                Sign in to continue your journey
-              </p>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-8 max-w-xl mx-auto">
-              <div className="space-y-3">
-                <label htmlFor="email" className="text-base font-medium">
-                  Email
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="pl-12 h-14 text-lg"
-                    required
-                    data-testid="input-email"
-                  />
+              <div className="text-center mb-6 sm:mb-8 md:mb-12">
+                <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-4 sm:mb-6 md:mb-8">
+                  <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-[hsl(var(--liquid-gold))]" />
                 </div>
+                
+                <h1 className="font-cormorant text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold metallic-text mb-2 sm:mb-4 md:mb-6">
+                  Welcome Back
+                </h1>
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground">
+                  Sign in to continue your journey
+                </p>
               </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <label htmlFor="password" className="text-base font-medium">
-                    Password
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label htmlFor="email" className="text-xs sm:text-sm font-medium">
+                    Email
                   </label>
-                  <a
-                    href="/forgot-password"
-                    className="text-sm text-primary hover:underline"
-                    data-testid="link-forgot-password"
-                  >
-                    Forgot password?
-                  </a>
+                  <div className="relative">
+                    <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      className="pl-9 sm:pl-10 h-10 sm:h-11 md:h-12 text-xs sm:text-sm"
+                      required
+                      data-testid="input-email"
+                    />
+                  </div>
                 </div>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter password"
-                    value={formData.password}
-                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                    className="pl-12 h-14 text-lg"
-                    required
-                    data-testid="input-password"
-                  />
+
+                <div className="space-y-1.5 sm:space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <label htmlFor="password" className="text-xs sm:text-sm font-medium">
+                      Password
+                    </label>
+                    <a
+                      href="/forgot-password"
+                      className="text-xs sm:text-sm text-primary hover:underline flex-shrink-0"
+                      data-testid="link-forgot-password"
+                    >
+                      Forgot?
+                    </a>
+                  </div>
+                  <div className="relative">
+                    <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Enter password"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      className="pl-9 sm:pl-10 h-10 sm:h-11 md:h-12 text-xs sm:text-sm"
+                      required
+                      data-testid="input-password"
+                    />
+                  </div>
                 </div>
+
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full gap-2 h-10 sm:h-11 md:h-12 text-xs sm:text-sm md:text-base mt-2 sm:mt-3"
+                  disabled={isLoading}
+                  data-testid="button-login"
+                >
+                  {isLoading ? (
+                    "Signing in..."
+                  ) : (
+                    <>
+                      Sign In
+                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
+                    </>
+                  )}
+                </Button>
+              </form>
+
+              <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-muted-foreground">
+                Don't have an account?{" "}
+                <a
+                  href="/signup"
+                  className="text-primary hover:underline font-medium"
+                  data-testid="link-signup"
+                >
+                  Create one
+                </a>
               </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full gap-2 h-14 text-lg"
-                disabled={isLoading}
-                data-testid="button-login"
-              >
-                {isLoading ? (
-                  "Signing in..."
-                ) : (
-                  <>
-                    Sign In
-                    <ArrowRight className="w-5 h-5" />
-                  </>
-                )}
-              </Button>
-            </form>
-
-            <div className="mt-10 text-center text-lg text-muted-foreground">
-              Don't have an account?{" "}
-              <a
-                href="/signup"
-                className="text-primary hover:underline font-medium text-xl"
-                data-testid="link-signup"
-              >
-                Create one
-              </a>
-            </div>
             </div>
           </div>
         </div>
