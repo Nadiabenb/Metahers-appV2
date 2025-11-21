@@ -457,7 +457,7 @@ export default function CircleDiscoveryPage() {
                       </div>
                     </Card>
                   </motion.div>
-                )}}
+                )}
               </div>
             </>
           )}
