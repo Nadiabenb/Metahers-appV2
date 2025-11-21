@@ -7,16 +7,33 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { SEO } from "@/components/SEO";
+import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
-import { ArrowLeft, Plus, Star, DollarSign, Briefcase } from "lucide-react";
+import { ArrowLeft, Plus, Star, DollarSign, Briefcase, Lock } from "lucide-react";
 import type { CircleService } from "@shared/schema";
 import { motion } from "framer-motion";
 
 export default function CircleServicesPage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { user, isAuthenticated } = useAuth();
   const [showForm, setShowForm] = useState(false);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--cyber-fuchsia))]/5 to-white flex items-center justify-center px-4 py-16">
+        <Card className="max-w-md p-8 text-center bg-gradient-to-br from-white to-[hsl(var(--cyber-fuchsia))]/5 border border-[hsl(var(--cyber-fuchsia))]/20">
+          <Lock className="w-12 h-12 text-[hsl(var(--cyber-fuchsia))]/50 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-foreground mb-2">Sign in required</h2>
+          <p className="text-foreground/70 mb-6">You must be logged in to view and list services</p>
+          <Button onClick={() => setLocation("/login")} className="w-full">
+            Sign In
+          </Button>
+        </Card>
+      </div>
+    );
+  }
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -77,10 +94,10 @@ export default function CircleServicesPage() {
         title="Services Marketplace | MetaHers Circle"
         description="Browse and list professional services from women experts in the MetaHers Circle community"
       />
-      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--cyber-fuchsia))]/5 to-white py-8 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--cyber-fuchsia))]/5 to-white py-6 sm:py-8 px-4">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 mb-8 sm:mb-12">
             <div>
               <Button
                 variant="ghost"
@@ -91,15 +108,15 @@ export default function CircleServicesPage() {
                 <ArrowLeft className="w-4 h-4" />
                 Back to Circle
               </Button>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] bg-clip-text text-transparent mb-2">
+              <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] bg-clip-text text-transparent mb-2">
                 Services Marketplace
               </h1>
-              <p className="text-foreground/70">Discover and offer professional services within the Circle</p>
+              <p className="text-foreground/70 text-sm sm:text-base">Discover and offer professional services within the Circle</p>
             </div>
             <Button
               size="lg"
               onClick={() => setShowForm(!showForm)}
-              className="gap-2 bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] text-white"
+              className="gap-2 bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] text-white w-full sm:w-auto"
               data-testid="button-list-service"
             >
               <Plus className="w-5 h-5" />

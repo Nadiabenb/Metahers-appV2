@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
 import { SEO } from "@/components/SEO";
-import { ArrowLeft, Upload, CheckCircle, Sparkles } from "lucide-react";
+import { ArrowLeft, CheckCircle, Sparkles, Lock } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import type { WomenProfileDB } from "@shared/schema";
@@ -84,7 +84,7 @@ export default function CircleProfilePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--hyper-violet))]/5 to-white flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--hyper-violet))]/5 to-white flex items-center justify-center px-4">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-[hsl(var(--hyper-violet))]/20 border-t-[hsl(var(--hyper-violet))] rounded-full animate-spin mx-auto mb-4" />
           <p className="text-foreground/60">Loading your profile...</p>
@@ -95,13 +95,29 @@ export default function CircleProfilePage() {
 
   const hasProfile = !!profile;
 
+  // Subscription enforcement: All users can create profile
+  if (!user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--hyper-violet))]/5 to-white flex items-center justify-center px-4">
+        <Card className="max-w-md p-8 text-center bg-gradient-to-br from-white to-[hsl(var(--hyper-violet))]/5 border border-[hsl(var(--hyper-violet))]/20">
+          <Lock className="w-12 h-12 text-[hsl(var(--hyper-violet))]/50 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-foreground mb-2">Sign in required</h2>
+          <p className="text-foreground/70 mb-6">You must be logged in to create a Circle profile</p>
+          <Button onClick={() => setLocation("/login")} className="w-full">
+            Sign In
+          </Button>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <>
       <SEO 
         title={hasProfile ? "Edit Profile | MetaHers Circle" : "Create Profile | MetaHers Circle"}
         description="Complete your MetaHers Circle profile and join our community of ambitious women professionals"
       />
-      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--hyper-violet))]/5 to-white py-8 px-4">
+      <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--hyper-violet))]/5 to-white py-6 sm:py-8 px-4">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="flex items-center justify-between mb-8">

@@ -311,13 +311,44 @@ export default function CircleDiscoveryPage() {
           ) : (
             <>
               <motion.div 
-                className="mb-8"
+                className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
               >
                 <p className="text-base text-foreground/70">
-                  Showing <span className="font-bold text-[hsl(var(--hyper-violet))]">{filteredProfiles.length}</span> amazing women {selectedFilter ? `(${selectedFilter})` : ''}
+                  Showing <span className="font-bold text-[hsl(var(--hyper-violet))]">{paginatedProfiles.length}</span> of <span className="font-bold">{filteredProfiles.length}</span> amazing women {selectedFilter ? `(${selectedFilter})` : ''}
                 </p>
+                {totalPages > 1 && (
+                  <div className="flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setCurrentPage(Math.max(0, currentPage - 1))}
+                      disabled={currentPage === 0}
+                      className="gap-2"
+                      data-testid="button-prev-page"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      Previous
+                    </Button>
+                    <div className="flex items-center gap-2 px-3">
+                      <span className="text-sm text-foreground/70">
+                        Page {currentPage + 1} of {totalPages}
+                      </span>
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setCurrentPage(Math.min(totalPages - 1, currentPage + 1))}
+                      disabled={currentPage === totalPages - 1}
+                      className="gap-2"
+                      data-testid="button-next-page"
+                    >
+                      Next
+                      <ChevronRight className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
               </motion.div>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -373,10 +404,11 @@ export default function CircleDiscoveryPage() {
                         <Button 
                           size="sm" 
                           variant="ghost" 
+                          onClick={() => toggleFavorite(profile.id)}
                           className="gap-2"
                           data-testid={`button-favorite-${profile.id}`}
                         >
-                          <Heart className="w-4 h-4" />
+                          <Heart className={`w-4 h-4 transition-colors ${isFavorite(profile.id) ? 'fill-red-500 text-red-500' : ''}`} />
                         </Button>
                       </div>
                     </Card>
