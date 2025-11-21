@@ -1,0 +1,112 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "nohemi",
+      "role": "body"
+    },
+    {
+      "family": "Geist Mono",
+      "role": "monospace"
+    },
+    {
+      "family": "Tobias",
+      "role": "heading"
+    }
+  ],
+  "colors": {
+    "primary": "#20023B",
+    "accent": "#DEFF90",
+    "background": "#000000",
+    "textPrimary": "#000000",
+    "link": "#DEFF90"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "nohemi",
+      "heading": "Tobias"
+    },
+    "fontStacks": {
+      "heading": [
+        "nohemi",
+        "system-ui",
+        "sans-serif"
+      ],
+      "body": [
+        "nohemi",
+        "system-ui",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "Tobias",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "128px",
+      "h2": "72px",
+      "body": "18px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "4px"
+  },
+  "components": {
+    "input": {
+      "borderColor": "#CCCCCC",
+      "borderRadius": "4px"
+    },
+    "buttonPrimary": {
+      "background": "#DEFF90",
+      "textColor": "#20023B",
+      "borderRadius": "12px",
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#FBFDFD",
+      "textColor": "#20023B",
+      "borderColor": "#20023B",
+      "borderRadius": "12px",
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "File saved at: attached_assets/logo.svg",
+    "favicon": "File saved at: attached_assets/favicon.png",
+    "ogImage": "https://worldofwomen.xyz/og-image.png"
+  },
+  "__framework_hints": [],
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Logo #0 visually represents the brand name 'World of Women' and is located in the header, linking to the homepage, making it the primary brand logo.",
+    "confidence": 0.9
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 1,
+      "text": "Subscribe",
+      "reasoning": "Button #1 ('Subscribe') has a vibrant green background (#DEFF90), which is a brand color and is action-oriented, making it the primary CTA."
+    },
+    "secondary": {
+      "index": 3,
+      "text": "About Us",
+      "reasoning": "Button #3 ('About Us') has a light/white background (#FBFDFD), which is different from the primary button's color, making it a suitable secondary option."
+    },
+    "confidence": 0.95
+  },
+  "personality": {
+    "tone": "modern",
+    "energy": "high",
+    "targetAudience": "young adults and women interested in community and empowerment."
+  },
+  "designSystem": {
+    "framework": "tailwind",
+    "componentLibrary": null
+  },
+  "confidence": {
+    "buttons": 0.95,
+    "colors": 0.9,
+    "overall": 0.925
+  }
+}
