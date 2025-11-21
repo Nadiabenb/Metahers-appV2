@@ -88,6 +88,11 @@ app.use((req, res, next) => {
     const server = await registerRoutes(app);
     logger.info('Routes registered');
 
+    // Register Stripe routes
+    const { registerStripeRoutes } = await import('./stripeRoutes');
+    await registerStripeRoutes(app);
+    logger.info('Stripe routes registered');
+
     // Register admin routes
     app.use('/api/admin', adminRoutes);
 
