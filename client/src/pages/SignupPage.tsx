@@ -119,7 +119,7 @@ export default function SignupPage() {
   const matchedRitualData = quizRitual ? getRitualBySlug(quizRitual) : null;
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-auto py-8 px-4">
+    <div className="w-screen min-h-screen flex flex-col items-center justify-center relative overflow-auto bg-background">
       <SEO
         title="Join MetaHers - Start Your AI & Web3 Journey Free"
         description="Create your free account at MetaHers Mind Spa. Join thousands of women mastering AI and Web3 through luxury guided experiences. Start learning today."
@@ -149,23 +149,23 @@ export default function SignupPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full relative z-10 flex flex-col items-center"
+        className="w-full relative z-10 flex flex-col items-center justify-center px-4 py-6 sm:py-12"
       >
-        <div className="w-full max-w-2xl flex flex-col items-center">
+        <div className="w-full max-w-xl">
           {quizRitual && matchedRitualData && (
             <motion.div
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="mb-6 p-4 sm:p-5 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl w-full"
+              className="mb-4 sm:mb-6 p-3 sm:p-4 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/10 via-[hsl(var(--magenta-quartz))]/10 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30 rounded-xl"
             >
               <div className="flex items-start gap-3">
-                <CheckCircle className="w-6 h-6 text-[hsl(var(--liquid-gold))] flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-[hsl(var(--liquid-gold))] flex-shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm sm:text-base font-semibold text-foreground mb-1">
+                  <p className="text-xs sm:text-sm font-semibold text-foreground mb-1">
                     Quiz Match: {matchedRitualData.title}
                   </p>
-                  <p className="text-xs sm:text-sm text-foreground/80">
+                  <p className="text-xs text-foreground/80">
                     Create your account to unlock this ritual + your FREE 1:1 session!
                   </p>
                 </div>
@@ -173,104 +173,104 @@ export default function SignupPage() {
             </motion.div>
           )}
 
-          <div className="w-full editorial-card p-6 sm:p-10 md:p-16 lg:p-24 relative overflow-hidden">
+          <div className="editorial-card p-6 sm:p-10 md:p-16 relative overflow-hidden">
             <div className="absolute inset-0 gradient-violet-fuchsia opacity-5" />
             
             <div className="relative z-10">
-              <div className="text-center mb-8 sm:mb-12">
-                <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-6 sm:mb-8">
+              <div className="text-center mb-6 sm:mb-8 md:mb-12">
+                <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-4 sm:mb-6 md:mb-8">
                   <Sparkles className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 text-[hsl(var(--liquid-gold))]" />
                 </div>
                 
-                <h1 className="font-cormorant text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold metallic-text mb-4 sm:mb-6">
+                <h1 className="font-cormorant text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold metallic-text mb-2 sm:mb-4 md:mb-6">
                   Join MetaHers
                 </h1>
-                <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-3 sm:mb-4">
+                <p className="text-xs sm:text-sm md:text-base text-muted-foreground mb-2 sm:mb-3">
                   Create your account to begin your learning journey
                 </p>
-                <p className="text-sm sm:text-base text-muted-foreground flex items-center justify-center gap-2 flex-wrap">
-                  <Lock className="w-4 h-4 sm:w-5 sm:h-5" />
+                <p className="text-xs text-muted-foreground flex items-center justify-center gap-2 flex-wrap">
+                  <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>Your information is safe and secure</span>
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8 max-w-xl mx-auto w-full">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  <div className="space-y-2 sm:space-y-3">
-                    <label htmlFor="firstName" className="text-sm sm:text-base font-medium">
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label htmlFor="firstName" className="text-xs sm:text-sm font-medium">
                       First Name
                     </label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                      <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
                         id="firstName"
                         type="text"
                         placeholder="Jane"
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                        className="pl-10 sm:pl-12 h-11 sm:h-14 text-base"
+                        className="pl-9 sm:pl-10 h-10 sm:h-11 md:h-12 text-xs sm:text-sm"
                         data-testid="input-first-name"
                       />
                     </div>
                   </div>
                   
-                  <div className="space-y-2 sm:space-y-3">
-                    <label htmlFor="lastName" className="text-sm sm:text-base font-medium">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <label htmlFor="lastName" className="text-xs sm:text-sm font-medium">
                       Last Name
                     </label>
                     <div className="relative">
-                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                      <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                       <Input
                         id="lastName"
                         type="text"
                         placeholder="Doe"
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                        className="pl-10 sm:pl-12 h-11 sm:h-14 text-base"
+                        className="pl-9 sm:pl-10 h-10 sm:h-11 md:h-12 text-xs sm:text-sm"
                         data-testid="input-last-name"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-2 sm:space-y-3">
-                  <label htmlFor="email" className="text-sm sm:text-base font-medium">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label htmlFor="email" className="text-xs sm:text-sm font-medium">
                     Email
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                    <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
                       id="email"
                       type="email"
                       placeholder="you@example.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="pl-10 sm:pl-12 h-11 sm:h-14 text-base"
+                      className="pl-9 sm:pl-10 h-10 sm:h-11 md:h-12 text-xs sm:text-sm"
                       required
                       data-testid="input-email"
                     />
                   </div>
                 </div>
 
-                <div className="space-y-2 sm:space-y-3">
-                  <label htmlFor="password" className="text-sm sm:text-base font-medium">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <label htmlFor="password" className="text-xs sm:text-sm font-medium">
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
+                    <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
                       id="password"
                       type="password"
                       placeholder="8+ characters"
                       value={formData.password}
                       onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                      className="pl-10 sm:pl-12 h-11 sm:h-14 text-base"
+                      className="pl-9 sm:pl-10 h-10 sm:h-11 md:h-12 text-xs sm:text-sm"
                       required
                       minLength={8}
                       data-testid="input-password"
                     />
                   </div>
-                  <p className="text-xs sm:text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     Must be at least 8 characters long
                   </p>
                 </div>
@@ -278,7 +278,7 @@ export default function SignupPage() {
                 <Button
                   type="submit"
                   size="lg"
-                  className="w-full gap-2 h-12 sm:h-14 text-base sm:text-lg"
+                  className="w-full gap-2 h-10 sm:h-11 md:h-12 text-xs sm:text-sm md:text-base mt-2 sm:mt-3"
                   disabled={isLoading}
                   data-testid="button-signup"
                 >
@@ -287,13 +287,13 @@ export default function SignupPage() {
                   ) : (
                     <>
                       Create Account
-                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
                     </>
                   )}
                 </Button>
               </form>
 
-              <div className="mt-8 sm:mt-10 text-center text-base sm:text-lg text-muted-foreground">
+              <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-muted-foreground">
                 Already have an account?{" "}
                 <a
                   href="/login"
