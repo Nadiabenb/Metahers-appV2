@@ -145,67 +145,86 @@ export default function CircleProfilePage() {
           {/* View Profile */}
           {hasProfile && !isEditing && (
             <div className="space-y-6">
-              <Card className="p-8 bg-gradient-to-br from-white to-[hsl(var(--hyper-violet))]/5 border border-[hsl(var(--hyper-violet))]/20">
-                <div className="flex items-start justify-between mb-6">
-                  <div>
-                    <h1 className="text-4xl font-bold text-foreground mb-2">{formData.headline}</h1>
-                    <p className="text-lg text-foreground/60">{formData.location}</p>
-                  </div>
-                  {profile?.verifiedMember && (
-                    <Badge className="bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--cyber-fuchsia))] text-white">
-                      Verified Member
-                    </Badge>
-                  )}
-                </div>
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+                <Card className="relative overflow-hidden p-8 bg-gradient-to-br from-white/95 via-white/90 to-white/85 border border-white/40 backdrop-blur-xl shadow-xl">
+                  {/* Ambient Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/8 via-[hsl(var(--magenta-quartz))]/5 to-[hsl(var(--cyber-fuchsia))]/8" />
+                  
+                  <div className="relative z-5">
+                    <div className="flex items-start justify-between mb-6">
+                      <div className="flex-1">
+                        <h1 className="text-5xl font-bold bg-gradient-to-r from-[hsl(var(--hyper-violet))] via-[hsl(var(--magenta-quartz))] to-[hsl(var(--cyber-fuchsia))] bg-clip-text text-transparent mb-2">{formData.headline}</h1>
+                        <div className="flex items-center gap-2 text-lg text-foreground/70">
+                          <Globe className="w-5 h-5 text-[hsl(var(--hyper-violet))]/60" />
+                          <span className="font-medium">{formData.location}</span>
+                        </div>
+                      </div>
+                      {profile?.verifiedMember && (
+                        <motion.div animate={{ y: [0, -3, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                          <div className="w-12 h-12 bg-gradient-to-br from-[hsl(var(--liquid-gold))]/90 to-[hsl(var(--cyber-fuchsia))]/90 rounded-full flex items-center justify-center shadow-lg border border-white/50">
+                            <Star className="w-6 h-6 text-white fill-white" />
+                          </div>
+                        </motion.div>
+                      )}
+                    </div>
 
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-bold text-foreground mb-3">About</h3>
-                    <p className="text-foreground/70 leading-relaxed">{formData.bio}</p>
-                  </div>
+                    <div className="space-y-6">
+                      <motion.div whileHover={{ scale: 1.02 }} className="p-4 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/5 to-[hsl(var(--cyber-fuchsia))]/5 rounded-lg border border-[hsl(var(--hyper-violet))]/20">
+                        <h3 className="font-bold text-foreground mb-2 flex items-center gap-2">
+                          <Sparkles className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
+                          About
+                        </h3>
+                        <p className="text-foreground/75 leading-relaxed italic">"{formData.bio}"</p>
+                      </motion.div>
 
-                  {formData.skills && (
-                    <div>
-                      <h3 className="font-bold text-foreground mb-3">Skills & Expertise</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {formData.skills.split(',').map((skill, idx) => (
-                          <Badge key={idx} variant="outline" className="border-[hsl(var(--hyper-violet))]/30 bg-[hsl(var(--hyper-violet))]/5">
-                            {skill.trim()}
+                      {formData.skills && (
+                        <motion.div whileHover={{ scale: 1.02 }} className="p-4 bg-gradient-to-r from-[hsl(var(--hyper-violet))]/5 to-[hsl(var(--magenta-quartz))]/5 rounded-lg border border-[hsl(var(--hyper-violet))]/20">
+                          <h3 className="font-bold text-foreground mb-3">Skills & Expertise</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {formData.skills.split(',').map((skill, idx) => (
+                              <motion.div key={idx} whileHover={{ scale: 1.1 }}>
+                                <Badge className="bg-gradient-to-r from-[hsl(var(--hyper-violet))]/20 to-[hsl(var(--cyber-fuchsia))]/20 text-foreground font-medium border border-[hsl(var(--hyper-violet))]/30">
+                                  {skill.trim()}
+                                </Badge>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {formData.lookingFor && (
+                        <motion.div whileHover={{ scale: 1.02 }} className="p-4 bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/5 to-[hsl(var(--liquid-gold))]/5 rounded-lg border border-[hsl(var(--cyber-fuchsia))]/20">
+                          <h3 className="font-bold text-foreground mb-3">Looking For</h3>
+                          <div className="flex flex-wrap gap-2">
+                            {formData.lookingFor.split(',').map((item, idx) => (
+                              <motion.div key={idx} whileHover={{ scale: 1.1 }}>
+                                <Badge className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] text-white font-medium">
+                                  {item.trim()}
+                                </Badge>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+
+                      <div className="grid grid-cols-2 gap-4 pt-4">
+                        <motion.div whileHover={{ scale: 1.05 }} className="p-4 bg-gradient-to-br from-red-500/10 to-red-600/5 rounded-lg border border-red-500/20">
+                          <p className="text-xs font-semibold text-foreground/60 mb-2">Availability</p>
+                          <Badge className={`${formData.availability === "active" ? "bg-gradient-to-r from-red-500/80 to-red-600/80" : "bg-gradient-to-r from-blue-500/80 to-blue-600/80"} text-white`}>
+                            {formData.availability === "active" ? "🔥 Active" : "👀 Open"}
                           </Badge>
-                        ))}
+                        </motion.div>
+                        <motion.div whileHover={{ scale: 1.05 }} className="p-4 bg-gradient-to-br from-[hsl(var(--aurora-teal))]/10 to-[hsl(var(--aurora-teal))]/5 rounded-lg border border-[hsl(var(--aurora-teal))]/20">
+                          <p className="text-xs font-semibold text-foreground/60 mb-2">Visibility</p>
+                          <Badge className="bg-gradient-to-r from-[hsl(var(--aurora-teal))] to-[hsl(var(--hyper-violet))] text-white">
+                            {formData.visibility === "public" ? "🌍 Public" : "🔒 Private"}
+                          </Badge>
+                        </motion.div>
                       </div>
                     </div>
-                  )}
-
-                  {formData.lookingFor && (
-                    <div>
-                      <h3 className="font-bold text-foreground mb-3">Looking For</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {formData.lookingFor.split(',').map((item, idx) => (
-                          <Badge key={idx} className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] text-white">
-                            {item.trim()}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-[hsl(var(--hyper-violet))]/20">
-                    <div>
-                      <p className="text-sm text-foreground/60 mb-1">Availability</p>
-                      <Badge className="bg-[hsl(var(--aurora-teal))]/20 text-[hsl(var(--aurora-teal))] border border-[hsl(var(--aurora-teal))]/30">
-                        {formData.availability === "active" ? "🔥 Active" : "👀 Open to Opportunities"}
-                      </Badge>
-                    </div>
-                    <div>
-                      <p className="text-sm text-foreground/60 mb-1">Visibility</p>
-                      <Badge variant="outline">
-                        {formData.visibility === "public" ? "🌍 Public" : "🔒 Private"}
-                      </Badge>
-                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </motion.div>
 
               <div className="grid sm:grid-cols-2 gap-4">
                 <Button

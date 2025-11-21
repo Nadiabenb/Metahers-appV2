@@ -450,23 +450,14 @@ export default function CircleDiscoveryPage() {
                             size="sm" 
                             className="flex-1 gap-2 bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] text-white hover:shadow-lg hover:shadow-[hsl(var(--cyber-fuchsia))]/30 transition-all"
                             data-testid={`button-message-${profile.id}`}
-                        >
-                          <MessageCircle className="w-4 h-4" />
-                          Message
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="ghost" 
-                          onClick={() => toggleFavorite(profile.id)}
-                          className="gap-2"
-                          data-testid={`button-favorite-${profile.id}`}
-                        >
-                          <Heart className={`w-4 h-4 transition-colors ${isFavorite(profile.id) ? 'fill-red-500 text-red-500' : ''}`} />
-                        </Button>
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                            Message
+                          </Button>
                       </div>
                     </Card>
                   </motion.div>
-                ))}
+                )}}
               </div>
             </>
           )}

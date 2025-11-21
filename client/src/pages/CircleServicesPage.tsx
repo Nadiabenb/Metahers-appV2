@@ -255,45 +255,66 @@ export default function CircleServicesPage() {
               {services.map((service, idx) => (
                 <motion.div
                   key={service.id}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: idx * 0.05 }}
-                  whileHover={{ y: -4 }}
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ delay: idx * 0.06, type: "spring", stiffness: 300 }}
+                  whileHover={{ y: -12, scale: 1.02 }}
+                  className="group"
                 >
-                  <Card className="p-6 bg-gradient-to-br from-white to-[hsl(var(--cyber-fuchsia))]/5 border border-[hsl(var(--cyber-fuchsia))]/20 hover:border-[hsl(var(--liquid-gold))]/30 shadow-md hover:shadow-lg h-full flex flex-col transition-all" data-testid={`card-service-${service.id}`}>
-                    <div className="flex items-start justify-between mb-3">
-                      <Badge className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] text-white">
-                        {categories.find(c => c.value === service.category)?.label || service.category}
-                      </Badge>
-                      <Star className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
+                  <Card className="relative h-full flex flex-col overflow-hidden bg-gradient-to-br from-white/95 via-white/90 to-white/85 border border-white/40 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300" data-testid={`card-service-${service.id}`}>
+                    {/* Ambient Background */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))]/8 via-[hsl(var(--liquid-gold))]/5 to-[hsl(var(--magenta-quartz))]/8 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                    {/* Content */}
+                    <div className="relative p-6 flex flex-col flex-1 z-5">
+                      {/* Category Badge */}
+                      <motion.div
+                        initial={{ scale: 0.8 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: idx * 0.06 + 0.1, type: "spring" }}
+                        className="mb-4"
+                      >
+                        <Badge className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] text-white font-semibold px-3 py-1.5 shadow-lg">
+                          {categories.find(c => c.value === service.category)?.label || service.category}
+                        </Badge>
+                      </motion.div>
+
+                      {/* Title */}
+                      <h3 className="font-bold text-xl text-transparent bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] bg-clip-text mb-3 line-clamp-2">
+                        {service.title}
+                      </h3>
+
+                      {/* Description */}
+                      <p className="text-sm text-foreground/75 line-clamp-3 mb-4 flex-1 italic">
+                        "{service.description}"
+                      </p>
+
+                      {/* Details */}
+                      <div className="space-y-3 pt-4 border-t border-[hsl(var(--cyber-fuchsia))]/20">
+                        {service.pricing && (
+                          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-3 p-2 bg-gradient-to-r from-[hsl(var(--liquid-gold))]/10 to-transparent rounded-lg">
+                            <DollarSign className="w-5 h-5 text-[hsl(var(--liquid-gold))] flex-shrink-0" />
+                            <span className="text-sm font-semibold text-foreground">{service.pricing}</span>
+                          </motion.div>
+                        )}
+                        {service.deliveryTime && (
+                          <motion.div whileHover={{ scale: 1.05 }} className="flex items-center gap-3 p-2 bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/10 to-transparent rounded-lg">
+                            <Briefcase className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))] flex-shrink-0" />
+                            <span className="text-sm font-medium text-foreground">{service.deliveryTime}</span>
+                          </motion.div>
+                        )}
+                      </div>
+
+                      {/* CTA Button */}
+                      <Button
+                        size="sm"
+                        className="w-full mt-6 gap-2 bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--liquid-gold))] text-white hover:shadow-lg hover:shadow-[hsl(var(--liquid-gold))]/30 transition-all"
+                        data-testid={`button-inquire-${service.id}`}
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        Inquire Now
+                      </Button>
                     </div>
-
-                    <h3 className="font-bold text-lg text-foreground mb-2">{service.title}</h3>
-                    <p className="text-sm text-foreground/70 line-clamp-3 mb-4 flex-1">{service.description}</p>
-
-                    <div className="space-y-3 pt-4 border-t border-[hsl(var(--cyber-fuchsia))]/20">
-                      {service.pricing && (
-                        <div className="flex items-center gap-2">
-                          <DollarSign className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
-                          <span className="text-sm font-semibold text-foreground">{service.pricing}</span>
-                        </div>
-                      )}
-                      {service.deliveryTime && (
-                        <div className="flex items-center gap-2">
-                          <Briefcase className="w-4 h-4 text-[hsl(var(--cyber-fuchsia))]" />
-                          <span className="text-sm text-foreground/70">{service.deliveryTime}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <Button
-                      size="sm"
-                      className="w-full mt-4 gap-2 border-[hsl(var(--cyber-fuchsia))]/30 hover:bg-[hsl(var(--cyber-fuchsia))]/10"
-                      variant="outline"
-                      data-testid={`button-inquire-${service.id}`}
-                    >
-                      Inquire Now
-                    </Button>
                   </Card>
                 </motion.div>
               ))}
