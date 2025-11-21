@@ -10,8 +10,7 @@ import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
-import { ArrowLeft, Plus, Star, DollarSign, Briefcase, Lock } from "lucide-react";
-import type { CircleService } from "@shared/schema";
+import { ArrowLeft, Plus, Star, DollarSign, Briefcase, Lock, MessageCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function CircleServicesPage() {
@@ -42,7 +41,7 @@ export default function CircleServicesPage() {
     deliveryTime: "",
   });
 
-  const { data: services = [] } = useQuery<CircleService[]>({
+  const { data: services = [] } = useQuery<any[]>({
     queryKey: ["/api/circle/services"],
   });
 
