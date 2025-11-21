@@ -352,51 +352,104 @@ export default function CircleDiscoveryPage() {
               </motion.div>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {paginatedProfiles.map((profile, idx) => (
+                {paginatedProfiles.map((profile, idx) => {
+                  const statusColors = {
+                    "active": "from-red-500/80 to-red-600/80",
+                    "passive": "from-blue-500/80 to-blue-600/80",
+                    "not-available": "from-gray-500/80 to-gray-600/80",
+                  };
+                  const statusLabel = { "active": "🔥 Active", "passive": "👀 Open", "not-available": "Unavailable" };
+
+                  return (
                   <motion.div
                     key={profile.id}
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: idx * 0.05 }}
-                    whileHover={{ y: -4 }}
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ delay: idx * 0.06, type: "spring", stiffness: 300 }}
+                    whileHover={{ y: -12, scale: 1.02 }}
+                    className="group"
                   >
-                    <Card className="p-6 bg-gradient-to-br from-white to-[hsl(var(--hyper-violet))]/5 border border-[hsl(var(--hyper-violet))]/15 hover:border-[hsl(var(--cyber-fuchsia))]/30 shadow-md hover:shadow-lg h-full flex flex-col transition-all" data-testid={`card-profile-${profile.id}`}>
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex-1">
-                          <h3 className="font-bold text-lg text-foreground">{profile.headline || "Profile"}</h3>
-                          <div className="flex items-center gap-2 mt-1">
-                            <Globe className="w-4 h-4 text-foreground/50" />
-                            <p className="text-sm text-foreground/60">{profile.location || "Location not specified"}</p>
+                    <Card className="relative h-full flex flex-col overflow-hidden bg-gradient-to-br from-white/95 via-white/90 to-white/85 border border-white/40 backdrop-blur-xl shadow-lg hover:shadow-2xl transition-all duration-300" data-testid={`card-profile-${profile.id}`}>
+                      {/* Ambient Background Gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/8 via-[hsl(var(--magenta-quartz))]/5 to-[hsl(var(--cyber-fuchsia))]/8 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                      {/* Status Badge - Top Left */}
+                      <div className="absolute top-4 left-4 z-10">
+                        <motion.div 
+                          initial={{ scale: 0.8 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: idx * 0.06 + 0.1, type: "spring" }}
+                        >
+                          <Badge className={`bg-gradient-to-r ${statusColors[profile.availability as keyof typeof statusColors] || 'from-gray-500/80 to-gray-600/80'} text-white border-0 text-xs font-semibold px-3 py-1.5 shadow-lg`}>
+                            {statusLabel[profile.availability as keyof typeof statusLabel] || "Available"}
+                          </Badge>
+                        </motion.div>
+                      </div>
+
+                      {/* Verified Star - Top Right */}
+                      {profile.verifiedMember && (
+                        <motion.div
+                          className="absolute top-4 right-4 z-10"
+                          animate={{ y: [0, -3, 0] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                        >
+                          <div className="w-8 h-8 bg-gradient-to-br from-[hsl(var(--liquid-gold))]/90 to-[hsl(var(--cyber-fuchsia))]/90 rounded-full flex items-center justify-center shadow-lg border border-white/50">
+                            <Star className="w-4 h-4 text-white fill-white" />
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {/* Content */}
+                      <div className="relative p-6 flex flex-col flex-1 z-5">
+                        {/* Header Section */}
+                        <div className="mb-4">
+                          <h3 className="font-bold text-xl text-transparent bg-gradient-to-r from-[hsl(var(--hyper-violet))] via-[hsl(var(--magenta-quartz))] to-[hsl(var(--cyber-fuchsia))] bg-clip-text mb-2 line-clamp-2">
+                            {profile.headline || "Ambitious Woman"}
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-foreground/70">
+                            <Globe className="w-4 h-4 text-[hsl(var(--hyper-violet))]/60" />
+                            <span className="font-medium">{profile.location || "Location TBD"}</span>
                           </div>
                         </div>
-                        {profile.verifiedMember && (
-                          <Badge className="bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--cyber-fuchsia))] text-white flex-shrink-0 gap-1" data-testid="badge-verified">
-                            <Star className="w-3 h-3" />
-                            Verified
-                          </Badge>
+
+                        {/* Bio */}
+                        <p className="text-sm text-foreground/75 line-clamp-3 mb-4 leading-relaxed italic">
+                          "{profile.bio || 'Passionate professional building the future'}"
+                        </p>
+
+                        {/* Skills Tags */}
+                        {profile.lookingFor && typeof profile.lookingFor === 'string' && (
+                          <div className="flex gap-2 mb-5 flex-wrap">
+                            {profile.lookingFor.split(',').slice(0, 3).map((tag, i) => (
+                              <motion.div key={i} whileHover={{ scale: 1.08 }}>
+                                <Badge className="bg-gradient-to-r from-[hsl(var(--hyper-violet))]/15 to-[hsl(var(--cyber-fuchsia))]/15 text-foreground font-medium border border-[hsl(var(--hyper-violet))]/30 text-xs px-2.5 py-1">
+                                  {tag.trim().substring(0, 12)}
+                                </Badge>
+                              </motion.div>
+                            ))}
+                          </div>
                         )}
-                      </div>
 
-                      <p className="text-sm text-foreground/70 line-clamp-3 mb-4 leading-relaxed">
-                        {profile.bio || "No bio yet"}
-                      </p>
-
-                      <div className="flex gap-2 mb-4 flex-wrap">
-                        {profile.lookingFor && typeof profile.lookingFor === 'string' && 
-                          profile.lookingFor.split(',').slice(0, 2).map((tag, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs border-[hsl(var(--hyper-violet))]/20 bg-[hsl(var(--hyper-violet))]/5">
-                              {tag.trim()}
-                            </Badge>
-                          ))
-                        }
-                      </div>
-
-                      <div className="flex gap-2 mt-auto">
-                        <Button 
-                          size="sm" 
-                          variant="outline" 
-                          className="flex-1 gap-2 border-[hsl(var(--cyber-fuchsia))]/20 hover:bg-[hsl(var(--cyber-fuchsia))]/10"
-                          data-testid={`button-message-${profile.id}`}
+                        {/* Action Buttons */}
+                        <div className="flex gap-2 mt-auto pt-4">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => toggleFavorite(profile.id)}
+                            className={`flex-1 gap-2 border transition-all duration-200 ${isFavorite(profile.id) ? 'border-[hsl(var(--cyber-fuchsia))]/40 bg-[hsl(var(--cyber-fuchsia))]/10 hover:bg-[hsl(var(--cyber-fuchsia))]/20' : 'border-[hsl(var(--hyper-violet))]/20 hover:border-[hsl(var(--hyper-violet))]/40'}`}
+                            data-testid={`button-favorite-${profile.id}`}
+                          >
+                            <motion.div
+                              animate={{ scale: isFavorite(profile.id) ? [1, 1.3, 1] : 1 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <Heart className={`w-4 h-4 ${isFavorite(profile.id) ? 'fill-[hsl(var(--cyber-fuchsia))] text-[hsl(var(--cyber-fuchsia))]' : 'text-foreground/50'}`} />
+                            </motion.div>
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            className="flex-1 gap-2 bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--cyber-fuchsia))] text-white hover:shadow-lg hover:shadow-[hsl(var(--cyber-fuchsia))]/30 transition-all"
+                            data-testid={`button-message-${profile.id}`}
                         >
                           <MessageCircle className="w-4 h-4" />
                           Message
