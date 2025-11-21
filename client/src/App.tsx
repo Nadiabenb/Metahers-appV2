@@ -69,6 +69,8 @@ const CircleDiscoveryPage = lazy(() => import("@/pages/CircleDiscoveryPage"));
 const CircleProfilePage = lazy(() => import("@/pages/CircleProfilePage"));
 const CircleServicesPage = lazy(() => import("@/pages/CircleServicesPage"));
 const CircleMessagingPage = lazy(() => import("@/pages/CircleMessagingPage"));
+const NewsletterPage = lazy(() => import("@/pages/NewsletterPage"));
+const WaitlistPage = lazy(() => import("@/pages/WaitlistPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -151,6 +153,10 @@ function Router() {
 
         {/* Companion - Public */}
         <Route path="/companion" component={CompanionPage} />
+
+        {/* Newsletter & Waitlist - Public */}
+        <Route path="/newsletter" component={NewsletterPage} />
+        <Route path="/waitlist" component={WaitlistPage} />
 
         {/* Circle - Networking (public accessible) */}
         <Route path="/circle" component={CircleDiscoveryPage} />

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { Search, Users, Heart, MessageCircle, Star, Filter, Briefcase, Zap, Users2, ArrowRight, CheckCircle, Sparkles, Globe, Target, Lightbulb } from "lucide-react";
+import { Search, Users, Heart, MessageCircle, Star, Filter, Briefcase, Zap, Users2, ArrowRight, CheckCircle, Sparkles, Globe, Target, Lightbulb, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -9,25 +9,37 @@ import { SEO } from "@/components/SEO";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "wouter";
+import { useFavorites } from "@/hooks/useFavorites";
 import type { WomenProfileDB } from "@shared/schema";
 
 export default function CircleDiscoveryPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(0);
   const [, setLocation] = useLocation();
   const { isAuthenticated, user } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const ITEMS_PER_PAGE = 6;
 
   const { data: profiles = [] } = useQuery<WomenProfileDB[]>({
     queryKey: ["/api/circle/profiles"],
   });
 
-  const filteredProfiles = profiles.filter(p => {
-    const matchesSearch = !searchTerm || 
-      p.headline?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      p.bio?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = !selectedFilter || p.availability === selectedFilter;
-    return matchesSearch && matchesFilter && p.visibility !== "private";
-  });
+  const filteredProfiles = useMemo(() => {
+    return profiles.filter(p => {
+      const matchesSearch = !searchTerm || 
+        p.headline?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.bio?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesFilter = !selectedFilter || p.availability === selectedFilter;
+      return matchesSearch && matchesFilter && p.visibility !== "private";
+    });
+  }, [profiles, searchTerm, selectedFilter]);
+
+  const totalPages = Math.ceil(filteredProfiles.length / ITEMS_PER_PAGE);
+  const paginatedProfiles = filteredProfiles.slice(
+    currentPage * ITEMS_PER_PAGE,
+    (currentPage + 1) * ITEMS_PER_PAGE
+  );
 
   const userProfile = profiles.find(p => p.userId === user?.id);
 
@@ -309,7 +321,7 @@ export default function CircleDiscoveryPage() {
               </motion.div>
 
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProfiles.map((profile, idx) => (
+                {paginatedProfiles.map((profile, idx) => (
                   <motion.div
                     key={profile.id}
                     initial={{ opacity: 0, scale: 0.95 }}
