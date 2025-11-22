@@ -454,10 +454,12 @@ export default function CircleDiscoveryPage() {
                             <MessageCircle className="w-4 h-4" />
                             Message
                           </Button>
+                        </div>
                       </div>
                     </Card>
                   </motion.div>
-                )}
+                )
+                })}
               </div>
             </>
           )}
