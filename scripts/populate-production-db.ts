@@ -1,8 +1,9 @@
 import { neon } from '@neondatabase/serverless';
+import * as bcrypt from 'bcrypt';
 import { EXPERIENCES } from '../server/seedExperiences';
 import { MOMS_EXPERIENCES } from '../server/seedMomsExperiences';
 
-// This script populates the production database with spaces and experiences
+// This script populates the production database with spaces, experiences, and test users
 // Run this ONCE after deploying to production to fix empty database
 
 const spaces = [
@@ -120,6 +121,31 @@ async function populateProductionDB() {
   const sql = neon(dbUrl);
 
   try {
+    // Create 20 test users
+    console.log('\nCreating test users...');
+    const testUsers = [];
+    for (let i = 1; i <= 20; i++) {
+      const email = `testuser${i}@metahers.ai`;
+      const password = 'TestPassword123!';
+      const passwordHash = await bcrypt.hash(password, 12);
+      
+      testUsers.push({
+        email,
+        passwordHash,
+        firstName: `Test`,
+        lastName: `User${i}`,
+      });
+    }
+
+    for (const user of testUsers) {
+      await sql`
+        INSERT INTO users (email, password_hash, first_name, last_name, subscription_tier, is_pro, onboarding_completed)
+        VALUES (${user.email}, ${user.passwordHash}, ${user.firstName}, ${user.lastName}, 'free', false, false)
+        ON CONFLICT (email) DO NOTHING
+      `;
+      console.log(`✓ Created test user: ${user.email} (password: TestPassword123!)`);
+    }
+
     // Insert spaces
     console.log('Inserting spaces...');
     for (const space of spaces) {
@@ -170,7 +196,6 @@ async function populateProductionDB() {
       console.log(`✓ Inserted experience: ${exp.title}`);
     }
 
-    const allExperiences = [...EXPERIENCES, ...MOMS_EXPERIENCES];
     console.log('\n✅ SUCCESS! Production database populated with:');
     console.log(`   - ${spaces.length} spaces`);
     console.log(`   - ${allExperiences.length} transformational experiences`);
