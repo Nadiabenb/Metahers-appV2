@@ -960,16 +960,16 @@ export async function seedExperiences() {
     for (const experience of EXPERIENCES) {
       await db
         .insert(transformationalExperiences)
-        .values(experience)
+        .values(experience as any)
         .onConflictDoUpdate({
           target: transformationalExperiences.id,
           set: {
             title: experience.title,
             description: experience.description,
-            learningObjectives: experience.learningObjectives,
+            learningObjectives: experience.learningObjectives as any,
             tier: experience.tier,
             estimatedMinutes: experience.estimatedMinutes,
-            content: experience.content,
+            content: experience.content as any,
             updatedAt: new Date(),
           },
         });
