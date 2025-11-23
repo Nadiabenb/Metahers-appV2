@@ -648,8 +648,21 @@ Return ONLY valid JSON:
         return res.status(401).json({ message: "Invalid email or password" });
       }
 
+      // Check if user has a password hash
+      if (!user.passwordHash) {
+        console.error("User exists but has no password hash:", email);
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
       // Verify password
-      const isValid = await verifyPassword(password, user.passwordHash);
+      let isValid = false;
+      try {
+        isValid = await verifyPassword(password, user.passwordHash);
+      } catch (passwordError) {
+        console.error("Password verification error for user:", email, passwordError);
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
       if (!isValid) {
         return res.status(401).json({ message: "Invalid email or password" });
       }
@@ -660,7 +673,7 @@ Return ONLY valid JSON:
       res.json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
     } catch (error) {
       console.error("Error during login:", error);
-      res.status(500).json({ message: "Login failed" });
+      res.status(500).json({ error: "Internal server error", code: "LOGIN_ERROR" });
     }
   });
 
