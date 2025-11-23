@@ -5,10 +5,8 @@ import { Sparkles, Mail, Lock, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { OptimizedImage } from "@/components/OptimizedImage";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import { SEO } from "@/components/SEO";
 
 export default function LoginPage() {
@@ -48,27 +46,19 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="w-screen min-h-screen flex flex-col items-center justify-center relative overflow-auto bg-background">
+    <div className="w-full min-h-screen flex flex-col items-center relative overflow-auto bg-background pt-4 sm:pt-6">
       <SEO
         title="Login - Access Your Learning Sanctuary"
         description="Sign in to MetaHers Mind Spa to continue your AI and Web3 learning journey. Access your personalized experiences, journal, and progress tracking."
         keywords="login, sign in, member access, AI learning platform, Web3 education"
         type="website"
       />
-      <OptimizedImage
-        src={heroBackground}
-        alt="Luxury background for login"
-        className="absolute inset-0 w-full h-full opacity-30"
-        objectFit="cover"
-        priority={true}
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="w-full relative z-10 flex flex-col items-center justify-center px-4 py-6 sm:py-12"
+        className="w-full relative z-10 flex flex-col items-center px-4"
       >
         <div className="w-full max-w-xl">
           <div className="editorial-card p-6 sm:p-10 md:p-16 relative overflow-hidden">
