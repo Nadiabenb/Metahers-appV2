@@ -198,9 +198,8 @@ async function populateProductionDB() {
 
     console.log('\n✅ SUCCESS! Production database populated with:');
     console.log(`   - ${spaces.length} spaces`);
-    console.log(`   - ${allExperiences.length} transformational experiences`);
-    console.log(`   - ${allExperiences.filter(e => e.tier === 'free').length} FREE experiences`);
-    console.log(`   - ${allExperiences.filter(e => e.tier === 'pro').length} PRO experiences`);
+    console.log(`   - 20 test users created`);
+    console.log(`   - Experiences loaded and inserted`);
     console.log('\nYour production app should now work correctly!');
 
   } catch (error) {
