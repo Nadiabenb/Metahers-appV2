@@ -958,28 +958,36 @@ export async function seedExperiences() {
     console.log("Seeding transformational experiences...");
 
     for (const experience of EXPERIENCES) {
-      await db
-        .insert(transformationalExperiences)
-        .values(experience as any)
-        .onConflictDoUpdate({
-          target: transformationalExperiences.id,
-          set: {
-            title: experience.title,
-            description: experience.description,
-            learningObjectives: experience.learningObjectives as any,
-            tier: experience.tier,
-            estimatedMinutes: experience.estimatedMinutes,
-            content: experience.content as any,
-            updatedAt: new Date(),
-          },
-        });
+      try {
+        const data = {
+          spaceId: experience.spaceId,
+          title: experience.title,
+          slug: experience.slug,
+          description: experience.description,
+          tier: experience.tier,
+          estimatedMinutes: experience.estimatedMinutes,
+          sortOrder: experience.sortOrder,
+          isActive: experience.isActive,
+          learningObjectives: experience.learningObjectives,
+          content: experience.content,
+          personalizationEnabled: experience.personalizationEnabled,
+        };
 
-      console.log(`✓ Seeded: ${experience.title}`);
+        await db
+          .insert(transformationalExperiences)
+          .values(data as any)
+          .onConflictDoNothing();
+
+        console.log(`✓ Seeded: ${experience.title}`);
+      } catch (rowError) {
+        console.warn(`⚠ Could not seed ${experience.title}:`, rowError);
+        // Continue with next experience
+      }
     }
 
-    console.log(`✓ All ${EXPERIENCES.length} experiences seeded successfully!`);
+    console.log(`✓ All ${EXPERIENCES.length} experiences processed!`);
   } catch (error) {
     console.error("Error seeding experiences:", error);
-    throw error;
+    // Don't throw - allow app to continue even if seeding fails
   }
 }
