@@ -139,19 +139,7 @@ export function OptimizedImage({
         )}
       </AnimatePresence>
 
-      <motion.img
-        ref={pictureRef as any}
-        src={isInView ? src : undefined}
-        alt={alt}
-        className={`${className} ${objectFitClass} relative z-10`}
-        loading={priority ? "eager" : "lazy"}
-        onLoad={handleLoad}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isLoaded ? 1 : 0 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        fetchpriority={fetchPriority || (priority ? 'high' : 'auto')}
-      />
-    </div>
+      </div>
   );
 }
 
