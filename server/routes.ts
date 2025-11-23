@@ -587,95 +587,85 @@ Return ONLY valid JSON:
   // ===== AUTHROUTES =====
 
   // Signup endpoint
-  app.post('/api/auth/signup', async (req, res) => {
-    try {
-      const { email, password, firstName, lastName, quizUnlockedRitual } = req.body;
+  app.post('/api/auth/signup', asyncHandler(async (req, res) => {
+    const { email, password, firstName, lastName, quizUnlockedRitual } = req.body;
 
-      // Validate input
-      if (!email || !password) {
-        return res.status(400).json({ message: "Email and password are required" });
-      }
-
-      if (password.length < 8) {
-        return res.status(400).json({ message: "Password must be at least 8 characters" });
-      }
-
-      // Check if user already exists
-      const existingUser = await storage.getUserByEmail(email);
-      if (existingUser) {
-        return res.status(409).json({ message: "User with this email already exists" });
-      }
-
-      // Check if user has completed the quiz
-      const quizSubmission = await storage.getQuizSubmissionByEmail(email);
-
-      // Use quiz ritual from request body if provided, otherwise from quiz submission
-      const unlockedRitual = quizUnlockedRitual || quizSubmission?.matchedRitual || null;
-
-      // Hash password and create user
-      const passwordHash = await hashPassword(password);
-      const user = await storage.createUser({
-        email,
-        passwordHash,
-        firstName: firstName || null,
-        lastName: lastName || null,
-        quizUnlockedRitual: unlockedRitual,
-        quizCompletedAt: quizSubmission ? new Date() : null,
-      });
-
-      // Set up session
-      req.session!.userId = user.id;
-
-      res.status(201).json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
-    } catch (error) {
-      console.error("Error during signup:", error);
-      res.status(500).json({ message: "Failed to create account" });
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
     }
-  });
+
+    if (password.length < 8) {
+      return res.status(400).json({ message: "Password must be at least 8 characters" });
+    }
+
+    // Check if user already exists
+    const existingUser = await storage.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ message: "User with this email already exists" });
+    }
+
+    // Check if user has completed the quiz
+    const quizSubmission = await storage.getQuizSubmissionByEmail(email);
+
+    // Use quiz ritual from request body if provided, otherwise from quiz submission
+    const unlockedRitual = quizUnlockedRitual || quizSubmission?.matchedRitual || null;
+
+    // Hash password and create user
+    const passwordHash = await hashPassword(password);
+    const user = await storage.createUser({
+      email,
+      passwordHash,
+      firstName: firstName || null,
+      lastName: lastName || null,
+      quizUnlockedRitual: unlockedRitual,
+      quizCompletedAt: quizSubmission ? new Date() : null,
+    });
+
+    // Set up session
+    req.session!.userId = user.id;
+
+    res.status(201).json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+  }));
 
   // Login endpoint
-  app.post('/api/auth/login', async (req, res) => {
-    try {
-      const { email, password } = req.body;
+  app.post('/api/auth/login', asyncHandler(async (req, res) => {
+    const { email, password } = req.body;
 
-      if (!email || !password) {
-        return res.status(400).json({ message: "Email and password are required" });
-      }
-
-      // Find user by email
-      const user = await storage.getUserByEmail(email);
-      if (!user) {
-        return res.status(401).json({ message: "Invalid email or password" });
-      }
-
-      // Check if user has a password hash
-      if (!user.passwordHash) {
-        console.error("User exists but has no password hash:", email);
-        return res.status(401).json({ message: "Invalid email or password" });
-      }
-
-      // Verify password
-      let isValid = false;
-      try {
-        isValid = await verifyPassword(password, user.passwordHash);
-      } catch (passwordError) {
-        console.error("Password verification error for user:", email, passwordError);
-        return res.status(401).json({ message: "Invalid email or password" });
-      }
-
-      if (!isValid) {
-        return res.status(401).json({ message: "Invalid email or password" });
-      }
-
-      // Set up session
-      req.session!.userId = user.id;
-
-      res.json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
-    } catch (error) {
-      console.error("Error during login:", error);
-      res.status(500).json({ error: "Internal server error", code: "LOGIN_ERROR" });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
     }
-  });
+
+    // Find user by email
+    const user = await storage.getUserByEmail(email);
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Check if user has a password hash
+    if (!user.passwordHash) {
+      console.error("User exists but has no password hash:", email);
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Verify password
+    let isValid = false;
+    try {
+      isValid = await verifyPassword(password, user.passwordHash);
+    } catch (passwordError) {
+      console.error("Password verification error for user:", email, passwordError);
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    if (!isValid) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    // Set up session
+    req.session!.userId = user.id;
+
+    res.json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+  }));
 
   // Logout endpoint
   app.post('/api/auth/logout', async (req, res) => {
