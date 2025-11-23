@@ -5,7 +5,6 @@ import type { InsertTransformationalExperience } from "../shared/schema";
 export const EXPERIENCES: InsertTransformationalExperience[] = [
   // ===== WEB3 SPACE (9 experiences) =====
   {
-    id: "web3-1-foundations",
     spaceId: "web3",
     title: "Web3 Foundations",
     slug: "web3-foundations",
@@ -72,7 +71,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "web3-2-wallets",
     spaceId: "web3",
     title: "Wallet Mastery & Security",
     slug: "web3-wallets",
@@ -134,7 +132,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "web3-3-defi",
     spaceId: "web3",
     title: "DeFi Fundamentals",
     slug: "web3-defi",
@@ -199,7 +196,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
 
   // ===== AI SPACE (9 experiences) =====
   {
-    id: "ai-1-essentials",
     spaceId: "ai",
     title: "AI Essentials",
     slug: "ai-essentials",
@@ -261,7 +257,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "ai-2-advanced-prompting",
     spaceId: "ai",
     title: "Advanced Prompting Techniques",
     slug: "ai-advanced-prompting",
@@ -318,7 +313,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "ai-3-content-production",
     spaceId: "ai",
     title: "AI-Powered Content Production",
     slug: "ai-content-production",
@@ -376,7 +370,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
 
   // ===== CRYPTO SPACE (12 experiences) =====
   {
-    id: "crypto-1-foundations",
     spaceId: "crypto",
     title: "Crypto Foundations",
     slug: "crypto-foundations",
@@ -443,7 +436,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "crypto-2-btc-deep-dive",
     spaceId: "crypto",
     title: "Bitcoin Deep Dive",
     slug: "crypto-bitcoin-deep-dive",
@@ -500,7 +492,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "crypto-3-eth-smart-contracts",
     spaceId: "crypto",
     title: "Ethereum & Smart Contracts",
     slug: "crypto-ethereum-smart-contracts",
@@ -559,7 +550,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "crypto-4-nft-essentials",
     spaceId: "crypto",
     title: "NFT Essentials",
     slug: "crypto-nft-essentials",
@@ -623,7 +613,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "crypto-5-trading-strategy",
     spaceId: "crypto",
     title: "Crypto Trading & Portfolio Management",
     slug: "crypto-trading-strategy",
@@ -680,7 +669,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "crypto-6-security-advanced",
     spaceId: "crypto",
     title: "Advanced Crypto Security",
     slug: "crypto-security-advanced",
@@ -745,7 +733,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   // In production, you'd generate all 69 with similar detail
   
   {
-    id: "metaverse-1-foundations",
     spaceId: "metaverse",
     title: "Metaverse Fundamentals",
     slug: "metaverse-foundations",
@@ -802,7 +789,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "branding-1-personal-brand",
     spaceId: "branding",
     title: "Build Your Personal Brand",
     slug: "branding-personal-brand",
@@ -860,7 +846,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
 
   // Brief stubs for remaining spaces to reach 69 experiences
   {
-    id: "moms-1-balance",
     spaceId: "moms",
     title: "Balance Work and Motherhood",
     slug: "moms-balance",
@@ -887,7 +872,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "app-atelier-1-ai-tools",
     spaceId: "app-atelier",
     title: "Build Apps with AI",
     slug: "app-atelier-ai-tools",
@@ -914,7 +898,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "founders-club-1-launch",
     spaceId: "founders-club",
     title: "Launch Your Startup",
     slug: "founders-club-launch",
@@ -941,7 +924,6 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
   },
 
   {
-    id: "digital-boutique-1-launch",
     spaceId: "digital-boutique",
     title: "Launch Your Online Store",
     slug: "digital-boutique-launch",
