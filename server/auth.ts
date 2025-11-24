@@ -10,8 +10,6 @@ import type { Express, RequestHandler } from "express";
 import { storage } from "./storage";
 import { logger } from "./lib/logger";
 
-const PgSession = connectPg(session);
-
 const SALT_ROUNDS = 12;
 
 export async function hashPassword(password: string): Promise<string> {
@@ -23,33 +21,6 @@ export async function verifyPassword(
   hash: string
 ): Promise<boolean> {
   return await bcrypt.compare(password, hash);
-}
-
-export function getSession() {
-  // Hardened session: 24 hours (reduced from 7 days for better security)
-  const sessionTtl = 24 * 60 * 60 * 1000;
-  const pgStore = connectPg(session);
-  const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: true,
-    ttl: sessionTtl,
-    tableName: "sessions",
-  });
-
-  return session({
-    secret: process.env.SESSION_SECRET!,
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    rolling: true, // Extend session on activity
-    cookie: {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: sessionTtl,
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax", // Strict in production
-      path: "/",
-    },
-  });
 }
 
 export async function setupAuth(app: Express) {
@@ -66,9 +37,10 @@ export async function setupAuth(app: Express) {
     });
   } else {
     logger.info('Using PostgreSQL for session storage (Redis unavailable)');
+    const PgSession = connectPg(session);
     sessionStore = new PgSession({
       pool,
-      createTableIfMissing: true,
+      createTableIfMissing: false,
     });
   }
 
