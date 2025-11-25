@@ -181,9 +181,9 @@ export function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-2xl bg-background/70 border-b border-white/10 shadow-[0_8px_32px_rgba(68,143,82,0.15)]">
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-2xl bg-background/70 border-b border-border shadow-[0_8px_32px_rgba(212,165,165,0.15)]">
       {/* Gradient accent line */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
@@ -194,7 +194,7 @@ export function Navigation() {
             data-testid="link-home"
           >
             <span className="hidden sm:inline">MetaHers</span>
-            <span className="sm:hidden">M</span>
+            <span className="sm:hidden">M✨</span>
           </button>
 
           {/* Desktop Navigation - Mega Menu */}

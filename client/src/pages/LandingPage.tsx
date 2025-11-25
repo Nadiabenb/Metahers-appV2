@@ -84,11 +84,12 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* CLEAN HERO - App-like Experience */}
+      {/* CLEAN HERO - Feminine Pastel Experience */}
       <div className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden">
-        {/* Subtle background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
+        {/* Soft gradient backgrounds */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--pastel-yellow))] via-background to-background opacity-30" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(var(--blue-1837))]/10 via-transparent to-transparent opacity-40" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[hsl(var(--soft-purple))]/10 via-transparent to-transparent opacity-40" />
         
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
@@ -96,7 +97,7 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground">
               Master <span className="text-primary">AI & Web3</span>
             </h1>
             <p className="text-xl sm:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
@@ -108,7 +109,7 @@ export default function LandingPage() {
                 onClick={handleSignup}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-lg hover:bg-primary/90 transition-colors"
+                className="px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-lg hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all"
                 data-testid="button-start-free"
               >
                 Start Free
@@ -117,7 +118,7 @@ export default function LandingPage() {
                 onClick={handleLogin}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-lg border-2 border-primary text-primary font-semibold text-lg hover:bg-primary/10 transition-colors"
+                className="px-8 py-4 rounded-lg border-2 border-primary text-primary font-semibold text-lg hover:bg-card transition-colors"
                 data-testid="button-login-hero"
               >
                 Sign In
@@ -132,19 +133,19 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-16 pt-12 border-t border-border"
           >
-            <p className="text-sm text-muted-foreground mb-4">Trusted by 500+ women leaders</p>
+            <p className="text-sm text-muted-foreground mb-6">Trusted by 500+ women leaders</p>
             <div className="flex justify-center gap-8 flex-wrap">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">65+</p>
-                <p className="text-sm text-muted-foreground">Learning experiences</p>
+              <div className="text-center p-4 rounded-lg bg-card/50 backdrop-blur-sm">
+                <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">65+</p>
+                <p className="text-sm text-muted-foreground mt-1">Learning experiences</p>
               </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">9</p>
-                <p className="text-sm text-muted-foreground">Learning spaces</p>
+              <div className="text-center p-4 rounded-lg bg-card/50 backdrop-blur-sm">
+                <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">9</p>
+                <p className="text-sm text-muted-foreground mt-1">Learning spaces</p>
               </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-primary">Free</p>
-                <p className="text-sm text-muted-foreground">To start</p>
+              <div className="text-center p-4 rounded-lg bg-card/50 backdrop-blur-sm">
+                <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Free</p>
+                <p className="text-sm text-muted-foreground mt-1">To start</p>
               </div>
             </div>
           </motion.div>
@@ -152,7 +153,7 @@ export default function LandingPage() {
       </div>
 
       {/* NINE LEARNING SPACES - Editorial Grid */}
-      <div className="relative py-40 px-6 lg:px-16 bg-background">
+      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-background via-[hsl(var(--soft-purple))]/5 to-background">
         <div className="max-w-[1400px] mx-auto">
           {/* Section Header - Magazine Style */}
           <motion.div
@@ -309,7 +310,7 @@ export default function LandingPage() {
       </div>
 
       {/* MEMBERSHIP TIERS - Clean Modern Layout */}
-      <div className="relative py-40 px-6 lg:px-16 bg-background">
+      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-[hsl(var(--pastel-yellow))]/20 via-background to-[hsl(var(--blue-1837))]/10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
