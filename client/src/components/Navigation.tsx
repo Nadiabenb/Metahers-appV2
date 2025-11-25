@@ -181,20 +181,20 @@ export function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-2xl bg-background/70 border-b border-white/10 shadow-[0_8px_32px_rgba(181,101,216,0.15)]">
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-2xl bg-background/70 border-b border-white/10 shadow-[0_8px_32px_rgba(68,143,82,0.15)]">
       {/* Gradient accent line */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[hsl(var(--gold))]/50 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <button
             onClick={() => handleNavClick("/")}
-            className="text-xl sm:text-2xl font-serif font-bold bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-clip-text text-transparent cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md"
+            className="text-xl sm:text-2xl font-sans font-bold text-primary hover:text-primary/80 cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md transition-colors"
             data-testid="link-home"
           >
-            <span className="hidden sm:inline">MetaHers Mind Spa</span>
-            <span className="sm:hidden">MetaHers</span>
+            <span className="hidden sm:inline">MetaHers</span>
+            <span className="sm:hidden">M</span>
           </button>
 
           {/* Desktop Navigation - Mega Menu */}

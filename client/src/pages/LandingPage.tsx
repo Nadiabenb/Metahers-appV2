@@ -84,75 +84,70 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* TOP LOGIN BAR */}
-      <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border py-3 px-4 sm:px-6 lg:px-16">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-bold text-gradient-purple-pink">MetaHers Mind Spa</h1>
-          <button
-            onClick={handleLogin}
-            className="text-sm font-medium text-purple-400 hover:text-purple-300 transition-colors"
-            data-testid="button-login"
-          >
-            Sign In
-          </button>
-        </div>
-      </div>
-
-      {/* PREMIUM MEMBER SPOTLIGHT - Social Proof */}
-      <div className="relative py-32 px-6 lg:px-16 bg-gradient-to-b from-purple-500/5 to-background border-t border-purple-500/10">
-        <div className="max-w-6xl mx-auto">
+      {/* CLEAN HERO - App-like Experience */}
+      <div className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden">
+        {/* Subtle background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-background to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent opacity-50" />
+        
+        <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
           >
-            <h2 className="sanctuary-headline text-4xl lg:text-5xl font-bold mb-4">
-              <span className="text-gradient-purple-pink">Elite Women Leaders</span><br />Are Already Building Their Empires
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Founder CEOs, solopreneurs & creators transforming their businesses with AI & Web3
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              Master <span className="text-primary">AI & Web3</span>
+            </h1>
+            <p className="text-xl sm:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
+              Learn from real experts. Get personalized coaching. Build your tech future—no experience needed.
             </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <motion.button
+                onClick={handleSignup}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-lg hover:bg-primary/90 transition-colors"
+                data-testid="button-start-free"
+              >
+                Start Free
+              </motion.button>
+              <motion.button
+                onClick={handleLogin}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-4 rounded-lg border-2 border-primary text-primary font-semibold text-lg hover:bg-primary/10 transition-colors"
+                data-testid="button-login-hero"
+              >
+                Sign In
+              </motion.button>
+            </div>
           </motion.div>
 
-          {/* Premium Member Cards - 3 Column Grid */}
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                name: "Sarah M.",
-                role: "Founder & CEO",
-                story: "Went from $0 → $50K ARR using AI strategies from MetaHers",
-                avatar: "👑"
-              },
-              {
-                name: "Jessica L.",
-                role: "Web3 Educator",
-                story: "Built her own NFT collection & community in 30 days",
-                avatar: "💎"
-              },
-              {
-                name: "Priya P.",
-                role: "AI Consultant",
-                story: "Landed 3 enterprise clients by positioning herself as AI expert",
-                avatar: "✨"
-              }
-            ].map((member, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                className="kinetic-glass rounded-2xl p-8 border border-card-border hover-elevate transition-all duration-300"
-              >
-                <div className="mb-4 text-4xl">{member.avatar}</div>
-                <h3 className="font-serif text-lg font-bold mb-1">{member.name}</h3>
-                <p className="text-sm text-primary font-semibold mb-4">{member.role}</p>
-                <p className="text-muted-foreground text-sm leading-relaxed">{member.story}</p>
-              </motion.div>
-            ))}
-          </div>
+          {/* Social proof - minimal */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-16 pt-12 border-t border-border"
+          >
+            <p className="text-sm text-muted-foreground mb-4">Trusted by 500+ women leaders</p>
+            <div className="flex justify-center gap-8 flex-wrap">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-primary">65+</p>
+                <p className="text-sm text-muted-foreground">Learning experiences</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-primary">9</p>
+                <p className="text-sm text-muted-foreground">Learning spaces</p>
+              </div>
+              <div className="text-center">
+                <p className="text-2xl font-bold text-primary">Free</p>
+                <p className="text-sm text-muted-foreground">To start</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
