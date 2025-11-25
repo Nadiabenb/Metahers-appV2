@@ -1,0 +1,108 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Inter",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#DBEDDF",
+    "accent": "#448F52",
+    "background": "#18191B",
+    "textPrimary": "#18191B",
+    "link": "#448F52"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Inter",
+      "heading": "Inter"
+    },
+    "fontStacks": {
+      "heading": [
+        "Instrument Sans",
+        "Inter",
+        "sans-serif"
+      ],
+      "body": [
+        "Inter",
+        "ui-sans-serif",
+        "system-ui",
+        "sans-serif",
+        "Apple Color Emoji",
+        "Segoe UI Emoji",
+        "Segoe UI Symbol",
+        "Noto Color Emoji"
+      ],
+      "paragraph": [
+        "__Instrument_Sans_e986a4",
+        "__Instrument_Sans_Fallback_e986a4"
+      ]
+    },
+    "fontSizes": {
+      "h1": "42px",
+      "h2": "42px",
+      "body": "18px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "6px"
+  },
+  "components": {
+    "input": {
+      "borderColor": "#CCCCCC",
+      "borderRadius": "6px"
+    },
+    "buttonPrimary": {
+      "background": "#18191B",
+      "textColor": "#FFFFFF",
+      "borderRadius": "9999px",
+      "shadow": "none"
+    },
+    "buttonSecondary": {
+      "background": "#F2F2F2",
+      "textColor": "#18191B",
+      "borderRadius": "0px",
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "File saved at: attached_assets/logo.svg",
+    "favicon": "File saved at: attached_assets/favicon.ico",
+    "ogImage": "File saved at: attached_assets/ogImage.png"
+  },
+  "__framework_hints": [],
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Logo #0 matches the brand name 'Anything - AI app builder' and is visible in the header, indicating it is the main brand logo.",
+    "confidence": 0.95
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "Get started",
+      "reasoning": "Button #0 has vibrant dark background color (#18191B) with action-oriented text 'Get started', making it the primary CTA."
+    },
+    "secondary": {
+      "index": 2,
+      "text": "Mobile",
+      "reasoning": "Button #2 has a light background color (#F2F2F2) and is less prominent, making it suitable as the secondary button."
+    },
+    "confidence": 0.9
+  },
+  "personality": {
+    "tone": "modern",
+    "energy": "medium",
+    "targetAudience": "tech-savvy individuals and businesses looking to create applications easily."
+  },
+  "designSystem": {
+    "framework": "tailwind",
+    "componentLibrary": null
+  },
+  "confidence": {
+    "buttons": 0.9,
+    "colors": 0.95,
+    "overall": 0.925
+  }
+}
