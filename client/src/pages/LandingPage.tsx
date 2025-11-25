@@ -163,16 +163,16 @@ export default function LandingPage() {
             className="mb-20 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
+              <div className="h-px w-12 bg-gradient-to-r from-primary to-primary/50" />
               <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
-                Your Signature Program
+                Learning Spaces
               </span>
             </div>
-            <h2 className="sanctuary-headline text-4xl lg:text-5xl font-bold mb-4">
-              <span className="text-gradient-purple-pink">Nine Curated</span><br />Learning Spaces
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+              Explore <span className="text-primary">9 Learning Spaces</span>
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Choose your path to mastery. Each space contains personalized transformational experiences designed for your success.
+              Choose your path to mastery. Each space contains personalized learning experiences designed for your success.
             </p>
           </motion.div>
 
@@ -308,8 +308,8 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* MEMBERSHIP TIERS - Luxury Editorial Clean Layout */}
-      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-b from-background to-purple-500/5">
+      {/* MEMBERSHIP TIERS - Clean Modern Layout */}
+      <div className="relative py-40 px-6 lg:px-16 bg-background">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -318,11 +318,11 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-24"
           >
-            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient-purple-pink">Choose Your Path</span><br />to Mastery
+            <h2 className="text-5xl lg:text-6xl font-bold mb-6">
+              Simple <span className="text-primary">Pricing</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Start free. Upgrade when you're ready. Luxury learning, always within reach.
+              Start free. Upgrade when you're ready. No hidden fees.
             </p>
           </motion.div>
 
@@ -358,26 +358,26 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="sanctuary-card p-12 border-2 border-purple-400/40 relative overflow-hidden shadow-2xl shadow-purple-500/20 hover-elevate transition-all duration-300"
+              className="kinetic-glass rounded-3xl p-12 border-2 border-primary/40 relative overflow-hidden shadow-2xl shadow-primary/20 hover-elevate transition-all duration-300"
             >
               {/* Exclusive Badge */}
               <div className="absolute top-6 right-6">
-                <Badge className="bg-gradient-to-r from-[#F8D57E] to-purple-400 text-purple-900 border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
+                <Badge className="bg-primary text-primary-foreground border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
                   Most Popular
                 </Badge>
               </div>
 
               <div className="mb-10">
-                <h3 className="font-serif text-5xl font-bold mb-4">Inner Circle</h3>
+                <h3 className="font-sans text-5xl font-bold mb-4">Inner Circle</h3>
                 <p className="text-muted-foreground text-lg leading-relaxed">
                   All 36 experiences, thought leadership journey, priority access to Nadia + monthly group coaching.
                 </p>
               </div>
               <motion.button
-                onClick={() => window.location.href = "/pricing"}
+                onClick={() => window.location.href = "/upgrade"}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="purple-shimmer w-full px-8 py-6 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 hover:shadow-2xl hover:shadow-purple-500/50 transition-all font-semibold text-lg text-white"
+                className="w-full px-8 py-6 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-semibold text-lg"
                 data-testid="button-upgrade-pro"
               >
                 Unlock Inner Circle

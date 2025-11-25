@@ -59,7 +59,7 @@ export function Navigation() {
         { path: "/ai-prompts", label: "AI Prompts", icon: Code2, gradient: "from-indigo-500 to-purple-600", glow: "99, 102, 241" },
       ],
     }),
-    ...(user?.isAdmin ? {
+    ...(user && "isAdmin" in user && user.isAdmin ? {
       "Admin": [
         { path: "/admin", label: "Admin Dashboard", icon: Shield, gradient: "from-amber-500 to-yellow-600", glow: "251, 191, 36" },
       ],

@@ -239,7 +239,7 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="dark" storageKey="metahers-theme">
+        <ThemeProvider>
           <TooltipProvider>
             <ErrorBoundary fallback={
               <div className="min-h-screen flex items-center justify-center p-4">
