@@ -625,7 +625,13 @@ Return ONLY valid JSON:
     // Set up session
     req.session!.userId = user.id;
 
-    res.status(201).json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+    req.session!.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).json({ message: "Failed to create session" });
+      }
+      res.status(201).json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+    });
   }));
 
   // Login endpoint
@@ -664,7 +670,13 @@ Return ONLY valid JSON:
     // Set up session
     req.session!.userId = user.id;
 
-    res.json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+    req.session!.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).json({ message: "Failed to create session" });
+      }
+      res.json({ success: true, user: { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName } });
+    });
   }));
 
   // Logout endpoint
