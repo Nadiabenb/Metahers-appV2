@@ -3994,6 +3994,63 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     res.json(result[0] || null);
   }));
 
+  // Get smart next experience recommendation based on progress
+  app.get('/api/recommendations/next', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    
+    // Get user's quiz responses
+    const quizResult = await db.select().from(quizResponses).where(eq(quizResponses.userId, userId)).limit(1);
+    const quizData = quizResult[0];
+    
+    if (!quizData?.recommendedExperiences?.length) {
+      return res.json(null);
+    }
+
+    // Get all recommended experiences for this user
+    const recommendedSlugs = quizData.recommendedExperiences as string[];
+    
+    // Get their progress on these experiences
+    const allExps = await storage.getAllExperiences();
+    const recommendedExps = allExps.filter(exp => recommendedSlugs.includes(exp.slug));
+    
+    // Find completed experiences
+    const completedExp = await db.query.experienceProgress.findMany({
+      where: (exp, { eq: dbEq }) => dbEq(exp.userId, userId),
+    }) as any[];
+    
+    const completedExpIds = new Set(completedExp.filter((p: any) => p.completedAt).map((p: any) => p.experienceId));
+    
+    // Find first incomplete recommended experience
+    const nextExp = recommendedExps.find(exp => !completedExpIds.has(exp.id));
+    
+    if (!nextExp) {
+      return res.json(null);
+    }
+
+    const reasons: Record<string, string> = {
+      master_ai: "Build on your AI foundations with practical applications",
+      build_web3: "Deepen your Web3 knowledge with hands-on projects",
+      own_authority: "Strengthen your thought leadership positioning",
+      advance_career: "Level up your professional capabilities",
+    };
+
+    const difficultyMap: Record<string, "beginner" | "intermediate" | "advanced"> = {
+      free: "beginner",
+      pro: "intermediate",
+      vip: "advanced",
+    };
+
+    res.json({
+      id: nextExp.id,
+      title: nextExp.title,
+      slug: nextExp.slug,
+      description: nextExp.description,
+      estimatedMinutes: nextExp.estimatedMinutes,
+      difficulty: difficultyMap[nextExp.tier] || "intermediate",
+      reason: reasons[quizData.goal as keyof typeof reasons] || "Continue your learning journey",
+    });
+  }));
+
   const httpServer = createServer(app);
   return httpServer;
 }
