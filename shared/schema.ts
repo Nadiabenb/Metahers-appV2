@@ -18,8 +18,8 @@ import { createInsertSchema } from "drizzle-zod";
 // ===== DRIZZLE DATABASE TABLES =====
 
 // Session storage table (required for Replit Auth)
-export const sessions = pgTable(
-  "sessions",
+export const session = pgTable(
+  "session",
   {
     sid: varchar("sid").primaryKey(),
     sess: jsonb("sess").notNull(),
