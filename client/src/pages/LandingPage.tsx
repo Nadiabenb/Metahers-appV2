@@ -87,9 +87,9 @@ export default function LandingPage() {
       {/* CLEAN HERO - Feminine Pastel Experience */}
       <div className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden">
         {/* Soft gradient backgrounds */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--pastel-yellow))] via-background to-background opacity-30" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(var(--blue-1837))]/10 via-transparent to-transparent opacity-40" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[hsl(var(--soft-purple))]/10 via-transparent to-transparent opacity-40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--pastel-yellow))] via-background to-background opacity-20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(var(--blue-1837))]/8 via-transparent to-transparent opacity-30" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[hsl(var(--soft-purple))]/8 via-transparent to-transparent opacity-30" />
         
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
@@ -97,27 +97,25 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-[hsl(var(--primary))] via-[hsl(var(--secondary))] via-[hsl(var(--pastel-yellow))] to-[hsl(var(--blue-1837))] bg-clip-text text-transparent animate-pulse">
-                Master AI & Web3
-              </span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground">
+              Master <span className="bg-gradient-to-r from-[hsl(var(--primary))] via-[hsl(var(--secondary))] via-[hsl(var(--pastel-yellow))] to-[hsl(var(--blue-1837))] bg-clip-text text-transparent">AI & Web3</span>
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto font-light">
+            <p className="text-lg sm:text-xl text-foreground mb-8 leading-relaxed max-w-2xl mx-auto font-medium">
               Go from overwhelmed to unstoppable. Build AI & Web3 skills while living your life as a solopreneur, mom, or creative.
             </p>
             
             <div className="mb-12 flex flex-col gap-3 justify-center max-w-2xl mx-auto">
               <div className="flex items-center gap-2 text-foreground justify-center">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base">Real experts + real AI coaching + real human support (from me, Nadia)</span>
+                <span className="text-sm md:text-base font-medium">Real experts + real AI coaching + real human support (from me, Nadia)</span>
               </div>
               <div className="flex items-center gap-2 text-foreground justify-center">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base">12 transformational experiences free—no credit card, no commitment</span>
+                <span className="text-sm md:text-base font-medium">12 transformational experiences free—no credit card, no commitment</span>
               </div>
               <div className="flex items-center gap-2 text-foreground justify-center">
                 <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base">Personalized roadmap based on your goals, not generic courses</span>
+                <span className="text-sm md:text-base font-medium">Personalized roadmap based on your goals, not generic courses</span>
               </div>
             </div>
             
@@ -151,22 +149,22 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-20 pt-16 border-t-2 border-border/50"
           >
-            <p className="text-base text-muted-foreground mb-8 font-semibold uppercase tracking-wider">Real results. Real women. Real transformation.</p>
+            <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">Real results. Real women. Real transformation.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10 backdrop-blur-sm">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/30 backdrop-blur">
                 <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">500+</p>
-                <p className="text-foreground font-semibold mb-1">Women leaders transformed</p>
-                <p className="text-sm text-muted-foreground">From side hustle to thriving brand</p>
+                <p className="text-foreground font-bold mb-1">Women leaders transformed</p>
+                <p className="text-sm text-foreground/80">From side hustle to thriving brand</p>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-secondary/5 to-accent/5 border border-secondary/10 backdrop-blur-sm">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-secondary/15 to-accent/15 border border-secondary/30 backdrop-blur">
                 <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent mb-2">65+</p>
-                <p className="text-foreground font-semibold mb-1">Transformational experiences</p>
-                <p className="text-sm text-muted-foreground">Expert-led, personalized to you</p>
+                <p className="text-foreground font-bold mb-1">Transformational experiences</p>
+                <p className="text-sm text-foreground/80">Expert-led, personalized to you</p>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-accent/5 to-blue-1837/5 border border-accent/20 backdrop-blur-sm">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-accent/15 to-blue-1837/15 border border-accent/30 backdrop-blur">
                 <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-accent to-blue-1837 bg-clip-text text-transparent mb-2">Lifetime</p>
-                <p className="text-foreground font-semibold mb-1">Access to 12 free experiences</p>
-                <p className="text-sm text-muted-foreground">Start now, upgrade when ready</p>
+                <p className="text-foreground font-bold mb-1">Access to 12 free experiences</p>
+                <p className="text-sm text-foreground/80">Start now, upgrade when ready</p>
               </div>
             </div>
           </motion.div>
@@ -174,7 +172,7 @@ export default function LandingPage() {
       </div>
 
       {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
-      <div className="relative py-24 px-6 lg:px-16 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10">
+      <div className="relative py-24 px-6 lg:px-16 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -182,26 +180,26 @@ export default function LandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You'll Be Able To Do</h2>
-            <p className="text-lg text-muted-foreground mb-12">Join women who went from frustrated to empowered in weeks, not years</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">What You'll Be Able To Do</h2>
+            <p className="text-lg text-foreground mb-12 font-medium">Join women who went from frustrated to empowered in weeks, not years</p>
             
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-card/80 backdrop-blur border border-card-border hover-elevate transition-all">
+              <div className="p-6 rounded-2xl bg-card backdrop-blur-md border border-card-border hover-elevate transition-all">
                 <Bot className="w-10 h-10 text-primary mx-auto mb-4" />
                 <h3 className="font-bold text-lg mb-2 text-foreground">Master AI Tools</h3>
-                <p className="text-sm text-muted-foreground">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
+                <p className="text-sm text-foreground/85">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
               </div>
               
-              <div className="p-6 rounded-2xl bg-card/80 backdrop-blur border border-card-border hover-elevate transition-all">
+              <div className="p-6 rounded-2xl bg-card backdrop-blur-md border border-card-border hover-elevate transition-all">
                 <Globe className="w-10 h-10 text-secondary mx-auto mb-4" />
                 <h3 className="font-bold text-lg mb-2 text-foreground">Build Web3 Wealth</h3>
-                <p className="text-sm text-muted-foreground">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
+                <p className="text-sm text-foreground/85">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
               </div>
               
-              <div className="p-6 rounded-2xl bg-card/80 backdrop-blur border border-card-border hover-elevate transition-all">
+              <div className="p-6 rounded-2xl bg-card backdrop-blur-md border border-card-border hover-elevate transition-all">
                 <Crown className="w-10 h-10 text-accent mx-auto mb-4" />
                 <h3 className="font-bold text-lg mb-2 text-foreground">Own Your Authority</h3>
-                <p className="text-sm text-muted-foreground">Build your personal brand, establish thought leadership, and charge premium prices</p>
+                <p className="text-sm text-foreground/85">Build your personal brand, establish thought leadership, and charge premium prices</p>
               </div>
             </div>
           </motion.div>

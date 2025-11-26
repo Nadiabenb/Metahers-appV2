@@ -36,40 +36,40 @@ body {
 
   /* Core Theme Colors - Light Feminine Mode */
   --background: 340 32% 88%;
-  --foreground: 340 10% 25%;
-  --border: 340 30% 80%;
+  --foreground: 340 15% 12%;
+  --border: 340 30% 78%;
 
-  --card: 0 0% 99%;
-  --card-foreground: 340 10% 25%;
-  --card-border: 340 25% 85%;
+  --card: 0 0% 100%;
+  --card-foreground: 340 15% 12%;
+  --card-border: 340 25% 82%;
 
   --sidebar: 340 32% 90%;
-  --sidebar-foreground: 340 10% 25%;
-  --sidebar-border: 340 25% 82%;
+  --sidebar-foreground: 340 15% 12%;
+  --sidebar-border: 340 25% 80%;
   --sidebar-primary: 340 25% 72%;
-  --sidebar-primary-foreground: 0 0% 99%;
+  --sidebar-primary-foreground: 0 0% 100%;
   --sidebar-accent: 270 30% 75%;
-  --sidebar-accent-foreground: 340 10% 25%;
+  --sidebar-accent-foreground: 340 15% 12%;
   --sidebar-ring: 340 25% 72%;
 
-  --popover: 0 0% 99%;
-  --popover-foreground: 340 10% 25%;
-  --popover-border: 340 25% 85%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 340 15% 12%;
+  --popover-border: 340 25% 83%;
 
   --primary: 340 25% 72%;
-  --primary-foreground: 0 0% 99%;
+  --primary-foreground: 0 0% 100%;
 
   --secondary: 270 30% 75%;
-  --secondary-foreground: 340 10% 25%;
+  --secondary-foreground: 340 15% 12%;
 
   --accent: 45 100% 85%;
-  --accent-foreground: 340 10% 25%;
+  --accent-foreground: 340 15% 12%;
 
   --destructive: 0 68% 52%;
   --destructive-foreground: 0 0% 98%;
 
-  --muted: 340 15% 70%;
-  --muted-foreground: 340 10% 45%;
+  --muted: 340 15% 65%;
+  --muted-foreground: 340 10% 35%;
 
   --input: 0 0% 99%;
   --ring: 340 25% 72%;
