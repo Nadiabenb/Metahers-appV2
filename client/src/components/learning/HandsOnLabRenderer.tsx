@@ -53,7 +53,7 @@ export default function HandsOnLabRenderer({
           <div>
             <h4 className="font-serif text-lg font-semibold mb-2">Hands-On Lab</h4>
             <div className="prose prose-sm max-w-none dark:prose-invert">
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              <p className="text-foreground leading-relaxed whitespace-pre-wrap">
                 {section.content}
               </p>
             </div>
@@ -129,7 +129,7 @@ export default function HandsOnLabRenderer({
               <p className="font-serif text-lg font-semibold text-[hsl(var(--aurora-teal))] mb-2">
                 Lab Completed!
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground">
                 You've completed the hands-on portion. This practical experience is invaluable for mastering the concepts. Well done!
               </p>
             </div>
@@ -144,7 +144,7 @@ export default function HandsOnLabRenderer({
         transition={{ delay: 0.5 }}
         className="p-4 rounded-lg bg-muted/30 border border-border"
       >
-        <p className="text-sm text-muted-foreground text-center italic">
+        <p className="text-sm text-foreground text-center italic">
           "Building with your own hands is how you transform from learner to creator."
         </p>
       </motion.div>

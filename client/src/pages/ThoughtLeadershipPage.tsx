@@ -177,7 +177,7 @@ export default function ThoughtLeadershipPage() {
           <CardHeader className="text-center">
             <Lock className="w-16 h-16 mx-auto mb-4 text-primary" />
             <CardTitle className="font-cormorant text-3xl mb-2">Sign In Required</CardTitle>
-            <p className="text-muted-foreground">
+            <p className="text-foreground">
               Please sign in to access your 30-Day Brand Authority Journey.
             </p>
           </CardHeader>
@@ -243,7 +243,7 @@ export default function ThoughtLeadershipPage() {
           <h1 className="font-cormorant text-5xl font-bold text-foreground mb-4">
             30-Day Brand Authority Journey
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-foreground max-w-2xl mx-auto">
             Build your digital presence one intentional day at a time
           </p>
         </div>
@@ -260,7 +260,7 @@ export default function ThoughtLeadershipPage() {
                   <h3 className="font-semibold text-lg mb-2">
                     🎉 Try Days 1-3 Free
                   </h3>
-                  <p className="text-muted-foreground mb-4">
+                  <p className="text-foreground mb-4">
                     You're exploring the first 3 days of the journey for free. Upgrade to Pro to unlock all 30 days of personalized content, AI-powered writing, and brand-building curriculum.
                   </p>
                   <Link href="/pricing">
@@ -287,7 +287,7 @@ export default function ThoughtLeadershipPage() {
                   <h3 className="font-semibold text-lg mb-2">
                     Day {progress.currentDay} Requires Pro
                   </h3>
-                  <p className="text-muted-foreground mb-4">
+                  <p className="text-foreground mb-4">
                     You've completed the free trial (Days 1-3). Upgrade to Pro to continue your journey and access personalized AI-powered content for Days 4-30.
                   </p>
                   <Link href="/pricing">
@@ -307,25 +307,25 @@ export default function ThoughtLeadershipPage() {
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-primary">{progress.currentDay}</div>
-              <div className="text-sm text-muted-foreground">Current Day</div>
+              <div className="text-sm text-foreground">Current Day</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-primary">{progress.completedDays.length}</div>
-              <div className="text-sm text-muted-foreground">Days Complete</div>
+              <div className="text-sm text-foreground">Days Complete</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-primary">{progress.currentStreak}</div>
-              <div className="text-sm text-muted-foreground">Current Streak</div>
+              <div className="text-sm text-foreground">Current Streak</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-3xl font-bold text-primary">{progress.totalPostsGenerated}</div>
-              <div className="text-sm text-muted-foreground">Posts Created</div>
+              <div className="text-sm text-foreground">Posts Created</div>
             </CardContent>
           </Card>
         </div>
@@ -373,7 +373,7 @@ export default function ThoughtLeadershipPage() {
                   <CardTitle className="font-cormorant text-2xl">Your Content is Ready</CardTitle>
                   <Badge variant="default">Day {currentDayPost.dayNumber}</Badge>
                 </div>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   {currentDayPost.topic}
                 </p>
               </CardHeader>
@@ -542,7 +542,7 @@ export default function ThoughtLeadershipPage() {
                           existingReflection={selectedPost.dailyStory}
                         />
                         <div className="p-4 rounded-lg bg-primary/5 border border-primary/10">
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-foreground">
                             Your reflection was used to generate personalized content across all platforms.
                             Edit your reflection above to regenerate content with your updated insights.
                           </p>
@@ -550,7 +550,7 @@ export default function ThoughtLeadershipPage() {
                       </div>
                     ) : (
                       <div className="p-5 rounded-lg bg-accent/30 text-center">
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-foreground">
                           No practice reflection saved for this day.
                         </p>
                       </div>
@@ -569,7 +569,7 @@ export default function ThoughtLeadershipPage() {
                             {selectedDayCurriculum.discovery.teaching}
                           </p>
                           <div className="p-3 rounded bg-accent/30 border border-accent-border">
-                            <h4 className="font-medium text-xs text-muted-foreground mb-2">Why This Matters</h4>
+                            <h4 className="font-medium text-xs text-foreground mb-2">Why This Matters</h4>
                             <p className="text-xs text-foreground/80 leading-relaxed">
                               {selectedDayCurriculum.discovery.whyItMatters}
                             </p>

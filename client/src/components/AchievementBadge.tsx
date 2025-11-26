@@ -150,7 +150,7 @@ export default function AchievementBadge({
 
             <div>
               <h4 className="font-semibold mb-1">{achievement.title}</h4>
-              <p className="text-xs text-muted-foreground mb-2">
+              <p className="text-xs text-foreground mb-2">
                 {achievement.description}
               </p>
               <Badge variant="outline" className={`${RARITY_COLORS[achievement.rarity]} text-white border-0 text-xs`}>
@@ -159,7 +159,7 @@ export default function AchievementBadge({
             </div>
 
             {unlocked && unlockedAt && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-foreground">
                 Unlocked {new Date(unlockedAt).toLocaleDateString()}
               </p>
             )}

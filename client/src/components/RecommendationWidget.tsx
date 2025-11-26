@@ -58,7 +58,7 @@ export function RecommendationWidget() {
         </div>
         <div>
           <h2 className="text-2xl font-serif font-bold text-foreground">Your Mind Spa Recommends</h2>
-          <p className="text-sm text-muted-foreground">Personalized next steps for your journey</p>
+          <p className="text-sm text-foreground">Personalized next steps for your journey</p>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export function RecommendationWidget() {
               {recommendations.nextExperience.title}
             </h3>
 
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-foreground mb-4">
               {recommendations.nextExperience.reason}
             </p>
 
@@ -113,7 +113,7 @@ export function RecommendationWidget() {
               {recommendations.achievementTip.name}
             </h3>
 
-            <p className="text-sm text-muted-foreground mb-2">
+            <p className="text-sm text-foreground mb-2">
               {recommendations.achievementTip.description}
             </p>
 
@@ -133,7 +133,7 @@ export function RecommendationWidget() {
               <h3 className="font-serif text-lg font-bold mb-2 text-foreground">
                 Today's Reflection
               </h3>
-              <p className="text-muted-foreground leading-relaxed italic">
+              <p className="text-foreground leading-relaxed italic">
                 "{recommendations.journalPrompt}"
               </p>
             </div>
@@ -159,7 +159,7 @@ export function RecommendationWidget() {
                   className="flex items-start gap-3"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-foreground leading-relaxed">
                     {insight}
                   </p>
                 </motion.div>

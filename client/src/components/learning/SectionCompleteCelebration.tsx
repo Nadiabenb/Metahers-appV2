@@ -134,7 +134,7 @@ export default function SectionCompleteCelebration({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-muted-foreground mb-6"
+              className="text-foreground mb-6"
             >
               {isExperienceComplete ? (
                 <>
@@ -154,7 +154,7 @@ export default function SectionCompleteCelebration({
               transition={{ delay: 0.5 }}
               className="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 mb-6"
             >
-              <p className="text-sm italic text-muted-foreground">
+              <p className="text-sm italic text-foreground">
                 {isExperienceComplete
                   ? "Transformation happens through consistent action. You're building the future you deserve!"
                   : "Every section completed is another step toward mastery. Keep going!"}

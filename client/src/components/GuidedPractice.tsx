@@ -76,7 +76,7 @@ export function GuidedPractice({ curriculumDay, onSubmit, isLoading, existingRef
         <CardContent className="space-y-6">
           <div className="space-y-4">
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground mb-3">Reflect on these questions:</h4>
+              <h4 className="font-medium text-sm text-foreground mb-3">Reflect on these questions:</h4>
               <ul className="space-y-2">
                 {curriculumDay.practice.guidingQuestions.map((question, index) => (
                   <motion.li
@@ -96,7 +96,7 @@ export function GuidedPractice({ curriculumDay, onSubmit, isLoading, existingRef
 
             <div className="p-4 rounded-lg bg-accent/50 border border-accent-border">
               <h4 className="font-medium text-sm text-foreground mb-2">Success looks like:</h4>
-              <p className="text-sm text-muted-foreground" data-testid="text-success-criteria">
+              <p className="text-sm text-foreground" data-testid="text-success-criteria">
                 {curriculumDay.practice.successCriteria}
               </p>
             </div>
@@ -115,7 +115,7 @@ export function GuidedPractice({ curriculumDay, onSubmit, isLoading, existingRef
               disabled={isCompleted && !isEditing}
               data-testid="input-reflection"
             />
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-foreground">
               {reflection.length} characters · Be authentic and specific
             </p>
           </div>

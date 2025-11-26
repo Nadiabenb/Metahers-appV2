@@ -227,15 +227,15 @@ export function AchievementsBadges() {
                       }
                     `}>
                       <Icon 
-                        className={`w-6 h-6 ${isUnlocked ? achievement.color : 'text-muted-foreground'}`} 
+                        className={`w-6 h-6 ${isUnlocked ? achievement.color : 'text-foreground'}`} 
                       />
                     </div>
                     
                     <div className="flex-1">
-                      <h4 className={`font-semibold mb-1 ${isUnlocked ? 'text-foreground' : 'text-muted-foreground'}`}>
+                      <h4 className={`font-semibold mb-1 ${isUnlocked ? 'text-foreground' : 'text-foreground'}`}>
                         {achievement.title}
                       </h4>
-                      <p className="text-xs text-muted-foreground mb-2">
+                      <p className="text-xs text-foreground mb-2">
                         {achievement.description}
                       </p>
                       <Badge variant="outline" className="text-xs">
@@ -260,7 +260,7 @@ export function AchievementsBadges() {
             <h3 className="text-lg font-bold text-[hsl(var(--liquid-gold))] mb-1">
               Achievement Master!
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground">
               You've unlocked all achievements. Your dedication is inspiring!
             </p>
           </motion.div>

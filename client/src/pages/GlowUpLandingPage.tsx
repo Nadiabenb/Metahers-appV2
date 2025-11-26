@@ -116,7 +116,7 @@ export default function GlowUpLandingPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.25 }}
-            className="text-sm text-muted-foreground"
+            className="text-sm text-foreground"
           >
             {!user?.isPro && "Use beta code 'MetaMuse2025' for free Pro access"}
           </motion.p>
@@ -135,7 +135,7 @@ export default function GlowUpLandingPage() {
             <h2 className="font-cormorant text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
               What You'll Get
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-foreground max-w-2xl mx-auto">
               A complete brand transformation powered by AI, designed specifically for women in business.
             </p>
           </motion.div>
@@ -173,7 +173,7 @@ export default function GlowUpLandingPage() {
             <h2 className="font-cormorant text-4xl sm:text-5xl font-bold mb-6 metallic-text">
               Success Stories
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-foreground max-w-2xl mx-auto">
               Real results from women who transformed their brands with AI.
             </p>
           </motion.div>
@@ -191,7 +191,7 @@ export default function GlowUpLandingPage() {
                   <p className="text-foreground mb-6 italic">"{testimonial.quote}"</p>
                   <div className="border-t border-border pt-4">
                     <p className="font-semibold text-foreground">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                    <p className="text-sm text-foreground">{testimonial.role}</p>
                   </div>
                 </Card>
               </motion.div>
@@ -230,7 +230,7 @@ export default function GlowUpLandingPage() {
             </Button>
 
             {!user?.isPro && (
-              <p className="mt-6 text-sm text-muted-foreground">
+              <p className="mt-6 text-sm text-foreground">
                 Beta testers: Use code 'MetaMuse2025' for free access
               </p>
             )}

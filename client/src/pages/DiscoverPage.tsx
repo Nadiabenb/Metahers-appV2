@@ -203,7 +203,7 @@ export default function DiscoverPage() {
               <ArrowRight className="w-5 h-5" />
             </Button>
 
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground">
               Limited to MetaHers WhatsApp community members • Takes 2 minutes
             </p>
           </motion.div>
@@ -220,7 +220,7 @@ export default function DiscoverPage() {
         <div className="max-w-3xl mx-auto">
           {/* Progress Bar */}
           <div className="mb-12">
-            <div className="flex justify-between text-sm text-muted-foreground mb-2">
+            <div className="flex justify-between text-sm text-foreground mb-2">
               <span>Question {currentQuestion + 1} of {quizQuestions.length}</span>
               <span>{Math.round(progress)}%</span>
             </div>
@@ -359,14 +359,14 @@ export default function DiscoverPage() {
                   {isSubmitting ? "Unlocking..." : "Unlock My Results"}
                   <ArrowRight className="w-5 h-5" />
                 </Button>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-foreground">
                   We'll email you your ritual + 1:1 session link. No spam, ever.
                 </p>
               </div>
             </Card>
 
             {/* Trust signals */}
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center justify-center gap-2 text-sm text-foreground">
               <Users className="w-4 h-4" />
               <span>Join 2,500+ women mastering AI & Web3</span>
             </div>
@@ -445,7 +445,7 @@ export default function DiscoverPage() {
               <p className="text-foreground/80 mb-3">
                 This ritual is now unlocked in your account! Complete it to schedule your FREE 1:1 session with the founder.
               </p>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground">
                 We'll also send you a WhatsApp message with next steps.
               </p>
             </div>
@@ -519,7 +519,7 @@ export default function DiscoverPage() {
                         <Crown className="w-4 h-4" />
                         Join VIP Cohort - $197
                       </Button>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-sm text-foreground">
                         🔥 Only 3 spots left
                       </span>
                     </div>

@@ -94,12 +94,12 @@ export default function TextSectionRenderer({
                       {resource.title}
                     </span>
                   </div>
-                  <BookOpen className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <BookOpen className="w-4 h-4 text-foreground group-hover:text-primary transition-colors" />
                 </Link>
               );
             })}
           </div>
-          <p className="mt-4 text-xs text-muted-foreground italic">
+          <p className="mt-4 text-xs text-foreground italic">
             All resources curated from the MetaHers knowledge base
           </p>
         </motion.div>

@@ -156,7 +156,7 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3, delay: 0.3 }}
-            className="mt-12 text-sm text-muted-foreground tracking-wide"
+            className="mt-12 text-sm text-foreground tracking-wide"
           >
             <p>No credit card required • Free ritual included</p>
           </motion.div>
@@ -297,7 +297,7 @@ export default function HomePage() {
                   </p>
                   <div className="border-t border-border pt-4">
                     <p className="font-semibold text-foreground">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                    <p className="text-sm text-foreground">{testimonial.role}</p>
                   </div>
                 </div>
               </motion.div>

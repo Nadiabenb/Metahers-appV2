@@ -78,7 +78,7 @@ export default function GlowUpJournalPage() {
           <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
             Pro Feature
           </h1>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-foreground mb-8">
             The AI Glow-Up Program is exclusive to Pro members. Upgrade to unlock your 14-day brand transformation journey.
           </p>
           
@@ -111,9 +111,9 @@ export default function GlowUpJournalPage() {
           </Button>
 
           <Card className="p-12 text-center">
-            <Book className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+            <Book className="w-16 h-16 text-foreground mx-auto mb-4" />
             <h2 className="font-cormorant text-3xl font-bold mb-2">Your Journal is Empty</h2>
-            <p className="text-muted-foreground mb-6">
+            <p className="text-foreground mb-6">
               Start completing days in the dashboard to build your brand journal.
             </p>
             <Button onClick={() => setLocation("/glow-up/dashboard")} data-testid="button-goto-dashboard">
@@ -133,7 +133,7 @@ export default function GlowUpJournalPage() {
             <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-2">
               My Glow-Up Journal
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-foreground">
               {journalEntries.length} {journalEntries.length === 1 ? 'entry' : 'entries'} saved
             </p>
           </div>
@@ -192,7 +192,7 @@ export default function GlowUpJournalPage() {
                     {entry.gptResponse && (
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                          <h4 className="font-semibold text-sm text-foreground uppercase tracking-wide">
                             AI Response
                           </h4>
                           {!isEditing && (
@@ -226,7 +226,7 @@ export default function GlowUpJournalPage() {
                     {entry.publicPostDraft && (
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <h4 className="font-semibold text-sm text-muted-foreground uppercase tracking-wide">
+                          <h4 className="font-semibold text-sm text-foreground uppercase tracking-wide">
                             Public Post Draft
                           </h4>
                           {!isEditing && (

@@ -91,12 +91,12 @@ export default function QuizSectionRenderer({
         className="space-y-6 text-center"
       >
         <div className={`p-8 rounded-2xl bg-gradient-to-br ${score >= 70 ? 'from-[hsl(var(--aurora-teal))]/20 to-[hsl(var(--liquid-gold))]/10 border-[hsl(var(--aurora-teal))]/30' : 'from-muted/50 to-muted/30 border-border'} border`}>
-          <Trophy className={`w-16 h-16 mx-auto mb-4 ${score >= 70 ? 'text-[hsl(var(--liquid-gold))]' : 'text-muted-foreground'}`} />
+          <Trophy className={`w-16 h-16 mx-auto mb-4 ${score >= 70 ? 'text-[hsl(var(--liquid-gold))]' : 'text-foreground'}`} />
           <h3 className="font-serif text-3xl font-bold mb-2">
             {score >= 70 ? "Excellent Work!" : "Good Effort!"}
           </h3>
           <p className="text-5xl font-bold mb-4">{score}%</p>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-foreground mb-6">
             You got {correctAnswersCount} out of {totalQuestions} questions correct
           </p>
           
@@ -129,7 +129,7 @@ export default function QuizSectionRenderer({
   if (!currentQuestion) {
     return (
       <div className="text-center p-8">
-        <p className="text-muted-foreground">No quiz questions available.</p>
+        <p className="text-foreground">No quiz questions available.</p>
       </div>
     );
   }
@@ -140,7 +140,7 @@ export default function QuizSectionRenderer({
   return (
     <div className="space-y-6">
       {/* Progress */}
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
+      <div className="flex items-center justify-between text-sm text-foreground">
         <span>Question {currentQuestionIndex + 1} of {totalQuestions}</span>
         <span>{Object.keys(selectedAnswers).length} answered</span>
       </div>
@@ -211,7 +211,7 @@ export default function QuizSectionRenderer({
               animate={{ opacity: 1, height: "auto" }}
               className="p-4 rounded-lg bg-muted/50 border border-border"
             >
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground">
                 <strong>Explanation:</strong> {currentQuestion.explanation}
               </p>
             </motion.div>

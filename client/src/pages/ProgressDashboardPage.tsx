@@ -106,7 +106,7 @@ export default function ProgressDashboardPage() {
       <div className="min-h-screen bg-background py-16 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-muted-foreground">Loading your progress...</p>
+          <p className="text-foreground">Loading your progress...</p>
         </div>
       </div>
     );
@@ -124,7 +124,7 @@ export default function ProgressDashboardPage() {
           <h1 className="font-serif text-5xl font-bold mb-4 bg-gradient-to-r from-[hsl(var(--liquid-gold))] via-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] bg-clip-text text-transparent">
             Your Journey Dashboard
           </h1>
-          <p className="text-xl text-muted-foreground">
+          <p className="text-xl text-foreground">
             Track your transformation across all 6 learning spaces
           </p>
         </motion.div>
@@ -139,13 +139,13 @@ export default function ProgressDashboardPage() {
             <Card className="border-primary/20 bg-gradient-to-br from-card via-card to-primary/5">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Completed</CardTitle>
+                  <CardTitle className="text-sm font-medium text-foreground">Completed</CardTitle>
                   <Trophy className="w-5 h-5 text-primary" data-testid="icon-trophy" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold" data-testid="stat-completed">{completedExperiences}</div>
-                <p className="text-xs text-muted-foreground mt-1">Experiences finished</p>
+                <p className="text-xs text-foreground mt-1">Experiences finished</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -158,13 +158,13 @@ export default function ProgressDashboardPage() {
             <Card className="border-orange-500/20 bg-gradient-to-br from-card via-card to-orange-500/5">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Streak</CardTitle>
+                  <CardTitle className="text-sm font-medium text-foreground">Streak</CardTitle>
                   <Flame className="w-5 h-5 text-orange-500" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{currentStreak}</div>
-                <p className="text-xs text-muted-foreground mt-1">Days in a row</p>
+                <p className="text-xs text-foreground mt-1">Days in a row</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -177,13 +177,13 @@ export default function ProgressDashboardPage() {
             <Card className="border-[hsl(var(--aurora-teal))]/20 bg-gradient-to-br from-card via-card to-[hsl(var(--aurora-teal))]/5">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Confidence</CardTitle>
+                  <CardTitle className="text-sm font-medium text-foreground">Confidence</CardTitle>
                   <Target className="w-5 h-5 text-[hsl(var(--aurora-teal))]" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{averageConfidence.toFixed(1)}/10</div>
-                <p className="text-xs text-muted-foreground mt-1">Average score</p>
+                <p className="text-xs text-foreground mt-1">Average score</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -196,13 +196,13 @@ export default function ProgressDashboardPage() {
             <Card className="border-[hsl(var(--liquid-gold))]/20 bg-gradient-to-br from-card via-card to-[hsl(var(--liquid-gold))]/5">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">Time Invested</CardTitle>
+                  <CardTitle className="text-sm font-medium text-foreground">Time Invested</CardTitle>
                   <Clock className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="text-3xl font-bold">{Math.floor(totalMinutesLearned / 60)}h</div>
-                <p className="text-xs text-muted-foreground mt-1">{totalMinutesLearned % 60}min learning</p>
+                <p className="text-xs text-foreground mt-1">{totalMinutesLearned % 60}min learning</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -289,7 +289,7 @@ export default function ProgressDashboardPage() {
                         </div>
                         <div className="flex-1">
                           <h4 className="font-semibold">{experience.title}</h4>
-                          <p className="text-sm text-muted-foreground">{space?.name}</p>
+                          <p className="text-sm text-foreground">{space?.name}</p>
                         </div>
                         {progress.confidenceScore && (
                           <Badge variant="outline" className="gap-1">

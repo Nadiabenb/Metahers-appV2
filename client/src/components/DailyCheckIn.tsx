@@ -65,7 +65,7 @@ export function DailyCheckIn({ dayNumber, onSubmit, isLoading }: DailyCheckInPro
               className="min-h-[120px] text-base"
               data-testid="input-accomplishment"
             />
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground">
               {accomplishment.length} / 20 characters minimum
             </p>
           </div>
@@ -124,7 +124,7 @@ export function DailyCheckIn({ dayNumber, onSubmit, isLoading }: DailyCheckInPro
 
           {/* Helpful Tips */}
           <div className="bg-primary/5 rounded-lg p-4">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground">
               <strong className="text-foreground">Building in Public:</strong> Share your real journey - wins AND challenges. Authenticity builds connection. Your audience wants to see the behind-the-scenes, not just the highlight reel.
             </p>
           </div>

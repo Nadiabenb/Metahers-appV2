@@ -44,7 +44,7 @@ export default function GlowUpOnboardingPage() {
           <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
             Pro Feature
           </h1>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-foreground mb-8">
             The AI Glow-Up Program is exclusive to Pro members. Upgrade to unlock your 14-day brand transformation journey with AI-powered guidance and personalized insights.
           </p>
           
@@ -100,7 +100,7 @@ export default function GlowUpOnboardingPage() {
           <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
             Welcome Back, {existingProfile.name}!
           </h1>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-foreground mb-8">
             Ready to continue your 14-day brand transformation?
           </p>
           
@@ -135,7 +135,7 @@ export default function GlowUpOnboardingPage() {
             <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
               Your 14-Day AI Glow-Up
             </h1>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-foreground">
               Transform your brand using AI-powered guidance, strategic prompts, and actionable insights
             </p>
           </div>

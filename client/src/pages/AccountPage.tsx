@@ -131,7 +131,7 @@ export default function AccountPage() {
                       <div className="text-3xl font-bold text-foreground mb-1" data-testid="text-completed-rituals">
                         {stats?.completedRituals || 0}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-foreground">
                         Rituals Started
                       </div>
                     </div>
@@ -139,7 +139,7 @@ export default function AccountPage() {
                       <div className="text-3xl font-bold text-foreground mb-1" data-testid="text-journal-entries">
                         {stats?.journalEntries || 0}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-foreground">
                         Journal Entries
                       </div>
                     </div>
@@ -147,7 +147,7 @@ export default function AccountPage() {
                       <div className="text-3xl font-bold text-foreground mb-1" data-testid="text-streak-days">
                         {stats?.streak || 0}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-foreground">
                         Day Streak
                       </div>
                     </div>
@@ -167,7 +167,7 @@ export default function AccountPage() {
                         <Trophy className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
                         Your Achievements
                       </h3>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-foreground">
                         Badges unlocked on your MetaHers journey
                       </p>
                     </div>
@@ -218,11 +218,11 @@ export default function AccountPage() {
                     <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
                       App Settings
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-foreground">
                       Customize your MetaHers experience
                     </p>
                   </div>
-                  <Settings className="w-5 h-5 text-muted-foreground" />
+                  <Settings className="w-5 h-5 text-foreground" />
                 </div>
 
                 <div className="space-y-4">
@@ -231,13 +231,13 @@ export default function AccountPage() {
                       {soundsEnabled ? (
                         <Volume2 className="w-5 h-5 text-primary" />
                       ) : (
-                        <VolumeX className="w-5 h-5 text-muted-foreground" />
+                        <VolumeX className="w-5 h-5 text-foreground" />
                       )}
                       <div>
                         <Label htmlFor="sound-toggle" className="text-sm font-medium text-foreground cursor-pointer">
                           Sound Effects
                         </Label>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-foreground">
                           Subtle audio feedback for interactions
                         </p>
                       </div>
@@ -259,13 +259,13 @@ export default function AccountPage() {
                         {notificationsEnabled ? (
                           <Bell className="w-5 h-5 text-primary" />
                         ) : (
-                          <BellOff className="w-5 h-5 text-muted-foreground" />
+                          <BellOff className="w-5 h-5 text-foreground" />
                         )}
                         <div>
                           <Label htmlFor="notification-toggle" className="text-sm font-medium text-foreground cursor-pointer">
                             Push Notifications
                           </Label>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-xs text-foreground">
                             {permission === 'denied' 
                               ? 'Notifications blocked - enable in browser settings'
                               : 'Get notified about achievements and milestones'}
@@ -358,31 +358,31 @@ export default function AccountPage() {
                   <div className="flex items-center justify-between py-3 border-b border-border">
                     <div>
                       <div className="font-medium text-foreground">Email Notifications</div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-foreground">
                         Receive updates about new rituals
                       </div>
                     </div>
-                    <div className="text-sm text-muted-foreground">Coming soon</div>
+                    <div className="text-sm text-foreground">Coming soon</div>
                   </div>
 
                   <div className="flex items-center justify-between py-3 border-b border-border">
                     <div>
                       <div className="font-medium text-foreground">Privacy Settings</div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-foreground">
                         Manage your data and privacy
                       </div>
                     </div>
-                    <div className="text-sm text-muted-foreground">Coming soon</div>
+                    <div className="text-sm text-foreground">Coming soon</div>
                   </div>
 
                   <div className="flex items-center justify-between py-3">
                     <div>
                       <div className="font-medium text-foreground">Connected Accounts</div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-foreground">
                         Link external services
                       </div>
                     </div>
-                    <div className="text-sm text-muted-foreground">Coming soon</div>
+                    <div className="text-sm text-foreground">Coming soon</div>
                   </div>
                 </div>
               </div>

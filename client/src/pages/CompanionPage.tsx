@@ -17,7 +17,7 @@ export default function CompanionPage() {
           <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
             Your Career Companion
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-foreground max-w-2xl mx-auto">
             Meet your personal growth companion that evolves with your professional journey
           </p>
         </motion.div>
@@ -35,7 +35,7 @@ export default function CompanionPage() {
                   How It Works
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
+              <CardContent className="text-sm text-foreground">
                 Your companion grows as you journal, learn, and connect. Each activity boosts different stats!
               </CardContent>
             </Card>
@@ -53,7 +53,7 @@ export default function CompanionPage() {
                   Evolution Stages
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
+              <CardContent className="text-sm text-foreground">
                 From Seedling to Radiant - watch your companion transform as you master new skills!
               </CardContent>
             </Card>
@@ -71,7 +71,7 @@ export default function CompanionPage() {
                   Unlock Rewards
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
+              <CardContent className="text-sm text-foreground">
                 Earn exclusive accessories and traits as you complete learning milestones!
               </CardContent>
             </Card>
@@ -96,27 +96,27 @@ export default function CompanionPage() {
               <CardContent className="space-y-4">
                 <div>
                   <Badge variant="outline" className="mb-2">📖 Journal</Badge>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     Boosts <strong>Inspiration</strong>. Write regularly to keep your companion inspired!
                   </p>
                 </div>
 
                 <div>
                   <Badge variant="outline" className="mb-2">⚡ Learn</Badge>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     Boosts <strong>Growth & Mastery</strong>. Complete experiences to help your companion level up!
                   </p>
                 </div>
 
                 <div>
                   <Badge variant="outline" className="mb-2">🤝 Connect</Badge>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     Boosts <strong>Connection</strong>. Engage with the community to strengthen bonds!
                   </p>
                 </div>
 
                 <div className="pt-4 border-t">
-                  <p className="text-sm text-muted-foreground italic">
+                  <p className="text-sm text-foreground italic">
                     💡 <strong>Pro Tip:</strong> Balance all activities for the fastest evolution!
                   </p>
                 </div>

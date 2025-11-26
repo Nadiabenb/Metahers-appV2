@@ -34,7 +34,7 @@ export default function GlowUpCompletePage() {
           <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
             Pro Feature
           </h1>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-foreground mb-8">
             The AI Glow-Up Program is exclusive to Pro members. Upgrade to unlock your 14-day brand transformation journey.
           </p>
           
@@ -272,7 +272,7 @@ export default function GlowUpCompletePage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="p-8 text-center">
-          <p className="text-muted-foreground mb-4">Complete the program first</p>
+          <p className="text-foreground mb-4">Complete the program first</p>
           <Button onClick={() => setLocation("/glow-up/dashboard")}>
             Go to Dashboard
           </Button>
@@ -287,12 +287,12 @@ export default function GlowUpCompletePage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="p-8 text-center">
-          <Trophy className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <Trophy className="w-16 h-16 text-foreground mx-auto mb-4" />
           <h2 className="font-cormorant text-3xl font-bold mb-2">Almost There!</h2>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-foreground mb-4">
             Complete all 14 days to unlock your Brand Glow-Up Report
           </p>
-          <p className="text-sm text-muted-foreground mb-6">
+          <p className="text-sm text-foreground mb-6">
             Days completed: {progress.completedDays?.length || 0} / 14
           </p>
           <Button onClick={() => setLocation("/glow-up/dashboard")}>
@@ -335,7 +335,7 @@ export default function GlowUpCompletePage() {
               <h1 className="font-cormorant text-5xl md:text-6xl font-bold metallic-text mb-4">
                 You Did It, {profile.name}! 🎉
               </h1>
-              <p className="text-xl text-muted-foreground mb-6">
+              <p className="text-xl text-foreground mb-6">
                 14 days of AI-powered brand transformation complete
               </p>
               
@@ -350,7 +350,7 @@ export default function GlowUpCompletePage() {
                 <h2 className="font-cormorant text-3xl font-bold mb-4">
                   Your Brand Summary
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Here's what you've built over the past 14 days
                 </p>
               </div>
@@ -358,17 +358,17 @@ export default function GlowUpCompletePage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <Card className="p-6 border-2">
                   <h3 className="font-semibold mb-2">Brand Type</h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-foreground">
                     {profile.brandType === 'personal' ? 'Personal Brand' : 'Business Brand'}
                   </p>
                 </Card>
                 <Card className="p-6 border-2">
                   <h3 className="font-semibold mb-2">Primary Platform</h3>
-                  <p className="text-muted-foreground">{profile.platform}</p>
+                  <p className="text-foreground">{profile.platform}</p>
                 </Card>
                 <Card className="p-6 border-2 md:col-span-2">
                   <h3 className="font-semibold mb-2">Niche</h3>
-                  <p className="text-muted-foreground">{profile.niche}</p>
+                  <p className="text-foreground">{profile.niche}</p>
                 </Card>
               </div>
 
@@ -430,7 +430,7 @@ export default function GlowUpCompletePage() {
 
               <div className="p-6 rounded-lg bg-gradient-to-r from-[hsl(var(--liquid-gold))]/10 to-[hsl(var(--cyber-fuchsia))]/10 border border-primary/20 text-center">
                 <p className="text-lg font-medium mb-2">What's Next?</p>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Your brand transformation is just beginning. Use your journal, share your journey, 
                   and watch your brand come to life. Consistency compounds. Keep showing up. ✨
                 </p>

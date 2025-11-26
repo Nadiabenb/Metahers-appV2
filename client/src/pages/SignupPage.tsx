@@ -185,10 +185,10 @@ export default function SignupPage() {
                 <h1 className="font-cormorant text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold metallic-text mb-2 sm:mb-4 md:mb-6">
                   Join MetaHers
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base text-muted-foreground mb-2 sm:mb-3">
+                <p className="text-xs sm:text-sm md:text-base text-foreground mb-2 sm:mb-3">
                   Create your account to begin your learning journey
                 </p>
-                <p className="text-xs text-muted-foreground flex items-center justify-center gap-2 flex-wrap">
+                <p className="text-xs text-foreground flex items-center justify-center gap-2 flex-wrap">
                   <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
                   <span>Your information is safe and secure</span>
                 </p>
@@ -201,7 +201,7 @@ export default function SignupPage() {
                       First Name
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                       <Input
                         id="firstName"
                         type="text"
@@ -219,7 +219,7 @@ export default function SignupPage() {
                       Last Name
                     </label>
                     <div className="relative">
-                      <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                       <Input
                         id="lastName"
                         type="text"
@@ -238,7 +238,7 @@ export default function SignupPage() {
                     Email
                   </label>
                   <div className="relative">
-                    <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                     <Input
                       id="email"
                       type="email"
@@ -257,7 +257,7 @@ export default function SignupPage() {
                     Password
                   </label>
                   <div className="relative">
-                    <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Lock className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                     <Input
                       id="password"
                       type="password"
@@ -270,7 +270,7 @@ export default function SignupPage() {
                       data-testid="input-password"
                     />
                   </div>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-foreground">
                     Must be at least 8 characters long
                   </p>
                 </div>
@@ -293,7 +293,7 @@ export default function SignupPage() {
                 </Button>
               </form>
 
-              <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-muted-foreground">
+              <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-foreground">
                 Already have an account?{" "}
                 <a
                   href="/login"

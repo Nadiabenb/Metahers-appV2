@@ -174,7 +174,7 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
               >
                 {format(currentMonth, "MMMM yyyy")}
               </button>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground">
                 {showMonthPicker ? "Choose month & year" : "Select a date to journal"}
               </p>
             </div>
@@ -253,7 +253,7 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
             {weekDays.map(day => (
               <div
                 key={day}
-                className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide py-2"
+                className="text-center text-xs font-medium text-foreground uppercase tracking-wide py-2"
               >
                 {day}
               </div>
@@ -294,7 +294,7 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
                       ? `${moodColors.bg} border-2 ${moodColors.border} hover-elevate ${moodColors.text}`
                       : hasJournalEntry
                       ? "bg-muted hover-elevate text-foreground"
-                      : "hover-elevate text-muted-foreground"
+                      : "hover-elevate text-foreground"
                     }
                   `}
                   data-testid={`button-date-${format(day, "yyyy-MM-dd")}`}
@@ -330,7 +330,7 @@ export function JournalCalendarPicker({ selectedDate, onDateSelect, className = 
         </div>
 
         {/* Legend */}
-        <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground pt-2 border-t border-border/40 flex-wrap">
+        <div className="flex items-center justify-center gap-4 text-xs text-foreground pt-2 border-t border-border/40 flex-wrap">
           <div className="flex items-center gap-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-[hsl(var(--aurora-teal))]" />
             <span>Entry</span>

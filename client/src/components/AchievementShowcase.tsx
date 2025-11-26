@@ -38,7 +38,7 @@ export default function AchievementShowcase({
           <Trophy className="w-8 h-8 text-primary" />
           <div>
             <h2 className="text-2xl font-serif font-bold">Achievements</h2>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-foreground">
               {unlockedCount} of {totalCount} unlocked
             </p>
           </div>
@@ -47,7 +47,7 @@ export default function AchievementShowcase({
           <p className="text-3xl font-bold text-primary">
             {Math.round((unlockedCount / totalCount) * 100)}%
           </p>
-          <p className="text-xs text-muted-foreground">Complete</p>
+          <p className="text-xs text-foreground">Complete</p>
         </div>
       </div>
 

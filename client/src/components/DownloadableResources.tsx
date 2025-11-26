@@ -60,7 +60,7 @@ export default function DownloadableResources({
     <div className="space-y-6">
       <div>
         <h3 className="text-2xl font-serif font-bold mb-2">Resources & Templates</h3>
-        <p className="text-muted-foreground">
+        <p className="text-foreground">
           Downloadable materials to help you apply what you've learned
         </p>
       </div>
@@ -131,7 +131,7 @@ export default function DownloadableResources({
             <div className="flex items-center justify-between gap-4">
               <div>
                 <p className="font-semibold mb-1">Unlock All Resources</p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground">
                   Upgrade to Pro to download premium templates and workbooks
                 </p>
               </div>

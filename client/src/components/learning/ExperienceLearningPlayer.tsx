@@ -158,7 +158,7 @@ export default function ExperienceLearningPlayer({
       <div className="min-h-screen flex items-center justify-center p-6">
         <Card className="p-8 text-center max-w-md">
           <h3 className="font-serif text-2xl font-bold mb-4">No Content Available</h3>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-foreground mb-6">
             This experience doesn't have any learning content yet.
           </p>
           {onExit && (
@@ -199,7 +199,7 @@ export default function ExperienceLearningPlayer({
                 <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl font-bold truncate bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
                   {experience.title}
                 </h1>
-                <p className="text-sm text-muted-foreground truncate font-medium mt-0.5">
+                <p className="text-sm text-foreground truncate font-medium mt-0.5">
                   Section {currentSectionIndex + 1} of {totalSections}
                 </p>
               </div>
@@ -219,7 +219,7 @@ export default function ExperienceLearningPlayer({
 
           <div className="space-y-2.5">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground font-medium">Overall Progress</span>
+              <span className="text-foreground font-medium">Overall Progress</span>
               <span className="font-bold text-foreground">
                 {completedSections.length} / {totalSections} sections
               </span>
@@ -249,7 +249,7 @@ export default function ExperienceLearningPlayer({
                   Your Learning Journey
                 </h3>
               </div>
-              <div className="text-sm text-muted-foreground font-medium">
+              <div className="text-sm text-foreground font-medium">
                 {Math.round(progressPercentage)}% Complete
               </div>
             </div>
@@ -311,7 +311,7 @@ export default function ExperienceLearningPlayer({
                           <Check className="w-6 h-6 text-emerald-500 relative z-10" />
                         ) : (
                           <Icon 
-                            className={`w-6 h-6 relative z-10 transition-transform duration-300 ${isCurrent ? 'scale-110' : 'group-hover:scale-110'} ${isCurrent ? '' : 'text-muted-foreground group-hover:text-foreground'}`}
+                            className={`w-6 h-6 relative z-10 transition-transform duration-300 ${isCurrent ? 'scale-110' : 'group-hover:scale-110'} ${isCurrent ? '' : 'text-foreground group-hover:text-foreground'}`}
                             style={isCurrent ? { color: `hsl(${spaceColorVar})` } : {}}
                           />
                         )}
@@ -326,10 +326,10 @@ export default function ExperienceLearningPlayer({
                       
                       {/* Section info - ENHANCED */}
                       <div className="flex-1 sm:flex-initial text-left sm:text-center min-w-0 max-w-[140px]">
-                        <div className={`text-[10px] font-bold text-muted-foreground mb-1.5 uppercase tracking-widest ${isCurrent ? 'text-primary' : ''}`}>
+                        <div className={`text-[10px] font-bold text-foreground mb-1.5 uppercase tracking-widest ${isCurrent ? 'text-primary' : ''}`}>
                           Section {index + 1}
                         </div>
-                        <div className={`text-sm font-semibold leading-tight transition-colors duration-300 ${isCurrent ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                        <div className={`text-sm font-semibold leading-tight transition-colors duration-300 ${isCurrent ? 'text-foreground' : 'text-foreground group-hover:text-foreground'}`}>
                           {section.title}
                         </div>
                       </div>
@@ -536,14 +536,14 @@ export default function ExperienceLearningPlayer({
 
               {/* Stats */}
               <div className="text-left pr-2">
-                <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
+                <div className="text-xs text-foreground uppercase tracking-wider mb-1">
                   Your Journey
                 </div>
                 <div className="font-semibold text-sm flex items-center gap-2">
                   <span>{completedSections.length}/{totalSections} Complete</span>
                   <Award className="w-3.5 h-3.5 text-primary opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <div className="text-xs text-muted-foreground mt-0.5">
+                <div className="text-xs text-foreground mt-0.5">
                   Back to World
                 </div>
               </div>
@@ -584,7 +584,7 @@ export default function ExperienceLearningPlayer({
       <div className="fixed bottom-0 left-0 right-0 z-30 lg:hidden bg-background/95 backdrop-blur-xl border-t border-border p-4 safe-bottom">
         <div className="flex items-center justify-between gap-3 mb-2">
           <div className="flex-1">
-            <div className="text-xs text-muted-foreground mb-1">
+            <div className="text-xs text-foreground mb-1">
               Section {currentSectionIndex + 1} of {totalSections}
             </div>
             <Progress value={progressPercentage} className="h-1.5" />

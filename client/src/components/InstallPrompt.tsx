@@ -97,7 +97,7 @@ export function InstallPrompt() {
                     {isIOS && (
                       <div className="flex items-start gap-2 p-3 bg-background/50 rounded-lg border border-border/50">
                         <Smartphone className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-foreground">
                           Tap <span className="font-semibold">Share</span> → <span className="font-semibold">Add to Home Screen</span>
                         </p>
                       </div>
@@ -109,7 +109,7 @@ export function InstallPrompt() {
                   className="ml-2 p-1 hover-elevate rounded-full shrink-0"
                   data-testid="button-dismiss-install"
                 >
-                  <X className="w-5 h-5 text-muted-foreground" />
+                  <X className="w-5 h-5 text-foreground" />
                 </button>
               </div>
 

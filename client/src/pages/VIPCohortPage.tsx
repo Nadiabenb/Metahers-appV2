@@ -98,7 +98,7 @@ export default function VIPCohortPage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               Your Retreat Includes
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               Everything you need to discover AI & Web3 in 4 transformative weeks
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function VIPCohortPage() {
                   <h3 className="font-cormorant text-xl font-bold text-foreground mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground font-light">
+                  <p className="text-sm text-foreground font-light">
                     {feature.description}
                   </p>
                 </CardContent>
@@ -154,7 +154,7 @@ export default function VIPCohortPage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               Your 4-Week Journey
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               A gentle path from curious explorer to confident creator
             </p>
           </div>
@@ -194,7 +194,7 @@ export default function VIPCohortPage() {
                       <h3 className="font-cormorant text-2xl font-bold text-foreground mb-2">
                         Week {week.week}: {week.title}
                       </h3>
-                      <p className="text-muted-foreground">
+                      <p className="text-foreground">
                         {week.description}
                       </p>
                     </div>
@@ -218,7 +218,7 @@ export default function VIPCohortPage() {
                 <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4">
                   Complete Package
                 </h2>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Everything included in your $197 VIP Retreat experience
                 </p>
               </div>
@@ -249,7 +249,7 @@ export default function VIPCohortPage() {
                     <div className="font-cormorant text-3xl font-bold text-foreground">
                       Total Value: $500+
                     </div>
-                    <div className="text-muted-foreground">
+                    <div className="text-foreground">
                       Your investment: Only $197
                     </div>
                   </div>
@@ -283,7 +283,7 @@ export default function VIPCohortPage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               Is This Right For You?
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               Perfect for ambitious women who want gentle, guided discovery
             </p>
           </div>
@@ -313,14 +313,14 @@ export default function VIPCohortPage() {
             <Card className="editorial-card border-border">
               <CardContent className="p-8">
                 <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted text-muted-foreground mb-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted text-foreground mb-4">
                     <MessageCircle className="w-8 h-8" />
                   </div>
                   <h3 className="font-cormorant text-2xl font-bold text-foreground mb-4">
                     Not Right If You...
                   </h3>
                 </div>
-                <ul className="space-y-3 text-muted-foreground">
+                <ul className="space-y-3 text-foreground">
                   <li>⏰ Prefer self-paced learning</li>
                   <li>🎧 Can't attend live sessions</li>
                   <li>💸 Want the lowest price option</li>
@@ -381,7 +381,7 @@ export default function VIPCohortPage() {
                   <h3 className="font-cormorant text-xl font-bold text-foreground mb-2">
                     {faq.q}
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-foreground">
                     {faq.a}
                   </p>
                 </CardContent>
@@ -406,7 +406,7 @@ export default function VIPCohortPage() {
               <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4">
                 Ready to Join the VIP Cohort?
               </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-foreground mb-8 max-w-2xl mx-auto">
                 Limited to 10 women per cohort. When spots fill, you'll wait until next month.
               </p>
               
@@ -426,7 +426,7 @@ export default function VIPCohortPage() {
                 </Button>
               </div>
 
-              <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
+              <p className="text-sm text-foreground flex items-center justify-center gap-2">
                 <Calendar className="w-4 h-4" />
                 Next cohort starts {new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
               </p>

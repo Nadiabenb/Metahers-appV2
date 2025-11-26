@@ -76,11 +76,11 @@ export default function VideoSectionRenderer({
           className="relative aspect-video rounded-xl overflow-hidden bg-muted flex items-center justify-center"
         >
           <div className="text-center p-6">
-            <Play className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-            <p className="text-muted-foreground">
+            <Play className="w-16 h-16 mx-auto mb-4 text-foreground" />
+            <p className="text-foreground">
               Video content will be available soon
             </p>
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-foreground mt-2">
               {section.content}
             </p>
           </div>
@@ -95,12 +95,12 @@ export default function VideoSectionRenderer({
       >
         <div className="p-4 rounded-lg bg-muted/50 border border-border">
           <div className="flex items-start gap-3">
-            <CheckCircle2 className={`w-5 h-5 flex-shrink-0 mt-0.5 ${hasWatchedVideo ? 'text-[hsl(var(--aurora-teal))]' : 'text-muted-foreground'}`} />
+            <CheckCircle2 className={`w-5 h-5 flex-shrink-0 mt-0.5 ${hasWatchedVideo ? 'text-[hsl(var(--aurora-teal))]' : 'text-foreground'}`} />
             <div className="flex-1">
               <p className="text-sm font-medium mb-1">
                 {hasWatchedVideo ? "Great! You've started watching" : "Watch the video to continue"}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-foreground">
                 {isCompleted ? "This section is complete!" : "Mark this section complete when you're ready."}
               </p>
             </div>

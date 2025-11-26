@@ -50,7 +50,7 @@ export default function InteractiveSectionRenderer({
           <Lightbulb className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
           <div>
             <h4 className="font-serif text-lg font-semibold mb-2">Interactive Exercise</h4>
-            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+            <p className="text-foreground leading-relaxed whitespace-pre-wrap">
               {section.content}
             </p>
           </div>
@@ -94,7 +94,7 @@ export default function InteractiveSectionRenderer({
                 <p className="font-medium text-[hsl(var(--aurora-teal))] mb-1">
                   Response Submitted!
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground">
                   Great reflection! This hands-on practice helps solidify your learning.
                 </p>
               </div>
@@ -110,7 +110,7 @@ export default function InteractiveSectionRenderer({
         transition={{ delay: 0.5 }}
         className="p-4 rounded-lg bg-muted/30 border border-border"
       >
-        <p className="text-sm text-muted-foreground text-center italic">
+        <p className="text-sm text-foreground text-center italic">
           "The only way to learn is by doing. Your active participation is transforming knowledge into wisdom."
         </p>
       </motion.div>

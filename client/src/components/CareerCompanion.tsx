@@ -120,7 +120,7 @@ export function CareerCompanion() {
           <h3 className="font-cormorant text-2xl font-bold mb-1">
             {companion.name}
           </h3>
-          <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
+          <p className="text-sm text-foreground flex items-center justify-center gap-2">
             Feeling {companion.currentMood} 
             <span>{MOOD_EMOJIS[companion.currentMood as keyof typeof MOOD_EMOJIS]}</span>
           </p>

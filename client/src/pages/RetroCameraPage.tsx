@@ -274,7 +274,7 @@ export default function RetroCameraPage() {
                   <h1 className="font-serif text-4xl font-bold mb-2 bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                     Polaroid Camera
                   </h1>
-                  <p className="text-muted-foreground">
+                  <p className="text-foreground">
                     📸 Capture & share your MetaHers moments
                   </p>
                 </div>
@@ -493,7 +493,7 @@ export default function RetroCameraPage() {
               <h2 className="font-serif text-3xl font-bold mb-2">
                 Community Feed
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-foreground">
                 See what others are capturing
               </p>
             </motion.div>
@@ -518,7 +518,7 @@ export default function RetroCameraPage() {
                               <p className="font-semibold">
                                 {photo.userFirstName || 'MetaHers'} {photo.userLastName?.[0] || ''}
                               </p>
-                              <p className="text-xs text-muted-foreground">
+                              <p className="text-xs text-foreground">
                                 {new Date(photo.createdAt).toLocaleDateString()}
                               </p>
                             </div>
@@ -571,7 +571,7 @@ export default function RetroCameraPage() {
               {photoFeed.length === 0 && (
                 <Card className="p-8 text-center border-2 border-pink-100">
                   <ImageIcon className="w-12 h-12 mx-auto mb-4 text-pink-300" />
-                  <p className="text-muted-foreground">
+                  <p className="text-foreground">
                     No photos yet. Be the first to share!
                   </p>
                 </Card>
@@ -612,7 +612,7 @@ export default function RetroCameraPage() {
                   </>
                 ) : (
                   <>
-                    <Lock className="w-4 h-4 text-muted-foreground" />
+                    <Lock className="w-4 h-4 text-foreground" />
                     <Label htmlFor="public">Private</Label>
                   </>
                 )}

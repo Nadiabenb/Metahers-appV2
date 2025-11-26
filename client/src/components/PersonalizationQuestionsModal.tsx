@@ -170,7 +170,7 @@ export default function PersonalizationQuestionsModal({
       case "scale":
         return (
           <div className="space-y-4">
-            <div className="flex justify-between text-sm text-muted-foreground">
+            <div className="flex justify-between text-sm text-foreground">
               <span>Not confident</span>
               <span>Very confident</span>
             </div>
@@ -216,7 +216,7 @@ export default function PersonalizationQuestionsModal({
         <div className="space-y-6">
           <Progress value={progress} className="h-2" />
           
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-foreground">
             Question {currentQuestionIndex + 1} of {questions.length}
           </div>
 

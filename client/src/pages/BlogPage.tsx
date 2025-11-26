@@ -100,10 +100,10 @@ function ArticleContent({ article }: { article: BlogArticle }) {
         <h1 className="font-cormorant text-5xl md:text-6xl font-bold text-foreground leading-tight">
           {article.title}
         </h1>
-        <p className="text-xl text-muted-foreground font-light italic">
+        <p className="text-xl text-foreground font-light italic">
           {article.subtitle}
         </p>
-        <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+        <div className="flex items-center justify-center gap-6 text-sm text-foreground">
           <span className="flex items-center gap-2">
             <BookOpen className="w-4 h-4" />
             {article.author}
@@ -204,7 +204,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
 
             {!isAuthenticated ? (
               <>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                <p className="text-lg text-foreground max-w-2xl mx-auto leading-relaxed">
                   Get access to guided AI & Web3 rituals, an AI-powered journal, and exclusive content designed for women who want to lead in the digital age.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -228,13 +228,13 @@ function ArticleContent({ article }: { article: BlogArticle }) {
                     Explore Drop 001
                   </Button>
                 </div>
-                <p className="text-sm text-muted-foreground/80">
+                <p className="text-sm text-foreground/80">
                   Drop 001 ritual bags include instant Pro membership + exclusive AI unlocks
                 </p>
               </>
             ) : (
               <>
-                <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+                <p className="text-lg text-foreground max-w-2xl mx-auto leading-relaxed">
                   Continue your journey with our limited edition ritual bags—handmade luxury meets AI-powered transformation.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -320,7 +320,7 @@ export default function BlogPage() {
             <h1 className="font-cormorant text-6xl md:text-7xl lg:text-8xl font-bold text-foreground">
               MetaHers Daily
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground font-light max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl text-foreground font-light max-w-3xl mx-auto">
               Your insider's guide to Web3, AI, crypto, and the digital frontier—written for women, by women
             </p>
           </motion.div>
@@ -365,10 +365,10 @@ export default function BlogPage() {
                   <h2 className="font-cormorant text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight">
                     {heroArticle.title}
                   </h2>
-                  <p className="text-lg text-muted-foreground mb-6 font-light leading-relaxed">
+                  <p className="text-lg text-foreground mb-6 font-light leading-relaxed">
                     {heroArticle.subtitle}
                   </p>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                  <div className="flex items-center gap-4 text-sm text-foreground mb-6">
                     <span className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       {format(parseISO(heroArticle.publishDate), "MMM d, yyyy")}
@@ -440,10 +440,10 @@ export default function BlogPage() {
                   <h3 className="font-cormorant text-2xl font-bold text-foreground mb-3 leading-tight line-clamp-2">
                     {article.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground mb-4 font-light line-clamp-2 flex-1">
+                  <p className="text-sm text-foreground mb-4 font-light line-clamp-2 flex-1">
                     {article.subtitle}
                   </p>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/40">
+                  <div className="flex items-center justify-between text-xs text-foreground pt-4 border-t border-border/40">
                     <span className="flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5" />
                       {format(parseISO(article.publishDate), "MMM d")}

@@ -68,7 +68,7 @@ export default function MemberWorkspacePage() {
   });
 
   const tierBadgeColors = {
-    free: 'bg-muted text-muted-foreground',
+    free: 'bg-muted text-foreground',
     pro_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     pro_annual: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     sanctuary: 'bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] text-white',
@@ -168,10 +168,10 @@ export default function MemberWorkspacePage() {
                                 <h4 className="font-semibold text-foreground mb-1">
                                   {session.title}
                                 </h4>
-                                <p className="text-sm text-muted-foreground mb-3">
+                                <p className="text-sm text-foreground mb-3">
                                   {session.description}
                                 </p>
-                                <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                                <div className="flex flex-wrap gap-3 text-sm text-foreground">
                                   <span className="flex items-center gap-1">
                                     <Calendar className="w-4 h-4" />
                                     {format(parseISO(session.scheduledDate), 'MMM d, yyyy')}
@@ -200,9 +200,9 @@ export default function MemberWorkspacePage() {
                       </div>
                     ) : (
                       <div className="text-center py-12">
-                        <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-                        <p className="text-muted-foreground mb-2">No upcoming sessions scheduled</p>
-                        <p className="text-sm text-muted-foreground">
+                        <Users className="w-12 h-12 text-foreground mx-auto mb-4 opacity-50" />
+                        <p className="text-foreground mb-2">No upcoming sessions scheduled</p>
+                        <p className="text-sm text-foreground">
                           New sessions are added monthly. Check back soon!
                         </p>
                       </div>
@@ -252,11 +252,11 @@ export default function MemberWorkspacePage() {
                                   {booking.bookingType.replace('_', ' ')} Session
                                 </h4>
                                 {booking.notes && (
-                                  <p className="text-sm text-muted-foreground mb-3">
+                                  <p className="text-sm text-foreground mb-3">
                                     {booking.notes}
                                   </p>
                                 )}
-                                <div className="flex flex-wrap gap-3 text-sm text-muted-foreground">
+                                <div className="flex flex-wrap gap-3 text-sm text-foreground">
                                   <span className="flex items-center gap-1">
                                     <Calendar className="w-4 h-4" />
                                     {format(parseISO(booking.scheduledDate), 'MMM d, yyyy')}
@@ -284,8 +284,8 @@ export default function MemberWorkspacePage() {
                       </div>
                     ) : (
                       <div className="text-center py-12">
-                        <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4 opacity-50" />
-                        <p className="text-muted-foreground mb-4">No upcoming 1:1 sessions booked</p>
+                        <Calendar className="w-12 h-12 text-foreground mx-auto mb-4 opacity-50" />
+                        <p className="text-foreground mb-4">No upcoming 1:1 sessions booked</p>
                         <Button variant="default" asChild data-testid="button-book-session">
                           <Link href="/bookings/new">
                             Book Your First Session
@@ -310,7 +310,7 @@ export default function MemberWorkspacePage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-6">
+                    <p className="text-foreground mb-6">
                       Upgrade to The Sanctuary to access 90-minute monthly group sessions, exclusive content, and priority support.
                     </p>
                     <Button variant="default" asChild data-testid="button-upgrade-sanctuary">
@@ -335,7 +335,7 @@ export default function MemberWorkspacePage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-6">
+                    <p className="text-foreground mb-6">
                       Upgrade to The Inner Circle for quarterly 1:1 check-ins, founder insights, and intimate bi-weekly sessions.
                     </p>
                     <Button variant="default" asChild data-testid="button-upgrade-inner-circle">
@@ -406,7 +406,7 @@ export default function MemberWorkspacePage() {
                                 <Badge variant="secondary" className="text-xs">
                                   {insight.category}
                                 </Badge>
-                                <span className="text-xs text-muted-foreground">
+                                <span className="text-xs text-foreground">
                                   {format(parseISO(insight.publishedAt), 'MMM d')}
                                 </span>
                               </div>
@@ -416,8 +416,8 @@ export default function MemberWorkspacePage() {
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <FileText className="w-10 h-10 text-muted-foreground mx-auto mb-3 opacity-50" />
-                        <p className="text-sm text-muted-foreground">
+                        <FileText className="w-10 h-10 text-foreground mx-auto mb-3 opacity-50" />
+                        <p className="text-sm text-foreground">
                           No insights published yet
                         </p>
                       </div>

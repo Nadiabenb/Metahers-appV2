@@ -98,7 +98,7 @@ export default function ExecutivePage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               What's Included
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               Bespoke guidance designed for ambitious women entrepreneurs
             </p>
           </div>
@@ -134,7 +134,7 @@ export default function ExecutivePage() {
                   <h3 className="font-cormorant text-xl font-bold text-foreground mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-foreground leading-relaxed">
                     {feature.description}
                   </p>
                 </CardContent>
@@ -154,7 +154,7 @@ export default function ExecutivePage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               Who This Is For
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               Premium mentorship for women who demand the best
             </p>
           </div>
@@ -184,14 +184,14 @@ export default function ExecutivePage() {
             <Card className="editorial-card border-border">
               <CardContent className="p-8">
                 <div className="text-center mb-6">
-                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted text-muted-foreground mb-4">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted text-foreground mb-4">
                     <MessageCircle className="w-8 h-8" />
                   </div>
                   <h3 className="font-cormorant text-2xl font-bold text-foreground mb-4">
                     Not Right If You...
                   </h3>
                 </div>
-                <ul className="space-y-3 text-muted-foreground">
+                <ul className="space-y-3 text-foreground">
                   <li>📚 Prefer group learning over 1:1</li>
                   <li>💸 Want the most affordable option</li>
                   <li>🏃 Need general knowledge, not custom strategy</li>
@@ -250,7 +250,7 @@ export default function ExecutivePage() {
                   <h3 className="font-cormorant text-2xl font-bold text-foreground mb-3">
                     {item.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-foreground leading-relaxed">
                     {item.description}
                   </p>
                 </CardContent>
@@ -259,7 +259,7 @@ export default function ExecutivePage() {
           </div>
 
           <div className="text-center mt-12">
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-foreground max-w-2xl mx-auto">
               Plus: 30 days of direct WhatsApp/Slack access to the founder for questions, feedback, and ongoing support.
             </p>
           </div>
@@ -309,7 +309,7 @@ export default function ExecutivePage() {
                   <h3 className="font-cormorant text-xl font-bold text-foreground mb-2">
                     {faq.q}
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-foreground">
                     {faq.a}
                   </p>
                 </CardContent>
@@ -331,7 +331,7 @@ export default function ExecutivePage() {
               <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4">
                 Ready for Executive-Level Mentorship?
               </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-foreground mb-8 max-w-2xl mx-auto">
                 Book your first strategy session and get a custom AI & Web3 playbook tailored to your business.
               </p>
               
@@ -351,7 +351,7 @@ export default function ExecutivePage() {
                 </Button>
               </div>
 
-              <p className="text-sm text-muted-foreground flex items-center justify-center gap-2">
+              <p className="text-sm text-foreground flex items-center justify-center gap-2">
                 <Calendar className="w-4 h-4" />
                 Schedule your first session within 7 days of booking
               </p>

@@ -162,7 +162,7 @@ export default function ShopPage() {
             Handmade. Intentional. Soul-led.<br/>
             18 exclusive Ritual Kits • 6 of each design • AI-guided experiences
           </p>
-          <p className="text-base text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base text-foreground max-w-2xl mx-auto">
             Each bag unlocks a mystery AI ritual + instant MetaHers Pro Membership
           </p>
         </motion.div>
@@ -239,7 +239,7 @@ export default function ShopPage() {
                     )}
                     
                     {product.scents && product.scents.length > 0 && (
-                      <div className="text-sm text-muted-foreground mb-4 font-serif" data-testid={`text-product-scents-${product.id}`}>
+                      <div className="text-sm text-foreground mb-4 font-serif" data-testid={`text-product-scents-${product.id}`}>
                         Scent notes: {product.scents.join(" • ")}
                       </div>
                     )}
@@ -294,7 +294,7 @@ export default function ShopPage() {
                 ].map((ritual, index) => (
                   <div key={index} className="text-center p-4 rounded-lg bg-card/50 border border-border/40">
                     <h4 className="font-semibold text-foreground mb-2">{ritual.title}</h4>
-                    <p className="text-sm text-muted-foreground">{ritual.desc}</p>
+                    <p className="text-sm text-foreground">{ritual.desc}</p>
                   </div>
                 ))}
               </div>
@@ -360,7 +360,7 @@ export default function ShopPage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-foreground mb-1">{feature.title}</h4>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
+                      <p className="text-sm text-foreground leading-relaxed">{feature.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -370,7 +370,7 @@ export default function ShopPage() {
                 <p className="text-foreground font-medium mb-2">
                   <span className="text-primary">One-time purchase.</span> Lifetime access to Pro features.
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground">
                   No recurring subscription fees. Your ritual bag unlocks permanent Pro membership.
                 </p>
               </div>
@@ -395,7 +395,7 @@ export default function ShopPage() {
               <p className="text-xl text-foreground/80 mb-6 max-w-2xl mx-auto">
                 Drop 001 • 18 kits only • Each purchase unlocks MetaHers Pro
               </p>
-              <p className="text-sm text-muted-foreground mb-8">
+              <p className="text-sm text-foreground mb-8">
                 Limited edition. Intentionally crafted. Soul-led wellness meets AI-powered growth.
               </p>
               <Button

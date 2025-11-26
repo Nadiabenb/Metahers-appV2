@@ -135,7 +135,7 @@ export function RitualStepper({
                     disabled={isLocked}
                     className={`flex-shrink-0 w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
                       isLocked
-                        ? "bg-muted border-muted text-muted-foreground cursor-not-allowed"
+                        ? "bg-muted border-muted text-foreground cursor-not-allowed"
                         : isCompleted
                         ? "bg-[hsl(var(--aurora-teal))] border-[hsl(var(--aurora-teal))] text-black"
                         : "border-border hover:border-[hsl(var(--aurora-teal))] cursor-pointer hover-elevate active-elevate-2"
@@ -160,12 +160,12 @@ export function RitualStepper({
                         <h4 className="font-serif text-lg font-semibold text-foreground mb-1 group-hover:text-[hsl(var(--hyper-violet))] transition-colors">
                           {step.title}
                         </h4>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-foreground">
                           {step.summary}
                         </p>
                       </div>
                       <ChevronDown
-                        className={`w-5 h-5 text-muted-foreground transition-transform duration-200 flex-shrink-0 ${
+                        className={`w-5 h-5 text-foreground transition-transform duration-200 flex-shrink-0 ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />

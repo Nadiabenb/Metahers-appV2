@@ -98,7 +98,7 @@ export default function InteractiveQuiz({ questions, onComplete }: InteractiveQu
               <h3 className="text-3xl font-bold mb-2">
                 {isPassing ? 'Congratulations!' : 'Good Effort!'}
               </h3>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-xl text-foreground">
                 You scored {score} out of {questions.length}
               </p>
               <Badge className="mt-2 text-lg px-4 py-2">
@@ -107,7 +107,7 @@ export default function InteractiveQuiz({ questions, onComplete }: InteractiveQu
             </div>
 
             {!isPassing && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground">
                 Review the material and try again to improve your score!
               </p>
             )}
@@ -142,7 +142,7 @@ export default function InteractiveQuiz({ questions, onComplete }: InteractiveQu
       <CardContent className="pt-6">
         <div className="space-y-6">
           <div className="flex items-center justify-between">
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm text-foreground">
               Question {currentQuestionIndex + 1} of {questions.length}
             </div>
             <Badge variant="outline" className="gap-1">
@@ -203,7 +203,7 @@ export default function InteractiveQuiz({ questions, onComplete }: InteractiveQu
                         {showCorrect && <Check className="w-4 h-4 text-white" />}
                         {showIncorrect && <X className="w-4 h-4 text-white" />}
                       </div>
-                      <span className={showFeedback && !isSelected && !isCorrectAnswer ? 'text-muted-foreground' : ''}>
+                      <span className={showFeedback && !isSelected && !isCorrectAnswer ? 'text-foreground' : ''}>
                         {option}
                       </span>
                     </motion.button>
@@ -231,7 +231,7 @@ export default function InteractiveQuiz({ questions, onComplete }: InteractiveQu
                       <p className="font-semibold mb-1">
                         {isCorrect ? 'Correct!' : 'Not quite right'}
                       </p>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-foreground">
                         {currentQuestion.explanation}
                       </p>
                     </div>

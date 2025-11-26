@@ -95,7 +95,7 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
                   <h2 className="font-cormorant text-3xl md:text-4xl font-bold metallic-text mb-3">
                     {currentStep.title}
                   </h2>
-                  <p className="text-lg text-muted-foreground max-w-lg mx-auto">
+                  <p className="text-lg text-foreground max-w-lg mx-auto">
                     {currentStep.description}
                   </p>
                 </motion.div>
@@ -140,7 +140,7 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
                   transition={{ delay: 0.3 }}
                   className="mt-6 text-center"
                 >
-                  <p className="text-sm text-muted-foreground mb-3">
+                  <p className="text-sm text-foreground mb-3">
                     Ready to unlock all rituals and AI features?
                   </p>
                   <Link href="/subscribe">

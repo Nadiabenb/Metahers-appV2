@@ -87,9 +87,9 @@ export default function LandingPage() {
       {/* CLEAN HERO - Feminine Pastel Experience */}
       <div className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden">
         {/* Soft gradient backgrounds */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(var(--pastel-yellow))] via-background to-background opacity-20" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(var(--blue-1837))]/8 via-transparent to-transparent opacity-30" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-[hsl(var(--soft-purple))]/8 via-transparent to-transparent opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(50 100% 60%)] via-background to-background opacity-20" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(220 100% 52%)]/8 via-transparent to-transparent opacity-30" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-purple-400/8 via-transparent to-transparent opacity-30" />
         
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
@@ -98,7 +98,7 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
           >
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground">
-              Master <span className="bg-gradient-to-r from-[hsl(var(--primary))] via-[hsl(var(--secondary))] via-[hsl(var(--pastel-yellow))] to-[hsl(var(--blue-1837))] bg-clip-text text-transparent">AI & Web3</span>
+              Master <span className="bg-gradient-to-r from-[hsl(var(--primary))] via-[hsl(var(--secondary))] via-[hsl(50 100% 60%)] to-[hsl(220 100% 52%)] bg-clip-text text-transparent">AI & Web3</span>
             </h1>
             <p className="text-lg sm:text-xl text-foreground mb-8 leading-relaxed max-w-2xl mx-auto font-medium">
               Go from overwhelmed to unstoppable. Build AI & Web3 skills while living your life as a solopreneur, mom, or creative.
@@ -207,7 +207,7 @@ export default function LandingPage() {
       </div>
 
       {/* NINE LEARNING SPACES - Editorial Grid */}
-      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-background via-[hsl(var(--soft-purple))]/5 to-background">
+      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-background via-purple-400/5 to-background">
         <div className="max-w-[1400px] mx-auto">
           {/* Section Header - Magazine Style */}
           <motion.div
@@ -332,12 +332,12 @@ export default function LandingPage() {
                         </div>
 
                         {/* Description */}
-                        <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-4">
+                        <p className="text-sm text-foreground leading-relaxed flex-1 mb-4">
                           {space.description}
                         </p>
 
                         {/* Experience Count */}
-                        <div className="flex items-center gap-2 mb-4 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2 mb-4 text-xs text-foreground">
                           <Sparkles className="w-3.5 h-3.5" />
                           <span>{totalExperiencesCount} transformational experiences</span>
                           {freeExperiencesCount > 0 && (
@@ -348,7 +348,7 @@ export default function LandingPage() {
                         </div>
 
                         {/* Footer - Minimal */}
-                        <div className="flex items-center justify-between text-xs text-muted-foreground/60 group-hover:text-primary/80 transition-colors">
+                        <div className="flex items-center justify-between text-xs text-foreground/60 group-hover:text-primary/80 transition-colors">
                           <span className="uppercase tracking-wider font-medium">Explore Space</span>
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -364,7 +364,7 @@ export default function LandingPage() {
       </div>
 
       {/* MEMBERSHIP TIERS - Clean Modern Layout */}
-      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-[hsl(var(--pastel-yellow))]/20 via-background to-[hsl(var(--blue-1837))]/10">
+      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-[hsl(50 100% 60%)]/20 via-background to-[hsl(220 100% 52%)]/10">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -376,7 +376,7 @@ export default function LandingPage() {
             <h2 className="text-5xl lg:text-6xl font-bold mb-6">
               Simple <span className="text-primary">Pricing</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-foreground max-w-2xl mx-auto">
               Start free. Upgrade when you're ready. No hidden fees.
             </p>
           </motion.div>
@@ -392,7 +392,7 @@ export default function LandingPage() {
             >
               <div className="mb-10">
                 <h3 className="font-serif text-5xl font-bold mb-4">Free Forever</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+                <p className="text-foreground text-lg leading-relaxed">
                   12 transformational experiences, personalized AI coaching, and direct calls with Nadia.
                 </p>
               </div>
@@ -424,7 +424,7 @@ export default function LandingPage() {
 
               <div className="mb-10">
                 <h3 className="font-sans text-5xl font-bold mb-4">Inner Circle</h3>
-                <p className="text-muted-foreground text-lg leading-relaxed">
+                <p className="text-foreground text-lg leading-relaxed">
                   All 36 experiences, thought leadership journey, priority access to Nadia + monthly group coaching.
                 </p>
               </div>
@@ -455,14 +455,14 @@ export default function LandingPage() {
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+              <span className="text-sm uppercase tracking-widest text-foreground font-medium">
                 Human-Powered AI
               </span>
             </div>
             <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
               <span className="text-gradient-purple-pink">Meet Nadia</span>
             </h2>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-xl text-foreground leading-relaxed">
               Your personal guide. Text or call me anytime you need motivation—no extra charge.
             </p>
           </motion.div>
@@ -501,7 +501,7 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <p className="font-bold text-lg">Free Personal Calls</p>
-                    <p className="text-muted-foreground text-sm">Text or Call Anytime</p>
+                    <p className="text-foreground text-sm">Text or Call Anytime</p>
                   </div>
                 </div>
               </motion.div>
@@ -535,7 +535,7 @@ export default function LandingPage() {
                   <MessageCircle className="w-6 h-6 text-primary" />
                   <h3 className="text-xl font-serif font-bold">The Human-Powered Difference</h3>
                 </div>
-                <p className="text-muted-foreground leading-relaxed">
+                <p className="text-foreground leading-relaxed">
                   Unlike AI-only platforms, you get <span className="font-semibold text-foreground">direct access to me</span>. Call or text when you're stuck. No chatbots, no waiting. Just real human support from someone who remembers being a beginner in 2020.
                 </p>
               </div>

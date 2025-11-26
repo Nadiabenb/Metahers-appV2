@@ -118,7 +118,7 @@ export default function AIBuilderRetreatPage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               What is Vibe Coding?
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-foreground max-w-3xl mx-auto">
               Forget traditional coding stress. Vibe coding is about creative flow—partnering with AI tools to bring your app vision to life without pressure or overwhelm
             </p>
           </div>
@@ -133,7 +133,7 @@ export default function AIBuilderRetreatPage() {
                   <h3 className="font-cormorant text-xl font-bold text-foreground mb-2">
                     No Pressure
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     Learn at your own pace in a calm, supportive sanctuary. No coding experience needed.
                   </p>
                 </div>
@@ -144,7 +144,7 @@ export default function AIBuilderRetreatPage() {
                   <h3 className="font-cormorant text-xl font-bold text-foreground mb-2">
                     Pure Creativity
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     AI handles the technical complexity. You focus on your vision and creative decisions.
                   </p>
                 </div>
@@ -155,7 +155,7 @@ export default function AIBuilderRetreatPage() {
                   <h3 className="font-cormorant text-xl font-bold text-foreground mb-2">
                     Real Results
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     Build and publish your own app—not a tutorial project, YOUR actual business app.
                   </p>
                 </div>
@@ -175,7 +175,7 @@ export default function AIBuilderRetreatPage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               AI Tools You'll Master
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               Discover the most powerful AI coding assistants through hands-on creation
             </p>
           </div>
@@ -208,7 +208,7 @@ export default function AIBuilderRetreatPage() {
                   <h3 className="font-cormorant text-2xl font-bold text-foreground mb-2">
                     {tool.title}
                   </h3>
-                  <p className="text-muted-foreground mb-3">
+                  <p className="text-foreground mb-3">
                     {tool.description}
                   </p>
                   <Badge variant="secondary" className="text-xs">
@@ -231,7 +231,7 @@ export default function AIBuilderRetreatPage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               Choose Your Journey
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               Group energy or private sanctuary—both paths get you to a published app
             </p>
           </div>
@@ -248,7 +248,7 @@ export default function AIBuilderRetreatPage() {
                   <h3 className="font-cormorant text-3xl font-bold text-foreground mb-2">
                     Group Retreat
                   </h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-foreground text-sm">
                     4 weeks • Max 10 women • Weekly live sessions
                   </p>
                 </div>
@@ -297,7 +297,7 @@ export default function AIBuilderRetreatPage() {
                   <h3 className="font-cormorant text-3xl font-bold text-foreground mb-2">
                     1:1 Private Sessions
                   </h3>
-                  <p className="text-muted-foreground text-sm">
+                  <p className="text-foreground text-sm">
                     6-8 weeks • Weekly 1:1 sessions • Priority support
                   </p>
                 </div>
@@ -348,7 +348,7 @@ export default function AIBuilderRetreatPage() {
             <h2 className="font-cormorant text-5xl font-bold text-foreground mb-4">
               The 4-Week Group Journey
             </h2>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               Master one AI tool per week through gentle, hands-on practice
             </p>
           </div>
@@ -388,7 +388,7 @@ export default function AIBuilderRetreatPage() {
                       <h3 className="font-cormorant text-2xl font-bold text-foreground mb-2">
                         Week {week.week}: {week.title}
                       </h3>
-                      <p className="text-muted-foreground">
+                      <p className="text-foreground">
                         {week.description}
                       </p>
                     </div>
@@ -414,7 +414,7 @@ export default function AIBuilderRetreatPage() {
               <h2 className="font-cormorant text-4xl font-bold text-foreground mb-4">
                 Ready to Build Your App?
               </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-xl text-foreground mb-8 max-w-2xl mx-auto">
                 Choose your path: intimate group energy or private sanctuary. Both get you to a published app.
               </p>
               

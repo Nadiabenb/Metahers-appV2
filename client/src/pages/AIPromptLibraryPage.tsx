@@ -231,7 +231,7 @@ export default function AIPromptLibraryPage() {
           <h1 className="font-serif text-5xl font-bold mb-4 bg-gradient-to-r from-[hsl(var(--liquid-gold))] via-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] bg-clip-text text-transparent">
             AI Prompt Library
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-xl text-foreground max-w-3xl mx-auto">
             50+ battle-tested AI prompts to supercharge your personal brand, content, and business growth
           </p>
         </motion.div>
@@ -239,7 +239,7 @@ export default function AIPromptLibraryPage() {
         {/* Search */}
         <div className="mb-8 max-w-2xl mx-auto">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
             <Input
               type="text"
               placeholder="Search prompts by title, keyword, or tag..."
@@ -320,7 +320,7 @@ export default function AIPromptLibraryPage() {
 
         {filteredPrompts.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-xl text-muted-foreground">
+            <p className="text-xl text-foreground">
               No prompts found. Try a different search term or category.
             </p>
           </div>
@@ -341,7 +341,7 @@ export default function AIPromptLibraryPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">
+              <p className="text-foreground">
                 Replace the [bracketed placeholders] with your specific details for best results. The more context you provide, the better the AI's response will be. Save your favorite customized prompts in a doc for quick access!
               </p>
             </CardContent>

@@ -71,7 +71,7 @@ export default function JournalHistoryPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center gap-4">
           <Sparkles className="w-8 h-8 animate-spin text-primary" />
-          <p className="text-muted-foreground">Loading your journal history...</p>
+          <p className="text-foreground">Loading your journal history...</p>
         </div>
       </div>
     );
@@ -84,7 +84,7 @@ export default function JournalHistoryPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="font-display text-4xl mb-2">Journal History</h1>
-            <p className="text-muted-foreground">
+            <p className="text-foreground">
               Explore your reflections and track your growth
             </p>
           </div>
@@ -95,7 +95,7 @@ export default function JournalHistoryPage() {
           <Card data-testid="card-stat-entries">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Entries</CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <Calendar className="h-4 w-4 text-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold" data-testid="text-total-entries">
@@ -107,7 +107,7 @@ export default function JournalHistoryPage() {
           <Card data-testid="card-stat-words">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Words</CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp className="h-4 w-4 text-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold" data-testid="text-total-words">
@@ -119,7 +119,7 @@ export default function JournalHistoryPage() {
           <Card data-testid="card-stat-streak">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
-              <Sparkles className="h-4 w-4 text-muted-foreground" />
+              <Sparkles className="h-4 w-4 text-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold" data-testid="text-current-streak">
@@ -131,7 +131,7 @@ export default function JournalHistoryPage() {
           <Card data-testid="card-stat-tags">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Unique Tags</CardTitle>
-              <Tag className="h-4 w-4 text-muted-foreground" />
+              <Tag className="h-4 w-4 text-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold" data-testid="text-unique-tags">
@@ -171,7 +171,7 @@ export default function JournalHistoryPage() {
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
-                      <div className="w-16 text-right text-sm text-muted-foreground">
+                      <div className="w-16 text-right text-sm text-foreground">
                         {count} ({percentage}%)
                       </div>
                     </div>
@@ -250,7 +250,7 @@ export default function JournalHistoryPage() {
             <div className="grid grid-cols-7 gap-2">
               {/* Calendar header */}
               {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-                <div key={day} className="text-center text-xs font-medium text-muted-foreground py-2">
+                <div key={day} className="text-center text-xs font-medium text-foreground py-2">
                   {day}
                 </div>
               ))}
@@ -288,7 +288,7 @@ export default function JournalHistoryPage() {
                       transition-all hover-elevate border
                       ${entry 
                         ? getMoodBg(entry.mood) + ' cursor-pointer'
-                        : 'bg-muted/30 border-muted text-muted-foreground'
+                        : 'bg-muted/30 border-muted text-foreground'
                       }
                     `}
                     title={entry ? `${format(date, 'MMM d')}: ${entry.wordCount} words (${entry.mood || 'no mood'})` : format(date, 'MMM d')}
@@ -299,7 +299,7 @@ export default function JournalHistoryPage() {
                 );
               })}
             </div>
-            <div className="mt-4 text-xs text-muted-foreground text-center">
+            <div className="mt-4 text-xs text-foreground text-center">
               Showing last 28 days • Colored days indicate journal entries
             </div>
           </CardContent>
@@ -311,7 +311,7 @@ export default function JournalHistoryPage() {
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-foreground" />
               <Input
                 placeholder="Search your entries..."
                 value={searchTerm}
@@ -358,9 +358,9 @@ export default function JournalHistoryPage() {
         {filteredEntries.length === 0 ? (
           <Card>
             <CardContent className="py-12 text-center">
-              <Filter className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <Filter className="w-12 h-12 mx-auto mb-4 text-foreground" />
               <h3 className="text-lg font-semibold mb-2">No entries found</h3>
-              <p className="text-muted-foreground">
+              <p className="text-foreground">
                 Try adjusting your filters or search term
               </p>
             </CardContent>
@@ -374,7 +374,7 @@ export default function JournalHistoryPage() {
                   <CardHeader className="flex flex-row items-start justify-between space-y-0 gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm text-muted-foreground" data-testid={`text-date-${entry.id}`}>
+                        <span className="text-sm text-foreground" data-testid={`text-date-${entry.id}`}>
                           {format(parseISO(entry.createdAt), 'MMMM d, yyyy')}
                         </span>
                         {entry.mood && (
@@ -393,7 +393,7 @@ export default function JournalHistoryPage() {
                         </div>
                       )}
                     </div>
-                    <div className="text-sm text-muted-foreground whitespace-nowrap" data-testid={`text-wordcount-${entry.id}`}>
+                    <div className="text-sm text-foreground whitespace-nowrap" data-testid={`text-wordcount-${entry.id}`}>
                       {entry.wordCount} words
                     </div>
                   </CardHeader>

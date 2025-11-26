@@ -293,7 +293,7 @@ export default function RetreatPage() {
             <h2 className="font-serif text-5xl lg:text-6xl font-bold mb-6">
               Your Mind Spa Journey
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <p className="text-xl text-foreground max-w-3xl mx-auto">
               Three transformational days designed like a luxury wellness retreat—
               <span className="text-foreground font-semibold"> cleanse, nourish, and transform</span> your relationship with AI.
             </p>
@@ -325,7 +325,7 @@ export default function RetreatPage() {
                               <Icon className="w-8 h-8 text-black" />
                             </div>
                             <div>
-                              <p className="text-sm uppercase tracking-widest text-muted-foreground font-semibold">
+                              <p className="text-sm uppercase tracking-widest text-foreground font-semibold">
                                 Day {day.day}
                               </p>
                               <h3 className="font-serif text-4xl font-bold">
@@ -338,7 +338,7 @@ export default function RetreatPage() {
                             <p className="text-xl font-semibold text-foreground/90 mb-2">
                               {day.subtitle}
                             </p>
-                            <p className="text-muted-foreground">
+                            <p className="text-foreground">
                               {day.theme}
                             </p>
                           </div>
@@ -383,7 +383,7 @@ export default function RetreatPage() {
               <SiWhatsapp className="w-6 h-6 mr-3" />
               Reserve Your Spot Now
             </Button>
-            <p className="mt-4 text-sm text-muted-foreground">
+            <p className="mt-4 text-sm text-foreground">
               Join the WhatsApp group to register • Only {spotsRemaining} spots remaining
             </p>
           </motion.div>
@@ -417,7 +417,7 @@ export default function RetreatPage() {
                       <h2 className="font-serif text-4xl lg:text-5xl font-bold mb-4">
                         Elevate Your Experience
                       </h2>
-                      <p className="text-xl text-muted-foreground">
+                      <p className="text-xl text-foreground">
                         Get personalized guidance, premium resources, and direct access to Nadia throughout the retreat.
                       </p>
                     </div>
@@ -436,7 +436,7 @@ export default function RetreatPage() {
                     <div className="pt-6">
                       <div className="flex items-baseline gap-3 mb-4">
                         <span className="font-serif text-5xl font-bold">$297</span>
-                        <span className="text-muted-foreground line-through text-xl">$797</span>
+                        <span className="text-foreground line-through text-xl">$797</span>
                         <Badge variant="secondary" className="text-xs">
                           Early Bird Price
                         </Badge>
@@ -455,7 +455,7 @@ export default function RetreatPage() {
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                       </Button>
                       
-                      <p className="mt-3 text-sm text-center text-muted-foreground">
+                      <p className="mt-3 text-sm text-center text-foreground">
                         Limited to 10 VIP spots only
                       </p>
                     </div>
@@ -514,7 +514,7 @@ export default function RetreatPage() {
               Starts <span className="text-[hsl(var(--gold))]">This Week</span>
             </h2>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-foreground max-w-2xl mx-auto">
               Join the free WhatsApp group now to register and get instant access to pre-retreat bonuses.
             </p>
 
@@ -529,7 +529,7 @@ export default function RetreatPage() {
                 Join the Retreat Now
               </Button>
 
-              <div className="flex flex-wrap gap-4 justify-center text-sm text-muted-foreground">
+              <div className="flex flex-wrap gap-4 justify-center text-sm text-foreground">
                 <div className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-[#25D366]" />
                   <span>Free Forever</span>

@@ -75,13 +75,13 @@ export default function JournalPage() {
                     <Flame className="w-6 h-6 text-[hsl(var(--liquid-gold))]" />
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
+                    <div className="text-xs text-foreground uppercase tracking-wide mb-1">
                       Current Streak
                     </div>
                     <div className="text-3xl font-bold text-foreground" data-testid="text-streak">
                       {streak}
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-xs text-foreground">
                       {streak === 1 ? 'day' : 'days'}
                     </div>
                   </div>
@@ -119,7 +119,7 @@ export default function JournalPage() {
                 {format(selectedDate, "EEEE, MMMM d, yyyy")}
               </h2>
               {!isToday && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground">
                   Viewing past entry • <button
                     onClick={() => setSelectedDate(new Date())}
                     className="text-primary hover:underline"
@@ -138,7 +138,7 @@ export default function JournalPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="mt-4 text-center text-xs text-muted-foreground"
+            className="mt-4 text-center text-xs text-foreground"
           >
             <p>Your journal entries are securely saved to your account.</p>
           </motion.div>

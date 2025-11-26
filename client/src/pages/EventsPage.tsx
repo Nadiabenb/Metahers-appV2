@@ -27,11 +27,11 @@ export default function EventsPage() {
             </p>
 
             <div className="flex items-center justify-center gap-8 mb-12">
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="flex items-center gap-2 text-foreground">
                 <Video className="w-5 h-5" />
                 <span className="text-sm">30 min video call</span>
               </div>
-              <div className="flex items-center gap-2 text-muted-foreground">
+              <div className="flex items-center gap-2 text-foreground">
                 <Calendar className="w-5 h-5" />
                 <span className="text-sm">Choose your time</span>
               </div>
@@ -73,7 +73,7 @@ export default function EventsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="mt-8 text-center text-sm text-muted-foreground"
+            className="mt-8 text-center text-sm text-foreground"
           >
             <p>All calls are conducted via video conferencing • No preparation needed</p>
           </motion.div>

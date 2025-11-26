@@ -33,7 +33,7 @@ export function RitualCard({ ritual, onClick }: RitualCardProps) {
           <PlanBadge tier={ritual.tier} />
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+        <div className="flex items-center gap-2 text-sm text-foreground mb-3">
           <Clock className="w-4 h-4" />
           <span>{ritual.duration_min} min</span>
         </div>
@@ -43,7 +43,7 @@ export function RitualCard({ ritual, onClick }: RitualCardProps) {
         </p>
 
         <div className="mt-4 pt-4 border-t border-border">
-          <div className="text-xs text-muted-foreground uppercase tracking-wide">
+          <div className="text-xs text-foreground uppercase tracking-wide">
             {ritual.steps.length} Steps
           </div>
         </div>
@@ -90,7 +90,7 @@ export function ShopCard({ product, onClick }: ShopCardProps) {
         </h3>
 
         {product.scents && product.scents.length > 0 && (
-          <div className="text-sm text-muted-foreground mb-3 font-serif italic">
+          <div className="text-sm text-foreground mb-3 font-serif italic">
             {product.scents.join(" • ")}
           </div>
         )}
@@ -103,7 +103,7 @@ export function ShopCard({ product, onClick }: ShopCardProps) {
           <div className="text-2xl font-semibold text-primary">
             ${product.price}
           </div>
-          <div className="text-xs text-muted-foreground uppercase tracking-wide">
+          <div className="text-xs text-foreground uppercase tracking-wide">
             {isBundle ? "Collection" : "Ritual Bag"}
           </div>
         </div>

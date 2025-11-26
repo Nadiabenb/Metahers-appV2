@@ -61,19 +61,19 @@ export default function AdminQuizResultsPage() {
             <Card className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Total Submissions</p>
+                  <p className="text-sm text-foreground mb-1">Total Submissions</p>
                   <p className="text-3xl font-bold text-foreground" data-testid="stat-total">
                     {submissions?.length || 0}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Claimed (Signed Up)</p>
+                  <p className="text-sm text-foreground mb-1">Claimed (Signed Up)</p>
                   <p className="text-3xl font-bold text-[hsl(var(--aurora-teal))]" data-testid="stat-claimed">
                     {submissions?.filter(s => s.claimed).length || 0}
                   </p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Completed Rituals</p>
+                  <p className="text-sm text-foreground mb-1">Completed Rituals</p>
                   <p className="text-3xl font-bold text-[hsl(var(--liquid-gold))]" data-testid="stat-completed">
                     {submissions?.filter(s => s.ritualCompleted).length || 0}
                   </p>
@@ -85,11 +85,11 @@ export default function AdminQuizResultsPage() {
           <div className="space-y-4">
             {submissions && submissions.length === 0 && (
               <Card className="p-12 text-center">
-                <Sparkles className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <Sparkles className="w-12 h-12 text-foreground mx-auto mb-4" />
                 <h3 className="font-serif text-xl font-semibold text-foreground mb-2">
                   No Submissions Yet
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-foreground">
                   Quiz submissions will appear here once users complete the discovery quiz.
                 </p>
               </Card>
@@ -123,12 +123,12 @@ export default function AdminQuizResultsPage() {
                         )}
                       </div>
 
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                      <div className="flex items-center gap-2 text-sm text-foreground mb-3">
                         <Mail className="w-4 h-4" />
                         <span data-testid={`email-${submission.id}`}>{submission.email}</span>
                       </div>
 
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                      <div className="flex items-center gap-2 text-sm text-foreground mb-4">
                         <Calendar className="w-4 h-4" />
                         <span>
                           {submission.createdAt 
@@ -162,7 +162,7 @@ export default function AdminQuizResultsPage() {
                     </div>
 
                     <div className="md:text-right">
-                      <p className="text-xs text-muted-foreground mb-2">User ID</p>
+                      <p className="text-xs text-foreground mb-2">User ID</p>
                       <p className="text-xs font-mono text-foreground/60">
                         {submission.userId || "Not signed up"}
                       </p>
@@ -177,7 +177,7 @@ export default function AdminQuizResultsPage() {
                     <div className="mt-3 space-y-2 text-sm">
                       {Object.entries(submission.answers || {}).map(([questionId, answerId]) => (
                         <div key={questionId} className="flex gap-2">
-                          <span className="text-muted-foreground min-w-24">{questionId}:</span>
+                          <span className="text-foreground min-w-24">{questionId}:</span>
                           <span className="text-foreground/80">{answerId as string}</span>
                         </div>
                       ))}

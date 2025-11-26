@@ -15,7 +15,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
     return (
       <div className="text-center py-6 px-4">
         <Crown className="w-8 h-8 text-[hsl(var(--liquid-gold))] mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground mb-3">
+        <p className="text-sm text-foreground mb-3">
           {description || `${feature} is a Pro feature`}
         </p>
         <Link href="/subscribe">
@@ -44,7 +44,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
             <h3 className="font-cormorant text-2xl font-bold metallic-text mb-2">
               Unlock {feature}
             </h3>
-            <p className="text-muted-foreground max-w-md mx-auto">
+            <p className="text-foreground max-w-md mx-auto">
               {description || `Get access to ${feature} and all premium features with MetaHers Pro`}
             </p>
           </div>

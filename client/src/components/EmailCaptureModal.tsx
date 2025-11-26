@@ -85,7 +85,7 @@ export function EmailCaptureModal() {
               
               <button
                 onClick={handleClose}
-                className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+                className="absolute top-4 right-4 text-foreground hover:text-foreground transition-colors"
                 data-testid="button-close-modal"
               >
                 <X className="w-5 h-5" />
@@ -106,7 +106,7 @@ export function EmailCaptureModal() {
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-foreground" />
                       <Input
                         type="email"
                         placeholder="Enter your email"
@@ -140,7 +140,7 @@ export function EmailCaptureModal() {
                     </Button>
                   </form>
 
-                  <p className="text-xs text-center text-muted-foreground mt-4">
+                  <p className="text-xs text-center text-foreground mt-4">
                     Your exclusive beta code will be revealed instantly after signup.
                   </p>
                 </div>
@@ -164,7 +164,7 @@ export function EmailCaptureModal() {
                   <p className="text-sm text-foreground/70 mb-2">
                     Go to your <span className="font-semibold">Account</span> page and enter this code to unlock Pro features for free!
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-foreground">
                     This window will close automatically...
                   </p>
                 </div>

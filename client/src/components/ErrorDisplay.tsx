@@ -44,7 +44,7 @@ export function ErrorDisplay({
       </CardHeader>
       <CardContent className="space-y-4">
         {errorCode && (
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-foreground">
             Error code: <code className="font-mono bg-muted px-1 py-0.5 rounded">{errorCode}</code>
           </div>
         )}
@@ -65,7 +65,7 @@ export function ErrorDisplay({
 
         {showDetails && error?.stack && process.env.NODE_ENV === 'development' && (
           <details className="mt-4">
-            <summary className="cursor-pointer text-sm text-muted-foreground">
+            <summary className="cursor-pointer text-sm text-foreground">
               Error Details (Dev Only)
             </summary>
             <pre className="mt-2 p-2 text-xs bg-muted rounded overflow-auto max-h-40">

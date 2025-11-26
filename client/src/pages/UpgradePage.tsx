@@ -242,7 +242,7 @@ export default function UpgradePage() {
                         <div className="text-4xl font-bold text-foreground">
                           ${plan.price}
                         </div>
-                        <div className="text-sm text-muted-foreground">per month</div>
+                        <div className="text-sm text-foreground">per month</div>
                         {plan.savings && (
                           <div className="text-xs text-primary mt-1">{plan.savings}</div>
                         )}
@@ -304,7 +304,7 @@ export default function UpgradePage() {
           >
             <div className="text-center mb-6">
               <h2 className="font-serif text-2xl font-bold text-foreground mb-2">Looking for Something More?</h2>
-              <p className="text-muted-foreground">We also offer specialized intensive programs</p>
+              <p className="text-foreground">We also offer specialized intensive programs</p>
             </div>
             <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
               <Card className="border-primary/20">
@@ -315,7 +315,7 @@ export default function UpgradePage() {
                   </CardTitle>
                   <CardDescription>$197 one-time • Limited to 10 members</CardDescription>
                 </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
+                <CardContent className="text-sm text-foreground">
                   <p className="mb-3">4-week guided program with direct founder mentorship, live group sessions, and exclusive ritual bag.</p>
                   <Button variant="outline" size="sm" asChild>
                     <a href="/vip-cohort">Learn More</a>
@@ -331,7 +331,7 @@ export default function UpgradePage() {
                   </CardTitle>
                   <CardDescription>$499 one-time • For Founders & Leaders</CardDescription>
                 </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
+                <CardContent className="text-sm text-foreground">
                   <p className="mb-3">Private 1:1 consulting with custom AI & Web3 playbook for your business plus 3 months Pro included.</p>
                   <Button variant="outline" size="sm" asChild>
                     <a href="/executive">Learn More</a>
@@ -351,7 +351,7 @@ export default function UpgradePage() {
               <CardHeader>
                 <CardTitle className="font-serif text-2xl">Questions About Upgrading?</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4 text-sm text-muted-foreground">
+              <CardContent className="space-y-4 text-sm text-foreground">
                 <p>
                   All upgrades are prorated based on your current billing cycle. You'll only pay the difference 
                   for the remaining time in your current period.

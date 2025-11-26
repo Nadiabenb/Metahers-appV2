@@ -171,7 +171,7 @@ export default function RitualDetailPage() {
                       <h1 className="font-serif text-4xl font-bold text-foreground mb-2" data-testid="text-ritual-title">
                         {ritual.title}
                       </h1>
-                      <div className="flex items-center gap-4 text-muted-foreground mb-4">
+                      <div className="flex items-center gap-4 text-foreground mb-4">
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4" />
                           <span data-testid="text-duration">{ritual.duration_min} minutes</span>
@@ -216,7 +216,7 @@ export default function RitualDetailPage() {
                     <ProgressRing progress={progress} />
                   )}
                   <div className="text-center">
-                    <div className="text-sm text-muted-foreground uppercase tracking-wide mb-1">
+                    <div className="text-sm text-foreground uppercase tracking-wide mb-1">
                       Progress
                     </div>
                     <div className="font-semibold text-foreground" data-testid="text-progress">

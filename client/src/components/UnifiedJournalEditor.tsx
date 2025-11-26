@@ -309,7 +309,7 @@ export function UnifiedJournalEditor({ selectedDate }: UnifiedJournalEditorProps
             Today's Priorities
           </h3>
           {totalTodos > 0 && (
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm text-foreground">
               {completedTodos}/{totalTodos}
             </div>
           )}
@@ -340,7 +340,7 @@ export function UnifiedJournalEditor({ selectedDate }: UnifiedJournalEditorProps
                 }`}
               >
                 <Checkbox checked={todo.completed} onCheckedChange={() => toggleTodo(todo.id)} />
-                <span className={`flex-1 ${todo.completed ? "line-through text-muted-foreground" : ""}`}>
+                <span className={`flex-1 ${todo.completed ? "line-through text-foreground" : ""}`}>
                   {todo.text}
                 </span>
                 <Button variant="ghost" size="icon" onClick={() => removeTodo(todo.id)}>
@@ -425,7 +425,7 @@ export function UnifiedJournalEditor({ selectedDate }: UnifiedJournalEditorProps
           rows={8}
           className="resize-none"
         />
-        <div className="mt-2 text-xs text-muted-foreground text-right">{wordCount} words</div>
+        <div className="mt-2 text-xs text-foreground text-right">{wordCount} words</div>
       </Card>
 
       {/* Tags */}
@@ -472,7 +472,7 @@ export function UnifiedJournalEditor({ selectedDate }: UnifiedJournalEditorProps
             {events.map((event) => (
               <div key={event.id} className="flex items-start gap-3 p-3 rounded-lg hover-elevate group">
                 <div className="flex-1">
-                  {event.time && <div className="text-sm text-muted-foreground mb-1">{event.time}</div>}
+                  {event.time && <div className="text-sm text-foreground mb-1">{event.time}</div>}
                   <div>{event.title}</div>
                 </div>
                 <Button variant="ghost" size="icon" onClick={() => removeEvent(event.id)}>
@@ -506,11 +506,11 @@ export function UnifiedJournalEditor({ selectedDate }: UnifiedJournalEditorProps
                     i < waterIntake ? "bg-blue-500/20 border-2 border-blue-500" : "bg-muted border-2 border-muted-foreground/20"
                   }`}
                 >
-                  <Droplet className={`w-5 h-5 mx-auto ${i < waterIntake ? "text-blue-500 fill-blue-500" : "text-muted-foreground"}`} />
+                  <Droplet className={`w-5 h-5 mx-auto ${i < waterIntake ? "text-blue-500 fill-blue-500" : "text-foreground"}`} />
                 </motion.button>
               ))}
             </div>
-            <p className="text-sm text-muted-foreground mt-3">{waterIntake} / 8 glasses</p>
+            <p className="text-sm text-foreground mt-3">{waterIntake} / 8 glasses</p>
           </Card>
 
           <Card className="p-6">
@@ -549,7 +549,7 @@ export function UnifiedJournalEditor({ selectedDate }: UnifiedJournalEditorProps
         </Card>
       )}
 
-      <div className="text-center text-sm text-muted-foreground">
+      <div className="text-center text-sm text-foreground">
         <motion.div className="flex items-center justify-center gap-2">
           <Save className="w-4 h-4" />
           <span>All changes are automatically saved</span>

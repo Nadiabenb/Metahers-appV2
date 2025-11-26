@@ -199,12 +199,12 @@ export default function ExperienceDetailPage() {
             </h1>
 
             {/* Description */}
-            <p className="text-2xl lg:text-3xl text-muted-foreground leading-relaxed mb-12 max-w-3xl mx-auto">
+            <p className="text-2xl lg:text-3xl text-foreground leading-relaxed mb-12 max-w-3xl mx-auto">
               {experience.description}
             </p>
         {/* Quick preview of what they'll learn */}
             <div className="mb-12">
-              <h3 className="text-sm uppercase tracking-widest text-muted-foreground mb-6 font-medium">
+              <h3 className="text-sm uppercase tracking-widest text-foreground mb-6 font-medium">
                 You'll Master
               </h3>
               <div className="grid gap-4 max-w-2xl mx-auto">

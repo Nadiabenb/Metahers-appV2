@@ -130,7 +130,7 @@ export function BrandOnboarding({ onComplete, isLoading }: BrandOnboardingProps)
                 />
               ))}
             </div>
-            <p className="text-sm text-muted-foreground mt-2">
+            <p className="text-sm text-foreground mt-2">
               Step {step} of {totalSteps}
             </p>
           </CardHeader>
@@ -148,7 +148,7 @@ export function BrandOnboarding({ onComplete, isLoading }: BrandOnboardingProps)
                   <h3 className="text-2xl font-cormorant font-bold text-foreground mb-2">
                     {currentStep.title}
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-foreground">
                     {currentStep.description}
                   </p>
                 </div>
@@ -165,7 +165,7 @@ export function BrandOnboarding({ onComplete, isLoading }: BrandOnboardingProps)
                     className="min-h-[200px] text-base"
                     data-testid={`input-${currentStep.field}`}
                   />
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-foreground">
                     {profile[currentStep.field].length} / {currentStep.minLength} characters minimum
                   </p>
                 </div>
@@ -210,7 +210,7 @@ export function BrandOnboarding({ onComplete, isLoading }: BrandOnboardingProps)
 
             {/* Helpful Tips */}
             <div className="bg-primary/5 rounded-lg p-4 mt-6">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-foreground">
                 <strong className="text-foreground">Pro Tip:</strong> Be specific and authentic. This becomes the foundation for AI to generate content that truly sounds like YOU. Think: What would you tell a friend over coffee?
               </p>
             </div>

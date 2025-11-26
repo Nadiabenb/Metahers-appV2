@@ -107,7 +107,7 @@ export default function GlowUpDashboardPage() {
           <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-4">
             Pro Feature
           </h1>
-          <p className="text-lg text-muted-foreground mb-8">
+          <p className="text-lg text-foreground mb-8">
             The AI Glow-Up Program is exclusive to Pro members. Upgrade to unlock your 14-day brand transformation journey.
           </p>
           
@@ -129,7 +129,7 @@ export default function GlowUpDashboardPage() {
     return (
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="p-8 text-center">
-          <p className="text-muted-foreground mb-4">Complete onboarding first</p>
+          <p className="text-foreground mb-4">Complete onboarding first</p>
           <Button onClick={() => setLocation("/glow-up")} data-testid="button-start-onboarding">
             Start Onboarding
           </Button>
@@ -213,7 +213,7 @@ export default function GlowUpDashboardPage() {
               <h1 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text">
                 AI Glow-Up Program
               </h1>
-              <p className="text-muted-foreground mt-2">
+              <p className="text-foreground mt-2">
                 Welcome, {profile.name}! {completedDays.length} of 14 days complete
               </p>
             </div>
@@ -230,7 +230,7 @@ export default function GlowUpDashboardPage() {
           
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Progress</span>
+              <span className="text-foreground">Progress</span>
               <span className="font-medium">{Math.round(progressPercentage)}%</span>
             </div>
             <Progress value={progressPercentage} className="h-3" />
@@ -270,7 +270,7 @@ export default function GlowUpDashboardPage() {
                           ) : isUnlocked ? (
                             <Calendar className="w-6 h-6 text-primary" />
                           ) : (
-                            <Lock className="w-6 h-6 text-muted-foreground" />
+                            <Lock className="w-6 h-6 text-foreground" />
                           )}
                         </div>
                         
@@ -289,7 +289,7 @@ export default function GlowUpDashboardPage() {
                           <h3 className="font-cormorant text-2xl font-bold mb-2">
                             {lesson.title}
                           </h3>
-                          <p className="text-muted-foreground line-clamp-2">
+                          <p className="text-foreground line-clamp-2">
                             {lesson.lesson.substring(0, 150)}...
                           </p>
                         </div>

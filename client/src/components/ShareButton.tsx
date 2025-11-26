@@ -143,7 +143,7 @@ export function ShareButton({
           </Button>
 
           <div className="border-t border-border/50 pt-3">
-            <p className="text-xs text-muted-foreground mb-2">Share on social media</p>
+            <p className="text-xs text-foreground mb-2">Share on social media</p>
             <div className="flex gap-2">
               {socialShares.map((social) => (
                 <a

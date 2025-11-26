@@ -285,7 +285,7 @@ export function DailyCalendar({ className = "" }: DailyCalendarProps) {
               <div className="bg-gradient-to-br from-card to-charcoal border border-primary/20 rounded-lg shadow-lg overflow-hidden">
                 {/* Top Bar - Date Display */}
                 <div className="bg-gradient-to-r from-primary/20 to-secondary/20 p-3 text-center border-b border-primary/30">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
+                  <div className="text-xs uppercase tracking-wider text-foreground font-medium">
                     {format(currentDate, "EEEE, MMMM d, yyyy")}
                   </div>
                 </div>
@@ -303,7 +303,7 @@ export function DailyCalendar({ className = "" }: DailyCalendarProps) {
 
                 {/* Action Bar */}
                 <div className="px-3 pb-3 flex items-center justify-between border-t border-border/40 pt-3">
-                  <div className="text-xs text-muted-foreground uppercase tracking-wider">
+                  <div className="text-xs text-foreground uppercase tracking-wider">
                     Quote {quoteIndex + 1} of {DAILY_QUOTES.length}
                   </div>
                   <div className="flex items-center gap-1">
@@ -334,7 +334,7 @@ export function DailyCalendar({ className = "" }: DailyCalendarProps) {
 
         {/* Favorites Count */}
         {favorites.length > 0 && (
-          <div className="relative z-10 mt-2 text-center text-xs text-muted-foreground">
+          <div className="relative z-10 mt-2 text-center text-xs text-foreground">
             ❤️ {favorites.length} favorite {favorites.length === 1 ? "quote" : "quotes"} saved
           </div>
         )}

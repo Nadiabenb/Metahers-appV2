@@ -207,7 +207,7 @@ export default function SpaceDetailPage() {
             {/* Eyebrow */}
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-primary" />
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+              <span className="text-sm uppercase tracking-widest text-foreground font-medium">
                 Learning Space
               </span>
             </div>
@@ -218,7 +218,7 @@ export default function SpaceDetailPage() {
             </h1>
 
             {/* Description */}
-            <p className="text-2xl text-muted-foreground mb-8 leading-relaxed max-w-3xl">
+            <p className="text-2xl text-foreground mb-8 leading-relaxed max-w-3xl">
               {space.description}
             </p>
 
@@ -258,7 +258,7 @@ export default function SpaceDetailPage() {
               </div>
               <div>
                 <h2 className="font-serif text-3xl font-bold">What You'll Accomplish</h2>
-                <p className="text-muted-foreground mt-1">
+                <p className="text-foreground mt-1">
                   Transformational outcomes designed for busy women who need results, not fluff.
                 </p>
               </div>
@@ -295,7 +295,7 @@ export default function SpaceDetailPage() {
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2 text-lg">{item.title}</h4>
-                    <p className="text-muted-foreground leading-relaxed">
+                    <p className="text-foreground leading-relaxed">
                       {item.description}
                     </p>
                   </div>
@@ -314,7 +314,7 @@ export default function SpaceDetailPage() {
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-12 bg-primary" />
-                <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                <span className="text-sm uppercase tracking-widest text-foreground font-medium">
                   Free Access
                 </span>
               </div>
@@ -359,15 +359,15 @@ export default function SpaceDetailPage() {
                           <h3 className="font-serif text-3xl font-bold mb-3 group-hover:text-primary transition-colors">
                             {experience.title}
                           </h3>
-                          <p className="text-lg text-muted-foreground leading-relaxed">
+                          <p className="text-lg text-foreground leading-relaxed">
                             {experience.description}
                           </p>
                         </div>
-                        <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0" />
+                        <ChevronRight className="w-6 h-6 text-foreground group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0" />
                       </div>
 
                       <div className="mb-6">
-                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">
+                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-foreground">
                           Learning Objectives
                         </p>
                         <ul className="space-y-2">
@@ -423,7 +423,7 @@ export default function SpaceDetailPage() {
             <div className="mb-10">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-px w-12 bg-primary" />
-                <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                <span className="text-sm uppercase tracking-widest text-foreground font-medium">
                   Premium Content
                 </span>
               </div>
@@ -476,12 +476,12 @@ export default function SpaceDetailPage() {
                       <h3 className="font-serif text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
                         {experience.title}
                       </h3>
-                      <p className="text-muted-foreground leading-relaxed mb-6 flex-1">
+                      <p className="text-foreground leading-relaxed mb-6 flex-1">
                         {experience.description}
                       </p>
 
                       <div>
-                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">
+                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-foreground">
                           You'll Learn To
                         </p>
                         <ul className="space-y-2">
@@ -511,7 +511,7 @@ export default function SpaceDetailPage() {
                   <h3 className="font-serif text-3xl font-bold mb-4">
                     Ready to Unlock Everything?
                   </h3>
-                  <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                  <p className="text-lg text-foreground mb-8 leading-relaxed">
                     Get unlimited access to all premium experiences and transform your skills
                   </p>
                   <Button

@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
             <h1 className="font-cormorant text-4xl font-bold text-foreground mb-2">
               Reset Password
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-foreground">
               Enter your email and we'll generate a password reset link for you.
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function ForgotPasswordPage() {
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -101,11 +101,11 @@ export default function ForgotPasswordPage() {
                 <p className="text-sm font-medium text-foreground mb-2">
                   Check Your Email
                 </p>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-foreground">
                   If an account exists with that email address, you will receive a password reset link shortly.
                 </p>
               </div>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-foreground">
                 <strong>For Developers:</strong> In development mode, the reset link is logged to the server console. Check your terminal to find the link.
               </p>
             </div>

@@ -53,7 +53,7 @@ export function TestimonialsSection() {
           <h2 className="font-cormorant text-5xl md:text-6xl font-bold text-foreground mb-4">
             What Women Are Saying
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-foreground max-w-2xl mx-auto">
             Real results from ambitious women mastering AI & Web3
           </p>
         </motion.div>
@@ -93,7 +93,7 @@ export function TestimonialsSection() {
                       <div className="font-cormorant text-lg font-bold text-foreground">
                         {testimonial.name}
                       </div>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-foreground">
                         {testimonial.title}
                       </div>
                     </div>
@@ -111,7 +111,7 @@ export function TestimonialsSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-12"
         >
-          <p className="text-muted-foreground">
+          <p className="text-foreground">
             ⭐️ Rated 4.9/5 by 500+ women learning AI & Web3
           </p>
         </motion.div>

@@ -153,7 +153,7 @@ export default function DashboardPage() {
   const currentStreak = 7;
 
   const tierBadgeColors = {
-    free: 'bg-muted text-muted-foreground',
+    free: 'bg-muted text-foreground',
     pro_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     pro_annual: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     sanctuary: 'bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] text-white',
@@ -247,7 +247,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{currentStreak} days</div>
-              <p className="text-xs text-muted-foreground">Keep it going!</p>
+              <p className="text-xs text-foreground">Keep it going!</p>
             </CardContent>
           </Card>
 
@@ -258,7 +258,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{completedExperiences}</div>
-              <p className="text-xs text-muted-foreground">Experiences finished</p>
+              <p className="text-xs text-foreground">Experiences finished</p>
             </CardContent>
           </Card>
 
@@ -269,7 +269,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{Math.round(totalMinutesLearned / 60)}h</div>
-              <p className="text-xs text-muted-foreground">{totalMinutesLearned} minutes</p>
+              <p className="text-xs text-foreground">{totalMinutesLearned} minutes</p>
             </CardContent>
           </Card>
 
@@ -280,7 +280,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{averageConfidence}%</div>
-              <p className="text-xs text-muted-foreground">Average score</p>
+              <p className="text-xs text-foreground">Average score</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -315,14 +315,14 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     {loadingSessions ? (
-                      <div className="text-sm text-muted-foreground">Loading sessions...</div>
+                      <div className="text-sm text-foreground">Loading sessions...</div>
                     ) : upcomingSessions && upcomingSessions.length > 0 ? (
                       <div className="space-y-3">
                         {upcomingSessions.slice(0, 3).map((session) => (
                           <div key={session.id} className="flex items-start justify-between p-3 rounded-lg bg-muted/50 hover-elevate" data-testid={`session-${session.id}`}>
                             <div className="flex-1">
                               <h4 className="font-medium text-sm mb-1">{session.title}</h4>
-                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                              <div className="flex items-center gap-4 text-xs text-foreground">
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
                                   {format(parseISO(session.scheduledDate), 'MMM d, h:mm a')}
@@ -349,7 +349,7 @@ export default function DashboardPage() {
                         ))}
                       </div>
                     ) : (
-                      <div className="text-sm text-muted-foreground text-center py-8">
+                      <div className="text-sm text-foreground text-center py-8">
                         No upcoming sessions scheduled yet
                       </div>
                     )}
@@ -375,14 +375,14 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     {loadingBookings ? (
-                      <div className="text-sm text-muted-foreground">Loading bookings...</div>
+                      <div className="text-sm text-foreground">Loading bookings...</div>
                     ) : upcomingBookings && upcomingBookings.length > 0 ? (
                       <div className="space-y-3">
                         {upcomingBookings.slice(0, 3).map((booking) => (
                           <div key={booking.id} className="flex items-start justify-between p-3 rounded-lg bg-muted/50 hover-elevate" data-testid={`booking-${booking.id}`}>
                             <div className="flex-1">
                               <h4 className="font-medium text-sm mb-1 capitalize">{booking.bookingType.replace('_', ' ')}</h4>
-                              <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                              <div className="flex items-center gap-4 text-xs text-foreground">
                                 <span className="flex items-center gap-1">
                                   <Calendar className="w-3 h-3" />
                                   {format(parseISO(booking.scheduledDate), 'MMM d, h:mm a')}
@@ -405,7 +405,7 @@ export default function DashboardPage() {
                         ))}
                       </div>
                     ) : (
-                      <div className="text-sm text-muted-foreground text-center py-8">
+                      <div className="text-sm text-foreground text-center py-8">
                         No upcoming 1-on-1 sessions scheduled
                       </div>
                     )}
@@ -430,14 +430,14 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   {spacesLoading || progressLoading || experiencesLoading ? (
-                    <div className="text-sm text-muted-foreground">Loading progress...</div>
+                    <div className="text-sm text-foreground">Loading progress...</div>
                   ) : (
                     <div className="space-y-4">
                       {spaceProgress.map((space) => (
                         <div key={space.id} className="space-y-2" data-testid={`space-progress-${space.slug}`}>
                           <div className="flex items-center justify-between">
                             <span className="text-sm font-medium">{space.name}</span>
-                            <span className="text-xs text-muted-foreground">
+                            <span className="text-xs text-foreground">
                               {space.completed} / {space.total} completed
                             </span>
                           </div>
@@ -518,22 +518,22 @@ export default function DashboardPage() {
                   </CardHeader>
                   <CardContent>
                     {loadingInsights ? (
-                      <div className="text-sm text-muted-foreground">Loading insights...</div>
+                      <div className="text-sm text-foreground">Loading insights...</div>
                     ) : insights && insights.length > 0 ? (
                       <div className="space-y-3">
                         {insights.slice(0, 3).map((insight) => (
                           <div key={insight.id} className="p-3 rounded-lg bg-muted/50 hover-elevate cursor-pointer" data-testid={`insight-${insight.id}`}>
                             <h4 className="font-medium text-sm mb-1">{insight.title}</h4>
-                            <p className="text-xs text-muted-foreground line-clamp-2">{insight.content}</p>
+                            <p className="text-xs text-foreground line-clamp-2">{insight.content}</p>
                             <div className="flex items-center gap-2 mt-2">
                               <Badge variant="secondary" className="text-xs">{insight.category}</Badge>
-                              <span className="text-xs text-muted-foreground">{insight.viewCount} views</span>
+                              <span className="text-xs text-foreground">{insight.viewCount} views</span>
                             </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="text-sm text-muted-foreground text-center py-8">
+                      <div className="text-sm text-foreground text-center py-8">
                         No insights available yet
                       </div>
                     )}

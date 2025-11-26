@@ -101,7 +101,7 @@ export default function DailyNewsPage() {
           <h1 className="font-cormorant text-5xl md:text-6xl font-bold text-foreground mb-4">
             MetaHers Daily
           </h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-light">
+          <p className="text-xl text-foreground max-w-2xl mx-auto font-light">
             Live tech news for women. Current updates on AI, crypto, blockchain, NFTs, and the metaverse—straight from the source.
           </p>
         </motion.div>
@@ -114,8 +114,8 @@ export default function DailyNewsPage() {
           className="mb-8"
         >
           <div className="flex items-center gap-2 mb-4">
-            <Filter className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Filter by topic:</span>
+            <Filter className="w-4 h-4 text-foreground" />
+            <span className="text-sm text-foreground">Filter by topic:</span>
           </div>
           <div className="flex flex-wrap gap-2">
             {categories.map((category) => (
@@ -137,7 +137,7 @@ export default function DailyNewsPage() {
         {isLoading && (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Loading the latest tech news...</p>
+            <p className="text-foreground">Loading the latest tech news...</p>
           </div>
         )}
 
@@ -177,7 +177,7 @@ export default function DailyNewsPage() {
                             >
                               {item.category}
                             </Badge>
-                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                            <span className="text-xs text-foreground flex items-center gap-1">
                               <Calendar className="w-3 h-3" />
                               {format(new Date(item.date), "MMM d")}
                             </span>
@@ -194,7 +194,7 @@ export default function DailyNewsPage() {
                       </p>
 
                       {/* Source */}
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-2 text-sm text-foreground">
                         <ExternalLink className="w-3 h-3" />
                         <span>Source: {item.source}</span>
                       </div>
@@ -244,7 +244,7 @@ export default function DailyNewsPage() {
             {/* Empty State */}
             {filteredNews.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-muted-foreground text-lg">
+                <p className="text-foreground text-lg">
                   No news in this category yet. Check back soon!
                 </p>
               </div>
@@ -265,7 +265,7 @@ export default function DailyNewsPage() {
               <h3 className="font-cormorant text-3xl font-bold text-foreground">
                 Want to Go Deeper?
               </h3>
-              <p className="text-muted-foreground max-w-xl mx-auto">
+              <p className="text-foreground max-w-xl mx-auto">
                 MetaHers Daily is just the beginning. Dive into guided AI & Web3 rituals designed to transform you from curious to confident.
               </p>
               <Button

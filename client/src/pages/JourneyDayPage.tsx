@@ -82,7 +82,7 @@ export default function JourneyDayPage() {
             <h1 className="font-cormorant text-5xl md:text-6xl font-bold text-foreground">
               {dayData.title}
             </h1>
-            <p className="text-xl text-muted-foreground font-light">
+            <p className="text-xl text-foreground font-light">
               {dayData.discovery.headline}
             </p>
           </motion.div>
@@ -126,7 +126,7 @@ export default function JourneyDayPage() {
               </div>
 
               {dayData.discovery.founderStory && (
-                <div className="italic text-muted-foreground border-l-4 border-[hsl(var(--cyber-fuchsia))] pl-6 py-2">
+                <div className="italic text-foreground border-l-4 border-[hsl(var(--cyber-fuchsia))] pl-6 py-2">
                   <p className="text-sm mb-1 font-medium text-foreground">Founder's Insight:</p>
                   <p className="leading-relaxed">{dayData.discovery.founderStory}</p>
                 </div>
@@ -201,15 +201,15 @@ export default function JourneyDayPage() {
               </h2>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Topic</p>
+                  <p className="text-sm text-foreground mb-1">Topic</p>
                   <p className="text-lg font-medium text-foreground">{dayData.contentFocus.topic}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Angle</p>
+                  <p className="text-sm text-foreground mb-1">Angle</p>
                   <p className="text-foreground/80">{dayData.contentFocus.angle}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground mb-2">Recommended Platforms</p>
+                  <p className="text-sm text-foreground mb-2">Recommended Platforms</p>
                   <div className="flex flex-wrap gap-2">
                     {dayData.contentFocus.platforms.map((platform) => (
                       <Badge key={platform} variant="secondary" className="text-xs">
@@ -269,7 +269,7 @@ export default function JourneyDayPage() {
               <h3 className="font-cormorant text-3xl font-bold text-foreground">
                 Ready to Start Your 30-Day Journey?
               </h3>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-foreground max-w-2xl mx-auto">
                 Join MetaHers Pro to unlock the complete 30-day thought leadership journey with AI-powered content generation, daily guidance, and personalized coaching.
               </p>
               <Button

@@ -167,7 +167,7 @@ export default function MetaHersWorldPage() {
               {/* Eyebrow */}
               <div className="flex items-center gap-3">
                 <div className="h-px w-12 bg-primary" />
-                <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                <span className="text-sm uppercase tracking-widest text-foreground font-medium">
                   Forbes Meets Vogue Luxury Learning
                 </span>
               </div>
@@ -179,7 +179,7 @@ export default function MetaHersWorldPage() {
               </h1>
 
               {/* Subheading */}
-              <p className="text-xl lg:text-2xl text-muted-foreground max-w-2xl leading-relaxed">
+              <p className="text-xl lg:text-2xl text-foreground max-w-2xl leading-relaxed">
                 The luxury learning sanctuary for women who refuse to be left behind in the AI revolution. Transform from confused to confident in 30 days.
               </p>
 
@@ -218,7 +218,7 @@ export default function MetaHersWorldPage() {
               </div>
 
               {/* Trust Badge */}
-              <p className="text-sm text-muted-foreground uppercase tracking-wider">
+              <p className="text-sm text-foreground uppercase tracking-wider">
                 ✓ First experience free in each space • ✓ Cancel anytime • ✓ Join in 30 seconds
               </p>
             </motion.div>
@@ -248,7 +248,7 @@ export default function MetaHersWorldPage() {
                     </div>
                     <div>
                       <div className="text-3xl font-serif font-bold">{stat.number}</div>
-                      <div className="text-sm text-muted-foreground uppercase tracking-wider">{stat.label}</div>
+                      <div className="text-sm text-foreground uppercase tracking-wider">{stat.label}</div>
                     </div>
                   </div>
                 </motion.div>
@@ -280,7 +280,7 @@ export default function MetaHersWorldPage() {
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-3">
                     <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <p className="text-muted-foreground">
+                    <p className="text-foreground">
                       <span className="text-primary font-bold">{item.stat}</span> {item.text}
                     </p>
                   </div>
@@ -328,7 +328,7 @@ export default function MetaHersWorldPage() {
                   <span className="font-semibold">{freeSpacesCount} Free Spaces</span>
                 </div>
                 <div className="h-4 w-px bg-border" />
-                <div className="flex items-center gap-2 text-muted-foreground">
+                <div className="flex items-center gap-2 text-foreground">
                   <Lock className="w-4 h-4" />
                   <span className="text-sm">{lockedSpacesCount} PRO Spaces</span>
                 </div>
@@ -362,14 +362,14 @@ export default function MetaHersWorldPage() {
               <div className="max-w-3xl">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="h-px w-12 bg-primary" />
-                  <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+                  <span className="text-sm uppercase tracking-widest text-foreground font-medium">
                     Choose Your Sanctuary
                   </span>
                 </div>
                 <h2 className="editorial-headline text-5xl lg:text-7xl mb-6">
                   Nine Learning<br />Spaces
                 </h2>
-                <p className="text-xl text-muted-foreground leading-relaxed">
+                <p className="text-xl text-foreground leading-relaxed">
                   60 AI-guided transformational experiences to master AI, Web3, and the future
                 </p>
               </div>
@@ -387,7 +387,7 @@ export default function MetaHersWorldPage() {
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                       filter === tab.value
                         ? 'bg-primary text-primary-foreground shadow-lg'
-                        : 'text-muted-foreground hover:text-foreground hover-elevate'
+                        : 'text-foreground hover:text-foreground hover-elevate'
                     }`}
                     data-testid={`filter-${tab.value}`}
                   >
@@ -533,7 +533,7 @@ export default function MetaHersWorldPage() {
                                     <h3 className="font-serif text-2xl lg:text-3xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 mb-3 leading-tight">
                                       {space.name}
                                     </h3>
-                                    <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+                                    <p className="text-sm text-foreground line-clamp-2 leading-relaxed">
                                       {space.description}
                                     </p>
                                   </div>
@@ -544,7 +544,7 @@ export default function MetaHersWorldPage() {
 
                                 {/* Learning Outcomes - ENHANCED */}
                                 <div className="flex-1 mb-5">
-                                  <h4 className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-4">You'll Master:</h4>
+                                  <h4 className="text-[10px] uppercase tracking-widest text-foreground font-bold mb-4">You'll Master:</h4>
                                   <ul className="space-y-2.5">
                                     {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
                                       <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/90 group/item">
@@ -592,7 +592,7 @@ export default function MetaHersWorldPage() {
           >
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-primary" />
-              <span className="text-sm uppercase tracking-widest text-muted-foreground font-medium">
+              <span className="text-sm uppercase tracking-widest text-foreground font-medium">
                 Success Stories
               </span>
             </div>
@@ -627,7 +627,7 @@ export default function MetaHersWorldPage() {
                 {/* Attribution */}
                 <div>
                   <div className="font-semibold text-foreground">{testimonial.name}</div>
-                  <div className="text-sm text-muted-foreground">{testimonial.title}</div>
+                  <div className="text-sm text-foreground">{testimonial.title}</div>
                 </div>
               </motion.div>
             ))}
@@ -649,7 +649,7 @@ export default function MetaHersWorldPage() {
               Ready to Begin<br />Your Journey?
             </h2>
             
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-foreground max-w-2xl mx-auto leading-relaxed">
               Join 1,000+ women mastering AI and Web3 without the overwhelm
             </p>
 

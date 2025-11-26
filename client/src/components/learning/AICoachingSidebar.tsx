@@ -103,7 +103,7 @@ export default function AICoachingSidebar({
             <X className="w-5 h-5" />
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="text-xs text-foreground">
           Ask questions about {currentSection.title}
         </p>
       </div>
@@ -137,7 +137,7 @@ export default function AICoachingSidebar({
             <div className="flex justify-start">
               <div className="bg-muted rounded-lg p-3 flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span className="text-sm text-muted-foreground">Thinking...</span>
+                <span className="text-sm text-foreground">Thinking...</span>
               </div>
             </div>
           )}
@@ -166,7 +166,7 @@ export default function AICoachingSidebar({
             <Send className="w-4 h-4" />
           </Button>
         </div>
-        <p className="text-xs text-muted-foreground mt-2">
+        <p className="text-xs text-foreground mt-2">
           Press Enter to send, Shift+Enter for new line
         </p>
       </div>

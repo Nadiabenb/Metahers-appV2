@@ -91,7 +91,7 @@ export default function ResetPasswordPage() {
           <h1 className="font-cormorant text-3xl font-bold text-foreground mb-4">
             Invalid Reset Link
           </h1>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-foreground mb-6">
             This password reset link is invalid or has expired.
           </p>
           <Button onClick={() => setLocation("/forgot-password")} data-testid="button-request-new">
@@ -110,7 +110,7 @@ export default function ResetPasswordPage() {
           <h1 className="font-cormorant text-3xl font-bold text-foreground mb-4">
             Password Reset Successful!
           </h1>
-          <p className="text-muted-foreground mb-6">
+          <p className="text-foreground mb-6">
             Redirecting you to login...
           </p>
         </Card>
@@ -127,7 +127,7 @@ export default function ResetPasswordPage() {
             <h1 className="font-cormorant text-4xl font-bold text-foreground mb-2">
               Set New Password
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-foreground">
               Enter your new password below
             </p>
           </div>
@@ -139,7 +139,7 @@ export default function ResetPasswordPage() {
                 New Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                 <Input
                   id="newPassword"
                   type="password"
@@ -158,7 +158,7 @@ export default function ResetPasswordPage() {
                 Confirm Password
               </label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground" />
                 <Input
                   id="confirmPassword"
                   type="password"

@@ -78,7 +78,7 @@ export function DailyDiscovery({ curriculumDay, onComplete, isCompleted }: Daily
 
             <div className="p-4 rounded-lg bg-accent/50 border border-accent-border">
               <h4 className="font-medium text-sm text-foreground mb-2">Why This Matters</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed" data-testid="text-why-matters">
+              <p className="text-sm text-foreground leading-relaxed" data-testid="text-why-matters">
                 {curriculumDay.discovery.whyItMatters}
               </p>
             </div>
