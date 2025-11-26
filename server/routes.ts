@@ -13,7 +13,7 @@ import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
-import { spaces, transformationalExperiences, cohortCapacity } from "@shared/schema";
+import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users } from "@shared/schema";
 import { sql as drizzleSql, eq } from "drizzle-orm";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
@@ -3950,6 +3950,48 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     const { activityType, title, description } = req.body;
     const activity = await storage.addActivityFeed({ profileId: profile.id, activityType, title, description });
     res.json(activity);
+  }));
+
+  // Submit onboarding quiz
+  app.post('/api/onboarding/quiz', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { goal, experienceLevel, role, timeAvailability, painPoint, learningStyle, recommendedExperiences } = req.body;
+    
+    // Validate required fields
+    if (!goal || !experienceLevel || !role || !timeAvailability || !painPoint || !learningStyle) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    const quizData = {
+      userId,
+      goal,
+      experienceLevel,
+      role,
+      timeAvailability,
+      painPoint,
+      learningStyle,
+      recommendedExperiences: recommendedExperiences || [],
+    };
+
+    const result = await db.insert(quizResponses)
+      .values(quizData as any)
+      .onConflictDoUpdate({
+        target: quizResponses.userId,
+        set: quizData as any,
+      })
+      .returning();
+
+    // Mark onboarding as completed in user record
+    await db.update(users).set({ onboardingCompleted: true }).where(eq(users.id, userId));
+
+    res.json(result[0] || result);
+  }));
+
+  // Get user's quiz responses and recommendations
+  app.get('/api/onboarding/quiz', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const result = await db.select().from(quizResponses).where(eq(quizResponses.userId, userId)).limit(1);
+    res.json(result[0] || null);
   }));
 
   const httpServer = createServer(app);

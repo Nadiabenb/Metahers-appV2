@@ -2374,3 +2374,24 @@ export const profileActivityFeed = pgTable("profile_activity_feed", {
 export const insertProfileActivityFeedSchema = createInsertSchema(profileActivityFeed).omit({ id: true, createdAt: true });
 export type InsertProfileActivityFeed = z.infer<typeof insertProfileActivityFeedSchema>;
 export type ProfileActivityFeedDB = typeof profileActivityFeed.$inferSelect;
+
+// Onboarding Quiz Responses table
+export const quizResponses = pgTable("quiz_responses", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  goal: varchar("goal").notNull(), // "master_ai", "build_web3", "own_authority", "advance_career"
+  experienceLevel: varchar("experience_level").notNull(), // "beginner", "intermediate", "comfortable", "expert"
+  role: varchar("role").notNull(), // "solopreneur", "mom", "creative", "executive", "freelancer"
+  timeAvailability: varchar("time_availability").notNull(), // "casual", "5hrs_week", "intensive"
+  painPoint: varchar("pain_point").notNull(), // "overwhelmed", "tech_scared", "no_time", "imposter_syndrome"
+  learningStyle: varchar("learning_style").notNull(), // "video", "written", "interactive", "coaching"
+  recommendedExperiences: jsonb("recommended_experiences").$type<string[]>().notNull().default(sql`'[]'::jsonb`), // array of experience slugs
+  completedAt: timestamp("completed_at").defaultNow(),
+}, (table) => [
+  index("idx_quiz_user").on(table.userId),
+  index("idx_quiz_completed").on(table.completedAt),
+]);
+
+export const insertQuizResponseSchema = createInsertSchema(quizResponses).omit({ id: true, completedAt: true });
+export type InsertQuizResponse = z.infer<typeof insertQuizResponseSchema>;
+export type QuizResponseDB = typeof quizResponses.$inferSelect;
