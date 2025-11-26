@@ -371,4 +371,37 @@ body {
     background: hsl(var(--card));
     border-radius: calc(1.5rem - 2px);
   }
+
+  /* Premium Animated Gradient + Glow Effect for Titles */
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .premium-title {
+    background: linear-gradient(
+      135deg,
+      #8B5CF6 0%,      /* Purple */
+      #EC4899 25%,     /* Pink */
+      #3B82F6 50%,     /* Blue */
+      #EC4899 75%,     /* Pink */
+      #8B5CF6 100%     /* Purple */
+    );
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientFlow 6s ease infinite;
+    filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4)) drop-shadow(0 0 24px rgba(139, 92, 246, 0.2));
+    position: relative;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .premium-title {
+      animation: none;
+      background-position: 0% 50%;
+    }
+  }
 }
