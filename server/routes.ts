@@ -625,7 +625,7 @@ Return ONLY valid JSON:
     // Set up session
     req.session!.userId = user.id;
 
-    req.session!.save((err) => {
+    req.session!.save((err: any) => {
       if (err) {
         console.error("Session save error:", err);
         return res.status(500).json({ message: "Failed to create session" });
@@ -670,7 +670,7 @@ Return ONLY valid JSON:
     // Set up session
     req.session!.userId = user.id;
 
-    req.session!.save((err) => {
+    req.session!.save((err: any) => {
       if (err) {
         console.error("Session save error:", err);
         return res.status(500).json({ message: "Failed to create session" });
