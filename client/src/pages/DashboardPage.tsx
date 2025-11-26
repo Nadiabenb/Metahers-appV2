@@ -234,6 +234,9 @@ export default function DashboardPage() {
           </div>
         </motion.div>
 
+        {/* Personalized Recommendations from Quiz */}
+        <PersonalizedRecommendations />
+
         {/* Quick Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
