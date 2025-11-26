@@ -7,7 +7,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import type { QuizResponseDB } from "@shared/schema";
+import { ArrowRight, Sparkles, CheckCircle2, SkipForward } from "lucide-react";
 
 const QUESTIONS = [
   {
@@ -91,6 +93,39 @@ export default function OnboardingQuizPage() {
   const [currentStep, setCurrentStep] = useState(0);
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Check if quiz already completed
+  const { data: existingQuiz } = useQuery<QuizResponseDB>({
+    queryKey: ['/api/onboarding/quiz'],
+  });
+
+  // If quiz already completed, show skip option
+  if (existingQuiz && !isSubmitting) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl p-8 md:p-12 text-center">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 mb-6">
+            <CheckCircle2 className="w-10 h-10 text-primary" />
+          </div>
+          <h2 className="font-cormorant text-3xl font-bold text-foreground mb-4">
+            Welcome Back! ✨
+          </h2>
+          <p className="text-lg text-foreground/70 mb-8">
+            You've already set up your personalized learning path. Let's continue your journey!
+          </p>
+          <Button
+            onClick={() => setLocation("/dashboard")}
+            size="lg"
+            className="gap-2"
+            data-testid="button-continue-to-dashboard"
+          >
+            Go to Dashboard
+            <ArrowRight className="w-5 h-5" />
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   const currentQuestion = QUESTIONS[currentStep];
   const isComplete = currentStep === QUESTIONS.length;
