@@ -102,52 +102,106 @@ export default function LandingPage() {
                 Master AI & Web3
               </span>
             </h1>
-            <p className="text-xl sm:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
-              Learn from real experts. Get personalized coaching. Build your tech future—no experience needed.
+            <p className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl mx-auto font-light">
+              Go from overwhelmed to unstoppable. Build AI & Web3 skills while living your life as a solopreneur, mom, or creative.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="mb-12 flex flex-col gap-3 justify-center max-w-2xl mx-auto">
+              <div className="flex items-center gap-2 text-foreground justify-center">
+                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-sm md:text-base">Real experts + real AI coaching + real human support (from me, Nadia)</span>
+              </div>
+              <div className="flex items-center gap-2 text-foreground justify-center">
+                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-sm md:text-base">12 transformational experiences free—no credit card, no commitment</span>
+              </div>
+              <div className="flex items-center gap-2 text-foreground justify-center">
+                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
+                <span className="text-sm md:text-base">Personalized roadmap based on your goals, not generic courses</span>
+              </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <motion.button
                 onClick={handleSignup}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-lg bg-primary text-primary-foreground font-semibold text-lg hover:bg-primary/90 shadow-lg shadow-primary/20 transition-all"
+                className="px-10 py-5 rounded-lg bg-primary text-primary-foreground font-bold text-lg hover:bg-primary/90 shadow-2xl shadow-primary/30 transition-all flex items-center gap-2"
                 data-testid="button-start-free"
               >
-                Start Free
+                <Sparkles className="w-5 h-5" />
+                Start Your Transformation Free
               </motion.button>
               <motion.button
                 onClick={handleLogin}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-lg border-2 border-primary text-primary font-semibold text-lg hover:bg-card transition-colors"
+                className="px-8 py-5 rounded-lg border-2 border-primary text-primary font-semibold text-lg hover:bg-card transition-colors"
                 data-testid="button-login-hero"
               >
-                Sign In
+                Welcome Back
               </motion.button>
             </div>
           </motion.div>
 
-          {/* Social proof - minimal */}
+          {/* Transformation proof - powerful */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-16 pt-12 border-t border-border"
+            className="mt-20 pt-16 border-t-2 border-border/50"
           >
-            <p className="text-sm text-muted-foreground mb-6">Trusted by 500+ women leaders</p>
-            <div className="flex justify-center gap-8 flex-wrap">
-              <div className="text-center p-4 rounded-lg bg-card/50 backdrop-blur-sm">
-                <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">65+</p>
-                <p className="text-sm text-muted-foreground mt-1">Learning experiences</p>
+            <p className="text-base text-muted-foreground mb-8 font-semibold uppercase tracking-wider">Real results. Real women. Real transformation.</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/10 backdrop-blur-sm">
+                <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">500+</p>
+                <p className="text-foreground font-semibold mb-1">Women leaders transformed</p>
+                <p className="text-sm text-muted-foreground">From side hustle to thriving brand</p>
               </div>
-              <div className="text-center p-4 rounded-lg bg-card/50 backdrop-blur-sm">
-                <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">9</p>
-                <p className="text-sm text-muted-foreground mt-1">Learning spaces</p>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-secondary/5 to-accent/5 border border-secondary/10 backdrop-blur-sm">
+                <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent mb-2">65+</p>
+                <p className="text-foreground font-semibold mb-1">Transformational experiences</p>
+                <p className="text-sm text-muted-foreground">Expert-led, personalized to you</p>
               </div>
-              <div className="text-center p-4 rounded-lg bg-card/50 backdrop-blur-sm">
-                <p className="text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Free</p>
-                <p className="text-sm text-muted-foreground mt-1">To start</p>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-accent/5 to-blue-1837/5 border border-accent/20 backdrop-blur-sm">
+                <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-accent to-blue-1837 bg-clip-text text-transparent mb-2">Lifetime</p>
+                <p className="text-foreground font-semibold mb-1">Access to 12 free experiences</p>
+                <p className="text-sm text-muted-foreground">Start now, upgrade when ready</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
+      <div className="relative py-24 px-6 lg:px-16 bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10">
+        <div className="max-w-5xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">What You'll Be Able To Do</h2>
+            <p className="text-lg text-muted-foreground mb-12">Join women who went from frustrated to empowered in weeks, not years</p>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="p-6 rounded-2xl bg-card/80 backdrop-blur border border-card-border hover-elevate transition-all">
+                <Bot className="w-10 h-10 text-primary mx-auto mb-4" />
+                <h3 className="font-bold text-lg mb-2 text-foreground">Master AI Tools</h3>
+                <p className="text-sm text-muted-foreground">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
+              </div>
+              
+              <div className="p-6 rounded-2xl bg-card/80 backdrop-blur border border-card-border hover-elevate transition-all">
+                <Globe className="w-10 h-10 text-secondary mx-auto mb-4" />
+                <h3 className="font-bold text-lg mb-2 text-foreground">Build Web3 Wealth</h3>
+                <p className="text-sm text-muted-foreground">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
+              </div>
+              
+              <div className="p-6 rounded-2xl bg-card/80 backdrop-blur border border-card-border hover-elevate transition-all">
+                <Crown className="w-10 h-10 text-accent mx-auto mb-4" />
+                <h3 className="font-bold text-lg mb-2 text-foreground">Own Your Authority</h3>
+                <p className="text-sm text-muted-foreground">Build your personal brand, establish thought leadership, and charge premium prices</p>
               </div>
             </div>
           </motion.div>
@@ -168,14 +222,14 @@ export default function LandingPage() {
             <div className="flex items-center gap-3 mb-4">
               <div className="h-px w-12 bg-gradient-to-r from-primary to-primary/50" />
               <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
-                Learning Spaces
+                Your Personalized Path
               </span>
             </div>
             <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-              Explore <span className="text-primary">9 Learning Spaces</span>
+              Choose Your <span className="text-primary">9 Learning Spaces</span>
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Choose your path to mastery. Each space contains personalized learning experiences designed for your success.
+              Each space is expertly designed to take you from where you are now to where you want to be—step by transformational step.
             </p>
           </motion.div>
 
