@@ -459,7 +459,7 @@ export const aiUsage = pgTable('ai_usage', {
   timestamp: timestamp('timestamp').defaultNow().notNull(),
 });
 
-export const insertAiUsageSchema = createInsertSchema(aiUsage).omit({ id: true, createdAt: true });
+export const insertAiUsageSchema = createInsertSchema(aiUsage).omit({ id: true, timestamp: true });
 export type InsertAiUsage = z.infer<typeof insertAiUsageSchema>;
 export type AiUsageDB = typeof aiUsage.$inferSelect;
 

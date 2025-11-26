@@ -5,6 +5,7 @@ import { SEO } from "@/components/SEO";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { RecommendationWidget } from "@/components/RecommendationWidget";
 import { PersonalizedRecommendations } from "@/components/PersonalizedRecommendations";
+import { NextExperienceWidget } from "@/components/NextExperienceWidget";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -236,6 +237,9 @@ export default function DashboardPage() {
 
         {/* Personalized Recommendations from Quiz */}
         <PersonalizedRecommendations />
+
+        {/* Next Experience */}
+        <NextExperienceWidget />
 
         {/* Quick Stats */}
         <motion.div
