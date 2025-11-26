@@ -97,8 +97,10 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground">
-              Master <span className="text-primary">AI & Web3</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-[hsl(var(--primary))] via-[hsl(var(--secondary))] via-[hsl(var(--pastel-yellow))] to-[hsl(var(--blue-1837))] bg-clip-text text-transparent animate-pulse">
+                Master AI & Web3
+              </span>
             </h1>
             <p className="text-xl sm:text-2xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
               Learn from real experts. Get personalized coaching. Build your tech future—no experience needed.
