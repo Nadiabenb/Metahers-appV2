@@ -151,20 +151,20 @@ export default function LandingPage() {
           >
             <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">Real results. Real women. Real transformation.</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/30 backdrop-blur">
-                <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">500+</p>
-                <p className="text-foreground font-bold mb-1">Women leaders transformed</p>
-                <p className="text-sm text-foreground/80">From side hustle to thriving brand</p>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/40 backdrop-blur-md">
+                <p className="text-5xl md:text-6xl font-bold text-foreground mb-2">500+</p>
+                <p className="text-foreground font-bold text-lg mb-1">Women leaders transformed</p>
+                <p className="text-sm text-foreground/90 font-medium">From side hustle to thriving brand</p>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-secondary/15 to-accent/15 border border-secondary/30 backdrop-blur">
-                <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent mb-2">65+</p>
-                <p className="text-foreground font-bold mb-1">Transformational experiences</p>
-                <p className="text-sm text-foreground/80">Expert-led, personalized to you</p>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-secondary/20 to-accent/20 border border-secondary/40 backdrop-blur-md">
+                <p className="text-5xl md:text-6xl font-bold text-foreground mb-2">65+</p>
+                <p className="text-foreground font-bold text-lg mb-1">Transformational experiences</p>
+                <p className="text-sm text-foreground/90 font-medium">Expert-led, personalized to you</p>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-accent/15 to-blue-1837/15 border border-accent/30 backdrop-blur">
-                <p className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-accent to-blue-1837 bg-clip-text text-transparent mb-2">Lifetime</p>
-                <p className="text-foreground font-bold mb-1">Access to 12 free experiences</p>
-                <p className="text-sm text-foreground/80">Start now, upgrade when ready</p>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-accent/20 to-blue-1837/20 border border-accent/40 backdrop-blur-md">
+                <p className="text-5xl md:text-6xl font-bold text-foreground mb-2">Lifetime</p>
+                <p className="text-foreground font-bold text-lg mb-1">Access to 12 free experiences</p>
+                <p className="text-sm text-foreground/90 font-medium">Start now, upgrade when ready</p>
               </div>
             </div>
           </motion.div>
@@ -219,14 +219,14 @@ export default function LandingPage() {
           >
             <div className="flex items-center gap-3 mb-4">
               <div className="h-px w-12 bg-gradient-to-r from-primary to-primary/50" />
-              <span className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+              <span className="text-xs uppercase tracking-widest text-foreground/80 font-bold">
                 Your Personalized Path
               </span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-foreground">
               Choose Your <span className="text-primary">9 Learning Spaces</span>
             </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground/90 leading-relaxed font-medium">
               Each space is expertly designed to take you from where you are now to where you want to be—step by transformational step.
             </p>
           </motion.div>
