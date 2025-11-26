@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { heroImage, spaceImages } from "@/lib/imageManifest";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
+import heroBackground from "@assets/generated_images/Hero_sanctuary_tech_woman_dcb2080b.png";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -84,12 +85,22 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* CLEAN HERO - Feminine Pastel Experience */}
-      <div className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden">
-        {/* Soft gradient backgrounds */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(50 100% 60%)] via-background to-background opacity-20" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(220 100% 52%)]/8 via-transparent to-transparent opacity-30" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-purple-400/8 via-transparent to-transparent opacity-30" />
+      {/* PREMIUM HERO - Stunning Background Image */}
+      <div 
+        className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden"
+        style={{
+          backgroundImage: `url(${heroBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Dark luxury wash overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60" />
+        {/* Premium accent gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(280 72% 48%)]/10 to-[hsl(280 72% 48%)]/20" />
+        {/* Subtle radial accents */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/15 via-transparent to-transparent opacity-40" />
         
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
@@ -97,25 +108,25 @@ export default function LandingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground">
-              Master <span className="bg-gradient-to-r from-[hsl(var(--primary))] via-[hsl(var(--secondary))] via-[hsl(50 100% 60%)] to-[hsl(220 100% 52%)] bg-clip-text text-transparent">AI & Web3</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white drop-shadow-2xl">
+              Master <span className="bg-gradient-to-r from-[#FFD700] via-[#FF69B4] to-[#00D9FF] bg-clip-text text-transparent drop-shadow-lg">AI & Web3</span>
             </h1>
-            <p className="text-lg sm:text-xl text-foreground mb-8 leading-relaxed max-w-2xl mx-auto font-medium">
+            <p className="text-lg sm:text-xl text-white/95 mb-8 leading-relaxed max-w-2xl mx-auto font-medium drop-shadow-lg">
               Go from overwhelmed to unstoppable. Build AI & Web3 skills while living your life as a solopreneur, mom, or creative.
             </p>
             
             <div className="mb-12 flex flex-col gap-3 justify-center max-w-2xl mx-auto">
-              <div className="flex items-center gap-2 text-foreground justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium">Real experts + real AI coaching + real human support (from me, Nadia)</span>
+              <div className="flex items-center gap-2 text-white/90 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-[#FFD700] flex-shrink-0" />
+                <span className="text-sm md:text-base font-medium drop-shadow-md">Real experts + real AI coaching + real human support (from me, Nadia)</span>
               </div>
-              <div className="flex items-center gap-2 text-foreground justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium">12 transformational experiences free—no credit card, no commitment</span>
+              <div className="flex items-center gap-2 text-white/90 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-[#FFD700] flex-shrink-0" />
+                <span className="text-sm md:text-base font-medium drop-shadow-md">12 transformational experiences free—no credit card, no commitment</span>
               </div>
-              <div className="flex items-center gap-2 text-foreground justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium">Personalized roadmap based on your goals, not generic courses</span>
+              <div className="flex items-center gap-2 text-white/90 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-[#FFD700] flex-shrink-0" />
+                <span className="text-sm md:text-base font-medium drop-shadow-md">Personalized roadmap based on your goals, not generic courses</span>
               </div>
             </div>
             
@@ -124,7 +135,7 @@ export default function LandingPage() {
                 onClick={handleSignup}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 rounded-lg bg-primary text-primary-foreground font-bold text-lg hover:bg-primary/90 shadow-2xl shadow-primary/30 transition-all flex items-center gap-2"
+                className="px-10 py-5 rounded-lg bg-gradient-to-r from-[#FFD700] to-[#FFA500] text-black font-bold text-lg shadow-2xl shadow-yellow-500/50 transition-all flex items-center gap-2 hover:shadow-yellow-500/70"
                 data-testid="button-start-free"
               >
                 <Sparkles className="w-5 h-5" />
@@ -134,7 +145,7 @@ export default function LandingPage() {
                 onClick={handleLogin}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-5 rounded-lg border-2 border-primary text-primary font-semibold text-lg hover:bg-card transition-colors"
+                className="px-8 py-5 rounded-lg border-2 border-white/80 text-white font-semibold text-lg hover:bg-white/10 transition-all backdrop-blur-sm"
                 data-testid="button-login-hero"
               >
                 Welcome Back
