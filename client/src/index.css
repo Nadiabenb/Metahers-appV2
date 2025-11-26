@@ -24,52 +24,52 @@ body {
   --elevate-1: rgba(212, 165, 165, 0.04);
   --elevate-2: rgba(212, 165, 165, 0.10);
 
-  /* Core Feminine Pastel Palette */
-  --soft-rose: 340 32% 88%;
-  --dusty-mauve: 340 25% 72%;
-  --soft-purple: 270 30% 75%;
-  --pastel-yellow: 45 100% 85%;
-  --blue-1837: 220 40% 75%;
-  --cream-white: 0 0% 99%;
-  --text-dark: 340 10% 25%;
-  --text-secondary: 340 10% 45%;
+  /* Modern Vibrant Feminine Palette */
+  --soft-rose: 340 100% 96%;
+  --dusty-mauve: 290 70% 50%;
+  --soft-purple: 280 80% 55%;
+  --pastel-yellow: 50 100% 60%;
+  --blue-1837: 220 100% 52%;
+  --cream-white: 0 0% 100%;
+  --text-dark: 280 20% 15%;
+  --text-secondary: 280 15% 35%;
 
-  /* Core Theme Colors - Light Feminine Mode */
-  --background: 340 32% 88%;
-  --foreground: 340 15% 12%;
-  --border: 340 30% 78%;
+  /* Core Theme Colors - Modern Light Mode */
+  --background: 0 0% 99%;
+  --foreground: 280 20% 10%;
+  --border: 280 30% 90%;
 
   --card: 0 0% 100%;
-  --card-foreground: 340 15% 12%;
-  --card-border: 340 25% 82%;
+  --card-foreground: 280 20% 10%;
+  --card-border: 280 25% 92%;
 
-  --sidebar: 340 32% 90%;
-  --sidebar-foreground: 340 15% 12%;
-  --sidebar-border: 340 25% 80%;
-  --sidebar-primary: 340 25% 72%;
+  --sidebar: 0 0% 99%;
+  --sidebar-foreground: 280 20% 10%;
+  --sidebar-border: 280 25% 90%;
+  --sidebar-primary: 280 80% 55%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 270 30% 75%;
-  --sidebar-accent-foreground: 340 15% 12%;
-  --sidebar-ring: 340 25% 72%;
+  --sidebar-accent: 50 100% 60%;
+  --sidebar-accent-foreground: 280 20% 10%;
+  --sidebar-ring: 280 80% 55%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 340 15% 12%;
-  --popover-border: 340 25% 83%;
+  --popover-foreground: 280 20% 10%;
+  --popover-border: 280 25% 92%;
 
-  --primary: 340 25% 72%;
+  --primary: 280 80% 55%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 270 30% 75%;
-  --secondary-foreground: 340 15% 12%;
+  --secondary: 220 100% 52%;
+  --secondary-foreground: 0 0% 100%;
 
-  --accent: 45 100% 85%;
-  --accent-foreground: 340 15% 12%;
+  --accent: 50 100% 60%;
+  --accent-foreground: 280 20% 10%;
 
-  --destructive: 0 68% 52%;
-  --destructive-foreground: 0 0% 98%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
 
-  --muted: 340 15% 65%;
-  --muted-foreground: 340 10% 35%;
+  --muted: 280 20% 75%;
+  --muted-foreground: 280 15% 40%;
 
   --input: 0 0% 99%;
   --ring: 340 25% 72%;
