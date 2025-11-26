@@ -13,7 +13,7 @@ import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
-import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users } from "@shared/schema";
+import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress } from "@shared/schema";
 import { sql as drizzleSql, eq } from "drizzle-orm";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
@@ -4014,7 +4014,6 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     const recommendedExps = allExps.filter(exp => recommendedSlugs.includes(exp.slug));
     
     // Find completed experiences
-    const { experienceProgress } = await import("@shared/schema");
     const completedExp = await db.select().from(experienceProgress).where(eq(experienceProgress.userId, userId));
     
     const completedExpIds = new Set(completedExp.filter((p: any) => p.completedAt).map((p: any) => p.experienceId));
