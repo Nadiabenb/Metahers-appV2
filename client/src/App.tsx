@@ -72,6 +72,7 @@ const CircleMessagingPage = lazy(() => import("@/pages/CircleMessagingPage"));
 const NewsletterPage = lazy(() => import("@/pages/NewsletterPage"));
 const WaitlistPage = lazy(() => import("@/pages/WaitlistPage"));
 const CheckoutPage = lazy(() => import("@/pages/CheckoutPage"));
+const OnboardingQuizPage = lazy(() => import("@/pages/OnboardingQuizPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -93,7 +94,7 @@ function Redirect({ to }: { to: string }) {
 }
 
 function Router() {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
   const [location] = useLocation();
 
   useEffect(() => {
@@ -169,6 +170,9 @@ function Router() {
 
         {isAuthenticated ? (
           <>
+            {/* Onboarding Quiz */}
+            <Route path="/onboarding/quiz" component={OnboardingQuizPage} />
+
             {/* Circle - Authenticated Routes */}
             <Route path="/circle-profile" component={CircleProfilePage} />
             <Route path="/circle-services" component={CircleServicesPage} />

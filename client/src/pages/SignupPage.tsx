@@ -98,13 +98,11 @@ export default function SignupPage() {
       
       toast({
         title: "Welcome to MetaHers Mind Spa!",
-        description: quizRitual 
-          ? "Your account has been created and your ritual is unlocked!"
-          : "Your account has been created successfully.",
+        description: "Let's personalize your learning journey...",
       });
       
-      // Redirect to rituals page if coming from quiz
-      setLocation(quizRitual ? "/rituals" : "/home");
+      // Redirect to onboarding quiz to set up personalized path
+      setLocation("/onboarding/quiz");
     } catch (error: any) {
       toast({
         title: "Signup failed",
