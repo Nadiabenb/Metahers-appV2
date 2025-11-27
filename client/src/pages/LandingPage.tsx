@@ -85,7 +85,7 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* PREMIUM HERO - Luxury Pastel Background */}
+      {/* PREMIUM HERO - Luxury Metaverse Background */}
       <div 
         className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden"
         style={{
@@ -95,38 +95,39 @@ export default function LandingPage() {
           backgroundAttachment: 'fixed'
         }}
       >
-        {/* Soft luxury wash overlay - lighter for pastel aesthetic */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/30 via-transparent to-[hsl(280 72% 48%)]/15" />
+        {/* Enhanced dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
         {/* Premium accent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[hsl(280 72% 48%)]/8 to-[hsl(340 100% 95%)]/20" />
-        {/* Subtle radial accents */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/10 via-transparent to-transparent opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+        {/* Strong radial light accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            className="backdrop-blur-sm bg-white/10 rounded-3xl p-8 lg:p-12"
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-foreground drop-shadow-md">
-              Master <span className="bg-gradient-to-r from-[hsl(var(--primary))] via-[#EC4899] to-[#3B82F6] bg-clip-text text-transparent">AI & Web3</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white drop-shadow-2xl" style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
+              Master <span className="bg-gradient-to-r from-[#FFD700] via-[#EC4899] to-[#00D9FF] bg-clip-text text-transparent drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>AI & Web3</span>
             </h1>
-            <p className="text-lg sm:text-xl text-foreground/85 mb-8 leading-relaxed max-w-2xl mx-auto font-medium drop-shadow-sm">
+            <p className="text-lg sm:text-xl text-white/95 mb-8 leading-relaxed max-w-2xl mx-auto font-medium drop-shadow-lg" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
               Go from overwhelmed to unstoppable. Build AI & Web3 skills while living your life as a solopreneur, mom, or creative.
             </p>
             
             <div className="mb-12 flex flex-col gap-3 justify-center max-w-2xl mx-auto">
-              <div className="flex items-center gap-2 text-foreground/80 justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium drop-shadow-sm">Real experts + real AI coaching + real human support (from me, Nadia)</span>
+              <div className="flex items-center gap-2 text-white/90 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-yellow-400 flex-shrink-0 drop-shadow-md" />
+                <span className="text-sm md:text-base font-medium drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.4)' }}>Real experts + real AI coaching + real human support (from me, Nadia)</span>
               </div>
-              <div className="flex items-center gap-2 text-foreground/80 justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium drop-shadow-sm">12 transformational experiences free—no credit card, no commitment</span>
+              <div className="flex items-center gap-2 text-white/90 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-yellow-400 flex-shrink-0 drop-shadow-md" />
+                <span className="text-sm md:text-base font-medium drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.4)' }}>12 transformational experiences free—no credit card, no commitment</span>
               </div>
-              <div className="flex items-center gap-2 text-foreground/80 justify-center">
-                <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium drop-shadow-sm">Personalized roadmap based on your goals, not generic courses</span>
+              <div className="flex items-center gap-2 text-white/90 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-yellow-400 flex-shrink-0 drop-shadow-md" />
+                <span className="text-sm md:text-base font-medium drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.4)' }}>Personalized roadmap based on your goals, not generic courses</span>
               </div>
             </div>
             
@@ -135,7 +136,7 @@ export default function LandingPage() {
                 onClick={handleSignup}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 rounded-lg bg-primary text-primary-foreground font-bold text-lg shadow-lg shadow-primary/40 transition-all flex items-center gap-2 hover:shadow-primary/60"
+                className="px-10 py-5 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-lg shadow-2xl transition-all flex items-center gap-2 hover:shadow-yellow-500/60"
                 data-testid="button-start-free"
               >
                 <Sparkles className="w-5 h-5" />
@@ -145,7 +146,7 @@ export default function LandingPage() {
                 onClick={handleLogin}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-5 rounded-lg border-2 border-primary text-primary font-semibold text-lg hover:bg-card/50 transition-all backdrop-blur-sm"
+                className="px-8 py-5 rounded-lg border-2 border-white/80 text-white font-semibold text-lg hover:bg-white/20 transition-all backdrop-blur-sm drop-shadow-lg"
                 data-testid="button-login-hero"
               >
                 Welcome Back
