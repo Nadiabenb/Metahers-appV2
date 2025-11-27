@@ -124,10 +124,10 @@ export function Navigation() {
 
           {/* Label */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-foreground truncate flex items-center gap-2">
+            <p className="text-sm font-medium text-white/90 truncate flex items-center gap-2 drop-shadow-md">
               {item.label}
               {item.pro && (
-                <Badge variant="secondary" className="text-[10px] px-1 py-0">
+                <Badge className="text-[10px] px-1 py-0 bg-yellow-400/30 text-white border-yellow-400/50">
                   PRO
                 </Badge>
               )}
@@ -167,7 +167,7 @@ export function Navigation() {
         </div>
 
         {/* Label */}
-        <span className="font-medium text-foreground flex-1 text-left">
+        <span className="font-medium text-white/90 flex-1 text-left drop-shadow-md">
           {item.label}
         </span>
 
@@ -181,16 +181,16 @@ export function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-2xl bg-background/70 border-b border-border shadow-[0_8px_32px_rgba(212,165,165,0.15)]">
-      {/* Gradient accent line */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-3xl bg-white/15 border-b border-white/20 shadow-lg shadow-purple-500/20">
+      {/* Premium gradient accent line */}
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <button
             onClick={() => handleNavClick("/")}
-            className="text-xl sm:text-2xl font-sans font-bold text-primary hover:text-primary/80 cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md transition-colors"
+            className="text-xl sm:text-2xl font-sans font-bold text-yellow-400 hover:text-yellow-300 cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md transition-colors drop-shadow-md"
             data-testid="link-home"
           >
             <span className="hidden sm:inline">MetaHers</span>
@@ -244,7 +244,7 @@ export function Navigation() {
                         {Object.entries(navCategories).map(([category, items]) => (
                           items.length > 0 && (
                             <div key={category}>
-                              <h3 className="text-xs font-semibold text-foreground/60 uppercase tracking-wider mb-3 px-2">
+                              <h3 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3 px-2 drop-shadow-md">
                                 {category}
                               </h3>
                               <div className="space-y-2">
