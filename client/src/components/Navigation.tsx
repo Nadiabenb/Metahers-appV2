@@ -362,20 +362,22 @@ export function Navigation() {
                   )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[350px]">
-                <div className="flex flex-col h-full">
-                  <div className="mb-6 pt-6">
-                    <h2 className="font-serif text-2xl font-bold text-gradient-violet">
+              <SheetContent side="right" className="w-[280px] sm:w-[350px] p-0 bg-gradient-to-b from-black/90 via-purple-950/50 to-black/90" style={{
+                backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(88,28,135,0.35) 50%, rgba(0,0,0,0.9) 100%)`
+              }}>
+                <div className="flex flex-col h-full p-4">
+                  <div className="mb-6 pt-2 border-b border-white/15 pb-4">
+                    <h2 className="font-serif text-2xl font-bold text-white drop-shadow-lg" style={{ textShadow: '0 0 8px rgba(0,0,0,0.8)' }}>
                       Menu
                     </h2>
                   </div>
 
-                  <div className="flex-1 flex flex-col gap-2 overflow-y-auto">
+                  <div className="flex-1 flex flex-col gap-3 overflow-y-auto pr-2">
                     {/* All categories in mobile */}
                     {Object.entries(navCategories).map(([category, items]) => (
                       items.length > 0 && (
-                        <div key={category} className="mb-4">
-                          <h3 className="text-xs font-semibold text-foreground/50 uppercase tracking-wider mb-3 px-2">
+                        <div key={category} className="mb-2">
+                          <h3 className="text-xs font-bold text-white/90 uppercase tracking-wider mb-3 px-2" style={{ textShadow: '0 0 6px rgba(0,0,0,0.8)' }}>
                             {category}
                           </h3>
                           <div className="space-y-2">
@@ -388,7 +390,7 @@ export function Navigation() {
                     ))}
 
                     {/* Pricing link */}
-                    <div className="border-t border-border pt-4 mt-2">
+                    <div className="border-t border-white/15 pt-3 mt-2">
                       <MobileNavItem item={{
                         path: "/upgrade",
                         label: "Pricing",
@@ -406,14 +408,14 @@ export function Navigation() {
                       className="block"
                       data-testid="link-mobile-whatsapp"
                     >
-                      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#25D366]/10 border-2 border-[#25D366]/30 hover-elevate active-elevate-2 transition-all">
+                      <div className="flex items-center gap-3 p-3 rounded-xl bg-[#25D366]/20 border-2 border-[#25D366]/60 hover-elevate active-elevate-2 transition-all">
                         <div className="w-10 h-10 rounded-lg bg-[#25D366] flex items-center justify-center shadow-lg flex-shrink-0">
                           <SiWhatsapp className="w-5 h-5 text-white" />
                         </div>
-                        <span className="font-medium text-foreground flex-1 text-left">
+                        <span className="font-medium text-white/95 flex-1 text-left drop-shadow-md">
                           Free AI Retreat
                         </span>
-                        <Badge variant="secondary" className="text-xs px-1.5 py-0">
+                        <Badge className="text-xs px-1.5 py-0 bg-[#25D366] text-black font-semibold">
                           FREE
                         </Badge>
                       </div>
@@ -439,7 +441,7 @@ export function Navigation() {
                   </div>
 
                   {/* Auth buttons at bottom */}
-                  <div className="border-t border-border pt-4 mt-4 space-y-2">
+                  <div className="border-t border-white/15 pt-4 mt-auto space-y-2">
                     {!isAuthenticated && !isLoading && (
                       <>
                         <Button
@@ -447,9 +449,8 @@ export function Navigation() {
                             trackCTAClick('nav_login_mobile', '/login');
                             handleNavClick("/login");
                           }}
-                          variant="default"
                           size="sm"
-                          className="w-full gap-2"
+                          className="w-full gap-2 bg-yellow-400 text-black font-semibold hover:bg-yellow-300 drop-shadow-md"
                           data-testid="button-mobile-login"
                         >
                           <LogIn className="w-4 h-4" />
@@ -460,9 +461,8 @@ export function Navigation() {
                             trackCTAClick('nav_signup_mobile', '/signup');
                             handleNavClick("/signup");
                           }}
-                          variant="outline"
                           size="sm"
-                          className="w-full gap-2"
+                          className="w-full gap-2 border-white/30 bg-white/10 text-white hover:bg-white/20 drop-shadow-md"
                           data-testid="button-mobile-signup"
                         >
                           Create Account
@@ -473,9 +473,8 @@ export function Navigation() {
                     {isAuthenticated && (
                       <Button
                         onClick={handleLogout}
-                        variant="ghost"
                         size="sm"
-                        className="w-full gap-2"
+                        className="w-full gap-2 border-white/20 bg-white/8 text-white/90 hover:bg-white/15 drop-shadow-md"
                         data-testid="button-mobile-logout"
                       >
                         <LogOut className="w-4 h-4" />
