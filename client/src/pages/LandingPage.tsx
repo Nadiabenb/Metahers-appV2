@@ -340,7 +340,7 @@ export default function LandingPage() {
                     className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`space-card-${space.slug}`}
                   >
-                    <div className="kinetic-glass rounded-lg overflow-visible border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
+                    <div className="rounded-lg overflow-visible border border-white/20 backdrop-blur-md bg-white/15 hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
                       {/* Cover Image */}
                       {spaceImage && (
                         <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-lg">
@@ -351,12 +351,12 @@ export default function LandingPage() {
                             loading="lazy"
                           />
                           {/* Gradient overlay with badge */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-card/90 via-card/30 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
                           
                           {/* Badge on image */}
                           {badge && (
                             <div className="absolute top-3 right-3">
-                              <Badge variant="default" className="text-xs font-semibold bg-purple-500/90 text-white border-purple-400/50 backdrop-blur-sm">
+                              <Badge variant="default" className="text-xs font-semibold bg-yellow-400 text-black border-yellow-300/50 backdrop-blur-sm">
                                 {badge.text}
                               </Badge>
                             </div>
@@ -368,34 +368,34 @@ export default function LandingPage() {
                       <div className="p-5 flex flex-col flex-1">
                         {/* Icon & Title Row */}
                         <div className="flex items-start gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center border border-primary/10 flex-shrink-0">
-                            <SpaceIcon className="w-5 h-5 text-primary" />
+                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400/30 to-yellow-400/10 flex items-center justify-center border border-yellow-400/30 flex-shrink-0">
+                            <SpaceIcon className="w-5 h-5 text-yellow-400 drop-shadow-md" />
                           </div>
 
                           {/* Title */}
-                          <h3 className="font-serif text-xl font-bold text-foreground group-hover:text-primary transition-colors flex-1 leading-tight">
+                          <h3 className="font-serif text-xl font-bold text-white group-hover:text-yellow-400 transition-colors flex-1 leading-tight drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
                             {space.name}
                           </h3>
                         </div>
 
                         {/* Description */}
-                        <p className="text-sm text-foreground leading-relaxed flex-1 mb-4">
+                        <p className="text-sm text-white/90 leading-relaxed flex-1 mb-4 drop-shadow-md" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
                           {space.description}
                         </p>
 
                         {/* Experience Count */}
-                        <div className="flex items-center gap-2 mb-4 text-xs text-foreground">
-                          <Sparkles className="w-3.5 h-3.5" />
+                        <div className="flex items-center gap-2 mb-4 text-xs text-white/80 drop-shadow-sm">
+                          <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
                           <span>{totalExperiencesCount} transformational experiences</span>
                           {freeExperiencesCount > 0 && (
-                            <Badge variant="outline" className="text-xs bg-primary/10 border-primary/30">
+                            <Badge className="text-xs bg-yellow-400/30 text-white border-yellow-400/50">
                               {freeExperiencesCount} Free
                             </Badge>
                           )}
                         </div>
 
                         {/* Footer - Minimal */}
-                        <div className="flex items-center justify-between text-xs text-foreground/60 group-hover:text-primary/80 transition-colors">
+                        <div className="flex items-center justify-between text-xs text-white/70 group-hover:text-yellow-400 transition-colors drop-shadow-sm">
                           <span className="uppercase tracking-wider font-medium">Explore Space</span>
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </div>
