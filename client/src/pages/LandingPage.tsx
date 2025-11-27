@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { heroImage, spaceImages } from "@/lib/imageManifest";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
-import heroBackground from "@assets/generated_images/diverse_women_with_ai_and_web3_elements_in_luxury_spa.png";
+import heroBackground from "@assets/generated_images/smiling_diverse_women_with_ai_and_web3_in_luxury_spa.png";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
