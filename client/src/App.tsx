@@ -7,6 +7,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { trackPageView } from "@/lib/analytics";
 import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
+import { NetworkErrorBoundary } from "@/components/NetworkErrorBoundary";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CursorSparkles } from "@/components/effects/CursorSparkles";
@@ -251,28 +253,33 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <TooltipProvider>
-            <ErrorBoundary fallback={
-              <div className="min-h-screen flex items-center justify-center p-4">
-                <div className="text-center">
-                  <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
-                  <h2 className="text-xl font-semibold mb-2">Unable to load app</h2>
-                  <p className="text-muted-foreground mb-4">Please refresh the page</p>
-                  <Button onClick={() => window.location.reload()}>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Refresh
-                  </Button>
+            <NetworkErrorBoundary>
+              <ErrorBoundary fallback={
+                <div className="min-h-screen flex items-center justify-center p-4">
+                  <div className="text-center">
+                    <AlertCircle className="w-12 h-12 text-destructive mx-auto mb-4" />
+                    <h2 className="text-xl font-semibold mb-2">Unable to load app</h2>
+                    <p className="text-muted-foreground mb-4">Please refresh the page</p>
+                    <Button onClick={() => window.location.reload()}>
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      Refresh
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            }>
-              <div className="min-h-screen bg-background overflow-x-hidden">
-                <CursorSparkles />
-                <CustomCursor />
-                <Navigation />
-                <Router />
-                <InstallPrompt />
-              </div>
-              <Toaster />
-            </ErrorBoundary>
+              }>
+                <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
+                  <CursorSparkles />
+                  <CustomCursor />
+                  <Navigation />
+                  <main className="flex-1">
+                    <Router />
+                  </main>
+                  <Footer />
+                  <InstallPrompt />
+                </div>
+                <Toaster />
+              </ErrorBoundary>
+            </NetworkErrorBoundary>
           </TooltipProvider>
         </ThemeProvider>
       </QueryClientProvider>
