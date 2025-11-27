@@ -10,6 +10,7 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 import { spaceImages } from "@/lib/imageManifest";
 import { SEO } from "@/components/SEO";
 import { WorldPageSkeleton } from "@/components/LoadingSkeleton";
+import worldBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
 
 type Space = {
   id: string;
@@ -133,7 +134,19 @@ export default function MetaHersWorldPage() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen relative bg-black"
+      style={{
+        backgroundImage: `url(${worldBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
+      }}
+    >
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[hsl(280 72% 48%)]/45 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+      
+      <div className="relative z-10">
       <SEO
         title="MetaHers World - 9 Learning Spaces for AI & Web3 Mastery"
         description="Master AI and Web3 through 9 specialized learning spaces with 54 transformational experiences. Forbes-meets-Vogue luxury education for women solopreneurs."
@@ -686,6 +699,7 @@ export default function MetaHersWorldPage() {
           </motion.div>
         </div>
       </section>
+      </div>
     </div>
   );
 }

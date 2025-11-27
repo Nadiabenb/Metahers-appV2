@@ -220,6 +220,7 @@ export default function DiscoverPage() {
               Limited to MetaHers WhatsApp community members • Takes 2 minutes
             </p>
           </motion.div>
+          </div>
         </div>
       </div>
     );

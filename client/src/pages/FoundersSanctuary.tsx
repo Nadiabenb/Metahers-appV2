@@ -22,6 +22,7 @@ import {
   MessageSquare
 } from "lucide-react";
 import { Link } from "wouter";
+import sanctuaryBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
 
 export default function FoundersSanctuary() {
   const milestones = [
@@ -166,7 +167,19 @@ export default function FoundersSanctuary() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen relative bg-black"
+      style={{
+        backgroundImage: `url(${sanctuaryBackground})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
+      }}
+    >
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[hsl(280 72% 48%)]/45 to-black/60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+      
+      <div className="relative z-10">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/10 via-transparent to-[hsl(var(--cyber-fuchsia))]/10" />
@@ -548,6 +561,7 @@ export default function FoundersSanctuary() {
           </Card>
         </motion.div>
       </section>
+      </div>
     </div>
   );
 }
