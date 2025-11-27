@@ -100,10 +100,10 @@ export function Navigation() {
         onClick={() => handleNavClick(item.path, item.label)}
         whileHover={{ scale: 1.02, x: 4 }}
         whileTap={{ scale: 0.98 }}
-        className={`relative group w-full rounded-xl p-3 backdrop-blur-xl border overflow-hidden transition-all text-left ${
+        className={`relative group w-full rounded-xl p-3 backdrop-blur-md border overflow-hidden transition-all text-left ${
           isActive 
-            ? 'border-white/40 bg-white/10' 
-            : 'border-white/10 bg-white/5 hover:border-white/30 hover:bg-white/8'
+            ? 'border-yellow-400/50 bg-yellow-400/15' 
+            : 'border-white/20 bg-white/8 hover:border-yellow-400/40 hover:bg-yellow-400/10'
         }`}
         data-testid={`mega-nav-${item.label.toLowerCase().replace(' ', '-')}`}
       >
@@ -210,7 +210,7 @@ export function Navigation() {
                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
                 variant="ghost"
                 size="sm"
-                className="gap-2"
+                className="gap-2 text-white/90 hover:text-yellow-400 transition-colors drop-shadow-md"
                 data-testid="button-explore-menu"
               >
                 <Compass className="w-4 h-4" />
@@ -237,7 +237,10 @@ export function Navigation() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full right-0 mt-2 w-[900px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] backdrop-blur-2xl bg-background/95 border border-white/20 rounded-3xl shadow-2xl p-6 z-50 overflow-y-auto"
+                      className="absolute top-full right-0 mt-2 w-[900px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] backdrop-blur-3xl bg-gradient-to-br from-black/70 via-purple-900/50 to-black/70 border border-white/15 rounded-3xl shadow-2xl shadow-purple-500/30 p-6 z-50 overflow-y-auto"
+                      style={{
+                        backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(168,85,247,0.3) 50%, rgba(0,0,0,0.7) 100%)`
+                      }}
                     >
                       {/* 3-Column Grid Layout */}
                       <div className="grid grid-cols-3 gap-6">
@@ -258,11 +261,11 @@ export function Navigation() {
                       </div>
 
                       {/* Quick Actions Footer */}
-                      <div className="border-t border-white/10 pt-4 mt-4">
+                      <div className="border-t border-white/15 pt-4 mt-4">
                         <div className="flex items-center justify-between gap-2">
                           <button
                             onClick={() => handleNavClick("/upgrade")}
-                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2 flex-1"
+                            className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-yellow-400 text-black hover:bg-yellow-300 h-9 px-4 py-2 flex-1 drop-shadow-md hover-elevate"
                             data-testid="mega-nav-pricing"
                           >
                             <Crown className="w-4 h-4" />
@@ -271,7 +274,7 @@ export function Navigation() {
                           {isAuthenticated && (
                             <button
                               onClick={() => handleNavClick("/account")}
-                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2 flex-1"
+                              className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-white/30 bg-white/10 text-white hover:bg-white/20 h-9 px-4 py-2 flex-1 drop-shadow-md hover-elevate"
                               data-testid="mega-nav-account"
                             >
                               <User className="w-4 h-4" />
