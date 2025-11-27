@@ -91,12 +91,12 @@ export default function LandingPage() {
 
       {/* PREMIUM HERO - Luxury Metaverse Background */}
       <div 
-        className="relative min-h-[80vh] flex items-center justify-center px-6 lg:px-16 py-32 overflow-hidden"
+        className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden"
         style={{
           backgroundImage: `url(${heroBackground})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
         }}
       >
         {/* Enhanced dark overlay for text legibility */}
@@ -189,12 +189,12 @@ export default function LandingPage() {
 
       {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
       <div 
-        className="relative py-24 px-6 lg:px-16"
+        className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16"
         style={{
           backgroundImage: `url(${transformationBackground})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
         }}
       >
         {/* Enhanced dark overlay for text legibility */}
@@ -240,12 +240,12 @@ export default function LandingPage() {
 
       {/* NINE LEARNING SPACES - Editorial Grid */}
       <div 
-        className="relative py-40 px-6 lg:px-16"
+        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16"
         style={{
           backgroundImage: `url(${learningSpacesBackground})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
         }}
       >
         {/* Enhanced dark overlay for text legibility */}
@@ -412,12 +412,12 @@ export default function LandingPage() {
 
       {/* MEMBERSHIP TIERS - Clean Modern Layout */}
       <div 
-        className="relative py-40 px-6 lg:px-16"
+        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16"
         style={{
           backgroundImage: `url(${pricingBackground})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
+          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
         }}
       >
         {/* Enhanced dark overlay for text legibility */}
