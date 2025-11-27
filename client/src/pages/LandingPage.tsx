@@ -11,6 +11,10 @@ import { heroImage, spaceImages } from "@/lib/imageManifest";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import heroBackground from "@assets/generated_images/metaverse_digital_worlds_with_ai_and_web3_elements.png";
+import transformationBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
+import learningSpacesBackground from "@assets/generated_images/metaverse_9_learning_spaces_and_portals.png";
+import pricingBackground from "@assets/generated_images/metaverse_premium_marketplace_and_storefront.png";
+import nadiaBackground from "@assets/generated_images/metaverse_sanctuary_meeting_and_guidance_space.png";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -184,10 +188,21 @@ export default function LandingPage() {
       </div>
 
       {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
-      <div className="relative py-24 px-6 lg:px-16">
-        {/* Enhanced background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/20 via-background to-[hsl(220 100% 52%)]/15" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+      <div 
+        className="relative py-24 px-6 lg:px-16"
+        style={{
+          backgroundImage: `url(${transformationBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Enhanced dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
+        {/* Premium accent gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+        {/* Strong radial light accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-5xl mx-auto text-center">
           <motion.div
@@ -224,10 +239,21 @@ export default function LandingPage() {
       </div>
 
       {/* NINE LEARNING SPACES - Editorial Grid */}
-      <div className="relative py-40 px-6 lg:px-16">
-        {/* Enhanced background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/15 via-background to-[hsl(220 100% 52%)]/10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
+      <div 
+        className="relative py-40 px-6 lg:px-16"
+        style={{
+          backgroundImage: `url(${learningSpacesBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Enhanced dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
+        {/* Premium accent gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+        {/* Strong radial light accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-[1400px] mx-auto">
           {/* Section Header - Magazine Style */}
@@ -385,10 +411,21 @@ export default function LandingPage() {
       </div>
 
       {/* MEMBERSHIP TIERS - Clean Modern Layout */}
-      <div className="relative py-40 px-6 lg:px-16">
-        {/* Enhanced background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/20 via-background to-[hsl(220 100% 52%)]/15" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+      <div 
+        className="relative py-40 px-6 lg:px-16"
+        style={{
+          backgroundImage: `url(${pricingBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Enhanced dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
+        {/* Premium accent gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+        {/* Strong radial light accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-6xl mx-auto">
           <motion.div
@@ -468,10 +505,21 @@ export default function LandingPage() {
       </div>
 
       {/* MEET NADIA - Editorial Feature Story */}
-      <div className="relative py-40 px-6 lg:px-16 overflow-hidden">
-        {/* Enhanced background overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/20 via-background to-[hsl(220 100% 52%)]/15" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+      <div 
+        className="relative py-40 px-6 lg:px-16 overflow-hidden"
+        style={{
+          backgroundImage: `url(${nadiaBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        {/* Enhanced dark overlay for text legibility */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
+        {/* Premium accent gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+        {/* Strong radial light accent */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-7xl mx-auto">
           {/* Section Header */}
