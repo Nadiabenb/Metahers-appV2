@@ -181,7 +181,7 @@ export function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-xl bg-transparent">
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-xl bg-gradient-to-b from-background/80 via-background/60 to-background/40">
       {/* Premium gradient accent line */}
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-yellow-400/40 to-transparent" />
 
