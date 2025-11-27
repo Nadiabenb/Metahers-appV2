@@ -184,34 +184,39 @@ export default function LandingPage() {
       </div>
 
       {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
-      <div className="relative py-24 px-6 lg:px-16 bg-gradient-to-r from-primary/20 via-secondary/20 to-accent/20">
-        <div className="max-w-5xl mx-auto text-center">
+      <div className="relative py-24 px-6 lg:px-16">
+        {/* Enhanced background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/20 via-background to-[hsl(220 100% 52%)]/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+        
+        <div className="relative max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
+            className="backdrop-blur-sm bg-white/8 rounded-3xl p-12 border border-white/10"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-foreground">What You'll Be Able To Do</h2>
-            <p className="text-lg text-foreground mb-12 font-medium">Join women who went from frustrated to empowered in weeks, not years</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>What You'll Be Able To Do</h2>
+            <p className="text-lg text-white/90 mb-12 font-medium drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>Join women who went from frustrated to empowered in weeks, not years</p>
             
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-card backdrop-blur-md border border-card-border hover-elevate transition-all">
-                <Bot className="w-10 h-10 text-primary mx-auto mb-4" />
-                <h3 className="font-bold text-lg mb-2 text-foreground">Master AI Tools</h3>
-                <p className="text-sm text-foreground/85">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 backdrop-blur-sm border border-primary/30 hover-elevate transition-all">
+                <Bot className="w-10 h-10 text-yellow-400 mx-auto mb-4 drop-shadow-md" />
+                <h3 className="font-bold text-lg mb-2 text-white drop-shadow-md">Master AI Tools</h3>
+                <p className="text-sm text-white/85 drop-shadow-sm">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
               </div>
               
-              <div className="p-6 rounded-2xl bg-card backdrop-blur-md border border-card-border hover-elevate transition-all">
-                <Globe className="w-10 h-10 text-secondary mx-auto mb-4" />
-                <h3 className="font-bold text-lg mb-2 text-foreground">Build Web3 Wealth</h3>
-                <p className="text-sm text-foreground/85">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-secondary/30 to-secondary/10 backdrop-blur-sm border border-secondary/30 hover-elevate transition-all">
+                <Globe className="w-10 h-10 text-yellow-400 mx-auto mb-4 drop-shadow-md" />
+                <h3 className="font-bold text-lg mb-2 text-white drop-shadow-md">Build Web3 Wealth</h3>
+                <p className="text-sm text-white/85 drop-shadow-sm">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
               </div>
               
-              <div className="p-6 rounded-2xl bg-card backdrop-blur-md border border-card-border hover-elevate transition-all">
-                <Crown className="w-10 h-10 text-accent mx-auto mb-4" />
-                <h3 className="font-bold text-lg mb-2 text-foreground">Own Your Authority</h3>
-                <p className="text-sm text-foreground/85">Build your personal brand, establish thought leadership, and charge premium prices</p>
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-accent/30 to-accent/10 backdrop-blur-sm border border-accent/30 hover-elevate transition-all">
+                <Crown className="w-10 h-10 text-yellow-400 mx-auto mb-4 drop-shadow-md" />
+                <h3 className="font-bold text-lg mb-2 text-white drop-shadow-md">Own Your Authority</h3>
+                <p className="text-sm text-white/85 drop-shadow-sm">Build your personal brand, establish thought leadership, and charge premium prices</p>
               </div>
             </div>
           </motion.div>
@@ -219,26 +224,30 @@ export default function LandingPage() {
       </div>
 
       {/* NINE LEARNING SPACES - Editorial Grid */}
-      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-background via-purple-400/5 to-background">
-        <div className="max-w-[1400px] mx-auto">
+      <div className="relative py-40 px-6 lg:px-16">
+        {/* Enhanced background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/15 via-background to-[hsl(220 100% 52%)]/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
+        
+        <div className="relative max-w-[1400px] mx-auto">
           {/* Section Header - Magazine Style */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="mb-20 max-w-3xl"
+            className="mb-20 max-w-3xl backdrop-blur-sm bg-white/8 rounded-2xl p-8 border border-white/10"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="h-px w-12 bg-gradient-to-r from-primary to-primary/50" />
-              <span className="text-xs uppercase tracking-widest text-foreground/80 font-bold">
+              <div className="h-px w-12 bg-gradient-to-r from-yellow-400 to-yellow-400/50" />
+              <span className="text-xs uppercase tracking-widest text-white/80 font-bold drop-shadow-md">
                 Your Personalized Path
               </span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-foreground">
-              Choose Your <span className="text-primary">9 Learning Spaces</span>
+            <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+              Choose Your <span className="text-yellow-400">9 Learning Spaces</span>
             </h2>
-            <p className="text-lg text-foreground/90 leading-relaxed font-medium">
+            <p className="text-lg text-white/90 leading-relaxed font-medium drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
               Each space is expertly designed to take you from where you are now to where you want to be—step by transformational step.
             </p>
           </motion.div>
@@ -376,19 +385,23 @@ export default function LandingPage() {
       </div>
 
       {/* MEMBERSHIP TIERS - Clean Modern Layout */}
-      <div className="relative py-40 px-6 lg:px-16 bg-gradient-to-br from-[hsl(50 100% 60%)]/20 via-background to-[hsl(220 100% 52%)]/10">
-        <div className="max-w-6xl mx-auto">
+      <div className="relative py-40 px-6 lg:px-16">
+        {/* Enhanced background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/20 via-background to-[hsl(220 100% 52%)]/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+        
+        <div className="relative max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-24"
+            className="text-center mb-24 backdrop-blur-sm bg-white/8 rounded-2xl p-8 border border-white/10"
           >
-            <h2 className="text-5xl lg:text-6xl font-bold mb-6">
-              Simple <span className="text-primary">Pricing</span>
+            <h2 className="text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+              Simple <span className="text-yellow-400">Pricing</span>
             </h2>
-            <p className="text-xl text-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
               Start free. Upgrade when you're ready. No hidden fees.
             </p>
           </motion.div>
@@ -400,11 +413,11 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="kinetic-glass rounded-3xl p-12 border border-card-border hover-elevate transition-all duration-300"
+              className="rounded-3xl p-12 border border-white/20 backdrop-blur-sm bg-white/10 hover-elevate transition-all duration-300"
             >
               <div className="mb-10">
-                <h3 className="font-serif text-5xl font-bold mb-4">Free Forever</h3>
-                <p className="text-foreground text-lg leading-relaxed">
+                <h3 className="font-serif text-5xl font-bold mb-4 text-white drop-shadow-lg">Free Forever</h3>
+                <p className="text-white/90 text-lg leading-relaxed drop-shadow-md">
                   12 transformational experiences, personalized AI coaching, and direct calls with Nadia.
                 </p>
               </div>
@@ -412,7 +425,7 @@ export default function LandingPage() {
                 onClick={handleSignup}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="w-full px-8 py-6 rounded-full border-2 border-foreground/20 bg-card hover:bg-card/80 hover:border-foreground/40 transition-all font-semibold text-lg"
+                className="w-full px-8 py-6 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg font-semibold text-lg transition-all"
                 data-testid="button-start-free-tier"
               >
                 Start Your Journey Free
@@ -425,18 +438,18 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="kinetic-glass rounded-3xl p-12 border-2 border-primary/40 relative overflow-hidden shadow-2xl shadow-primary/20 hover-elevate transition-all duration-300"
+              className="rounded-3xl p-12 border-2 border-yellow-400/50 relative overflow-hidden backdrop-blur-sm bg-white/15 shadow-2xl shadow-purple-500/20 hover-elevate transition-all duration-300"
             >
               {/* Exclusive Badge */}
               <div className="absolute top-6 right-6">
-                <Badge className="bg-primary text-primary-foreground border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
+                <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
                   Most Popular
                 </Badge>
               </div>
 
               <div className="mb-10">
-                <h3 className="font-sans text-5xl font-bold mb-4">Inner Circle</h3>
-                <p className="text-foreground text-lg leading-relaxed">
+                <h3 className="font-sans text-5xl font-bold mb-4 text-white drop-shadow-lg">Inner Circle</h3>
+                <p className="text-white/90 text-lg leading-relaxed drop-shadow-md">
                   All 36 experiences, thought leadership journey, priority access to Nadia + monthly group coaching.
                 </p>
               </div>
@@ -444,7 +457,7 @@ export default function LandingPage() {
                 onClick={() => window.location.href = "/upgrade"}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="w-full px-8 py-6 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all font-semibold text-lg"
+                className="w-full px-8 py-6 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg font-semibold text-lg transition-all"
                 data-testid="button-upgrade-pro"
               >
                 Unlock Inner Circle
@@ -455,26 +468,30 @@ export default function LandingPage() {
       </div>
 
       {/* MEET NADIA - Editorial Feature Story */}
-      <div className="relative py-40 px-6 lg:px-16 bg-background overflow-hidden">
-        <div className="max-w-7xl mx-auto">
+      <div className="relative py-40 px-6 lg:px-16 overflow-hidden">
+        {/* Enhanced background overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/20 via-background to-[hsl(220 100% 52%)]/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent" />
+        
+        <div className="relative max-w-7xl mx-auto">
           {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="mb-20 max-w-3xl"
+            className="mb-20 max-w-3xl backdrop-blur-sm bg-white/8 rounded-2xl p-8 border border-white/10"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-gradient-to-r from-purple-500 to-pink-500" />
-              <span className="text-sm uppercase tracking-widest text-foreground font-medium">
+              <div className="h-px w-12 bg-gradient-to-r from-yellow-400 to-yellow-400/50" />
+              <span className="text-sm uppercase tracking-widest text-white/80 font-medium drop-shadow-md">
                 Human-Powered AI
               </span>
             </div>
-            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6">
-              <span className="text-gradient-purple-pink">Meet Nadia</span>
+            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+              Meet Nadia
             </h2>
-            <p className="text-xl text-foreground leading-relaxed">
+            <p className="text-xl text-white/90 leading-relaxed drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
               Your personal guide. Text or call me anytime you need motivation—no extra charge.
             </p>
           </motion.div>
@@ -535,27 +552,27 @@ export default function LandingPage() {
               </div>
 
               {/* Bio Card */}
-              <div className="kinetic-glass rounded-2xl p-8 border border-card-border">
-                <p className="text-lg leading-relaxed mb-4">
+              <div className="rounded-2xl p-8 border border-white/20 backdrop-blur-sm bg-white/10">
+                <p className="text-lg leading-relaxed mb-4 text-white/95 drop-shadow-md">
                   <span className="font-semibold">CS degree + MBA + Cornell Blockchain certified.</span> Fluent in English, French & Arabic. Former Hotel GM turned Web3 educator.
                 </p>
               </div>
 
               {/* Human-Powered Difference */}
-              <div className="kinetic-glass rounded-2xl p-8 border border-card-border">
+              <div className="rounded-2xl p-8 border border-white/20 backdrop-blur-sm bg-white/10">
                 <div className="flex items-center gap-3 mb-4">
-                  <MessageCircle className="w-6 h-6 text-primary" />
-                  <h3 className="text-xl font-serif font-bold">The Human-Powered Difference</h3>
+                  <MessageCircle className="w-6 h-6 text-yellow-400" />
+                  <h3 className="text-xl font-serif font-bold text-white drop-shadow-md">The Human-Powered Difference</h3>
                 </div>
-                <p className="text-foreground leading-relaxed">
-                  Unlike AI-only platforms, you get <span className="font-semibold text-foreground">direct access to me</span>. Call or text when you're stuck. No chatbots, no waiting. Just real human support from someone who remembers being a beginner in 2020.
+                <p className="text-white/90 leading-relaxed drop-shadow-md">
+                  Unlike AI-only platforms, you get <span className="font-semibold">direct access to me</span>. Call or text when you're stuck. No chatbots, no waiting. Just real human support from someone who remembers being a beginner in 2020.
                 </p>
               </div>
 
               {/* CTA */}
               <button
                 onClick={handleSignup}
-                className="w-full px-12 py-5 rounded-full border-2 border-foreground/20 bg-card hover:bg-card/80 transition-all font-semibold text-lg"
+                className="w-full px-12 py-5 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-semibold text-lg hover:shadow-lg transition-all"
                 data-testid="button-meet-nadia"
               >
                 Start Your Journey
