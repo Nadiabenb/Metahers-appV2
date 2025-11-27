@@ -1,16 +1,21 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, ArrowRight, CheckCircle2, Lock, BookOpen, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, Crown, ShoppingCart } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { SEO } from "@/components/SEO";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { lazy, Suspense } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 // Lazy load non-critical components for better mobile performance
 const RecommendationWidget = lazy(() => import("@/components/RecommendationWidget").then(m => ({ default: m.RecommendationWidget })));
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { spaceImages } from "@/lib/imageManifest";
 import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
 import learnBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
 
@@ -43,9 +48,74 @@ const websiteSchema = {
   }
 };
 
+type Space = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  icon: string;
+  color: string;
+  sortOrder: number;
+  isActive: boolean;
+};
+
+type Experience = {
+  id: string;
+  spaceId: string;
+  title: string;
+  slug: string;
+  description: string;
+  learningObjectives: string[];
+  tier: "free" | "pro";
+  estimatedMinutes: number;
+  sortOrder: number;
+  isActive: boolean;
+};
+
+const SPACE_VALUE_PROPS: Record<string, { outcomes: string[] }> = {
+  "web3": {
+    outcomes: ["Understand blockchain fundamentals", "Navigate Web3 confidently", "Build your first dApp"],
+  },
+  "crypto": {
+    outcomes: ["Master NFT creation & trading", "Understand cryptocurrency", "Launch digital collections"],
+  },
+  "ai": {
+    outcomes: ["Build AI-powered workflows", "Master ChatGPT & tools", "Automate your business"],
+  },
+  "metaverse": {
+    outcomes: ["Navigate virtual worlds", "Understand digital ownership", "Create metaverse presence"],
+  },
+  "branding": {
+    outcomes: ["Build magnetic personal brand", "Stand out as thought leader", "Attract ideal clients"],
+  },
+  "moms": {
+    outcomes: ["Balance tech career & family", "Build flexible income", "Join supportive community"],
+  },
+  "app-atelier": {
+    outcomes: ["Build apps with AI", "No coding required", "Launch in days, not months"],
+  },
+  "founders-club": {
+    outcomes: ["Turn idea into reality", "Build profitable business", "Get founder mentorship"],
+  },
+  "digital-sales": {
+    outcomes: ["Launch online store in 3 days", "Master Instagram Shopping", "Scale with paid ads"],
+  },
+};
+
 export default function HomePage() {
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
   const [showWelcome, setShowWelcome] = useState(false);
+
+  const { data: spaces = [], isLoading: spacesLoading } = useQuery<Space[]>({
+    queryKey: ["/api/spaces"],
+  });
+
+  const { data: experiences = [], isLoading: experiencesLoading } = useQuery<Experience[]>({
+    queryKey: ["/api/experiences/all"],
+  });
+
+  const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
 
   useEffect(() => {
     // Show welcome modal for first-time users
@@ -192,6 +262,185 @@ export default function HomePage() {
             <Suspense fallback={<div className="h-64 animate-pulse bg-card rounded-xl" />}>
               <RecommendationWidget />
             </Suspense>
+          </div>
+        </section>
+      )}
+
+      {/* Learning Spaces Section */}
+      {!spacesLoading && spaces.length > 0 && (
+        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background/40 border-b border-border/30">
+          <div className="max-w-7xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3 }}
+              className="text-center mb-16"
+            >
+              <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
+                Explore Your Learning Spaces
+              </h2>
+              <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
+                Choose your sanctuary. Master AI, Web3, and the metaverse through luxury learning experiences.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {spaces
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .map((space, index) => {
+                  const isLocked = !isProUser && space.sortOrder > 2;
+                  const valueProp = SPACE_VALUE_PROPS[space.slug] || { outcomes: ["Master core concepts", "Build practical skills", "Transform your career"] };
+                  const spaceExperiences = experiences.filter(e => e.spaceId === space.id);
+                  const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
+                  const actualExperienceCount = spaceExperiences.length;
+
+                  const SpaceIcon = 
+                    space.name === "AI" ? Bot :
+                    space.name === "Web3" ? Globe :
+                    space.name === "NFT/Blockchain/Crypto" ? Gem :
+                    space.name === "Metaverse" ? CompassIcon :
+                    space.name === "Branding" ? Palette :
+                    space.name === "Moms" ? Heart :
+                    space.name === "App Atelier" ? Code2 :
+                    space.name === "Founder's Club" ? Crown :
+                    space.name === "Digital Boutique" ? ShoppingCart :
+                    Sparkles;
+
+                  return (
+                    <motion.div
+                      key={space.id}
+                      initial={{ opacity: 0, y: 40 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.5, delay: index * 0.08 }}
+                      className="group relative"
+                      data-testid={`space-card-landing-${space.slug}`}
+                    >
+                      <div className={`relative h-full ${isLocked ? 'opacity-90' : ''}`}>
+                        {/* Locked Overlay */}
+                        {isLocked && (
+                          <div className="absolute inset-0 z-10 rounded-2xl bg-gradient-to-br from-background/60 via-background/40 to-background/60 backdrop-blur-sm border-2 border-primary/30 flex items-center justify-center">
+                            <motion.div
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ delay: 0.3 }}
+                              className="text-center px-6"
+                            >
+                              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary/40">
+                                <Lock className="w-8 h-8 text-primary" />
+                              </div>
+                              <p className="font-semibold text-lg mb-2">PRO Access Required</p>
+                              <Button
+                                size="sm"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setLocation("/upgrade");
+                                }}
+                                className="gold-shimmer text-black"
+                                data-testid={`unlock-space-${space.slug}`}
+                              >
+                                Unlock Space
+                              </Button>
+                            </motion.div>
+                          </div>
+                        )}
+
+                        {/* Main Card */}
+                        <button
+                          onClick={() => {
+                            if (!isLocked) {
+                              setLocation(`/spaces/${space.slug}`);
+                            }
+                          }}
+                          disabled={isLocked}
+                          className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
+                          data-testid={`button-space-${space.slug}`}
+                        >
+                          <div className="rounded-2xl overflow-hidden border border-border/40 hover-elevate active-elevate-2 transition-all duration-500 h-full flex flex-col bg-gradient-to-br from-card/95 via-card to-card/90 backdrop-blur-sm shadow-2xl shadow-black/10 group-hover:shadow-3xl group-hover:shadow-primary/10">
+                            {/* Header Image */}
+                            {spaceImages[space.slug] && (
+                              <div className="relative w-full aspect-[4/3] overflow-hidden">
+                                <img
+                                  src={spaceImages[space.slug].src}
+                                  alt={spaceImages[space.slug].alt}
+                                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-500 group-hover:from-black/80" />
+                                
+                                {/* Floating Badges */}
+                                <div className="absolute top-4 left-4 flex gap-2">
+                                  {!isLocked && !experiencesLoading && freeExperiencesCount > 0 && (
+                                    <Badge className="backdrop-blur-md bg-emerald-500/20 border-emerald-400/40 text-emerald-100 font-semibold">
+                                      {freeExperiencesCount} Free
+                                    </Badge>
+                                  )}
+                                </div>
+
+                                {/* Experience Count */}
+                                <div className="absolute bottom-4 right-4 backdrop-blur-md bg-background/30 rounded-lg px-3 py-1.5 border border-white/20">
+                                  <div className="flex items-center gap-2 text-white">
+                                    <BookOpen className="w-4 h-4" />
+                                    <span className="text-sm font-semibold">{actualExperienceCount} Experiences</span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Card Content */}
+                            <div className="p-7 flex flex-col flex-1 relative">
+                              <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] to-transparent pointer-events-none" />
+                              
+                              <div className="relative z-10">
+                                {/* Title & Icon */}
+                                <div className="flex items-start justify-between mb-5">
+                                  <div className="flex-1">
+                                    <h3 className="font-serif text-2xl lg:text-3xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 mb-3 leading-tight">
+                                      {space.name}
+                                    </h3>
+                                    <p className="text-sm text-foreground line-clamp-2 leading-relaxed">
+                                      {space.description}
+                                    </p>
+                                  </div>
+                                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/20 flex-shrink-0 ml-4 shadow-lg shadow-primary/5 group-hover:shadow-xl group-hover:shadow-primary/10 group-hover:scale-105 transition-all duration-500">
+                                    <SpaceIcon className="w-7 h-7 text-primary group-hover:scale-110 transition-transform duration-500" />
+                                  </div>
+                                </div>
+
+                                {/* Learning Outcomes */}
+                                <div className="flex-1 mb-5">
+                                  <h4 className="text-[10px] uppercase tracking-widest text-foreground font-bold mb-4">You'll Master:</h4>
+                                  <ul className="space-y-2.5">
+                                    {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
+                                      <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/90 group/item">
+                                        <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform duration-300" />
+                                        <span className="leading-snug">{outcome}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+
+                                {/* CTA Footer */}
+                                <div className="pt-5 border-t border-border/50">
+                                  <div className="flex items-center justify-between group/cta">
+                                    <span className="text-sm font-bold text-primary group-hover/cta:tracking-wide transition-all duration-300">
+                                      {isLocked ? "Unlock to Explore" : "Explore Space"}
+                                    </span>
+                                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
+                                      <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+            </div>
           </div>
         </section>
       )}
