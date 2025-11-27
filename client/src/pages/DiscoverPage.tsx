@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { SEO } from "@/components/SEO";
 import { Input } from "@/components/ui/input";
 import { trackCTAClick, trackQuizComplete } from "@/lib/analytics";
+import discoverBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
 
 export default function DiscoverPage() {
   const [stage, setStage] = useState<"intro" | "quiz" | "results" | "email-capture">("intro");
@@ -123,13 +124,25 @@ export default function DiscoverPage() {
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen bg-background py-12 px-4 sm:px-6 lg:px-8">
-        <SEO
-          title="Discover Your Perfect AI & Web3 Ritual - Free Quiz"
-          description="Discover your perfect AI & Web3 learning path in 2 minutes. Free personalized quiz matches you with hands-on rituals for beginners. Start learning today!"
-          keywords="AI quiz, Web3 assessment, personalized learning, AI course finder, blockchain quiz, tech education quiz"
-        />
-        <div className="max-w-4xl mx-auto">
+      <div className="min-h-screen relative bg-black py-12 px-4 sm:px-6 lg:px-8"
+        style={{
+          backgroundImage: `url(${discoverBackground})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
+        }}
+      >
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[hsl(280 72% 48%)]/45 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
+        
+        <div className="relative z-10">
+          <SEO
+            title="Discover Your Perfect AI & Web3 Ritual - Free Quiz"
+            description="Discover your perfect AI & Web3 learning path in 2 minutes. Free personalized quiz matches you with hands-on rituals for beginners. Start learning today!"
+            keywords="AI quiz, Web3 assessment, personalized learning, AI course finder, blockchain quiz, tech education quiz"
+          />
+          <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

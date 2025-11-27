@@ -603,6 +603,7 @@ export default function DashboardPage() {
           userName={user?.firstName || undefined}
         />
       )}
+      </div>
     </div>
   );
 }
