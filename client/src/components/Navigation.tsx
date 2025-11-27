@@ -190,11 +190,17 @@ export function Navigation() {
           {/* Logo */}
           <button
             onClick={() => handleNavClick("/")}
-            className="text-xl sm:text-2xl font-sans font-bold text-yellow-400 hover:text-yellow-300 cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md transition-colors drop-shadow-md"
+            className="font-sans font-bold hover:opacity-90 cursor-pointer hover-elevate active-elevate-2 px-3 py-2 rounded-md transition-opacity drop-shadow-md text-lg sm:text-2xl"
+            style={{
+              background: "linear-gradient(135deg, hsl(var(--liquid-gold)) 0%, hsl(var(--hyper-violet)) 50%, hsl(var(--cyber-fuchsia)) 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              textShadow: "0 0 20px hsla(var(--liquid-gold), 0.2)"
+            }}
             data-testid="link-home"
           >
-            <span className="hidden sm:inline">MetaHers</span>
-            <span className="sm:hidden">M✨</span>
+            MetaHers
           </button>
 
           {/* Desktop Navigation - Mega Menu */}
