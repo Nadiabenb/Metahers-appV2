@@ -124,10 +124,10 @@ export function Navigation() {
 
           {/* Label */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white/90 truncate flex items-center gap-2 drop-shadow-md">
+            <p className="text-sm font-bold text-white truncate flex items-center gap-2" style={{ textShadow: '0 0 8px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.6)' }}>
               {item.label}
               {item.pro && (
-                <Badge className="text-[10px] px-1 py-0 bg-yellow-400/30 text-white border-yellow-400/50">
+                <Badge className="text-[10px] px-1 py-0 bg-yellow-400 text-black font-semibold border-yellow-300/80">
                   PRO
                 </Badge>
               )}
@@ -237,9 +237,9 @@ export function Navigation() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.2 }}
-                      className="absolute top-full right-0 mt-2 w-[900px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] backdrop-blur-3xl bg-gradient-to-br from-black/70 via-purple-900/50 to-black/70 border border-white/15 rounded-3xl shadow-2xl shadow-purple-500/30 p-6 z-50 overflow-y-auto"
+                      className="absolute top-full right-0 mt-2 w-[900px] max-w-[calc(100vw-2rem)] max-h-[calc(100vh-120px)] backdrop-blur-3xl bg-gradient-to-br from-black/85 via-purple-950/60 to-black/85 border border-white/20 rounded-3xl shadow-2xl shadow-purple-500/40 p-6 z-50 overflow-y-auto"
                       style={{
-                        backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(168,85,247,0.3) 50%, rgba(0,0,0,0.7) 100%)`
+                        backgroundImage: `linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(88,28,135,0.4) 50%, rgba(0,0,0,0.85) 100%)`
                       }}
                     >
                       {/* 3-Column Grid Layout */}
@@ -247,7 +247,7 @@ export function Navigation() {
                         {Object.entries(navCategories).map(([category, items]) => (
                           items.length > 0 && (
                             <div key={category}>
-                              <h3 className="text-xs font-semibold text-white/70 uppercase tracking-wider mb-3 px-2 drop-shadow-md">
+                              <h3 className="text-xs font-bold text-white uppercase tracking-wider mb-3 px-2" style={{ textShadow: '0 0 6px rgba(0,0,0,0.8)' }}>
                                 {category}
                               </h3>
                               <div className="space-y-2">
