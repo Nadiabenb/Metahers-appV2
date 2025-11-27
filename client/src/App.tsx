@@ -73,6 +73,8 @@ const NewsletterPage = lazy(() => import("@/pages/NewsletterPage"));
 const WaitlistPage = lazy(() => import("@/pages/WaitlistPage"));
 const CheckoutPage = lazy(() => import("@/pages/CheckoutPage"));
 const OnboardingQuizPage = lazy(() => import("@/pages/OnboardingQuizPage"));
+const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"));
+const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -159,6 +161,10 @@ function Router() {
         {/* Newsletter & Waitlist - Public */}
         <Route path="/newsletter" component={NewsletterPage} />
         <Route path="/waitlist" component={WaitlistPage} />
+        
+        {/* Legal Pages - Public */}
+        <Route path="/privacy" component={PrivacyPolicyPage} />
+        <Route path="/terms" component={TermsOfServicePage} />
         <Route path="/checkout/:tier/:priceId" component={(props: any) => {
           const tiers = { pro: { name: 'Pro', price: 29 }, sanctuary: { name: 'Sanctuary', price: 99 }, 'inner-circle': { name: 'Inner Circle', price: 299 } };
           const tier = tiers[props.tier as keyof typeof tiers];

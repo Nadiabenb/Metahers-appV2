@@ -8,6 +8,12 @@
     <meta name="description" content="MetaHers - AI and Web3 education for women in tech" />
     <meta name="theme-color" content="#0D0D0F" />
     
+    <!-- iOS App Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-color" content="#0D0D0F" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    
     <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MetaHers Mind Spa" />
@@ -52,7 +58,6 @@
         } else {
           eventBuffer.push({ name: eventName, params: eventParams });
         }
-        console.log('Event tracked:', eventName, eventParams);
       };
       
       // Load GA after page is interactive (reduces TBT by ~200ms)

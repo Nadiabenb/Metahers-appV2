@@ -24,7 +24,7 @@ export function trackConversion(eventName: string, params?: {
   }
   
   // Also log to console for debugging
-  console.log(`[Analytics] ${eventName}`, params);
+  // Analytics: ${eventName}`, params);
 }
 
 /**
