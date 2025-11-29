@@ -1218,7 +1218,23 @@ Return ONLY valid JSON:
   app.get('/api/spaces/:spaceId/experiences', async (req: Request, res) => {
     try {
       const { spaceId } = req.params;
-      const experiences = await storage.getExperiencesBySpace(spaceId);
+      // Return experiences directly from seed data (avoids database dependency)
+      const experiences = EXPERIENCES.filter(exp => exp.spaceId === spaceId)
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map(exp => ({
+          id: exp.slug,
+          spaceId: exp.spaceId,
+          title: exp.title,
+          slug: exp.slug,
+          description: exp.description,
+          learningObjectives: exp.learningObjectives,
+          tier: exp.tier,
+          estimatedMinutes: exp.estimatedMinutes,
+          sortOrder: exp.sortOrder,
+          isActive: exp.isActive,
+          content: exp.content,
+          personalizationEnabled: exp.personalizationEnabled
+        }));
       res.json(experiences);
     } catch (error) {
       console.error("Error fetching experiences:", error);
