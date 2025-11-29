@@ -194,6 +194,159 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
     personalizationEnabled: false
   },
 
+  {
+    spaceId: "web3",
+    title: "Smart Contracts & DAOs",
+    slug: "web3-smart-contracts-daos",
+    description: "Master smart contracts, DAOs, and decentralized governance",
+    tier: "pro",
+    estimatedMinutes: 70,
+    sortOrder: 4,
+    isActive: true,
+    learningObjectives: [
+      "Understand smart contracts and how they work",
+      "Learn about DAOs and decentralized governance",
+      "Evaluate smart contract risks and opportunities"
+    ],
+    content: {
+      sections: [
+        {
+          id: "smart-contracts-intro",
+          title: "What Are Smart Contracts?",
+          type: "text",
+          content: "Smart contracts are self-executing code deployed on blockchain. When conditions are met, the code automatically executes. No intermediary needed. Example: A smart contract could automatically distribute royalties to artists when their work sells. Think of it as a digital vending machine—you insert payment, the machine automatically delivers the product. In blockchain, smart contracts deliver financial outcomes, ownership transfers, or complex logic without human intervention. For women entrepreneurs, this enables automated business processes without hiring administrators."
+        },
+        {
+          id: "dao-governance",
+          title: "DAOs: Decentralized Autonomous Organizations",
+          type: "text",
+          content: "A DAO is an organization run entirely by smart contracts and community voting. Members hold governance tokens that give voting rights. Decisions are made through proposals and voting, not top-down management. Example: MakerDAO (manages the DAI stablecoin) is controlled by MKR token holders who vote on system parameters. Uniswap, Aave, and Curve are DAOs controlled by community members. For women entrepreneurs, DAOs represent genuinely inclusive governance without traditional power hierarchies."
+        },
+        {
+          id: "governance-models",
+          title: "Governance Models and Voting",
+          type: "interactive",
+          content: "DAOs use various voting mechanisms: token-weighted voting (more tokens = more influence), quadratic voting (reduces whale dominance), delegation (vote through representatives), multi-sig (multiple signatures required). Each model has tradeoffs between decentralization and efficiency. Understand these models to evaluate which DAOs align with your values and which governance structures you'd want in your own organization."
+        },
+        {
+          id: "smart-contract-risks",
+          title: "Smart Contract Risks and Security",
+          type: "text",
+          content: "Smart contracts are code, and code has bugs. Historical hacks: The DAO hack (2016, $60M stolen due to contract vulnerability), Wormhole bridge hack (2022, $325M). These weren't scams—they were exploitable code vulnerabilities. Always: (1) Use audited contracts from reputable teams, (2) Understand code you interact with, (3) Start with small amounts, (4) Monitor security announcements from protocol teams. Contracts should be battle-tested by millions of dollars for months before you trust them with significant capital."
+        },
+        {
+          id: "dao-participation",
+          title: "Getting Involved in DAO Governance",
+          type: "hands_on_lab",
+          content: "Start participating in DAO governance: (1) Choose a DAO you believe in (Uniswap, Aave, Curve), (2) Research their governance token and voting system, (3) Join their Discord community and understand active discussions, (4) Read 3 recent governance proposals and their rationales, (5) Attend a community call or governance meeting. Document what you learn. This hands-on experience shows you how decentralized governance actually functions versus theory."
+        }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "web3",
+    title: "Web3 Opportunities for Women",
+    slug: "web3-opportunities-women",
+    description: "Discover Web3 business opportunities and funding mechanisms for female founders",
+    tier: "pro",
+    estimatedMinutes: 65,
+    sortOrder: 5,
+    isActive: true,
+    learningObjectives: [
+      "Identify Web3 business opportunities for women entrepreneurs",
+      "Learn about community tokens and fundraising in Web3",
+      "Build a Web3 business model for your venture"
+    ],
+    content: {
+      sections: [
+        {
+          id: "web3-opportunities",
+          title: "Web3 Business Opportunities",
+          type: "text",
+          content: "Web3 creates opportunities unavailable in traditional tech: (1) Community tokens—your followers become stakeholders earning value, (2) NFT collections—sell digital goods with perpetual royalties, (3) DAO leadership—run organizations without traditional hierarchies, (4) Creator platforms—earn directly from your audience without platform cuts, (5) DeFi protocols—build financial products accessible globally. Unlike traditional tech dominated by venture capital, Web3 enables bootstrapped, community-funded ventures. This dramatically changes who can build what."
+        },
+        {
+          id: "community-tokens",
+          title: "Community Tokens as Business Model",
+          type: "text",
+          content: "Instead of raising venture capital, issue a community token. Your supporters buy tokens, increasing value as you build. Example: A female creator issues 10M tokens at $0.10 (raising $1M community funding). As she builds, token value appreciates. Community members benefit from your success directly. This is fundamentally different from venture capital where investors own equity. Here, community is invested in your success AND benefits financially. Tools: Balancer Labs (token launch), Snapshot (community voting)."
+        },
+        {
+          id: "nft-business-model",
+          title: "NFTs and Creator Economics",
+          type: "interactive",
+          content: "NFTs enable new creator economics: (1) Limited editions of digital work (art, music, writing), (2) Perpetual royalties when NFTs resell (5-10% of secondary sales), (3) Community access through token-gating, (4) Direct-to-fan economics without platforms. Example: Create 100 limited edition NFTs of your digital artwork. Sell at $1,000 each. Every time they resell for $5,000, you earn $500 in perpetual royalties. Platform takes zero—it's all peer-to-peer."
+        },
+        {
+          id: "fundraising-web3",
+          title: "Web3 Fundraising: Alternatives to VC",
+          type: "text",
+          content: "Traditional VC is closed to most founders, especially women and minorities. Web3 alternatives: (1) Community funding—issue tokens, let community invest, (2) NFT drops—launch NFTs that fund your project and give holders governance, (3) DAOs—organize your team as a DAO where members share equity, (4) Grants—protocols fund builders through grants programs with no equity required. These mechanisms are more democratic and accessible than traditional venture capital."
+        },
+        {
+          id: "web3-business-plan",
+          title: "Design Your Web3 Business Model",
+          type: "hands_on_lab",
+          content: "Map your Web3 opportunity: (1) Choose your core offering (token, NFT, DAO, protocol), (2) Define your target community, (3) Design your tokenomics (how many tokens, distribution, vesting), (4) Plan your go-to-market (how do you get initial users?), (5) Set metrics (what success looks like). Document this in a one-page model. This isn't a full business plan—it's your Web3 hypothesis. Refine through community feedback."
+        }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "web3",
+    title: "Web3 Risk Management & Due Diligence",
+    slug: "web3-risk-management",
+    description: "Master risk assessment, due diligence, and smart decision-making in Web3",
+    tier: "pro",
+    estimatedMinutes: 75,
+    sortOrder: 6,
+    isActive: true,
+    learningObjectives: [
+      "Identify Web3 scams and common fraud schemes",
+      "Perform technical and team due diligence on protocols",
+      "Develop a risk management framework for Web3 investing"
+    ],
+    content: {
+      sections: [
+        {
+          id: "common-web3-scams",
+          title: "Common Web3 Scams and Red Flags",
+          type: "text",
+          content: "Web3 has unique scams: (1) Rug pulls—developers abandon project after collecting funds, (2) Pump and dump—artificially inflate token price then sell, (3) Fake contracts—fake token contracts that steal your assets, (4) Phishing—fake websites stealing private keys, (5) Fake giveaways—'send 1 ETH to receive 10 ETH back' (impossible), (6) Impersonation—scammers pretending to be project founders. Rule of thumb: If it sounds too good to be true, it's a scam. Never send money to unknown addresses. Verify everything independently."
+        },
+        {
+          id: "smart-contract-audit",
+          title: "Understanding Smart Contract Audits",
+          type: "text",
+          content: "A smart contract audit is a security review by specialized firms. Reputable auditors: OpenZeppelin, Trail of Bits, Immunefi, ConsenSys Diligence. An audit checks for vulnerabilities, logic errors, and security best practices. Critical rule: Only interact with audited smart contracts. Look for: (1) Audit from reputable firm, (2) Recent audit (within 6 months), (3) Public audit report available, (4) No critical vulnerabilities found. If a project skips audits or hides audit reports, it's a red flag."
+        },
+        {
+          id: "team-due-diligence",
+          title: "Assessing the Team Behind a Protocol",
+          type: "interactive",
+          content: "Evaluate the team: (1) Track record—have they shipped before?, (2) Transparency—are they publicly known or anonymous?, (3) Community trust—do community members support them?, (4) Funding—who are their investors?, (5) Communication—do they respond to issues and questions? Anonymous teams aren't inherently bad (Bitcoin creator Satoshi is anonymous), but anonymity increases risk. Reputable teams are transparent about who they are and have verifiable track records."
+        },
+        {
+          id: "tokenomics-analysis",
+          title: "Understanding Tokenomics",
+          type: "text",
+          content: "Tokenomics is the economics of a token. Critical questions: (1) Total supply—how many tokens will ever exist?, (2) Distribution—how many do founders, investors, and community have?, (3) Vesting—when do tokens unlock? (4) Inflation—does supply increase over time?, (5) Use case—what do tokens actually do? Red flags: founders own 50%+ of supply (suggests personal enrichment over project success), no vesting (immediate dumping risk), infinite inflation (dilutes value forever). Good tokenomics align founder incentives with long-term project success."
+        },
+        {
+          id: "risk-framework",
+          title: "Build Your Web3 Risk Framework",
+          type: "hands_on_lab",
+          content: "Create your personal Web3 risk framework: (1) Investment cap—maximum you'll risk per project, (2) Due diligence checklist—what you always verify, (3) Diversification rule—never more than X% in one project, (4) Exposure limits—maximum leverage or borrowed capital, (5) Exit strategy—when you sell, (6) Monitoring process—how often you check on investments. Document this. Use it for every Web3 opportunity. Your framework prevents emotional decision-making."
+        }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
   // ===== AI SPACE (9 experiences) =====
   {
     spaceId: "ai",
