@@ -207,7 +207,7 @@ export default function HomePage() {
             }}
             data-testid="text-hero-title"
           >
-            Luxury meets literacy.
+            Become a MetaHers Woman
           </motion.h1>
 
           <motion.p
@@ -216,7 +216,7 @@ export default function HomePage() {
             transition={{ duration: 0.3, delay: 0.2 }}
             className="text-xl sm:text-2xl text-foreground/90 mb-12 max-w-2xl mx-auto leading-relaxed"
           >
-            Learn AI + Web3 in a calm, guided ritual designed for the modern woman.
+            Master AI & Web3 to build your business, amplify your influence, and live on your terms. Join thousands of women redefining tech.
           </motion.p>
 
           <motion.div
@@ -230,7 +230,7 @@ export default function HomePage() {
               className="text-lg px-10 py-6 bg-[hsl(var(--gold-highlight))] text-black hover:neon-glow-violet font-semibold"
               dataTestId="button-cta-start"
             >
-              Start your AI Glow-Up (Free)
+              Begin Your Transformation (Free)
               <ArrowRight className="ml-2 w-5 h-5" />
             </CTAButton>
           </motion.div>
@@ -278,10 +278,10 @@ export default function HomePage() {
               className="text-center mb-16"
             >
               <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
-                Explore Your Learning Spaces
+                Discover Your Edge
               </h2>
               <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-                Choose your sanctuary. Master AI, Web3, and the metaverse through luxury learning experiences.
+                Choose your sanctuary. Master AI, Web3, and the metaverse to build influence, wealth, and impact in your business.
               </p>
             </motion.div>
 
@@ -425,7 +425,7 @@ export default function HomePage() {
                                 <div className="pt-5 border-t border-border/50">
                                   <div className="flex items-center justify-between group/cta">
                                     <span className="text-sm font-bold text-primary group-hover/cta:tracking-wide transition-all duration-300">
-                                      {isLocked ? "Unlock to Explore" : "Explore Space"}
+                                      {isLocked ? "Unlock Access" : "Begin Ritual"}
                                     </span>
                                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
                                       <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
@@ -455,29 +455,28 @@ export default function HomePage() {
             className="text-center mb-16"
           >
             <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
-              Your journey begins here
+              The MetaHers Difference
             </h2>
             <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-              Explore our curated rituals designed to make technology accessible, 
-              empowering, and beautifully simple.
+              We're not another academy. We're a lifestyle movement for women who refuse to be left behind in the AI + Web3 revolution.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Guided Rituals",
-                description: "Step-by-step experiences that blend futuristic luxury with tech education",
+                title: "Designed for Your Success",
+                description: "Practical, real-world strategies you can use TODAY in your business—not textbook theory",
                 gradient: "gradient-violet-magenta",
               },
               {
-                title: "Luxury Products",
-                description: "Beautifully crafted ritual bags with AI-powered experiences",
+                title: "Community of Winners",
+                description: "Join thousands of women solopreneurs building wealth, influence, and freedom",
                 gradient: "gradient-magenta-fuchsia",
               },
               {
-                title: "Personal Growth",
-                description: "Journal your journey and track your progress with AI insights",
+                title: "Luxury Learning Experience",
+                description: "Beautiful design + proven Harvard methodology = education that feels like self-care",
                 gradient: "gradient-teal-gold",
               },
             ].map((feature, index) => (
@@ -518,7 +517,7 @@ export default function HomePage() {
               <span className="text-sm font-medium">Trusted by 500+ Women</span>
             </div>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-violet">
-              What our community says
+              Stories from MetaHers Women
             </h2>
           </motion.div>
 
