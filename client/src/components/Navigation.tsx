@@ -15,55 +15,48 @@ export function Navigation() {
   const [location, setLocation] = useLocation();
   const { isAuthenticated, isLoading, user } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
-  const navCategories = {
-    "Featured": [
-      { path: "/retreat", label: "Free AI Retreat", icon: Sparkles },
-      { path: "/world", label: "MetaHers World", icon: Globe },
-      { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown },
-      ...(isAuthenticated ? [
-        { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-      ] : []),
-    ],
-    "AI & Tools": [
-      { path: "/playground", label: "AI Playground", icon: Sparkles },
-      { path: "/career-path", label: "Career Path", icon: Target },
-      { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp },
-      { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, pro: true },
-      { path: "/companion", label: "AI Companion", icon: MessageSquare },
-    ],
-    "Learn & Grow": [
-      { path: "/discover", label: "Discover", icon: Compass },
-      { path: "/rituals", label: "Rituals", icon: Zap },
-      { path: "/app-atelier", label: "App Atelier", icon: Code2 },
-      { path: "/blog", label: "Blog & Resources", icon: BookOpen },
-    ],
-    ...(isAuthenticated ? {
-      "Your Space": [
-        { path: "/journal", label: "Journal", icon: BookOpen },
-        { path: "/thought-leadership", label: "30-Day Journey", icon: Edit3, pro: true },
-        { path: "/events", label: "Events", icon: Calendar },
-        { path: "/shop", label: "Shop", icon: ShoppingBag },
-        { path: "/retro-camera", label: "Retro Camera", icon: Camera },
+  const menuSections = {
+    "Featured": {
+      icon: Sparkles,
+      items: [
+        { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, desc: "Join our community" },
+        { path: "/world", label: "MetaHers World", icon: Globe, desc: "Digital hub" },
+        { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, desc: "Premium space" },
+        ...(isAuthenticated ? [
+          { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, desc: "Your workspace" },
+        ] : []),
       ],
-    } : {
-      "Community": [
-        { path: "/circle", label: "Circle", icon: Users },
+    },
+    "AI & Tools": {
+      icon: TrendingUp,
+      items: [
+        { path: "/playground", label: "AI Playground", icon: Sparkles, desc: "Explore AI" },
+        { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "Master AI tools" },
+        { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, desc: "Transform yourself", pro: true },
+        { path: "/career-path", label: "Career Path Generator", icon: Target, desc: "Plan your path" },
+        { path: "/companion", label: "AI Companion", icon: MessageSquare, desc: "Chat & learn" },
       ],
-      "More": [
-        { path: "/shop", label: "Shop", icon: ShoppingBag },
-        { path: "/retro-camera", label: "Retro Camera", icon: Camera },
-        { path: "/vip-cohort", label: "VIP Cohort", icon: Crown },
-        { path: "/executive", label: "Executive", icon: Briefcase },
-        { path: "/ai-prompts", label: "AI Prompts", icon: Code2 },
+    },
+    "Learn & Grow": {
+      icon: BookOpen,
+      items: [
+        { path: "/discover", label: "Discover", icon: Compass, desc: "Explore content" },
+        { path: "/rituals", label: "Rituals", icon: Zap, desc: "Transform daily" },
+        { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build apps" },
+        { path: "/blog", label: "Blog & Resources", icon: BookOpen, desc: "Read insights" },
       ],
-    }),
-    ...(user && "isAdmin" in user && user.isAdmin ? {
-      "Admin": [
-        { path: "/admin", label: "Admin Dashboard", icon: Shield },
+    },
+    "Community": {
+      icon: Users,
+      items: [
+        { path: "/circle", label: "Circle", icon: Users, desc: "Connect with others" },
+        { path: "/shop", label: "Shop", icon: ShoppingBag, desc: "Browse products" },
+        { path: "/retro-camera", label: "Retro Camera", icon: Camera, desc: "Capture moments" },
+        { path: "/vip-cohort", label: "VIP Cohort", icon: Crown, desc: "Exclusive access" },
       ],
-    } : {}),
+    },
   };
 
   const handleLogout = async () => {
@@ -81,37 +74,33 @@ export function Navigation() {
     }
   };
 
-  const handleNavClick = (path: string, label?: string) => {
-    if (label && ['Discover', 'AI Builder', 'VIP Retreat', 'Shop', 'Blog'].includes(label)) {
-      trackCTAClick(`nav_${label.toLowerCase().replace(' ', '_')}`, path);
-    }
+  const handleNavClick = (path: string) => {
     setLocation(path);
     setMobileMenuOpen(false);
-    setMegaMenuOpen(false);
+    setActiveMenu(null);
   };
 
-  const MegaMenuCard = ({ item }: { item: any }) => {
+  const MenuItemCard = ({ item }: { item: any }) => {
     const Icon = item.icon;
     const isActive = location === item.path || 
       (item.path !== "/" && location.startsWith(item.path));
 
     return (
       <motion.button
-        onClick={() => handleNavClick(item.path, item.label)}
-        className={`relative group w-full p-3 text-left transition-all ${
+        onClick={() => handleNavClick(item.path)}
+        className={`w-full p-3 text-left rounded-md transition-all ${
           isActive 
-            ? 'bg-gray-100' 
-            : 'hover:bg-gray-50'
+            ? 'bg-purple-50 border border-purple-200' 
+            : 'hover:bg-gray-50 border border-transparent'
         }`}
-        data-testid={`mega-nav-${item.label.toLowerCase().replace(' ', '-')}`}
+        data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
       >
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 rounded">
             <Icon className="w-4 h-4 text-white" />
           </div>
-
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-black flex items-center gap-2">
+            <p className="text-sm font-semibold text-black flex items-center gap-2">
               {item.label}
               {item.pro && (
                 <Badge className="text-[10px] px-1 py-0 bg-purple-100 text-purple-700 border-0">
@@ -119,46 +108,35 @@ export function Navigation() {
                 </Badge>
               )}
             </p>
+            <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
           </div>
         </div>
       </motion.button>
     );
   };
 
-  const MobileNavItem = ({ item }: { item: any }) => {
-    const Icon = item.icon;
-    const isActive = location === item.path || 
-      (item.path !== "/" && location.startsWith(item.path));
+  const MenuSection = ({ section, items }: { section: string; items: any[] }) => {
+    const SectionIcon = menuSections[section as keyof typeof menuSections]?.icon || Sparkles;
 
     return (
-      <button
-        onClick={() => handleNavClick(item.path, item.label)}
-        className={`w-full flex items-center gap-3 p-3 transition-all ${
-          isActive 
-            ? 'bg-gray-100' 
-            : 'hover:bg-gray-50'
-        }`}
-        data-testid={`mobile-nav-${item.label.toLowerCase().replace(' ', '-')}`}
-      >
-        <div className="w-10 h-10 bg-black flex items-center justify-center flex-shrink-0">
-          <Icon className="w-5 h-5 text-white" />
+      <div className="p-6">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-6 h-6 bg-black flex items-center justify-center rounded">
+            <SectionIcon className="w-3 h-3 text-white" />
+          </div>
+          <h3 className="text-sm font-bold text-black uppercase tracking-wider">{section}</h3>
         </div>
-
-        <span className="font-medium text-black flex-1 text-left">
-          {item.label}
-        </span>
-
-        {item.pro && (
-          <Badge className="text-xs px-1.5 py-0 bg-purple-100 text-purple-700 border-0">
-            PRO
-          </Badge>
-        )}
-      </button>
+        <div className="space-y-2">
+          {items.map((item) => (
+            <MenuItemCard key={item.path} item={item} />
+          ))}
+        </div>
+      </div>
     );
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-100">
+    <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
@@ -170,105 +148,78 @@ export function Navigation() {
             MetaHers
           </button>
 
-          {/* Desktop Navigation - Center */}
-          <div className="hidden lg:flex items-center gap-6 flex-1">
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center gap-2 flex-1 mx-8">
             {/* Global Search */}
             <div className="flex-1 max-w-sm">
               <GlobalSearch />
             </div>
 
-            {/* Explore Menu Button */}
-            <div className="relative">
-              <Button
-                onClick={() => setMegaMenuOpen(!megaMenuOpen)}
-                variant="ghost"
-                size="sm"
-                className="gap-1 text-gray-700 hover:text-black uppercase tracking-wider text-sm font-medium"
-                data-testid="button-explore-menu"
-              >
-                Explore
-                <ChevronDown className={`w-4 h-4 transition-transform ${megaMenuOpen ? 'rotate-180' : ''}`} />
-              </Button>
+            {/* Main Menu Items */}
+            <div className="flex items-center gap-2">
+              {Object.entries(menuSections).map(([section, config]) => (
+                <div key={section} className="relative">
+                  <Button
+                    onClick={() => setActiveMenu(activeMenu === section ? null : section)}
+                    variant="ghost"
+                    size="sm"
+                    className="gap-1 text-gray-700 hover:text-black uppercase tracking-wider text-xs font-semibold"
+                    data-testid={`button-nav-${section.toLowerCase().replace(' ', '-')}`}
+                  >
+                    {section}
+                    <ChevronDown className={`w-3 h-3 transition-transform ${activeMenu === section ? 'rotate-180' : ''}`} />
+                  </Button>
 
-              {/* Mega Menu Dropdown */}
-              <AnimatePresence>
-                {megaMenuOpen && (
-                  <>
-                    {/* Backdrop */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="fixed inset-0 bg-black/10 z-40"
-                      onClick={() => setMegaMenuOpen(false)}
-                    />
-
-                    {/* Mega Menu Content */}
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.15 }}
-                      className="absolute top-full right-0 mt-2 w-[700px] max-w-[calc(100vw-2rem)] bg-white border border-gray-200 shadow-xl z-50"
-                    >
-                      {/* 3-Column Grid Layout */}
-                      <div className="grid grid-cols-3 divide-x divide-gray-100">
-                        {Object.entries(navCategories).map(([category, items]) => (
-                          items.length > 0 && (
-                            <div key={category} className="p-4">
-                              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-3">
-                                {category}
-                              </h3>
-                              <div className="space-y-1">
-                                {items.map((item) => (
-                                  <MegaMenuCard key={item.path} item={item} />
-                                ))}
-                              </div>
+                  {/* Dropdown Menu */}
+                  <AnimatePresence>
+                    {activeMenu === section && (
+                      <>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          className="fixed inset-0 z-40"
+                          onClick={() => setActiveMenu(null)}
+                        />
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -10 }}
+                          transition={{ duration: 0.1 }}
+                          className="absolute top-full left-0 mt-2 w-[320px] bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                        >
+                          <MenuSection section={section} items={config.items} />
+                          {section === "Featured" && (
+                            <div className="border-t border-gray-100 p-4 bg-gray-50">
+                              <Button
+                                onClick={() => handleNavClick("/upgrade")}
+                                className="w-full bg-black hover:bg-gray-900 text-white text-xs uppercase tracking-wider font-semibold"
+                                size="sm"
+                                data-testid="nav-membership"
+                              >
+                                <Crown className="w-3 h-3 mr-2" />
+                                View Membership
+                              </Button>
                             </div>
-                          )
-                        ))}
-                      </div>
-
-                      {/* Quick Actions Footer */}
-                      <div className="border-t border-gray-100 p-4 bg-gray-50">
-                        <div className="flex items-center justify-between gap-4">
-                          <button
-                            onClick={() => handleNavClick("/upgrade")}
-                            className="alo-button text-xs flex-1 flex items-center justify-center gap-2"
-                            data-testid="mega-nav-pricing"
-                          >
-                            <Crown className="w-4 h-4" />
-                            View Membership
-                          </button>
-                          {isAuthenticated && (
-                            <button
-                              onClick={() => handleNavClick("/account")}
-                              className="alo-button-outline text-xs flex-1 flex items-center justify-center gap-2"
-                              data-testid="mega-nav-account"
-                            >
-                              <User className="w-4 h-4" />
-                              Account
-                            </button>
                           )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
+                        </motion.div>
+                      </>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Desktop Auth & Actions - Right */}
-          <div className="hidden lg:flex items-center gap-4">
-            {/* Auth buttons */}
+          {/* Desktop Right Actions */}
+          <div className="hidden lg:flex items-center gap-3">
             {!isAuthenticated && !isLoading && (
               <Button
                 onClick={() => {
                   trackCTAClick('nav_login', '/login');
-                  setLocation("/login");
+                  handleNavClick("/login");
                 }}
-                className="bg-black text-white hover:bg-gray-900 uppercase tracking-wider text-xs font-medium"
+                className="bg-black text-white hover:bg-gray-900 uppercase tracking-wider text-xs font-semibold"
                 size="sm"
                 data-testid="button-login-nav"
               >
@@ -289,14 +240,14 @@ export function Navigation() {
               </Button>
             )}
 
-            {/* WhatsApp Retreat Link */}
+            {/* WhatsApp */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <a
                   href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => trackCTAClick('nav_whatsapp_retreat', 'whatsapp_retreat', 'free')}
+                  onClick={() => trackCTAClick('nav_whatsapp', 'whatsapp')}
                   data-testid="button-whatsapp-nav"
                 >
                   <Button
@@ -314,96 +265,55 @@ export function Navigation() {
             </Tooltip>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu */}
           <div className="lg:hidden">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
-                  aria-expanded={mobileMenuOpen}
-                  data-testid="button-mobile-menu"
                   className="text-black"
+                  data-testid="button-mobile-menu"
                 >
-                  {mobileMenuOpen ? (
-                    <X className="w-5 h-5" />
-                  ) : (
-                    <Menu className="w-5 h-5" />
-                  )}
+                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[280px] sm:w-[350px] p-0 bg-white">
+              <SheetContent side="right" className="w-[320px] p-0 bg-white">
                 <div className="flex flex-col h-full p-4">
                   <div className="mb-6 pt-2 border-b border-gray-100 pb-4">
-                    <h2 className="text-2xl font-semibold text-black">
-                      Menu
-                    </h2>
+                    <h2 className="text-2xl font-semibold text-black">Menu</h2>
                   </div>
 
-                  <div className="flex-1 flex flex-col gap-1 overflow-y-auto pr-2">
-                    {Object.entries(navCategories).map(([category, items]) => (
-                      items.length > 0 && (
-                        <div key={category} className="mb-4">
-                          <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-3">
-                            {category}
-                          </h3>
-                          <div className="space-y-1">
-                            {items.map((item) => (
-                              <MobileNavItem key={item.path} item={item} />
-                            ))}
+                  <div className="flex-1 overflow-y-auto space-y-6">
+                    {Object.entries(menuSections).map(([section, config]) => (
+                      <div key={section}>
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-6 h-6 bg-black flex items-center justify-center rounded">
+                            <config.icon className="w-3 h-3 text-white" />
                           </div>
+                          <h3 className="text-xs font-bold text-black uppercase tracking-wider">{section}</h3>
                         </div>
-                      )
-                    ))}
-
-                    {/* Pricing link */}
-                    <div className="border-t border-gray-100 pt-3 mt-2">
-                      <MobileNavItem item={{
-                        path: "/upgrade",
-                        label: "Membership",
-                        icon: ArrowUpCircle,
-                      }} />
-                    </div>
-
-                    {/* WhatsApp Retreat */}
-                    <a
-                      href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => trackCTAClick('mobile_whatsapp_retreat', 'whatsapp_retreat', 'free')}
-                      className="block mt-2"
-                      data-testid="link-mobile-whatsapp"
-                    >
-                      <div className="flex items-center gap-3 p-3 bg-[#25D366]/10 transition-all hover:bg-[#25D366]/20">
-                        <div className="w-10 h-10 bg-[#25D366] flex items-center justify-center flex-shrink-0">
-                          <SiWhatsapp className="w-5 h-5 text-white" />
+                        <div className="space-y-2 pl-2">
+                          {config.items.map((item) => (
+                            <button
+                              key={item.path}
+                              onClick={() => handleNavClick(item.path)}
+                              className="w-full text-left p-2 rounded hover:bg-gray-100 transition-colors"
+                              data-testid={`mobile-nav-${item.label.toLowerCase().replace(' ', '-')}`}
+                            >
+                              <p className="text-sm font-medium text-black flex items-center gap-2">
+                                {item.label}
+                                {"pro" in item && item.pro && <Badge className="text-[10px] px-1 bg-purple-100 text-purple-700 border-0">PRO</Badge>}
+                              </p>
+                              <p className="text-xs text-gray-500">{item.desc}</p>
+                            </button>
+                          ))}
                         </div>
-                        <span className="font-medium text-black flex-1 text-left">
-                          Free AI Retreat
-                        </span>
-                        <Badge className="text-xs px-1.5 py-0 bg-[#25D366] text-white border-0">
-                          FREE
-                        </Badge>
                       </div>
-                    </a>
-
-                    {isAuthenticated && (
-                      <MobileNavItem item={{
-                        path: "/account",
-                        label: "Account",
-                        icon: User,
-                      }} />
-                    )}
-
-                    <MobileNavItem item={{
-                      path: "/companion",
-                      label: "AI Companion",
-                      icon: Sparkles,
-                    }} />
+                    ))}
                   </div>
 
-                  {/* Auth buttons at bottom */}
+                  {/* Mobile Bottom Actions */}
                   <div className="border-t border-gray-100 pt-4 mt-auto space-y-2">
                     {!isAuthenticated && !isLoading && (
                       <>
@@ -413,20 +323,17 @@ export function Navigation() {
                             handleNavClick("/login");
                           }}
                           size="sm"
-                          className="w-full bg-black text-white hover:bg-gray-900 uppercase tracking-wider text-xs font-medium"
+                          className="w-full bg-black text-white hover:bg-gray-900 uppercase tracking-wider text-xs font-semibold"
                           data-testid="button-mobile-login"
                         >
                           <LogIn className="w-4 h-4 mr-2" />
                           Sign In
                         </Button>
                         <Button
-                          onClick={() => {
-                            trackCTAClick('nav_signup_mobile', '/signup');
-                            handleNavClick("/signup");
-                          }}
+                          onClick={() => handleNavClick("/signup")}
                           variant="outline"
                           size="sm"
-                          className="w-full border-black text-black hover:bg-gray-100 uppercase tracking-wider text-xs font-medium"
+                          className="w-full border-black text-black hover:bg-gray-50 uppercase tracking-wider text-xs font-semibold"
                           data-testid="button-mobile-signup"
                         >
                           Create Account
