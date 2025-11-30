@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams, Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { ArrowLeft, Lock, CheckCircle2, Clock, Trophy, Sparkles, ChevronRight, Bookmark } from "lucide-react";
+import { ArrowLeft, Lock, CheckCircle2, Clock, Trophy, Sparkles, ChevronRight, Bookmark, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -62,20 +62,14 @@ export default function SpaceDetailPage() {
 
   if (!slug) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
-        <Card className="max-w-md text-center p-8">
-          <CardHeader>
-            <CardTitle className="text-2xl mb-2">Space Not Found</CardTitle>
-            <CardDescription>
-              The space you're looking for doesn't exist.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button onClick={() => navigate("/world")} data-testid="button-back-to-world">
-              Back to MetaHers World
-            </Button>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen bg-white flex items-center justify-center p-6">
+        <div className="max-w-md text-center">
+          <h2 className="text-2xl font-semibold mb-4">Space Not Found</h2>
+          <p className="text-gray-600 mb-6">The space you're looking for doesn't exist.</p>
+          <button onClick={() => navigate("/world")} className="alo-button text-sm" data-testid="button-back-to-world">
+            Back to MetaHers World
+          </button>
+        </div>
       </div>
     );
   }
@@ -86,28 +80,23 @@ export default function SpaceDetailPage() {
 
   if (spaceError || !space) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-6">
-        <Card className="max-w-md text-center p-8">
-          <CardHeader>
-            <CardTitle className="text-2xl mb-2">Unable to Load Space</CardTitle>
-            <CardDescription>
-              We encountered an error while loading this space. Please try again.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <Button onClick={() => window.location.reload()} data-testid="button-retry">
+      <div className="min-h-screen bg-white flex items-center justify-center p-6">
+        <div className="max-w-md text-center">
+          <h2 className="text-2xl font-semibold mb-4">Unable to Load Space</h2>
+          <p className="text-gray-600 mb-6">We encountered an error while loading this space. Please try again.</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onClick={() => window.location.reload()} className="alo-button text-sm" data-testid="button-retry">
               Try Again
-            </Button>
-            <Button variant="outline" onClick={() => navigate("/world")} data-testid="button-back-to-world">
+            </button>
+            <button onClick={() => navigate("/world")} className="alo-button-outline text-sm" data-testid="button-back-to-world">
               Back to MetaHers World
-            </Button>
-          </CardContent>
-        </Card>
+            </button>
+          </div>
+        </div>
       </div>
     );
   }
 
-  // Special redirect for Founder's Club
   if (space.slug === "founders-club") {
     navigate("/founders-sanctuary");
     return null;
@@ -115,29 +104,25 @@ export default function SpaceDetailPage() {
 
   if (experiencesError) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="bg-muted/30 py-16 px-6">
+      <div className="min-h-screen bg-white">
+        <div className="bg-gray-50 py-16 px-6">
           <div className="container mx-auto max-w-6xl">
-            <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4">{space.name}</h1>
+            <h1 className="text-4xl font-semibold">{space.name}</h1>
           </div>
         </div>
         <div className="container mx-auto max-w-6xl px-6 py-16">
-          <Card className="max-w-2xl mx-auto text-center p-8">
-            <CardHeader>
-              <CardTitle className="text-2xl mb-2">Unable to Load Experiences</CardTitle>
-              <CardDescription>
-                We encountered an error while loading the experiences for this space.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Button onClick={() => window.location.reload()} data-testid="button-retry-experiences">
+          <div className="max-w-2xl mx-auto text-center">
+            <h2 className="text-2xl font-semibold mb-4">Unable to Load Experiences</h2>
+            <p className="text-gray-600 mb-6">We encountered an error while loading the experiences for this space.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <button onClick={() => window.location.reload()} className="alo-button text-sm" data-testid="button-retry-experiences">
                 Try Again
-              </Button>
-              <Button variant="outline" onClick={() => navigate("/world")} data-testid="button-back-to-world-error">
+              </button>
+              <button onClick={() => navigate("/world")} className="alo-button-outline text-sm" data-testid="button-back-to-world-error">
                 Back to MetaHers World
-              </Button>
-            </CardContent>
-          </Card>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -147,7 +132,7 @@ export default function SpaceDetailPage() {
   const proExperiences = experiences.filter(e => e.tier === "pro");
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <SEO
         title={`${space.name} Learning Space - Master AI & Web3`}
         description={`${space.description} Explore ${experiences.length} transformational experiences designed for women solopreneurs.`}
@@ -176,23 +161,20 @@ export default function SpaceDetailPage() {
           }
         }}
       />
-      {/* Editorial Hero Header */}
-      <div className="relative bg-muted/30 py-20 px-6 lg:px-16">
-        <div className="container mx-auto max-w-6xl">
+
+      {/* Hero Header - Clean Alo Style */}
+      <section className="py-20 px-6 border-b border-gray-100">
+        <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <Link href="/world">
-              <Button
-                variant="ghost"
-                className="-ml-4"
-                data-testid="button-back"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
+              <button className="text-sm text-gray-600 hover:text-black transition-colors flex items-center gap-2" data-testid="button-back">
+                <ArrowLeft className="w-4 h-4" />
                 Back to All Spaces
-              </Button>
+              </button>
             </Link>
             <ShareButton
               title={space.name}
-              text={`Check out ${space.name} on MetaHers Mind Spa - ${space.description}`}
+              text={`Check out ${space.name} on MetaHers - ${space.description}`}
               url={`/spaces/${slug}`}
               variant="ghost"
             />
@@ -201,68 +183,53 @@ export default function SpaceDetailPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             className="max-w-4xl"
           >
-            {/* Eyebrow */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-primary" />
-              <span className="text-sm uppercase tracking-widest text-foreground font-medium">
-                Transformation Ritual
-              </span>
-            </div>
+            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-6">
+              Transformation Ritual
+            </p>
 
-            {/* Headline */}
-            <h1 className="editorial-headline text-6xl lg:text-7xl xl:text-8xl mb-6">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight mb-6">
               Master {space.name}
             </h1>
 
-            {/* Description */}
-            <p className="text-2xl text-foreground mb-8 leading-relaxed max-w-3xl">
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl">
               {space.description}
             </p>
 
-            {/* Badges */}
-            <div className="flex flex-wrap gap-3">
-              <Badge variant="outline" className="gap-2 px-4 py-2 text-base">
+            <div className="flex flex-wrap gap-4">
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-sm">
                 <Trophy className="w-4 h-4" />
-                {experiences.length} Rituals & Labs
-              </Badge>
-              <Badge variant="outline" className="gap-2 px-4 py-2 text-base bg-primary/10 text-primary border-primary/30">
+                {experiences.length} Rituals
+              </span>
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-700 text-sm">
                 <Sparkles className="w-4 h-4" />
                 {freeExperiences.length} Free Rituals
-              </Badge>
+              </span>
             </div>
           </motion.div>
         </div>
-      </div>
+      </section>
 
-      {/* What You'll Accomplish - Editorial */}
-      <div className="container mx-auto max-w-6xl px-6 lg:px-16 py-20">
-        <motion.div
-          initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.8 }}
-        >
-          <div className="kinetic-glass rounded-2xl p-12 border border-card-border">
-            <motion.div 
-              className="flex items-center gap-4 mb-8"
-              initial={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.6, delay: 0.2 }}
-            >
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center">
-                <Sparkles className="w-7 h-7 text-primary" />
+      {/* What You'll Accomplish */}
+      <section className="py-16 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex items-center gap-4 mb-8">
+              <div className="w-12 h-12 bg-black flex items-center justify-center">
+                <Sparkles className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="font-serif text-3xl font-bold">What You'll Accomplish</h2>
-                <p className="text-foreground mt-1">
-                  Transformational outcomes designed for busy women who need results, not fluff.
-                </p>
+                <h2 className="text-2xl font-semibold">What You'll Accomplish</h2>
+                <p className="text-gray-600">Transformational outcomes for busy women.</p>
               </div>
-            </motion.div>
+            </div>
 
             <div className="grid md:grid-cols-3 gap-8">
               {[
@@ -284,250 +251,230 @@ export default function SpaceDetailPage() {
               ].map((item, index) => (
                 <motion.div
                   key={item.title}
-                  className="flex items-start gap-4"
-                  initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+                  initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.6, delay: 0.3 + (index * 0.1) }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="flex items-start gap-4"
                 >
-                  <div className="p-3 rounded-xl bg-primary/10 mt-1">
-                    <item.icon className="w-6 h-6 text-primary" />
+                  <div className="p-3 bg-white border border-gray-200">
+                    <item.icon className="w-5 h-5" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2 text-lg">{item.title}</h4>
-                    <p className="text-foreground leading-relaxed">
-                      {item.description}
-                    </p>
+                    <h4 className="font-semibold mb-1">{item.title}</h4>
+                    <p className="text-gray-600 text-sm">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
             </div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      </section>
 
-      {/* Experiences - Editorial Grid */}
-      <div className="container mx-auto max-w-6xl px-6 lg:px-16 pb-32">
-        {/* Free Experiences */}
-        {freeExperiences.length > 0 && (
-          <div className="mb-20">
-            <div className="mb-10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-px w-12 bg-primary" />
-                <span className="text-sm uppercase tracking-widest text-foreground font-medium">
-                  Free Access
-                </span>
+      {/* Experiences Grid */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          {/* Free Experiences */}
+          {freeExperiences.length > 0 && (
+            <div className="mb-20">
+              <div className="mb-10">
+                <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Free Access</p>
+                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">Start Your Journey</h2>
               </div>
-              <h2 className="font-serif text-5xl font-bold">Start Your Journey</h2>
-            </div>
 
-            <div className="grid gap-8">
-              {freeExperiences.map((experience, index) => (
-                <motion.div
-                  key={experience.id}
-                  initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={prefersReducedMotion ? { duration: 0 } : { delay: index * 0.15, duration: 0.7 }}
-                  style={!prefersReducedMotion ? { willChange: 'transform' } : undefined}
-                >
-                  <div
-                    onClick={() => navigate(`/experiences/${experience.slug}`)}
-                    className="w-full text-left group cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
-                    data-testid={`card-experience-${experience.slug}`}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        navigate(`/experiences/${experience.slug}`);
-                      }
-                    }}
+              <div className="space-y-6">
+                {freeExperiences.map((experience, index) => (
+                  <motion.div
+                    key={experience.id}
+                    initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
-                    <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300">
-                      <div className="flex items-start justify-between gap-6 mb-6">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-4">
-                            <Badge className="bg-primary/20 text-primary border-primary/30 px-4 py-1.5 text-sm font-semibold">
-                              FREE
-                            </Badge>
-                            <Badge variant="outline" className="gap-1.5 px-4 py-1.5">
-                              <Clock className="w-3.5 h-3.5" />
-                              {experience.estimatedMinutes} min
-                            </Badge>
+                    <div
+                      onClick={() => navigate(`/experiences/${experience.slug}`)}
+                      className="group cursor-pointer bg-white border border-gray-200 hover:border-gray-300 transition-all hover:shadow-lg"
+                      data-testid={`card-experience-${experience.slug}`}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          navigate(`/experiences/${experience.slug}`);
+                        }
+                      }}
+                    >
+                      <div className="p-8">
+                        <div className="flex items-start justify-between gap-6 mb-6">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-4">
+                              <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-medium uppercase tracking-wider">
+                                Free
+                              </span>
+                              <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs flex items-center gap-1">
+                                <Clock className="w-3 h-3" />
+                                {experience.estimatedMinutes} min
+                              </span>
+                            </div>
+                            <h3 className="text-2xl font-semibold mb-2 group-hover:text-purple-600 transition-colors">
+                              {experience.title}
+                            </h3>
+                            <p className="text-gray-600 leading-relaxed">
+                              {experience.description}
+                            </p>
                           </div>
-                          <h3 className="font-serif text-3xl font-bold mb-3 group-hover:text-primary transition-colors">
-                            {experience.title}
-                          </h3>
-                          <p className="text-lg text-foreground leading-relaxed">
-                            {experience.description}
-                          </p>
+                          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all flex-shrink-0 mt-2" />
                         </div>
-                        <ChevronRight className="w-6 h-6 text-foreground group-hover:text-primary group-hover:translate-x-1 transition-all flex-shrink-0" />
-                      </div>
 
-                      <div className="mb-6">
-                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-foreground">
-                          Learning Objectives
-                        </p>
-                        <ul className="space-y-2">
-                          {experience.learningObjectives.map((objective, i) => (
-                            <li key={i} className="flex items-start gap-3">
-                              <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                              <span className="text-foreground/80">{objective}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                        <div className="mb-6">
+                          <p className="text-xs font-medium uppercase tracking-[0.15em] text-gray-500 mb-3">
+                            Learning Objectives
+                          </p>
+                          <ul className="grid md:grid-cols-2 gap-2">
+                            {experience.learningObjectives.map((objective, i) => (
+                              <li key={i} className="flex items-start gap-2 text-sm">
+                                <CheckCircle2 className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-gray-700">{objective}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
 
-                      <div className="flex gap-3">
-                        <Button
-                          className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 flex-1 sm:flex-initial px-8 py-6 text-base"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/experiences/${experience.slug}`);
-                          }}
-                          data-testid={`button-start-${experience.slug}`}
-                        >
-                          Start Learning Free
-                          <Sparkles className="ml-2 w-4 h-4" />
-                        </Button>
-                        <Button
-                          size="lg"
-                          variant={isBookmarked(experience.id) ? "default" : "outline"}
-                          className="px-6 py-6"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleBookmark(experience.id);
-                            toast({
-                              title: isBookmarked(experience.id) ? "Removed from bookmarks" : "Added to bookmarks",
-                              description: experience.title,
-                            });
-                          }}
-                          data-testid={`button-bookmark-${experience.slug}`}
-                        >
-                          <Bookmark className={`w-4 h-4 ${isBookmarked(experience.id) ? 'fill-current' : ''}`} />
-                        </Button>
+                        <div className="flex gap-3">
+                          <button
+                            className="px-8 py-3 bg-black text-white text-sm uppercase tracking-wider font-medium hover:bg-gray-900 transition-colors flex items-center gap-2"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/experiences/${experience.slug}`);
+                            }}
+                            data-testid={`button-start-${experience.slug}`}
+                          >
+                            Begin Ritual
+                            <ArrowRight className="w-4 h-4" />
+                          </button>
+                          <button
+                            className={`px-4 py-3 border ${isBookmarked(experience.id) ? 'border-purple-600 text-purple-600' : 'border-gray-300 text-gray-600'} hover:border-purple-600 hover:text-purple-600 transition-colors`}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleBookmark(experience.id);
+                              toast({
+                                title: isBookmarked(experience.id) ? "Removed from bookmarks" : "Added to bookmarks",
+                                description: experience.title,
+                              });
+                            }}
+                            data-testid={`button-bookmark-${experience.slug}`}
+                          >
+                            <Bookmark className={`w-5 h-5 ${isBookmarked(experience.id) ? 'fill-current' : ''}`} />
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Pro Experiences */}
-        {proExperiences.length > 0 && (
-          <div>
-            <div className="mb-10">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="h-px w-12 bg-primary" />
-                <span className="text-sm uppercase tracking-widest text-foreground font-medium">
-                  Premium Content
-                </span>
-              </div>
-              <div className="flex items-center gap-4">
-                <h2 className="font-serif text-5xl font-bold">Unlock with Pro</h2>
-                <Badge variant="outline" className="gap-2 px-4 py-2">
-                  <Trophy className="w-4 h-4" />
-                  {proExperiences.length} Experiences
-                </Badge>
+                  </motion.div>
+                ))}
               </div>
             </div>
+          )}
 
-            <div className="grid md:grid-cols-2 gap-8">
-              {proExperiences.map((experience, index) => (
-                <motion.div
-                  key={experience.id}
-                  initial={prefersReducedMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 40, scale: 0.95 }}
-                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                  viewport={{ once: true, margin: "-80px" }}
-                  transition={prefersReducedMotion ? { duration: 0 } : { delay: index * 0.1, duration: 0.7 }}
-                  style={!prefersReducedMotion ? { willChange: 'transform' } : undefined}
-                >
-                  <div
-                    onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
-                    className={`w-full text-left h-full group cursor-pointer focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg ${!isProUser ? 'opacity-75' : ''}`}
-                    data-testid={`card-experience-${experience.slug}`}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade");
-                      }
-                    }}
-                  >
-                    <div className="kinetic-glass rounded-lg p-8 border border-card-border hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
-                      <div className="flex items-center gap-3 mb-4">
-                        {!isProUser && (
-                          <Badge variant="outline" className="gap-1.5 border-amber-500/30 text-amber-600 dark:text-amber-400 px-4 py-1.5">
-                            <Lock className="w-3.5 h-3.5" />
-                            PRO
-                          </Badge>
-                        )}
-                        <Badge variant="outline" className="gap-1.5 px-4 py-1.5">
-                          <Clock className="w-3.5 h-3.5" />
-                          {experience.estimatedMinutes} min
-                        </Badge>
-                      </div>
-
-                      <h3 className="font-serif text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
-                        {experience.title}
-                      </h3>
-                      <p className="text-foreground leading-relaxed mb-6 flex-1">
-                        {experience.description}
-                      </p>
-
-                      <div>
-                        <p className="text-sm font-semibold mb-3 uppercase tracking-wider text-foreground">
-                          You'll Learn To
-                        </p>
-                        <ul className="space-y-2">
-                          {experience.learningObjectives.slice(0, 3).map((objective, i) => (
-                            <li key={i} className="flex items-start gap-3">
-                              <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
-                              <span className="text-sm text-foreground/80">{objective}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Upgrade CTA if not Pro */}
-            {!isProUser && (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-                className="mt-12 text-center"
-              >
-                <div className="kinetic-glass rounded-2xl p-12 border border-card-border max-w-2xl mx-auto">
-                  <h3 className="font-serif text-3xl font-bold mb-4">
-                    Ready to Unlock Everything?
-                  </h3>
-                  <p className="text-lg text-foreground mb-8 leading-relaxed">
-                    Get unlimited access to all premium experiences and transform your skills
-                  </p>
-                  <Button
-                    size="lg"
-                    onClick={() => navigate("/upgrade")}
-                    className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-xl hover:shadow-primary/20 px-12 py-6 text-lg"
-                    data-testid="button-upgrade-pro"
-                  >
-                    Upgrade to Pro
-                  </Button>
+          {/* Pro Experiences */}
+          {proExperiences.length > 0 && (
+            <div>
+              <div className="mb-10">
+                <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Premium Content</p>
+                <div className="flex items-center gap-4">
+                  <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">Unlock with Pro</h2>
+                  <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm">
+                    {proExperiences.length} Rituals
+                  </span>
                 </div>
-              </motion.div>
-            )}
-          </div>
-        )}
-      </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {proExperiences.map((experience, index) => (
+                  <motion.div
+                    key={experience.id}
+                    initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: index * 0.05 }}
+                  >
+                    <div
+                      onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
+                      className={`group cursor-pointer bg-white border border-gray-200 hover:border-gray-300 transition-all hover:shadow-lg h-full ${!isProUser ? 'opacity-75' : ''}`}
+                      data-testid={`card-experience-${experience.slug}`}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade");
+                        }
+                      }}
+                    >
+                      <div className="p-6 h-full flex flex-col">
+                        <div className="flex items-center gap-2 mb-4">
+                          {!isProUser && (
+                            <span className="px-2 py-1 bg-amber-50 text-amber-700 text-xs font-medium uppercase tracking-wider flex items-center gap-1">
+                              <Lock className="w-3 h-3" />
+                              Pro
+                            </span>
+                          )}
+                          <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs flex items-center gap-1">
+                            <Clock className="w-3 h-3" />
+                            {experience.estimatedMinutes} min
+                          </span>
+                        </div>
+
+                        <h3 className="text-xl font-semibold mb-2 group-hover:text-purple-600 transition-colors">
+                          {experience.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1">
+                          {experience.description}
+                        </p>
+
+                        <ul className="space-y-2">
+                          {experience.learningObjectives.slice(0, 2).map((objective, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm">
+                              <CheckCircle2 className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">{objective}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Upgrade CTA */}
+              {!isProUser && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  className="mt-12 text-center"
+                >
+                  <div className="bg-black text-white p-12 max-w-2xl mx-auto">
+                    <h3 className="text-2xl font-semibold mb-4">
+                      Ready to Unlock Everything?
+                    </h3>
+                    <p className="text-gray-400 mb-8">
+                      Get unlimited access to all premium rituals and transform your skills.
+                    </p>
+                    <button
+                      onClick={() => navigate("/upgrade")}
+                      className="px-10 py-4 bg-white text-black text-sm uppercase tracking-[0.15em] font-medium hover:bg-gray-100 transition-colors"
+                      data-testid="button-upgrade-pro"
+                    >
+                      Upgrade to Pro
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 }

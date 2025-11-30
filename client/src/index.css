@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,92 +15,105 @@ body {
 }
 
 :root {
-  /* Premium Luxury Feminine Palette - Enhanced */
-  --button-outline: rgba(139, 92, 246, 0.15);
-  --badge-outline: rgba(139, 92, 246, 0.12);
+  /* Alo Yoga Inspired Clean Palette with Tech Accents */
+  --button-outline: rgba(0, 0, 0, 0.08);
+  --badge-outline: rgba(0, 0, 0, 0.06);
 
   --opaque-button-border-intensity: 8;
 
-  --elevate-1: rgba(139, 92, 246, 0.06);
-  --elevate-2: rgba(139, 92, 246, 0.12);
+  --elevate-1: rgba(0, 0, 0, 0.04);
+  --elevate-2: rgba(0, 0, 0, 0.08);
 
-  /* Vibrant Luxury Palette with Rich Purples */
-  --soft-rose: 340 100% 95%;
-  --dusty-mauve: 280 65% 45%;
-  --soft-purple: 270 75% 50%;
+  /* Clean Minimal Palette - Alo Style */
+  --soft-rose: 340 30% 95%;
+  --dusty-mauve: 280 20% 65%;
+  --soft-purple: 270 40% 60%;
   --pastel-yellow: 45 100% 65%;
-  --blue-1837: 220 100% 55%;
   --cream-white: 0 0% 100%;
-  --text-dark: 270 25% 12%;
-  --text-secondary: 270 20% 32%;
+  --text-dark: 0 0% 0%;
+  --text-secondary: 0 0% 40%;
 
-  /* Core Theme Colors - Premium Light Mode */
-  --background: 340 30% 96%;
-  --foreground: 270 25% 12%;
-  --border: 280 40% 85%;
+  /* Core Theme Colors - Clean Light Mode (Alo Style) */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --border: 0 0% 90%;
 
   --card: 0 0% 100%;
-  --card-foreground: 270 25% 12%;
-  --card-border: 280 35% 88%;
+  --card-foreground: 0 0% 0%;
+  --card-border: 0 0% 92%;
 
-  --sidebar: 340 30% 96%;
-  --sidebar-foreground: 270 25% 12%;
-  --sidebar-border: 280 35% 88%;
-  --sidebar-primary: 280 65% 48%;
+  --sidebar: 0 0% 98%;
+  --sidebar-foreground: 0 0% 0%;
+  --sidebar-border: 0 0% 90%;
+  --sidebar-primary: 0 0% 0%;
   --sidebar-primary-foreground: 0 0% 100%;
-  --sidebar-accent: 45 100% 62%;
-  --sidebar-accent-foreground: 270 25% 12%;
-  --sidebar-ring: 280 65% 48%;
+  --sidebar-accent: 270 60% 55%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 0 0% 0%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 270 25% 12%;
-  --popover-border: 280 35% 88%;
+  --popover-foreground: 0 0% 0%;
+  --popover-border: 0 0% 92%;
 
-  --primary: 280 72% 48%;
+  /* Primary - Black (Alo Style) */
+  --primary: 0 0% 0%;
   --primary-foreground: 0 0% 100%;
 
-  --secondary: 220 100% 55%;
+  /* Secondary - Tech Purple Accent */
+  --secondary: 270 60% 55%;
   --secondary-foreground: 0 0% 100%;
 
-  --accent: 45 100% 62%;
-  --accent-foreground: 270 25% 12%;
+  /* Accent - Soft Lavender/Light Purple */
+  --accent: 270 50% 95%;
+  --accent-foreground: 0 0% 0%;
 
-  --destructive: 0 84% 65%;
+  --destructive: 0 84% 60%;
   --destructive-foreground: 0 0% 100%;
 
-  --muted: 280 20% 72%;
-  --muted-foreground: 280 15% 38%;
+  --muted: 0 0% 96%;
+  --muted-foreground: 0 0% 45%;
 
-  --input: 340 30% 98%;
-  --ring: 280 72% 48%;
+  --input: 0 0% 98%;
+  --ring: 0 0% 0%;
 
-  --chart-1: 280 65% 48%;
-  --chart-2: 270 75% 50%;
-  --chart-3: 220 100% 55%;
+  --chart-1: 270 60% 55%;
+  --chart-2: 280 50% 60%;
+  --chart-3: 260 55% 50%;
   --chart-4: 45 100% 62%;
-  --chart-5: 280 40% 35%;
+  --chart-5: 270 40% 35%;
 
-  /* Premium Typography System */
-  --font-sans: "Space Grotesk", system-ui, -apple-system, sans-serif;
-  --font-serif: "Cormorant Garamond", Georgia, serif;
+  /* Tech Accent Colors - Subtle Futuristic */
+  --tech-purple: 270 60% 55%;
+  --tech-pink: 330 80% 60%;
+  --tech-blue: 220 90% 55%;
+  --gold-highlight: 45 100% 55%;
+
+  /* Legacy metaverse color variables for compatibility */
+  --hyper-violet: 270 60% 55%;
+  --cyber-fuchsia: 330 80% 60%;
+  --liquid-gold: 45 100% 55%;
+
+  /* Clean Typography - Proxima Nova Style */
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
   --font-display: "Playfair Display", Georgia, serif;
   --font-mono: 'JetBrains Mono', monospace;
-  --radius: 1rem;
+  --radius: 0.5rem;
   
-  /* Premium Shadow System - Depth & Sophistication */
-  --shadow-2xs: 0px 1px 2px 0px rgba(139, 92, 246, 0.05);
-  --shadow-xs: 0px 2px 4px 0px rgba(139, 92, 246, 0.08);
-  --shadow-sm: 0px 4px 8px 0px rgba(139, 92, 246, 0.10), 0px 2px 4px -1px rgba(139, 92, 246, 0.06);
-  --shadow: 0px 8px 16px 0px rgba(139, 92, 246, 0.12), 0px 4px 8px -2px rgba(139, 92, 246, 0.08);
-  --shadow-md: 0px 12px 24px 0px rgba(139, 92, 246, 0.14), 0px 6px 12px -3px rgba(139, 92, 246, 0.10);
-  --shadow-lg: 0px 20px 32px 0px rgba(139, 92, 246, 0.16), 0px 10px 20px -5px rgba(139, 92, 246, 0.12);
-  --shadow-xl: 0px 28px 40px 0px rgba(139, 92, 246, 0.18), 0px 14px 28px -6px rgba(139, 92, 246, 0.14);
-  --shadow-2xl: 0px 40px 64px 0px rgba(139, 92, 246, 0.20);
+  /* Minimal Shadow System - Clean & Subtle */
+  --shadow-2xs: 0px 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-xs: 0px 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow: 0px 4px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0px 6px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0px 12px 24px rgba(0, 0, 0, 0.10);
+  --shadow-xl: 0px 20px 40px rgba(0, 0, 0, 0.12);
+  --shadow-2xl: 0px 32px 64px rgba(0, 0, 0, 0.14);
   
-  /* Premium Glow Shadows */
-  --glow-sm: 0px 0px 12px rgba(139, 92, 246, 0.15);
-  --glow-md: 0px 0px 24px rgba(139, 92, 246, 0.20);
-  --glow-lg: 0px 0px 40px rgba(139, 92, 246, 0.25);
+  /* Tech Glow Shadows - Subtle Purple */
+  --glow-sm: 0px 0px 8px rgba(139, 92, 246, 0.12);
+  --glow-md: 0px 0px 16px rgba(139, 92, 246, 0.18);
+  --glow-lg: 0px 0px 32px rgba(139, 92, 246, 0.25);
   
   --tracking-normal: 0.02em;
   --spacing: 0.5rem;
@@ -140,32 +153,32 @@ body {
   body {
     @apply font-sans antialiased bg-background text-foreground;
     transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 400;
+    letter-spacing: -0.01em;
   }
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-sans;
     letter-spacing: -0.02em;
+    font-weight: 600;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
-    font-family: var(--font-display);
+    @apply text-4xl md:text-5xl lg:text-6xl font-semibold;
+    font-family: var(--font-sans);
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 50%, #3B82F6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: hsl(var(--foreground));
   }
 
   h2 {
     @apply text-3xl md:text-4xl lg:text-5xl font-semibold;
-    font-family: var(--font-display);
+    font-family: var(--font-sans);
     letter-spacing: -0.02em;
   }
 
   h3 {
-    @apply text-2xl md:text-3xl font-semibold;
-    font-family: var(--font-serif);
+    @apply text-2xl md:text-3xl font-medium;
+    font-family: var(--font-sans);
     letter-spacing: -0.01em;
   }
 }
@@ -241,117 +254,177 @@ body {
     inset: -1px;
   }
 
-  /* Premium Neon Glow Effects */
-  .purple-glow {
+  /* Clean Tech Glow Effects - Subtle */
+  .tech-glow {
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.15), 
+                0 0 20px rgba(139, 92, 246, 0.08);
+  }
+
+  .tech-glow-strong {
     box-shadow: 0 0 12px rgba(139, 92, 246, 0.25), 
-                0 0 24px rgba(139, 92, 246, 0.15),
-                0 0 40px rgba(139, 92, 246, 0.08),
-                inset 0 0 12px rgba(139, 92, 246, 0.05);
+                0 0 32px rgba(139, 92, 246, 0.12);
   }
 
-  .pink-glow {
-    box-shadow: 0 0 12px rgba(236, 72, 153, 0.25), 
-                0 0 24px rgba(236, 72, 153, 0.15),
-                0 0 40px rgba(236, 72, 153, 0.08),
-                inset 0 0 12px rgba(236, 72, 153, 0.05);
-  }
-
-  .magenta-glow {
-    box-shadow: 0 0 12px rgba(255, 59, 156, 0.25), 
-                0 0 24px rgba(255, 59, 156, 0.15),
-                0 0 40px rgba(255, 59, 156, 0.08),
-                inset 0 0 12px rgba(255, 59, 156, 0.05);
-  }
-
-  /* Violet-Magenta-Coral Gradients */
-  .gradient-violet-magenta-coral {
-    background: linear-gradient(90deg, #5611A7 0%, #FF3B9C 50%, #FF8F5B 100%);
-  }
-
-  .gradient-purple-pink {
+  /* Gradient Text Effects - Tech Accent */
+  .text-gradient-tech {
     background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-  }
-
-  .gradient-violet-pink {
-    background: linear-gradient(135deg, #5611A7 0%, #FF3B9C 100%);
-  }
-
-  /* Gradient Text Effects */
-  .text-gradient-violet-magenta-coral {
-    background: linear-gradient(90deg, #5611A7 0%, #FF3B9C 50%, #FF8F5B 100%);
-    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .text-gradient-purple-pink {
-    background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 50%, #F59E0B 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .text-gradient-shimmer {
-    background: linear-gradient(90deg, #5611A7, #FF3B9C, #FF8F5B, #5611A7);
-    background-size: 200% auto;
+  .text-gradient-violet {
+    background: linear-gradient(135deg, #8B5CF6 0%, #A78BFA 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: shimmer 3s linear infinite;
   }
 
-  @keyframes shimmer {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+  /* Gold Shimmer Button */
+  .gold-shimmer {
+    background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 50%, #F59E0B 100%);
+    color: black;
+    font-weight: 600;
   }
 
-  /* Accessibility: Respect reduced motion preference */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-
-    .text-gradient-shimmer {
-      animation: none;
-      background-position: 0% center;
-    }
+  /* Clean Minimal Card */
+  .editorial-card {
+    @apply bg-card border border-border;
+    border-radius: 0.25rem;
+    transition: all 0.2s ease;
   }
 
-  /* Premium Rounded Card Style */
-  .sanctuary-card {
-    @apply bg-card border border-card-border rounded-3xl;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .sanctuary-card:hover {
+  .editorial-card:hover {
     box-shadow: var(--shadow-md);
-    border-color: hsl(var(--primary));
   }
 
-  .sanctuary-card::before {
+  /* Alo-Style Clean Button */
+  .alo-button {
+    @apply bg-black text-white px-8 py-3 text-sm uppercase tracking-widest font-medium;
+    border-radius: 0;
+    transition: all 0.2s ease;
+    letter-spacing: 0.1em;
+  }
+
+  .alo-button:hover {
+    @apply bg-gray-900;
+  }
+
+  .alo-button-outline {
+    @apply bg-transparent text-black border border-black px-8 py-3 text-sm uppercase tracking-widest font-medium;
+    border-radius: 0;
+    transition: all 0.2s ease;
+    letter-spacing: 0.1em;
+  }
+
+  .alo-button-outline:hover {
+    @apply bg-black text-white;
+  }
+
+  /* Clean Headlines - Alo Style */
+  .editorial-headline {
+    @apply font-sans font-semibold leading-tight;
+    letter-spacing: -0.03em;
+    color: hsl(var(--foreground));
+  }
+
+  /* Tech accent underline */
+  .tech-underline {
+    position: relative;
+  }
+
+  .tech-underline::after {
     content: '';
     position: absolute;
-    top: 0;
+    bottom: -4px;
     left: 0;
     right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
+  }
+
+  /* Subtle Glass Effect for Tech Elements */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  /* Premium Neon Text - Subtle */
+  .neon-text {
+    text-shadow: 0 0 6px rgba(139, 92, 246, 0.4),
+                 0 0 12px rgba(139, 92, 246, 0.2);
+  }
+
+  .neon-glow-violet {
+    box-shadow: 0 0 12px rgba(139, 92, 246, 0.3);
+  }
+
+  /* Clean Divider */
+  .elegant-divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.4), transparent);
-    opacity: 0.8;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(0, 0, 0, 0.1), 
+      transparent);
+    margin: 2rem 0;
   }
 
-  /* Clean Modern Headlines */
-  .sanctuary-headline {
-    @apply font-sans font-bold leading-tight tracking-tight;
-    letter-spacing: -0.03em;
+  /* Gradient backgrounds for sections */
+  .gradient-violet-magenta {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
   }
 
-  /* Purple Shimmer Effect */
+  .gradient-magenta-fuchsia {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.05) 0%, rgba(232, 121, 249, 0.05) 100%);
+  }
+
+  .gradient-teal-gold {
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.05) 0%, rgba(245, 158, 11, 0.05) 100%);
+  }
+
+  .gradient-gold-violet {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  }
+
+  /* Premium Animated Gradient - Subtle Tech Effect */
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .premium-title {
+    background: linear-gradient(
+      135deg,
+      #8B5CF6 0%,
+      #EC4899 50%,
+      #8B5CF6 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradientFlow 6s ease infinite;
+  }
+
+  /* Kinetic Glass - Modern effect */
+  .kinetic-glass {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  /* Subtle Purple Shimmer for CTAs */
   .purple-shimmer {
     position: relative;
     overflow: hidden;
@@ -364,7 +437,7 @@ body {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.15), transparent);
     animation: shimmer-slide 3s infinite;
   }
 
@@ -373,81 +446,21 @@ body {
     50%, 100% { left: 100%; }
   }
 
-  /* Premium Glass Effect */
-  .glass-card {
-    background: rgba(340 30% 96% / 0.5);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(139, 92, 246, 0.15);
-    box-shadow: 0 8px 32px rgba(139, 92, 246, 0.08);
-  }
-
-  /* Premium Neon Text */
-  .neon-text {
-    text-shadow: 0 0 8px rgba(139, 92, 246, 0.6),
-                 0 0 16px rgba(139, 92, 246, 0.4),
-                 0 0 24px rgba(139, 92, 246, 0.2);
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-
-  /* Gradient Border */
-  .gradient-border {
-    position: relative;
-    background: linear-gradient(135deg, #5611A7, #FF3B9C);
-    padding: 2px;
-    border-radius: 1.5rem;
-  }
-
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: 2px;
-    background: hsl(var(--card));
-    border-radius: calc(1.5rem - 2px);
-  }
-
-  /* Premium Animated Gradient + Glow Effect for Titles */
-  @keyframes gradientFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  .premium-title {
-    background: linear-gradient(
-      135deg,
-      #8B5CF6 0%,      /* Purple */
-      #EC4899 25%,     /* Pink */
-      #3B82F6 50%,     /* Blue */
-      #EC4899 75%,     /* Pink */
-      #8B5CF6 100%     /* Purple */
-    );
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradientFlow 8s ease infinite;
-    filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.35)) drop-shadow(0 0 32px rgba(139, 92, 246, 0.15));
-    position: relative;
-    font-weight: 900;
-  }
-
-  /* Elegant Divider */
-  .elegant-divider {
-    height: 1px;
-    background: linear-gradient(90deg, 
-      transparent, 
-      rgba(139, 92, 246, 0.3), 
-      transparent);
-    margin: 2rem 0;
-  }
-
-  /* Respect reduced motion */
+  /* Accessibility: Respect reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
     .premium-title {
       animation: none;
       background-position: 0% 50%;
+    }
+
+    .purple-shimmer::after {
+      animation: none;
     }
   }
 }

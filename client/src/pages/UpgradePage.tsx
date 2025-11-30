@@ -4,22 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlanBadge } from "@/components/PlanBadge";
 import { PRICING_PLANS, type SubscriptionTier, formatPrice } from "@shared/pricing";
-import { Check, Sparkles, Crown, Gem, Diamond, TrendingUp, MessageCircle } from "lucide-react";
+import { Check, Sparkles, Crown, Gem, Diamond, TrendingUp, ArrowRight } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
-import { motion, useReducedMotion } from "framer-motion";
-import { ParticleField, GradientOrbs, TiltCard, ShimmerBadge, ImmersiveSection } from "@/components/metaverse";
+import { motion } from "framer-motion";
 import { trackCTAClick } from "@/lib/analytics";
 
-// Only show the 3 main tiers to avoid confusion
 const TIER_ORDER: SubscriptionTier[] = ['pro_monthly', 'sanctuary', 'inner_circle'];
 
 export default function UpgradePage() {
   const { user } = useAuth();
   const currentTier = (user?.subscriptionTier || 'free') as SubscriptionTier;
-  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    document.title = "Upgrade Your Membership - MetaHers Mind Spa";
+    document.title = "Membership - MetaHers";
   }, []);
 
   const getTierIcon = (tier: SubscriptionTier) => {
@@ -53,12 +50,9 @@ export default function UpgradePage() {
 
       const data = await response.json();
       
-      // Check if this was a direct upgrade (existing subscription)
       if (data.upgraded) {
-        // Direct upgrade successful - redirect to workspace with success message
         window.location.href = '/workspace?upgrade=success';
       } else if (data.url) {
-        // New subscription - redirect to Stripe checkout
         window.location.href = data.url;
       }
     } catch (error) {
@@ -70,322 +64,324 @@ export default function UpgradePage() {
   const currentTierIndex = TIER_ORDER.indexOf(currentTier);
 
   return (
-      <div className="relative min-h-screen bg-background overflow-x-hidden">
-        {/* Particle field background */}
-        <ParticleField count={40} prefersReducedMotion={prefersReducedMotion || false} />
+    <div className="min-h-screen bg-white">
+      {/* Hero Section - Clean */}
+      <section className="py-20 px-6 border-b border-gray-100">
+        <div className="max-w-4xl mx-auto text-center">
+          {/* Cyber Monday Banner */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-xs uppercase tracking-[0.2em] font-medium mb-8"
+          >
+            <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+            Cyber Monday: 80% OFF Everything
+          </motion.div>
 
-        {/* Hero section with gradient orbs */}
-        <div className="relative py-32 px-4 sm:px-6 lg:px-8 overflow-hidden">
-          {/* Morphing gradient orbs */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <GradientOrbs prefersReducedMotion={prefersReducedMotion || false} />
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight mb-6"
+          >
+            Choose Your{' '}
+            <span className="text-gradient-tech">Edge</span>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg text-gray-600 max-w-2xl mx-auto mb-6"
+          >
+            Three powerful membership levels designed for women building wealth, influence, and freedom.
+          </motion.p>
+
+          {currentTier !== 'free' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="flex items-center justify-center gap-3 mt-6"
+            >
+              <span className="text-sm text-gray-500">Your current membership:</span>
+              <PlanBadge tier={currentTier} />
+            </motion.div>
+          )}
+        </div>
+      </section>
+
+      {/* Cyber Monday Deal Banner */}
+      <section className="py-12 px-6 bg-black text-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center">
+            <p className="text-sm uppercase tracking-[0.2em] text-gray-400 mb-4">Limited Time Offer</p>
+            <h2 className="text-3xl sm:text-4xl font-semibold mb-4">
+              All 9 Spaces for{' '}
+              <span className="text-gradient-tech">$299</span>
+            </h2>
+            <p className="text-gray-400 mb-6">
+              That's personal coaching, all rituals, and lifetime access. Originally $1,497.
+            </p>
+            <button
+              onClick={() => handleUpgrade('sanctuary')}
+              className="px-10 py-4 bg-white text-black text-sm uppercase tracking-[0.15em] font-medium hover:bg-gray-100 transition-colors inline-flex items-center gap-2"
+              data-testid="button-cyber-monday-deal"
+            >
+              Claim Your 80% Discount
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Free Retreat */}
+      <section className="py-16 px-6 bg-gray-50 border-b border-gray-100">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="bg-white border border-gray-200 p-8"
+          >
+            <div className="flex flex-col md:flex-row items-start gap-6">
+              <div className="p-4 bg-[#25D366]/10 flex-shrink-0">
+                <SiWhatsapp className="w-8 h-8 text-[#25D366]" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-2xl font-semibold mb-2">Start Free: 3-Day AI Retreat</h3>
+                <p className="text-gray-600 mb-4">
+                  Join Nadia's intimate 3-day AI training via WhatsApp. Learn ChatGPT, automation, and Web3 basics with zero tech overwhelm.
+                </p>
+                <div className="flex flex-wrap gap-4 mb-4">
+                  {["3 days of live training", "Personal mentorship", "Cleanse, Nourish, Transform"].map((item, i) => (
+                    <span key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                      <Check className="w-4 h-4 text-[#25D366]" />
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+              <a
+                href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => trackCTAClick('pricing_whatsapp_retreat', 'whatsapp_retreat', 'free')}
+                data-testid="link-whatsapp-pricing"
+              >
+                <button className="px-6 py-3 bg-[#25D366] text-white text-sm uppercase tracking-wider font-medium hover:bg-[#128C7E] transition-colors flex items-center gap-2">
+                  <SiWhatsapp className="w-5 h-5" />
+                  Join Free
+                </button>
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Pricing Tiers */}
+      <section className="py-20 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Membership Options</p>
+            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">
+              Invest in Your Future
+            </h2>
           </div>
 
-          {/* Grid overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(181,101,216,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(181,101,216,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
+          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {TIER_ORDER.map((tier, index) => {
+              const plan = PRICING_PLANS[tier];
+              const TierIcon = getTierIcon(tier);
+              const isCurrentTier = tier === currentTier;
+              const isLowerTier = index < currentTierIndex;
+              const isHighlighted = tier === 'inner_circle';
 
-          <div className="relative z-10 max-w-7xl mx-auto">
-            {/* CYBER MONDAY BANNER */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="mb-16 p-6 rounded-2xl bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/20 via-[hsl(var(--hyper-violet))]/20 to-[hsl(var(--liquid-gold))]/20 border-2 border-[hsl(var(--liquid-gold))]/40"
-            >
-              <div className="text-center">
-                <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30">
-                  <Sparkles className="w-4 h-4 text-[hsl(var(--liquid-gold))] animate-pulse" />
-                  <span className="font-bold text-sm uppercase tracking-wider text-[hsl(var(--liquid-gold))]">
-                    Cyber Monday Deal: 80% OFF All Tiers
-                  </span>
-                </div>
-                <h2 className="text-3xl font-bold mb-2">Limited Time: $299 for Everything</h2>
-                <p className="text-lg text-foreground/80">All 9 learning spaces, personal coaching, and lifetime access for the price of one coffee a month</p>
-              </div>
-            </motion.div>
-
-            <ImmersiveSection className="text-center mb-32">
-              <ShimmerBadge
-                icon={<TrendingUp className="w-6 h-6 text-[hsl(var(--gold))]" />}
-                className="mb-12"
-              >
-                Join the MetaHers Movement
-              </ShimmerBadge>
-
-              <h1 
-                className="font-serif text-7xl sm:text-8xl md:text-9xl font-bold mb-12 bg-gradient-to-r from-[#FFD700] via-[#FFF] to-[#FFD700] bg-clip-text text-transparent py-2 leading-tight"
-                style={{
-                  textShadow: '0 0 80px rgba(255,215,0,0.5), 0 0 120px rgba(181,101,216,0.3)',
-                }}
-              >
-                Choose Your Edge
-              </h1>
-              
-              <p className="text-2xl sm:text-3xl text-foreground/90 max-w-4xl mx-auto leading-relaxed font-light mb-6">
-                Three powerful membership levels designed for women building wealth, influence, and freedom.
-                <br />
-                <span className="text-[hsl(var(--gold))]">Start with Self-Paced Rituals or Get Personal Coaching.</span>
-              </p>
-              
-              {currentTier !== 'free' && (
-                <div className="flex items-center justify-center gap-3 mt-8">
-                  <span className="text-lg text-foreground/70">Your current membership:</span>
-                  <PlanBadge tier={currentTier} />
-                </div>
-              )}
-            </ImmersiveSection>
-
-            {/* Free WhatsApp Community - Human-Powered Feature */}
-            <ImmersiveSection className="max-w-4xl mx-auto mb-16" delay={0.1}>
-              <div className="backdrop-blur-2xl bg-gradient-to-br from-[#25D366]/10 to-white/5 rounded-3xl p-8 border border-[#25D366]/30 relative overflow-hidden group">
+              return (
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-[#25D366]/10 to-transparent opacity-0 group-hover:opacity-100"
-                  transition={{ duration: 0.5 }}
-                />
-                <div className="relative z-10 flex items-center justify-between flex-wrap gap-6">
-                  <div className="flex items-start gap-4 flex-1">
-                    <div className="p-3 rounded-full bg-[#25D366]/20 flex-shrink-0">
-                      <SiWhatsapp className="w-8 h-8 text-[#25D366]" />
-                    </div>
-                    <div>
-                      <h3 className="font-serif text-2xl font-bold text-foreground mb-2">Start Here: Free 3-Day AI Retreat</h3>
-                      <p className="text-lg text-foreground/80 mb-3">
-                        Join Nadia's intimate 3-day AI training via WhatsApp. Learn ChatGPT, automation, and Web3 basics with zero tech overwhelm.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-3">
-                        <div className="flex items-center gap-1 text-sm text-foreground/70">
-                          <Check className="w-4 h-4 text-[#25D366]" />
-                          3 days of live AI training
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-foreground/70">
-                          <Check className="w-4 h-4 text-[#25D366]" />
-                          Personal mentorship from Nadia
-                        </div>
-                        <div className="flex items-center gap-1 text-sm text-foreground/70">
-                          <Check className="w-4 h-4 text-[#25D366]" />
-                          Cleanse, Nourish, Transform
-                        </div>
-                      </div>
-                      <p className="text-sm text-foreground/60 italic">
-                        This retreat is our lead magnet—100% free access to experience Nadia's teaching firsthand.
-                      </p>
-                    </div>
-                  </div>
-                  <a
-                    href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => trackCTAClick('pricing_whatsapp_retreat', 'whatsapp_retreat', 'free')}
-                    data-testid="link-whatsapp-pricing"
+                  key={tier}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                >
+                  <div 
+                    className={`relative h-full flex flex-col bg-white border ${
+                      isHighlighted ? 'border-black border-2' : 'border-gray-200'
+                    } ${isCurrentTier ? 'ring-2 ring-purple-500' : ''}`}
+                    data-testid={`card-tier-${tier}`}
                   >
-                    <Button
-                      size="lg"
-                      className="bg-[#25D366] text-white border border-[#25D366] shadow-lg"
-                      data-testid="button-whatsapp-pricing"
-                    >
-                      <SiWhatsapp className="w-5 h-5 mr-2" />
-                      Join Free AI Retreat
-                    </Button>
-                  </a>
-                </div>
-              </div>
-            </ImmersiveSection>
-
-            {/* Pro Annual Savings Callout */}
-            <ImmersiveSection className="max-w-4xl mx-auto mb-16" delay={0.2}>
-              <div className="backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border border-[hsl(var(--gold))]/30 relative overflow-hidden group">
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-[#FFD700]/10 to-transparent opacity-0 group-hover:opacity-100"
-                  transition={{ duration: 0.5 }}
-                />
-                <div className="relative z-10 flex items-center justify-between flex-wrap gap-4">
-                  <div>
-                    <h3 className="font-serif text-2xl font-bold text-[hsl(var(--gold))] mb-2">Save with Annual Billing</h3>
-                    <p className="text-lg text-foreground/80">Get 2 months free when you choose Pro Annual ($199/year)</p>
-                  </div>
-                  <Button
-                    onClick={() => handleUpgrade('pro_annual')}
-                    variant="outline"
-                    className="border-[hsl(var(--gold))]/50 hover:bg-[hsl(var(--gold))]/10"
-                    data-testid="button-annual-upgrade"
-                  >
-                    View Annual Option
-                  </Button>
-                </div>
-              </div>
-            </ImmersiveSection>
-
-            {/* Paid Tier Heading */}
-            <div className="text-center mb-12">
-              <h2 className="font-serif text-3xl font-bold text-foreground mb-2">Your MetaHers Membership</h2>
-              <p className="text-foreground/70">Designed for women solopreneurs ready to master AI, Web3, and build 6-figure businesses</p>
-            </div>
-
-            <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3 mb-16">
-              {TIER_ORDER.map((tier, index) => {
-                const plan = PRICING_PLANS[tier];
-                const TierIcon = getTierIcon(tier);
-                const isCurrentTier = tier === currentTier;
-                const isLowerTier = index < currentTierIndex;
-                const isHighlighted = tier === 'inner_circle';
-
-                return (
-                  <TiltCard
-                    key={tier}
-                    delay={index * 0.1}
-                    prefersReducedMotion={prefersReducedMotion || false}
-                  >
-                    <div 
-                      className={`relative h-full flex flex-col backdrop-blur-2xl bg-gradient-to-br from-white/10 to-white/5 rounded-3xl p-8 border ${
-                        isHighlighted ? 'border-[hsl(var(--gold))] shadow-[0_0_60px_rgba(255,215,0,0.3)]' : 'border-white/10'
-                      } ${isCurrentTier ? 'ring-2 ring-[hsl(var(--gold))]' : ''} overflow-hidden group`}
-                      data-testid={`card-tier-${tier}`}
-                    >
                     {plan.badge && (
                       <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <div className="bg-primary text-primary-foreground px-4 py-1 rounded-full text-xs font-medium">
+                        <div className="bg-black text-white px-4 py-1 text-xs font-medium uppercase tracking-wider">
                           {plan.badge}
                         </div>
                       </div>
                     )}
 
-                    <CardHeader className="text-center pb-4">
-                      <div className="flex justify-center mb-3">
-                        <div className="p-3 rounded-full bg-gradient-to-br from-primary/20 to-accent/20">
-                          <TierIcon className="w-6 h-6 text-primary" />
+                    <div className="p-8 text-center border-b border-gray-100">
+                      <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-gray-100">
+                          <TierIcon className="w-6 h-6 text-black" />
                         </div>
                       </div>
-                      <CardTitle className="font-serif text-2xl mb-2">{plan.displayName}</CardTitle>
-                      <CardDescription className="text-sm">{plan.description}</CardDescription>
-                      <div className="mt-4">
-                        <div className="text-4xl font-bold text-foreground">
-                          ${plan.price}
-                        </div>
-                        <div className="text-sm text-foreground">per month</div>
+                      <h3 className="text-xl font-semibold mb-2">{plan.displayName}</h3>
+                      <p className="text-sm text-gray-600 mb-4">{plan.description}</p>
+                      <div>
+                        <div className="text-4xl font-semibold">${plan.price}</div>
+                        <div className="text-sm text-gray-500">per month</div>
                         {plan.savings && (
-                          <div className="text-xs text-primary mt-1">{plan.savings}</div>
+                          <div className="text-xs text-purple-600 mt-1">{plan.savings}</div>
                         )}
                       </div>
-                    </CardHeader>
+                    </div>
 
-                    <CardContent className="flex-1">
+                    <div className="p-8 flex-1">
                       <ul className="space-y-3">
                         {plan.features.map((feature, i) => (
-                          <li key={i} className="flex items-start gap-2 text-sm">
-                            <Check className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                            <span className="text-foreground/80">{feature}</span>
+                          <li key={i} className="flex items-start gap-3 text-sm">
+                            <Check className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
+                            <span className="text-gray-700">{feature}</span>
                           </li>
                         ))}
                       </ul>
-                    </CardContent>
+                    </div>
 
-                    <CardFooter>
+                    <div className="p-8 pt-0">
                       {isCurrentTier ? (
-                        <Button 
-                          className="w-full" 
-                          variant="outline" 
+                        <button 
+                          className="w-full py-3 border border-gray-300 text-gray-500 text-sm uppercase tracking-wider font-medium cursor-not-allowed"
                           disabled
                           data-testid={`button-current-${tier}`}
                         >
                           Current Membership
-                        </Button>
+                        </button>
                       ) : isLowerTier ? (
-                        <Button 
-                          className="w-full" 
-                          variant="outline" 
+                        <button 
+                          className="w-full py-3 border border-gray-300 text-gray-500 text-sm uppercase tracking-wider font-medium cursor-not-allowed"
                           disabled
                           data-testid={`button-downgrade-${tier}`}
                         >
                           Lower Tier
-                        </Button>
+                        </button>
                       ) : (
-                        <Button 
-                          className="w-full" 
+                        <button 
+                          className={`w-full py-3 text-sm uppercase tracking-wider font-medium transition-colors ${
+                            isHighlighted 
+                              ? 'bg-black text-white hover:bg-gray-900' 
+                              : 'border border-black text-black hover:bg-black hover:text-white'
+                          }`}
                           onClick={() => handleUpgrade(tier)}
                           data-testid={`button-upgrade-${tier}`}
                         >
-                          Upgrade to {plan.displayName}
-                        </Button>
+                          {isHighlighted ? 'Join Now' : `Choose ${plan.displayName}`}
+                        </button>
                       )}
-                    </CardFooter>
                     </div>
-                  </TiltCard>
-                );
-              })}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
 
-          {/* Special Programs */}
+          {/* Annual Savings Note */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-12"
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="mt-12 text-center"
           >
-            <div className="text-center mb-6">
-              <h2 className="font-serif text-2xl font-bold text-foreground mb-2">Looking for Something More?</h2>
-              <p className="text-foreground">We also offer specialized intensive programs</p>
-            </div>
-            <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
-              <Card className="border-primary/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-primary" />
-                    VIP Cohort Experience
-                  </CardTitle>
-                  <CardDescription>$197 one-time • Limited to 10 members</CardDescription>
-                </CardHeader>
-                <CardContent className="text-sm text-foreground">
-                  <p className="mb-3">4-week guided program with direct founder mentorship, live group sessions, and exclusive ritual bag.</p>
-                  <Button variant="outline" size="sm" asChild>
-                    <a href="/vip-cohort">Learn More</a>
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="border-primary/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Diamond className="w-5 h-5 text-primary" />
-                    Executive Intensive
-                  </CardTitle>
-                  <CardDescription>$499 one-time • For Founders & Leaders</CardDescription>
-                </CardHeader>
-                <CardContent className="text-sm text-foreground">
-                  <p className="mb-3">Private 1:1 consulting with custom AI & Web3 playbook for your business plus 3 months Pro included.</p>
-                  <Button variant="outline" size="sm" asChild>
-                    <a href="/executive">Learn More</a>
-                  </Button>
-                </CardContent>
-              </Card>
+            <div className="inline-flex items-center gap-3 px-6 py-3 bg-purple-50 border border-purple-100">
+              <TrendingUp className="w-5 h-5 text-purple-600" />
+              <span className="text-sm text-gray-700">
+                <strong>Save 2 months</strong> with annual billing – Pro Annual at $199/year
+              </span>
+              <button
+                onClick={() => handleUpgrade('pro_annual')}
+                className="text-sm font-medium text-purple-600 hover:text-purple-800 underline"
+                data-testid="button-annual-upgrade"
+              >
+                View Annual
+              </button>
             </div>
           </motion.div>
+        </div>
+      </section>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-            className="text-center"
-          >
-            <Card className="max-w-3xl mx-auto">
-              <CardHeader>
-                <CardTitle className="font-serif text-2xl">Questions About Upgrading?</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4 text-sm text-foreground">
-                <p>
-                  All upgrades are prorated based on your current billing cycle. You'll only pay the difference 
-                  for the remaining time in your current period.
-                </p>
-                <p>
-                  Need help choosing the right tier? We're here to guide you. Reach out to{' '}
-                  <a href="mailto:help@metahers.ai" className="text-primary hover:underline">
-                    help@metahers.ai
-                  </a>
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
+      {/* Special Programs */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Intensive Programs</p>
+            <h2 className="text-3xl font-semibold tracking-tight">Looking for More?</h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+              className="bg-white border border-gray-200 p-8"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <Crown className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">VIP Cohort Experience</h3>
+              </div>
+              <p className="text-sm text-gray-500 mb-4">$197 one-time &middot; Limited to 10 members</p>
+              <p className="text-gray-600 mb-6">
+                4-week guided program with direct founder mentorship, live group sessions, and exclusive ritual bag.
+              </p>
+              <a href="/vip-cohort">
+                <button className="text-sm font-medium text-black uppercase tracking-wider hover:text-purple-600 transition-colors">
+                  Learn More &rarr;
+                </button>
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="bg-white border border-gray-200 p-8"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <Diamond className="w-5 h-5" />
+                <h3 className="text-lg font-semibold">Executive Intensive</h3>
+              </div>
+              <p className="text-sm text-gray-500 mb-4">$499 one-time &middot; For Founders & Leaders</p>
+              <p className="text-gray-600 mb-6">
+                Private 1:1 consulting with custom AI & Web3 playbook for your business plus 3 months Pro included.
+              </p>
+              <a href="/executive">
+                <button className="text-sm font-medium text-black uppercase tracking-wider hover:text-purple-600 transition-colors">
+                  Learn More &rarr;
+                </button>
+              </a>
+            </motion.div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 px-6">
+        <div className="max-w-2xl mx-auto text-center">
+          <h2 className="text-2xl font-semibold mb-6">Questions About Membership?</h2>
+          <p className="text-gray-600 mb-4">
+            All upgrades are prorated based on your current billing cycle. You'll only pay the difference for the remaining time in your current period.
+          </p>
+          <p className="text-gray-600">
+            Need help choosing? Reach out to{' '}
+            <a href="mailto:help@metahers.ai" className="text-purple-600 hover:underline">
+              help@metahers.ai
+            </a>
+          </p>
+        </div>
+      </section>
+    </div>
   );
 }

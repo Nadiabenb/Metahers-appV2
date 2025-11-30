@@ -1,23 +1,19 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, CheckCircle2, Lock, BookOpen, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, Crown, ShoppingCart } from "lucide-react";
+import { motion } from "framer-motion";
+import { Sparkles, ArrowRight, CheckCircle2, Lock, BookOpen, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, Crown, ShoppingCart, Star, TrendingUp, Users } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { SEO } from "@/components/SEO";
-import { OptimizedImage } from "@/components/OptimizedImage";
 import { lazy, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-// Lazy load non-critical components for better mobile performance
 const RecommendationWidget = lazy(() => import("@/components/RecommendationWidget").then(m => ({ default: m.RecommendationWidget })));
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { spaceImages } from "@/lib/imageManifest";
-import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
-import learnBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -118,7 +114,6 @@ export default function HomePage() {
   const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
 
   useEffect(() => {
-    // Show welcome modal for first-time users
     if (user && !user.onboardingCompleted) {
       setShowWelcome(true);
     }
@@ -127,125 +122,112 @@ export default function HomePage() {
   const handleCompleteOnboarding = async () => {
     try {
       await apiRequest('POST', '/api/auth/complete-onboarding', {});
-      // Invalidate user query to refresh data
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
       setShowWelcome(false);
     } catch (error) {
       console.error('Error completing onboarding:', error);
-      // Still close modal on error to not block user
       setShowWelcome(false);
     }
   };
 
   return (
-    <div className="min-h-screen relative bg-black"
-      style={{
-        backgroundImage: `url(${learnBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-      }}
-    >
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-[hsl(280 72% 48%)]/40 to-black/50" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/20 via-transparent to-[hsl(340 100% 95%)]/10" />
-      
-      <div className="relative z-10">
+    <div className="min-h-screen bg-white">
       <SEO
-        title="Learn AI & Web3 for Women"
-        description="Transform into a confident tech leader through luxury learning rituals. Master AI prompts, blockchain, NFTs & the metaverse with personalized coaching."
-        keywords="AI for women, Web3 education, blockchain for beginners, AI prompts, NFT learning, women in tech, luxury tech education"
+        title="MetaHers - AI & Web3 for Women Solopreneurs"
+        description="Master AI & Web3 to build your business, amplify your influence, and live on your terms. Join thousands of women redefining success."
+        keywords="AI for women, Web3 education, women entrepreneurs, solopreneur, AI business tools, women in tech"
         schema={[organizationSchema, websiteSchema]}
       />
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <OptimizedImage
-          src={heroBackground}
-          alt="Luxury neon light trails representing AI and Web3 technology"
-          className="absolute inset-0 w-full h-full"
-          objectFit="cover"
-          priority={true}
-          fetchPriority="high"
-        />
-        {/* Layered atmospheric effects */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[hsl(var(--hyper-violet))]/10 via-transparent to-transparent" />
-        {/* Subtle grain overlay for texture */}
+
+      {/* HERO SECTION - Alo Yoga Clean Style with Tech Accent */}
+      <section className="relative min-h-[90vh] flex items-center justify-center bg-white overflow-hidden">
+        {/* Subtle tech gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 via-white to-pink-50/20" />
+        
+        {/* Minimal grid pattern for tech feel */}
         <div 
-          className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none"
+          className="absolute inset-0 opacity-[0.02]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+            backgroundImage: `linear-gradient(rgba(139, 92, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(139, 92, 246, 0.3) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px'
           }}
         />
 
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+          {/* Announcement Banner */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="inline-block"
+            transition={{ duration: 0.4 }}
+            className="inline-block mb-8"
           >
-            <div className="inline-flex items-center gap-2 glass-card px-6 py-3 rounded-full mb-8 neon-glow-violet">
-              <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))]" />
-              <span className="text-sm font-medium tracking-wider uppercase">
-                Welcome to MetaHers Mind Spa
-              </span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-black text-white text-xs uppercase tracking-[0.2em] font-medium">
+              <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+              Cyber Monday: 80% Off Everything
             </div>
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="text-5xl sm:text-6xl lg:text-8xl font-black mb-6 leading-[0.95] tracking-tight"
-            style={{ 
-              fontFamily: "var(--font-display)",
-              background: "linear-gradient(135deg, hsl(var(--liquid-gold)) 0%, hsl(var(--hyper-violet)) 50%, hsl(var(--cyber-fuchsia)) 100%)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-              textShadow: "0 0 80px hsla(var(--liquid-gold), 0.3)"
-            }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-5xl sm:text-6xl lg:text-8xl font-semibold mb-8 tracking-tight leading-[0.95]"
+            style={{ letterSpacing: '-0.03em' }}
             data-testid="text-hero-title"
           >
-            Become a MetaHers Woman
+            Become a{' '}
+            <span className="text-gradient-tech">MetaHers</span>
+            {' '}Woman
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.2 }}
-            className="text-xl sm:text-2xl text-foreground/90 mb-12 max-w-2xl mx-auto leading-relaxed"
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg sm:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed font-light"
           >
-            Master AI & Web3 to build your business, amplify your influence, and live on your terms. Join thousands of women redefining tech.
+            Master AI & Web3 to build your business, amplify your influence, and live on your terms. Join thousands of women redefining success.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.25 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <CTAButton
-              href="/rituals/ai-glow-up-facial"
-              size="lg"
-              className="text-lg px-10 py-6 bg-[hsl(var(--gold-highlight))] text-black hover:neon-glow-violet font-semibold"
-              dataTestId="button-cta-start"
+            <button
+              onClick={() => setLocation('/rituals/ai-glow-up-facial')}
+              className="alo-button text-sm"
+              data-testid="button-cta-start"
             >
-              Begin Your Transformation (Free)
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </CTAButton>
+              Begin Your Transformation
+              <ArrowRight className="inline-block ml-2 w-4 h-4" />
+            </button>
+            <button
+              onClick={() => setLocation('/upgrade')}
+              className="alo-button-outline text-sm"
+              data-testid="button-cta-pricing"
+            >
+              View Membership
+            </button>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.3 }}
-            className="mt-12 text-sm text-foreground tracking-wide"
+            transition={{ duration: 0.5, delay: 0.4 }}
+            className="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500"
           >
-            <p>No credit card required • Free ritual included</p>
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-purple-500" />
+              Free trial included
+            </span>
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-purple-500" />
+              No credit card required
+            </span>
           </motion.div>
         </div>
-
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {showWelcome && (
@@ -255,37 +237,62 @@ export default function HomePage() {
         />
       )}
 
+      {/* STATS BANNER - Social Proof */}
+      <section className="py-16 bg-black text-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            {[
+              { stat: "5,000+", label: "Active Members" },
+              { stat: "$50K+", label: "Avg First Year Revenue" },
+              { stat: "9", label: "Learning Spaces" },
+              { stat: "54", label: "Transformational Rituals" },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <div className="text-3xl sm:text-4xl font-semibold mb-2">{item.stat}</div>
+                <div className="text-sm text-gray-400 uppercase tracking-widest">{item.label}</div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* AI Recommendations - Only for authenticated users */}
       {user && (
-        <section className="py-16 px-4 sm:px-6 lg:px-8 bg-background border-b border-border/50">
+        <section className="py-16 px-6 bg-gray-50">
           <div className="max-w-7xl mx-auto">
-            <Suspense fallback={<div className="h-64 animate-pulse bg-card rounded-xl" />}>
+            <Suspense fallback={<div className="h-64 animate-pulse bg-gray-100 rounded" />}>
               <RecommendationWidget />
             </Suspense>
           </div>
         </section>
       )}
 
-      {/* Learning Spaces Section */}
+      {/* SPACES SECTION - Clean Grid */}
       {!spacesLoading && spaces.length > 0 && (
-        <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background/40 border-b border-border/30">
+        <section className="py-24 px-6 bg-white">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.4 }}
               className="text-center mb-16"
             >
-              <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
                 Discover Your Edge
               </h2>
-              <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-                Choose your sanctuary. Master AI, Web3, and the metaverse to build influence, wealth, and impact in your business.
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Nine transformational spaces to master AI, Web3, and build wealth, influence, and impact.
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {spaces
                 .sort((a, b) => a.sortOrder - b.sortOrder)
                 .map((space, index) => {
@@ -310,43 +317,41 @@ export default function HomePage() {
                   return (
                     <motion.div
                       key={space.id}
-                      initial={{ opacity: 0, y: 40 }}
+                      initial={{ opacity: 0, y: 30 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, margin: "-100px" }}
-                      transition={{ duration: 0.5, delay: index * 0.08 }}
-                      className="group relative"
+                      viewport={{ once: true, margin: "-50px" }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className="group"
                       data-testid={`space-card-landing-${space.slug}`}
                     >
-                      <div className={`relative h-full ${isLocked ? 'opacity-90' : ''}`}>
-                        {/* Locked Overlay */}
+                      <div className={`relative h-full ${isLocked ? 'opacity-75' : ''}`}>
                         {isLocked && (
-                          <div className="absolute inset-0 z-10 rounded-2xl bg-gradient-to-br from-background/60 via-background/40 to-background/60 backdrop-blur-sm border-2 border-primary/30 flex items-center justify-center">
+                          <div className="absolute inset-0 z-10 bg-white/90 flex items-center justify-center">
                             <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
+                              initial={{ scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
-                              transition={{ delay: 0.3 }}
+                              transition={{ delay: 0.2 }}
                               className="text-center px-6"
                             >
-                              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center border-2 border-primary/40">
-                                <Lock className="w-8 h-8 text-primary" />
+                              <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
+                                <Lock className="w-5 h-5 text-gray-500" />
                               </div>
-                              <p className="font-semibold text-lg mb-2">PRO Access Required</p>
+                              <p className="font-medium text-sm mb-2">Pro Access Required</p>
                               <Button
                                 size="sm"
                                 onClick={(e) => {
                                   e.stopPropagation();
                                   setLocation("/upgrade");
                                 }}
-                                className="gold-shimmer text-black"
+                                className="bg-black text-white hover:bg-gray-900 text-xs uppercase tracking-wider"
                                 data-testid={`unlock-space-${space.slug}`}
                               >
-                                Unlock Space
+                                Unlock
                               </Button>
                             </motion.div>
                           </div>
                         )}
 
-                        {/* Main Card */}
                         <button
                           onClick={() => {
                             if (!isLocked) {
@@ -354,84 +359,58 @@ export default function HomePage() {
                             }
                           }}
                           disabled={isLocked}
-                          className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-2xl"
+                          className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
                           data-testid={`button-space-${space.slug}`}
                         >
-                          <div className="rounded-2xl overflow-hidden border border-border/40 hover-elevate active-elevate-2 transition-all duration-500 h-full flex flex-col bg-gradient-to-br from-card/95 via-card to-card/90 backdrop-blur-sm shadow-2xl shadow-black/10 group-hover:shadow-3xl group-hover:shadow-primary/10">
-                            {/* Header Image */}
+                          <div className="border border-gray-200 hover:border-gray-300 transition-all duration-300 h-full flex flex-col bg-white group-hover:shadow-lg">
                             {spaceImages[space.slug] && (
                               <div className="relative w-full aspect-[4/3] overflow-hidden">
                                 <img
                                   src={spaceImages[space.slug].src}
                                   alt={spaceImages[space.slug].alt}
-                                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                   loading="lazy"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent transition-opacity duration-500 group-hover:from-black/80" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                                 
-                                {/* Floating Badges */}
                                 <div className="absolute top-4 left-4 flex gap-2">
                                   {!isLocked && !experiencesLoading && freeExperiencesCount > 0 && (
-                                    <Badge className="backdrop-blur-md bg-emerald-500/20 border-emerald-400/40 text-emerald-100 font-semibold">
+                                    <span className="px-2 py-1 bg-white text-black text-xs font-medium uppercase tracking-wider">
                                       {freeExperiencesCount} Free
-                                    </Badge>
+                                    </span>
                                   )}
                                 </div>
 
-                                {/* Experience Count */}
-                                <div className="absolute bottom-4 right-4 backdrop-blur-md bg-background/30 rounded-lg px-3 py-1.5 border border-white/20">
-                                  <div className="flex items-center gap-2 text-white">
-                                    <BookOpen className="w-4 h-4" />
-                                    <span className="text-sm font-semibold">{actualExperienceCount} Experiences</span>
-                                  </div>
+                                <div className="absolute bottom-4 left-4">
+                                  <h3 className="text-xl font-semibold text-white mb-1">
+                                    {space.name}
+                                  </h3>
+                                  <span className="text-sm text-white/80">{actualExperienceCount} Rituals</span>
                                 </div>
                               </div>
                             )}
 
-                            {/* Card Content */}
-                            <div className="p-7 flex flex-col flex-1 relative">
-                              <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] to-transparent pointer-events-none" />
-                              
-                              <div className="relative z-10">
-                                {/* Title & Icon */}
-                                <div className="flex items-start justify-between mb-5">
-                                  <div className="flex-1">
-                                    <h3 className="font-serif text-2xl lg:text-3xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 mb-3 leading-tight">
-                                      {space.name}
-                                    </h3>
-                                    <p className="text-sm text-foreground line-clamp-2 leading-relaxed">
-                                      {space.description}
-                                    </p>
-                                  </div>
-                                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/20 flex-shrink-0 ml-4 shadow-lg shadow-primary/5 group-hover:shadow-xl group-hover:shadow-primary/10 group-hover:scale-105 transition-all duration-500">
-                                    <SpaceIcon className="w-7 h-7 text-primary group-hover:scale-110 transition-transform duration-500" />
-                                  </div>
-                                </div>
+                            <div className="p-6 flex flex-col flex-1">
+                              <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                                {space.description}
+                              </p>
 
-                                {/* Learning Outcomes */}
-                                <div className="flex-1 mb-5">
-                                  <h4 className="text-[10px] uppercase tracking-widest text-foreground font-bold mb-4">You'll Master:</h4>
-                                  <ul className="space-y-2.5">
-                                    {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
-                                      <li key={i} className="flex items-start gap-2.5 text-sm text-foreground/90 group/item">
-                                        <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform duration-300" />
-                                        <span className="leading-snug">{outcome}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
+                              <div className="flex-1 mb-4">
+                                <ul className="space-y-2">
+                                  {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
+                                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                                      <CheckCircle2 className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+                                      <span>{outcome}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
 
-                                {/* CTA Footer */}
-                                <div className="pt-5 border-t border-border/50">
-                                  <div className="flex items-center justify-between group/cta">
-                                    <span className="text-sm font-bold text-primary group-hover/cta:tracking-wide transition-all duration-300">
-                                      {isLocked ? "Unlock Access" : "Begin Ritual"}
-                                    </span>
-                                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20 group-hover:bg-primary/20 group-hover:border-primary/30 transition-all duration-300">
-                                      <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform duration-300" />
-                                    </div>
-                                  </div>
-                                </div>
+                              <div className="pt-4 border-t border-gray-100">
+                                <span className="text-sm font-medium text-black uppercase tracking-wider group-hover:text-purple-600 transition-colors flex items-center gap-2">
+                                  {isLocked ? "Unlock Access" : "Begin Ritual"}
+                                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                                </span>
                               </div>
                             </div>
                           </div>
@@ -445,39 +424,40 @@ export default function HomePage() {
         </section>
       )}
 
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-background">
-        <div className="max-w-7xl mx-auto">
+      {/* THE METAHERS DIFFERENCE */}
+      <section className="py-24 px-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
               The MetaHers Difference
             </h2>
-            <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-              We're not another academy. We're a lifestyle movement for women who refuse to be left behind in the AI + Web3 revolution.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              We're not another academy. We're a lifestyle movement for women who refuse to be left behind.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                title: "Designed for Your Success",
-                description: "Practical, real-world strategies you can use TODAY in your business—not textbook theory",
-                gradient: "gradient-violet-magenta",
+                icon: TrendingUp,
+                title: "Designed for Success",
+                description: "Practical strategies you can use TODAY in your business—not textbook theory",
               },
               {
+                icon: Users,
                 title: "Community of Winners",
                 description: "Join thousands of women solopreneurs building wealth, influence, and freedom",
-                gradient: "gradient-magenta-fuchsia",
               },
               {
-                title: "Luxury Learning Experience",
-                description: "Beautiful design + proven Harvard methodology = education that feels like self-care",
-                gradient: "gradient-teal-gold",
+                icon: Star,
+                title: "Luxury Experience",
+                description: "Beautiful design + proven methodology = education that feels like self-care",
               },
             ].map((feature, index) => (
               <motion.div
@@ -485,148 +465,120 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="editorial-card p-8 text-center hover-elevate transition-all duration-300 relative overflow-hidden group"
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="bg-white p-8 border border-gray-200 hover:border-gray-300 transition-all hover:shadow-lg"
               >
-                <div className={`absolute inset-0 ${feature.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
-                <div className="relative z-10">
-                  <h3 className="font-serif text-2xl font-semibold mb-4 text-primary">
-                    {feature.title}
-                  </h3>
-                  <p className="text-foreground/80 leading-relaxed">
-                    {feature.description}
-                  </p>
+                <div className="w-12 h-12 bg-purple-50 flex items-center justify-center mb-6">
+                  <feature.icon className="w-6 h-6 text-purple-600" />
                 </div>
+                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* MEMBER WINS SECTION - Phase 2 */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background/50 to-background">
+      {/* MEMBER WINS */}
+      <section className="py-24 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
-              What MetaHers Women Are Accomplishing
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
+              What Members Are Accomplishing
             </h2>
-            <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
-              Real women. Real results. Real transformation happening in MetaHers community.
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Real women. Real results. Real transformation.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
-              {
-                stat: "$50K+",
-                description: "Average first-year revenue from AI-powered businesses",
-                gradient: "gradient-gold-violet",
-              },
-              {
-                stat: "1,200+",
-                description: "NFT collections launched by MetaHers members",
-                gradient: "gradient-violet-magenta",
-              },
-              {
-                stat: "3M+",
-                description: "Combined reach of MetaHers women on social",
-                gradient: "gradient-magenta-fuchsia",
-              },
-              {
-                stat: "98%",
-                description: "Would recommend MetaHers to other women",
-                gradient: "gradient-teal-gold",
-              },
+              { stat: "$50K+", description: "Average first-year revenue from AI-powered businesses" },
+              { stat: "1,200+", description: "NFT collections launched by members" },
+              { stat: "3M+", description: "Combined reach on social media" },
+              { stat: "98%", description: "Would recommend to other women" },
             ].map((win, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="editorial-card p-8 text-center hover-elevate transition-all duration-300 relative overflow-hidden group"
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="bg-gray-50 p-6 text-center border border-gray-200"
               >
-                <div className={`absolute inset-0 ${win.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
-                <div className="relative z-10">
-                  <div className="text-5xl font-black mb-4 text-gradient-gold">
-                    {win.stat}
-                  </div>
-                  <p className="text-foreground/80 leading-relaxed">
-                    {win.description}
-                  </p>
+                <div className="text-3xl sm:text-4xl font-semibold mb-2 text-gradient-tech">
+                  {win.stat}
                 </div>
+                <p className="text-sm text-gray-600">{win.description}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CYBER MONDAY CAMPAIGN BANNER - Phase 4 */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/10 via-[hsl(var(--hyper-violet))]/10 to-[hsl(var(--liquid-gold))]/10 border-y border-primary/30">
-        <div className="max-w-6xl mx-auto text-center">
+      {/* CYBER MONDAY CTA */}
+      <section className="py-20 px-6 bg-black text-white">
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <div className="inline-flex items-center gap-2 glass-card px-6 py-3 rounded-full mb-6 border border-primary/30 bg-primary/5">
-              <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))] animate-pulse" />
-              <span className="text-sm font-bold uppercase tracking-wider text-primary">
-                Cyber Monday: 80% OFF Ends Midnight Monday
-              </span>
+            <div className="inline-flex items-center gap-2 px-4 py-2 border border-purple-500/50 text-purple-300 text-xs uppercase tracking-[0.15em] mb-8">
+              <span className="w-2 h-2 bg-purple-400 rounded-full animate-pulse" />
+              Cyber Monday: 80% OFF Ends Soon
             </div>
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 leading-tight">
-              <span className="text-gradient-gold">Everything you need to master AI + Web3</span>
-              <br />
-              <span className="text-2xl text-foreground/80 font-medium mt-4">All 9 learning spaces + personal coaching</span>
+            
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 tracking-tight">
+              Everything You Need for{' '}
+              <span className="text-gradient-tech">$299</span>
             </h2>
-            <p className="text-xl text-foreground/80 max-w-2xl mx-auto mb-10">
-              Transform from overwhelmed to influential in just 90 days. Join hundreds of women solopreneurs building 6-figure businesses.
+            
+            <p className="text-lg text-gray-400 mb-10 max-w-xl mx-auto">
+              All 9 learning spaces + personal coaching. Transform from overwhelmed to influential in 90 days.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <CTAButton
-                href="/upgrade"
-                size="lg"
-                className="text-lg px-12 py-7 bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--cyber-fuchsia))] text-black hover:shadow-2xl font-bold"
-                dataTestId="button-cyber-monday-cta"
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+              <button
+                onClick={() => setLocation('/upgrade')}
+                className="px-10 py-4 bg-white text-black text-sm uppercase tracking-[0.15em] font-medium hover:bg-gray-100 transition-colors"
+                data-testid="button-cyber-monday-cta"
               >
                 Get All 9 Spaces for $299
-                <ArrowRight className="ml-2 w-5 h-5" />
-              </CTAButton>
+                <ArrowRight className="inline-block ml-2 w-4 h-4" />
+              </button>
               <div className="text-center">
-                <div className="text-2xl font-black text-[hsl(var(--liquid-gold))] mb-1">$299</div>
-                <div className="text-sm text-foreground/60 line-through">$1,497</div>
-                <div className="text-sm font-bold text-primary mt-1">80% OFF</div>
+                <div className="text-2xl font-semibold">$299</div>
+                <div className="text-sm text-gray-500 line-through">$1,497</div>
               </div>
             </div>
-            <p className="text-sm text-foreground/60 mt-6">
-              Limited to 100 women this Cyber Monday. Last spots going fast.
+            
+            <p className="text-sm text-gray-500 mt-8">
+              Limited to 100 women this Cyber Monday
             </p>
           </motion.div>
         </div>
       </section>
 
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/50">
+      {/* TESTIMONIALS */}
+      <section className="py-24 px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 glass-card px-4 py-2 rounded-full mb-6">
-              <Sparkles className="w-4 h-4 text-[hsl(var(--liquid-gold))]" />
-              <span className="text-sm font-medium">Trusted by 500+ Women</span>
-            </div>
-            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-violet">
+            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Trusted by 5,000+ Women</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
               Why MetaHers Women Win
             </h2>
           </motion.div>
@@ -637,19 +589,16 @@ export default function HomePage() {
                 quote: "I launched my AI-powered copywriting business and hit $10K in month 2. MetaHers gave me the confidence and the tools.",
                 author: "Sarah M.",
                 role: "Now Making $120K/year",
-                gradient: "gradient-violet-magenta",
               },
               {
                 quote: "Sold $50K in NFTs using the strategies from the NFT Artistry space. This community is incredible.",
                 author: "Jessica R.",
                 role: "Now a Verified Artist",
-                gradient: "gradient-magenta-fuchsia",
               },
               {
                 quote: "Went from 5K to 100K followers by positioning myself as an AI expert. MetaHers showed me exactly how.",
                 author: "Maya K.",
                 role: "Now a Thought Leader",
-                gradient: "gradient-teal-gold",
               },
             ].map((testimonial, index) => (
               <motion.div
@@ -657,26 +606,49 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="editorial-card p-6 relative overflow-hidden"
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="bg-white p-8 border border-gray-200"
               >
-                <div className={`absolute inset-0 ${testimonial.gradient} opacity-5`} />
-                <div className="relative z-10">
-                  <div className="text-4xl text-[hsl(var(--liquid-gold))] mb-4">"</div>
-                  <p className="text-foreground/90 mb-6 italic leading-relaxed">
-                    {testimonial.quote}
-                  </p>
-                  <div className="border-t border-border pt-4">
-                    <p className="font-semibold text-foreground">{testimonial.author}</p>
-                    <p className="text-sm text-foreground">{testimonial.role}</p>
-                  </div>
+                <div className="text-4xl text-purple-300 mb-4">"</div>
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  {testimonial.quote}
+                </p>
+                <div className="border-t border-gray-100 pt-4">
+                  <p className="font-semibold">{testimonial.author}</p>
+                  <p className="text-sm text-purple-600">{testimonial.role}</p>
                 </div>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
-      </div>
+
+      {/* FINAL CTA */}
+      <section className="py-24 px-6 bg-white">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+          >
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 tracking-tight">
+              Ready to Transform?
+            </h2>
+            <p className="text-lg text-gray-600 mb-10">
+              Join thousands of women building the future with AI & Web3.
+            </p>
+            <button
+              onClick={() => setLocation('/rituals/ai-glow-up-facial')}
+              className="alo-button text-sm"
+              data-testid="button-final-cta"
+            >
+              Start Free Today
+              <ArrowRight className="inline-block ml-2 w-4 h-4" />
+            </button>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
