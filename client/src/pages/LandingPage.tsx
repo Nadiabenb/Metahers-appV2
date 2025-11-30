@@ -296,7 +296,7 @@ export default function LandingPage() {
                     className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
                     data-testid={`space-card-${space.slug}`}
                   >
-                    <div className="rounded-lg overflow-visible border border-white/20 backdrop-blur-md bg-white/15 hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
+                    <div className="rounded-lg overflow-visible border border-gray-200 bg-white hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
                       {/* Cover Image */}
                       {spaceImage && (
                         <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-lg">
@@ -312,7 +312,7 @@ export default function LandingPage() {
                           {/* Badge on image */}
                           {badge && (
                             <div className="absolute top-3 right-3">
-                              <Badge variant="default" className="text-xs font-semibold bg-yellow-400 text-black border-yellow-300/50 backdrop-blur-sm">
+                              <Badge variant="default" className="text-xs font-semibold bg-purple-600 text-white border-purple-500/50 backdrop-blur-sm">
                                 {badge.text}
                               </Badge>
                             </div>
@@ -324,34 +324,34 @@ export default function LandingPage() {
                       <div className="p-5 flex flex-col flex-1">
                         {/* Icon & Title Row */}
                         <div className="flex items-start gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400/30 to-yellow-400/10 flex items-center justify-center border border-yellow-400/30 flex-shrink-0">
-                            <SpaceIcon className="w-5 h-5 text-yellow-400 drop-shadow-md" />
+                          <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center border border-purple-200 flex-shrink-0">
+                            <SpaceIcon className="w-5 h-5 text-purple-600" />
                           </div>
 
                           {/* Title */}
-                          <h3 className="font-serif text-xl font-bold text-white group-hover:text-yellow-400 transition-colors flex-1 leading-tight drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
+                          <h3 className="font-semibold text-xl text-black group-hover:text-purple-600 transition-colors flex-1 leading-tight">
                             {space.name}
                           </h3>
                         </div>
 
                         {/* Description */}
-                        <p className="text-sm text-white/90 leading-relaxed flex-1 mb-4 drop-shadow-md" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.4)' }}>
+                        <p className="text-sm text-gray-700 leading-relaxed flex-1 mb-4">
                           {space.description}
                         </p>
 
                         {/* Experience Count */}
-                        <div className="flex items-center gap-2 mb-4 text-xs text-white/80 drop-shadow-sm">
-                          <Sparkles className="w-3.5 h-3.5 text-yellow-400" />
+                        <div className="flex items-center gap-2 mb-4 text-xs text-gray-600">
+                          <Sparkles className="w-3.5 h-3.5 text-purple-600" />
                           <span>{totalExperiencesCount} transformational experiences</span>
                           {freeExperiencesCount > 0 && (
-                            <Badge className="text-xs bg-yellow-400/30 text-white border-yellow-400/50">
+                            <Badge className="text-xs bg-purple-100 text-purple-700 border-purple-300">
                               {freeExperiencesCount} Free
                             </Badge>
                           )}
                         </div>
 
                         {/* Footer - Minimal */}
-                        <div className="flex items-center justify-between text-xs text-white/70 group-hover:text-yellow-400 transition-colors drop-shadow-sm">
+                        <div className="flex items-center justify-between text-xs text-gray-600 group-hover:text-purple-600 transition-colors">
                           <span className="uppercase tracking-wider font-medium">Explore Space</span>
                           <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                         </div>
@@ -377,12 +377,12 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-24 backdrop-blur-sm bg-white/8 rounded-2xl p-8 border border-white/10"
+            className="text-center mb-24"
           >
-            <h2 className="text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
-              Simple <span className="text-yellow-400">Pricing</span>
+            <h2 className="text-5xl lg:text-6xl font-semibold mb-6 text-black tracking-tight">
+              Simple <span className="text-purple-600">Pricing</span>
             </h2>
-            <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
               Start free. Upgrade when you're ready. No hidden fees.
             </p>
           </motion.div>
@@ -394,22 +394,22 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="rounded-3xl p-12 border border-white/20 backdrop-blur-sm bg-white/10 hover-elevate transition-all duration-300"
+              className="rounded-lg p-12 border border-gray-200 bg-white hover:shadow-lg transition-all duration-300"
             >
               <div className="mb-10">
-                <h3 className="font-serif text-5xl font-bold mb-4 text-white drop-shadow-lg">Free Forever</h3>
-                <p className="text-white/90 text-lg leading-relaxed drop-shadow-md">
-                  12 transformational experiences, personalized AI coaching, and direct calls with Nadia.
+                <h3 className="text-5xl font-semibold mb-4 text-black">Free Forever</h3>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  54 transformational rituals, personalized AI coaching, and direct access to Nadia.
                 </p>
               </div>
               <motion.button
                 onClick={handleSignup}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="w-full px-8 py-6 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg font-semibold text-lg transition-all"
+                className="w-full px-8 py-4 bg-black text-white font-medium text-lg uppercase tracking-wider hover:bg-gray-900 transition-all"
                 data-testid="button-start-free-tier"
               >
-                Start Your Journey Free
+                Start Free
               </motion.button>
             </motion.div>
 
@@ -419,29 +419,29 @@ export default function LandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="rounded-3xl p-12 border-2 border-yellow-400/50 relative overflow-hidden backdrop-blur-sm bg-white/15 shadow-2xl shadow-purple-500/20 hover-elevate transition-all duration-300"
+              className="rounded-lg p-12 border-2 border-purple-600 relative overflow-hidden bg-white hover:shadow-lg transition-all duration-300"
             >
               {/* Exclusive Badge */}
               <div className="absolute top-6 right-6">
-                <Badge className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-black border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
+                <Badge className="bg-purple-600 text-white border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
                   Most Popular
                 </Badge>
               </div>
 
               <div className="mb-10">
-                <h3 className="font-sans text-5xl font-bold mb-4 text-white drop-shadow-lg">Inner Circle</h3>
-                <p className="text-white/90 text-lg leading-relaxed drop-shadow-md">
-                  All 36 experiences, thought leadership journey, priority access to Nadia + monthly group coaching.
+                <h3 className="text-5xl font-semibold mb-4 text-black">Ultimate Bundle</h3>
+                <p className="text-gray-600 text-lg leading-relaxed">
+                  All 54 rituals, advanced tools, thought leadership journey, priority support + exclusive group sessions.
                 </p>
               </div>
               <motion.button
                 onClick={() => window.location.href = "/upgrade"}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                className="w-full px-8 py-6 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 text-black hover:shadow-lg font-semibold text-lg transition-all"
+                className="w-full px-8 py-4 bg-purple-600 text-white font-medium text-lg uppercase tracking-wider hover:bg-purple-700 transition-all"
                 data-testid="button-upgrade-pro"
               >
-                Unlock Inner Circle
+                Unlock Ultimate Bundle
               </motion.button>
             </motion.div>
           </div>
