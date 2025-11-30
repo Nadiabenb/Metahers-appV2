@@ -1,0 +1,110 @@
+{
+  "colorScheme": "light",
+  "fonts": [
+    {
+      "family": "Proxima Nova",
+      "role": "body"
+    },
+    {
+      "family": "Helvetica",
+      "role": "body"
+    },
+    {
+      "family": "Helvetica Neue",
+      "role": "body"
+    },
+    {
+      "family": "sans-serif",
+      "role": "body"
+    }
+  ],
+  "colors": {
+    "primary": "#6C757D",
+    "accent": "#96C8DA",
+    "background": "#FFFFFF",
+    "textPrimary": "#000000",
+    "link": "#96C8DA"
+  },
+  "typography": {
+    "fontFamilies": {
+      "primary": "Proxima Nova",
+      "heading": "Proxima Nova"
+    },
+    "fontStacks": {
+      "heading": [
+        "proxima-nova",
+        "Helvetica",
+        "sans-serif"
+      ],
+      "body": [
+        "proxima-nova",
+        "Helvetica",
+        "sans-serif"
+      ],
+      "paragraph": [
+        "proxima-nova",
+        "Helvetica",
+        "sans-serif"
+      ]
+    },
+    "fontSizes": {
+      "h1": "16px",
+      "h2": "60px",
+      "body": "14px"
+    }
+  },
+  "spacing": {
+    "baseUnit": 4,
+    "borderRadius": "5px"
+  },
+  "components": {
+    "input": {
+      "borderColor": "#CCCCCC",
+      "borderRadius": "5px"
+    },
+    "buttonPrimary": {
+      "background": "#FFFFFF",
+      "textColor": "#000000",
+      "borderRadius": "0px",
+      "shadow": "none"
+    }
+  },
+  "images": {
+    "logo": "File saved at: attached_assets/logo.svg",
+    "favicon": "File saved at: attached_assets/favicon.png",
+    "ogImage": "File saved at: attached_assets/ogImage.png"
+  },
+  "__framework_hints": [],
+  "__llm_logo_reasoning": {
+    "selectedIndex": 0,
+    "reasoning": "Logo #0 is selected as it visually represents the brand name 'Alo Yoga', is located in the header, and links to the homepage, making it the most likely candidate for the main brand logo.",
+    "confidence": 0.95
+  },
+  "__llm_button_reasoning": {
+    "primary": {
+      "index": 0,
+      "text": "SHOP NOW",
+      "reasoning": "Button #0 ('SHOP NOW') is selected as the primary CTA because it has action-oriented text and is the only button that could be considered a primary call-to-action, despite both buttons having the same background color. It is more prominent and likely intended to drive sales directly."
+    },
+    "secondary": {
+      "index": 1,
+      "text": "Start Here",
+      "reasoning": "Button #1 ('Start Here') is selected as the secondary button because it has less action-oriented text and is styled as a link, making it less prominent than the primary button. However, both buttons share the same background color, which is a limitation in this case."
+    },
+    "confidence": 0.8
+  },
+  "personality": {
+    "tone": "modern",
+    "energy": "medium",
+    "targetAudience": "yoga enthusiasts and fitness-conscious individuals"
+  },
+  "designSystem": {
+    "framework": "custom",
+    "componentLibrary": null
+  },
+  "confidence": {
+    "buttons": 0.8,
+    "colors": 0.9,
+    "overall": 0.8500000000000001
+  }
+}
