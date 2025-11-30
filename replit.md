@@ -2,13 +2,14 @@
 
 ## Project Overview
 
-**MetaHers Mind Spa** is a premium luxury PWA (Progressive Web App) designed for Apple Store submission. It combines:
-- Luxury spa design with metaverse aesthetics
-- AI and Web3 education for women solopreneurs
-- Light feminine pastel theme elevated to sophisticated high-end standards
-- Immersive metaverse-inspired visuals throughout
+**MetaHers Mind Spa** is a lifestyle empowerment platform for women solopreneurs, combining AI and Web3 education with a premium Alo Yoga-inspired aesthetic. Features 54 transformational experiences ("rituals") designed to help women build their digital businesses.
 
-**Current Status:** ✅ **App Store Submission Ready**
+**Current Status:** ✅ **Cyber Monday Ready** - Clean Alo Yoga redesign complete
+
+**Brand Positioning:**
+- Lifestyle empowerment (Alo Yoga model) not EdTech
+- 54 transformational "rituals" not courses
+- $299 Ultimate Bundle (80% off $1,497 for Cyber Monday)
 
 ---
 
@@ -18,7 +19,7 @@
 - **Frontend:** React 18 + TypeScript + Vite
 - **Backend:** Express.js + Node.js
 - **Database:** PostgreSQL (Neon) + Drizzle ORM
-- **Styling:** Tailwind CSS + Custom Design System
+- **Styling:** Tailwind CSS + Alo Yoga-Inspired Design System
 - **State Management:** React Query (TanStack Query v5)
 - **Forms:** React Hook Form + Zod validation
 - **Icons:** Lucide React + React Icons
@@ -53,29 +54,43 @@ public/
 
 ---
 
-## Design System
+## Design System (Alo Yoga Inspired)
 
 ### Color Palette
-**Primary Theme:** Dark Background + Purple/Yellow Accents
+**Primary Theme:** Clean White Background + Subtle Tech Accents
 ```
-- Background: #0D0D0F (deep black/purple)
-- Foreground: #FFFFFF (pure white)
-- Accent: #FACC15 (yellow-400, CTAs)
-- Secondary: Purple tones for depth
-- Overlay: rgba(0, 0, 0, 0.85) for contrast
+- Background: #FFFFFF (pure white)
+- Foreground: #000000 (pure black)
+- Primary (Tech Accent): purple-600 (#9333EA)
+- Secondary: Gray tones for subtlety
+- Muted: cream-50 (#faf8f5) for sections
+- Card Borders: gray-200 for clean lines
 ```
 
+### Typography
+- **Font Family:** Inter (clean, modern sans-serif)
+- **Headlines:** Font-semibold, tight tracking
+- **Body:** Regular weight, relaxed leading
+- **Eyebrow Labels:** Uppercase, tracking-[0.2em], text-sm
+
 ### Design Patterns Applied
-✅ **Dark Overlays** - black/85 (purple-950) for readability on images
-✅ **Frosted Glass Effects** - bg-white/15 + backdrop-blur for premium feel
-✅ **White Text** - strong drop shadows for WCAG AAA compliance (21:1 ratio)
-✅ **Yellow CTAs** - yellow-400 for action buttons standing out
-✅ **Metaverse Aesthetics** - Generated AI background images with tech elements
+✅ **Clean White Backgrounds** - Minimal, breathable layouts
+✅ **Black Text** - High contrast, WCAG AAA compliance
+✅ **Purple Tech Accents** - Subtle nods to futuristic theme (purple-600)
+✅ **Alo-Style Buttons** - Black fill / white outline, uppercase tracking
+✅ **Editorial Layout** - Large headlines, generous whitespace
+✅ **Subtle Tech Glows** - .tech-glow, .tech-underline for differentiation
+
+### Button Classes
+```css
+.alo-button        - Black bg, white text, uppercase, tracking-wider
+.alo-button-outline - White bg, black border, uppercase, tracking-wider
+.alo-button-accent  - Purple bg, white text for CTAs
+```
 
 ### Mobile Optimization
 ✅ Responsive padding: px-4 sm:px-6 lg:px-16
-✅ Disabled parallax on mobile (backgroundAttachment conditional)
-✅ Reduced heights on small screens
+✅ Clean white backgrounds (no parallax issues)
 ✅ Touch-friendly target sizes (44x44px minimum)
 ✅ Safe area insets for notch/dynamic island
 
@@ -83,12 +98,14 @@ public/
 
 ## Key Features Implemented
 
-### Landing Page
-- ✅ Hero section with metaverse background
-- ✅ Immersive animated sections
+### Landing Page (HomePage)
+- ✅ Clean white hero with subtle tech gradient
+- ✅ Black announcement banner (Cyber Monday)
+- ✅ Minimal 3-column grid for learning spaces
+- ✅ Stats section with clean typography
+- ✅ Member wins / testimonials
+- ✅ Cyber Monday CTA with pricing
 - ✅ Mobile-optimized navigation
-- ✅ Call-to-action buttons with yellow accents
-- ✅ Accessibility-first design (WCAG AAA)
 
 ### Legal Pages
 - ✅ Privacy Policy (`/privacy`)
