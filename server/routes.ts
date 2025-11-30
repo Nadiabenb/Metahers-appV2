@@ -1245,60 +1245,26 @@ Return ONLY valid JSON:
   // GET all experiences (must be before :slug/:id routes)
   app.get('/api/experiences/all', async (req: Request, res) => {
     try {
-      // Check cache first
-      const now = Date.now();
-      let experiences: any[];
+      // Return experiences directly from seed data
+      const experiences = EXPERIENCES
+        .filter(exp => exp.isActive !== false)
+        .sort((a, b) => a.sortOrder - b.sortOrder)
+        .map(exp => ({
+          id: exp.slug,
+          spaceId: exp.spaceId,
+          title: exp.title,
+          slug: exp.slug,
+          description: exp.description,
+          learningObjectives: exp.learningObjectives,
+          tier: exp.tier,
+          estimatedMinutes: exp.estimatedMinutes,
+          sortOrder: exp.sortOrder,
+          isActive: exp.isActive,
+          content: exp.content,
+          personalizationEnabled: exp.personalizationEnabled
+        }));
 
-      if (experiencesCache && (now - experiencesCache.timestamp) < DATA_CACHE_TTL) {
-        experiences = experiencesCache.data;
-      } else {
-        // Fetch from database with JOIN
-        experiences = await storage.getAllExperiences();
-
-        // Update cache
-        experiencesCache = { data: experiences, timestamp: now };
-      }
-
-      // Check if user has Pro access
-      const userId = req.session?.userId;
-      const user = userId ? await storage.getUser(userId) : null;
-      const isProUser = user?.isPro || user?.subscriptionTier === "pro";
-
-      // Filter experiences and ensure all have proper content structure
-      const filteredExperiences = experiences.map(exp => {
-        // Validate content structure - ensure all experiences have 5+ sections
-        const sectionCount = exp.content?.sections?.length || 0;
-        if (sectionCount < 5) {
-          console.warn(`⚠️ Experience ${exp.slug} has only ${sectionCount} sections - needs regeneration`);
-        }
-
-        if (exp.tier === "pro" && !isProUser) {
-          // Redact sensitive Pro content for non-Pro users, but keep metadata
-          return {
-            id: exp.id,
-            spaceId: exp.spaceId,
-            spaceName: exp.spaceName,
-            title: exp.title,
-            slug: exp.slug,
-            description: exp.description,
-            tier: exp.tier,
-            estimatedMinutes: exp.estimatedMinutes,
-            sortOrder: exp.sortOrder,
-            isActive: exp.isActive,
-            learningObjectives: exp.learningObjectives || [], // Keep objectives visible
-            // Omit: content, personalizationEnabled
-            _accessRestricted: true,
-            _sectionCount: sectionCount // For debugging
-          };
-        }
-        // Free experiences or Pro users - return full content
-        return {
-          ...exp,
-          _sectionCount: sectionCount // For debugging
-        };
-      });
-
-      res.json(filteredExperiences);
+      res.json(experiences);
     } catch (error) {
       console.error("Error fetching all experiences:", error);
       res.status(500).json({ message: "Failed to fetch experiences" });
