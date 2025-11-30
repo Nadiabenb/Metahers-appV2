@@ -47,6 +47,7 @@ const GlowUpOnboardingPage = lazy(() => import("@/pages/GlowUpOnboardingPage"));
 const GlowUpDashboardPage = lazy(() => import("@/pages/GlowUpDashboardPage"));
 const GlowUpJournalPage = lazy(() => import("@/pages/GlowUpJournalPage"));
 const GlowUpCompletePage = lazy(() => import("@/pages/GlowUpCompletePage"));
+const AIMasteryPage = lazy(() => import("@/pages/AIMasteryPage"));
 const DiscoverPage = lazy(() => import("@/pages/DiscoverPage"));
 const VIPCohortPage = lazy(() => import("@/pages/VIPCohortPage"));
 const ExecutivePage = lazy(() => import("@/pages/ExecutivePage"));
@@ -139,6 +140,7 @@ function Router() {
         <Route path="/ai-builder" component={AIBuilderRetreatPage} />
         <Route path="/app-atelier" component={AppAtelierPage} />
         <Route path="/founders-sanctuary" component={FoundersSanctuaryPage} />
+        <Route path="/ai-mastery" component={AIMasteryPage} />
         <Route path="/rituals" component={RitualsPage} />
         <Route path="/journey/day-:dayNumber" component={JourneyDayPage} />
 
