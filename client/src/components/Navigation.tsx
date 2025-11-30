@@ -170,29 +170,12 @@ export function Navigation() {
             MetaHers
           </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-6">
+          {/* Desktop Navigation - Center */}
+          <div className="hidden lg:flex items-center gap-6 flex-1">
             {/* Global Search */}
-            <div className="w-56">
+            <div className="flex-1 max-w-sm">
               <GlobalSearch />
             </div>
-
-            {/* Simple Text Links */}
-            <button
-              onClick={() => handleNavClick("/discover")}
-              className="text-sm font-medium text-gray-700 hover:text-black transition-colors uppercase tracking-wider"
-              data-testid="nav-discover"
-            >
-              Discover
-            </button>
-
-            <button
-              onClick={() => handleNavClick("/rituals")}
-              className="text-sm font-medium text-gray-700 hover:text-black transition-colors uppercase tracking-wider"
-              data-testid="nav-rituals"
-            >
-              Rituals
-            </button>
 
             {/* Explore Menu Button */}
             <div className="relative">
@@ -274,7 +257,10 @@ export function Navigation() {
                 )}
               </AnimatePresence>
             </div>
+          </div>
 
+          {/* Desktop Auth & Actions - Right */}
+          <div className="hidden lg:flex items-center gap-4">
             {/* Auth buttons */}
             {!isAuthenticated && !isLoading && (
               <Button
@@ -329,7 +315,7 @@ export function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center gap-2">
+          <div className="lg:hidden">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button 
