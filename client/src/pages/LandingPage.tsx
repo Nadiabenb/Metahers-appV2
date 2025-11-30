@@ -218,18 +218,18 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8 }}
-            className="mb-20 max-w-3xl backdrop-blur-sm bg-white/8 rounded-2xl p-8 border border-white/10"
+            className="mb-20 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-4">
-              <div className="h-px w-12 bg-gradient-to-r from-yellow-400 to-yellow-400/50" />
-              <span className="text-xs uppercase tracking-widest text-white/80 font-bold drop-shadow-md">
+              <div className="h-px w-12 bg-purple-600" />
+              <span className="text-xs uppercase tracking-widest text-gray-600 font-bold">
                 Your Personalized Path
               </span>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
-              Choose Your <span className="text-yellow-400">9 Learning Spaces</span>
+            <h2 className="text-4xl lg:text-5xl font-semibold mb-4 text-black">
+              Choose Your <span className="text-purple-600">Learning Spaces</span>
             </h2>
-            <p className="text-lg text-white/90 leading-relaxed font-medium drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+            <p className="text-lg text-gray-600 leading-relaxed font-medium">
               Each space is expertly designed to take you from where you are now to where you want to be—step by transformational step.
             </p>
           </motion.div>
