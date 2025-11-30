@@ -1275,73 +1275,30 @@ Return ONLY valid JSON:
   app.get('/api/experiences/:slug', async (req: Request, res) => {
     try {
       const { slug } = req.params;
-      const { cacheGet, cacheSet } = await import('./lib/cache');
 
-      // Try Redis cache first
-      const cacheKey = `experience:${slug}`;
-      const cached = await cacheGet<any>(cacheKey);
-      if (cached) {
-        const userId = req.session?.userId;
-        const user = userId ? await storage.getUser(userId) : null;
-        const isProUser = user?.isPro || user?.subscriptionTier === "pro";
-
-        // Still need to check Pro authorization for cached data
-        if (cached.tier === "pro" && !isProUser) {
-          return res.status(403).json({
-            id: cached.id,
-            spaceId: cached.spaceId,
-            title: cached.title,
-            slug: cached.slug,
-            description: cached.description,
-            tier: cached.tier,
-            estimatedMinutes: cached.estimatedMinutes,
-            isActive: cached.isActive,
-            error: "pro_subscription_required",
-            message: userId 
-              ? "This experience requires a Pro subscription"
-              : "Please sign up and upgrade to Pro to access this content"
-          });
-        }
-
-        return res.json(cached);
-      }
-
-      const experience = await storage.getExperienceBySlug(slug);
-
-      if (!experience) {
+      // Find experience from seed data
+      const seedExperience = EXPERIENCES.find(exp => exp.slug === slug);
+      if (!seedExperience) {
         return res.status(404).json({ message: "Experience not found" });
       }
 
-      // Cache the experience (30 minutes TTL)
-      await cacheSet(cacheKey, experience, 1800);
+      // Map to response format
+      const experience = {
+        id: seedExperience.slug,
+        spaceId: seedExperience.spaceId,
+        title: seedExperience.title,
+        slug: seedExperience.slug,
+        description: seedExperience.description,
+        learningObjectives: seedExperience.learningObjectives,
+        tier: seedExperience.tier,
+        estimatedMinutes: seedExperience.estimatedMinutes,
+        sortOrder: seedExperience.sortOrder,
+        isActive: seedExperience.isActive,
+        content: seedExperience.content,
+        personalizationEnabled: seedExperience.personalizationEnabled
+      };
 
-      // Server-side authorization: Check if Pro experience requires Pro access
-      if (experience.tier === "pro") {
-        const userId = req.session?.userId;
-        const user = userId ? await storage.getUser(userId) : null;
-        const isProUser = user?.isPro || user?.subscriptionTier === "pro";
-
-        if (!isProUser) {
-          // Unauthorized access to Pro content - return 403 with minimal metadata
-          return res.status(403).json({
-            id: experience.id,
-            spaceId: experience.spaceId,
-            title: experience.title,
-            slug: experience.slug,
-            description: experience.description,
-            tier: experience.tier,
-            estimatedMinutes: experience.estimatedMinutes,
-            isActive: experience.isActive,
-            // Omit: content, learningObjectives, personalizationEnabled
-            error: "pro_subscription_required",
-            message: userId 
-              ? "This experience requires a Pro subscription"
-              : "Please sign up and upgrade to Pro to access this content"
-          });
-        }
-      }
-
-      // Free experience or authorized Pro user - return full data
+      // Return experience
       res.json(experience);
     } catch (error) {
       console.error("Error fetching experience:", error);
