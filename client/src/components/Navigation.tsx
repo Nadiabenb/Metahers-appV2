@@ -29,6 +29,7 @@ export function Navigation() {
     "AI & Tools": [
       { path: "/playground", label: "AI Playground", icon: Sparkles },
       { path: "/career-path", label: "Career Path", icon: Target },
+      { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp },
       { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, pro: true },
       { path: "/companion", label: "AI Companion", icon: MessageSquare },
     ],
