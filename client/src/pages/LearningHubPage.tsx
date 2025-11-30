@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
+import { SEO } from "@/components/SEO";
 
 export default function LearningHubPage() {
   const { isAuthenticated, user } = useAuth();
@@ -93,23 +94,27 @@ export default function LearningHubPage() {
 
   return (
     <div className="min-h-screen bg-white">
+      <SEO 
+        title="AI Mastery Program Learning Hub | MetaHers Mind Spa"
+        description="Welcome to your AI Mastery Program dashboard. Complete 4-week curriculum, join live sessions, and connect with 500+ women solopreneurs in our exclusive community."
+      />
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-8">
-            <TabsTrigger value="dashboard" className="flex items-center gap-2">
-              <BookOpen className="w-4 h-4" />
-              <span className="hidden sm:inline">Dashboard</span>
-            </TabsTrigger>
-            <TabsTrigger value="sessions" className="flex items-center gap-2">
-              <Calendar className="w-4 h-4" />
-              <span className="hidden sm:inline">Live Sessions</span>
-            </TabsTrigger>
-            <TabsTrigger value="community" className="flex items-center gap-2">
-              <Users className="w-4 h-4" />
-              <span className="hidden sm:inline">Community</span>
-            </TabsTrigger>
-          </TabsList>
+              <TabsTrigger value="dashboard" className="flex items-center gap-2" data-testid="tab-dashboard">
+                <BookOpen className="w-4 h-4" />
+                <span className="hidden sm:inline">Dashboard</span>
+              </TabsTrigger>
+              <TabsTrigger value="sessions" className="flex items-center gap-2" data-testid="tab-sessions">
+                <Calendar className="w-4 h-4" />
+                <span className="hidden sm:inline">Live Sessions</span>
+              </TabsTrigger>
+              <TabsTrigger value="community" className="flex items-center gap-2" data-testid="tab-community">
+                <Users className="w-4 h-4" />
+                <span className="hidden sm:inline">Community</span>
+              </TabsTrigger>
+            </TabsList>
 
           {/* Dashboard Tab */}
           <TabsContent value="dashboard" className="space-y-6">
@@ -153,7 +158,7 @@ export default function LearningHubPage() {
                   <div className="text-xl font-bold mb-1">AI Content Creation Q&A with Nadia</div>
                   <div className="text-pink-100">December 3, 2024 at 2:00 PM PST</div>
                 </div>
-                <Button className="bg-white text-pink-600 hover:bg-pink-50 whitespace-nowrap flex-shrink-0">
+                <Button className="bg-white text-pink-600 hover:bg-pink-50 whitespace-nowrap flex-shrink-0" data-testid="button-join-next-session">
                   Join Session
                 </Button>
               </div>
@@ -262,7 +267,7 @@ export default function LearningHubPage() {
                     </div>
                   ))}
                 </div>
-                <Button className="w-full mt-4 bg-purple-600 text-white hover:bg-purple-700">
+                <Button className="w-full mt-4 bg-purple-600 text-white hover:bg-purple-700" data-testid="button-view-private-group">
                   View Private Group
                 </Button>
               </div>
@@ -276,12 +281,12 @@ export default function LearningHubPage() {
                   Have a question? I'm here to help! Get direct answers from me in the
                   private group.
                 </p>
-                <Button className="w-full bg-white text-pink-600 hover:bg-pink-50">
+                <Button className="w-full bg-white text-pink-600 hover:bg-pink-50" data-testid="button-message-nadia-dashboard">
                   Message Nadia
                 </Button>
                 <div className="mt-4 p-3 bg-white/20 backdrop-blur rounded-lg">
                   <div className="text-sm font-semibold mb-1">Average Response Time</div>
-                  <div className="text-2xl font-bold">{"<"} 2 hours</div>
+                  <div className="text-2xl font-bold" data-testid="text-response-time">{"<"} 2 hours</div>
                 </div>
               </div>
             </div>
@@ -317,7 +322,7 @@ export default function LearningHubPage() {
                         <span>{session.time}</span>
                       </div>
                     </div>
-                    <Button className="bg-purple-600 text-white hover:bg-purple-700 flex-shrink-0 whitespace-nowrap">
+                    <Button className="bg-purple-600 text-white hover:bg-purple-700 flex-shrink-0 whitespace-nowrap" data-testid={`button-join-session-${idx}`}>
                       Join Session
                     </Button>
                   </div>
@@ -453,7 +458,7 @@ export default function LearningHubPage() {
                   As a program member, you have direct messaging access to get personalized
                   guidance
                 </p>
-                <Button className="bg-white text-pink-600 hover:bg-pink-50 mx-auto block">
+                <Button className="bg-white text-pink-600 hover:bg-pink-50 mx-auto block" data-testid="button-message-nadia-community">
                   Message Nadia
                 </Button>
               </Card>
