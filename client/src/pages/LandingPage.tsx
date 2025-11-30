@@ -1,5 +1,5 @@
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from "framer-motion";
-import { Lock, ArrowRight, Star, CheckCircle2, Phone, MessageCircle, ChevronRight, Crown, Sparkles, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, ShoppingCart } from "lucide-react";
+import { motion, useScroll, useTransform, useSpring, useReducedMotion, AnimatePresence } from "framer-motion";
+import { Lock, ArrowRight, Star, CheckCircle2, Phone, MessageCircle, ChevronRight, Crown, Sparkles, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, ShoppingCart, BookOpen, Unlock } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { OptimizedImage } from "@/components/OptimizedImage";
 import { SEO } from "@/components/SEO";
@@ -7,11 +7,12 @@ import { ChatbotPopup } from "@/components/ChatbotPopup";
 import { trackCTAClick } from "@/lib/analytics";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { heroImage, spaceImages } from "@/lib/imageManifest";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
 import { SpaceCardSkeleton } from "@/components/LoadingSkeleton";
@@ -20,23 +21,78 @@ export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
   const [animationsReady, setAnimationsReady] = useState(false);
+  const [, setLocation] = useLocation();
+  const [filter, setFilter] = useState<'all' | 'free' | 'pro'>('all');
 
   // Simplified - remove heavy parallax animations for better performance
 
-  const { data: spaces, isLoading: spacesLoading } = useQuery<SpaceDB[]>({
-    queryKey: ["spaces"],
-    queryFn: async () => {
-      const response = await fetch("/api/spaces");
-      if (!response.ok) {
-        throw new Error("Failed to fetch spaces");
-      }
-      return response.json();
-    },
+  const { data: spaces = [], isLoading: spacesLoading } = useQuery<SpaceDB[]>({
+    queryKey: ["/api/spaces"],
   });
 
-  // Fetch all experiences to show real counts and content
   const { data: experiences = [], isLoading: experiencesLoading } = useQuery<Array<{ id: string; slug: string; spaceId: string; title: string; tier: string }>>({
     queryKey: ["/api/experiences/all"],
+  });
+
+  // Space value props for enhanced cards
+  const SPACE_VALUE_PROPS: Record<string, { outcomes: string[]; experienceCount: number; highlight: string }> = {
+    "web3": {
+      outcomes: ["Understand blockchain fundamentals", "Navigate Web3 confidently", "Build your first dApp"],
+      experienceCount: 6,
+      highlight: "Perfect Starting Point"
+    },
+    "crypto": {
+      outcomes: ["Master NFT creation & trading", "Understand cryptocurrency", "Launch digital collections"],
+      experienceCount: 12,
+      highlight: "Most Comprehensive"
+    },
+    "ai": {
+      outcomes: ["Build AI-powered workflows", "Master ChatGPT & tools", "Automate your business"],
+      experienceCount: 6,
+      highlight: "Highly Practical"
+    },
+    "metaverse": {
+      outcomes: ["Navigate virtual worlds", "Understand digital ownership", "Create metaverse presence"],
+      experienceCount: 6,
+      highlight: "Future-Ready"
+    },
+    "branding": {
+      outcomes: ["Build magnetic personal brand", "Stand out as thought leader", "Attract ideal clients"],
+      experienceCount: 6,
+      highlight: "Career Accelerator"
+    },
+    "moms": {
+      outcomes: ["Balance tech career & family", "Build flexible income", "Join supportive community"],
+      experienceCount: 6,
+      highlight: "Mom-Focused"
+    },
+    "app-atelier": {
+      outcomes: ["Build apps with AI", "No coding required", "Launch in days, not months"],
+      experienceCount: 6,
+      highlight: "No-Code Power"
+    },
+    "founders-club": {
+      outcomes: ["Turn idea into reality", "Build profitable business", "Get founder mentorship"],
+      experienceCount: 6,
+      highlight: "12-Week Accelerator"
+    },
+    "digital-sales": {
+      outcomes: ["Launch online store in 3 days", "Master Instagram Shopping", "Scale with paid ads"],
+      experienceCount: 6,
+      highlight: "Quick Launch"
+    },
+  };
+
+  // Calculate free vs pro counts
+  const freeSpacesCount = spaces.filter(s => s.sortOrder <= 2).length;
+  const totalSpacesCount = spaces.length;
+  const lockedSpacesCount = totalSpacesCount - freeSpacesCount;
+
+  // Filter spaces
+  const filteredSpaces = spaces.filter(space => {
+    if (filter === 'free') return space.sortOrder <= 2;
+    if (filter === 'pro') return space.sortOrder > 2;
+    return true;
   });
 
   useEffect(() => {
@@ -206,165 +262,206 @@ export default function LandingPage() {
         </div>
       </div>
 
-      {/* NINE LEARNING SPACES - Editorial Grid */}
-      <div 
-        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16 bg-white"
-      >
-        
-        <div className="relative max-w-[1400px] mx-auto">
-          {/* Section Header - Magazine Style */}
+      {/* NINE LEARNING SPACES - Enhanced Editorial Grid (From MetaHersWorldPage) */}
+      <section className="relative py-32 px-6 lg:px-16 bg-white">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header with Filter */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="mb-20 max-w-3xl"
+            className="mb-16"
           >
-            <div className="flex items-center gap-3 mb-4">
-              <div className="h-px w-12 bg-purple-600" />
-              <span className="text-xs uppercase tracking-widest text-gray-600 font-bold">
-                Your Personalized Path
-              </span>
+            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
+              <div className="max-w-3xl">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="h-px w-12 bg-purple-600" />
+                  <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
+                    Choose Your Sanctuary
+                  </span>
+                </div>
+                <h2 className="text-5xl lg:text-7xl font-semibold mb-6 text-black">
+                  Nine Learning<br />Spaces
+                </h2>
+                <p className="text-xl text-gray-700 leading-relaxed">
+                  54 transformational experiences to master AI, Web3, and the future
+                </p>
+              </div>
+
+              {/* Filter Tabs */}
+              <div className="flex gap-2 bg-white border border-gray-200 rounded-lg p-1">
+                {[
+                  { value: 'all', label: 'All Spaces', count: totalSpacesCount },
+                  { value: 'free', label: 'Free', count: freeSpacesCount },
+                  { value: 'pro', label: 'PRO', count: lockedSpacesCount }
+                ].map((tab) => (
+                  <button
+                    key={tab.value}
+                    onClick={() => setFilter(tab.value as typeof filter)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      filter === tab.value
+                        ? 'bg-purple-600 text-white shadow-lg'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                    data-testid={`filter-${tab.value}`}
+                  >
+                    {tab.label} ({tab.count})
+                  </button>
+                ))}
+              </div>
             </div>
-            <h2 className="text-4xl lg:text-5xl font-semibold mb-4 text-black">
-              Choose Your <span className="text-purple-600">Learning Spaces</span>
-            </h2>
-            <p className="text-lg text-gray-600 leading-relaxed font-medium">
-              Each space is expertly designed to take you from where you are now to where you want to be—step by transformational step.
-            </p>
           </motion.div>
 
-          {/* Editorial Grid - Compact 3-Column Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {spacesLoading || experiencesLoading ? (
-              <>
-                <SpaceCardSkeleton />
-                <SpaceCardSkeleton />
-                <SpaceCardSkeleton />
-                <SpaceCardSkeleton />
-                <SpaceCardSkeleton />
-                <SpaceCardSkeleton />
-              </>
-            ) : spaces?.map((space, index) => {
-              // Get real experience data for this space
-              const spaceExperiences = experiences.filter(e => e.spaceId === space.id);
-              const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
-              const totalExperiencesCount = spaceExperiences.length;
+          {/* Enhanced Space Cards Grid */}
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={filter}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {spacesLoading || experiencesLoading ? (
+                <>
+                  <SpaceCardSkeleton />
+                  <SpaceCardSkeleton />
+                  <SpaceCardSkeleton />
+                </>
+              ) : (
+                filteredSpaces
+                  .sort((a, b) => a.sortOrder - b.sortOrder)
+                  .map((space, index) => {
+                    const valueProp = SPACE_VALUE_PROPS[space.slug] || { 
+                      outcomes: ["Master core concepts", "Build practical skills", "Transform your career"], 
+                      experienceCount: 6, 
+                      highlight: "Learning Path" 
+                    };
+                    const spaceExperiences = experiences.filter(e => e.spaceId === space.id);
+                    const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
+                    const actualExperienceCount = spaceExperiences.length;
 
-              // Find the first experience for direct navigation (prioritize free tier, then by sortOrder)
-              const firstExperience = spaceExperiences
-                .sort((a, b) => {
-                  // Free experiences first
-                  if (a.tier === 'free' && b.tier !== 'free') return -1;
-                  if (a.tier !== 'free' && b.tier === 'free') return 1;
-                  // Then by id/creation order
-                  return a.id.localeCompare(b.id);
-                })[0];
+                    const SpaceIcon = 
+                      space.name === "AI" ? Bot :
+                      space.name === "Web3" ? Globe :
+                      space.name === "NFT/Blockchain/Crypto" ? Gem :
+                      space.name === "Metaverse" ? CompassIcon :
+                      space.name === "Branding" ? Palette :
+                      space.name === "Moms" ? Heart :
+                      space.name === "App Atelier" ? Code2 :
+                      space.name === "Founder's Club" ? Crown :
+                      space.name === "Digital Boutique" ? ShoppingCart :
+                      Sparkles;
 
-              const badgeMap: Record<string, { text: string }> = {
-                "Founder's Club": { text: "12 Weeks" },
-                "App Atelier": { text: "AI-Powered" }
-              };
+                    return (
+                      <motion.div
+                        key={space.id}
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: "-100px" }}
+                        transition={{ duration: 0.5, delay: index * 0.08 }}
+                        className="group relative"
+                        data-testid={`space-card-${space.slug}`}
+                      >
+                        <button
+                          onClick={() => {
+                            if (spaceExperiences.length > 0 && spaceExperiences[0].slug) {
+                              setLocation(`/experiences/${spaceExperiences[0].slug}`);
+                            }
+                          }}
+                          className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-2xl"
+                        >
+                          <div className="rounded-2xl overflow-hidden border border-gray-200 hover-elevate active-elevate-2 transition-all duration-500 h-full flex flex-col bg-white shadow-lg shadow-gray-100 group-hover:shadow-xl group-hover:shadow-gray-200">
+                            {/* Header Image */}
+                            {spaceImages[space.slug] && (
+                              <div className="relative w-full aspect-[4/3] overflow-hidden">
+                                <img
+                                  src={spaceImages[space.slug].src}
+                                  alt={spaceImages[space.slug].alt}
+                                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                                  loading="lazy"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500" />
+                                
+                                {/* Floating Badges */}
+                                <div className="absolute top-4 left-4 flex gap-2">
+                                  {valueProp.highlight && (
+                                    <Badge className="bg-purple-600/80 text-white font-semibold">
+                                      {valueProp.highlight}
+                                    </Badge>
+                                  )}
+                                  {freeExperiencesCount > 0 && (
+                                    <Badge className="bg-emerald-500/80 text-white font-semibold">
+                                      {freeExperiencesCount} Free
+                                    </Badge>
+                                  )}
+                                </div>
 
-              const badge = badgeMap[space.name];
+                                {/* Experience Count */}
+                                <div className="absolute bottom-4 right-4 bg-black/50 rounded-lg px-3 py-1.5 border border-white/20">
+                                  <div className="flex items-center gap-2 text-white">
+                                    <BookOpen className="w-4 h-4" />
+                                    <span className="text-sm font-semibold">{actualExperienceCount} Experiences</span>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
 
-              // Get cover image for this space
-              const spaceImage = spaceImages[space.slug];
+                            {/* Card Content */}
+                            <div className="p-7 flex flex-col flex-1 relative">
+                              <div className="relative z-10">
+                                {/* Title & Icon */}
+                                <div className="flex items-start justify-between mb-5">
+                                  <div className="flex-1">
+                                    <h3 className="font-semibold text-2xl lg:text-3xl text-black group-hover:text-purple-600 transition-colors duration-300 mb-3 leading-tight">
+                                      {space.name}
+                                    </h3>
+                                    <p className="text-sm text-gray-700 line-clamp-2 leading-relaxed">
+                                      {space.description}
+                                    </p>
+                                  </div>
+                                  <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center border border-purple-200 flex-shrink-0 ml-4 shadow-lg shadow-purple-100 group-hover:shadow-xl group-hover:scale-105 transition-all duration-500">
+                                    <SpaceIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-500" />
+                                  </div>
+                                </div>
 
-              // Map space names to Lucide icons (NO EMOJIS per design guidelines)
-              const SpaceIcon = 
-                space.name === "AI" ? Bot :
-                space.name === "Web3" ? Globe :
-                space.name === "NFT/Blockchain/Crypto" ? Gem :
-                space.name === "Metaverse" ? CompassIcon :
-                space.name === "Branding" ? Palette :
-                space.name === "Moms" ? Heart :
-                space.name === "App Atelier" ? Code2 :
-                space.name === "Founder's Club" ? Crown :
-                space.name === "Digital Boutique" ? ShoppingCart :
-                Sparkles;
+                                {/* Learning Outcomes */}
+                                <div className="flex-1 mb-5">
+                                  <h4 className="text-[10px] uppercase tracking-widest text-gray-700 font-bold mb-4">You'll Master:</h4>
+                                  <ul className="space-y-2.5">
+                                    {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
+                                      <li key={i} className="flex items-start gap-2.5 text-sm text-gray-700 group/item">
+                                        <CheckCircle2 className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform duration-300" />
+                                        <span className="leading-snug">{outcome}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
 
-              // Navigation: go to first experience, or fallback to world page if no experiences
-              const navigationHref = firstExperience 
-                ? `/experiences/${firstExperience.slug}`
-                : "/world";
-
-              return (
-                <div key={space.name} className="group">
-                  <Link 
-                    href={navigationHref}
-                    className="block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-lg"
-                    data-testid={`space-card-${space.slug}`}
-                  >
-                    <div className="rounded-lg overflow-visible border border-gray-200 bg-white hover-elevate active-elevate-2 transition-all duration-300 h-full flex flex-col">
-                      {/* Cover Image */}
-                      {spaceImage && (
-                        <div className="relative w-full aspect-[16/10] overflow-hidden rounded-t-lg">
-                          <img
-                            src={spaceImage.src}
-                            alt={spaceImage.alt}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            loading="lazy"
-                          />
-                          {/* Gradient overlay with badge */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent" />
-                          
-                          {/* Badge on image */}
-                          {badge && (
-                            <div className="absolute top-3 right-3">
-                              <Badge variant="default" className="text-xs font-semibold bg-purple-600 text-white border-purple-500/50 backdrop-blur-sm">
-                                {badge.text}
-                              </Badge>
+                                {/* CTA Footer */}
+                                <div className="pt-5 border-t border-gray-200">
+                                  <div className="flex items-center justify-between group/cta">
+                                    <span className="text-sm font-bold text-purple-600 group-hover/cta:tracking-wide transition-all duration-300">
+                                      Start Learning
+                                    </span>
+                                    <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center border border-purple-200 group-hover:bg-purple-100 transition-all duration-300">
+                                      <ArrowRight className="w-5 h-5 text-purple-600 group-hover:translate-x-1 transition-transform duration-300" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Card Content - Compact */}
-                      <div className="p-5 flex flex-col flex-1">
-                        {/* Icon & Title Row */}
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center border border-purple-200 flex-shrink-0">
-                            <SpaceIcon className="w-5 h-5 text-purple-600" />
                           </div>
-
-                          {/* Title */}
-                          <h3 className="font-semibold text-xl text-black group-hover:text-purple-600 transition-colors flex-1 leading-tight">
-                            {space.name}
-                          </h3>
-                        </div>
-
-                        {/* Description */}
-                        <p className="text-sm text-gray-700 leading-relaxed flex-1 mb-4">
-                          {space.description}
-                        </p>
-
-                        {/* Experience Count */}
-                        <div className="flex items-center gap-2 mb-4 text-xs text-gray-600">
-                          <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                          <span>{totalExperiencesCount} transformational experiences</span>
-                          {freeExperiencesCount > 0 && (
-                            <Badge className="text-xs bg-purple-100 text-purple-700 border-purple-300">
-                              {freeExperiencesCount} Free
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Footer - Minimal */}
-                        <div className="flex items-center justify-between text-xs text-gray-600 group-hover:text-purple-600 transition-colors">
-                          <span className="uppercase tracking-wider font-medium">Explore Space</span>
-                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                </div>
-              );
-            })
-            }
-          </div>
+                        </button>
+                      </motion.div>
+                    );
+                  })
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </div>
+      </section>
 
       {/* MEMBERSHIP TIERS - Clean Modern Layout */}
       <div 
