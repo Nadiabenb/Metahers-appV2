@@ -10,7 +10,6 @@ import { OptimizedImage } from "@/components/OptimizedImage";
 import { spaceImages } from "@/lib/imageManifest";
 import { SEO } from "@/components/SEO";
 import { WorldPageSkeleton } from "@/components/LoadingSkeleton";
-import worldBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
 
 type Space = {
   id: string;
@@ -134,18 +133,7 @@ export default function MetaHersWorldPage() {
   });
 
   return (
-    <div className="min-h-screen relative bg-black"
-      style={{
-        backgroundImage: `url(${worldBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-      }}
-    >
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[hsl(280 72% 48%)]/45 to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
-      
+    <div className="min-h-screen relative bg-white">
       <div className="relative z-10">
       <SEO
         title="MetaHers World - 9 Learning Spaces for AI & Web3 Mastery"
@@ -167,7 +155,7 @@ export default function MetaHersWorldPage() {
         }}
       />
       {/* HERO - Editorial Magazine Style */}
-      <section className="relative py-32 px-6 lg:px-16 bg-muted/20">
+      <section className="relative py-32 px-6 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Text Content - 8 columns (2/3) */}
@@ -179,20 +167,20 @@ export default function MetaHersWorldPage() {
             >
               {/* Eyebrow */}
               <div className="flex items-center gap-3">
-                <div className="h-px w-12 bg-primary" />
-                <span className="text-sm uppercase tracking-widest text-foreground font-medium">
+                <div className="h-px w-12 bg-purple-600" />
+                <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
                   Forbes Meets Vogue Luxury Learning
                 </span>
               </div>
 
               {/* Massive Editorial Headline */}
-              <h1 className="editorial-headline text-6xl lg:text-7xl xl:text-8xl">
+              <h1 className="text-6xl lg:text-7xl xl:text-8xl font-semibold text-black leading-tight">
                 Master AI<br />& Web3<br />
-                <span className="text-primary">Without the<br />Overwhelm</span>
+                <span className="text-purple-600">Without the<br />Overwhelm</span>
               </h1>
 
               {/* Subheading */}
-              <p className="text-xl lg:text-2xl text-foreground max-w-2xl leading-relaxed">
+              <p className="text-xl lg:text-2xl text-gray-700 max-w-2xl leading-relaxed">
                 The luxury learning sanctuary for women who refuse to be left behind in the AI revolution. Transform from confused to confident in 30 days.
               </p>
 
@@ -203,7 +191,7 @@ export default function MetaHersWorldPage() {
                     <Button
                       size="lg"
                       onClick={() => setLocation("/signup")}
-                      className="gold-shimmer bg-gradient-to-r from-primary to-primary/90 hover:shadow-2xl hover:shadow-primary/20 text-primary-foreground px-12 py-6 text-lg font-semibold"
+                      className="bg-black text-white px-12 py-6 text-lg font-semibold uppercase tracking-wider hover:bg-gray-900"
                       data-testid="button-start-free"
                     >
                       Start Free Today
@@ -222,7 +210,7 @@ export default function MetaHersWorldPage() {
                   <Button
                     size="lg"
                     onClick={() => setLocation("/rituals")}
-                    className="bg-gradient-to-r from-primary to-primary/90 hover:shadow-2xl hover:shadow-primary/20 px-12 py-6 text-lg font-semibold"
+                    className="bg-purple-600 text-white px-12 py-6 text-lg font-semibold uppercase tracking-wider hover:bg-purple-700"
                     data-testid="button-explore-rituals"
                   >
                     Explore Your Rituals
@@ -231,12 +219,12 @@ export default function MetaHersWorldPage() {
               </div>
 
               {/* Trust Badge */}
-              <p className="text-sm text-foreground uppercase tracking-wider">
+              <p className="text-sm text-gray-600 uppercase tracking-wider">
                 ✓ First experience free in each space • ✓ Cancel anytime • ✓ Join in 30 seconds
               </p>
             </motion.div>
 
-            {/* Stats Column - 4 columns (1/3) - Kinetic Glass Cards */}
+            {/* Stats Column - 4 columns (1/3) */}
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
@@ -244,24 +232,24 @@ export default function MetaHersWorldPage() {
               className="lg:col-span-4 space-y-6 hidden lg:block"
             >
               {[
-                { icon: Users, number: "1K+", label: "Women Empowered", color: "text-primary" },
-                { icon: Star, number: "4.9/5", label: "Rating", color: "text-primary" },
-                { icon: TrendingUp, number: "94%", label: "Success Rate", color: "text-primary" }
+                { icon: Users, number: "1K+", label: "Women Empowered", color: "text-purple-600" },
+                { icon: Star, number: "4.9/5", label: "Rating", color: "text-purple-600" },
+                { icon: TrendingUp, number: "94%", label: "Success Rate", color: "text-purple-600" }
               ].map((stat, index) => (
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.4 + index * 0.15 }}
-                  className="kinetic-glass rounded-2xl p-6 border border-card-border"
+                  className="rounded-lg p-6 border border-gray-200 bg-white"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
                       <stat.icon className={`w-6 h-6 ${stat.color}`} />
                     </div>
                     <div>
-                      <div className="text-3xl font-serif font-bold">{stat.number}</div>
-                      <div className="text-sm text-foreground uppercase tracking-wider">{stat.label}</div>
+                      <div className="text-3xl font-semibold text-black">{stat.number}</div>
+                      <div className="text-sm text-gray-600 uppercase tracking-wider">{stat.label}</div>
                     </div>
                   </div>
                 </motion.div>
@@ -272,7 +260,7 @@ export default function MetaHersWorldPage() {
       </section>
 
       {/* PROBLEM/SOLUTION - Editorial Two Column */}
-      <section className="py-32 px-6 lg:px-16">
+      <section className="py-32 px-6 lg:px-16 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-16">
             {/* Problem */}
@@ -282,7 +270,7 @@ export default function MetaHersWorldPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="font-serif text-4xl font-bold mb-8">
+              <h2 className="text-4xl font-semibold mb-8 text-black">
                 The Reality for<br />Women in Tech
               </h2>
               <div className="space-y-4">
@@ -292,9 +280,9 @@ export default function MetaHersWorldPage() {
                   { stat: "Only 6%", text: "of crypto CEOs are women" }
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    <p className="text-foreground">
-                      <span className="text-primary font-bold">{item.stat}</span> {item.text}
+                    <div className="w-2 h-2 rounded-full bg-purple-600 mt-2 flex-shrink-0" />
+                    <p className="text-gray-700">
+                      <span className="text-purple-600 font-bold">{item.stat}</span> {item.text}
                     </p>
                   </div>
                 ))}
@@ -308,7 +296,7 @@ export default function MetaHersWorldPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="font-serif text-4xl font-bold mb-8">
+              <h2 className="text-4xl font-semibold mb-8 text-black">
                 Your Solution<br />is Here
               </h2>
               <div className="space-y-4">
@@ -318,9 +306,9 @@ export default function MetaHersWorldPage() {
                   { title: "Women-Only Community", desc: "Safe space to learn & grow" }
                 ].map((item, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                    <p className="text-foreground/80">
-                      <span className="font-semibold text-foreground">{item.title}</span> - {item.desc}
+                    <CheckCircle2 className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+                    <p className="text-gray-700">
+                      <span className="font-semibold text-black">{item.title}</span> - {item.desc}
                     </p>
                   </div>
                 ))}
@@ -332,16 +320,16 @@ export default function MetaHersWorldPage() {
 
       {/* PROGRESS RIBBON - Shows access status */}
       {!isProUser && (
-        <div className="sticky top-16 z-40 backdrop-blur-xl bg-background/80 border-b border-border/40">
+        <div className="sticky top-16 z-40 bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <Unlock className="w-5 h-5 text-primary" />
-                  <span className="font-semibold">{freeSpacesCount} Free Spaces</span>
+                  <Unlock className="w-5 h-5 text-purple-600" />
+                  <span className="font-semibold text-black">{freeSpacesCount} Free Spaces</span>
                 </div>
-                <div className="h-4 w-px bg-border" />
-                <div className="flex items-center gap-2 text-foreground">
+                <div className="h-4 w-px bg-gray-200" />
+                <div className="flex items-center gap-2 text-gray-600">
                   <Lock className="w-4 h-4" />
                   <span className="text-sm">{lockedSpacesCount} PRO Spaces</span>
                 </div>
@@ -349,7 +337,7 @@ export default function MetaHersWorldPage() {
               <Button 
                 size="sm" 
                 onClick={() => setLocation("/upgrade")}
-                className="gold-shimmer text-black"
+                className="bg-purple-600 text-white hover:bg-purple-700"
                 data-testid="button-unlock-all"
               >
                 <Sparkles className="w-4 h-4 mr-2" />
@@ -361,7 +349,7 @@ export default function MetaHersWorldPage() {
       )}
 
       {/* NINE LEARNING SPACES - Enhanced Editorial Grid */}
-      <section className="relative py-32 px-6 lg:px-16 bg-muted/30">
+      <section className="relative py-32 px-6 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
           {/* Section Header with Filter */}
           <motion.div
@@ -374,21 +362,21 @@ export default function MetaHersWorldPage() {
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
               <div className="max-w-3xl">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-px w-12 bg-primary" />
-                  <span className="text-sm uppercase tracking-widest text-foreground font-medium">
+                  <div className="h-px w-12 bg-purple-600" />
+                  <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
                     Choose Your Sanctuary
                   </span>
                 </div>
-                <h2 className="editorial-headline text-5xl lg:text-7xl mb-6">
+                <h2 className="text-5xl lg:text-7xl font-semibold mb-6 text-black">
                   Nine Learning<br />Spaces
                 </h2>
-                <p className="text-xl text-foreground leading-relaxed">
-                  60 AI-guided transformational experiences to master AI, Web3, and the future
+                <p className="text-xl text-gray-700 leading-relaxed">
+                  54 transformational experiences to master AI, Web3, and the future
                 </p>
               </div>
 
               {/* Filter Tabs */}
-              <div className="flex gap-2 bg-card/50 backdrop-blur-sm border border-border/40 rounded-xl p-1">
+              <div className="flex gap-2 bg-white border border-gray-200 rounded-lg p-1">
                 {[
                   { value: 'all', label: 'All Spaces', count: totalSpacesCount },
                   { value: 'free', label: 'Free', count: freeSpacesCount },
