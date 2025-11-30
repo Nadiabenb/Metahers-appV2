@@ -208,13 +208,13 @@ export default function SpaceDetailPage() {
             <div className="flex items-center gap-3 mb-6">
               <div className="h-px w-12 bg-primary" />
               <span className="text-sm uppercase tracking-widest text-foreground font-medium">
-                Learning Space
+                Transformation Ritual
               </span>
             </div>
 
             {/* Headline */}
             <h1 className="editorial-headline text-6xl lg:text-7xl xl:text-8xl mb-6">
-              {space.name}
+              Master {space.name}
             </h1>
 
             {/* Description */}
@@ -226,11 +226,11 @@ export default function SpaceDetailPage() {
             <div className="flex flex-wrap gap-3">
               <Badge variant="outline" className="gap-2 px-4 py-2 text-base">
                 <Trophy className="w-4 h-4" />
-                {experiences.length} Experiences
+                {experiences.length} Rituals & Labs
               </Badge>
               <Badge variant="outline" className="gap-2 px-4 py-2 text-base bg-primary/10 text-primary border-primary/30">
                 <Sparkles className="w-4 h-4" />
-                {freeExperiences.length} Free to Start
+                {freeExperiences.length} Free Rituals
               </Badge>
             </div>
           </motion.div>

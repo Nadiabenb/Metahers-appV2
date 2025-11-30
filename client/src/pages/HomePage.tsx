@@ -503,6 +503,116 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* MEMBER WINS SECTION - Phase 2 */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background/50 to-background">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.3 }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-gold">
+              What MetaHers Women Are Accomplishing
+            </h2>
+            <p className="text-lg text-foreground/80 max-w-2xl mx-auto">
+              Real women. Real results. Real transformation happening in MetaHers community.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                stat: "$50K+",
+                description: "Average first-year revenue from AI-powered businesses",
+                gradient: "gradient-gold-violet",
+              },
+              {
+                stat: "1,200+",
+                description: "NFT collections launched by MetaHers members",
+                gradient: "gradient-violet-magenta",
+              },
+              {
+                stat: "3M+",
+                description: "Combined reach of MetaHers women on social",
+                gradient: "gradient-magenta-fuchsia",
+              },
+              {
+                stat: "98%",
+                description: "Would recommend MetaHers to other women",
+                gradient: "gradient-teal-gold",
+              },
+            ].map((win, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="editorial-card p-8 text-center hover-elevate transition-all duration-300 relative overflow-hidden group"
+              >
+                <div className={`absolute inset-0 ${win.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
+                <div className="relative z-10">
+                  <div className="text-5xl font-black mb-4 text-gradient-gold">
+                    {win.stat}
+                  </div>
+                  <p className="text-foreground/80 leading-relaxed">
+                    {win.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CYBER MONDAY CAMPAIGN BANNER - Phase 4 */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/10 via-[hsl(var(--hyper-violet))]/10 to-[hsl(var(--liquid-gold))]/10 border-y border-primary/30">
+        <div className="max-w-6xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+          >
+            <div className="inline-flex items-center gap-2 glass-card px-6 py-3 rounded-full mb-6 border border-primary/30 bg-primary/5">
+              <Sparkles className="w-5 h-5 text-[hsl(var(--liquid-gold))] animate-pulse" />
+              <span className="text-sm font-bold uppercase tracking-wider text-primary">
+                Cyber Monday: 80% OFF Ends Midnight Monday
+              </span>
+            </div>
+            <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+              <span className="text-gradient-gold">Everything you need to master AI + Web3</span>
+              <br />
+              <span className="text-2xl text-foreground/80 font-medium mt-4">All 9 learning spaces + personal coaching</span>
+            </h2>
+            <p className="text-xl text-foreground/80 max-w-2xl mx-auto mb-10">
+              Transform from overwhelmed to influential in just 90 days. Join hundreds of women solopreneurs building 6-figure businesses.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <CTAButton
+                href="/upgrade"
+                size="lg"
+                className="text-lg px-12 py-7 bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--cyber-fuchsia))] text-black hover:shadow-2xl font-bold"
+                dataTestId="button-cyber-monday-cta"
+              >
+                Get All 9 Spaces for $299
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </CTAButton>
+              <div className="text-center">
+                <div className="text-2xl font-black text-[hsl(var(--liquid-gold))] mb-1">$299</div>
+                <div className="text-sm text-foreground/60 line-through">$1,497</div>
+                <div className="text-sm font-bold text-primary mt-1">80% OFF</div>
+              </div>
+            </div>
+            <p className="text-sm text-foreground/60 mt-6">
+              Limited to 100 women this Cyber Monday. Last spots going fast.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background to-background/50">
         <div className="max-w-6xl mx-auto">
           <motion.div
@@ -517,28 +627,28 @@ export default function HomePage() {
               <span className="text-sm font-medium">Trusted by 500+ Women</span>
             </div>
             <h2 className="font-serif text-4xl sm:text-5xl font-bold mb-6 text-gradient-violet">
-              Stories from MetaHers Women
+              Why MetaHers Women Win
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
-                quote: "MetaHers made AI accessible in a way I never thought possible. The luxury aesthetic makes learning feel like self-care.",
+                quote: "I launched my AI-powered copywriting business and hit $10K in month 2. MetaHers gave me the confidence and the tools.",
                 author: "Sarah M.",
-                role: "Marketing Manager",
+                role: "Now Making $120K/year",
                 gradient: "gradient-violet-magenta",
               },
               {
-                quote: "I finally understand blockchain! The quiz matched me perfectly, and the 1:1 session was invaluable.",
+                quote: "Sold $50K in NFTs using the strategies from the NFT Artistry space. This community is incredible.",
                 author: "Jessica R.",
-                role: "Entrepreneur",
+                role: "Now a Verified Artist",
                 gradient: "gradient-magenta-fuchsia",
               },
               {
-                quote: "This is what tech education should be - beautiful, empowering, and actually enjoyable. Forbes meets Vogue indeed!",
+                quote: "Went from 5K to 100K followers by positioning myself as an AI expert. MetaHers showed me exactly how.",
                 author: "Maya K.",
-                role: "Content Creator",
+                role: "Now a Thought Leader",
                 gradient: "gradient-teal-gold",
               },
             ].map((testimonial, index) => (
