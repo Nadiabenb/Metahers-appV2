@@ -78,6 +78,7 @@ const CheckoutPage = lazy(() => import("@/pages/CheckoutPage"));
 const OnboardingQuizPage = lazy(() => import("@/pages/OnboardingQuizPage"));
 const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"));
 const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
+const LearningHubPage = lazy(() => import("@/pages/LearningHubPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -204,6 +205,9 @@ function Router() {
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>
             <Route path="/workspace">{() => <Redirect to="/dashboard" />}</Route>
             <Route path="/progress">{() => <Redirect to="/dashboard" />}</Route>
+
+            {/* AI Mastery Program Learning Hub */}
+            <Route path="/learning-hub" component={LearningHubPage} />
 
             {/* Authenticated routes */}
             <Route path="/rituals/:slug" component={RitualDetailPage} />
