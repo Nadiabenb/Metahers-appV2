@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { BookOpen, Calendar, Users, MessageSquare, CheckCircle2, Lock, Clock, Sparkles, ArrowRight } from "lucide-react";
+import { BookOpen, Calendar, Users, MessageCircle, CheckCircle2, Lock, Clock, Sparkles, ArrowRight, Heart, Video, Star, Rocket, Zap, Trophy, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,154 +21,80 @@ export default function LearningHubPage() {
   const modules = [
     {
       week: 1,
-      title: "AI Content Creation",
+      title: "AI Content Creation Mastery",
       description: "Master AI tools to create stunning content",
-      lessons: 8,
-      completed: 3,
-      topics: ["ChatGPT Mastery", "Prompt Engineering", "Content Ideas"],
-      color: "from-purple-500 to-purple-600",
+      status: "active",
+      progress: 65,
+      lessons: ["AI Photography", "Video Generation", "Copy Writing", "Social Media Magic"],
+      icon: Sparkles,
+      color: "from-purple-500 to-pink-500",
+      nextSession: "Dec 3, 2024 - 2:00 PM PST",
     },
     {
       week: 2,
-      title: "Brand Identity",
+      title: "Brand Identity & Design",
       description: "Build your unique AI-powered personal brand",
-      lessons: 7,
-      completed: 0,
-      topics: ["Brand Strategy", "Visual Identity", "Voice & Tone"],
-      color: "from-pink-500 to-pink-600",
-      locked: true,
+      status: "locked",
+      progress: 0,
+      lessons: ["Logo Design", "Color Psychology", "Visual Identity", "Brand Voice"],
+      icon: Star,
+      color: "from-pink-500 to-orange-500",
+      nextSession: "Dec 6, 2024 - 2:00 PM PST",
     },
     {
       week: 3,
-      title: "Website Building",
+      title: "Website Building (No Code)",
       description: "Create websites with AI assistance",
-      lessons: 9,
-      completed: 0,
-      topics: ["No-Code Tools", "Design Principles", "SEO"],
-      color: "from-orange-500 to-orange-600",
-      locked: true,
+      status: "locked",
+      progress: 0,
+      lessons: ["Site Structure", "AI Design Tools", "Content Strategy", "Launch Checklist"],
+      icon: Rocket,
+      color: "from-orange-500 to-yellow-500",
+      nextSession: "Dec 9, 2024 - 2:00 PM PST",
     },
     {
       week: 4,
-      title: "AI Agents",
+      title: "AI Agents & Automation",
       description: "Deploy autonomous AI agents for your business",
-      lessons: 6,
-      completed: 0,
-      topics: ["Agent Architecture", "Automation", "Scaling"],
-      color: "from-yellow-500 to-yellow-600",
-      locked: true,
+      status: "locked",
+      progress: 0,
+      lessons: ["AI Assistants", "Workflow Automation", "Customer Service Bots", "Time Freedom"],
+      icon: Zap,
+      color: "from-yellow-500 to-pink-500",
+      nextSession: "Dec 12, 2024 - 2:00 PM PST",
     },
   ];
 
   const upcomingSessions = [
     {
-      id: 1,
-      title: "ChatGPT Advanced Prompts Workshop",
-      date: "December 3, 2024",
-      time: "7:00 PM EST",
+      date: "Dec 3",
+      time: "2:00 PM PST",
+      title: "Live Q&A: AI Content Creation",
+      type: "Group Session",
       attendees: 245,
-      hosted_by: "Nadia",
-      duration: "90 min",
     },
     {
-      id: 2,
-      title: "Building Your AI Brand Story",
-      date: "December 6, 2024",
-      time: "6:00 PM EST",
+      date: "Dec 6",
+      time: "2:00 PM PST",
+      title: "Brand Showcase & Feedback",
+      type: "Group Session",
       attendees: 312,
-      hosted_by: "Nadia",
-      duration: "75 min",
-    },
-    {
-      id: 3,
-      title: "AI Website Launch Masterclass",
-      date: "December 9, 2024",
-      time: "7:30 PM EST",
-      attendees: 189,
-      hosted_by: "Nadia",
-      duration: "90 min",
-    },
-    {
-      id: 4,
-      title: "AI Agents for Solo Entrepreneurs",
-      date: "December 12, 2024",
-      time: "6:00 PM EST",
-      attendees: 267,
-      hosted_by: "Nadia",
-      duration: "90 min",
     },
   ];
 
-  const communityFeatures = [
-    {
-      icon: Users,
-      title: "Private Community",
-      description: "Connect with 500+ women solopreneurs",
-    },
-    {
-      icon: MessageSquare,
-      title: "Direct Message Nadia",
-      description: "Get personal guidance and support",
-    },
-    {
-      icon: Calendar,
-      title: "Exclusive Events",
-      description: "Monthly mastermind sessions",
-    },
-    {
-      icon: Sparkles,
-      title: "Resource Library",
-      description: "Templates and AI prompts",
-    },
+  const recentActivity = [
+    { user: "Sarah M.", action: "shared her AI-generated brand photos", time: "2 hours ago" },
+    { user: "Nadia", action: "replied to your question about ChatGPT prompts", time: "5 hours ago" },
+    { user: "Jessica K.", action: "completed Website Building module", time: "1 day ago" },
+    { user: "Maria L.", action: "started AI Agents & Automation", time: "1 day ago" },
   ];
 
-  const progressPercentage = Math.round((3 / 30) * 100);
+  const progressPercentage = 65;
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header with Gradient */}
-      <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500 py-12 sm:py-16">
-        <div className="absolute inset-0 bg-black/20" />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-                Your AI Mastery Journey
-              </h1>
-              <p className="text-purple-100">Welcome back, {user?.firstName || "Master"}!</p>
-            </div>
-            <div className="hidden sm:block">
-              <div className="text-right">
-                <p className="text-sm text-purple-100 mb-1">Overall Progress</p>
-                <p className="text-3xl font-bold text-white">{progressPercentage}%</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-              <p className="text-sm text-purple-100 mb-1">Lessons Completed</p>
-              <p className="text-2xl font-bold text-white">3 of 30</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-              <p className="text-sm text-purple-100 mb-1">Current Module</p>
-              <p className="text-2xl font-bold text-white">Week 1</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-              <p className="text-sm text-purple-100 mb-1">Streak Days</p>
-              <p className="text-2xl font-bold text-white">5 🔥</p>
-            </div>
-            <div className="bg-white/10 backdrop-blur rounded-lg p-4">
-              <p className="text-sm text-purple-100 mb-1">Community</p>
-              <p className="text-2xl font-bold text-white">500+</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-3 mb-8">
             <TabsTrigger value="dashboard" className="flex items-center gap-2">
@@ -186,252 +112,350 @@ export default function LearningHubPage() {
           </TabsList>
 
           {/* Dashboard Tab */}
-          <TabsContent value="dashboard" className="space-y-8">
-            {/* Learning Modules */}
-            <div>
-              <h2 className="text-2xl font-bold text-black mb-6">4-Week Learning Path</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {modules.map((module) => (
-                  <Card
-                    key={module.week}
-                    className={`overflow-hidden border-0 ${
-                      module.locked ? "opacity-60" : ""
-                    }`}
-                  >
-                    <div className={`bg-gradient-to-r ${module.color} h-2`} />
-                    <div className="p-6">
-                      {module.locked && (
-                        <div className="absolute top-4 right-4">
-                          <Lock className="w-5 h-5 text-gray-400" />
-                        </div>
-                      )}
-
-                      <div className="flex items-start justify-between mb-3">
-                        <Badge className="bg-black text-white">
-                          Week {module.week}
-                        </Badge>
-                        {!module.locked && module.completed > 0 && (
-                          <Badge className="bg-green-100 text-green-700 border-0">
-                            {module.completed}/{module.lessons} Done
-                          </Badge>
-                        )}
-                      </div>
-
-                      <h3 className="text-lg font-bold text-black mb-2">
-                        {module.title}
-                      </h3>
-                      <p className="text-sm text-gray-600 mb-4">
-                        {module.description}
-                      </p>
-
-                      {/* Progress Bar */}
-                      <div className="mb-4">
-                        <div className="flex items-center justify-between text-xs mb-2">
-                          <span className="text-gray-600">Progress</span>
-                          <span className="font-semibold text-black">
-                            {Math.round(
-                              (module.completed / module.lessons) * 100
-                            )}
-                            %
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className={`bg-gradient-to-r ${module.color} h-2 rounded-full transition-all`}
-                            style={{
-                              width: `${(module.completed / module.lessons) * 100}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Topics */}
-                      <div className="mb-4">
-                        <p className="text-xs text-gray-600 font-semibold mb-2">
-                          Topics Covered
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {module.topics.map((topic, idx) => (
-                            <Badge
-                              key={idx}
-                              variant="outline"
-                              className="text-xs"
-                            >
-                              {topic}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-
-                      <Button
-                        className={`w-full mt-4 ${
-                          module.locked
-                            ? "bg-gray-300 text-gray-600 cursor-not-allowed"
-                            : "bg-black text-white hover:bg-gray-900"
-                        }`}
-                        disabled={module.locked}
-                      >
-                        {module.locked ? (
-                          <>
-                            <Lock className="w-4 h-4 mr-2" />
-                            Coming Soon
-                          </>
-                        ) : (
-                          <>
-                            Continue Learning
-                            <ArrowRight className="w-4 h-4 ml-2" />
-                          </>
-                        )}
-                      </Button>
+          <TabsContent value="dashboard" className="space-y-6">
+            {/* Hero Welcome */}
+            <div className="bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400 rounded-2xl p-8 text-white">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h1 className="text-3xl font-bold mb-2">
+                    Welcome Back, Queen! 👑
+                  </h1>
+                  <p className="text-purple-100 text-lg mb-6">
+                    You're making incredible progress. Keep shining!
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="bg-white/20 backdrop-blur rounded-lg px-4 py-3">
+                      <div className="text-2xl font-bold">{progressPercentage}%</div>
+                      <div className="text-sm text-purple-100">Overall Progress</div>
                     </div>
-                  </Card>
-                ))}
+                    <div className="bg-white/20 backdrop-blur rounded-lg px-4 py-3">
+                      <div className="text-2xl font-bold">12</div>
+                      <div className="text-sm text-purple-100">Lessons Completed</div>
+                    </div>
+                    <div className="bg-white/20 backdrop-blur rounded-lg px-4 py-3">
+                      <div className="text-2xl font-bold">3</div>
+                      <div className="text-sm text-purple-100">Live Sessions</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="hidden lg:flex w-32 h-32 bg-white/20 backdrop-blur rounded-full flex-shrink-0 items-center justify-center">
+                  <Heart className="w-16 h-16 text-white" fill="currentColor" />
+                </div>
               </div>
             </div>
 
-            {/* Upcoming Sessions Alert */}
-            <Card className="border-purple-200 bg-purple-50">
-              <div className="p-6">
-                <h3 className="text-lg font-bold text-black mb-2 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-purple-600" />
-                  Next Live Session in 3 Days!
-                </h3>
-                <p className="text-gray-700 mb-4">
-                  Join Nadia for "ChatGPT Advanced Prompts Workshop" on December 3rd
-                </p>
-                <Button className="bg-black text-white hover:bg-gray-900">
-                  Set Reminder
+            {/* Next Live Session Alert */}
+            <div className="bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl p-6 text-white">
+              <div className="flex items-center gap-4">
+                <Video className="w-12 h-12 flex-shrink-0" />
+                <div className="flex-1">
+                  <div className="text-sm font-semibold text-pink-100">NEXT LIVE SESSION</div>
+                  <div className="text-xl font-bold mb-1">AI Content Creation Q&A with Nadia</div>
+                  <div className="text-pink-100">December 3, 2024 at 2:00 PM PST</div>
+                </div>
+                <Button className="bg-white text-pink-600 hover:bg-pink-50 whitespace-nowrap flex-shrink-0">
+                  Join Session
                 </Button>
               </div>
-            </Card>
+            </div>
+
+            {/* Learning Modules */}
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Learning Journey</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {modules.map((module) => {
+                  const Icon = module.icon;
+                  return (
+                    <Card
+                      key={module.week}
+                      className={`border-2 p-6 transition-all cursor-pointer ${
+                        module.status === "locked"
+                          ? "border-gray-200 opacity-60"
+                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg"
+                      }`}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`p-3 rounded-lg ${
+                              module.status === "locked"
+                                ? "bg-gray-100"
+                                : "bg-purple-100"
+                            }`}
+                          >
+                            {module.status === "locked" ? (
+                              <Lock className="w-6 h-6 text-gray-400" />
+                            ) : (
+                              <Icon className="w-6 h-6 text-purple-600" />
+                            )}
+                          </div>
+                          <div>
+                            <div className="text-sm text-gray-500">Week {module.week}</div>
+                            <div className="font-bold text-gray-800">{module.title}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {module.status !== "locked" && (
+                        <>
+                          <div className="mb-3">
+                            <div className="flex justify-between text-sm mb-1">
+                              <span className="text-gray-600">Progress</span>
+                              <span className="text-purple-600 font-semibold">
+                                {module.progress}%
+                              </span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-2">
+                              <div
+                                className={`bg-gradient-to-r ${module.color} h-2 rounded-full transition-all`}
+                                style={{ width: `${module.progress}%` }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {module.lessons.map((lesson, idx) => (
+                              <span
+                                key={idx}
+                                className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded"
+                              >
+                                {lesson}
+                              </span>
+                            ))}
+                          </div>
+                        </>
+                      )}
+
+                      <div className="text-sm text-gray-500 flex items-center gap-2">
+                        <Calendar className="w-4 h-4" />
+                        {module.nextSession}
+                      </div>
+                    </Card>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Community Activity & Ask Nadia */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 bg-white rounded-xl p-6 border-2 border-gray-200">
+                <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+                  <Users className="w-6 h-6 text-purple-600" />
+                  Community Activity
+                </h3>
+                <div className="space-y-3">
+                  {recentActivity.map((activity, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg"
+                    >
+                      <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                        {activity.user[0]}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm text-gray-800">
+                          <span className="font-semibold">{activity.user}</span>{" "}
+                          {activity.action}
+                        </p>
+                        <p className="text-xs text-gray-500">{activity.time}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <Button className="w-full mt-4 bg-purple-600 text-white hover:bg-purple-700">
+                  View Private Group
+                </Button>
+              </div>
+
+              <div className="bg-gradient-to-br from-orange-400 to-pink-500 rounded-xl p-6 text-white">
+                <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                  <MessageCircle className="w-6 h-6" />
+                  Ask Nadia
+                </h3>
+                <p className="text-white/90 mb-4 text-sm">
+                  Have a question? I'm here to help! Get direct answers from me in the
+                  private group.
+                </p>
+                <Button className="w-full bg-white text-pink-600 hover:bg-pink-50">
+                  Message Nadia
+                </Button>
+                <div className="mt-4 p-3 bg-white/20 backdrop-blur rounded-lg">
+                  <div className="text-sm font-semibold mb-1">Average Response Time</div>
+                  <div className="text-2xl font-bold">{"<"} 2 hours</div>
+                </div>
+              </div>
+            </div>
           </TabsContent>
 
           {/* Live Sessions Tab */}
-          <TabsContent value="sessions" className="space-y-4">
-            <div>
-              <h2 className="text-2xl font-bold text-black mb-6">
-                Upcoming Live Sessions
-              </h2>
-              <p className="text-gray-600 mb-6">
-                Join every 3 days for interactive training with Nadia
-              </p>
-
+          <TabsContent value="sessions" className="space-y-6">
+            <div className="bg-white rounded-xl p-6 border-2 border-purple-200">
+              <h2 className="text-2xl font-bold mb-6 text-gray-800">Upcoming Live Sessions</h2>
               <div className="space-y-4">
-                {upcomingSessions.map((session) => (
-                  <Card key={session.id} className="p-6 hover:shadow-lg transition-shadow">
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                      <div className="flex-1">
-                        <div className="flex items-start gap-2 mb-2">
-                          <Badge className="bg-purple-600">Live</Badge>
-                          <Badge variant="outline">{session.duration}</Badge>
-                        </div>
-                        <h3 className="text-lg font-bold text-black mb-2">
-                          {session.title}
-                        </h3>
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-gray-600">
-                          <div className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            {session.date}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            {session.time}
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Users className="w-4 h-4" />
-                            {session.attendees} attending
-                          </div>
-                        </div>
+                {upcomingSessions.map((session, idx) => (
+                  <div
+                    key={idx}
+                    className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-5 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200"
+                  >
+                    <div className="text-center sm:text-left">
+                      <div className="text-3xl font-bold text-purple-600">
+                        {session.date.split(" ")[1]}
                       </div>
-                      <Button className="bg-black text-white hover:bg-gray-900 whitespace-nowrap">
-                        Join Session
-                      </Button>
+                      <div className="text-sm text-gray-600">{session.date.split(" ")[0]}</div>
                     </div>
-                  </Card>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-lg text-gray-800">{session.title}</div>
+                      <div className="text-gray-600 text-sm flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
+                        <span className="flex items-center gap-1">
+                          <Video className="w-4 h-4" />
+                          {session.type}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Users className="w-4 h-4" />
+                          {session.attendees} attending
+                        </span>
+                        <span>{session.time}</span>
+                      </div>
+                    </div>
+                    <Button className="bg-purple-600 text-white hover:bg-purple-700 flex-shrink-0 whitespace-nowrap">
+                      Join Session
+                    </Button>
+                  </div>
                 ))}
               </div>
             </div>
 
-            {/* Session Guidelines */}
-            <Card className="bg-gray-50 p-6">
-              <h3 className="font-bold text-black mb-4">Session Guidelines</h3>
-              <ul className="space-y-2 text-sm text-gray-700">
-                <li className="flex gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Join 5 minutes early to test your audio
-                </li>
-                <li className="flex gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Camera optional but recommended for networking
-                </li>
-                <li className="flex gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Have notebook ready for action items
-                </li>
-                <li className="flex gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-600 flex-shrink-0" />
-                  Recordings available for 30 days
-                </li>
-              </ul>
-            </Card>
+            <div className="bg-gradient-to-br from-purple-600 to-pink-500 rounded-xl p-8 text-white">
+              <h3 className="text-2xl font-bold mb-4">Session Guidelines</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <div className="font-bold mb-2 flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    Share Your Work
+                  </div>
+                  <p className="text-sm text-purple-100">
+                    Show off what you've created! We celebrate every win together.
+                  </p>
+                </div>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <div className="font-bold mb-2 flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    Ask Questions
+                  </div>
+                  <p className="text-sm text-purple-100">
+                    No question is too small. I'm here to help you succeed.
+                  </p>
+                </div>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <div className="font-bold mb-2 flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    Network & Collaborate
+                  </div>
+                  <p className="text-sm text-purple-100">
+                    Connect with fellow women solopreneurs and build lasting friendships.
+                  </p>
+                </div>
+                <div className="bg-white/20 backdrop-blur rounded-lg p-4">
+                  <div className="font-bold mb-2 flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    Get Recorded
+                  </div>
+                  <p className="text-sm text-purple-100">
+                    All sessions are recorded. Catch up on replays anytime.
+                  </p>
+                </div>
+              </div>
+            </div>
           </TabsContent>
 
           {/* Community Tab */}
           <TabsContent value="community" className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-black mb-6">
-                Your Community
-              </h2>
+              <h2 className="text-2xl font-bold text-black mb-6">Your Community</h2>
 
-              {/* Community Features Grid */}
+              {/* Community Features */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                {communityFeatures.map((feature, idx) => {
-                  const Icon = feature.icon;
-                  return (
-                    <Card key={idx} className="p-6 text-center hover:shadow-lg transition-shadow">
-                      <div className="flex justify-center mb-4">
-                        <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
-                          <Icon className="w-6 h-6 text-white" />
-                        </div>
-                      </div>
-                      <h3 className="font-bold text-black mb-2">{feature.title}</h3>
-                      <p className="text-sm text-gray-600">{feature.description}</p>
-                    </Card>
-                  );
-                })}
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                  <div className="flex justify-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
+                      <Users className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-black mb-2">Private Community</h3>
+                  <p className="text-sm text-gray-600">
+                    Connect with 500+ women solopreneurs
+                  </p>
+                </Card>
+
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                  <div className="flex justify-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-pink-600 to-orange-500 rounded-lg flex items-center justify-center">
+                      <MessageCircle className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-black mb-2">Direct Message Nadia</h3>
+                  <p className="text-sm text-gray-600">
+                    Get personal guidance and support
+                  </p>
+                </Card>
+
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                  <div className="flex justify-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-yellow-500 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-black mb-2">Exclusive Events</h3>
+                  <p className="text-sm text-gray-600">
+                    Monthly mastermind sessions
+                  </p>
+                </Card>
+
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                  <div className="flex justify-center mb-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
+                      <Sparkles className="w-6 h-6 text-white" />
+                    </div>
+                  </div>
+                  <h3 className="font-bold text-black mb-2">Resource Library</h3>
+                  <p className="text-sm text-gray-600">
+                    Templates and AI prompts
+                  </p>
+                </Card>
               </div>
 
-              {/* Direct Message CTA */}
-              <Card className="bg-gradient-to-r from-purple-100 to-pink-100 border-0 p-8 text-center">
-                <MessageSquare className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-black mb-2">
-                  Direct Access to Nadia
-                </h3>
-                <p className="text-gray-700 mb-6">
-                  As a program member, you have direct messaging access to get personalized guidance
-                </p>
-                <Button className="bg-black text-white hover:bg-gray-900 mx-auto">
-                  Message Nadia
-                </Button>
-              </Card>
-
               {/* Community Stats */}
-              <Card className="p-6">
-                <h3 className="font-bold text-black mb-4">Community Stats</h3>
+              <Card className="p-6 border-2 border-gray-200 mb-6">
+                <h3 className="font-bold text-black mb-6">Community Stats</h3>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
-                    <p className="text-2xl font-bold text-purple-600">500+</p>
+                    <p className="text-3xl font-bold text-purple-600">500+</p>
                     <p className="text-sm text-gray-600">Members</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-pink-600">48</p>
+                    <p className="text-3xl font-bold text-pink-600">48</p>
                     <p className="text-sm text-gray-600">Active Daily</p>
                   </div>
                   <div>
-                    <p className="text-2xl font-bold text-orange-600">12</p>
+                    <p className="text-3xl font-bold text-orange-600">12</p>
                     <p className="text-sm text-gray-600">Countries</p>
                   </div>
                 </div>
+              </Card>
+
+              {/* Message Nadia CTA */}
+              <Card className="bg-gradient-to-r from-orange-400 to-pink-500 border-0 p-8 text-white">
+                <MessageCircle className="w-12 h-12 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-center mb-2">
+                  Direct Access to Nadia
+                </h3>
+                <p className="text-center text-white/90 mb-6">
+                  As a program member, you have direct messaging access to get personalized
+                  guidance
+                </p>
+                <Button className="bg-white text-pink-600 hover:bg-pink-50 mx-auto block">
+                  Message Nadia
+                </Button>
               </Card>
             </div>
           </TabsContent>
