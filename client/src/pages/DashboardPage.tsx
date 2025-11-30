@@ -213,7 +213,7 @@ export default function DashboardPage() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="font-serif text-4xl sm:text-5xl font-bold text-gradient-violet mb-2" data-testid="text-dashboard-title">
+              <h1 className="font-semibold text-4xl sm:text-5xl text-black mb-2" data-testid="text-dashboard-title">
                 Welcome Back, {user?.firstName || 'Member'}
               </h1>
               <p className="text-lg text-foreground/70">
@@ -265,7 +265,7 @@ export default function DashboardPage() {
           <Card className="hover-elevate" data-testid="card-stat-completed">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Completed</CardTitle>
-              <Trophy className="w-4 h-4 text-yellow-500" />
+              <Trophy className="w-4 h-4 text-purple-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{completedExperiences}</div>
@@ -569,7 +569,7 @@ export default function DashboardPage() {
                 <CardContent className="space-y-3">
                   <div>
                     <p className="text-sm font-medium mb-1">Current Plan</p>
-                    <p className="text-lg font-bold text-gradient-violet">{plan.displayName}</p>
+                    <p className="text-lg font-bold text-purple-600">{plan.displayName}</p>
                   </div>
                   <p className="text-sm text-foreground/70">{plan.description}</p>
                   {tier !== 'founders_circle' && (

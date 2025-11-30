@@ -460,18 +460,18 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="mb-20 max-w-3xl backdrop-blur-sm bg-white/8 rounded-2xl p-8 border border-white/10"
+            className="mb-20 max-w-3xl"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-gradient-to-r from-yellow-400 to-yellow-400/50" />
-              <span className="text-sm uppercase tracking-widest text-white/80 font-medium drop-shadow-md">
+              <div className="h-px w-12 bg-purple-600" />
+              <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
                 Human-Powered AI
               </span>
             </div>
-            <h2 className="sanctuary-headline text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
+            <h2 className="text-5xl lg:text-6xl font-semibold mb-6 text-black">
               Meet Nadia
             </h2>
-            <p className="text-xl text-white/90 leading-relaxed drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+            <p className="text-xl text-gray-600 leading-relaxed">
               Your personal guide. Text or call me anytime you need motivation—no extra charge.
             </p>
           </motion.div>
@@ -525,26 +525,26 @@ export default function LandingPage() {
               className="space-y-8"
             >
               {/* Pull Quote Style */}
-              <div className="pull-quote">
-                <p>
+              <div className="space-y-4">
+                <p className="text-2xl font-semibold leading-relaxed text-black">
                   I'm Nadia "The Mompreneur." I built MetaHers because I remember what it's like to be a beginner.
                 </p>
               </div>
 
               {/* Bio Card */}
-              <div className="rounded-2xl p-8 border border-white/20 backdrop-blur-sm bg-white/10">
-                <p className="text-lg leading-relaxed mb-4 text-white/95 drop-shadow-md">
+              <div className="rounded-lg p-8 border border-gray-200 bg-white">
+                <p className="text-lg leading-relaxed text-gray-700">
                   <span className="font-semibold">CS degree + MBA + Cornell Blockchain certified.</span> Fluent in English, French & Arabic. Former Hotel GM turned Web3 educator.
                 </p>
               </div>
 
               {/* Human-Powered Difference */}
-              <div className="rounded-2xl p-8 border border-white/20 backdrop-blur-sm bg-white/10">
+              <div className="rounded-lg p-8 border border-gray-200 bg-white">
                 <div className="flex items-center gap-3 mb-4">
-                  <MessageCircle className="w-6 h-6 text-yellow-400" />
-                  <h3 className="text-xl font-serif font-bold text-white drop-shadow-md">The Human-Powered Difference</h3>
+                  <MessageCircle className="w-6 h-6 text-purple-600" />
+                  <h3 className="text-xl font-semibold text-black">The Human-Powered Difference</h3>
                 </div>
-                <p className="text-white/90 leading-relaxed drop-shadow-md">
+                <p className="text-gray-700 leading-relaxed">
                   Unlike AI-only platforms, you get <span className="font-semibold">direct access to me</span>. Call or text when you're stuck. No chatbots, no waiting. Just real human support from someone who remembers being a beginner in 2020.
                 </p>
               </div>
@@ -552,7 +552,7 @@ export default function LandingPage() {
               {/* CTA */}
               <button
                 onClick={handleSignup}
-                className="w-full px-12 py-5 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-semibold text-lg hover:shadow-lg transition-all"
+                className="w-full px-12 py-5 bg-purple-600 text-white font-medium text-lg uppercase tracking-wider hover:bg-purple-700 transition-all"
                 data-testid="button-meet-nadia"
               >
                 Start Your Journey

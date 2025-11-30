@@ -146,13 +146,13 @@ export default function DiscoverPage() {
               </span>
             </div>
 
-            <h1 className="font-serif text-5xl sm:text-6xl md:text-7xl font-bold text-gradient-gold leading-tight">
+            <h1 className="font-semibold text-5xl sm:text-6xl md:text-7xl text-black leading-tight">
               Discover Your Ritual
             </h1>
 
-            <p className="text-xl sm:text-2xl text-foreground/90 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl sm:text-2xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
               Take this personalized quiz to discover which MetaHers ritual unlocks your potential—
-              <span className="text-gradient-magenta font-semibold"> plus a FREE 1:1 session with the founder</span>.
+              <span className="text-purple-600 font-semibold"> plus a FREE 1:1 session with the founder</span>.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto my-12">
@@ -296,7 +296,7 @@ export default function DiscoverPage() {
               </span>
             </div>
 
-            <h1 className="font-serif text-4xl sm:text-5xl font-bold text-gradient-gold leading-tight">
+            <h1 className="font-semibold text-4xl sm:text-5xl text-black leading-tight">
               Your Perfect Ritual Is Ready
             </h1>
 

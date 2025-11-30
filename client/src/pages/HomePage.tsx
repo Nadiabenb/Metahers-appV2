@@ -171,12 +171,12 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-8xl font-semibold mb-8 tracking-tight leading-[0.95]"
+            className="text-5xl sm:text-6xl lg:text-8xl font-semibold mb-8 tracking-tight leading-[0.95] text-black"
             style={{ letterSpacing: '-0.03em' }}
             data-testid="text-hero-title"
           >
             Become a{' '}
-            <span className="text-gradient-tech">MetaHers</span>
+            <span className="text-purple-600">MetaHers</span>
             {' '}Woman
           </motion.h1>
 
