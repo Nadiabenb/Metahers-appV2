@@ -2395,3 +2395,92 @@ export const quizResponses = pgTable("quiz_responses", {
 export const insertQuizResponseSchema = createInsertSchema(quizResponses).omit({ id: true, completedAt: true });
 export type InsertQuizResponse = z.infer<typeof insertQuizResponseSchema>;
 export type QuizResponseDB = typeof quizResponses.$inferSelect;
+
+// ===== AI MASTERY PROGRAM (Learning Hub) =====
+
+// AI Mastery enrollment table
+export const aiMasteryEnrollment = pgTable("ai_mastery_enrollment", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  tier: varchar("tier").notNull().default("basic"), // basic, premium
+  enrolledAt: timestamp("enrolled_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+}, (table) => [
+  index("idx_enrollment_user").on(table.userId),
+]);
+
+export const insertAiMasteryEnrollmentSchema = createInsertSchema(aiMasteryEnrollment).omit({ id: true, enrolledAt: true });
+export type InsertAiMasteryEnrollment = z.infer<typeof insertAiMasteryEnrollmentSchema>;
+export type AiMasteryEnrollmentDB = typeof aiMasteryEnrollment.$inferSelect;
+
+// AI Mastery module progress
+export const aiMasteryModuleProgress = pgTable("ai_mastery_module_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  moduleId: varchar("module_id").notNull(), // "week_1", "week_2", etc.
+  lessonsCompleted: integer("lessons_completed").notNull().default(0),
+  totalLessons: integer("total_lessons").notNull().default(5),
+  isUnlocked: boolean("is_unlocked").notNull().default(false),
+  startedAt: timestamp("started_at").defaultNow(),
+  completedAt: timestamp("completed_at"),
+}, (table) => [
+  index("idx_module_progress_user").on(table.userId),
+  uniqueIndex("idx_module_progress_user_module_unique").on(table.userId, table.moduleId),
+]);
+
+export const insertAiMasteryModuleProgressSchema = createInsertSchema(aiMasteryModuleProgress).omit({ id: true, startedAt: true });
+export type InsertAiMasteryModuleProgress = z.infer<typeof insertAiMasteryModuleProgressSchema>;
+export type AiMasteryModuleProgressDB = typeof aiMasteryModuleProgress.$inferSelect;
+
+// Live sessions
+export const liveSessions = pgTable("live_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: varchar("title").notNull(),
+  description: text("description"),
+  startTime: timestamp("start_time").notNull(),
+  endTime: timestamp("end_time"),
+  videoUrl: varchar("video_url"),
+  attendeeCount: integer("attendee_count").notNull().default(0),
+  maxAttendees: integer("max_attendees"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_session_start").on(table.startTime),
+]);
+
+export const insertLiveSessionSchema = createInsertSchema(liveSessions).omit({ id: true, createdAt: true });
+export type InsertLiveSession = z.infer<typeof insertLiveSessionSchema>;
+export type LiveSessionDB = typeof liveSessions.$inferSelect;
+
+// Community activity feed
+export const communityActivity = pgTable("community_activity", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  activityType: varchar("activity_type").notNull(), // "completed_module", "milestone", "achievement"
+  title: varchar("title").notNull(),
+  description: text("description"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_activity_user").on(table.userId),
+  index("idx_activity_created").on(table.createdAt),
+]);
+
+export const insertCommunityActivitySchema = createInsertSchema(communityActivity).omit({ id: true, createdAt: true });
+export type InsertCommunityActivity = z.infer<typeof insertCommunityActivitySchema>;
+export type CommunityActivityDB = typeof communityActivity.$inferSelect;
+
+// Direct messages (user to Nadia)
+export const aiMasteryMessages = pgTable("ai_mastery_messages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  senderType: varchar("sender_type").notNull(), // "user" or "nadia"
+  content: text("content").notNull(),
+  isRead: boolean("is_read").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_message_user").on(table.userId),
+  index("idx_message_created").on(table.createdAt),
+]);
+
+export const insertAiMasteryMessageSchema = createInsertSchema(aiMasteryMessages).omit({ id: true, createdAt: true });
+export type InsertAiMasteryMessage = z.infer<typeof insertAiMasteryMessageSchema>;
+export type AiMasteryMessageDB = typeof aiMasteryMessages.$inferSelect;

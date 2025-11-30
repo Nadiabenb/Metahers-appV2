@@ -13,7 +13,7 @@ import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
-import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress } from "@shared/schema";
+import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages } from "@shared/schema";
 import { sql as drizzleSql, eq } from "drizzle-orm";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
@@ -3998,6 +3998,81 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       difficulty: difficultyMap[nextExp.tier] || "intermediate",
       reason: reasons[quizData.goal as keyof typeof reasons] || "Continue your learning journey",
     });
+  }));
+
+  // ===== LEARNING HUB (AI MASTERY PROGRAM) =====
+
+  // Get user's enrollment and module progress
+  app.get('/api/learning-hub/progress', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    
+    const enrollment = await db.select().from(aiMasteryEnrollment).where(eq(aiMasteryEnrollment.userId, userId)).limit(1);
+    const modules = await db.select().from(aiMasteryModuleProgress).where(eq(aiMasteryModuleProgress.userId, userId));
+    
+    res.json({
+      enrollment: enrollment[0] || null,
+      modules: modules || []
+    });
+  }));
+
+  // Get all live sessions
+  app.get('/api/learning-hub/sessions', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const sessions = await db.select().from(liveSessions).orderBy(liveSessions.startTime).limit(20);
+    res.json(sessions);
+  }));
+
+  // Get community activity feed
+  app.get('/api/learning-hub/community/activity', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const activities = await db.select().from(communityActivity).orderBy(communityActivity.createdAt).limit(20);
+    res.json(activities);
+  }));
+
+  // Update module progress
+  app.post('/api/learning-hub/progress/update', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { moduleId, lessonsCompleted, totalLessons, isUnlocked } = req.body;
+    
+    const { and } = await import('drizzle-orm');
+    const existing = await db.select().from(aiMasteryModuleProgress)
+      .where(and(eq(aiMasteryModuleProgress.userId, userId), eq(aiMasteryModuleProgress.moduleId, moduleId)));
+    
+    if (existing.length > 0) {
+      const updated = await db.update(aiMasteryModuleProgress)
+        .set({ lessonsCompleted, isUnlocked })
+        .where(eq(aiMasteryModuleProgress.id, existing[0].id))
+        .returning();
+      res.json(updated[0]);
+    } else {
+      const created = await db.insert(aiMasteryModuleProgress)
+        .values({ userId, moduleId, lessonsCompleted, totalLessons, isUnlocked })
+        .returning();
+      res.json(created[0]);
+    }
+  }));
+
+  // Get messages with Nadia
+  app.get('/api/learning-hub/messages', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const messages = await db.select().from(aiMasteryMessages)
+      .where(eq(aiMasteryMessages.userId, userId))
+      .orderBy(aiMasteryMessages.createdAt);
+    res.json(messages);
+  }));
+
+  // Send message to Nadia
+  app.post('/api/learning-hub/messages', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { content } = req.body;
+    
+    if (!content || content.trim().length === 0) {
+      return res.status(400).json({ error: 'Message content required' });
+    }
+    
+    const message = await db.insert(aiMasteryMessages)
+      .values({ userId, senderType: 'user', content })
+      .returning();
+    
+    res.json(message[0]);
   }));
 
   const httpServer = createServer(app);

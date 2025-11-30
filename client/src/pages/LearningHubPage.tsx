@@ -1,17 +1,61 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { BookOpen, Calendar, Users, MessageCircle, CheckCircle2, Lock, Clock, Sparkles, ArrowRight, Heart, Video, Star, Rocket, Zap, Trophy, Brain } from "lucide-react";
+import { BookOpen, Calendar, Users, MessageCircle, CheckCircle2, Lock, Clock, Sparkles, ArrowRight, Heart, Video, Star, Rocket, Zap, Trophy, Brain, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/useAuth";
 import { SEO } from "@/components/SEO";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { queryClient, apiRequest } from "@/lib/queryClient";
 
 export default function LearningHubPage() {
   const { isAuthenticated, user } = useAuth();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [messageText, setMessageText] = useState("");
+
+  // Fetch user progress
+  const { data: progressData, isLoading: progressLoading } = useQuery({
+    queryKey: ['/api/learning-hub/progress'],
+    enabled: isAuthenticated,
+  });
+
+  // Fetch live sessions
+  const { data: sessionsData, isLoading: sessionsLoading } = useQuery({
+    queryKey: ['/api/learning-hub/sessions'],
+    enabled: isAuthenticated,
+  });
+
+  // Fetch community activity
+  const { data: activityData, isLoading: activityLoading } = useQuery({
+    queryKey: ['/api/learning-hub/community/activity'],
+    enabled: isAuthenticated,
+  });
+
+  // Fetch messages
+  const { data: messagesData, isLoading: messagesLoading } = useQuery({
+    queryKey: ['/api/learning-hub/messages'],
+    enabled: isAuthenticated,
+  });
+
+  // Update progress mutation
+  const updateProgressMutation = useMutation({
+    mutationFn: (data: any) => apiRequest('POST', '/api/learning-hub/progress/update', data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/learning-hub/progress'] });
+    }
+  });
+
+  // Send message mutation
+  const sendMessageMutation = useMutation({
+    mutationFn: (content: string) => apiRequest('POST', '/api/learning-hub/messages', { content }),
+    onSuccess: () => {
+      setMessageText("");
+      queryClient.invalidateQueries({ queryKey: ['/api/learning-hub/messages'] });
+    }
+  });
 
   // Redirect if not authenticated
   if (!isAuthenticated) {
