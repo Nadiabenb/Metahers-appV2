@@ -85,12 +85,31 @@ export default function UpgradePage() {
           <div className="absolute inset-0 bg-[linear-gradient(rgba(181,101,216,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(181,101,216,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
 
           <div className="relative z-10 max-w-7xl mx-auto">
+            {/* CYBER MONDAY BANNER */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="mb-16 p-6 rounded-2xl bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/20 via-[hsl(var(--hyper-violet))]/20 to-[hsl(var(--liquid-gold))]/20 border-2 border-[hsl(var(--liquid-gold))]/40"
+            >
+              <div className="text-center">
+                <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--liquid-gold))]/30">
+                  <Sparkles className="w-4 h-4 text-[hsl(var(--liquid-gold))] animate-pulse" />
+                  <span className="font-bold text-sm uppercase tracking-wider text-[hsl(var(--liquid-gold))]">
+                    Cyber Monday Deal: 80% OFF All Tiers
+                  </span>
+                </div>
+                <h2 className="text-3xl font-bold mb-2">Limited Time: $299 for Everything</h2>
+                <p className="text-lg text-foreground/80">All 9 learning spaces, personal coaching, and lifetime access for the price of one coffee a month</p>
+              </div>
+            </motion.div>
+
             <ImmersiveSection className="text-center mb-32">
               <ShimmerBadge
                 icon={<TrendingUp className="w-6 h-6 text-[hsl(var(--gold))]" />}
                 className="mb-12"
               >
-                Membership Tiers
+                Join the MetaHers Movement
               </ShimmerBadge>
 
               <h1 
@@ -99,13 +118,13 @@ export default function UpgradePage() {
                   textShadow: '0 0 80px rgba(255,215,0,0.5), 0 0 120px rgba(181,101,216,0.3)',
                 }}
               >
-                Choose Your Path
+                Choose Your Edge
               </h1>
               
               <p className="text-2xl sm:text-3xl text-foreground/90 max-w-4xl mx-auto leading-relaxed font-light mb-6">
-                Three simple tiers designed for your learning journey.
+                Three powerful membership levels designed for women building wealth, influence, and freedom.
                 <br />
-                <span className="text-[hsl(var(--gold))]">From self-paced mastery to concierge-level guidance.</span>
+                <span className="text-[hsl(var(--gold))]">Start with Self-Paced Rituals or Get Personal Coaching.</span>
               </p>
               
               {currentTier !== 'free' && (
@@ -198,8 +217,8 @@ export default function UpgradePage() {
 
             {/* Paid Tier Heading */}
             <div className="text-center mb-12">
-              <h2 className="font-serif text-3xl font-bold text-foreground mb-2">Premium Memberships</h2>
-              <p className="text-foreground/70">Unlock the full MetaHers experience with AI-powered learning</p>
+              <h2 className="font-serif text-3xl font-bold text-foreground mb-2">Your MetaHers Membership</h2>
+              <p className="text-foreground/70">Designed for women solopreneurs ready to master AI, Web3, and build 6-figure businesses</p>
             </div>
 
             <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-3 mb-16">
