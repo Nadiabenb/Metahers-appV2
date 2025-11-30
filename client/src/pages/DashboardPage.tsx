@@ -8,7 +8,6 @@ import { PersonalizedRecommendations } from "@/components/PersonalizedRecommenda
 import { NextExperienceWidget } from "@/components/NextExperienceWidget";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import dashboardBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -194,17 +193,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen relative bg-black py-8 px-4 sm:px-6 lg:px-8"
-      style={{
-        backgroundImage: `url(${dashboardBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-      }}
+    <div className="min-h-screen relative bg-white py-8 px-4 sm:px-6 lg:px-8"
     >
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[hsl(280 72% 48%)]/45 to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
       
       <div className="relative z-10">
       <SEO

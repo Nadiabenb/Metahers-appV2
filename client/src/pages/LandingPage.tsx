@@ -10,17 +10,11 @@ import { Badge } from "@/components/ui/badge";
 import { heroImage, spaceImages } from "@/lib/imageManifest";
 import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
-import heroBackground from "@assets/generated_images/metaverse_digital_worlds_with_ai_and_web3_elements.png";
-import transformationBackground from "@assets/generated_images/metaverse_ai_learning_interface_and_portals.png";
-import learningSpacesBackground from "@assets/generated_images/metaverse_9_learning_spaces_and_portals.png";
-import pricingBackground from "@assets/generated_images/metaverse_premium_marketplace_and_storefront.png";
-import nadiaBackground from "@assets/generated_images/metaverse_sanctuary_meeting_and_guidance_space.png";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import type { SpaceDB } from "@shared/schema";
 import { SpaceCardSkeleton } from "@/components/LoadingSkeleton";
-
 
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -89,49 +83,36 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* PREMIUM HERO - Luxury Metaverse Background */}
+      {/* PREMIUM HERO - Clean Alo Yoga Style */}
       <div 
-        className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden"
-        style={{
-          backgroundImage: `url(${heroBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-        }}
+        className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden bg-white"
       >
-        {/* Enhanced dark overlay for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
-        {/* Premium accent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
-        {/* Strong radial light accent */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="backdrop-blur-sm bg-white/10 rounded-3xl p-8 lg:p-12"
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight text-white drop-shadow-2xl" style={{ textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>
-              Master <span className="bg-gradient-to-r from-[#FFD700] via-[#EC4899] to-[#00D9FF] bg-clip-text text-transparent drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>AI & Web3</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold mb-6 leading-tight text-black tracking-tight">
+              Master <span className="text-purple-600">AI & Web3</span>
             </h1>
-            <p className="text-lg sm:text-xl text-white/95 mb-8 leading-relaxed max-w-2xl mx-auto font-medium drop-shadow-lg" style={{ textShadow: '0 2px 6px rgba(0,0,0,0.4)' }}>
+            <p className="text-xl sm:text-2xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto font-medium">
               Go from overwhelmed to unstoppable. Build AI & Web3 skills while living your life as a solopreneur, mom, or creative.
             </p>
             
             <div className="mb-12 flex flex-col gap-3 justify-center max-w-2xl mx-auto">
-              <div className="flex items-center gap-2 text-white/90 justify-center">
-                <CheckCircle2 className="w-5 h-5 text-yellow-400 flex-shrink-0 drop-shadow-md" />
-                <span className="text-sm md:text-base font-medium drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.4)' }}>Real experts + real AI coaching + real human support (from me, Nadia)</span>
+              <div className="flex items-center gap-2 text-gray-700 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                <span className="text-sm md:text-base font-medium">Real experts + real AI coaching + real human support (from me, Nadia)</span>
               </div>
-              <div className="flex items-center gap-2 text-white/90 justify-center">
-                <CheckCircle2 className="w-5 h-5 text-yellow-400 flex-shrink-0 drop-shadow-md" />
-                <span className="text-sm md:text-base font-medium drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.4)' }}>12 transformational experiences free—no credit card, no commitment</span>
+              <div className="flex items-center gap-2 text-gray-700 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                <span className="text-sm md:text-base font-medium">54 transformational rituals—free to start, upgrade when ready</span>
               </div>
-              <div className="flex items-center gap-2 text-white/90 justify-center">
-                <CheckCircle2 className="w-5 h-5 text-yellow-400 flex-shrink-0 drop-shadow-md" />
-                <span className="text-sm md:text-base font-medium drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.4)' }}>Personalized roadmap based on your goals, not generic courses</span>
+              <div className="flex items-center gap-2 text-gray-700 justify-center">
+                <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                <span className="text-sm md:text-base font-medium">Personalized roadmap based on your goals, not generic courses</span>
               </div>
             </div>
             
@@ -140,17 +121,17 @@ export default function LandingPage() {
                 onClick={handleSignup}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-10 py-5 rounded-lg bg-gradient-to-r from-yellow-400 to-yellow-500 text-black font-bold text-lg shadow-2xl transition-all flex items-center gap-2 hover:shadow-yellow-500/60"
+                className="px-10 py-4 bg-black text-white font-medium text-lg uppercase tracking-wider hover:bg-gray-900 transition-colors flex items-center gap-2"
                 data-testid="button-start-free"
               >
-                <Sparkles className="w-5 h-5" />
-                Start Your Transformation Free
+                Start Free
+                <ArrowRight className="w-4 h-4" />
               </motion.button>
               <motion.button
                 onClick={handleLogin}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-8 py-5 rounded-lg border-2 border-white/80 text-white font-semibold text-lg hover:bg-white/20 transition-all backdrop-blur-sm drop-shadow-lg"
+                className="px-8 py-4 border-2 border-black text-black font-medium text-lg uppercase tracking-wider hover:bg-black hover:text-white transition-all"
                 data-testid="button-login-hero"
               >
                 Welcome Back
@@ -189,20 +170,8 @@ export default function LandingPage() {
 
       {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
       <div 
-        className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16"
-        style={{
-          backgroundImage: `url(${transformationBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-        }}
+        className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16 bg-gray-50"
       >
-        {/* Enhanced dark overlay for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
-        {/* Premium accent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
-        {/* Strong radial light accent */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-5xl mx-auto text-center">
           <motion.div
@@ -210,28 +179,27 @@ export default function LandingPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="backdrop-blur-sm bg-white/8 rounded-3xl p-12 border border-white/10"
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>What You'll Be Able To Do</h2>
-            <p className="text-lg text-white/90 mb-12 font-medium drop-shadow-md" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>Join women who went from frustrated to empowered in weeks, not years</p>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-black">What You'll Be Able To Do</h2>
+            <p className="text-lg text-gray-600 mb-12 font-medium">Join women who went from frustrated to empowered in weeks, not years</p>
             
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-primary/30 to-primary/10 backdrop-blur-sm border border-primary/30 hover-elevate transition-all">
-                <Bot className="w-10 h-10 text-yellow-400 mx-auto mb-4 drop-shadow-md" />
-                <h3 className="font-bold text-lg mb-2 text-white drop-shadow-md">Master AI Tools</h3>
-                <p className="text-sm text-white/85 drop-shadow-sm">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
+              <div className="p-8 border border-gray-200 bg-white hover:shadow-lg transition-shadow">
+                <Bot className="w-10 h-10 text-purple-600 mx-auto mb-4" />
+                <h3 className="font-semibold text-lg mb-2 text-black">Master AI Tools</h3>
+                <p className="text-sm text-gray-600">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
               </div>
               
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-secondary/30 to-secondary/10 backdrop-blur-sm border border-secondary/30 hover-elevate transition-all">
-                <Globe className="w-10 h-10 text-yellow-400 mx-auto mb-4 drop-shadow-md" />
-                <h3 className="font-bold text-lg mb-2 text-white drop-shadow-md">Build Web3 Wealth</h3>
-                <p className="text-sm text-white/85 drop-shadow-sm">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
+              <div className="p-8 border border-gray-200 bg-white hover:shadow-lg transition-shadow">
+                <Globe className="w-10 h-10 text-purple-600 mx-auto mb-4" />
+                <h3 className="font-semibold text-lg mb-2 text-black">Build Web3 Wealth</h3>
+                <p className="text-sm text-gray-600">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
               </div>
               
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-accent/30 to-accent/10 backdrop-blur-sm border border-accent/30 hover-elevate transition-all">
-                <Crown className="w-10 h-10 text-yellow-400 mx-auto mb-4 drop-shadow-md" />
-                <h3 className="font-bold text-lg mb-2 text-white drop-shadow-md">Own Your Authority</h3>
-                <p className="text-sm text-white/85 drop-shadow-sm">Build your personal brand, establish thought leadership, and charge premium prices</p>
+              <div className="p-8 border border-gray-200 bg-white hover:shadow-lg transition-shadow">
+                <Crown className="w-10 h-10 text-purple-600 mx-auto mb-4" />
+                <h3 className="font-semibold text-lg mb-2 text-black">Own Your Authority</h3>
+                <p className="text-sm text-gray-600">Build your personal brand, establish thought leadership, and charge premium prices</p>
               </div>
             </div>
           </motion.div>
@@ -240,20 +208,8 @@ export default function LandingPage() {
 
       {/* NINE LEARNING SPACES - Editorial Grid */}
       <div 
-        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16"
-        style={{
-          backgroundImage: `url(${learningSpacesBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-        }}
+        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16 bg-white"
       >
-        {/* Enhanced dark overlay for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
-        {/* Premium accent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
-        {/* Strong radial light accent */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-[1400px] mx-auto">
           {/* Section Header - Magazine Style */}
@@ -412,20 +368,8 @@ export default function LandingPage() {
 
       {/* MEMBERSHIP TIERS - Clean Modern Layout */}
       <div 
-        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16"
-        style={{
-          backgroundImage: `url(${pricingBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-        }}
+        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16 bg-white"
       >
-        {/* Enhanced dark overlay for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
-        {/* Premium accent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
-        {/* Strong radial light accent */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-6xl mx-auto">
           <motion.div
@@ -506,20 +450,8 @@ export default function LandingPage() {
 
       {/* MEET NADIA - Editorial Feature Story */}
       <div 
-        className="relative py-40 px-6 lg:px-16 overflow-hidden"
-        style={{
-          backgroundImage: `url(${nadiaBackground})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
+        className="relative py-40 px-6 lg:px-16 overflow-hidden bg-gray-50"
       >
-        {/* Enhanced dark overlay for text legibility */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/45 via-[hsl(280 72% 48%)]/35 to-black/45" />
-        {/* Premium accent gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
-        {/* Strong radial light accent */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[hsl(280 72% 48%)]/30 via-transparent to-transparent opacity-50" />
         
         <div className="relative max-w-7xl mx-auto">
           {/* Section Header */}
