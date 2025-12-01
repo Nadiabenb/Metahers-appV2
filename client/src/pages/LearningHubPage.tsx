@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
-import { BookOpen, Calendar, Users, MessageCircle, CheckCircle2, Lock, Clock, Sparkles, ArrowRight, Heart, Video, Star, Rocket, Zap, Trophy, Brain, Send } from "lucide-react";
+import { BookOpen, Calendar, Users, MessageCircle, CheckCircle2, Lock, Clock, Sparkles, ArrowRight, Heart, Video, Star, Rocket, Zap, Trophy, Brain, Send, ChevronDown, ChevronUp, Lightbulb, Target, Code, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ export default function LearningHubPage() {
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [messageText, setMessageText] = useState("");
+  const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
 
   // Fetch user progress
   const { data: progressData, isLoading: progressLoading } = useQuery({
@@ -136,6 +137,122 @@ export default function LearningHubPage() {
 
   const progressPercentage = 65;
 
+  // Week 1 Lessons - Rich Content with Women Metaphors
+  const week1Lessons = {
+    "AI Photography": {
+      emoji: "📸",
+      tagline: "Turn yourself into a one-woman content machine",
+      description: "Learn to generate professional, on-brand photos without hiring a photographer. Because your solo business doesn't have a budget for photoshoots, but it does have your vision.",
+      objectives: [
+        "Master AI image generation tools (Midjourney, DALL-E, Stable Diffusion)",
+        "Create consistent brand aesthetics across all content",
+        "Generate product photos, portraits, and lifestyle imagery",
+        "Edit and refine AI-generated images for maximum impact"
+      ],
+      keyTopics: [
+        { title: "Prompt Engineering 101", desc: "Write prompts like you're directing a photographer—be specific, be visual, be YOU" },
+        { title: "Brand Consistency", desc: "Make sure your AI photos look like they belong in YOUR brand universe" },
+        { title: "Tool Comparison", desc: "Midjourney vs DALL-E vs Stable Diffusion—which tool is your soulmate?" },
+        { title: "Editing & Enhancement", desc: "Polish those AI babies to perfection in Canva or Photoshop" }
+      ],
+      exercise: {
+        title: "Generate Your Hero Shot",
+        desc: "Create 5 AI-generated lifestyle photos that represent your brand in action. Write down the exact prompts you used—these are gold for repetition.",
+        timeEstimate: "45 minutes"
+      },
+      resources: [
+        { title: "Prompt Template Library", type: "Template" },
+        { title: "AI Image Generation Comparison Chart", type: "Guide" },
+        { title: "10 Brand Photography Aesthetics to Steal", type: "Inspiration" },
+        { title: "Prompt Secrets: How to Get Perfect Results", type: "Video" }
+      ]
+    },
+    "Video Generation": {
+      emoji: "🎬",
+      tagline: "Be on camera without actually being on camera (introvert approved)",
+      description: "Create short-form videos, explainers, and testimonials using AI. No fancy equipment. No awkward takes. Just pure, polished content magic.",
+      objectives: [
+        "Use AI video generation tools (Synthesia, Runway, D-ID)",
+        "Create talking head videos with AI avatars",
+        "Generate text-to-video content for social media",
+        "Edit and enhance video content for different platforms"
+      ],
+      keyTopics: [
+        { title: "AI Avatar Videos", desc: "Let a digital you do the talking while you're actually building your business" },
+        { title: "Text-to-Video Magic", desc: "Turn your best tweets into viral-ready videos in seconds" },
+        { title: "Multi-Platform Optimization", desc: "TikTok, Instagram Reels, YouTube Shorts—different sizes, one toolkit" },
+        { title: "Voice & Narration", desc: "AI voice or your own? Let's figure out what feels authentic for your brand" }
+      ],
+      exercise: {
+        title: "Create Your First AI Video",
+        desc: "Script and generate a 30-60 second explainer video about your top service or product. Post in the community for feedback.",
+        timeEstimate: "60 minutes"
+      },
+      resources: [
+        { title: "Script Template: The Perfect 30-Second Hook", type: "Template" },
+        { title: "Best AI Video Tools Ranked (Performance + Price)", type: "Comparison" },
+        { title: "Video Editing Hacks for Solopreneurs", type: "Tutorial" },
+        { title: "5 Viral Video Formulas (Proven to Work)", type: "Masterclass" }
+      ]
+    },
+    "Copy Writing": {
+      emoji: "✨",
+      tagline: "Write copy that converts while sipping your morning coffee",
+      description: "Master AI-assisted copywriting to create sales pages, emails, social posts, and more. Your words will finally feel as good as they sound in your head.",
+      objectives: [
+        "Use ChatGPT, Claude, and specialized AI writing tools",
+        "Write compelling sales copy and product descriptions",
+        "Create email sequences that actually get opened",
+        "Develop your unique voice while using AI as your co-writer"
+      ],
+      keyTopics: [
+        { title: "Prompting for Copy", desc: "Tell AI your audience, your pain points, your solution—let it amplify your message" },
+        { title: "The Art of Iteration", desc: "First draft is never final. Refine, personalize, inject YOURSELF" },
+        { title: "Sales Page Formulas", desc: "Problem → Agitation → Solution → Objection Handling → CTA (AI knows these)" },
+        { title: "Email Sequences That Convert", desc: "From welcome series to sales sequences—AI can draft them, you make them human" }
+      ],
+      exercise: {
+        title: "Write Your Best Sales Email",
+        desc: "Use AI to draft an email sequence (3 emails) for your core offering. Share with the group and get real feedback.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Swipe File: 50 High-Converting Sales Pages", type: "Swipes" },
+        { title: "Email Sequence Template Library", type: "Template" },
+        { title: "Power Words That Make People Click", type: "Cheat Sheet" },
+        { title: "From Bland to Iconic: Voice & Tone Guide", type: "Workbook" }
+      ]
+    },
+    "Social Media Magic": {
+      emoji: "📱",
+      tagline: "Post like a content guru, schedule like a boss, engage like you have a team",
+      description: "Generate, schedule, and optimize social content for all platforms. Your followers will never know you're doing this in 2 hours a week.",
+      objectives: [
+        "Generate platform-specific content (captions, hashtags, timing)",
+        "Use scheduling tools with AI optimization",
+        "Create content calendars that actually work",
+        "Analyze what's resonating and double down on wins"
+      ],
+      keyTopics: [
+        { title: "Content Batching", desc: "Create a month's worth of content in one sitting. (Yes, really.)" },
+        { title: "Platform-Specific Optimization", desc: "LinkedIn doesn't want what TikTok wants. AI helps you speak each platform's language" },
+        { title: "Caption Writing", desc: "Your hook, your story, your CTA—AI drafts, you make it legendary" },
+        { title: "Engagement & Community", desc: "Build your 1000 true fans with strategic engagement (spoiler: AI helps)" }
+      ],
+      exercise: {
+        title: "Build Your 4-Week Content Calendar",
+        desc: "Use AI to generate content for 4 weeks across 2-3 platforms. Batch record videos, write captions, schedule everything. Welcome to freedom.",
+        timeEstimate: "120 minutes"
+      },
+      resources: [
+        { title: "Content Calendar Template (with AI prompts)", type: "Template" },
+        { title: "Hashtag Strategy for Each Platform", type: "Guide" },
+        { title: "Caption Formula Cheat Sheet", type: "Cheat Sheet" },
+        { title: "Best Scheduling Tools (Free + Paid Comparison)", type: "Resource" }
+      ]
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <SEO 
@@ -217,11 +334,17 @@ export default function LearningHubPage() {
                   return (
                     <Card
                       key={module.week}
+                      onClick={() => {
+                        if (module.status !== "locked" && module.week === 1) {
+                          setExpandedLesson(expandedLesson ? null : module.lessons[0]);
+                        }
+                      }}
                       className={`border-2 p-6 transition-all cursor-pointer ${
                         module.status === "locked"
                           ? "border-gray-200 opacity-60"
                           : "border-purple-200 hover:border-purple-400 hover:shadow-lg"
                       }`}
+                      data-testid={`card-module-week-${module.week}`}
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
@@ -284,6 +407,130 @@ export default function LearningHubPage() {
                 })}
               </div>
             </div>
+
+            {/* Expanded Lesson View - Week 1 Rich Content */}
+            {expandedLesson && week1Lessons[expandedLesson as keyof typeof week1Lessons] && (
+              <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200">
+                {(() => {
+                  const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons];
+                  return (
+                    <div>
+                      {/* Header */}
+                      <div className="flex items-start justify-between mb-6">
+                        <div className="flex-1">
+                          <div className="text-5xl mb-3">{lesson.emoji}</div>
+                          <h3 className="text-3xl font-bold text-gray-900 mb-2">{expandedLesson}</h3>
+                          <p className="text-lg text-purple-600 font-semibold italic mb-4">{lesson.tagline}</p>
+                          <p className="text-gray-700 leading-relaxed text-lg">{lesson.description}</p>
+                        </div>
+                        <button 
+                          onClick={() => setExpandedLesson(null)}
+                          className="flex-shrink-0 ml-4"
+                          data-testid="button-close-lesson"
+                        >
+                          <ChevronUp className="w-8 h-8 text-purple-600 hover:text-purple-800" />
+                        </button>
+                      </div>
+
+                      {/* Learning Objectives */}
+                      <div className="mb-8">
+                        <h4 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                          <Target className="w-6 h-6 text-purple-600" />
+                          What You'll Learn
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {lesson.objectives.map((obj, idx) => (
+                            <div key={idx} className="flex gap-3 bg-white p-4 rounded-lg border-2 border-purple-100">
+                              <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                              <span className="text-gray-700">{obj}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Key Topics */}
+                      <div className="mb-8">
+                        <h4 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                          <Lightbulb className="w-6 h-6 text-orange-600" />
+                          Key Concepts
+                        </h4>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                          {lesson.keyTopics.map((topic, idx) => (
+                            <div key={idx} className="bg-white p-5 rounded-lg border-l-4 border-pink-500">
+                              <h5 className="font-bold text-gray-900 mb-2">{topic.title}</h5>
+                              <p className="text-gray-600 text-sm italic">{topic.desc}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Interactive Exercise */}
+                      <div className="mb-8 bg-white rounded-xl p-6 border-2 border-purple-300">
+                        <h4 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                          <Zap className="w-6 h-6 text-yellow-500" />
+                          Your Challenge
+                        </h4>
+                        <div className="bg-purple-50 rounded-lg p-5 mb-4">
+                          <p className="text-lg font-semibold text-gray-900 mb-2">{lesson.exercise.title}</p>
+                          <p className="text-gray-700 mb-3">{lesson.exercise.desc}</p>
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Clock className="w-4 h-4" />
+                            <span>Time to complete: {lesson.exercise.timeEstimate}</span>
+                          </div>
+                        </div>
+                        <Button className="bg-purple-600 text-white hover:bg-purple-700 w-full" data-testid={`button-start-exercise-${expandedLesson}`}>
+                          Start This Challenge
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
+
+                      {/* Resources */}
+                      <div>
+                        <h4 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                          <Award className="w-6 h-6 text-pink-600" />
+                          Resources & Templates
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          {lesson.resources.map((resource, idx) => (
+                            <button
+                              key={idx}
+                              className="text-left bg-white p-4 rounded-lg border-2 border-gray-200 hover:border-purple-400 hover:shadow-md transition-all"
+                              data-testid={`button-resource-${resource.title.toLowerCase().replace(/\s+/g, '-')}`}
+                            >
+                              <div className="flex items-start justify-between">
+                                <div>
+                                  <p className="font-semibold text-gray-900">{resource.title}</p>
+                                  <p className="text-xs text-purple-600 font-medium mt-1">{resource.type}</p>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-purple-600 flex-shrink-0 mt-1" />
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Lesson Navigation */}
+                      <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t-2 border-gray-200">
+                        {modules[0].lessons.map((lessonTitle, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setExpandedLesson(lessonTitle)}
+                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                              expandedLesson === lessonTitle
+                                ? "bg-purple-600 text-white"
+                                : "bg-white text-purple-600 border-2 border-purple-200 hover:border-purple-400"
+                            }`}
+                            data-testid={`button-lesson-nav-${lessonTitle.toLowerCase().replace(/\s+/g, '-')}`}
+                          >
+                            {lessonTitle}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
 
             {/* Community Activity & Ask Nadia */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
