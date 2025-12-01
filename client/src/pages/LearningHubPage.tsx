@@ -80,9 +80,9 @@ export default function LearningHubPage() {
       week: 2,
       title: "Brand Identity & Design",
       description: "Build your unique AI-powered personal brand",
-      status: "locked",
+      status: "active",
       progress: 0,
-      lessons: ["Logo Design", "Color Psychology", "Visual Identity", "Brand Voice"],
+      lessons: ["Logo Design", "Color Psychology", "Typography", "Brand Kit Assembly"],
       icon: Star,
       color: "from-pink-500 to-orange-500",
       nextSession: "Dec 6, 2024 - 2:00 PM PST",
@@ -137,7 +137,7 @@ export default function LearningHubPage() {
 
   const progressPercentage = 65;
 
-  // Week 1 Lessons - Rich Content with Women Metaphors
+  // Week 1 & 2 Lessons - Rich Content with Women Metaphors
   const week1Lessons = {
     "AI Photography": {
       emoji: "📸",
@@ -253,6 +253,126 @@ export default function LearningHubPage() {
     }
   };
 
+  // Week 2 Lessons - Brand Identity & Design
+  const week2Lessons = {
+    "Logo Design": {
+      emoji: "🎨",
+      tagline: "Create Professional Logos (Without Hiring a Designer)",
+      description: "Master AI-powered logo creation using Looka, ChatGPT, and Midjourney. Design multiple professional logo concepts and convert them to scalable vector formats. Your brand identity starts here.",
+      objectives: [
+        "Understand the 5 types of logos and when to use each",
+        "Use Looka.com for quick, professional logo generation",
+        "Create custom logos with ChatGPT + DALL-E 3 prompts",
+        "Convert logos to vector format (SVG) for any size",
+        "Design 3 distinct logo variations (conservative, bold, personal)"
+      ],
+      keyTopics: [
+        { title: "Logo Types & Strategy", desc: "Wordmark, lettermark, icon, combination, emblem—choose the right type for your brand story" },
+        { title: "AI Logo Tools", desc: "Looka (beginner-friendly), ChatGPT + DALL-E (custom), Midjourney (artistic), Vectorizer.AI (conversion)" },
+        { title: "Logo Refinement", desc: "Adjust colors, fonts, placement, and scale. Create horizontal, vertical, and icon-only versions" },
+        { title: "Vector Conversion", desc: "Upload to Vectorizer.AI, download as SVG, test at all sizes—from favicon to billboards" }
+      ],
+      exercise: {
+        title: "Design 3 Logo Concepts",
+        desc: "Create three completely different logos using your preferred tool. Share each with #Week2Logo and get community feedback before choosing your final design.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Logo Brief Template (Fill-in-the-Blank)", type: "Template" },
+        { title: "Looka Step-by-Step Guide", type: "Tutorial" },
+        { title: "ChatGPT Logo Prompt Formulas", type: "Swipes" },
+        { title: "Midjourney Logo Prompts (Advanced)", type: "Guide" }
+      ]
+    },
+    "Color Psychology": {
+      emoji: "🎭",
+      tagline: "Choose Colors That Attract Your Dream Clients",
+      description: "Master color psychology to select the perfect brand palette. Learn why colors matter, test for accessibility, and create a cohesive color system that represents your brand personality.",
+      objectives: [
+        "Understand color psychology and emotional associations",
+        "Apply the 60-30-10 color rule for brand harmony",
+        "Use Coolors.co and Adobe Color for palette generation",
+        "Test color combinations for WCAG accessibility",
+        "Create a complete color palette guide with hex codes"
+      ],
+      keyTopics: [
+        { title: "Color Psychology Basics", desc: "Red (passion), Blue (trust), Purple (luxury), Green (growth), Pink (feminine), Yellow (optimism)—each color tells a story" },
+        { title: "The 60-30-10 Rule", desc: "60% primary, 30% secondary, 10% accent. Add neutrals (white, black, grays) for balance and readability" },
+        { title: "AI Palette Tools", desc: "ChatGPT for psychology recommendations, Coolors.co for generation, Adobe Color for harmony testing" },
+        { title: "Accessibility Testing", desc: "Use WebAIM contrast checker. Ensure 4.5:1 ratio minimum for text on backgrounds (WCAG AA compliance)" }
+      ],
+      exercise: {
+        title: "Create Your Brand Color Palette",
+        desc: "Define 5 adjectives for your brand, choose primary/secondary/accent colors with psychology reasoning, create 8-10 total color variations, test contrast, share with #Week2Colors.",
+        timeEstimate: "60 minutes"
+      },
+      resources: [
+        { title: "Color Psychology Chart", type: "Guide" },
+        { title: "Coolors.co Tutorial", type: "Tutorial" },
+        { title: "Adobe Color Harmony Guide", type: "Guide" },
+        { title: "Accessible Color Palette Generator", type: "Tool" }
+      ]
+    },
+    "Typography": {
+      emoji: "🔤",
+      tagline: "Choose Fonts That Speak Your Brand Language",
+      description: "Master font psychology and pairing. Select headline and body fonts that reflect your brand personality and ensure perfect readability across all platforms.",
+      objectives: [
+        "Understand font categories (serif, sans-serif, script, display, monospace)",
+        "Learn proven font pairing formulas that work",
+        "Find free commercial fonts on Google Fonts and Font Squirrel",
+        "Use ChatGPT to recommend fonts for your brand",
+        "Create a complete typography system with sizing and spacing"
+      ],
+      keyTopics: [
+        { title: "Font Psychology", desc: "Serif (trustworthy), Sans-serif (modern), Script (elegant), Display (bold), Monospace (technical)—match fonts to your brand personality" },
+        { title: "Font Pairing Rules", desc: "Contrast styles (serif + sans-serif), limit to 2-3 fonts, use one font family with different weights" },
+        { title: "Perfect Pairings", desc: "Playfair + Lato (elegant), Montserrat + Open Sans (modern), Bebas + Roboto (bold), Space Grotesk + Inter (tech)" },
+        { title: "Typography System", desc: "Define H1-H3 sizes (48-72px), body text (16-18px), line height (1.5-1.7), letter spacing rules" }
+      ],
+      exercise: {
+        title: "Design Your Typography System",
+        desc: "Choose 2 Google Fonts, create sample headlines and body copy, define sizing hierarchy (H1/H2/H3/body), test readability at different sizes, share with #Week2Typography.",
+        timeEstimate: "45 minutes"
+      },
+      resources: [
+        { title: "Font Pairing Combinations (Tested)", type: "Guide" },
+        { title: "Google Fonts Best Fonts for Brands", type: "Curated List" },
+        { title: "Typography Scale Calculator", type: "Tool" },
+        { title: "Font Psychology Deep Dive", type: "Guide" }
+      ]
+    },
+    "Brand Kit Assembly": {
+      emoji: "✨",
+      tagline: "Create Your Complete Brand Identity Package",
+      description: "Bring it all together! Assemble your logo, colors, fonts, and messaging into a professional brand guidelines document and create reusable branded templates.",
+      objectives: [
+        "Create a complete logo package (6+ versions)",
+        "Assemble your color palette guide with hex codes",
+        "Document your typography system",
+        "Write brand voice and messaging guidelines",
+        "Design 5+ branded templates ready to use"
+      ],
+      keyTopics: [
+        { title: "Logo Package Requirements", desc: "Full color, black, white, transparent, favicon, social profile, horizontal + vertical layouts" },
+        { title: "Brand Guidelines Document", desc: "8-page PDF: logo usage, colors, typography, photography style, brand voice, applications, do's/don'ts" },
+        { title: "Branded Templates", desc: "Instagram post/story, LinkedIn, email header, presentation slides, one-pager, Zoom background—all on-brand" },
+        { title: "Consistency Checklist", desc: "Every piece uses approved colors, fonts, includes logo (when appropriate), matches personality, follows spacing guidelines" }
+      ],
+      exercise: {
+        title: "Build Your Complete Brand Kit",
+        desc: "Create: logo package (all versions), color guide, typography guide, 8-page brand guidelines PDF, 5 branded templates. Use Canva for documents and templates.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Brand Guidelines Template (8-Page)", type: "Template" },
+        { title: "Canva Brand Kit Setup Guide", type: "Tutorial" },
+        { title: "Brand Consistency Checklist", type: "Checklist" },
+        { title: "Instagram Template Bundle", type: "Templates" }
+      ]
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <SEO 
@@ -331,7 +451,7 @@ export default function LearningHubPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modules.map((module) => {
                   const Icon = module.icon;
-                  const isClickable = module.status !== "locked" && module.week === 1;
+                  const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2);
                   return (
                     <button
                       key={module.week}
@@ -417,11 +537,11 @@ export default function LearningHubPage() {
               </div>
             </div>
 
-            {/* Expanded Lesson View - Week 1 Rich Content */}
-            {expandedLesson && week1Lessons[expandedLesson as keyof typeof week1Lessons] && (
+            {/* Expanded Lesson View - Week 1 & 2 Rich Content */}
+            {expandedLesson && (week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons]) && (
               <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200 mt-8" data-lesson-expanded>
                 {(() => {
-                  const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons];
+                  const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons];
                   return (
                     <div>
                       {/* Header */}
@@ -520,20 +640,23 @@ export default function LearningHubPage() {
 
                       {/* Lesson Navigation */}
                       <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t-2 border-gray-200">
-                        {modules[0].lessons.map((lessonTitle, idx) => (
-                          <button
-                            key={idx}
-                            onClick={() => setExpandedLesson(lessonTitle)}
-                            className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                              expandedLesson === lessonTitle
-                                ? "bg-purple-600 text-white"
-                                : "bg-white text-purple-600 border-2 border-purple-200 hover:border-purple-400"
-                            }`}
-                            data-testid={`button-lesson-nav-${lessonTitle.toLowerCase().replace(/\s+/g, '-')}`}
-                          >
-                            {lessonTitle}
-                          </button>
-                        ))}
+                        {(() => {
+                          const currentModule = modules.find(m => (m.week === 1 && week1Lessons[expandedLesson as keyof typeof week1Lessons]) || (m.week === 2 && week2Lessons[expandedLesson as keyof typeof week2Lessons]));
+                          return (currentModule?.lessons || []).map((lessonTitle, idx) => (
+                            <button
+                              key={idx}
+                              onClick={() => setExpandedLesson(lessonTitle)}
+                              className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                                expandedLesson === lessonTitle
+                                  ? "bg-purple-600 text-white"
+                                  : "bg-white text-purple-600 border-2 border-purple-200 hover:border-purple-400"
+                              }`}
+                              data-testid={`button-lesson-nav-${lessonTitle.toLowerCase().replace(/\s+/g, '-')}`}
+                            >
+                              {lessonTitle}
+                            </button>
+                          ));
+                        })()}
                       </div>
                     </div>
                   );
