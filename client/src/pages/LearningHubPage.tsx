@@ -798,67 +798,67 @@ export default function LearningHubPage() {
               </div>
             </div>
 
-            {/* Curriculum Flip Cards */}
+            {/* Curriculum Week Details - Mobile Friendly */}
             {flippedWeek && (
-              <div className="mb-8 h-96">
-                <div className="perspective h-full">
-                  <div className={`flip-card h-full ${flippedWeek ? 'flipped' : ''}`} style={{ transformStyle: 'preserve-3d' as any }}>
-                    {/* Front of card - Week Title */}
-                    <div className="flip-card-front" style={{ backfaceVisibility: 'hidden' } as any}>
-                      <div className="bg-white rounded-2xl p-8 border-2 border-purple-200 h-full flex flex-col justify-between shadow-lg">
-                        <div>
-                          <h3 className="text-3xl font-bold text-gray-900 mb-4">Week {flippedWeek}</h3>
-                          <p className="text-2xl text-purple-600 font-semibold mb-8">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].title}</p>
-                          <div className="space-y-3">
-                            <div className="flex items-center gap-3">
-                              <Clock className="w-5 h-5 text-purple-600" />
-                              <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].duration}</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <Calendar className="w-5 h-5 text-purple-600" />
-                              <span className="text-gray-700">Live Session: {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].liveSession}</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <BookOpen className="w-5 h-5 text-purple-600" />
-                              <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].modules} Modules</span>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-center gap-2 text-purple-600 font-semibold">
-                          <span>Click to see details</span>
-                          <ChevronDown className="w-4 h-4 animate-bounce" />
-                        </div>
+              <div className="mb-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-6 md:p-8 border-2 border-purple-200 shadow-lg">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900">Week {flippedWeek} Details</h3>
+                  <button 
+                    onClick={() => setFlippedWeek(null)} 
+                    className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+                    data-testid="button-close-week-details"
+                  >
+                    <ChevronUp className="w-6 h-6" />
+                  </button>
+                </div>
+                
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-xl md:text-2xl text-purple-600 font-semibold mb-4">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].title}</p>
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                        <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].duration}</span>
                       </div>
-                    </div>
-
-                    {/* Back of card - Detailed Content */}
-                    <div className="flip-card-back" style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' } as any}>
-                      <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200 h-full overflow-y-auto shadow-lg">
-                        <div className="mb-6">
-                          <h4 className="text-xl font-bold text-gray-900 mb-3">What You'll Master</h4>
-                          <ul className="space-y-2">
-                            {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].keyPoints.map((point, idx) => (
-                              <li key={idx} className="flex items-start gap-3">
-                                <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                                <span className="text-gray-700">{point}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div className="mb-6">
-                          <h4 className="text-lg font-bold text-gray-900 mb-3">Your Deliverables</h4>
-                          <div className="flex flex-wrap gap-2">
-                            {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].deliverables.map((item, idx) => (
-                              <Badge key={idx} variant="secondary">{item}</Badge>
-                            ))}
-                          </div>
-                        </div>
-                        <button onClick={() => setFlippedWeek(null)} className="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
-                          Back
-                        </button>
+                      <div className="flex items-center gap-3">
+                        <Calendar className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                        <span className="text-gray-700">Live Session: {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].liveSession}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <BookOpen className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                        <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].modules} Modules</span>
                       </div>
                     </div>
                   </div>
+
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900 mb-3">What You'll Master</h4>
+                    <ul className="space-y-2">
+                      {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].keyPoints.map((point, idx) => (
+                        <li key={idx} className="flex items-start gap-3">
+                          <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700 text-sm md:text-base">{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900 mb-3">Your Deliverables</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].deliverables.map((item, idx) => (
+                        <Badge key={idx} variant="secondary" className="text-xs md:text-sm">{item}</Badge>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button 
+                    onClick={() => setFlippedWeek(null)} 
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors mt-4"
+                    data-testid="button-close-week-details-action"
+                  >
+                    Close Details
+                  </button>
                 </div>
               </div>
             )}
