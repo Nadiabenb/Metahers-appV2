@@ -176,6 +176,9 @@ function Router() {
           return tier ? <CheckoutPage tierName={tier.name} price={tier.price} priceId={props.priceId} /> : <NotFound />;
         }} />
 
+        {/* AI Mastery Program Learning Hub - Public */}
+        <Route path="/learning-hub" component={LearningHubPage} />
+
         {/* Circle - Networking (public accessible) */}
         <Route path="/circle" component={CircleDiscoveryPage} />
 
@@ -205,9 +208,6 @@ function Router() {
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>
             <Route path="/workspace">{() => <Redirect to="/dashboard" />}</Route>
             <Route path="/progress">{() => <Redirect to="/dashboard" />}</Route>
-
-            {/* AI Mastery Program Learning Hub */}
-            <Route path="/learning-hub" component={LearningHubPage} />
 
             {/* Authenticated routes */}
             <Route path="/rituals/:slug" component={RitualDetailPage} />
