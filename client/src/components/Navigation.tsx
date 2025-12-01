@@ -88,7 +88,14 @@ export function Navigation() {
 
     return (
       <motion.button
-        onClick={() => handleNavClick(item.path)}
+        onClick={() => {
+          // Check if Pro feature and user is not Pro
+          if ("pro" in item && item.pro && (!isAuthenticated || !user?.isPro)) {
+            handleNavClick("/upgrade");
+          } else {
+            handleNavClick(item.path);
+          }
+        }}
         className={`w-full p-3 text-left rounded-md transition-all ${
           isActive 
             ? 'bg-purple-50 border border-purple-200' 
@@ -298,7 +305,14 @@ export function Navigation() {
                           {config.items.map((item) => (
                             <button
                               key={item.path}
-                              onClick={() => handleNavClick(item.path)}
+                              onClick={() => {
+                                // Check if Pro feature and user is not Pro
+                                if ("pro" in item && item.pro && (!isAuthenticated || !user?.isPro)) {
+                                  handleNavClick("/upgrade");
+                                } else {
+                                  handleNavClick(item.path);
+                                }
+                              }}
                               className="w-full text-left p-2 rounded hover:bg-gray-100 transition-colors"
                               data-testid={`mobile-nav-${item.label.toLowerCase().replace(' ', '-')}`}
                             >
