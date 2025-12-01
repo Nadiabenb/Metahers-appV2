@@ -11,6 +11,7 @@ export default function AIMasteryPage() {
   const [selectedOption, setSelectedOption] = useState<"one-time" | "payment-plan">(
     "one-time"
   );
+  const [flippedWeek, setFlippedWeek] = useState<number | null>(null);
 
   const benefits = [
     "AI-Generated Content Mastery",
@@ -157,7 +158,7 @@ export default function AIMasteryPage() {
             Your 4-Week Learning Path
           </h2>
           <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-            Each week builds on the last, transforming you from AI-curious to AI-confident
+            Click any card to flip and see the full curriculum details
           </p>
           <div className="grid md:grid-cols-4 gap-6 mb-12">
             {[
@@ -226,48 +227,89 @@ export default function AIMasteryPage() {
                 deliverables: ["Live chatbot", "3+ automations", "Email sequence", "Social calendar", "Analytics dashboard"]
               }
             ].map((module, idx) => (
-              <Link key={idx} href={`/learning-hub`}>
-                <Card className="p-6 border-purple-200 hover:shadow-lg transition-all cursor-pointer h-full flex flex-col">
-                  <Badge className="bg-purple-600 mb-3 w-fit">Week {module.week}</Badge>
-                  <h3 className="text-lg font-bold text-black mb-2">{module.title}</h3>
-                  
-                  <div className="space-y-3 mb-4 flex-1">
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Clock className="w-4 h-4 text-purple-600" />
-                      <span>{module.duration}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-gray-600">
-                      <Users className="w-4 h-4 text-purple-600" />
-                      <span>Live: {module.liveSession}</span>
-                    </div>
-                    
-                    <div className="pt-2 border-t border-gray-200">
-                      <p className="text-xs font-semibold text-gray-700 mb-2">Key Highlights:</p>
-                      <ul className="space-y-1">
-                        {module.keyPoints.slice(0, 2).map((point, pidx) => (
-                          <li key={pidx} className="text-xs text-gray-700 flex items-start gap-2">
-                            <span className="text-purple-600 flex-shrink-0">•</span>
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="pt-2 border-t border-gray-200">
-                      <p className="text-xs font-semibold text-gray-700 mb-2">Tools:</p>
-                      <div className="flex flex-wrap gap-1">
-                        {module.tools.slice(0, 3).map((tool, tidx) => (
-                          <Badge key={tidx} variant="outline" className="text-xs">{tool}</Badge>
-                        ))}
-                        {module.tools.length > 3 && <Badge variant="outline" className="text-xs">+{module.tools.length - 3}</Badge>}
+              <div
+                key={idx}
+                className="h-96 cursor-pointer"
+                onClick={() => setFlippedWeek(flippedWeek === module.week ? null : module.week)}
+              >
+                <div className={`flip-card ${flippedWeek === module.week ? 'flipped' : ''}`} style={{ width: '100%', height: '100%' }}>
+                  {/* Front of card */}
+                  <div className="flip-card-front">
+                    <Card className="p-6 border-purple-200 h-full flex flex-col justify-between bg-white">
+                      <div>
+                        <Badge className="bg-purple-600 mb-3 w-fit">Week {module.week}</Badge>
+                        <h3 className="text-lg font-bold text-black mb-4">{module.title}</h3>
+                        
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Clock className="w-4 h-4 text-purple-600" />
+                            <span>{module.duration}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <Users className="w-4 h-4 text-purple-600" />
+                            <span>{module.liveSession}</span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                      
+                      <p className="text-purple-600 text-sm font-semibold">Click to reveal curriculum →</p>
+                    </Card>
                   </div>
-                  
-                  <p className="text-purple-600 text-sm font-semibold mt-4">Read full curriculum →</p>
-                </Card>
-              </Link>
+
+                  {/* Back of card */}
+                  <div className="flip-card-back">
+                    <Card className="p-5 border-purple-200 h-full flex flex-col bg-white overflow-y-auto">
+                      <div className="flex-1">
+                        <h3 className="text-sm font-bold text-black mb-3">{module.title}</h3>
+                        
+                        <div className="mb-3 pb-3 border-b border-gray-200">
+                          <p className="text-xs font-semibold text-gray-700 mb-1">Key Skills:</p>
+                          <ul className="space-y-1">
+                            {module.keyPoints.slice(0, 2).map((point, pidx) => (
+                              <li key={pidx} className="text-xs text-gray-700 flex items-start gap-1">
+                                <span className="text-purple-600 flex-shrink-0">•</span>
+                                <span>{point}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className="mb-3 pb-3 border-b border-gray-200">
+                          <p className="text-xs font-semibold text-gray-700 mb-1">Tools:</p>
+                          <div className="flex flex-wrap gap-1">
+                            {module.tools.slice(0, 2).map((tool, tidx) => (
+                              <Badge key={tidx} variant="outline" className="text-xs">{tool}</Badge>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-xs font-semibold text-gray-700 mb-1">Deliverables:</p>
+                          <ul className="space-y-1">
+                            {module.deliverables.slice(0, 2).map((item, didx) => (
+                              <li key={didx} className="text-xs text-gray-700 flex items-start gap-1">
+                                <span className="text-purple-600 flex-shrink-0">✓</span>
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                </div>
+              </div>
             ))}
+          </div>
+
+          {/* CTA for Learning Hub */}
+          <div className="text-center mt-12">
+            <Link href="/learning-hub">
+              <Button className="bg-black hover:bg-gray-900 text-white text-lg px-8 py-6 rounded-md font-semibold flex items-center justify-center gap-2 mx-auto">
+                View Full Learning Hub
+                <ArrowRight className="w-5 h-5" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
