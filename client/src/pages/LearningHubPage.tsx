@@ -65,6 +65,12 @@ export default function LearningHubPage() {
     return null;
   }
 
+  // Redirect if not pro
+  if (!user?.isPro) {
+    setLocation("/upgrade");
+    return null;
+  }
+
   const curriculumDetails = {
     1: {
       title: "AI Content Creation",

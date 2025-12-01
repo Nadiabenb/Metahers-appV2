@@ -32,7 +32,7 @@ export function Navigation() {
     "AI & Tools": {
       icon: TrendingUp,
       items: [
-        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "AI Mastery curriculum" },
+        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "AI Mastery curriculum", pro: true },
         { path: "/playground", label: "AI Playground", icon: Sparkles, desc: "Explore AI" },
         { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "Master AI tools" },
         { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, desc: "Transform yourself", pro: true },
