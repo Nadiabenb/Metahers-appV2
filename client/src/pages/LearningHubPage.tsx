@@ -11,7 +11,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 
 export default function LearningHubPage() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [messageText, setMessageText] = useState("");
@@ -58,6 +58,18 @@ export default function LearningHubPage() {
       queryClient.invalidateQueries({ queryKey: ['/api/learning-hub/messages'] });
     }
   });
+
+  // Wait for user data to load
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-foreground/70">Loading Learning Hub...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Redirect if not pro (whether authenticated or not)
   if (!isAuthenticated || !user?.isPro) {
