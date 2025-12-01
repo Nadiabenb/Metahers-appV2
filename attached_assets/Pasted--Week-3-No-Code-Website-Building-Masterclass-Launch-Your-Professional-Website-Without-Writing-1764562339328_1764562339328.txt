@@ -1,0 +1,1312 @@
+# Week 3: No-Code Website Building Masterclass
+
+## Launch Your Professional Website (Without Writing a Single Line of Code)
+
+-----
+
+## 🎯 Week Overview
+
+**Welcome to Week 3, Queen!** You’ve created stunning content and built a powerful brand. Now it’s time to give your business a HOME on the web. This week, you’re launching a professional website that showcases your expertise and converts visitors into clients.
+
+**What You’ll Master:**
+
+- Choosing the right website platform for your needs
+- Designing a stunning homepage that converts
+- Creating essential pages (About, Services, Contact)
+- SEO basics to get found on Google
+- Launching your website to the world
+
+**Time Commitment:** 5-7 hours total (self-paced)
+**Live Session:** Day 3 at 2 PM PST - Website launch party & troubleshooting!
+
+-----
+
+## 📚 Lesson 1: Website Platform Selection & Setup
+
+### Choose Your Perfect No-Code Website Builder
+
+**Duration:** 60 minutes
+
+#### What You’ll Learn:
+
+- Comparing top no-code platforms
+- Setting up your chosen platform
+- Understanding domains and hosting
+- Planning your website structure
+
+#### The Best No-Code Website Builders
+
+**1. Wix (Best for Beginners)**
+
+- **Pros:** Drag-and-drop, AI design assistant, beautiful templates
+- **Cons:** Less flexibility once published, Wix branding on free plan
+- **Best For:** Small businesses, portfolios, simple stores
+- **Price:** Free (with ads) or $16-$45/month
+- **AI Feature:** Wix ADI creates entire site from your answers
+
+**2. Squarespace (Best for Creatives)**
+
+- **Pros:** Stunning templates, integrated e-commerce, mobile-optimized
+- **Cons:** Learning curve, limited customization
+- **Best For:** Photographers, designers, coaches, boutiques
+- **Price:** $16-$65/month
+- **AI Feature:** Design Intelligence suggests layouts
+
+**3. Framer (Best for Modern Design)**
+
+- **Pros:** Cutting-edge designs, animations, fast loading
+- **Cons:** Steeper learning curve, newer platform
+- **Best For:** Tech startups, agencies, modern brands
+- **Price:** Free or $5-$30/month
+- **AI Feature:** AI copywriting and layout suggestions
+
+**4. Webflow (Best for Advanced/Custom)**
+
+- **Pros:** Complete design control, powerful CMS, professional
+- **Cons:** Biggest learning curve, more complex
+- **Best For:** Agencies, developers, complex sites
+- **Price:** $14-$39/month
+- **AI Feature:** AI-powered responsive design
+
+**5. Carrd (Best for Simple One-Pagers)**
+
+- **Pros:** Super simple, extremely affordable, fast
+- **Cons:** Limited to one-page sites on free plan
+- **Best For:** Landing pages, personal sites, link-in-bio
+- **Price:** Free or $19/year (yes, per YEAR!)
+- **AI Feature:** Limited, but templates are optimized
+
+**Nadia’s Recommendations:**
+
+**If you’re building:**
+
+- **Your first website ever:** Wix or Carrd
+- **A creative portfolio:** Squarespace
+- **A modern tech brand:** Framer
+- **Multiple client websites:** Webflow
+- **A quick landing page:** Carrd
+
+#### AI Platform Selection Prompt
+
+```
+Help me choose the best website builder for my needs.
+
+Business Type: [your business]
+Website Purpose: [portfolio/sales/blog/store/etc.]
+Technical Skill Level: [beginner/intermediate/advanced]
+Budget: [your monthly budget]
+Must-Have Features: [booking, e-commerce, blog, etc.]
+Design Style: [modern/classic/minimalist/bold]
+
+Based on this, recommend:
+1. The best platform for my specific needs
+2. Why it's the right choice
+3. What plan/tier I should choose
+4. Potential limitations to be aware of
+5. Alternative options to consider
+
+Be specific and practical in your recommendations.
+```
+
+#### Domain Names & Hosting Basics
+
+**Choosing Your Domain Name:**
+
+**Best Practices:**
+
+- Keep it short (under 15 characters)
+- Easy to spell and say
+- Matches your brand name
+- Use .com if available (or .co, .io for modern tech)
+- Avoid numbers and hyphens
+
+**AI Domain Name Generator Prompt:**
+
+```
+Suggest 10 domain name options for my business.
+
+Business Name: [your business name]
+Industry: [your industry]
+Brand Personality: [adjectives]
+Target Audience: [who you serve]
+Keywords: [relevant keywords]
+
+For each suggestion, provide:
+- The domain name
+- Why it works
+- Availability likelihood
+- Alternative extensions (.com, .co, .io)
+
+Prioritize short, memorable, brandable names.
+```
+
+**Where to Buy Domains:**
+
+- **Namecheap** - Affordable, clean interface ($10-15/year)
+- **Google Domains** - Simple, Google integration ($12/year)
+- **GoDaddy** - Popular but upsell-heavy ($12-20/year)
+- **Porkbun** - Budget-friendly ($8-12/year)
+
+**Note:** Most website builders include free domain for first year!
+
+#### Planning Your Website Structure
+
+**Essential Pages (Minimum):**
+
+1. **Homepage** - Your digital storefront
+1. **About** - Your story and credentials
+1. **Services/Products** - What you offer
+1. **Contact** - How to reach you
+
+**Recommended Additional Pages:**
+
+1. **Portfolio/Work** - Showcase your results
+1. **Testimonials** - Social proof
+1. **Blog** - Demonstrate expertise
+1. **FAQ** - Address common questions
+1. **Resources** - Free value (builds trust)
+
+#### AI Website Structure Prompt
+
+```
+Create a website structure and sitemap for my business.
+
+Business: [your business name]
+Type: [service/product/hybrid]
+Target Audience: [who you serve]
+Main Offerings: [list your services/products]
+Business Goals: [generate leads/sell products/build authority]
+
+Please provide:
+1. Recommended pages (with purpose for each)
+2. Navigation menu structure
+3. Content hierarchy
+4. Conversion points (where CTAs should go)
+5. User journey flow (homepage → conversion)
+
+Make it simple but effective for conversions.
+```
+
+#### Your Platform Setup Assignment:
+
+**Step 1: Choose Your Platform**
+
+- Research based on recommendations above
+- Sign up for free trial or free plan
+- Explore dashboard and features
+
+**Step 2: Secure Your Domain**
+
+- Use AI to generate 10 options
+- Check availability
+- Purchase domain (or use free platform subdomain to start)
+
+**Step 3: Plan Your Structure**
+
+- Use AI prompt to create sitemap
+- List all pages you’ll build
+- Map out navigation menu
+- Sketch basic user journey
+
+**Share your platform choice and domain name in the community with #Week3Setup**
+
+-----
+
+## 📚 Lesson 2: Homepage Design That Converts
+
+### Create a Stunning First Impression
+
+**Duration:** 90 minutes
+
+#### What You’ll Learn:
+
+- The anatomy of a high-converting homepage
+- Above-the-fold optimization
+- Trust-building elements
+- Clear calls-to-action
+
+#### The Homepage Formula
+
+**Section 1: Hero (Above the Fold)**
+What visitors see first - makes or breaks everything!
+
+**Must Include:**
+
+- **Headline:** Clear value proposition (what you do + who you help)
+- **Subheadline:** How you help (the transformation)
+- **Hero Image/Video:** Professional, on-brand visual
+- **Primary CTA:** One clear action (Book Call, Shop Now, Learn More)
+- **Trust Indicators:** Awards, “As Seen On,” client logos
+
+**Hero Section Examples:**
+
+*For a Coach:*
+
+```
+Headline: "Transform Your Life in 90 Days"
+Subheadline: "Join 500+ women who've built successful businesses 
+while maintaining work-life balance"
+CTA: "Book Your Free Strategy Call"
+Visual: Professional photo of you or happy client
+```
+
+*For a Product Business:*
+
+```
+Headline: "Skincare That Actually Works"
+Subheadline: "Clean, science-backed formulas that deliver 
+visible results in 30 days or your money back"
+CTA: "Shop Bestsellers"
+Visual: Product photography with lifestyle context
+```
+
+*For a Service Provider:*
+
+```
+Headline: "Websites That Turn Visitors Into Customers"
+Subheadline: "Custom web design for entrepreneurs who want 
+to stand out and scale without the tech overwhelm"
+CTA: "View Portfolio"
+Visual: Website mockups or dramatic before/after
+```
+
+**AI Hero Section Generator:**
+
+```
+Create a high-converting hero section for my website.
+
+Business: [your business name]
+What I Do: [your service/product]
+Who I Help: [target audience]
+Main Benefit: [primary transformation/result]
+Unique Differentiator: [what makes you different]
+
+Please provide:
+1. A compelling headline (under 10 words)
+2. A subheadline that expands on the promise
+3. Primary CTA button text
+4. Secondary CTA option (if needed)
+5. Trust elements to include
+6. Recommended hero image concept
+
+Make it clear, compelling, and conversion-focused.
+```
+
+-----
+
+**Section 2: Problem/Agitation**
+Connect with pain points - show you understand them!
+
+**Structure:**
+
+- Identify their struggle
+- Agitate the pain (what happens if they don’t solve it)
+- Position yourself as the solution
+
+**Example:**
+
+```
+"Tired of spending hours creating content that gets zero engagement?
+
+You're posting daily, but crickets. Your competitors seem to have it 
+figured out, while you're stuck wondering what you're doing wrong.
+
+The truth? It's not about posting more—it's about posting smarter 
+with AI-powered strategies that actually work."
+```
+
+-----
+
+**Section 3: Solution/Offer**
+Present your solution clearly!
+
+**Include:**
+
+- What you offer
+- How it works (3-5 simple steps)
+- What makes it different
+- The transformation
+
+**Example Format:**
+
+```
+How [Your Solution] Works:
+
+Step 1: [Discovery/Assessment]
+Brief description of first step
+
+Step 2: [Implementation/Action]
+Brief description of second step
+
+Step 3: [Results/Transformation]
+Brief description of outcome
+```
+
+-----
+
+**Section 4: Social Proof**
+Build trust with testimonials and results!
+
+**Types of Proof:**
+
+- **Testimonials:** 3-5 powerful quotes with photos
+- **Case Studies:** Before/after results
+- **Numbers:** “500+ Clients Served” “4.9★ Rating”
+- **Media Mentions:** Logos of where you’ve been featured
+- **Certifications:** Credentials and training
+
+**Testimonial Format:**
+
+```
+"[Specific result or transformation they experienced]"
+
+[Pain point they had before]
+
+[Solution you provided]
+
+[Current state/success]
+
+- Client Name, Title/Business
+  [Photo]
+```
+
+-----
+
+**Section 5: Features/Benefits**
+Highlight what makes you special!
+
+**Use Icons + Short Copy:**
+
+- ✓ Feature → Benefit
+- ✓ Feature → Benefit
+- ✓ Feature → Benefit
+
+**Example:**
+
+```
+✓ AI-Powered Tools → Create content 10x faster
+✓ Live Support → Get answers in under 2 hours
+✓ Lifetime Access → Learn at your own pace
+```
+
+-----
+
+**Section 6: Final CTA**
+Give them one last chance to convert!
+
+**Strong CTA Structure:**
+
+- Restate the main benefit
+- Address final objection
+- Clear action button
+- Risk reversal (guarantee/free trial)
+
+**Example:**
+
+```
+Ready to Transform Your Business with AI?
+
+Join 500+ women who've already made the leap.
+
+[Book Your Free Strategy Call]
+
+30-Day Money-Back Guarantee • No Credit Card Required
+```
+
+-----
+
+**Section 7: Footer**
+Professional closing with navigation!
+
+**Include:**
+
+- Navigation links
+- Contact information
+- Social media icons
+- Legal pages (Privacy, Terms)
+- Newsletter signup
+- Copyright notice
+
+#### Your Homepage Design Assignment:
+
+**Create these elements:**
+
+1. **Hero Section** with headline, subheadline, CTA, image
+1. **Problem Statement** that resonates with your audience
+1. **3-Step Solution Process**
+1. **3 Testimonials** (real or placeholder)
+1. **Features/Benefits Grid** (6-8 items)
+1. **Final CTA Section**
+1. **Complete Footer**
+
+**Use AI to write all copy, then customize with your voice!**
+
+**Share your homepage design in the community with #Week3Homepage**
+
+-----
+
+## 📚 Lesson 3: Essential Pages & Content
+
+### Build Out Your Complete Website
+
+**Duration:** 90 minutes
+
+#### What You’ll Learn:
+
+- Creating an About page that connects
+- Services/Products pages that sell
+- Contact page best practices
+- Portfolio/work showcase
+
+#### About Page: Your Story Sells
+
+**The About Page Formula:**
+
+**Section 1: Opening Hook**
+Start with something unexpected or relatable
+
+**Examples:**
+
+- “I built my first business on a $100 budget and a dream.”
+- “Three years ago, I was exactly where you are now.”
+- “I never planned to become a [your title].”
+
+**Section 2: Your Journey**
+The path that led you here (keep it concise!)
+
+**Structure:**
+
+```
+Before: [Where you started, your struggles]
+↓
+Turning Point: [What changed, aha moment]
+↓
+After: [Your transformation, current state]
+↓
+Now: [Your mission to help others]
+```
+
+**Section 3: Credentials & Proof**
+Why they should trust you
+
+**Include:**
+
+- Years of experience
+- Certifications or training
+- Results you’ve achieved
+- Notable clients or projects
+- Media mentions
+
+**Section 4: Personal Touch**
+Show you’re human!
+
+**Optional Elements:**
+
+- Fun facts about you
+- Personal photos (family, hobbies)
+- Your values or beliefs
+- What you do outside of work
+- Your “why”
+
+**Section 5: Clear Next Step**
+Don’t leave them hanging!
+
+**CTA Examples:**
+
+- “Ready to work together? [Schedule a Call]”
+- “Want to learn more? [View My Services]”
+- “Let’s connect! [Follow Me on Instagram]”
+
+#### AI About Page Prompt
+
+```
+Write a compelling About page for my website.
+
+My Background: [your journey in 3-5 sentences]
+What I Do Now: [current business]
+Who I Help: [target audience]
+Why I'm Qualified: [credentials, experience, results]
+My Mission: [why you do this work]
+Personal Details: [1-2 interesting facts about you]
+
+Please create:
+1. An opening hook that draws readers in
+2. A brief origin story (200-300 words)
+3. Credentials section with bullet points
+4. Personal touch section
+5. Clear CTA
+
+Make it warm, authentic, and professional. 
+Write in first person with a conversational tone.
+```
+
+-----
+
+#### Services/Products Page: Sell Without Being Salesy
+
+**For Service Providers:**
+
+**Service Page Structure:**
+
+**1. Service Name & Overview**
+
+- Clear title
+- One-sentence description
+- Who it’s for
+
+**2. What’s Included**
+
+- Deliverables (bullet points)
+- Timeline
+- Process overview
+
+**3. Benefits & Outcomes**
+
+- What they’ll achieve
+- How their life/business changes
+- Specific results
+
+**4. Pricing**
+
+- Clear investment (or “Starting at…”)
+- Payment options
+- What’s included vs. add-ons
+
+**5. FAQ**
+
+- Address common concerns
+- Remove objections
+- Build confidence
+
+**6. CTA**
+
+- Book call
+- Request quote
+- Get started
+
+**Example Service Template:**
+
+```
+[Service Name]
+[One-line description of what it is and who it's for]
+
+What's Included:
+✓ [Deliverable 1]
+✓ [Deliverable 2]
+✓ [Deliverable 3]
+✓ [Deliverable 4]
+
+Perfect for you if:
+• [Ideal client characteristic 1]
+• [Ideal client characteristic 2]
+• [Ideal client characteristic 3]
+
+Investment: $[Price] or [Payment Plan]
+
+[Book Your Spot] [Learn More]
+```
+
+-----
+
+**For Product Sellers:**
+
+**Product Page Essentials:**
+
+**1. Product Photos**
+
+- 5-10 high-quality images
+- Different angles
+- Lifestyle/in-use photos
+- Zoom capability
+
+**2. Product Description**
+
+- What it is
+- Who it’s for
+- Key features
+- Benefits/transformation
+
+**3. Specifications**
+
+- Size, weight, dimensions
+- Materials
+- Colors/variants
+- Care instructions
+
+**4. Social Proof**
+
+- Star rating
+- Number of reviews
+- Customer photos
+- Testimonials
+
+**5. Add to Cart**
+
+- Clear pricing
+- Quantity selector
+- Size/variant picker
+- Stock status
+
+**6. Additional Info**
+
+- Shipping details
+- Return policy
+- Guarantees
+- Related products
+
+#### AI Service/Product Description Prompt
+
+```
+Write a compelling [service/product] description.
+
+[Service/Product] Name: [name]
+What It Is: [brief description]
+Who It's For: [target customer]
+Main Benefits: [3-5 key benefits]
+Features/What's Included: [list]
+Price Point: [price or range]
+Unique Selling Point: [what makes it special]
+
+Create:
+1. Attention-grabbing opening paragraph
+2. "What's Included" or "Features" section (bullet points)
+3. Benefits/outcomes section (emotional + practical)
+4. "Perfect for you if..." section (3-5 points)
+5. FAQ (5 common questions)
+6. Strong closing CTA
+
+Make it persuasive but authentic, focusing on transformation.
+```
+
+-----
+
+#### Contact Page: Make It Easy
+
+**Must-Have Elements:**
+
+1. **Contact Form**
+- Name
+- Email
+- Subject/Topic
+- Message
+- Submit button
+1. **Alternative Contact Methods**
+- Email address
+- Phone number (if applicable)
+- Social media links
+- Business address (if applicable)
+1. **Response Time**
+- “I’ll respond within 24 hours”
+- Sets expectations
+1. **Call-to-Action Context**
+- What happens after they submit
+- What to expect next
+
+**Optional But Helpful:**
+
+- Booking calendar integration (Calendly)
+- FAQ section
+- Office hours
+- Map (if physical location)
+
+#### Portfolio/Work Showcase
+
+**Project Showcase Structure:**
+
+**For Each Project:**
+
+**1. Hero Image**
+
+- Eye-catching main visual
+- Before/after (if applicable)
+
+**2. Project Details**
+
+- Client name (if allowed)
+- Industry/niche
+- Project type
+- Timeline
+
+**3. The Challenge**
+
+- What problem needed solving
+- Client’s pain point
+- Goals
+
+**4. The Solution**
+
+- What you did
+- Your approach
+- Tools/methods used
+
+**5. The Results**
+
+- Specific outcomes
+- Metrics/numbers
+- Client testimonial
+
+**6. Visuals**
+
+- 3-5 images showcasing work
+- Process photos
+- Final results
+
+**Portfolio Layout Options:**
+
+- **Grid:** Clean, visual-heavy
+- **Case Studies:** Detailed project pages
+- **Before/After:** Transformation-focused
+- **Carousel:** Space-saving, interactive
+
+#### Your Essential Pages Assignment:
+
+Create these pages:
+
+1. **About Page** (500-800 words + photos)
+1. **Services/Products Page** (one detailed offering)
+1. **Contact Page** (form + contact info)
+1. **Portfolio/Work** (3 examples, even if placeholder)
+
+**Share your favorite page in the community with #Week3Pages**
+
+-----
+
+## 📚 Lesson 4: SEO Basics & Website Launch
+
+### Get Found on Google & Go Live!
+
+**Duration:** 90 minutes
+
+#### What You’ll Learn:
+
+- SEO fundamentals for beginners
+- Optimizing your website content
+- Technical SEO checklist
+- Launch preparation and promotion
+
+#### SEO 101: Getting Found on Google
+
+**What is SEO?**
+Search Engine Optimization = Making your website show up when people search on Google
+
+**The 3 Pillars of SEO:**
+
+**1. On-Page SEO** (What’s on your website)
+
+- Keywords in right places
+- Quality content
+- Good user experience
+
+**2. Technical SEO** (How your site is built)
+
+- Fast loading speed
+- Mobile-friendly
+- Secure (HTTPS)
+- Clean structure
+
+**3. Off-Page SEO** (External signals)
+
+- Backlinks from other sites
+- Social media presence
+- Online mentions
+
+#### Keyword Research for Beginners
+
+**What Are Keywords?**
+Words/phrases people type into Google
+
+**Finding Your Keywords:**
+
+**Step 1: Brain Dump**
+List everything related to your business:
+
+- Services you offer
+- Problems you solve
+- Questions clients ask
+- Industry terms
+
+**Step 2: Use AI for Keyword Ideas**
+
+```
+Generate SEO keyword ideas for my business.
+
+Business: [your business]
+Services/Products: [what you offer]
+Target Audience: [who you serve]
+Location: [if local business]
+
+Please provide:
+1. 10 main keywords (high-level, competitive)
+2. 20 long-tail keywords (specific, easier to rank for)
+3. 10 question-based keywords (what people ask)
+4. Search intent for each (informational/commercial/transactional)
+5. Which keywords to target on which pages
+
+Focus on keywords a new website can realistically rank for.
+```
+
+**Step 3: Check Keywords (Free Tools)**
+
+- **Google Search:** Type keyword, see what autocompletes
+- **People Also Ask:** See related questions
+- **AnswerThePublic.com:** Visual keyword suggestions
+- **Ubersuggest:** Free keyword difficulty checker
+
+**Step 4: Choose Your Target Keywords**
+
+- **Homepage:** 1-2 main keywords
+- **Each Service Page:** 1 specific keyword
+- **Blog Posts:** 1 long-tail keyword each
+
+#### On-Page SEO Optimization
+
+**Where to Put Your Keywords:**
+
+**1. Page Title (Most Important!)**
+
+- Include main keyword near the beginning
+- Keep under 60 characters
+- Make it compelling
+
+**Examples:**
+
+- ❌ “Home | Jane’s Coaching”
+- ✅ “Life Coach for Women Entrepreneurs | Transform Your Business”
+
+**2. Meta Description**
+
+- 150-160 characters
+- Include keyword naturally
+- Compelling call-to-action
+
+**Example:**
+
+```
+"Transform your business with AI-powered strategies. 
+Join 500+ women entrepreneurs who've 10x'd their productivity. 
+Book your free strategy call today."
+```
+
+**3. Headers (H1, H2, H3)**
+
+- **H1:** One per page, includes main keyword
+- **H2:** Section headers, variations of keyword
+- **H3:** Subsections, related terms
+
+**4. URL Structure**
+
+- ❌ `yoursite.com/page1234?id=5`
+- ✅ `yoursite.com/ai-coaching-for-women`
+
+**5. Image Alt Text**
+
+- Describe image
+- Include keyword naturally
+- Good for accessibility too!
+
+**Example:**
+
+```
+Alt text: "Woman entrepreneur using AI tools on laptop for content creation"
+```
+
+**6. Body Content**
+
+- Use keyword naturally 2-3 times
+- Use related terms (synonyms)
+- Write for humans, not robots!
+- Aim for 300+ words per page
+
+#### AI SEO Optimization Prompt
+
+```
+Optimize this webpage content for SEO.
+
+Page: [Homepage/About/Services/etc.]
+Target Keyword: [your main keyword]
+Current Content: [paste your draft content]
+
+Please provide:
+1. Optimized page title (under 60 chars)
+2. Meta description (150-160 chars)
+3. H1 headline
+4. 3-5 H2 subheadlines
+5. Revised content with keyword naturally integrated
+6. 5 related keywords to sprinkle throughout
+7. Suggested URL slug
+
+Make sure it reads naturally and is compelling to humans!
+```
+
+#### Technical SEO Checklist
+
+**Before Launch, Verify:**
+
+**Speed & Performance:**
+
+- [ ] Images compressed (use TinyPNG.com)
+- [ ] Videos embedded (not uploaded directly)
+- [ ] Minimal plugins/widgets
+- [ ] Test speed with PageSpeed Insights
+
+**Mobile Optimization:**
+
+- [ ] Responsive design (looks good on phones)
+- [ ] Text is readable without zooming
+- [ ] Buttons are tappable (not too small)
+- [ ] Test on actual phone
+
+**Security:**
+
+- [ ] SSL certificate installed (HTTPS)
+- [ ] Secure contact forms
+- [ ] Privacy policy page
+- [ ] Cookie consent (if applicable)
+
+**Structure:**
+
+- [ ] Clear navigation menu
+- [ ] Internal links between pages
+- [ ] Sitemap submitted to Google
+- [ ] Google Analytics installed
+
+**Content:**
+
+- [ ] No broken links
+- [ ] All images have alt text
+- [ ] Contact info is accurate
+- [ ] Copyright year is current
+
+#### Setting Up Google Tools
+
+**Google Search Console (Free)**
+Tells you how your site performs in Google
+
+**Setup Steps:**
+
+1. Go to search.google.com/search-console
+1. Add your website
+1. Verify ownership (follow instructions)
+1. Submit your sitemap
+1. Monitor performance weekly
+
+**Google Analytics (Free)**
+Shows who visits your site
+
+**Setup Steps:**
+
+1. Go to analytics.google.com
+1. Create account
+1. Add your website
+1. Get tracking code
+1. Install on your site (your platform has easy integration)
+1. Verify it’s working
+
+#### Pre-Launch Checklist
+
+**Content Review:**
+
+- [ ] All pages have unique titles
+- [ ] No Lorem Ipsum placeholder text
+- [ ] All links work (test every single one!)
+- [ ] Contact form sends emails correctly
+- [ ] Social media links go to right profiles
+
+**Visual Review:**
+
+- [ ] Logo displays correctly
+- [ ] Brand colors are consistent
+- [ ] Fonts load properly
+- [ ] Images are high-quality
+- [ ] Mobile version looks good
+
+**Legal/Professional:**
+
+- [ ] Privacy Policy page
+- [ ] Terms of Service (if selling)
+- [ ] Disclaimer (if giving advice)
+- [ ] Copyright notice in footer
+- [ ] Business name/contact info accurate
+
+**Technical:**
+
+- [ ] Custom domain connected (not subdomain)
+- [ ] SSL certificate active (green padlock)
+- [ ] Favicon uploaded
+- [ ] Google Analytics tracking
+- [ ] Search Console verified
+- [ ] Site loads in under 3 seconds
+
+**Final Tests:**
+
+- [ ] Test on Chrome, Safari, Firefox
+- [ ] Test on iPhone and Android
+- [ ] Ask 2-3 friends to review
+- [ ] Spell-check EVERYTHING
+- [ ] Test all forms yourself
+
+#### Launch Day Promotion Strategy
+
+**When You Hit Publish:**
+
+**1. Social Media Announcement**
+
+Post on all platforms:
+
+```
+🎉 IT'S LIVE! 🎉
+
+After [weeks/months] of work, my website is officially live!
+
+✨ [Brief description of what it offers]
+
+I'm so proud to finally have a digital home for [your mission].
+
+Check it out and let me know what you think! 
+👇
+[Your URL]
+
+#WebsiteLaunch #[YourNiche] #NewWebsite #WomenInBusiness
+```
+
+**2. Email Announcement**
+
+Send to your list:
+
+```
+Subject: I have a surprise for you... 🎉
+
+Hi [Name],
+
+I'm thrilled to finally share something I've been working on:
+
+[Your Website URL]
+
+My brand new website is LIVE!
+
+Here's what you'll find:
+→ [Feature 1]
+→ [Feature 2]
+→ [Feature 3]
+
+I'd love your feedback! Take a look and reply to let me know 
+what you think.
+
+And if you know anyone who might benefit from [your offer], 
+I'd be so grateful if you shared it with them.
+
+Thank you for being part of this journey!
+
+[Your Name]
+
+P.S. As a thank you for being on my list, here's a special 
+[offer/freebie]: [Link]
+```
+
+**3. LinkedIn Post**
+
+Professional announcement:
+
+```
+Exciting news! 🚀
+
+I'm thrilled to announce the launch of my new website: [URL]
+
+This has been a labor of love, and I'm proud to now have a 
+professional home for [your business/mission].
+
+What you'll find:
+• [Value point 1]
+• [Value point 2]
+• [Value point 3]
+
+If you're a [target audience] looking for [solution], I'd love 
+to connect.
+
+Check it out and let me know your thoughts!
+
+#WebsiteLaunch #[Industry] #Entrepreneurship
+```
+
+**4. Stories/Reels**
+
+Create excitement with:
+
+- Behind-the-scenes of building it
+- Screen recording walkthrough
+- Before/after (if you had old site)
+- “Swipe up to visit” (if you have feature)
+- Countdown to launch
+
+**5. Ask for Feedback**
+
+Post in communities:
+
+- “Just launched my website! Would love constructive feedback”
+- Creates engagement and backlinks
+
+#### Post-Launch: First 30 Days
+
+**Week 1:**
+
+- Monitor analytics daily
+- Fix any bugs/issues immediately
+- Respond to all feedback
+- Share on social media 3x
+
+**Week 2:**
+
+- Start SEO blog content
+- Submit to online directories
+- Get featured in Facebook groups
+- Update email signature with link
+
+**Week 3:**
+
+- Analyze traffic sources
+- Improve high-traffic pages
+- Add more social proof
+- Create shareable content
+
+**Week 4:**
+
+- Review Google Search Console
+- Optimize based on user behavior
+- Plan content calendar
+- Set monthly traffic goals
+
+#### Your Website Launch Assignment:
+
+**Complete these final steps:**
+
+1. **Run through entire checklist**
+1. **Set up Google Analytics & Search Console**
+1. **Optimize all pages for SEO**
+1. **Test everything 3 times**
+1. **Create launch announcement posts**
+1. **HIT PUBLISH!** 🚀
+
+**Share your live website in the community with #Week3Launch**
+
+**We’ll celebrate together during the live session!** 🎉
+
+-----
+
+## 🎯 Week 3 Challenge: Traffic & Engagement
+
+**Post-Launch Goals:**
+
+- [ ] Get 100 unique visitors in first week
+- [ ] Receive 5+ pieces of feedback
+- [ ] Get 1 inquiry/lead from website
+- [ ] Share website on 3+ platforms
+- [ ] Have 1 conversion (newsletter signup, booking, sale)
+
+**Bonus:** Get featured or shared by someone in your industry!
+
+-----
+
+## 💬 Live Session Day 3: Website Launch Party!
+
+**What to Bring:**
+
+- Your LIVE website URL
+- Analytics screenshot (if launched)
+- Questions about traffic/SEO
+- Wins to celebrate!
+
+**What We’ll Cover:**
+
+- Live website reviews (I’ll give feedback!)
+- SEO troubleshooting
+- Traffic-driving strategies
+- Celebrating every launch! 🎉
+- Planning your content strategy
+
+**We’re doing LIVE site reviews! Drop your URL in the community BEFORE the session with #Week3LaunchParty**
+
+-----
+
+## 🎁 Week 3 Resources
+
+**Free Website Builders:**
+
+- Carrd (best free option for simple sites)
+- Wix (free tier with ads)
+- Google Sites (basic but functional)
+
+**Free SEO Tools:**
+
+- Google Search Console
+- Google Analytics
+- Ubersuggest (limited free searches)
+- AnswerThePublic (keyword ideas)
+- PageSpeed Insights (speed testing)
+
+**Paid Tools Worth It:**
+
+- Wix/Squarespace ($16-25/month)
+- Framer ($5-15/month)
+- Namecheap domain ($10/year)
+
+**Templates & Downloads:**
+
+- [Download: Website Planning Worksheet]
+- [Download: SEO Checklist]
+- [Download: Launch Day Promotion Templates]
+- [Download: 30-Day Post-Launch Action Plan]
+
+-----
+
+## 📝 Your Success Checklist
+
+**Planning:**
+
+- [ ] Chose website platform
+- [ ] Secured domain name
+- [ ] Planned site structure
+- [ ] Completed content for all pages
+
+**Building:**
+
+- [ ] Designed homepage
+- [ ] Created About page
+- [ ] Built Services/Products page
+- [ ] Set up Contact page
+- [ ] Added portfolio/work examples
+
+**Optimizing:**
+
+- [ ] Researched keywords
+- [ ] Optimized all page titles
+- [ ] Added meta descriptions
+- [ ] Included alt text on images
+- [ ] Set up Google tools
+
+**Launching:**
+
+- [ ] Completed pre-launch checklist
+- [ ] Tested on multiple devices
+- [ ] Published website
+- [ ] Announced on social media
+- [ ] Shared with email list
+
+**Celebrating:**
+
+- [ ] Shared in MetaHers community
+- [ ] Helped another member
+- [ ] Celebrated this MASSIVE win!
+- [ ] Proud of yourself (you should be!)
+
+-----
+
+## 💪 Overcoming Week 3 Challenges
+
+**“My website doesn’t look professional enough!”**
+
+- Simple and clean beats complex and messy
+- Use one good template consistently
+- Less is more - remove anything that doesn’t serve
+- Show real people (testimonials, your photo)
+
+**“I don

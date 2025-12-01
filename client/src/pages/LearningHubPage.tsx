@@ -91,9 +91,9 @@ export default function LearningHubPage() {
       week: 3,
       title: "Website Building (No Code)",
       description: "Create websites with AI assistance",
-      status: "locked",
+      status: "active",
       progress: 0,
-      lessons: ["Site Structure", "AI Design Tools", "Content Strategy", "Launch Checklist"],
+      lessons: ["Website Platform Selection", "Homepage Design", "Essential Pages", "SEO & Launch"],
       icon: Rocket,
       color: "from-orange-500 to-yellow-500",
       nextSession: "Dec 9, 2024 - 2:00 PM PST",
@@ -373,6 +373,126 @@ export default function LearningHubPage() {
     }
   };
 
+  // Week 3 Lessons - No-Code Website Building
+  const week3Lessons = {
+    "Website Platform Selection": {
+      emoji: "🌐",
+      tagline: "Choose Your Perfect No-Code Website Builder",
+      description: "Master the top website builders and choose the right one for your business. Learn about domains, hosting, and plan your complete website structure before building.",
+      objectives: [
+        "Compare top no-code platforms (Wix, Squarespace, Framer, Webflow, Carrd)",
+        "Understand domains and hosting fundamentals",
+        "Choose the right platform for your business type",
+        "Plan your complete website structure and sitemap",
+        "Set up your domain and begin building"
+      ],
+      keyTopics: [
+        { title: "Platform Comparison", desc: "Wix (beginners), Squarespace (creatives), Framer (modern design), Webflow (advanced), Carrd (simple)" },
+        { title: "Domain & Hosting", desc: "Understanding domain names, where to buy (.com, .co, .io), hosting basics, and free domain first-year offers" },
+        { title: "Website Structure", desc: "Essential pages: homepage, about, services, contact. Optional: portfolio, blog, testimonials, FAQ, resources" },
+        { title: "User Journey Planning", desc: "Map out how visitors move through your site, identify conversion points, and plan CTA placement" }
+      ],
+      exercise: {
+        title: "Setup Your Website Foundation",
+        desc: "Choose your platform, generate 10 domain options with AI, purchase domain, plan your sitemap with all pages, sketch basic navigation menu.",
+        timeEstimate: "60 minutes"
+      },
+      resources: [
+        { title: "Website Builder Comparison Chart", type: "Guide" },
+        { title: "Domain Name Generator Prompt", type: "Template" },
+        { title: "Website Sitemap Planning Template", type: "Worksheet" },
+        { title: "Platform Setup Video Tutorials", type: "Videos" }
+      ]
+    },
+    "Homepage Design": {
+      emoji: "🎯",
+      tagline: "Create a Homepage That Converts Visitors Into Clients",
+      description: "Design a stunning homepage using the proven conversion formula. Learn the anatomy of high-converting homepages and how to write copy that sells.",
+      objectives: [
+        "Understand the homepage conversion formula (7-section structure)",
+        "Create compelling hero sections with strong CTAs",
+        "Address pain points and agitate customer problems",
+        "Build trust with social proof and testimonials",
+        "Write benefit-focused copy that converts"
+      ],
+      keyTopics: [
+        { title: "Hero Section Formula", desc: "Headline (value prop) + Subheadline (transformation) + Image + CTA + Trust indicators—what visitors see first" },
+        { title: "Problem/Agitation Section", desc: "Connect with pain points, show understanding, position yourself as the solution—the emotional sell" },
+        { title: "Social Proof & Trust", desc: "Testimonials, case studies, numbers, media mentions, certifications—build credibility and reduce objections" },
+        { title: "Final CTA & Footer", desc: "Last conversion opportunity, complete navigation, contact info, legal pages, newsletter signup" }
+      ],
+      exercise: {
+        title: "Design Your High-Converting Homepage",
+        desc: "Create hero section, problem statement, 3-step solution process, 3 testimonials, features grid, final CTA, complete footer. Use AI to write all copy.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Homepage Template (7-Section Formula)", type: "Template" },
+        { title: "Hero Section Copy Generator Prompt", type: "Prompt" },
+        { title: "High-Converting Homepage Examples", type: "Swipes" },
+        { title: "Testimonial Format & Placeholders", type: "Template" }
+      ]
+    },
+    "Essential Pages": {
+      emoji: "📄",
+      tagline: "Build Pages That Connect and Sell",
+      description: "Create complete, professional pages for About, Services/Products, and Contact. Each page has a specific formula for maximum impact and conversions.",
+      objectives: [
+        "Write an authentic About page that builds connection",
+        "Create Services/Products pages that sell without being salesy",
+        "Design Contact pages that make it easy to get in touch",
+        "Showcase your portfolio/work with before-and-after impact",
+        "Use AI to write compelling page copy"
+      ],
+      keyTopics: [
+        { title: "About Page Formula", desc: "Opening hook, your journey, credentials & proof, personal touch, clear next step—tell your story authentically" },
+        { title: "Services/Products Pages", desc: "What's included, who it's for, benefits & outcomes, pricing, FAQ, strong CTA—sell the transformation" },
+        { title: "Contact Page Best Practices", desc: "Easy contact form, multiple contact methods, response time expectations, what happens next after submission" },
+        { title: "Portfolio/Work Showcase", desc: "Hero image, project details, the challenge, your solution, the results—demonstrate your value with proof" }
+      ],
+      exercise: {
+        title: "Build Your Essential Pages",
+        desc: "Create About page (500-800 words), one Services/Products page, Contact page with form, Portfolio section with 3 examples (real or placeholder).",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "About Page Template with Prompts", type: "Template" },
+        { title: "Services/Products Page Template", type: "Template" },
+        { title: "Contact Page Setup Guide", type: "Tutorial" },
+        { title: "Portfolio Case Study Template", type: "Template" }
+      ]
+    },
+    "SEO & Launch": {
+      emoji: "🚀",
+      tagline: "Get Found on Google & Launch Your Website",
+      description: "Master SEO basics to get found on Google. Optimize your content, fix technical issues, and launch your website with confidence to the world.",
+      objectives: [
+        "Understand SEO fundamentals and the 3 pillars (on-page, technical, off-page)",
+        "Research and target the right keywords for your business",
+        "Optimize your website pages for search engines",
+        "Complete technical SEO checklist",
+        "Launch your website and promote it"
+      ],
+      keyTopics: [
+        { title: "SEO Fundamentals", desc: "What is SEO, the 3 pillars (on-page content, technical setup, external signals), how Google ranks websites" },
+        { title: "Keyword Research", desc: "Brain dump keywords, use AI for ideas, check difficulty, choose targets: 1-2 for homepage, 1 per service/page" },
+        { title: "On-Page Optimization", desc: "Title tags (60 chars), meta descriptions (150-160 chars), H1/H2 headers, keyword density, internal links" },
+        { title: "Technical SEO Checklist", desc: "Mobile-friendly, fast loading, HTTPS security, clean structure, sitemap, robots.txt, Google Search Console setup" }
+      ],
+      exercise: {
+        title: "Optimize & Launch Your Website",
+        desc: "Research 30+ keywords with AI, choose target keywords by page, optimize all titles/descriptions/headers, run technical SEO checklist, submit to Google Search Console, launch website!",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "SEO Keywords Research Prompt", type: "Prompt" },
+        { title: "Technical SEO Checklist", type: "Checklist" },
+        { title: "Meta Description & Title Examples", type: "Swipes" },
+        { title: "Launch Preparation Checklist", type: "Checklist" }
+      ]
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <SEO 
@@ -451,7 +571,7 @@ export default function LearningHubPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modules.map((module) => {
                   const Icon = module.icon;
-                  const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2);
+                  const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2 || module.week === 3);
                   return (
                     <button
                       key={module.week}
@@ -537,11 +657,11 @@ export default function LearningHubPage() {
               </div>
             </div>
 
-            {/* Expanded Lesson View - Week 1 & 2 Rich Content */}
-            {expandedLesson && (week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons]) && (
+            {/* Expanded Lesson View - Week 1, 2 & 3 Rich Content */}
+            {expandedLesson && (week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons]) && (
               <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200 mt-8" data-lesson-expanded>
                 {(() => {
-                  const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons];
+                  const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons];
                   return (
                     <div>
                       {/* Header */}
@@ -641,7 +761,7 @@ export default function LearningHubPage() {
                       {/* Lesson Navigation */}
                       <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t-2 border-gray-200">
                         {(() => {
-                          const currentModule = modules.find(m => (m.week === 1 && week1Lessons[expandedLesson as keyof typeof week1Lessons]) || (m.week === 2 && week2Lessons[expandedLesson as keyof typeof week2Lessons]));
+                          const currentModule = modules.find(m => (m.week === 1 && week1Lessons[expandedLesson as keyof typeof week1Lessons]) || (m.week === 2 && week2Lessons[expandedLesson as keyof typeof week2Lessons]) || (m.week === 3 && week3Lessons[expandedLesson as keyof typeof week3Lessons]));
                           return (currentModule?.lessons || []).map((lessonTitle, idx) => (
                             <button
                               key={idx}
