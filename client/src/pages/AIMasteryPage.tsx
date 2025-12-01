@@ -2,16 +2,27 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Link } from "wouter";
-import { Check, ArrowRight, MessageCircle, Users, TrendingUp, Clock, Zap, Award, Users2 } from "lucide-react";
+import { Link, useLocation } from "wouter";
+import { Check, ArrowRight, MessageCircle, Users, TrendingUp, Clock, Zap, Award, Users2, Lock } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import { useAuth } from "@/hooks/useAuth";
 import nadiaPhotoUrl from "@assets/IMG_2303_1764551506250.jpeg";
 
 export default function AIMasteryPage() {
+  const { isAuthenticated } = useAuth();
+  const [, setLocation] = useLocation();
   const [selectedOption, setSelectedOption] = useState<"one-time" | "payment-plan">(
     "one-time"
   );
   const [flippedWeek, setFlippedWeek] = useState<number | null>(null);
+
+  const handleViewLearningHub = () => {
+    if (!isAuthenticated) {
+      setLocation("/login");
+    } else {
+      setLocation("/learning-hub");
+    }
+  };
 
   const benefits = [
     "AI-Generated Content Mastery",
@@ -304,12 +315,23 @@ export default function AIMasteryPage() {
 
           {/* CTA for Learning Hub */}
           <div className="text-center mt-12">
-            <Link href="/learning-hub">
-              <Button className="bg-black hover:bg-gray-900 text-white text-lg px-8 py-6 rounded-md font-semibold flex items-center justify-center gap-2 mx-auto">
-                View Full Learning Hub
-                <ArrowRight className="w-5 h-5" />
-              </Button>
-            </Link>
+            <Button 
+              onClick={handleViewLearningHub}
+              className="bg-black hover:bg-gray-900 text-white text-lg px-8 py-6 rounded-md font-semibold flex items-center justify-center gap-2 mx-auto"
+              data-testid="button-view-learning-hub"
+            >
+              {isAuthenticated ? (
+                <>
+                  View Full Learning Hub
+                  <ArrowRight className="w-5 h-5" />
+                </>
+              ) : (
+                <>
+                  <Lock className="w-5 h-5" />
+                  Sign In to Access
+                </>
+              )}
+            </Button>
           </div>
         </div>
       </section>
