@@ -331,20 +331,23 @@ export default function LearningHubPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modules.map((module) => {
                   const Icon = module.icon;
+                  const isClickable = module.status !== "locked" && module.week === 1;
                   return (
-                    <button
+                    <div
                       key={module.week}
                       onClick={() => {
-                        if (module.status !== "locked" && module.week === 1) {
+                        if (isClickable) {
                           setExpandedLesson(expandedLesson ? null : module.lessons[0]);
                         }
                       }}
-                      className={`border-2 p-6 transition-all cursor-pointer text-left bg-white rounded-lg ${
+                      className={`border-2 p-6 rounded-lg transition-all ${
                         module.status === "locked"
-                          ? "border-gray-200 opacity-60"
-                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg"
-                      }`}
+                          ? "border-gray-200 opacity-60 bg-white"
+                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white"
+                      } ${isClickable ? "cursor-pointer" : "cursor-default"}`}
                       data-testid={`card-module-week-${module.week}`}
+                      role="button"
+                      tabIndex={isClickable ? 0 : -1}
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
@@ -402,7 +405,7 @@ export default function LearningHubPage() {
                         <Calendar className="w-4 h-4" />
                         {module.nextSession}
                       </div>
-                    </button>
+                    </div>
                   );
                 })}
               </div>
