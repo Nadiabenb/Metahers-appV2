@@ -16,6 +16,7 @@ export default function LearningHubPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [messageText, setMessageText] = useState("");
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
+  const [flippedWeek, setFlippedWeek] = useState<number | null>(null);
 
   // Fetch user progress
   const { data: progressData, isLoading: progressLoading } = useQuery({
@@ -63,6 +64,93 @@ export default function LearningHubPage() {
     setLocation("/ai-mastery");
     return null;
   }
+
+  const curriculumDetails = {
+    1: {
+      title: "AI Content Creation",
+      duration: "3-5 hours total",
+      liveSession: "Day 3 at 2 PM PST",
+      modules: 4,
+      keyPoints: [
+        "Create stunning AI-generated photos without a camera",
+        "Produce engaging videos without expensive equipment",
+        "Write compelling copy that actually converts",
+        "Build a 30-day content calendar in under an hour",
+        "Never experience creator's block again"
+      ],
+      courseModules: [
+        { title: "AI Photography Mastery", time: "45 min", skills: ["Midjourney, DALL-E 3, Leonardo.AI", "Perfect prompt formulas", "Consistent brand photography", "Professional AI editing"] },
+        { title: "AI Video Generation", time: "60 min", skills: ["Runway ML video creation", "HeyGen talking head videos", "CapCut AI effects", "Auto-generated captions"] },
+        { title: "AI Copywriting That Converts", time: "45 min", skills: ["ChatGPT prompts", "Brand voice definition", "Email sequences that sell", "Viral captions"] },
+        { title: "Social Media Strategy", time: "45 min", skills: ["30-day content calendar", "10-way content repurposing", "Viral frameworks", "Automated scheduling"] }
+      ],
+      tools: ["ChatGPT / Claude", "Midjourney", "DALL-E 3", "Runway ML", "HeyGen", "CapCut"],
+      deliverables: ["3 professional brand photos", "1 AI-generated video", "3 compelling copy pieces", "7-day content calendar", "Brand voice guide"]
+    },
+    2: {
+      title: "Brand Identity & Design",
+      duration: "3-5 hours total",
+      liveSession: "Day 3 at 2 PM PST",
+      modules: 4,
+      keyPoints: [
+        "Build a premium brand that stands out",
+        "Master color psychology to influence buying decisions",
+        "Create professional logos using AI design tools",
+        "Develop typography that reflects your personality",
+        "Create a brand kit that keeps everything consistent"
+      ],
+      courseModules: [
+        { title: "Logo Design Mastery", time: "60 min", skills: ["Canva Pro & Looka AI", "Logo design principles", "Typography in logos", "Professional mockups"] },
+        { title: "Color Psychology & Palettes", time: "45 min", skills: ["Color psychology science", "Industry color trends", "Contrast & accessibility", "Consistent color palettes"] },
+        { title: "Typography & Fonts", time: "45 min", skills: ["Font pairing principles", "Readability best practices", "Brand voice in fonts", "Professional font libraries"] },
+        { title: "Brand Kit Assembly", time: "60 min", skills: ["Complete brand guidelines", "Logo usage rules", "Design system creation", "Brand consistency tools"] }
+      ],
+      tools: ["Canva Pro", "Figma", "Looka AI", "Adobe Creative Suite", "Font libraries"],
+      deliverables: ["Professional logo", "Brand color palette", "Typography system", "Brand guidelines document", "Mockup templates"]
+    },
+    3: {
+      title: "Website Building (No Code)",
+      duration: "3-5 hours total",
+      liveSession: "Day 3 at 2 PM PST",
+      modules: 4,
+      keyPoints: [
+        "Choose the perfect no-code website builder for your business",
+        "Design a homepage that converts visitors into clients",
+        "Create essential pages (About, Services, Contact)",
+        "Master SEO basics to get found on Google",
+        "Launch your professional website with confidence"
+      ],
+      courseModules: [
+        { title: "Platform Selection", time: "60 min", skills: ["Platform comparison", "Domain setup", "Hosting options", "Migration strategies"] },
+        { title: "Homepage Design", time: "90 min", skills: ["Conversion formulas", "Hero sections", "Trust building", "Social proof placement"] },
+        { title: "Essential Pages", time: "90 min", skills: ["About page storytelling", "Services/Products pages", "Contact forms", "Portfolio showcases"] },
+        { title: "SEO & Launch", time: "90 min", skills: ["Keyword research", "Technical SEO", "On-page optimization", "Google Search Console"] }
+      ],
+      tools: ["Wix", "Squarespace", "Framer", "Webflow", "Carrd", "WordPress"],
+      deliverables: ["Live website", "Complete sitemap", "SEO-optimized pages", "Contact system", "Analytics setup"]
+    },
+    4: {
+      title: "AI Agents & Automation",
+      duration: "5-7 hours total",
+      liveSession: "Day 3 at 2 PM PST",
+      modules: 4,
+      keyPoints: [
+        "Set up AI chatbots for 24/7 customer support",
+        "Automate repetitive tasks with Zapier & Make",
+        "Create email sequences that nurture leads",
+        "Schedule content across all platforms",
+        "Build AI agents that work for you 24/7"
+      ],
+      courseModules: [
+        { title: "AI Chatbots & Customer Service", time: "90 min", skills: ["Chatbase setup", "Knowledge base training", "Lead qualification flows", "Appointment integration"] },
+        { title: "Workflow Automation", time: "90 min", skills: ["Zapier setup", "Multi-step workflows", "Conditional logic", "ChatGPT integration"] },
+        { title: "Email Marketing Automation", time: "90 min", skills: ["Welcome sequences", "Segmentation", "Personalization", "Advanced nurture flows"] },
+        { title: "Social Media Scheduling", time: "90 min", skills: ["Content batching", "Optimal posting times", "Performance analytics", "Content repurposing"] }
+      ],
+      tools: ["Chatbase", "Zapier", "Make", "ConvertKit", "Buffer", "Mailchimp"],
+      deliverables: ["Live chatbot", "3+ automations", "Email sequence", "Social calendar", "Analytics dashboard"]
+    }
+  };
 
   const modules = [
     {
@@ -685,6 +773,71 @@ export default function LearningHubPage() {
               </div>
             </div>
 
+            {/* Curriculum Flip Cards */}
+            {flippedWeek && (
+              <div className="mb-8 h-96">
+                <div className="perspective h-full">
+                  <div className={`flip-card h-full ${flippedWeek ? 'flipped' : ''}`} style={{ transformStyle: 'preserve-3d' as any }}>
+                    {/* Front of card - Week Title */}
+                    <div className="flip-card-front" style={{ backfaceVisibility: 'hidden' } as any}>
+                      <div className="bg-white rounded-2xl p-8 border-2 border-purple-200 h-full flex flex-col justify-between shadow-lg">
+                        <div>
+                          <h3 className="text-3xl font-bold text-gray-900 mb-4">Week {flippedWeek}</h3>
+                          <p className="text-2xl text-purple-600 font-semibold mb-8">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].title}</p>
+                          <div className="space-y-3">
+                            <div className="flex items-center gap-3">
+                              <Clock className="w-5 h-5 text-purple-600" />
+                              <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].duration}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <Calendar className="w-5 h-5 text-purple-600" />
+                              <span className="text-gray-700">Live Session: {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].liveSession}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <BookOpen className="w-5 h-5 text-purple-600" />
+                              <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].modules} Modules</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-center gap-2 text-purple-600 font-semibold">
+                          <span>Click to see details</span>
+                          <ChevronDown className="w-4 h-4 animate-bounce" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Back of card - Detailed Content */}
+                    <div className="flip-card-back" style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' } as any}>
+                      <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200 h-full overflow-y-auto shadow-lg">
+                        <div className="mb-6">
+                          <h4 className="text-xl font-bold text-gray-900 mb-3">What You'll Master</h4>
+                          <ul className="space-y-2">
+                            {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].keyPoints.map((point, idx) => (
+                              <li key={idx} className="flex items-start gap-3">
+                                <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-gray-700">{point}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="mb-6">
+                          <h4 className="text-lg font-bold text-gray-900 mb-3">Your Deliverables</h4>
+                          <div className="flex flex-wrap gap-2">
+                            {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].deliverables.map((item, idx) => (
+                              <Badge key={idx} variant="secondary">{item}</Badge>
+                            ))}
+                          </div>
+                        </div>
+                        <button onClick={() => setFlippedWeek(null)} className="mt-4 w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors">
+                          Back
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Learning Modules */}
             <div>
               <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Learning Journey</h2>
@@ -696,22 +849,13 @@ export default function LearningHubPage() {
                     <button
                       key={module.week}
                       onClick={() => {
-                        if (isClickable) {
-                          const newLesson = expandedLesson ? null : module.lessons[0];
-                          setExpandedLesson(newLesson);
-                          // Scroll to expanded lesson when opened
-                          if (newLesson) {
-                            setTimeout(() => {
-                              document.querySelector('[data-lesson-expanded]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }, 0);
-                          }
-                        }
+                        setFlippedWeek(module.week);
                       }}
                       type="button"
                       className={`border-2 p-6 rounded-lg transition-all text-left w-full ${
                         module.status === "locked"
                           ? "border-gray-200 opacity-60 bg-white pointer-events-none"
-                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white"
+                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white cursor-pointer"
                       }`}
                       data-testid={`card-module-week-${module.week}`}
                     >
@@ -731,46 +875,29 @@ export default function LearningHubPage() {
                             )}
                           </div>
                           <div>
-                            <div className="text-sm text-gray-500">Week {module.week}</div>
-                            <div className="font-bold text-gray-800">{module.title}</div>
+                            <h3 className="font-bold text-gray-900">Week {module.week}</h3>
+                            <p className="text-sm text-purple-600 font-medium">{module.title}</p>
                           </div>
                         </div>
+                        <ChevronDown className="w-5 h-5 text-purple-600 flex-shrink-0 group-hover:translate-y-1 transition-transform" />
                       </div>
-
-                      {module.status !== "locked" && (
-                        <>
-                          <div className="mb-3">
-                            <div className="flex justify-between text-sm mb-1">
-                              <span className="text-gray-600">Progress</span>
-                              <span className="text-purple-600 font-semibold">
-                                {module.progress}%
-                              </span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div
-                                className={`bg-gradient-to-r ${module.color} h-2 rounded-full transition-all`}
-                                style={{ width: `${module.progress}%` }}
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {module.lessons.map((lesson, idx) => (
-                              <span
-                                key={idx}
-                                className="text-xs bg-purple-50 text-purple-700 px-2 py-1 rounded"
-                              >
-                                {lesson}
-                              </span>
-                            ))}
-                          </div>
-                        </>
+                      <p className="text-gray-600 text-sm mb-3">{module.description}</p>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <BookOpen className="w-4 h-4" />
+                          <span>{module.lessons.length} Lessons</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Calendar className="w-4 h-4" />
+                          <span>{module.nextSession}</span>
+                        </div>
+                      </div>
+                      {module.status === "active" && (
+                        <div className="mt-4 w-full bg-purple-100 rounded-lg p-2">
+                          <div className="bg-purple-600 rounded-full h-2" style={{ width: `${module.progress}%` }}></div>
+                          <div className="text-xs text-gray-600 mt-1">{module.progress}% complete</div>
+                        </div>
                       )}
-
-                      <div className="text-sm text-gray-500 flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        {module.nextSession}
-                      </div>
                     </button>
                   );
                 })}
