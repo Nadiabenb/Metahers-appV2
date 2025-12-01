@@ -332,14 +332,14 @@ export default function LearningHubPage() {
                 {modules.map((module) => {
                   const Icon = module.icon;
                   return (
-                    <Card
+                    <button
                       key={module.week}
                       onClick={() => {
                         if (module.status !== "locked" && module.week === 1) {
                           setExpandedLesson(expandedLesson ? null : module.lessons[0]);
                         }
                       }}
-                      className={`border-2 p-6 transition-all cursor-pointer ${
+                      className={`border-2 p-6 transition-all cursor-pointer text-left bg-white rounded-lg ${
                         module.status === "locked"
                           ? "border-gray-200 opacity-60"
                           : "border-purple-200 hover:border-purple-400 hover:shadow-lg"
@@ -402,7 +402,7 @@ export default function LearningHubPage() {
                         <Calendar className="w-4 h-4" />
                         {module.nextSession}
                       </div>
-                    </Card>
+                    </button>
                   );
                 })}
               </div>
