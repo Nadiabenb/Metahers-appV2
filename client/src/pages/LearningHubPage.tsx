@@ -333,21 +333,20 @@ export default function LearningHubPage() {
                   const Icon = module.icon;
                   const isClickable = module.status !== "locked" && module.week === 1;
                   return (
-                    <div
+                    <button
                       key={module.week}
                       onClick={() => {
                         if (isClickable) {
                           setExpandedLesson(expandedLesson ? null : module.lessons[0]);
                         }
                       }}
-                      className={`border-2 p-6 rounded-lg transition-all ${
+                      disabled={!isClickable}
+                      className={`border-2 p-6 rounded-lg transition-all text-left w-full ${
                         module.status === "locked"
-                          ? "border-gray-200 opacity-60 bg-white"
-                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white"
-                      } ${isClickable ? "cursor-pointer" : "cursor-default"}`}
+                          ? "border-gray-200 opacity-60 bg-white cursor-not-allowed"
+                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white cursor-pointer"
+                      }`}
                       data-testid={`card-module-week-${module.week}`}
-                      role="button"
-                      tabIndex={isClickable ? 0 : -1}
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
@@ -405,7 +404,7 @@ export default function LearningHubPage() {
                         <Calendar className="w-4 h-4" />
                         {module.nextSession}
                       </div>
-                    </div>
+                    </button>
                   );
                 })}
               </div>
