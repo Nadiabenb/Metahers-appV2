@@ -223,8 +223,8 @@ export default function DashboardPage() {
             
             <div className="flex items-center gap-3">
               <Badge className={`${tierBadgeColors[tier]} px-4 py-2 text-sm font-medium`} data-testid="badge-current-tier">
-                {plan.badge && <Sparkles className="w-4 h-4 mr-2" />}
-                {plan.displayName}
+                {plan?.badge && <Sparkles className="w-4 h-4 mr-2" />}
+                {plan?.displayName || 'Member'}
               </Badge>
               {tier !== 'founders_circle' && (
                 <Link href="/upgrade">
