@@ -186,7 +186,7 @@ export default function AIMasteryPage() {
                 slug: "ai-agents-automation"
               }
             ].map((module, idx) => (
-              <Link key={idx} href={`/blog?article=${module.slug}`}>
+              <Link key={idx} href={`/learning-hub`}>
                 <Card className="p-6 border-purple-200 hover:shadow-lg transition-all cursor-pointer h-full">
                   <Badge className="bg-purple-600 mb-3">Week {module.week}</Badge>
                   <h3 className="text-lg font-bold text-black mb-3">{module.title}</h3>
