@@ -102,11 +102,11 @@ export default function LearningHubPage() {
       week: 4,
       title: "AI Agents & Automation",
       description: "Deploy autonomous AI agents for your business",
-      status: "locked",
+      status: "active",
       progress: 0,
-      lessons: ["AI Assistants", "Workflow Automation", "Customer Service Bots", "Time Freedom"],
+      lessons: ["AI Chatbots", "Workflow Automation", "Email Automation", "Social Media Scheduling"],
       icon: Zap,
-      color: "from-yellow-500 to-pink-500",
+      color: "from-purple-600 to-pink-500",
       nextSession: "Dec 12, 2024 - 2:00 PM PST",
     },
   ];
@@ -373,6 +373,126 @@ export default function LearningHubPage() {
     }
   };
 
+  // Week 4 Lessons - AI Agents & Automation Masterclass
+  const week4Lessons = {
+    "AI Chatbots": {
+      emoji: "🤖",
+      tagline: "Your 24/7 Customer Support Team",
+      description: "Set up AI chatbots that handle FAQs, qualify leads, and book appointments—saving you 5-10 hours per week. No coding required.",
+      objectives: [
+        "Understand why chatbots are essential for your business",
+        "Choose the right chatbot platform (Chatbase recommended)",
+        "Train your chatbot with your business information",
+        "Integrate chatbots with your website and messaging platforms",
+        "Build advanced flows for lead qualification and booking"
+      ],
+      keyTopics: [
+        { title: "Chatbot Basics", desc: "Save time answering FAQs, respond 24/7, qualify leads automatically, capture customer info while you sleep" },
+        { title: "Platform Comparison", desc: "Chatbase (fastest), Tidio (e-commerce), ManyChat (social), Voiceflow (advanced). Start with Chatbase!" },
+        { title: "Training Your Chatbot", desc: "Create knowledge base document with services, FAQs, pricing, policies. Chatbase learns from your website & docs." },
+        { title: "Advanced Flows", desc: "Lead qualification conversations, appointment booking integration, product recommendations, smart escalation to you" }
+      ],
+      exercise: {
+        title: "Build & Deploy Your AI Chatbot",
+        desc: "Sign up on Chatbase, gather all business info, create knowledge base, train chatbot, customize appearance, test 20+ questions, install on website, set up notifications.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Chatbot Platform Comparison Guide", type: "Guide" },
+        { title: "Knowledge Base Template", type: "Template" },
+        { title: "Lead Qualification Conversation Flows", type: "Template" },
+        { title: "Chatbot Training Prompt", type: "Prompt" }
+      ]
+    },
+    "Workflow Automation": {
+      emoji: "⚡",
+      tagline: "Connect Your Apps & Automate Everything",
+      description: "Use Zapier or Make to create workflows that automatically manage leads, send emails, update databases, and run your business while you sleep.",
+      objectives: [
+        "Understand workflow automation and why it matters",
+        "Choose between Zapier (easier) and Make (more powerful)",
+        "Create your first automation (lead capture)",
+        "Set up multi-step workflows with conditions",
+        "Integrate AI (ChatGPT) into your workflows"
+      ],
+      keyTopics: [
+        { title: "Workflow Automation Concept", desc: "When [Trigger] in App A, do [Actions] in App B—automatically. No coding. Saves massive time & errors." },
+        { title: "Essential Automations", desc: "Lead capture, social to email, content distribution, calendar management, client onboarding, invoice follow-up, social proof collection, content repurposing" },
+        { title: "Zapier vs Make", desc: "Zapier: 6,000 integrations, easy, more expensive. Make: more powerful, cheaper, steeper learning curve. Start with Zapier!" },
+        { title: "Advanced Workflows", desc: "Multi-step sequences, conditional logic (if/then), delays, ChatGPT integration, complex nurture sequences running on autopilot" }
+      ],
+      exercise: {
+        title: "Set Up 3 Essential Automations",
+        desc: "Create lead capture workflow, booking confirmation automation, content distribution automation. Bonus: 1 advanced multi-step workflow with conditions.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Zapier Setup Guide", type: "Tutorial" },
+        { title: "8 Essential Automation Templates", type: "Templates" },
+        { title: "Lead Nurture Workflow Example", type: "Template" },
+        { title: "Workflow Planning Prompt", type: "Prompt" }
+      ]
+    },
+    "Email Automation": {
+      emoji: "📧",
+      tagline: "Nurture Leads While You Sleep",
+      description: "Create automated email sequences that welcome subscribers, build connection, showcase expertise, provide social proof, and convert them into paying clients.",
+      objectives: [
+        "Choose the right email marketing platform (ConvertKit or Klaviyo)",
+        "Create a powerful welcome sequence (5-7 emails)",
+        "Write emails that build connection and trust",
+        "Segment your audience for personalized campaigns",
+        "Automate your entire customer nurture journey"
+      ],
+      keyTopics: [
+        { title: "Email Marketing Stats", desc: "4x higher ROI than social, 119% higher click rates on automations, 74% expect welcome emails, nurtured leads buy 47% more" },
+        { title: "Platform Comparison", desc: "ConvertKit (creators), Mailchimp (most popular), ActiveCampaign (powerful), Klaviyo (e-commerce). Use ConvertKit or Klaviyo." },
+        { title: "Welcome Sequence Formula", desc: "Email 1: Welcome + deliver promise. Email 2: Your story. Email 3: Massive value. Email 4: Social proof. Email 5: The offer." },
+        { title: "Advanced Email Strategies", desc: "Segmentation based on behavior, personalization with dynamic fields, A/B testing subject lines, re-engagement campaigns, win-back sequences" }
+      ],
+      exercise: {
+        title: "Create Your Welcome Sequence",
+        desc: "Sign up on ConvertKit/Klaviyo, write 5-email welcome sequence (welcome, story, value, case study, offer), set up automation triggers, test with yourself, monitor performance.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Perfect Welcome Sequence Template", type: "Template" },
+        { title: "5-Email Sequence Copy Prompts", type: "Prompts" },
+        { title: "Email Subject Line Swipes", type: "Swipes" },
+        { title: "Segmentation Strategy Guide", type: "Guide" }
+      ]
+    },
+    "Social Media Scheduling": {
+      emoji: "📱",
+      tagline: "Post Consistently Without Daily Effort",
+      description: "Schedule content weeks in advance, auto-post to all platforms, analyze performance, and maintain consistent presence while you focus on business growth.",
+      objectives: [
+        "Choose social media scheduling tools (Buffer or Later recommended)",
+        "Create a content calendar and batch-create posts",
+        "Schedule posts for optimal times (AI-powered recommendations)",
+        "Repurpose content across multiple platforms",
+        "Analyze performance and refine your strategy"
+      ],
+      keyTopics: [
+        { title: "Why Scheduling Matters", desc: "Post consistently without daily stress, schedule for best times, reach more people, maintain presence while busy, save hours weekly" },
+        { title: "Scheduling Tools", desc: "Buffer (simple), Later (visual), Hootsuite (all-in-one), Meta Business Suite (Meta platforms). Start with Buffer!" },
+        { title: "Content Batching", desc: "Create week's worth of content in 2-3 hours, schedule all at once, repurpose 1 piece across multiple formats and platforms" },
+        { title: "AI-Powered Optimization", desc: "Best time to post, auto-generate captions with AI, analyze which content resonates, smart recommendations for content types" }
+      ],
+      exercise: {
+        title: "Set Up Social Media Automation",
+        desc: "Choose scheduling tool, create 2-week content calendar, batch-create 20+ posts, schedule across all platforms, set up performance analytics, create monthly posting routine.",
+        timeEstimate: "90 minutes"
+      },
+      resources: [
+        { title: "Content Calendar Template", type: "Template" },
+        { title: "Caption Generator Prompts", type: "Prompts" },
+        { title: "Posting Schedule by Platform", type: "Guide" },
+        { title: "Content Batching Workflow", type: "Tutorial" }
+      ]
+    }
+  };
+
   // Week 3 Lessons - No-Code Website Building
   const week3Lessons = {
     "Website Platform Selection": {
@@ -571,7 +691,7 @@ export default function LearningHubPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modules.map((module) => {
                   const Icon = module.icon;
-                  const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2 || module.week === 3);
+                  const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2 || module.week === 3 || module.week === 4);
                   return (
                     <button
                       key={module.week}
@@ -657,11 +777,11 @@ export default function LearningHubPage() {
               </div>
             </div>
 
-            {/* Expanded Lesson View - Week 1, 2 & 3 Rich Content */}
-            {expandedLesson && (week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons]) && (
+            {/* Expanded Lesson View - Week 1, 2, 3 & 4 Rich Content */}
+            {expandedLesson && (week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons] || week4Lessons[expandedLesson as keyof typeof week4Lessons]) && (
               <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200 mt-8" data-lesson-expanded>
                 {(() => {
-                  const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons];
+                  const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons] || week4Lessons[expandedLesson as keyof typeof week4Lessons];
                   return (
                     <div>
                       {/* Header */}
@@ -761,7 +881,7 @@ export default function LearningHubPage() {
                       {/* Lesson Navigation */}
                       <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t-2 border-gray-200">
                         {(() => {
-                          const currentModule = modules.find(m => (m.week === 1 && week1Lessons[expandedLesson as keyof typeof week1Lessons]) || (m.week === 2 && week2Lessons[expandedLesson as keyof typeof week2Lessons]) || (m.week === 3 && week3Lessons[expandedLesson as keyof typeof week3Lessons]));
+                          const currentModule = modules.find(m => (m.week === 1 && week1Lessons[expandedLesson as keyof typeof week1Lessons]) || (m.week === 2 && week2Lessons[expandedLesson as keyof typeof week2Lessons]) || (m.week === 3 && week3Lessons[expandedLesson as keyof typeof week3Lessons]) || (m.week === 4 && week4Lessons[expandedLesson as keyof typeof week4Lessons]));
                           return (currentModule?.lessons || []).map((lessonTitle, idx) => (
                             <button
                               key={idx}

@@ -1,0 +1,1165 @@
+# Week 4: AI Agents & Automation Masterclass
+
+## Reclaim 10+ Hours Per Week (Without Hiring a Team)
+
+-----
+
+## 🎯 Week Overview
+
+**Welcome to Week 4, Queen!** This is where everything comes together. You’ve mastered content creation, built your brand, and launched your website. Now it’s time to AUTOMATE so you can scale without burning out. This week, you’re setting up AI agents that work for you 24/7.
+
+**What You’ll Master:**
+
+- AI chatbots for customer service
+- Workflow automation (no-code tools)
+- Email marketing automation
+- Social media scheduling with AI
+- Building your own AI assistants
+
+**Time Commitment:** 5-7 hours total (self-paced)
+**Live Session:** Day 3 at 2 PM PST - Automation showcase & celebration!
+
+**By the end of this week:** You’ll have AI working FOR you while you sleep! 🤖✨
+
+-----
+
+## 📚 Lesson 1: AI Chatbots & Customer Service Automation
+
+### Your 24/7 Customer Support Team
+
+**Duration:** 90 minutes
+
+#### What You’ll Learn:
+
+- Setting up AI chatbots for your website
+- Training your chatbot with your business info
+- Automating FAQ responses
+- Integrating with messaging platforms
+
+#### Why You Need a Chatbot
+
+**Problems It Solves:**
+
+- Answering the same questions repeatedly
+- Missing inquiries when you’re offline
+- Slow response times losing you clients
+- Can’t scale 1-on-1 communication
+
+**What AI Chatbots Can Do:**
+
+- Answer FAQs instantly (24/7)
+- Qualify leads before they reach you
+- Book appointments automatically
+- Provide product recommendations
+- Collect customer information
+- Escalate complex issues to you
+
+**Real Results:**
+
+- Save 5-10 hours per week on customer service
+- Respond to inquiries in seconds, not hours
+- Capture leads even while you sleep
+- Improve customer satisfaction
+
+#### Best AI Chatbot Platforms
+
+**1. Chatbase (Easiest - Recommended!)**
+
+- **Best For:** Small businesses, websites, customer service
+- **Pros:** No-code, trains on your content, beautiful UI
+- **Price:** Free tier, then $19-99/month
+- **Setup Time:** 15 minutes
+- **AI Feature:** Upload docs/URLs, it learns automatically
+
+**2. Tidio**
+
+- **Best For:** E-commerce, live chat + bot hybrid
+- **Pros:** Visual builder, integrations, mobile app
+- **Price:** Free tier, then $29-394/month
+- **Setup Time:** 30 minutes
+- **AI Feature:** Lyro AI chatbot included
+
+**3. ManyChat**
+
+- **Best For:** Instagram/Facebook Messenger automation
+- **Pros:** Social media focused, great templates
+- **Price:** Free tier, then $15-145/month
+- **Setup Time:** 45 minutes
+- **AI Feature:** AI-powered conversation flows
+
+**4. Voiceflow**
+
+- **Best For:** Advanced custom chatbots
+- **Pros:** Powerful, customizable, multi-channel
+- **Price:** Free tier, then $50-625/month
+- **Setup Time:** 2-3 hours
+- **AI Feature:** Full conversational AI builder
+
+**Nadia’s Recommendation:**
+Start with **Chatbase** - it’s the fastest way to get a smart chatbot running on your website with ZERO coding.
+
+#### Step-by-Step: Building Your First Chatbot (Chatbase)
+
+**Step 1: Gather Your Training Data**
+
+Your chatbot needs to learn about your business. Prepare:
+
+**Essential Information:**
+
+- [ ] Your website URL
+- [ ] FAQs document
+- [ ] Product/service descriptions
+- [ ] Pricing information
+- [ ] Booking/contact process
+- [ ] Your story/about info
+- [ ] Policies (shipping, returns, refunds)
+
+**Create a Knowledge Base Document:**
+
+```
+Business Name: [Your Business]
+What We Do: [Clear description]
+Who We Serve: [Target audience]
+
+Services/Products:
+1. [Service 1] - [Description, Price, Duration]
+2. [Service 2] - [Description, Price, Duration]
+3. [Service 3] - [Description, Price, Duration]
+
+Frequently Asked Questions:
+Q: [Question]
+A: [Detailed answer]
+
+[Repeat for 10-20 common questions]
+
+How to Book/Buy:
+[Step-by-step process]
+
+Contact Information:
+Email: [your email]
+Phone: [if applicable]
+Hours: [your availability]
+Response Time: [when you respond]
+
+Policies:
+- Refund Policy: [details]
+- Cancellation Policy: [details]
+- Payment Options: [details]
+```
+
+**Step 2: Create Your Chatbot on Chatbase**
+
+1. **Sign up at Chatbase.co**
+1. **Click “New Chatbot”**
+1. **Add Your Data Sources:**
+- Enter your website URL
+- Upload your knowledge base document
+- Add any PDFs (service guides, catalogs, etc.)
+1. **Let AI Train (2-3 minutes)**
+- Chatbase reads all your content
+- Creates intelligent response system
+- Learns your brand voice
+1. **Customize Your Chatbot:**
+
+**Appearance:**
+
+- Name: “[Your Business] Assistant” or “[Your Name]’s Helper”
+- Avatar: Your logo or brand icon
+- Color scheme: Match your brand colors
+- Welcome message: “Hi! I’m here to help you with [your service]. What can I help you with today?”
+
+**Behavior Settings:**
+
+- Tone: Professional/Friendly/Casual (match your brand)
+- Response length: Concise/Detailed
+- Enable suggested questions
+- Set escalation triggers (when to say “Let me connect you with [Your Name]”)
+
+**Step 3: Test Your Chatbot**
+
+**Ask These Questions:**
+
+- “What services do you offer?”
+- “How much does [service] cost?”
+- “How do I book an appointment?”
+- “What’s your refund policy?”
+- “Tell me about [your business name]”
+- “I need help with [specific problem]”
+
+**Refine Responses:**
+
+- If answer is wrong, add to knowledge base
+- If answer is too vague, provide more detail in docs
+- If chatbot can’t answer, add that FAQ
+
+**Step 4: Install on Your Website**
+
+Chatbase gives you an embed code:
+
+```html
+<!-- Paste this before closing </body> tag -->
+<script>
+  // Chatbase embed code here
+</script>
+```
+
+**For No-Code Platforms:**
+
+- **Wix:** Add HTML widget, paste code
+- **Squarespace:** Add Code Block, paste code
+- **Framer:** Add Embed component, paste code
+- **Webflow:** Add Embed element, paste code
+
+**Step 5: Set Up Integrations**
+
+**Connect to:**
+
+- **Email:** Get notifications when someone chats
+- **Slack:** Team notifications
+- **Zapier:** Advanced automations
+- **CRM:** Save leads automatically
+
+#### Advanced Chatbot Features
+
+**Lead Qualification Flow:**
+
+Instead of just answering questions, qualify leads:
+
+```
+Bot: "Hi! I'm [Name]'s AI assistant. I'd love to help you! 
+     First, what brings you here today?"
+
+User: [Response]
+
+Bot: "Great! To make sure [Name] can help you best, 
+     could you tell me a bit about your current situation?"
+
+User: [Response]
+
+Bot: "Perfect! And what's your budget range for this project?"
+
+User: [Response]
+
+Bot: "Excellent! Based on what you've shared, I think 
+     [Your Name] can definitely help. Would you like to 
+     book a free consultation call?"
+
+[Yes] → "Great! Here's our booking calendar: [Link]"
+[No] → "No problem! Would you like me to email you some 
+        resources instead?"
+```
+
+**Appointment Booking Integration:**
+
+Connect to **Calendly** or **Cal.com**:
+
+```
+Bot: "Would you like to book a call with [Your Name]?"
+
+[Yes] → Shows available times
+        User picks time
+        Chatbot confirms booking
+        Sends confirmation email
+
+[No] → "No worries! Can I answer any questions for you?"
+```
+
+**Product Recommendations:**
+
+For e-commerce:
+
+```
+Bot: "I can help you find the perfect product! 
+     What are you looking for today?"
+
+User: "Something for dry skin"
+
+Bot: "I'd recommend our Hydrating Serum! It's perfect 
+     for dry skin because [benefits]. 
+     
+     Would you like to:
+     [Learn More] [Add to Cart] [See Alternatives]"
+```
+
+#### AI Chatbot Training Prompt
+
+Use this to improve your chatbot’s knowledge base:
+
+```
+I'm creating a knowledge base for my AI chatbot.
+
+Business: [Your business name and description]
+Services/Products: [What you offer]
+Target Audience: [Who you serve]
+Common Questions: [List 5-10 questions you get asked]
+Unique Value Proposition: [What makes you different]
+
+Please create:
+1. A comprehensive FAQ (20 questions with detailed answers)
+2. Product/service descriptions optimized for chatbot responses
+3. A conversation flow for lead qualification
+4. Suggested responses for common objections
+5. Escalation triggers (when to hand off to human)
+
+Make responses natural, helpful, and aligned with a 
+[professional/friendly/casual] tone.
+```
+
+#### Your Chatbot Assignment:
+
+**Set up your AI customer service:**
+
+1. **Choose your platform** (Chatbase recommended)
+1. **Create knowledge base document**
+1. **Train your chatbot** with all your info
+1. **Customize appearance** to match brand
+1. **Test thoroughly** (20+ questions)
+1. **Install on website**
+1. **Set up email notifications**
+
+**Share your chatbot link in the community with #Week4Chatbot so we can test it!**
+
+-----
+
+## 📚 Lesson 2: Workflow Automation with Zapier & Make
+
+### Connect Your Apps and Automate Repetitive Tasks
+
+**Duration:** 90 minutes
+
+#### What You’ll Learn:
+
+- Understanding workflow automation
+- Setting up Zapier automations (Zaps)
+- Creating multi-step workflows
+- Automating lead management
+
+#### What is Workflow Automation?
+
+**The Concept:**
+When [Trigger] happens in App A, automatically do [Action] in App B
+
+**Example:**
+
+- When someone fills out your contact form →
+  Automatically add them to your email list →
+  Send welcome email →
+  Create task in your project manager →
+  Notify you in Slack
+
+**No coding required!** Visual workflow builders connect your apps.
+
+#### Zapier vs Make (Integromat)
+
+**Zapier (Easier, Recommended for Beginners)**
+
+- **Pros:** 6,000+ app integrations, very user-friendly
+- **Cons:** More expensive, limited on free plan
+- **Price:** Free (5 Zaps), $19-69+/month
+- **Best For:** Simple automations, beginners
+
+**Make (formerly Integromat) (More Powerful)**
+
+- **Pros:** Visual builder, more free operations, cheaper
+- **Cons:** Steeper learning curve
+- **Price:** Free (1,000 operations), $9-29+/month
+- **Best For:** Complex workflows, advanced users
+
+**Start with Zapier**, move to Make when you need more power.
+
+#### Essential Automations Every Business Needs
+
+**1. Lead Capture Automation**
+
+**Trigger:** New form submission on website
+**Actions:**
+
+1. Add contact to Google Sheets
+1. Add to email marketing list (Mailchimp/ConvertKit)
+1. Send welcome email
+1. Create CRM contact (if using)
+1. Notify you via email/Slack
+
+**Result:** Never manually enter a lead again!
+
+-----
+
+**2. Social Media to Email List**
+
+**Trigger:** New Instagram follower (via ManyChat)
+**Actions:**
+
+1. Send DM with free resource offer
+1. If they click, add to email list
+1. Tag them in CRM as “Instagram lead”
+
+**Result:** Turn social followers into email subscribers automatically!
+
+-----
+
+**3. Content Distribution Automation**
+
+**Trigger:** New blog post published
+**Actions:**
+
+1. Post to Facebook
+1. Post to LinkedIn
+1. Post to Twitter/X
+1. Send to email newsletter
+1. Add to content calendar
+
+**Result:** Publish once, distribute everywhere!
+
+-----
+
+**4. Calendar Management**
+
+**Trigger:** New Calendly booking
+**Actions:**
+
+1. Add to Google Calendar
+1. Send confirmation email with prep materials
+1. Create Zoom meeting link
+1. Add contact to CRM
+1. Send reminder 24 hours before
+
+**Result:** Booking process runs itself!
+
+-----
+
+**5. Client Onboarding**
+
+**Trigger:** Payment received (Stripe/PayPal)
+**Actions:**
+
+1. Send welcome email with next steps
+1. Create client folder in Google Drive
+1. Add to project management board
+1. Schedule kickoff call
+1. Send intake questionnaire
+1. Add to private client group
+
+**Result:** Professional onboarding without manual work!
+
+-----
+
+**6. Invoice & Payment Follow-Up**
+
+**Trigger:** Invoice sent (via QuickBooks/Wave)
+**Actions:**
+
+1. Wait 3 days
+1. If unpaid, send gentle reminder
+1. Wait 7 days
+1. If still unpaid, send second reminder
+1. Notify you after 14 days
+
+**Result:** No more awkward payment chasing!
+
+-----
+
+**7. Social Proof Collection**
+
+**Trigger:** Project completed (task marked done)
+**Actions:**
+
+1. Wait 2 days
+1. Send testimonial request email
+1. If they respond, add to testimonial sheet
+1. Send thank you with bonus offer
+1. Add testimonial to website queue
+
+**Result:** Build social proof automatically!
+
+-----
+
+**8. Content Repurposing**
+
+**Trigger:** New YouTube video published
+**Actions:**
+
+1. Extract transcript (via API)
+1. Send to ChatGPT to create blog post
+1. Create social media captions
+1. Generate email newsletter
+1. Save all to content folder
+
+**Result:** One piece of content becomes 10!
+
+#### Step-by-Step: Creating Your First Zap
+
+**Example: Website Form → Email List + Notification**
+
+**Step 1: Sign Up for Zapier**
+
+- Go to Zapier.com
+- Create free account
+- Click “Create Zap”
+
+**Step 2: Set Up Trigger**
+
+1. **Choose Trigger App:** (e.g., Google Forms, Typeform, Website Form)
+1. **Choose Trigger Event:** “New Form Response”
+1. **Connect Your Account:** Login to that app
+1. **Test Trigger:** Zapier finds a recent form submission
+1. **Review Data:** See all the fields (name, email, etc.)
+
+**Step 3: Add First Action**
+
+1. **Choose Action App:** (e.g., Mailchimp, ConvertKit, etc.)
+1. **Choose Action Event:** “Add/Update Subscriber”
+1. **Connect Your Account**
+1. **Map Fields:**
+- Email → Form Email Field
+- First Name → Form Name Field
+- Tags → “Website Lead”
+1. **Test Action:** Zapier creates test subscriber
+
+**Step 4: Add Second Action (Optional)**
+
+1. **Click “+ Add Step”**
+1. **Choose App:** “Email by Zapier” (or Gmail)
+1. **Choose Event:** “Send Email”
+1. **Set Up Email:**
+- To: Your email
+- Subject: “🎉 New Lead: [Name from form]”
+- Body: “New form submission from [name] ([email])”
+1. **Test Action**
+
+**Step 5: Name and Turn On**
+
+1. **Name Your Zap:** “Website Form → Email List + Notification”
+1. **Click “Publish”**
+1. **Test with real form submission**
+1. **Verify it worked!**
+
+**You’re now AUTOMATED!** 🎉
+
+#### AI Automation Planning Prompt
+
+```
+Help me plan workflow automations for my business.
+
+Business Type: [your business]
+Current Manual Tasks: [list repetitive tasks]
+Tools I Use: [list all your apps/platforms]
+Goals: [save time, improve follow-up, scale, etc.]
+
+Please suggest:
+1. Top 5 automations I should set up first (prioritized by impact)
+2. Trigger and action steps for each
+3. Which tools to connect
+4. Expected time savings for each
+5. Implementation difficulty (easy/medium/hard)
+
+Focus on practical automations I can set up this week.
+```
+
+#### Advanced Automation: Multi-Step Workflows
+
+**Example: Complete Lead Nurture Sequence**
+
+**Trigger:** New email subscriber
+
+**Actions:**
+
+1. **Delay 5 minutes**
+1. **Send welcome email** with free resource
+1. **Wait 2 days**
+1. **Check:** Did they open email?
+- **Yes:** Send email #2 (value content)
+- **No:** Send re-engagement email
+1. **Wait 3 days**
+1. **Send email #3** (soft pitch)
+1. **Check:** Did they click link?
+- **Yes:** Tag as “Warm Lead” + notify you
+- **No:** Continue regular newsletter
+1. **If tagged warm:** Add to CRM with high priority
+
+**This complex sequence runs completely automatically!**
+
+#### Using AI Inside Your Automations
+
+**ChatGPT + Zapier Integration:**
+
+**Use Cases:**
+
+- Auto-generate email responses
+- Summarize meeting notes
+- Create social media captions
+- Draft blog posts from outlines
+- Translate content
+- Analyze customer feedback
+
+**Example Automation:**
+
+**Trigger:** New customer review submitted
+**Actions:**
+
+1. Send review text to ChatGPT
+1. Prompt: “Summarize this review and identify sentiment”
+1. Save summary to Google Sheets
+1. If negative sentiment: Create urgent task + notify you
+1. If positive sentiment: Post to social media + request permission to use as testimonial
+
+#### Your Automation Assignment:
+
+**Set up 3 essential automations:**
+
+1. **Lead Capture:** Form → Email list + notification
+1. **Booking Confirmation:** Calendar booking → Email + reminders
+1. **Content Distribution:** New post → Social media
+
+**Bonus:** Set up one advanced automation with multiple steps
+
+**Share your automation wins in the community with #Week4Automation**
+
+-----
+
+## 📚 Lesson 3: Email Marketing Automation
+
+### Nurture Leads While You Sleep
+
+**Duration:** 90 minutes
+
+#### What You’ll Learn:
+
+- Setting up email marketing platform
+- Creating automated email sequences
+- Welcome sequences that convert
+- Segmentation and personalization with AI
+
+#### Why Email Automation is Essential
+
+**The Stats:**
+
+- Email has 4x higher ROI than social media
+- Automated emails get 119% higher click rates
+- 74% of people expect welcome emails
+- Nurtured leads make 47% larger purchases
+
+**What You Can Automate:**
+
+- Welcome sequences
+- Lead nurture campaigns
+- Product launches
+- Cart abandonment
+- Re-engagement campaigns
+- Birthday/anniversary emails
+- Educational courses delivered via email
+
+#### Best Email Marketing Platforms
+
+**1. ConvertKit (Best for Creators)**
+
+- **Pros:** Creator-focused, easy automations, great deliverability
+- **Price:** Free (0-1000 subscribers), $15-$25/month
+- **Best For:** Coaches, creators, course sellers
+
+**2. Mailchimp (Most Popular)**
+
+- **Pros:** Free tier, user-friendly, lots of integrations
+- **Price:** Free (500 contacts), $13-$350/month
+- **Best For:** Small businesses, e-commerce
+
+**3. ActiveCampaign (Most Powerful)**
+
+- **Pros:** Advanced automation, CRM included, AI features
+- **Price:** $15-$259/month
+- **Best For:** Businesses needing complex automations
+
+**4. Klaviyo (Best for E-commerce)**
+
+- **Pros:** E-commerce focused, powerful segmentation
+- **Price:** Free (250 contacts), $20+/month
+- **Best For:** Online stores, product businesses
+
+**Nadia’s Recommendation:**
+**ConvertKit** for service-based businesses and creators
+**Klaviyo** for e-commerce
+
+#### The Perfect Welcome Sequence
+
+**Email 1: Welcome + Deliver Promise (Immediate)**
+
+**Subject:** “Welcome! Here’s your [free resource] 🎁”
+
+**Content Structure:**
+
+```
+Hi [First Name]!
+
+Welcome to [Your Community]! I'm so excited to have you here.
+
+As promised, here's your [free resource]: [LINK]
+
+[Brief description of what it is and how to use it]
+
+I created this specifically to help you [achieve specific outcome].
+
+Here's what you can expect from me:
+→ [Benefit 1]
+→ [Benefit 2]
+→ [Benefit 3]
+
+I send emails [frequency] with [type of content].
+
+Hit reply and let me know: [engaging question related to their pain point]?
+
+Can't wait to get to know you!
+
+[Your Name]
+
+P.S. Make sure to whitelist my email so you don't miss anything good!
+```
+
+-----
+
+**Email 2: Your Story + Build Connection (Day 2)**
+
+**Subject:** “My story (and why I built [your business])”
+
+**Content:**
+
+```
+Hey [First Name],
+
+Quick question: Have you ever felt like [relatable pain point]?
+
+Three years ago, that was me.
+
+[Share brief, relatable origin story - 2-3 paragraphs]
+
+[Turning point]
+
+[Where you are now]
+
+That's why I created [your business] - because I never want anyone 
+to feel [that pain] again.
+
+I've now helped [number]+ [audience] achieve [transformation], 
+and I'm on a mission to help even more.
+
+If this resonates with you, hit reply and tell me your story. 
+I read every single email.
+
+Talk soon!
+[Your Name]
+
+P.S. [Casual question or next step]
+```
+
+-----
+
+**Email 3: Massive Value + Showcase Expertise (Day 4)**
+
+**Subject:** “The [number] [topic] mistakes I see everyone make”
+
+**Content:**
+
+```
+[First Name],
+
+After working with [number]+ clients, I've noticed the same 
+mistakes over and over.
+
+Here are the top [3-5] and how to fix them:
+
+Mistake #1: [Common mistake]
+❌ Why it's problematic
+✅ What to do instead
+[Brief explanation]
+
+[Repeat for each mistake]
+
+The good news? These are all easy fixes.
+
+And if you want help implementing them, 
+[soft CTA to your service/product].
+
+What's your biggest challenge with [topic]? Hit reply - I'll answer!
+
+[Your Name]
+```
+
+-----
+
+**Email 4: Social Proof + Case Study (Day 7)**
+
+**Subject:** “How [Client Name] achieved [specific result]”
+
+**Content:**
+
+```
+Want to see what's possible?
+
+Meet [Client Name].
+
+When she came to me, she was [specific problem].
+
+In just [timeframe], she [specific result].
+
+Here's exactly what we did:
+
+[Step 1 with brief explanation]
+[Step 2 with brief explanation]  
+[Step 3 with brief explanation]
+
+Her words: "[Powerful testimonial quote]"
+
+This transformation is possible for you too.
+
+If you're ready for [similar result], here's how I can help:
+[Your offer with link]
+
+[Or] Reply to this email and let's chat about your goals.
+
+[Your Name]
+```
+
+-----
+
+**Email 5: The Offer + Clear CTA (Day 10)**
+
+**Subject:** “Ready to [achieve desired outcome]? Here’s how.”
+
+**Content:**
+
+```
+[First Name],
+
+Over the past week, I've shared:
+→ [Recap email 1 topic]
+→ [Recap email 2 topic]
+→ [Recap email 3 topic]
+→ [Recap email 4 topic]
+
+Now I want to help you actually IMPLEMENT all of this.
+
+Introducing [Your Offer]:
+[Clear description of what it is]
+
+Here's what you get:
+→ [Benefit 1]
+→ [Benefit 2]
+→ [Benefit 3]
+
+This is perfect for you if:
+✓ [Ideal client characteristic 1]
+✓ [Ideal client characteristic 2]
+✓ [Ideal client characteristic 3]
+
+Investment: [Price]
+[Special offer if applicable]
+
+Ready to get started?
+[CLEAR CTA BUTTON]
+
+Questions? Just hit reply!
+
+[Your Name]
+
+P.S. [Address common objection or add urgency]
+```
+
+#### AI Email Writing Prompts
+
+**For Welcome Emails:**
+
+```
+Write a warm, engaging welcome email for my email list.
+
+Business: [your business]
+Audience: [who they are]
+Free Resource: [what they signed up for]
+My Story (brief): [2-3 sentences]
+What They'll Get: [content you'll send]
+Email Frequency: [how often]
+
+Tone: [Professional/Friendly/Casual]
+Length: [300-400 words]
+
+Include:
+- Warm welcome
+- Deliver promised resource
+- Set expectations
+- Engaging question to build connection
+- Clear next steps
+
+Make it feel personal and authentic, not salesy.
+```
+
+-----
+
+**For Value/Educational Emails:**
+
+```
+Write an educational email about [topic] for my audience.
+
+Audience: [describe them]
+Their Main Pain Point: [specific problem]
+Topic: [what you're teaching]
+Key Points to Cover: [list 3-5 points]
+
+Format as:
+- Engaging subject line
+- Hook that resonates with pain point
+- [3-5] actionable tips/mistakes/steps
+- Each with brief explanation
+- Soft CTA to [your offer]
+- Engaging close
+
+Tone: [helpful, not preachy]
+Length: 400-500 words
+```
+
+#### Advanced Segmentation
+
+**Don’t send the same email to everyone!**
+
+**Segment By:**
+
+**1. Engagement Level**
+
+- **Active:** Opened last 3 emails → Send new content
+- **Warming:** Opened 1-2 emails → Re-engagement content
+- **Cold:** No opens in 30 days → Win-back campaign or remove
+
+**2. Purchase History**
+
+- **Customers:** Product updates, upsells, VIP content
+- **Non-customers:** Nurture, case studies, offers
+
+**3. Interests/Tags**
+
+- Tagged “Interested in [Product A]” → Product A sequence
+- Tagged “Beginner” → Beginner-friendly content
+- Tagged “Advanced” → Advanced strategies
+
+**4. Behavior-Based**
+
+- Clicked link about [Topic] → More content on that topic
+- Abandoned cart → Cart recovery sequence
+- Downloaded [Resource] → Related content sequence
+
+#### Automation Sequences You Need
+
+**1. Welcome Sequence (5-7 emails over 2 weeks)**
+Purpose: Build relationship, deliver value, make first offer
+
+**2. Lead Nurture (10-15 emails over 30-60 days)**
+Purpose: Establish expertise, build trust, move to purchase
+
+**3. Sales Sequence (3-5 emails over 1 week)**
+Purpose: Launch product, create urgency, drive conversions
+
+**4. Onboarding Sequence (varies)**
+Purpose: Help new customers get results
+
+**5. Re-engagement (3-4 emails over 2 weeks)**
+Purpose: Win back inactive subscribers
+
+**6. Evergreen Sales (ongoing)**
+Purpose: Ongoing promotion of core offer
+
+#### Your Email Automation Assignment:
+
+**Set up your email marketing:**
+
+1. **Choose and set up platform** (ConvertKit recommended)
+1. **Create opt-in form** for your website
+1. **Write 5-email welcome sequence** (use AI prompts!)
+1. **Set up automation** in your email platform
+1. **Connect to website** (add opt-in forms)
+1. **Test the entire sequence** (send to yourself)
+
+**Bonus:** Create a lead magnet (free PDF, checklist, template)
+
+**Share your welcome email in the community with #Week4Email for feedback!**
+
+-----
+
+## 📚 Lesson 4: Social Media Automation & AI Content Calendar
+
+### Never Run Out of Content Ideas Again
+
+**Duration:** 90 minutes
+
+#### What You’ll Learn:
+
+- Scheduling tools that save hours
+- AI-generated content calendars
+- Repurposing content across platforms
+- Analytics automation
+
+#### Best Social Media Scheduling Tools
+
+**1. Buffer (Simplest)**
+
+- **Pros:** Clean interface, easy scheduling, analytics
+- **Price:** Free (3 channels), $6-120/month
+- **Best For:** Small businesses, solopreneurs
+
+**2. Later (Best for Instagram)**
+
+- **Pros:** Visual planner, Instagram-focused, auto-publish
+- **Price:** Free (1 profile), $25-80/month
+- **Best For:** Visual brands, Instagram-heavy businesses
+
+**3. Metricool (Best Value)**
+
+- **Pros:** Multiple platforms, analytics, competitor analysis
+- **Price:** Free (limited), $12-239/month
+- **Best For:** Multi-platform presence
+
+**4. Hootsuite (Most Comprehensive)**
+
+- **Pros:** Enterprise features, team collaboration, advanced analytics
+- **Price:** $99-739/month
+- **Best For:** Agencies, larger businesses
+
+**5. Meta Business Suite (Free for Facebook/Instagram)**
+
+- **Pros:** Free, native scheduling
+- **Cons:** Only Facebook/Instagram
+- **Best For:** Budget-conscious, Facebook/Instagram only
+
+**Nadia’s Recommendation:**
+**Metricool** for best value across multiple platforms
+**Later** if Instagram is your main platform
+
+#### AI-Powered Content Calendar Creation
+
+**The 30-Day Content System:**
+
+**Step 1: Define Your Content Pillars**
+
+Use AI:
+
+```
+Create 5 content pillars for my social media strategy.
+
+Business: [your business]
+Target Audience: [who you serve]
+Platform(s): [Instagram/LinkedIn/etc.]
+Business Goals: [brand awareness/sales/community]
+
+For each pillar, provide:
+1. Pillar name
+2. Purpose/theme
+3. 5 content ideas within that pillar
+4. How it serves business goals
+
+Make them balanced between value, engagement, and promotion.
+```
+
+**Example Pillars:**
+
+1. **Education** (How-to content, tips, tutorials)
+1. **Inspiration** (Success stories, motivation, behind-the-scenes)
+1. **Engagement** (Questions, polls, conversations)
+1. **Authority** (Industry insights, expert opinions)
+1. **Promotion** (Products, services, offers)
+
+-----
+
+**Step 2: Generate 30 Days of Content Ideas**
+
+```
+Create a 30-day social media content calendar.
+
+Platform: [Instagram/LinkedIn/TikTok/etc.]
+Content Pillars: [list your 5 pillars]
+Posting Frequency: [daily/3x week/etc.]
+Business: [your business]
+Current Season/Events: [any relevant timing]
+
+For each day, provide:
+1. Date
+2. Content Pillar
+3. Post Type (carousel/reel/single image/text)
+4. Topic/Hook
+5. Key Message
+6. CTA
+
+Format as a table I can copy to Google Sheets/Excel.
+Make it balanced across pillars and varied in format.
+```
+
+-----
+
+**Step 3: Write the Actual Captions**
+
+For each post idea:
+
+```
+Write an engaging [Instagram/LinkedIn] caption.
+
+Topic: [from content calendar]
+Target Audience: [who you serve]
+Hook: [attention-grabbing opening]
+Key Points: [main message]
+CTA: [desired action]
+
+Include:
+- Scroll-stopping first line
+- Value-driven content (200-300 words for Instagram, 150-200 for LinkedIn)
+- Relevant hashtags (Instagram: 20-30, LinkedIn: 3-5)
+- Engaging question or CTA
+- Line breaks for readability
+
+Tone: [match your brand voice]
+```
+
+-----
+
+**Step 4: Generate Carousel/Visual Content**
+
+For educational carousels:
+
+```
+Create a 10-slide Instagram carousel outline about [topic].
+
+Topic: [specific subject]
+Target Audience: [who needs this]
+Main Takeaway: [what they'll learn]
+
+For each slide, provide:
+1. Slide number
+2. Headline/title (short, punchy)
+3. Body text (2-3 sentences max per slide)
+4. Visual suggestion (what the slide should look like)
+
+Make slide 1 a hook, slides 2-9 value, slide 10 CTA.
+Keep text minimal - visually scannable.
+```
+
+Then design in Canva using your brand templates!
+
+#### Batch Content Creation System
+
+**Save 10+ Hours Per Week:**
+
+**The Batching Method:**
+
+**Step 1: Pick One Day for Content Creation**
+Example: Every Sunday 2-4 hours
+
+**Step 2: Create Content in Batches**
+
+**Hour 1: Ideation & Planning (30 posts)**
+
+- Use AI to generate all topics
+- Outline key messages
+- Assign to content pillars
+
+**Hour 2: Writing (15-20 captions)**
+
+- Use AI for first drafts
+- Edit for your voice
+- Add personal touches
+
+**Hour 3: Design (10-15 graphics)**
+
+- Use Canva templates
+- Apply brand kit
