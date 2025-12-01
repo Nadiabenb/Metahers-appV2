@@ -164,34 +164,107 @@ export default function AIMasteryPage() {
               {
                 week: 1,
                 title: "AI Content Creation",
-                description: "ChatGPT, Midjourney, AI video, copywriting that converts",
-                slug: "ai-content-creation"
+                duration: "3-5 hours total",
+                liveSession: "Day 3 at 2 PM PST",
+                modules: 4,
+                keyPoints: [
+                  "Create stunning AI-generated photos without a camera",
+                  "Produce engaging videos without expensive equipment",
+                  "Write compelling copy that actually converts",
+                  "Build a 30-day content calendar in under an hour",
+                  "Never experience creator's block again"
+                ],
+                tools: ["ChatGPT / Claude", "Midjourney", "DALL-E 3", "Runway ML", "HeyGen", "CapCut"],
+                deliverables: ["3 professional brand photos", "1 AI-generated video", "3 compelling copy pieces", "7-day content calendar", "Brand voice guide"]
               },
               {
                 week: 2,
-                title: "Brand Building",
-                description: "Visual identity, positioning, personal authority framework",
-                slug: "ai-brand-building"
+                title: "Brand Identity & Design",
+                duration: "3-5 hours total",
+                liveSession: "Day 3 at 2 PM PST",
+                modules: 4,
+                keyPoints: [
+                  "Build a premium brand that stands out",
+                  "Master color psychology to influence buying decisions",
+                  "Create professional logos using AI design tools",
+                  "Develop typography that reflects your personality",
+                  "Create a brand kit that keeps everything consistent"
+                ],
+                tools: ["Canva Pro", "Figma", "Looka AI", "Adobe Creative Suite", "Font libraries"],
+                deliverables: ["Professional logo", "Brand color palette", "Typography system", "Brand guidelines document", "Mockup templates"]
               },
               {
                 week: 3,
-                title: "Web Presence",
-                description: "No-code website building, Webflow, conversions & SEO",
-                slug: "no-code-websites"
+                title: "Website Building (No Code)",
+                duration: "3-5 hours total",
+                liveSession: "Day 3 at 2 PM PST",
+                modules: 4,
+                keyPoints: [
+                  "Choose the perfect no-code website builder for your business",
+                  "Design a homepage that converts visitors into clients",
+                  "Create essential pages (About, Services, Contact)",
+                  "Master SEO basics to get found on Google",
+                  "Launch your professional website with confidence"
+                ],
+                tools: ["Wix", "Squarespace", "Framer", "Webflow", "Carrd", "WordPress"],
+                deliverables: ["Live website", "Complete sitemap", "SEO-optimized pages", "Contact system", "Analytics setup"]
               },
               {
                 week: 4,
-                title: "Business Automation",
-                description: "AI agents, workflows, 20-30 hours/week time savings",
-                slug: "ai-agents-automation"
+                title: "AI Agents & Automation",
+                duration: "5-7 hours total",
+                liveSession: "Day 3 at 2 PM PST",
+                modules: 4,
+                keyPoints: [
+                  "Set up AI chatbots for 24/7 customer support",
+                  "Automate repetitive tasks with Zapier & Make",
+                  "Create email sequences that nurture leads",
+                  "Schedule content across all platforms",
+                  "Build AI agents that work for you 24/7"
+                ],
+                tools: ["Chatbase", "Zapier", "Make", "ConvertKit", "Buffer", "Mailchimp"],
+                deliverables: ["Live chatbot", "3+ automations", "Email sequence", "Social calendar", "Analytics dashboard"]
               }
             ].map((module, idx) => (
               <Link key={idx} href={`/learning-hub`}>
-                <Card className="p-6 border-purple-200 hover:shadow-lg transition-all cursor-pointer h-full">
-                  <Badge className="bg-purple-600 mb-3">Week {module.week}</Badge>
-                  <h3 className="text-lg font-bold text-black mb-3">{module.title}</h3>
-                  <p className="text-gray-700 text-sm mb-4">{module.description}</p>
-                  <p className="text-purple-600 text-sm font-semibold">Read full curriculum →</p>
+                <Card className="p-6 border-purple-200 hover:shadow-lg transition-all cursor-pointer h-full flex flex-col">
+                  <Badge className="bg-purple-600 mb-3 w-fit">Week {module.week}</Badge>
+                  <h3 className="text-lg font-bold text-black mb-2">{module.title}</h3>
+                  
+                  <div className="space-y-3 mb-4 flex-1">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Clock className="w-4 h-4 text-purple-600" />
+                      <span>{module.duration}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Users className="w-4 h-4 text-purple-600" />
+                      <span>Live: {module.liveSession}</span>
+                    </div>
+                    
+                    <div className="pt-2 border-t border-gray-200">
+                      <p className="text-xs font-semibold text-gray-700 mb-2">Key Highlights:</p>
+                      <ul className="space-y-1">
+                        {module.keyPoints.slice(0, 2).map((point, pidx) => (
+                          <li key={pidx} className="text-xs text-gray-700 flex items-start gap-2">
+                            <span className="text-purple-600 flex-shrink-0">•</span>
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="pt-2 border-t border-gray-200">
+                      <p className="text-xs font-semibold text-gray-700 mb-2">Tools:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {module.tools.slice(0, 3).map((tool, tidx) => (
+                          <Badge key={tidx} variant="outline" className="text-xs">{tool}</Badge>
+                        ))}
+                        {module.tools.length > 3 && <Badge variant="outline" className="text-xs">+{module.tools.length - 3}</Badge>}
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <p className="text-purple-600 text-sm font-semibold mt-4">Read full curriculum →</p>
                 </Card>
               </Link>
             ))}
