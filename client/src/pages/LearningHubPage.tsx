@@ -59,14 +59,8 @@ export default function LearningHubPage() {
     }
   });
 
-  // Redirect if not authenticated
-  if (!isAuthenticated) {
-    setLocation("/ai-mastery");
-    return null;
-  }
-
-  // Redirect if not pro
-  if (!user?.isPro) {
+  // Redirect if not pro (whether authenticated or not)
+  if (!isAuthenticated || !user?.isPro) {
     setLocation("/upgrade");
     return null;
   }
