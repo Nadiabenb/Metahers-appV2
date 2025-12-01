@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link, useLocation } from "wouter";
-import { Check, ArrowRight, MessageCircle, Users, TrendingUp, Clock, Zap, Award, Users2, Lock } from "lucide-react";
+import { Check, ArrowRight, MessageCircle, Users, TrendingUp, Clock, Zap, Award, Users2, Lock, ChevronDown, CheckCircle2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import nadiaPhotoUrl from "@assets/IMG_2303_1764551506250.jpeg";
@@ -125,190 +125,159 @@ export default function AIMasteryPage() {
       {/* Hero Section */}
       <section className="relative bg-white pt-12 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-block mb-4 px-4 py-1 bg-red-50 rounded-full border border-red-200">
-            <span className="text-sm font-semibold text-red-600">
-              ⏰ Limited Spots Available This Year
+          <div className="inline-block mb-4 px-4 py-1 bg-purple-50 rounded-full border border-purple-200">
+            <span className="text-sm font-semibold text-purple-600">
+              ✨ AI Mastery Program - Lifetime Access
             </span>
           </div>
           <h1 className="text-5xl sm:text-6xl font-bold text-black mb-6 leading-tight">
-            From Overwhelmed to <span className="text-purple-600">AI-Empowered</span> in 4 Weeks
+            Go from <span className="text-purple-600">AI Confused</span> to <span className="text-purple-600">AI Confident</span> in 4 Weeks
           </h1>
-          <p className="text-2xl font-semibold text-black mb-4">
-            Master the AI skills that will <span className="text-purple-600">define the next decade</span> of your business
+          <p className="text-xl font-semibold text-gray-900 mb-4">
+            Build your content empire. Design your brand. Launch your site. Automate your business.
           </p>
-          <p className="text-lg text-gray-700 mb-6 max-w-3xl mx-auto leading-relaxed">
-            No more expensive designers. No more struggling with content creation. No more watching others build empire while you're stuck in the grind. In 4 weeks, you'll have everything you need to create professional content, build authority, automate your business, and position yourself as the expert in your field.
+          <p className="text-lg text-gray-700 mb-8 max-w-3xl mx-auto leading-relaxed">
+            No more expensive designers. No more blank page anxiety. No more manual busywork. In 4 weeks, you'll have professional content, a premium brand, a conversion-ready website, and AI systems running your business 24/7.
           </p>
-          <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-6 mb-8 max-w-2xl mx-auto">
-            <p className="text-sm text-gray-600 mb-2">SPECIAL OFFER</p>
-            <p className="text-4xl font-bold text-purple-600 mb-2">$699</p>
-            <p className="text-gray-700 font-semibold">One-time investment for lifetime access</p>
-            <p className="text-sm text-gray-600 mt-2">Or 3 payments of $233 if cash flow is tight</p>
+          <div className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-8 mb-8 max-w-2xl mx-auto">
+            <p className="text-sm font-semibold text-purple-600 tracking-wider mb-3">ONE-TIME INVESTMENT</p>
+            <p className="text-5xl font-bold text-purple-600 mb-3">$699</p>
+            <p className="text-gray-800 font-semibold mb-2">Lifetime access. All updates included.</p>
+            <p className="text-sm text-gray-600">Or 3 payments of $233 if that works better for your cash flow</p>
           </div>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="flex items-center justify-center gap-2 text-gray-700">
-              <Zap className="w-5 h-5 text-purple-600" />
-              <span>Start immediately</span>
+              <Zap className="w-5 h-5 text-purple-600 flex-shrink-0" />
+              <span className="text-sm sm:text-base">Start immediately</span>
             </div>
             <div className="flex items-center justify-center gap-2 text-gray-700">
-              <Clock className="w-5 h-5 text-purple-600" />
-              <span>Self-paced learning</span>
+              <Clock className="w-5 h-5 text-purple-600 flex-shrink-0" />
+              <span className="text-sm sm:text-base">Self-paced, 3-5 hrs/week</span>
             </div>
             <div className="flex items-center justify-center gap-2 text-gray-700">
-              <Check className="w-5 h-5 text-purple-600" />
-              <span>100% refund guarantee</span>
+              <Check className="w-5 h-5 text-purple-600 flex-shrink-0" />
+              <span className="text-sm sm:text-base">30-day guarantee</span>
             </div>
           </div>
+          <Button 
+            className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-6 rounded-lg font-bold flex items-center justify-center gap-2 mx-auto"
+            data-testid="button-hero-enroll"
+          >
+            Enroll in AI Mastery
+            <ArrowRight className="w-5 h-5" />
+          </Button>
         </div>
       </section>
 
       {/* 4-Week Curriculum Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 to-white">
+      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-black mb-4 text-center">
-            Your 4-Week Learning Path
+          <h2 className="text-4xl font-bold text-black mb-3 text-center">
+            Your 4-Week Transformation
           </h2>
           <p className="text-lg text-gray-600 mb-12 text-center max-w-3xl mx-auto">
-            Click any card to flip and see the full curriculum details
+            Each week builds on the last, turning you from AI-curious to AI-confident
           </p>
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
+          
+          <div className="space-y-4">
             {[
               {
                 week: 1,
                 title: "AI Content Creation",
-                duration: "3-5 hours total",
-                liveSession: "Day 3 at 2 PM PST",
-                modules: 4,
+                duration: "3-5 hours",
+                description: "Go from blank page anxiety to AI-powered content machine. Create professional photos, videos, and copy without equipment or experience.",
                 keyPoints: [
-                  "Create stunning AI-generated photos without a camera",
-                  "Produce engaging videos without expensive equipment",
-                  "Write compelling copy that actually converts",
-                  "Build a 30-day content calendar in under an hour",
-                  "Never experience creator's block again"
-                ],
-                tools: ["ChatGPT / Claude", "Midjourney", "DALL-E 3", "Runway ML", "HeyGen", "CapCut"],
-                deliverables: ["3 professional brand photos", "1 AI-generated video", "3 compelling copy pieces", "7-day content calendar", "Brand voice guide"]
+                  "Create stunning AI photos without a camera",
+                  "Produce engaging videos without equipment",
+                  "Write copy that converts",
+                  "Build 30-day content calendar"
+                ]
               },
               {
                 week: 2,
                 title: "Brand Identity & Design",
-                duration: "3-5 hours total",
-                liveSession: "Day 3 at 2 PM PST",
-                modules: 4,
+                duration: "3-5 hours",
+                description: "Transform from 'looks DIY' to 'looks premium.' Design a cohesive brand that makes you unforgettable.",
                 keyPoints: [
-                  "Build a premium brand that stands out",
-                  "Master color psychology to influence buying decisions",
-                  "Create professional logos using AI design tools",
-                  "Develop typography that reflects your personality",
-                  "Create a brand kit that keeps everything consistent"
-                ],
-                tools: ["Canva Pro", "Figma", "Looka AI", "Adobe Creative Suite", "Font libraries"],
-                deliverables: ["Professional logo", "Brand color palette", "Typography system", "Brand guidelines document", "Mockup templates"]
+                  "Build a premium brand identity",
+                  "Master color psychology",
+                  "Create professional AI logos",
+                  "Design your brand guidelines"
+                ]
               },
               {
                 week: 3,
                 title: "Website Building (No Code)",
-                duration: "3-5 hours total",
-                liveSession: "Day 3 at 2 PM PST",
-                modules: 4,
+                duration: "3-5 hours",
+                description: "Launch a professional website without hiring a designer. Turn visitors into clients with conversion-optimized pages.",
                 keyPoints: [
-                  "Choose the perfect no-code website builder for your business",
-                  "Design a homepage that converts visitors into clients",
-                  "Create essential pages (About, Services, Contact)",
-                  "Master SEO basics to get found on Google",
-                  "Launch your professional website with confidence"
-                ],
-                tools: ["Wix", "Squarespace", "Framer", "Webflow", "Carrd", "WordPress"],
-                deliverables: ["Live website", "Complete sitemap", "SEO-optimized pages", "Contact system", "Analytics setup"]
+                  "Choose the right no-code builder",
+                  "Design a conversion-ready homepage",
+                  "Create SEO-optimized pages",
+                  "Launch your site with confidence"
+                ]
               },
               {
                 week: 4,
                 title: "AI Agents & Automation",
-                duration: "5-7 hours total",
-                liveSession: "Day 3 at 2 PM PST",
-                modules: 4,
+                duration: "5-7 hours",
+                description: "Reclaim your time by automating the repetitive stuff. Set up AI systems that work for you 24/7.",
                 keyPoints: [
-                  "Set up AI chatbots for 24/7 customer support",
-                  "Automate repetitive tasks with Zapier & Make",
-                  "Create email sequences that nurture leads",
-                  "Schedule content across all platforms",
-                  "Build AI agents that work for you 24/7"
-                ],
-                tools: ["Chatbase", "Zapier", "Make", "ConvertKit", "Buffer", "Mailchimp"],
-                deliverables: ["Live chatbot", "3+ automations", "Email sequence", "Social calendar", "Analytics dashboard"]
+                  "Set up 24/7 AI customer support",
+                  "Automate repetitive tasks",
+                  "Create nurture email sequences",
+                  "Build systems that scale"
+                ]
               }
             ].map((module, idx) => (
-              <div
-                key={idx}
-                className="h-96 cursor-pointer"
-                onClick={() => setFlippedWeek(flippedWeek === module.week ? null : module.week)}
+              <div 
+                key={idx} 
+                className="border-2 border-gray-200 rounded-lg overflow-hidden hover:border-purple-300 transition-all"
               >
-                <div className={`flip-card ${flippedWeek === module.week ? 'flipped' : ''}`} style={{ width: '100%', height: '100%' }}>
-                  {/* Front of card */}
-                  <div className="flip-card-front">
-                    <Card className="p-6 border-purple-200 h-full flex flex-col justify-between bg-white">
-                      <div>
-                        <Badge className="bg-purple-600 mb-3 w-fit">Week {module.week}</Badge>
-                        <h3 className="text-lg font-bold text-black mb-4">{module.title}</h3>
-                        
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <Clock className="w-4 h-4 text-purple-600" />
-                            <span>{module.duration}</span>
-                          </div>
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <Users className="w-4 h-4 text-purple-600" />
-                            <span>{module.liveSession}</span>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <p className="text-purple-600 text-sm font-semibold">Click to reveal curriculum →</p>
-                    </Card>
+                <button
+                  onClick={() => setFlippedWeek(flippedWeek === module.week ? null : module.week)}
+                  className="w-full p-6 text-left flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
+                  data-testid={`button-curriculum-week-${module.week}`}
+                >
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <Badge className="bg-purple-600">{`Week ${module.week}`}</Badge>
+                      <h3 className="text-xl font-bold text-black">{module.title}</h3>
+                    </div>
+                    <p className="text-gray-600 mb-2">{module.description}</p>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <Clock className="w-4 h-4 text-purple-600" />
+                      <span>{module.duration}</span>
+                    </div>
                   </div>
+                  <ChevronDown className={`w-5 h-5 text-purple-600 flex-shrink-0 transition-transform ${flippedWeek === module.week ? 'rotate-180' : ''}`} />
+                </button>
 
-                  {/* Back of card */}
-                  <div className="flip-card-back">
-                    <Card className="p-5 border-purple-200 h-full flex flex-col bg-white overflow-y-auto">
-                      <div className="flex-1">
-                        <h3 className="text-sm font-bold text-black mb-3">{module.title}</h3>
-                        
-                        <div className="mb-3 pb-3 border-b border-gray-200">
-                          <p className="text-xs font-semibold text-gray-700 mb-1">Key Skills:</p>
-                          <ul className="space-y-1">
-                            {module.keyPoints.slice(0, 2).map((point, pidx) => (
-                              <li key={pidx} className="text-xs text-gray-700 flex items-start gap-1">
-                                <span className="text-purple-600 flex-shrink-0">•</span>
-                                <span>{point}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="mb-3 pb-3 border-b border-gray-200">
-                          <p className="text-xs font-semibold text-gray-700 mb-1">Tools:</p>
-                          <div className="flex flex-wrap gap-1">
-                            {module.tools.slice(0, 2).map((tool, tidx) => (
-                              <Badge key={tidx} variant="outline" className="text-xs">{tool}</Badge>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div>
-                          <p className="text-xs font-semibold text-gray-700 mb-1">Deliverables:</p>
-                          <ul className="space-y-1">
-                            {module.deliverables.slice(0, 2).map((item, didx) => (
-                              <li key={didx} className="text-xs text-gray-700 flex items-start gap-1">
-                                <span className="text-purple-600 flex-shrink-0">✓</span>
-                                <span>{item}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </Card>
+                {flippedWeek === module.week && (
+                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-t-2 border-purple-200 p-6 space-y-4">
+                    <div>
+                      <h4 className="font-bold text-black mb-3 flex items-center gap-2">
+                        <CheckCircle2 className="w-5 h-5 text-purple-600" />
+                        What You'll Master
+                      </h4>
+                      <ul className="space-y-2">
+                        {module.keyPoints.map((point, pidx) => (
+                          <li key={pidx} className="flex items-start gap-2 text-gray-700">
+                            <span className="text-purple-600 flex-shrink-0 mt-1">✓</span>
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <button 
+                      onClick={() => setFlippedWeek(null)}
+                      className="w-full py-2 text-purple-600 font-semibold hover:text-purple-700 transition-colors"
+                      data-testid={`button-close-curriculum-week-${module.week}`}
+                    >
+                      Close Details
+                    </button>
                   </div>
-                </div>
+                )}
               </div>
             ))}
           </div>
@@ -317,18 +286,18 @@ export default function AIMasteryPage() {
           <div className="text-center mt-12">
             <Button 
               onClick={handleViewLearningHub}
-              className="bg-black hover:bg-gray-900 text-white text-lg px-8 py-6 rounded-md font-semibold flex items-center justify-center gap-2 mx-auto"
+              className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-8 py-6 rounded-lg font-bold flex items-center justify-center gap-2 mx-auto"
               data-testid="button-view-learning-hub"
             >
               {isAuthenticated ? (
                 <>
-                  View Full Learning Hub
+                  Access Full Program
                   <ArrowRight className="w-5 h-5" />
                 </>
               ) : (
                 <>
                   <Lock className="w-5 h-5" />
-                  Sign In to Access
+                  Enroll to Access
                 </>
               )}
             </Button>
@@ -385,7 +354,7 @@ export default function AIMasteryPage() {
               }
             ].map((testimonial, idx) => (
               <Card key={idx} className="p-6 border-purple-200">
-                <p className="text-yellow-500 text-lg mb-4">★★★★★</p>
+                <p className="text-purple-600 text-lg mb-4">★★★★★</p>
                 <p className="text-gray-800 mb-4 italic">"{testimonial.quote}"</p>
                 <div className="border-t border-gray-200 pt-4">
                   <p className="font-semibold text-black">{testimonial.author}</p>
@@ -684,21 +653,21 @@ export default function AIMasteryPage() {
           </p>
           <div className="space-y-4 mb-12 text-left max-w-lg mx-auto bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20">
             <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-green-300 flex-shrink-0 mt-0.5" />
+              <Check className="w-6 h-6 text-white flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-white">$699 one-time investment</p>
                 <p className="text-purple-100 text-sm">Lifetime access. All future updates included.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-green-300 flex-shrink-0 mt-0.5" />
+              <Check className="w-6 h-6 text-white flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-white">30-day refund guarantee</p>
                 <p className="text-purple-100 text-sm">No questions asked. Your confidence is guaranteed.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Check className="w-6 h-6 text-green-300 flex-shrink-0 mt-0.5" />
+              <Check className="w-6 h-6 text-white flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-white">Start immediately</p>
                 <p className="text-purple-100 text-sm">Begin learning the moment you enroll. No waiting.</p>
@@ -706,7 +675,7 @@ export default function AIMasteryPage() {
             </div>
           </div>
           <Button
-            className="bg-white hover:bg-gray-100 text-purple-600 text-lg px-12 py-7 rounded-md font-bold w-full sm:w-auto mb-4"
+            className="bg-white hover:bg-gray-50 text-purple-600 text-lg px-12 py-7 rounded-lg font-bold w-full sm:w-auto mb-4 border-2 border-white"
             data-testid="button-enroll-final"
           >
             Enroll Now & Start Learning Today
