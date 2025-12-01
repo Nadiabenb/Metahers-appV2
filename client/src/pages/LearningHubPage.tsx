@@ -798,9 +798,79 @@ export default function LearningHubPage() {
               </div>
             </div>
 
-            {/* Curriculum Week Details - Mobile Friendly */}
+            {/* Learning Modules */}
+            <div>
+              <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Learning Journey</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {modules.map((module) => {
+                  const Icon = module.icon;
+                  const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2 || module.week === 3 || module.week === 4);
+                  return (
+                    <button
+                      key={module.week}
+                      onClick={() => {
+                        setFlippedWeek(module.week);
+                        // Scroll to details section after state update
+                        setTimeout(() => {
+                          document.querySelector('[data-week-details]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                      }}
+                      type="button"
+                      className={`border-2 p-6 rounded-lg transition-all text-left w-full ${
+                        module.status === "locked"
+                          ? "border-gray-200 opacity-60 bg-white pointer-events-none"
+                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white cursor-pointer"
+                      }`}
+                      data-testid={`card-module-week-${module.week}`}
+                    >
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          <div
+                            className={`p-3 rounded-lg ${
+                              module.status === "locked"
+                                ? "bg-gray-100"
+                                : "bg-purple-100"
+                            }`}
+                          >
+                            {module.status === "locked" ? (
+                              <Lock className="w-6 h-6 text-gray-400" />
+                            ) : (
+                              <Icon className="w-6 h-6 text-purple-600" />
+                            )}
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-gray-900">Week {module.week}</h3>
+                            <p className="text-sm text-purple-600 font-medium">{module.title}</p>
+                          </div>
+                        </div>
+                        <ChevronDown className="w-5 h-5 text-purple-600 flex-shrink-0 group-hover:translate-y-1 transition-transform" />
+                      </div>
+                      <p className="text-gray-600 text-sm mb-3">{module.description}</p>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <BookOpen className="w-4 h-4" />
+                          <span>{module.lessons.length} Lessons</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-gray-600">
+                          <Calendar className="w-4 h-4" />
+                          <span>{module.nextSession}</span>
+                        </div>
+                      </div>
+                      {module.status === "active" && (
+                        <div className="mt-4 w-full bg-purple-100 rounded-lg p-2">
+                          <div className="bg-purple-600 rounded-full h-2" style={{ width: `${module.progress}%` }}></div>
+                          <div className="text-xs text-gray-600 mt-1">{module.progress}% complete</div>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Curriculum Week Details - Mobile Friendly - NOW APPEARS AFTER CARDS */}
             {flippedWeek && (
-              <div className="mb-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-6 md:p-8 border-2 border-purple-200 shadow-lg">
+              <div className="mt-8 mb-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-6 md:p-8 border-2 border-purple-200 shadow-lg" data-week-details>
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900">Week {flippedWeek} Details</h3>
                   <button 
@@ -862,72 +932,6 @@ export default function LearningHubPage() {
                 </div>
               </div>
             )}
-
-            {/* Learning Modules */}
-            <div>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Learning Journey</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {modules.map((module) => {
-                  const Icon = module.icon;
-                  const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2 || module.week === 3 || module.week === 4);
-                  return (
-                    <button
-                      key={module.week}
-                      onClick={() => {
-                        setFlippedWeek(module.week);
-                      }}
-                      type="button"
-                      className={`border-2 p-6 rounded-lg transition-all text-left w-full ${
-                        module.status === "locked"
-                          ? "border-gray-200 opacity-60 bg-white pointer-events-none"
-                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white cursor-pointer"
-                      }`}
-                      data-testid={`card-module-week-${module.week}`}
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                          <div
-                            className={`p-3 rounded-lg ${
-                              module.status === "locked"
-                                ? "bg-gray-100"
-                                : "bg-purple-100"
-                            }`}
-                          >
-                            {module.status === "locked" ? (
-                              <Lock className="w-6 h-6 text-gray-400" />
-                            ) : (
-                              <Icon className="w-6 h-6 text-purple-600" />
-                            )}
-                          </div>
-                          <div>
-                            <h3 className="font-bold text-gray-900">Week {module.week}</h3>
-                            <p className="text-sm text-purple-600 font-medium">{module.title}</p>
-                          </div>
-                        </div>
-                        <ChevronDown className="w-5 h-5 text-purple-600 flex-shrink-0 group-hover:translate-y-1 transition-transform" />
-                      </div>
-                      <p className="text-gray-600 text-sm mb-3">{module.description}</p>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <BookOpen className="w-4 h-4" />
-                          <span>{module.lessons.length} Lessons</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-gray-600">
-                          <Calendar className="w-4 h-4" />
-                          <span>{module.nextSession}</span>
-                        </div>
-                      </div>
-                      {module.status === "active" && (
-                        <div className="mt-4 w-full bg-purple-100 rounded-lg p-2">
-                          <div className="bg-purple-600 rounded-full h-2" style={{ width: `${module.progress}%` }}></div>
-                          <div className="text-xs text-gray-600 mt-1">{module.progress}% complete</div>
-                        </div>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
 
             {/* Expanded Lesson View - Week 1, 2, 3 & 4 Rich Content */}
             {expandedLesson && (week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons] || week4Lessons[expandedLesson as keyof typeof week4Lessons]) && (
