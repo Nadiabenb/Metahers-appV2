@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { BookOpen, Calendar, Users, MessageCircle, CheckCircle2, Lock, Clock, Sparkles, ArrowRight, Heart, Video, Star, Rocket, Zap, Trophy, Brain, Send, ChevronDown, ChevronUp, Lightbulb, Target, Code, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -59,6 +59,13 @@ export default function LearningHubPage() {
     }
   });
 
+  // Redirect if not pro (whether authenticated or not)
+  useEffect(() => {
+    if (!isLoading && (!isAuthenticated || !user?.isPro)) {
+      setLocation("/upgrade");
+    }
+  }, [isLoading, isAuthenticated, user?.isPro, setLocation]);
+
   // Wait for user data to load
   if (isLoading) {
     return (
@@ -71,10 +78,16 @@ export default function LearningHubPage() {
     );
   }
 
-  // Redirect if not pro (whether authenticated or not)
+  // Show loading if checking auth
   if (!isAuthenticated || !user?.isPro) {
-    setLocation("/upgrade");
-    return null;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-foreground/70">Redirecting...</p>
+        </div>
+      </div>
+    );
   }
 
   const curriculumDetails = {
