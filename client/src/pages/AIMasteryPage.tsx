@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "wouter";
-import { Check, ArrowRight, MessageCircle, Users, TrendingUp, Clock, Zap } from "lucide-react";
+import { Check, ArrowRight, MessageCircle, Users, TrendingUp, Clock, Zap, Award, Users2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import nadiaPhotoUrl from "@assets/IMG_2303_1764551506250.jpeg";
 
 export default function AIMasteryPage() {
   const [selectedOption, setSelectedOption] = useState<"one-time" | "payment-plan">(
@@ -578,23 +579,76 @@ export default function AIMasteryPage() {
         </div>
       </section>
 
-      {/* Footer Message */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white border-t border-gray-200">
-        <div className="max-w-3xl mx-auto text-center">
-          <p className="text-gray-600 mb-4">
-            <span className="font-semibold">About Your Guide:</span> Nadia Ben Brahim, "The
-            Mompreneur"
-          </p>
-          <p className="text-gray-700 leading-relaxed">
-            Founder of MetaHers and passionate advocate for women in tech, I've made it my mission
-            to demystify emerging technologies and make them accessible to every woman with a
-            vision. I've helped hundreds of women transform their businesses with AI, and I'm
-            ready to help you do the same.
-          </p>
-          <p className="text-purple-600 font-semibold mt-6 text-lg">
-            "I believe in you. I know I can help you. Let's make this your breakthrough year."
-          </p>
-          <p className="text-gray-600 mt-2">— Nadia</p>
+      {/* Meet Your Instructor Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-white to-purple-50">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-4xl font-bold text-black mb-16 text-center">
+            Meet Your Guide
+          </h2>
+          
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Photo */}
+            <div className="flex justify-center md:order-first">
+              <div className="relative w-full max-w-sm">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-600 to-purple-400 rounded-2xl blur-2xl opacity-20 -z-10"></div>
+                <img
+                  src={nadiaPhotoUrl}
+                  alt="Nadia Ben Brahim - Founder of MetaHers"
+                  className="w-full rounded-2xl shadow-xl object-cover"
+                  data-testid="img-nadia-guide"
+                />
+              </div>
+            </div>
+
+            {/* Bio */}
+            <div className="flex flex-col justify-center">
+              <Badge className="w-fit bg-purple-100 text-purple-700 mb-4">
+                <Award className="w-4 h-4 mr-2" />
+                Founder & AI Strategist
+              </Badge>
+              
+              <h3 className="text-3xl font-bold text-black mb-2">
+                Nadia Ben Brahim
+              </h3>
+              <p className="text-lg text-purple-600 font-semibold mb-6">
+                "The Mompreneur" — Founder of MetaHers
+              </p>
+
+              <div className="space-y-4 mb-8">
+                <p className="text-gray-700 leading-relaxed">
+                  I'm obsessed with demystifying emerging technologies and making them accessible to every woman with a vision. For the past 5+ years, I've helped <span className="font-semibold text-black">500+ women</span> transform their businesses using AI, Web3, and cutting-edge automation.
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  As a mother, entrepreneur, and lifelong learner, I understand the unique challenges women face building businesses while managing everything else. I've walked that path, and I know what's possible when you have the right guidance and the right tools.
+                </p>
+              </div>
+
+              {/* Credentials */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                <div className="bg-white border border-purple-200 rounded-lg p-4">
+                  <p className="text-2xl font-bold text-purple-600">500+</p>
+                  <p className="text-sm text-gray-600">Women Transformed</p>
+                </div>
+                <div className="bg-white border border-purple-200 rounded-lg p-4">
+                  <p className="text-2xl font-bold text-purple-600">5+</p>
+                  <p className="text-sm text-gray-600">Years Teaching AI</p>
+                </div>
+              </div>
+
+              {/* Quote */}
+              <blockquote className="bg-purple-50 border-l-4 border-purple-600 pl-6 py-4 mb-6 rounded-r-lg">
+                <p className="text-gray-800 italic text-lg font-medium mb-2">
+                  "I don't just teach AI tools. I empower women to become unstoppable with them. Your success isn't just my goal—it's my mission."
+                </p>
+                <footer className="text-purple-600 font-semibold">— Nadia</footer>
+              </blockquote>
+
+              {/* CTA */}
+              <p className="text-gray-700 mb-6">
+                <span className="font-semibold">Ready to get expert guidance?</span> Enroll in AI Mastery and let me show you what's possible.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
     </div>
