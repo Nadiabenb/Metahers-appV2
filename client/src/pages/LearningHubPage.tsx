@@ -141,114 +141,114 @@ export default function LearningHubPage() {
   const week1Lessons = {
     "AI Photography": {
       emoji: "📸",
-      tagline: "Turn yourself into a one-woman content machine",
-      description: "Learn to generate professional, on-brand photos without hiring a photographer. Because your solo business doesn't have a budget for photoshoots, but it does have your vision.",
+      tagline: "Create Stunning Brand Photos Without a Camera",
+      description: "Master AI image generation to create professional, consistent brand photography. Learn the secret prompts that get you exactly what you want every time—and how to polish them to perfection.",
       objectives: [
-        "Master AI image generation tools (Midjourney, DALL-E, Stable Diffusion)",
-        "Create consistent brand aesthetics across all content",
-        "Generate product photos, portraits, and lifestyle imagery",
-        "Edit and refine AI-generated images for maximum impact"
+        "Master AI image generation with Midjourney, DALL-E 3, Leonardo.AI, and Magnific AI",
+        "Write prompts that produce exactly the photos you envision using the Subject + Style + Lighting + Composition + Quality formula",
+        "Create consistent brand photography across all platforms and marketing materials",
+        "Polish AI-generated images with advanced editing techniques for professional results"
       ],
       keyTopics: [
-        { title: "Prompt Engineering 101", desc: "Write prompts like you're directing a photographer—be specific, be visual, be YOU" },
-        { title: "Brand Consistency", desc: "Make sure your AI photos look like they belong in YOUR brand universe" },
-        { title: "Tool Comparison", desc: "Midjourney vs DALL-E vs Stable Diffusion—which tool is your soulmate?" },
-        { title: "Editing & Enhancement", desc: "Polish those AI babies to perfection in Canva or Photoshop" }
+        { title: "The Prompt Formula", desc: "[Subject] + [Style] + [Lighting] + [Composition] + [Quality Tags]—your blueprint for perfect shots" },
+        { title: "Tool Comparison: Midjourney vs DALL-E vs Leonardo", desc: "Ultra-realistic brand photography, quick quality images, or product-focused results—choose your weapon" },
+        { title: "Creating Brand Consistency", desc: "Use the same style keywords and seed numbers to ensure all your AI photos look like they belong together" },
+        { title: "Making It Look Real", desc: "Add imperfections, specify camera settings, include environmental details—avoid the obvious AI tells" }
       ],
       exercise: {
-        title: "Generate Your Hero Shot",
-        desc: "Create 5 AI-generated lifestyle photos that represent your brand in action. Write down the exact prompts you used—these are gold for repetition.",
+        title: "Create Your 3-Image Instagram Carousel",
+        desc: "Generate: 1) You/your brand story, 2) Your product/service in action, 3) The transformation/result. Write down the exact prompts you used—these become your gold standard templates.",
         timeEstimate: "45 minutes"
       },
       resources: [
-        { title: "Prompt Template Library", type: "Template" },
-        { title: "AI Image Generation Comparison Chart", type: "Guide" },
-        { title: "10 Brand Photography Aesthetics to Steal", type: "Inspiration" },
-        { title: "Prompt Secrets: How to Get Perfect Results", type: "Video" }
+        { title: "Ultimate AI Photography Prompt Template", type: "Template" },
+        { title: "Professional Headshot Prompt Examples", type: "Swipes" },
+        { title: "Product Photography Prompt Library", type: "Swipes" },
+        { title: "Advanced Consistency Techniques (Seed Numbers)", type: "Guide" }
       ]
     },
     "Video Generation": {
       emoji: "🎬",
-      tagline: "Be on camera without actually being on camera (introvert approved)",
-      description: "Create short-form videos, explainers, and testimonials using AI. No fancy equipment. No awkward takes. Just pure, polished content magic.",
+      tagline: "Create Scroll-Stopping Videos in Minutes",
+      description: "Transform your AI images into dynamic videos, create talking head videos without filming a single take, and master AI-powered video editing. No expensive equipment needed—just pure video magic.",
       objectives: [
-        "Use AI video generation tools (Synthesia, Runway, D-ID)",
-        "Create talking head videos with AI avatars",
-        "Generate text-to-video content for social media",
-        "Edit and enhance video content for different platforms"
+        "Use Runway ML to convert static images into engaging motion videos with custom prompts",
+        "Create professional talking head videos using HeyGen with AI avatars or your own likeness",
+        "Generate text-to-video content optimized for TikTok, Instagram Reels, and YouTube Shorts",
+        "Master CapCut's AI features: auto-captions, auto-subtitles, auto-effects, and intelligent editing"
       ],
       keyTopics: [
-        { title: "AI Avatar Videos", desc: "Let a digital you do the talking while you're actually building your business" },
-        { title: "Text-to-Video Magic", desc: "Turn your best tweets into viral-ready videos in seconds" },
-        { title: "Multi-Platform Optimization", desc: "TikTok, Instagram Reels, YouTube Shorts—different sizes, one toolkit" },
-        { title: "Voice & Narration", desc: "AI voice or your own? Let's figure out what feels authentic for your brand" }
+        { title: "Image-to-Video with Runway ML", desc: "Turn your hero shot into a dynamic video: camera zoom, subtle movements, motion effects—in seconds" },
+        { title: "Talking Head Videos (HeyGen)", desc: "Record your voice or use AI voice, pick an avatar or use your photo—boom, professional video without the awkward takes" },
+        { title: "AI Video Editing Mastery", desc: "Auto-captions, auto-transitions, background removal, speed changes—CapCut's AI does the heavy lifting" },
+        { title: "Multi-Platform Optimization", desc: "Different aspect ratios and lengths for each platform: TikTok (9:16), Reels (9:16), Shorts (9:16), LinkedIn (1:1)" }
       ],
       exercise: {
-        title: "Create Your First AI Video",
-        desc: "Script and generate a 30-60 second explainer video about your top service or product. Post in the community for feedback.",
+        title: "Create Your First Complete AI Video",
+        desc: "Choose: 30-second brand intro (HeyGen), product showcase (image-to-video), or tips video (auto-captions). Script, generate, edit, post. Own it.",
         timeEstimate: "60 minutes"
       },
       resources: [
-        { title: "Script Template: The Perfect 30-Second Hook", type: "Template" },
-        { title: "Best AI Video Tools Ranked (Performance + Price)", type: "Comparison" },
-        { title: "Video Editing Hacks for Solopreneurs", type: "Tutorial" },
-        { title: "5 Viral Video Formulas (Proven to Work)", type: "Masterclass" }
+        { title: "The Perfect 30-Second Hook Script Template", type: "Template" },
+        { title: "AI Video Tools Ranked: Performance + Speed + Price", type: "Comparison" },
+        { title: "HeyGen Avatar + Voice Setup Guide", type: "Tutorial" },
+        { title: "5 Viral Video Formulas Proven to Work", type: "Swipes" }
       ]
     },
     "Copy Writing": {
       emoji: "✨",
-      tagline: "Write copy that converts while sipping your morning coffee",
-      description: "Master AI-assisted copywriting to create sales pages, emails, social posts, and more. Your words will finally feel as good as they sound in your head.",
+      tagline: "Write Copy That Converts While Sipping Your Morning Coffee",
+      description: "Master ChatGPT and AI copywriting to craft sales pages, email sequences, social captions, and product descriptions that actually convert. AI drafts it, you make it legendary with your unique voice.",
       objectives: [
-        "Use ChatGPT, Claude, and specialized AI writing tools",
-        "Write compelling sales copy and product descriptions",
-        "Create email sequences that actually get opened",
-        "Develop your unique voice while using AI as your co-writer"
+        "Use ChatGPT prompts to generate high-converting sales copy, email sequences, and product descriptions",
+        "Create your personal brand voice guide so AI knows how to sound like YOU",
+        "Build email sequences that get opened, read, and convert (welcome, value, soft pitch)",
+        "Write social media copy that hooks, engages, and drives action—using the PAS framework"
       ],
       keyTopics: [
-        { title: "Prompting for Copy", desc: "Tell AI your audience, your pain points, your solution—let it amplify your message" },
-        { title: "The Art of Iteration", desc: "First draft is never final. Refine, personalize, inject YOURSELF" },
-        { title: "Sales Page Formulas", desc: "Problem → Agitation → Solution → Objection Handling → CTA (AI knows these)" },
-        { title: "Email Sequences That Convert", desc: "From welcome series to sales sequences—AI can draft them, you make them human" }
+        { title: "The Ultimate ChatGPT Prompt Formula", desc: "Tell it your audience, pain points, transformation, and unique angle—watch it amplify your message" },
+        { title: "Sales Page Framework", desc: "Problem → Agitate → Solution → Objection Handling → Strong CTA (PAS framework AI knows cold)" },
+        { title: "5-Email Welcome Sequence Template", desc: "Email 1: Welcome + expectations, Email 2: Story + connection, Email 3: Massive value, Email 4: Social proof, Email 5: Soft pitch" },
+        { title: "The Art of Iteration", desc: "AI's first draft is never final. Edit, personalize, inject yourself, test, repeat until it converts" }
       ],
       exercise: {
-        title: "Write Your Best Sales Email",
-        desc: "Use AI to draft an email sequence (3 emails) for your core offering. Share with the group and get real feedback.",
+        title: "Write Your Best Sales Email Sequence",
+        desc: "Use AI to draft 3 emails for your core offering. Edit for your voice. Share with community for feedback. This is your template forever.",
         timeEstimate: "90 minutes"
       },
       resources: [
-        { title: "Swipe File: 50 High-Converting Sales Pages", type: "Swipes" },
-        { title: "Email Sequence Template Library", type: "Template" },
+        { title: "Sales Page Copy Swipe File (50 High-Converters)", type: "Swipes" },
+        { title: "Email Sequence Templates (Welcome + Upsell)", type: "Templates" },
         { title: "Power Words That Make People Click", type: "Cheat Sheet" },
-        { title: "From Bland to Iconic: Voice & Tone Guide", type: "Workbook" }
+        { title: "Brand Voice Definition Worksheet", type: "Workbook" }
       ]
     },
     "Social Media Magic": {
       emoji: "📱",
-      tagline: "Post like a content guru, schedule like a boss, engage like you have a team",
-      description: "Generate, schedule, and optimize social content for all platforms. Your followers will never know you're doing this in 2 hours a week.",
+      tagline: "Never Run Out of Content Ideas Again",
+      description: "Create 30 days of social media content in one sitting using AI. Learn the content calendar system, repurposing framework, and viral formulas that actually work. Your followers will think you have a team.",
       objectives: [
-        "Generate platform-specific content (captions, hashtags, timing)",
-        "Use scheduling tools with AI optimization",
-        "Create content calendars that actually work",
-        "Analyze what's resonating and double down on wins"
+        "Generate 5 sustainable content pillars specific to your business using ChatGPT",
+        "Create a complete 30-day content calendar with specific posts, times, hashtags, and hooks",
+        "Master the repurposing framework: turn 1 piece of content into 10 different formats",
+        "Use proven viral frameworks and scheduling tools to maximize reach without extra work"
       ],
       keyTopics: [
-        { title: "Content Batching", desc: "Create a month's worth of content in one sitting. (Yes, really.)" },
-        { title: "Platform-Specific Optimization", desc: "LinkedIn doesn't want what TikTok wants. AI helps you speak each platform's language" },
-        { title: "Caption Writing", desc: "Your hook, your story, your CTA—AI drafts, you make it legendary" },
-        { title: "Engagement & Community", desc: "Build your 1000 true fans with strategic engagement (spoiler: AI helps)" }
+        { title: "Your 5 Content Pillars", desc: "Expertise showcase, value delivery, behind-the-scenes, community building, promotional—balanced sustainability" },
+        { title: "The Repurposing Framework", desc: "Turn 1 blog post into: Instagram post, Reel script, Carousel, LinkedIn post, Twitter thread, Pinterest pin, Email, YouTube Short" },
+        { title: "Viral Content Frameworks", desc: "Transformation posts, Listicles, Story hooks, Myth-busters—proven patterns that get engagement" },
+        { title: "Content Batching & Scheduling", desc: "Create a month of content in 2-3 hours, schedule with Buffer/Later, set and forget" }
       ],
       exercise: {
-        title: "Build Your 4-Week Content Calendar",
-        desc: "Use AI to generate content for 4 weeks across 2-3 platforms. Batch record videos, write captions, schedule everything. Welcome to freedom.",
+        title: "Build Your 30-Day Content Calendar",
+        desc: "AI-generate your content pillars, create 30 days of specific posts with hooks, times, hashtags. Batch create assets. Schedule everything. Welcome to the freedom zone.",
         timeEstimate: "120 minutes"
       },
       resources: [
-        { title: "Content Calendar Template (with AI prompts)", type: "Template" },
-        { title: "Hashtag Strategy for Each Platform", type: "Guide" },
-        { title: "Caption Formula Cheat Sheet", type: "Cheat Sheet" },
-        { title: "Best Scheduling Tools (Free + Paid Comparison)", type: "Resource" }
+        { title: "30-Day Content Calendar Template (AI-Integrated)", type: "Template" },
+        { title: "The Complete Repurposing Framework", type: "System" },
+        { title: "Hashtag Strategy by Platform", type: "Guide" },
+        { title: "Best Scheduling Tools Comparison (Free + Paid)", type: "Resource" }
       ]
     }
   };
@@ -336,10 +336,15 @@ export default function LearningHubPage() {
                     <button
                       key={module.week}
                       onClick={() => {
-                        console.log('Card clicked:', module.week, 'isClickable:', isClickable);
                         if (isClickable) {
-                          console.log('Expanding lesson:', module.lessons[0]);
-                          setExpandedLesson(expandedLesson ? null : module.lessons[0]);
+                          const newLesson = expandedLesson ? null : module.lessons[0];
+                          setExpandedLesson(newLesson);
+                          // Scroll to expanded lesson when opened
+                          if (newLesson) {
+                            setTimeout(() => {
+                              document.querySelector('[data-lesson-expanded]')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }, 0);
+                          }
                         }
                       }}
                       type="button"
@@ -414,7 +419,7 @@ export default function LearningHubPage() {
 
             {/* Expanded Lesson View - Week 1 Rich Content */}
             {expandedLesson && week1Lessons[expandedLesson as keyof typeof week1Lessons] && (
-              <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200">
+              <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200 mt-8" data-lesson-expanded>
                 {(() => {
                   const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons];
                   return (

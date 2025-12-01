@@ -1,0 +1,610 @@
+# Week 1: AI Content Creation Masterclass
+
+## Transform Your Content Game with AI
+
+-----
+
+## 🎯 Week Overview
+
+**Welcome to Week 1, Queen!** This week, you’re going to learn how to create content that looks like you hired a professional team—photos, videos, copy, and social media posts—all using AI tools that are easier than you think.
+
+**What You’ll Master:**
+
+- Professional AI photography without a camera
+- Engaging video content without expensive equipment
+- Compelling copy that converts
+- Social media content that stops the scroll
+
+**Time Commitment:** 3-5 hours total (self-paced)
+**Live Session:** Day 3 at 2 PM PST - Bring your questions and show off what you’ve created!
+
+-----
+
+## 📚 Lesson 1: AI Photography Mastery
+
+### Create Stunning Brand Photos Without a Camera
+
+**Duration:** 45 minutes
+
+#### What You’ll Learn:
+
+- The AI tools that create the most realistic photos
+- How to write prompts that get exactly what you want
+- Creating consistent brand photography
+- Professional editing tricks using AI
+
+#### Tools You’ll Use:
+
+1. **Midjourney** - For ultra-realistic brand photography
+1. **DALL-E 3** (via ChatGPT Plus) - For quick, high-quality images
+1. **Leonardo.AI** - For product photos and marketing images
+1. **Magnific AI** - For upscaling and enhancement
+
+#### Step-by-Step Tutorial:
+
+**Step 1: Understanding AI Image Prompts**
+
+The secret to great AI photos is in the prompt. Here’s the formula:
+
+```
+[Subject] + [Style] + [Lighting] + [Composition] + [Quality Tags]
+```
+
+**Example Prompts:**
+
+*For Personal Branding Photos:*
+
+```
+Professional Black woman entrepreneur, 30s, sitting at modern desk with laptop, 
+natural window lighting, soft focus background, warm tones, confident smile, 
+business casual attire, shot on Canon 5D, shallow depth of field, 
+professional photography, high resolution, 8k
+```
+
+*For Product Photos:*
+
+```
+Handmade ceramic mug on white marble countertop, steam rising from coffee, 
+morning natural light from window, minimalist kitchen background, 
+lifestyle photography, soft shadows, warm color palette, 
+commercial photography, 8k, ultra detailed
+```
+
+*For Social Media Content:*
+
+```
+Flat lay of workspace, laptop, coffee, notebook, flowers in vase, 
+overhead shot, bright natural lighting, pink and gold color scheme, 
+Instagram aesthetic, professional product photography, clean composition
+```
+
+**Step 2: Hands-On Practice**
+
+**Your Assignment:** Create 3 Brand Photos
+
+1. A professional headshot/portrait
+1. A workspace/lifestyle shot
+1. A product or service visualization
+
+**Tips for Success:**
+
+- Start with simple prompts, then add details
+- Save prompts that work well for you
+- Create variations by changing one element at a time
+- Use the same style keywords for brand consistency
+
+**Step 3: Advanced Techniques**
+
+**Creating Consistency:**
+
+- Use the same reference style in your prompts
+- Keep lighting descriptions consistent
+- Use “seed” numbers (in Midjourney) to maintain similar results
+- Create a prompt template for your brand
+
+**Making It Look Real:**
+
+- Add imperfections: “slight blur,” “natural skin texture”
+- Specify camera and lens: “shot on Canon 5D with 50mm lens”
+- Include environmental details: “soft window lighting,” “shallow depth of field”
+- Avoid AI tells: Skip overly perfect symmetry
+
+#### Practice Exercise:
+
+Create a 3-image Instagram carousel for your business:
+
+- Image 1: You/your brand story
+- Image 2: Your product/service in action
+- Image 3: The transformation/result
+
+**Share in the community group with #Week1Photography**
+
+-----
+
+## 📚 Lesson 2: AI Video Generation
+
+### Create Scroll-Stopping Videos in Minutes
+
+**Duration:** 60 minutes
+
+#### What You’ll Learn:
+
+- AI video tools that actually work
+- Turning images into dynamic videos
+- Creating talking head videos without filming
+- Adding professional effects and transitions
+
+#### Tools You’ll Use:
+
+1. **Runway ML** - For image-to-video and video editing
+1. **HeyGen** - For AI avatar/talking head videos
+1. **Pika Labs** - For creative video effects
+1. **CapCut** - For AI-powered editing and captions
+
+#### Step-by-Step Tutorial:
+
+**Part 1: Image-to-Video Magic**
+
+**Using Runway ML:**
+
+1. **Upload Your AI Image** (from Lesson 1)
+1. **Add Motion Prompts:**
+- “Camera slowly zooms in on face”
+- “Gentle hair movement from breeze”
+- “Steam rising from coffee cup”
+- “Subtle head turn and smile”
+1. **Adjust Settings:**
+- Duration: 4-5 seconds
+- Motion strength: Medium (3-5)
+- Camera movement: Subtle
+
+**Part 2: AI Talking Head Videos (HeyGen)**
+
+Perfect for:
+
+- Course content
+- Product explanations
+- Social media tips
+- Brand introductions
+
+**How to Create:**
+
+1. **Choose Your Avatar** (or create custom from your photo)
+1. **Write Your Script** (30-60 seconds max for social)
+1. **Select Voice** (natural, conversational tone)
+1. **Add Background** (your brand colors or imagery)
+1. **Generate & Download**
+
+**Script Formula for Social Media:**
+
+```
+Hook (first 3 seconds): "Want to know the secret to [desired outcome]?"
+Value (middle 20 seconds): "Here's exactly what I do..."
+CTA (last 5 seconds): "Save this and try it yourself!"
+```
+
+**Part 3: Video Editing with AI (CapCut)**
+
+**Auto-Captions:**
+
+- Upload video
+- Click “Auto Captions”
+- Customize style (use bold, dynamic fonts)
+- Match your brand colors
+
+**AI Effects:**
+
+- Auto b-roll insertion
+- Transitions based on content
+- Background removal
+- Speed adjustments for emphasis
+
+#### Your Video Assignment:
+
+Create one of these:
+
+1. **30-second brand intro video** (using HeyGen)
+1. **Product showcase video** (image-to-video with Runway)
+1. **Tips/tutorial video** with auto-captions
+
+**Share in the community with #Week1Video**
+
+-----
+
+## 📚 Lesson 3: AI Copywriting That Converts
+
+### Write Like a Pro Without Staring at a Blank Page
+
+**Duration:** 45 minutes
+
+#### What You’ll Learn:
+
+- ChatGPT prompts for different types of copy
+- Creating your brand voice with AI
+- Email sequences that sell
+- Social media captions that engage
+
+#### Tools You’ll Use:
+
+1. **ChatGPT** - Your AI copywriting assistant
+1. **Claude** (that’s me! 😊) - For longer-form content
+1. **Copy.ai** - For quick marketing copy variations
+1. **Jasper** - For SEO-optimized content (optional)
+
+#### The Ultimate ChatGPT Copywriting Prompts
+
+**For Sales Pages:**
+
+```
+You are an expert copywriter specializing in [your industry]. 
+Write compelling sales copy for [product/service] that:
+
+Target Audience: [describe your ideal client]
+Pain Points: [what problems do they have]
+Transformation: [what results do they want]
+Unique Angle: [what makes you different]
+
+Use the PAS framework (Problem-Agitate-Solution).
+Write in a conversational, empowering tone.
+Include emotional triggers and specific benefits.
+End with a strong call-to-action.
+```
+
+**For Email Sequences:**
+
+```
+Create a 5-email welcome sequence for new subscribers to [your business].
+
+Email 1: Welcome + set expectations
+Email 2: Share your story + build connection
+Email 3: Provide massive value (free resource)
+Email 4: Social proof + testimonials
+Email 5: Soft pitch for [product/service]
+
+Each email should be 150-200 words, conversational tone, 
+with clear subject lines and CTAs.
+```
+
+**For Social Media Captions:**
+
+```
+Write 10 Instagram captions for [your niche] that:
+- Start with a scroll-stopping hook
+- Provide value or insight
+- End with engagement question
+- Include relevant hashtags
+- Are 100-150 words each
+- Match this brand voice: [describe your voice]
+
+Make them authentic, relatable, and actionable.
+```
+
+**For Product Descriptions:**
+
+```
+Write a compelling product description for [product name].
+
+Features: [list features]
+Benefits: [how it helps customer]
+Target Customer: [who it's for]
+
+Write in a way that:
+- Focuses on transformation, not just features
+- Uses sensory language
+- Addresses objections
+- Creates urgency
+- Is 100-150 words
+```
+
+#### Creating Your Brand Voice Guide
+
+**Prompt to Define Your Voice:**
+
+```
+Help me define my brand voice for [business name] in [industry].
+
+My personality: [adjectives that describe you]
+My values: [what you stand for]
+My audience: [who you serve]
+What I want to be known for: [your expertise]
+
+Create a brand voice guide that includes:
+1. Voice attributes (3-5 adjectives)
+2. Do's and Don'ts
+3. Example phrases I should/shouldn't use
+4. Tone variations for different content types
+```
+
+#### Your Copywriting Assignment:
+
+Create this content using AI:
+
+1. **One sales page section** (200 words) for your offer
+1. **Three social media captions** for this week
+1. **One email** to your audience
+
+**Pro Tip:** Always edit AI copy to add your personality, specific examples, and authentic touches.
+
+**Share your best piece in the community with #Week1Copy**
+
+-----
+
+## 📚 Lesson 4: Social Media Content Strategy
+
+### Never Run Out of Content Ideas Again
+
+**Duration:** 45 minutes
+
+#### What You’ll Learn:
+
+- Creating a 30-day content calendar with AI
+- Repurposing one piece of content 10 ways
+- Viral content frameworks
+- Scheduling and automating posts
+
+#### The AI Content Calendar System
+
+**Step 1: Generate Content Pillars**
+
+**ChatGPT Prompt:**
+
+```
+I'm a [your business type] serving [target audience].
+
+Create 5 content pillars for my social media that:
+- Showcase my expertise
+- Provide value to my audience
+- Drive engagement
+- Support my business goals
+- Are sustainable to create
+
+For each pillar, explain what types of posts fit within it.
+```
+
+**Step 2: Create 30-Day Content Calendar**
+
+**ChatGPT Prompt:**
+
+```
+Using these content pillars: [list from above]
+
+Create a 30-day Instagram content calendar with:
+- Mix of formats (posts, reels, stories, carousels)
+- Balanced across all 5 pillars
+- Specific post ideas with hooks
+- Best posting times for [your timezone]
+- Hashtag strategy
+
+Format as a table with: Date | Content Pillar | Format | Topic | Hook | Hashtags
+```
+
+**Step 3: The Repurposing Framework**
+
+Take ONE piece of content and turn it into:
+
+1. **Instagram Post** - Key insight with visual
+1. **Instagram Reel** - Short video version
+1. **Instagram Carousel** - Step-by-step breakdown
+1. **Story Series** - Behind-the-scenes
+1. **LinkedIn Post** - Professional angle
+1. **Twitter Thread** - Bite-sized tips
+1. **Pinterest Pin** - Visual infographic
+1. **Email Newsletter** - Deep dive
+1. **Blog Post** - Long-form
+1. **YouTube Short** - Video snippet
+
+**AI Repurposing Prompt:**
+
+```
+I have this content: [paste your original content]
+
+Repurpose it into:
+- An Instagram carousel (10 slides)
+- A 60-second reel script
+- A LinkedIn post
+- A Twitter thread (5 tweets)
+- An email newsletter
+
+Adapt the tone and format for each platform while keeping the core message.
+```
+
+#### Viral Content Frameworks
+
+**Framework 1: The Transformation Post**
+
+- Before: Where they are now
+- During: The struggle/journey
+- After: The result
+- How: Your solution
+
+**Framework 2: The Listicle**
+
+- “5 Things I Wish I Knew About [topic]”
+- Number-driven with specific tips
+- Each point is actionable
+
+**Framework 3: The Story Hook**
+
+- Start with unexpected statement
+- Share relatable story
+- Reveal the lesson
+- Apply to their life
+
+**Framework 4: The Myth-Buster**
+
+- Common belief: “Most people think…”
+- The truth: “But here’s what really…”
+- The proof: “Here’s why…”
+- The action: “So instead, do this…”
+
+#### Your Content Assignment:
+
+1. **Create your 5 content pillars** using AI
+1. **Generate a 7-day content calendar**
+1. **Create one piece of content** and repurpose it 3 ways
+1. **Use AI to design graphics** for your posts
+
+**Share your content calendar in the community with #Week1Strategy**
+
+-----
+
+## 🎯 Week 1 Challenge: Your Content Portfolio
+
+By the end of Week 1, you should have:
+
+- [ ] 3 professional AI-generated brand photos
+- [ ] 1 video (30-60 seconds)
+- [ ] 3 pieces of compelling copy
+- [ ] 7-day content calendar
+- [ ] Your brand voice guide
+- [ ] At least 3 pieces of content posted
+
+**Bonus Challenge:** Get 1 piece of content to go viral (100+ engagements)
+
+-----
+
+## 💬 Live Session Day 3: Q&A + Portfolio Review
+
+**What to Bring:**
+
+- Your best content creation from the week
+- Questions about any tools or techniques
+- Examples of results you’re proud of
+- Challenges you’re facing
+
+**What We’ll Cover:**
+
+- Live portfolio reviews and feedback
+- Advanced tips based on your work
+- Troubleshooting common issues
+- Networking with other students
+- Celebrating your wins!
+
+**How to Prepare:**
+
+- Post your work in the community BEFORE the session
+- Write down your top 3 questions
+- Be ready to share your screen (optional)
+
+-----
+
+## 🎁 Week 1 Resources
+
+**Free Tools:**
+
+- Leonardo.AI (free tier)
+- ChatGPT (free version)
+- CapCut (free)
+- Canva (free tier)
+
+**Paid Tools Worth It:**
+
+- ChatGPT Plus ($20/month) - For DALL-E 3
+- Midjourney ($10/month) - Best quality images
+- HeyGen ($29/month) - AI video avatars
+- Runway ML ($15/month) - Video generation
+
+**Templates & Prompts:**
+
+- [Download: 50 ChatGPT Copywriting Prompts]
+- [Download: Content Calendar Template]
+- [Download: Brand Voice Worksheet]
+- [Download: Image Prompt Library]
+
+-----
+
+## 📝 Your Success Checklist
+
+Track your progress:
+
+**Learning:**
+
+- [ ] Watched all 4 lesson videos
+- [ ] Tried each AI tool mentioned
+- [ ] Completed practice exercises
+- [ ] Saved your best prompts
+
+**Creating:**
+
+- [ ] Created 3+ brand photos
+- [ ] Made at least 1 video
+- [ ] Written copy for your business
+- [ ] Posted content on social media
+
+**Community:**
+
+- [ ] Introduced yourself in the group
+- [ ] Shared your work with hashtags
+- [ ] Commented on 3+ other members’ posts
+- [ ] Asked Nadia at least one question
+
+**Mindset:**
+
+- [ ] Celebrated a win (big or small!)
+- [ ] Helped another member
+- [ ] Pushed past imposter syndrome
+- [ ] Had fun with the process!
+
+-----
+
+## 💪 Overcoming Week 1 Challenges
+
+**“The AI photos don’t look like me!”**
+
+- Use reference images with detailed descriptions
+- Try different tools (each has strengths)
+- Focus on brand aesthetic over perfect likeness
+- Consider HeyGen for actual video of “you”
+
+**“I’m overwhelmed by all the tools!”**
+
+- Pick ONE tool per category to start
+- Master it before moving to others
+- You don’t need all of them
+- Free versions are fine to start
+
+**“My content isn’t getting engagement!”**
+
+- It takes time - keep going
+- Focus on value, not perfection
+- Engage with others first
+- Use the viral frameworks
+- Ask the community for feedback
+
+**“I don’t know what to create!”**
+
+- Use the content calendar prompts
+- Look at what’s working in your niche
+- Share YOUR unique perspective
+- Document your learning journey
+
+-----
+
+## 🎉 Moving to Week 2
+
+**Before starting Week 2, make sure you:**
+
+- Completed your Week 1 portfolio
+- Attended or watched the live Q&A
+- Have your brand content folder organized
+- Feel confident using at least 2-3 AI tools
+- Shared your wins in the community
+
+**What’s Coming in Week 2:**
+
+- Designing your complete brand identity
+- Creating logos and visual assets
+- Building brand consistency across platforms
+- Professional design without being a designer
+
+**You’ve got this, Queen! See you in Week 2! 👑✨**
+
+-----
+
+## 💬 Need Help?
+
+**Ask Nadia:** Post in the private group or message me directly
+**Response Time:** < 2 hours during business hours
+**Emergency:** Tag @Nadia in the community
+
+Remember: There are no stupid questions. We’re all learning together! 💜
