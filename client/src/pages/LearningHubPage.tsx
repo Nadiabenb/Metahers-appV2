@@ -20,25 +20,25 @@ export default function LearningHubPage() {
   // Fetch user progress
   const { data: progressData, isLoading: progressLoading } = useQuery({
     queryKey: ['/api/learning-hub/progress'],
-    enabled: isAuthenticated,
+    enabled: false,
   });
 
   // Fetch live sessions
   const { data: sessionsData, isLoading: sessionsLoading } = useQuery({
     queryKey: ['/api/learning-hub/sessions'],
-    enabled: isAuthenticated,
+    enabled: false,
   });
 
   // Fetch community activity
   const { data: activityData, isLoading: activityLoading } = useQuery({
     queryKey: ['/api/learning-hub/community/activity'],
-    enabled: isAuthenticated,
+    enabled: false,
   });
 
   // Fetch messages
   const { data: messagesData, isLoading: messagesLoading } = useQuery({
     queryKey: ['/api/learning-hub/messages'],
-    enabled: isAuthenticated,
+    enabled: false,
   });
 
   // Update progress mutation
