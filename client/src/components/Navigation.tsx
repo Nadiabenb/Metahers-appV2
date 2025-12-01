@@ -32,11 +32,9 @@ export function Navigation() {
     "AI & Tools": {
       icon: TrendingUp,
       items: [
+        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "AI Mastery curriculum" },
         { path: "/playground", label: "AI Playground", icon: Sparkles, desc: "Explore AI" },
         { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "Master AI tools" },
-        ...(isAuthenticated ? [
-          { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "Your learning dashboard" },
-        ] : []),
         { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, desc: "Transform yourself", pro: true },
         { path: "/career-path", label: "Career Path Generator", icon: Target, desc: "Plan your path" },
         { path: "/companion", label: "AI Companion", icon: MessageSquare, desc: "Chat & learn" },
