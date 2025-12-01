@@ -167,18 +167,7 @@ export default function FoundersSanctuary() {
   ];
 
   return (
-    <div className="min-h-screen relative bg-black"
-      style={{
-        backgroundImage: `url(${sanctuaryBackground})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundAttachment: window.innerWidth >= 1024 ? 'fixed' : 'scroll'
-      }}
-    >
-      {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-[hsl(280 72% 48%)]/45 to-black/60" />
-      <div className="absolute inset-0 bg-gradient-to-br from-[hsl(280 72% 48%)]/25 via-transparent to-[hsl(340 100% 95%)]/15" />
-      
+    <div className="min-h-screen relative bg-white">
       <div className="relative z-10">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
@@ -190,32 +179,32 @@ export default function FoundersSanctuary() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center space-y-6"
           >
-            <Badge className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] text-white border-0">
+            <Badge className="bg-purple-600 text-white border-0">
               <Crown className="w-3 h-3 mr-1" />
               Winter 2026 Cohort Now Accepting Applications
             </Badge>
 
-            <h1 className="font-cormorant text-5xl md:text-7xl font-bold metallic-text">
+            <h1 className="text-5xl md:text-7xl font-bold text-black">
               Founder's Sanctuary
             </h1>
 
-            <p className="text-2xl md:text-3xl text-foreground/90 max-w-3xl mx-auto font-light leading-tight">
+            <p className="text-2xl md:text-3xl text-gray-900 max-w-3xl mx-auto font-light leading-tight">
               The 12-Week Program Where Women Turn Business Ideas Into Reality—Using AI, No-Code Tools & Web3 Mindset
             </p>
 
-            <p className="text-lg text-foreground/70 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-gray-700 max-w-2xl mx-auto leading-relaxed">
               This isn't personal branding (see our Branding Space for that). This is building an actual business: revenue systems, customer acquisition, operations, and scaling to $10K MRR. Whether you're launching a coaching practice, SaaS product, community, or service business—you'll learn to leverage AI and no-code tools to build it yourself.
             </p>
 
-            <div className="inline-flex items-center gap-2 bg-primary/10 border border-primary/20 rounded-full px-4 py-2 text-sm">
-              <span className="text-primary font-semibold">Not sure which path?</span>
-              <span className="text-foreground/70">Branding = Build authority. Founder's Club = Build business.</span>
+            <div className="inline-flex items-center gap-2 bg-purple-50 border border-purple-200 rounded-full px-4 py-2 text-sm">
+              <span className="text-purple-600 font-semibold">Not sure which path?</span>
+              <span className="text-gray-700">Branding = Build authority. Founder's Club = Build business.</span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
               <Button 
                 size="lg"
-                className="bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] hover:opacity-90 transition-opacity text-base px-8"
+                className="bg-black hover:bg-gray-900 text-white text-base px-8"
                 data-testid="button-apply-now"
               >
                 <Rocket className="w-5 h-5 mr-2" />
@@ -223,8 +212,7 @@ export default function FoundersSanctuary() {
               </Button>
               <Button 
                 size="lg"
-                variant="outline"
-                className="text-base px-8"
+                className="border-2 border-black text-black bg-white hover:bg-gray-50 text-base px-8"
                 data-testid="button-learn-more"
               >
                 Download Program Overview
@@ -232,13 +220,13 @@ export default function FoundersSanctuary() {
               </Button>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6 text-sm text-foreground/60">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6 text-sm text-gray-600">
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-[hsl(var(--cyber-fuchsia))]" />
+                <Clock className="w-4 h-4 text-purple-600" />
                 <span>Applications close December 15, 2025</span>
               </div>
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-[hsl(var(--cyber-fuchsia))]" />
+                <Users className="w-4 h-4 text-purple-600" />
                 <span>Limited to 100 founders · 23 spots remaining</span>
               </div>
             </div>
@@ -254,10 +242,10 @@ export default function FoundersSanctuary() {
           transition={{ delay: 0.2 }}
           className="text-center mb-12"
         >
-          <h2 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
             Built For Women Like You
           </h2>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             Founder's Sanctuary welcomes women from all industries who want to build or grow their business using modern tools—no technical background required.
           </p>
         </motion.div>
@@ -274,13 +262,13 @@ export default function FoundersSanctuary() {
               >
                 <Card className="h-full hover-elevate">
                   <CardHeader>
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--hyper-violet))]/20 flex items-center justify-center mb-3">
-                      <Icon className="w-6 h-6 text-[hsl(var(--cyber-fuchsia))]" />
+                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-3">
+                      <Icon className="w-6 h-6 text-purple-600" />
                     </div>
-                    <CardTitle className="text-xl">{persona.title}</CardTitle>
+                    <CardTitle className="text-xl text-black">{persona.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-foreground/70 leading-relaxed">{persona.desc}</p>
+                    <p className="text-sm text-gray-700 leading-relaxed">{persona.desc}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -290,17 +278,17 @@ export default function FoundersSanctuary() {
       </section>
 
       {/* Struggles Section */}
-      <section className="max-w-6xl mx-auto px-4 py-20 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/5 to-[hsl(var(--cyber-fuchsia))]/5 rounded-3xl">
+      <section className="max-w-6xl mx-auto px-4 py-20 bg-purple-50 rounded-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
           className="text-center mb-12"
         >
-          <h2 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
             If This Sounds Familiar, You're in the Right Place
           </h2>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             These are the real struggles women face when building businesses. We've designed every aspect of Founder's Sanctuary to solve them.
           </p>
         </motion.div>
@@ -317,15 +305,15 @@ export default function FoundersSanctuary() {
               >
                 <Card className="h-full hover-elevate">
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-3 text-xl">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--hyper-violet))]/20 flex items-center justify-center">
-                        <Icon className="w-6 h-6 text-[hsl(var(--cyber-fuchsia))]" />
+                    <CardTitle className="flex items-center gap-3 text-xl text-black">
+                      <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                        <Icon className="w-6 h-6 text-purple-600" />
                       </div>
                       {struggle.title}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-foreground/70 leading-relaxed">{struggle.desc}</p>
+                    <p className="text-gray-700 leading-relaxed">{struggle.desc}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -341,10 +329,10 @@ export default function FoundersSanctuary() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <h2 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
             Your 12-Week Transformation
           </h2>
-          <p className="text-xl text-foreground/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
             Three stages. Eleven milestones. One outcome: A launched business with real customers and revenue.
           </p>
         </motion.div>
@@ -360,21 +348,21 @@ export default function FoundersSanctuary() {
                 transition={{ delay: 0.4 + index * 0.15 }}
               >
                 <Card className="overflow-hidden hover-elevate">
-                  <div className={`h-2 bg-gradient-to-r ${milestone.color}`} />
+                  <div className="h-2 bg-purple-600" />
                   <CardHeader className="pb-4">
                     <div className="flex items-center gap-4 mb-4">
-                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${milestone.color} flex items-center justify-center shadow-lg`}>
+                      <div className="w-16 h-16 rounded-2xl bg-purple-600 flex items-center justify-center shadow-lg">
                         <Icon className="w-8 h-8 text-white" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1">
-                          <Badge variant="outline" className="text-xs">{milestone.subtitle}</Badge>
-                          <Badge className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--hyper-violet))]/20 text-foreground border-0 text-xs">
+                          <Badge variant="outline" className="text-xs border-gray-300">{milestone.subtitle}</Badge>
+                          <Badge className="bg-purple-100 text-purple-700 border-0 text-xs">
                             Stage {index + 1}/3
                           </Badge>
                         </div>
-                        <CardTitle className="text-3xl font-cormorant metallic-text">{milestone.stage}</CardTitle>
-                        <p className="text-sm text-foreground/60 mt-1">{milestone.headline}</p>
+                        <CardTitle className="text-3xl text-black">{milestone.stage}</CardTitle>
+                        <p className="text-sm text-gray-600 mt-1">{milestone.headline}</p>
                       </div>
                     </div>
                   </CardHeader>
@@ -382,8 +370,8 @@ export default function FoundersSanctuary() {
                     <ul className="space-y-3">
                       {milestone.items.map((item, i) => (
                         <li key={i} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-[hsl(var(--cyber-fuchsia))] flex-shrink-0 mt-0.5" />
-                          <span className="text-foreground/80 leading-relaxed">{item}</span>
+                          <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-800 leading-relaxed">{item}</span>
                         </li>
                       ))}
                     </ul>
@@ -396,16 +384,16 @@ export default function FoundersSanctuary() {
       </section>
 
       {/* What's Included */}
-      <section className="max-w-6xl mx-auto px-4 py-20 bg-gradient-to-br from-[hsl(var(--hyper-violet))]/5 to-[hsl(var(--cyber-fuchsia))]/5 rounded-3xl">
+      <section className="max-w-6xl mx-auto px-4 py-20 bg-purple-50 rounded-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <h2 className="font-cormorant text-4xl md:text-5xl font-bold metallic-text mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-black mb-6">
             Everything You Need to Launch
           </h2>
-          <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-700 max-w-2xl mx-auto">
             This isn't just a course. It's a complete founder support system designed for women building real businesses.
           </p>
         </motion.div>
@@ -422,13 +410,13 @@ export default function FoundersSanctuary() {
               >
                 <Card className="h-full hover-elevate">
                   <CardHeader>
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))]/20 to-[hsl(var(--hyper-violet))]/20 flex items-center justify-center mb-3">
-                      <Icon className="w-6 h-6 text-[hsl(var(--cyber-fuchsia))]" />
+                    <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-3">
+                      <Icon className="w-6 h-6 text-purple-600" />
                     </div>
-                    <CardTitle className="text-lg leading-tight">{item.title}</CardTitle>
+                    <CardTitle className="text-lg leading-tight text-black">{item.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-foreground/70 leading-relaxed">{item.desc}</p>
+                    <p className="text-sm text-gray-700 leading-relaxed">{item.desc}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -443,26 +431,26 @@ export default function FoundersSanctuary() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="overflow-hidden bg-gradient-to-br from-[hsl(var(--hyper-violet))]/10 to-[hsl(var(--cyber-fuchsia))]/10 border-[hsl(var(--cyber-fuchsia))]/30">
+          <Card className="overflow-hidden bg-purple-50 border-purple-200">
             <CardContent className="p-8 md:p-12">
               <div className="flex items-start gap-4 mb-6">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] flex items-center justify-center flex-shrink-0">
+                <div className="w-14 h-14 rounded-2xl bg-purple-600 flex items-center justify-center flex-shrink-0">
                   <Heart className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-cormorant text-2xl md:text-3xl font-bold metallic-text mb-2">
+                  <h3 className="text-2xl md:text-3xl font-bold text-black mb-2">
                     This is a Human-Powered AI Experience
                   </h3>
-                  <p className="text-foreground/70 leading-relaxed">
+                  <p className="text-gray-700 leading-relaxed">
                     Yes, you'll learn to use AI and no-code tools to build faster. But at the core? This is personal, founder-to-founder mentorship. You'll have direct access to Nadia (MetaHers founder) throughout the entire 12 weeks. Weekly calls. Slack access. Real support from someone who's walked this path.
                   </p>
                 </div>
               </div>
-              <div className="bg-background/50 rounded-xl p-6 border border-[hsl(var(--cyber-fuchsia))]/20">
-                <p className="text-sm text-foreground/60 italic">
+              <div className="bg-white rounded-xl p-6 border border-purple-200">
+                <p className="text-sm text-gray-700 italic">
                   "I built MetaHers as a solo founder while working full-time. I know the isolation, the imposter syndrome, the late nights wondering if you're building the right thing. Founder's Sanctuary is everything I wish existed when I started—a sanctuary where brilliant women get the tools, community, and personal guidance they deserve."
                 </p>
-                <p className="text-sm font-medium mt-3 text-foreground/80">— Nadia, Founder of MetaHers</p>
+                <p className="text-sm font-medium mt-3 text-gray-800">— Nadia, Founder of MetaHers</p>
               </div>
             </CardContent>
           </Card>
@@ -475,27 +463,27 @@ export default function FoundersSanctuary() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="overflow-hidden border-2 border-[hsl(var(--cyber-fuchsia))]/30 shadow-2xl">
-            <div className="h-2 bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))]" />
+          <Card className="overflow-hidden border-2 border-purple-200 shadow-2xl">
+            <div className="h-2 bg-purple-600" />
             <CardContent className="p-8 md:p-12 text-center space-y-6">
-              <Badge className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] text-white border-0">
+              <Badge className="bg-purple-600 text-white border-0">
                 Winter 2026 Cohort · Starts January 5
               </Badge>
 
-              <h3 className="font-cormorant text-3xl md:text-4xl font-bold metallic-text">
+              <h3 className="text-3xl md:text-4xl font-bold text-black">
                 Ready to Launch Your Business?
               </h3>
 
               <div className="flex items-baseline justify-center gap-2">
-                <span className="text-6xl font-bold metallic-text">$990</span>
-                <span className="text-foreground/60">for 12 weeks</span>
+                <span className="text-6xl font-bold text-black">$990</span>
+                <span className="text-gray-600">for 12 weeks</span>
               </div>
 
               <div className="space-y-2">
-                <p className="text-foreground/80 max-w-xl mx-auto leading-relaxed">
+                <p className="text-gray-800 max-w-xl mx-auto leading-relaxed">
                   That's $82.50/week for personal founder mentorship, unlimited AI tools training, expert sessions, and a lifetime female founder network.
                 </p>
-                <p className="text-sm text-foreground/60">
+                <p className="text-sm text-gray-600">
                   (Compare: Average business coach = $500-2K/month for group calls. We include personal mentorship, community, AND the tools.)
                 </p>
               </div>
@@ -503,24 +491,24 @@ export default function FoundersSanctuary() {
               <div className="space-y-3 pt-6">
                 <Button 
                   size="lg"
-                  className="w-full md:w-auto bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] hover:opacity-90 transition-opacity text-base px-10"
+                  className="w-full md:w-auto bg-black hover:bg-gray-900 text-white text-base px-10"
                   data-testid="button-apply-bottom"
                 >
                   <Crown className="w-5 h-5 mr-2" />
                   Apply Now · 23 Spots Remaining
                 </Button>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-foreground/60 pt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-600 pt-4">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[hsl(var(--cyber-fuchsia))]" />
+                    <CheckCircle2 className="w-4 h-4 text-purple-600" />
                     <span>Applications close Dec 15, 2025</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[hsl(var(--cyber-fuchsia))]" />
+                    <CheckCircle2 className="w-4 h-4 text-purple-600" />
                     <span>Program starts Jan 5, 2026</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[hsl(var(--cyber-fuchsia))]" />
+                    <CheckCircle2 className="w-4 h-4 text-purple-600" />
                     <span>100% remote, async-friendly</span>
                   </div>
                 </div>
@@ -536,17 +524,17 @@ export default function FoundersSanctuary() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <Card className="bg-gradient-to-br from-[hsl(var(--hyper-violet))]/10 to-[hsl(var(--cyber-fuchsia))]/10 border-[hsl(var(--cyber-fuchsia))]/20 hover-elevate">
+          <Card className="bg-purple-50 border-purple-200 hover-elevate">
             <CardContent className="p-8 md:p-12">
               <div className="flex flex-col md:flex-row items-center gap-8">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] flex items-center justify-center shadow-xl flex-shrink-0">
+                <div className="w-20 h-20 rounded-2xl bg-purple-600 flex items-center justify-center shadow-xl flex-shrink-0">
                   <Code2 className="w-10 h-10 text-white" />
                 </div>
                 <div className="flex-1 text-center md:text-left">
-                  <h3 className="font-cormorant text-2xl md:text-3xl font-bold metallic-text mb-3">
+                  <h3 className="text-2xl md:text-3xl font-bold text-black mb-3">
                     Build Anything With App Atelier
                   </h3>
-                  <p className="text-foreground/70 mb-4 leading-relaxed">
+                  <p className="text-gray-700 mb-4 leading-relaxed">
                     All Founder's Sanctuary members get unlimited access to App Atelier—our AI coding coach. Build custom landing pages, membership sites, booking systems, course platforms, and more. No developer required. Whether you're a coach launching a booking system or a designer building a portfolio, App Atelier helps you build it yourself.
                   </p>
                   <Link href="/app-atelier">
