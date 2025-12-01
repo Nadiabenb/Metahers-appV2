@@ -79,10 +79,6 @@ const OnboardingQuizPage = lazy(() => import("@/pages/OnboardingQuizPage"));
 const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"));
 const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
 const LearningHubPage = lazy(() => import("@/pages/LearningHubPage"));
-const AIContentCreationGuide = lazy(() => import("@/pages/articles/AIContentCreationGuide"));
-const AIBrandBuildingGuide = lazy(() => import("@/pages/articles/AIBrandBuildingGuide"));
-const NoCodeWebsiteGuide = lazy(() => import("@/pages/articles/NoCodeWebsiteGuide"));
-const AIAgentsGuide = lazy(() => import("@/pages/articles/AIAgentsGuide"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -174,13 +170,6 @@ function Router() {
         {/* Legal Pages - Public */}
         <Route path="/privacy" component={PrivacyPolicyPage} />
         <Route path="/terms" component={TermsOfServicePage} />
-
-        {/* AI Mastery Program Articles */}
-        <Route path="/articles/ai-content-creation" component={AIContentCreationGuide} />
-        <Route path="/articles/ai-brand-building" component={AIBrandBuildingGuide} />
-        <Route path="/articles/no-code-websites" component={NoCodeWebsiteGuide} />
-        <Route path="/articles/ai-agents-automation" component={AIAgentsGuide} />
-
         <Route path="/checkout/:tier/:priceId" component={(props: any) => {
           const tiers = { pro: { name: 'Pro', price: 29 }, sanctuary: { name: 'Sanctuary', price: 99 }, 'inner-circle': { name: 'Inner Circle', price: 299 } };
           const tier = tiers[props.tier as keyof typeof tiers];

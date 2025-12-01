@@ -1158,6 +1158,136 @@ export const shopProducts: ShopProduct[] = [
 
 export const blogArticles: BlogArticle[] = [
   {
+    slug: "ai-content-creation",
+    title: "AI Content Creation Mastery",
+    subtitle: "Master AI tools to create stunning content that converts. Learn ChatGPT, Midjourney, video generation, and copywriting.",
+    category: "AI",
+    author: "Nadia",
+    publishDate: "2025-12-01",
+    readTime: 8,
+    featured: true,
+    image: "ai-content-creation",
+    content: [
+      { type: "paragraph", text: "Stop struggling with creative blocks. Learn how to use AI tools to generate high-quality content that resonates with your audience and drives conversions." },
+      { type: "heading", text: "Master These Topics" },
+      { type: "list", text: "Week 1 curriculum includes:", items: [
+        "ChatGPT Content Generation: Compelling blog posts, sales copy, email sequences, social media captions",
+        "AI Image Generation (Midjourney & DALL-E): Professional product images, social graphics, brand aesthetics",
+        "Video Content with AI Tools: Script generation, AI avatar creation, auto-subtitles, video editing",
+        "Copywriting That Converts: Psychology of persuasion, AIDA framework, landing pages, A/B testing"
+      ]},
+      { type: "paragraph", text: "High-quality content positions you as an expert in your field, attracting ideal clients naturally. AI tools reduce content creation time by 70% while maintaining quality and consistency." },
+      { type: "heading", text: "Your Action Plan" },
+      { type: "list", text: "This week:", items: [
+        "Set up AI tools (ChatGPT Plus, Midjourney accounts)",
+        "Create 5 pieces of content using AI",
+        "Share your best work in our community for feedback"
+      ]},
+      { type: "quote", text: "Content creation isn't about working harder—it's about working smarter with AI while keeping your unique voice." }
+    ]
+  },
+  {
+    slug: "ai-brand-building",
+    title: "Building Your AI-Powered Brand",
+    subtitle: "Master personal branding with AI tools. Create a magnetic brand that attracts ideal clients and stands out.",
+    category: "AI",
+    author: "Nadia",
+    publishDate: "2025-12-01",
+    readTime: 8,
+    featured: false,
+    image: "ai-brand-building",
+    content: [
+      { type: "paragraph", text: "Your brand is your competitive advantage. Learn how to build a magnetic, cohesive brand identity that attracts your ideal clients and stands out in a crowded marketplace." },
+      { type: "heading", text: "Brand Discovery & Positioning" },
+      { type: "list", text: "Week 2 covers:", items: [
+        "Identify your core values and mission with AI insights",
+        "Find your unique angle in the market",
+        "Create your brand story that resonates",
+        "Develop your authentic brand voice"
+      ]},
+      { type: "heading", text: "Visual Brand Identity" },
+      { type: "paragraph", text: "Create stunning visuals without a designer. Use AI tools like Looka for logo design, and learn color psychology and typography selection. A strong visual identity is recognizable at a glance." },
+      { type: "heading", text: "Personal Branding Strategy" },
+      { type: "list", text: "Build authority as a thought leader:", items: [
+        "LinkedIn optimization that attracts opportunities",
+        "Website messaging that sells",
+        "Your unique positioning statement",
+        "Compelling testimonials and case studies"
+      ]},
+      { type: "quote", text: "A strong brand allows you to charge premium prices and attract high-value clients naturally." }
+    ]
+  },
+  {
+    slug: "no-code-websites",
+    title: "No-Code Website Building with AI",
+    subtitle: "Build a professional website without coding. Launch your business online in days using modern no-code tools.",
+    category: "AI",
+    author: "Nadia",
+    publishDate: "2025-12-01",
+    readTime: 8,
+    featured: false,
+    image: "no-code-websites",
+    content: [
+      { type: "paragraph", text: "Launch a professional website that sells, without learning to code. Master modern no-code tools and AI to build your online business presence in days." },
+      { type: "heading", text: "Platform Selection & Setup" },
+      { type: "list", text: "Week 3 teaches:", items: [
+        "Webflow: Full design control for professionals",
+        "Framer: AI-powered design system",
+        "Wix/Squarespace: Simplicity and speed",
+        "Custom domain setup and optimization"
+      ]},
+      { type: "heading", text: "Website Structure That Converts" },
+      { type: "list", text: "Build pages that turn visitors into customers:", items: [
+        "Homepage that captures attention immediately",
+        "Service/product pages with compelling copy",
+        "About page that builds trust and connection",
+        "Lead capture and email integration"
+      ]},
+      { type: "heading", text: "Design & Launch Timeline" },
+      { type: "list", text: "Get live in 7 days:", items: [
+        "Day 1-2: Choose platform and set up",
+        "Day 3-5: Create core pages",
+        "Day 6-7: Integrate payments and analytics, then launch"
+      ]},
+      { type: "quote", text: "A simple site that sells beats a fancy site that doesn't. Perfect is the enemy of done." }
+    ]
+  },
+  {
+    slug: "ai-agents-automation",
+    title: "AI Agents & Business Automation",
+    subtitle: "Deploy autonomous AI agents to run your business 24/7. Automate customer service, sales, and operations.",
+    category: "AI",
+    author: "Nadia",
+    publishDate: "2025-12-01",
+    readTime: 9,
+    featured: false,
+    image: "ai-agents-automation",
+    content: [
+      { type: "paragraph", text: "Stop working 24/7. Deploy autonomous AI agents that handle customer service, lead qualification, and repetitive tasks—while you focus on strategic growth." },
+      { type: "heading", text: "What AI Agents Do" },
+      { type: "list", text: "Week 4 automation covers:", items: [
+        "Customer service agents: Available 24/7 with empathy",
+        "Lead qualification: Auto-qualify and schedule consultations",
+        "Workflow automation: Connect all your tools seamlessly",
+        "Advanced AI deployment: Custom agents for your business"
+      ]},
+      { type: "heading", text: "Time Freedom Calculation" },
+      { type: "list", text: "Automation frees up 20-30 hours per week:", items: [
+        "Customer service replies: 8-10 hrs/week saved",
+        "Lead qualification & scheduling: 5-8 hrs/week",
+        "Email & content distribution: 3-5 hrs/week",
+        "Invoice & payment reminders: 2-4 hrs/week"
+      ]},
+      { type: "heading", text: "Implementation Path" },
+      { type: "list", text: "Roll out in 3 phases:", items: [
+        "Phase 1: Quick wins (email automation, basic chatbot)",
+        "Phase 2: Customer experience (lead agents, support)",
+        "Phase 3: Advanced systems (custom AI, full integration)"
+      ]},
+      { type: "quote", text: "AI agents aren't replacing you—they're amplifying you by handling the work that drains your energy." }
+    ]
+  },
+  {
     slug: "ai-agents-women-workforce",
     title: "AI Agents: Your Digital Dream Team Is Here",
     subtitle: "What autonomous AI agents mean for women building businesses and careers in 2025",

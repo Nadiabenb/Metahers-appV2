@@ -34,6 +34,10 @@ const IMAGE_MAP: Record<string, string> = {
   "ai-prompts-boss": aiPromptsBossImg,
   "web3-luxury": web3LuxuryImg,
   "web3-location-independent": web3LocationIndependentImg,
+  "ai-content-creation": aiPromptsBossImg,
+  "ai-brand-building": aiStylistImg,
+  "no-code-websites": web3EvolutionImg,
+  "ai-agents-automation": aiAgentsImg,
 };
 
 const CATEGORY_COLORS: Record<string, string> = {
