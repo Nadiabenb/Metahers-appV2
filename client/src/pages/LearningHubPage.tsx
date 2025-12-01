@@ -336,15 +336,17 @@ export default function LearningHubPage() {
                     <button
                       key={module.week}
                       onClick={() => {
+                        console.log('Card clicked:', module.week, 'isClickable:', isClickable);
                         if (isClickable) {
+                          console.log('Expanding lesson:', module.lessons[0]);
                           setExpandedLesson(expandedLesson ? null : module.lessons[0]);
                         }
                       }}
-                      disabled={!isClickable}
+                      type="button"
                       className={`border-2 p-6 rounded-lg transition-all text-left w-full ${
                         module.status === "locked"
-                          ? "border-gray-200 opacity-60 bg-white cursor-not-allowed"
-                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white cursor-pointer"
+                          ? "border-gray-200 opacity-60 bg-white pointer-events-none"
+                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white"
                       }`}
                       data-testid={`card-module-week-${module.week}`}
                     >
