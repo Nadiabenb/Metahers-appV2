@@ -21,25 +21,25 @@ export default function LearningHubPage() {
   // Fetch user progress
   const { data: progressData, isLoading: progressLoading } = useQuery({
     queryKey: ['/api/learning-hub/progress'],
-    enabled: false,
+    enabled: isAuthenticated,
   });
 
   // Fetch live sessions
   const { data: sessionsData, isLoading: sessionsLoading } = useQuery({
     queryKey: ['/api/learning-hub/sessions'],
-    enabled: false,
+    enabled: isAuthenticated,
   });
 
   // Fetch community activity
   const { data: activityData, isLoading: activityLoading } = useQuery({
     queryKey: ['/api/learning-hub/community/activity'],
-    enabled: false,
+    enabled: isAuthenticated,
   });
 
   // Fetch messages
   const { data: messagesData, isLoading: messagesLoading } = useQuery({
     queryKey: ['/api/learning-hub/messages'],
-    enabled: false,
+    enabled: isAuthenticated,
   });
 
   // Update progress mutation
@@ -248,7 +248,13 @@ export default function LearningHubPage() {
     { user: "Maria L.", action: "started AI Agents & Automation", time: "1 day ago" },
   ];
 
-  const progressPercentage = 65;
+  // Calculate progress from real data
+  const progressPercentage = progressData?.modules 
+    ? Math.round(
+        (progressData.modules.reduce((sum, m) => sum + (m.lessonsCompleted || 0), 0) /
+          (progressData.modules.reduce((sum, m) => sum + (m.totalLessons || 5), 0) || 1)) * 100
+      ) 
+    : 0;
 
   // Week 1 & 2 Lessons - Rich Content with Women Metaphors
   const week1Lessons = {
@@ -1068,20 +1074,22 @@ export default function LearningHubPage() {
                   Community Activity
                 </h3>
                 <div className="space-y-3">
-                  {recentActivity.map((activity, idx) => (
+                  {(activityLoading ? [] : activityData || recentActivity).map((activity, idx) => (
                     <div
                       key={idx}
                       className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg"
                     >
                       <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
-                        {activity.user[0]}
+                        {activity.title ? activity.title[0] : (activity.user ? activity.user[0] : 'A')}
                       </div>
                       <div className="flex-1">
                         <p className="text-sm text-gray-800">
-                          <span className="font-semibold">{activity.user}</span>{" "}
-                          {activity.action}
+                          <span className="font-semibold">{activity.title || activity.user}</span>
+                          {activity.action && ` ${activity.action}`}
                         </p>
-                        <p className="text-xs text-gray-500">{activity.time}</p>
+                        <p className="text-xs text-gray-500">
+                          {activity.time || (activity.createdAt ? new Date(activity.createdAt).toLocaleDateString() : 'Recently')}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -1116,36 +1124,41 @@ export default function LearningHubPage() {
             <div className="bg-white rounded-xl p-6 border-2 border-purple-200">
               <h2 className="text-2xl font-bold mb-6 text-gray-800">Upcoming Live Sessions</h2>
               <div className="space-y-4">
-                {upcomingSessions.map((session, idx) => (
-                  <div
-                    key={idx}
-                    className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-5 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200"
-                  >
-                    <div className="text-center sm:text-left">
-                      <div className="text-3xl font-bold text-purple-600">
-                        {session.date.split(" ")[1]}
+                {(sessionsLoading ? [] : sessionsData || upcomingSessions).map((session, idx) => {
+                  const startDate = session.startTime ? new Date(session.startTime) : null;
+                  const dateStr = startDate ? startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : (session.date || '');
+                  const timeStr = startDate ? startDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) : (session.time || '');
+                  return (
+                    <div
+                      key={idx}
+                      className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-5 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200"
+                    >
+                      <div className="text-center sm:text-left">
+                        <div className="text-3xl font-bold text-purple-600">
+                          {dateStr.split(' ')[1] || session.date?.split(" ")[1] || dateStr}
+                        </div>
+                        <div className="text-sm text-gray-600">{dateStr.split(' ')[0] || session.date?.split(" ")[0]}</div>
                       </div>
-                      <div className="text-sm text-gray-600">{session.date.split(" ")[0]}</div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-lg text-gray-800">{session.title}</div>
-                      <div className="text-gray-600 text-sm flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
-                        <span className="flex items-center gap-1">
-                          <Video className="w-4 h-4" />
-                          {session.type}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Users className="w-4 h-4" />
-                          {session.attendees} attending
-                        </span>
-                        <span>{session.time}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-bold text-lg text-gray-800">{session.title}</div>
+                        <div className="text-gray-600 text-sm flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
+                          <span className="flex items-center gap-1">
+                            <Video className="w-4 h-4" />
+                            {session.type || 'Live Session'}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Users className="w-4 h-4" />
+                            {session.attendeeCount || session.attendees || 0} attending
+                          </span>
+                          <span>{timeStr || session.time}</span>
+                        </div>
                       </div>
+                      <Button className="bg-purple-600 text-white hover:bg-purple-700 flex-shrink-0 whitespace-nowrap" data-testid={`button-join-session-${idx}`}>
+                        Join Session
+                      </Button>
                     </div>
-                    <Button className="bg-purple-600 text-white hover:bg-purple-700 flex-shrink-0 whitespace-nowrap" data-testid={`button-join-session-${idx}`}>
-                      Join Session
-                    </Button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
