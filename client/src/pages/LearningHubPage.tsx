@@ -19,25 +19,25 @@ export default function LearningHubPage() {
   const [flippedWeek, setFlippedWeek] = useState<number | null>(null);
 
   // Fetch user progress
-  const { data: progressData, isLoading: progressLoading } = useQuery({
+  const { data: progressData, isLoading: progressLoading } = useQuery<any>({
     queryKey: ['/api/learning-hub/progress'],
     enabled: isAuthenticated,
   });
 
   // Fetch live sessions
-  const { data: sessionsData, isLoading: sessionsLoading } = useQuery({
+  const { data: sessionsData, isLoading: sessionsLoading } = useQuery<any[]>({
     queryKey: ['/api/learning-hub/sessions'],
     enabled: isAuthenticated,
   });
 
   // Fetch community activity
-  const { data: activityData, isLoading: activityLoading } = useQuery({
+  const { data: activityData, isLoading: activityLoading } = useQuery<any[]>({
     queryKey: ['/api/learning-hub/community/activity'],
     enabled: isAuthenticated,
   });
 
   // Fetch messages
-  const { data: messagesData, isLoading: messagesLoading } = useQuery({
+  const { data: messagesData, isLoading: messagesLoading } = useQuery<any[]>({
     queryKey: ['/api/learning-hub/messages'],
     enabled: isAuthenticated,
   });
@@ -251,8 +251,8 @@ export default function LearningHubPage() {
   // Calculate progress from real data
   const progressPercentage = progressData?.modules 
     ? Math.round(
-        (progressData.modules.reduce((sum, m) => sum + (m.lessonsCompleted || 0), 0) /
-          (progressData.modules.reduce((sum, m) => sum + (m.totalLessons || 5), 0) || 1)) * 100
+        (progressData.modules.reduce((sum: number, m: any) => sum + (m.lessonsCompleted || 0), 0) /
+          (progressData.modules.reduce((sum: number, m: any) => sum + (m.totalLessons || 5), 0) || 1)) * 100
       ) 
     : 0;
 
