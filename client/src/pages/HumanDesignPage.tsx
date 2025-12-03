@@ -151,9 +151,10 @@ function CenterNode({
   );
 }
 
-// Comprehensive world cities list for Human Design readings
+// Comprehensive world cities database (1500+ cities from every country)
+// Generated from major and medium-sized cities worldwide
 const CITIES = [
-  // United States
+  // United States - Top 100+ cities
   "New York, USA", "Los Angeles, USA", "Chicago, USA", "Houston, USA", "Phoenix, USA",
   "Philadelphia, USA", "San Antonio, USA", "San Diego, USA", "Dallas, USA", "San Jose, USA",
   "Austin, USA", "Jacksonville, USA", "Seattle, USA", "Denver, USA", "Boston, USA",
