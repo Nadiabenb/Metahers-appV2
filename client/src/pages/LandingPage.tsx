@@ -171,7 +171,7 @@ export default function LandingPage() {
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-100 to-purple-50 border-2 border-purple-200 backdrop-blur-sm"
             >
               <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse" />
-              <span className="text-sm font-bold uppercase tracking-widest text-purple-600">For Moms, Solopreneurs, Creatives & Artists</span>
+              <span className="text-sm font-bold uppercase tracking-widest text-purple-600">For Women Building Lives & Income</span>
             </motion.div>
           </motion.div>
 
@@ -278,7 +278,7 @@ export default function LandingPage() {
             className="max-w-3xl mx-auto mb-12 text-center"
           >
             <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 font-medium">
-              <span className="font-bold text-black">Everything shifted in 12 months.</span> AI went from science fiction to your daily reality. New wealth is being built. <span className="font-bold text-purple-600">500+ women are already ahead.</span> They're not waiting. They're not confused. They're riding the wave.
+              <span className="font-bold text-black">Everything shifted in 12 months.</span> AI went from science fiction to your daily reality. Moms are getting weekends back. Solopreneurs are charging more. Creatives are reaching global audiences. And <span className="font-bold text-purple-600">500+ women are building lives—not just side hustles.</span> They're not waiting. They're not confused. They're riding the wave.
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
               <div className="h-px w-8 bg-purple-300" />
@@ -295,9 +295,9 @@ export default function LandingPage() {
             className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-3xl mx-auto"
           >
             {[
-              { icon: Sparkles, title: "Reclaim Your Time", desc: "15+ hours back every week" },
-              { icon: Gem, title: "Unlock Income", desc: "Build multiple revenue streams" },
-              { icon: Heart, title: "Live On Your Terms", desc: "Thrive personally & professionally" }
+              { icon: Sparkles, title: "Reclaim Your Time", desc: "AI meal preps, workouts, kid's books—15+ hours back weekly" },
+              { icon: Gem, title: "Unlock Income", desc: "Build multiple revenue streams while living your life" },
+              { icon: Heart, title: "Find Your Tribe", desc: "Network with 500+ women building together" }
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -410,6 +410,47 @@ export default function LandingPage() {
               <p className="text-gray-300">You've felt it. You've wondered about it. You might even be scared to miss it. MetaHers doesn't ask you to become a tech expert or crypto guru. It shows you what's real, what's hype, and how women like you are building incredible lives with these tools.</p>
             </div>
           </motion.div>
+        </div>
+      </div>
+
+      {/* REAL LIFE USE CASES - What This Actually Looks Like */}
+      <div className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16 bg-gray-50">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <p className="text-sm uppercase tracking-widest text-purple-600 font-bold mb-4">What This Actually Looks Like</p>
+            <h2 className="text-4xl md:text-5xl font-semibold text-black mb-6">It's Not Just Business</h2>
+            <p className="text-xl text-gray-700 leading-relaxed">MetaHers is for the whole you. Your business AND your life.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              { title: "Monday Morning", desc: "AI generates your week's meal plans (healthy, family-friendly, with shopping lists). You spend 10 minutes, not 3 hours." },
+              { title: "Workout Time", desc: "Personalized AI workout routines delivered daily. No gym membership guesswork. Fits into your actual schedule." },
+              { title: "Kids' Content", desc: "Create educational books, stories, activity guides for your kids using AI. Something to be proud of, something they'll remember." },
+              { title: "Accountability Crew", desc: "500+ women cheering you on. Real friendships. Real accountability. Weekly meetups, group challenges, support that matters." },
+              { title: "Income Alongside Life", desc: "Build business revenue without sacrificing family dinners. AI handles repetitive work. You focus on real value." },
+              { title: "New Friendships", desc: "Meet women in your exact situation. Solopreneurs, moms, creatives, artists. Network. Partner. Build together." }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                whileHover={{ scale: 1.02, y: -5 }}
+                className="p-8 bg-white border-2 border-purple-200 rounded-2xl hover:shadow-xl transition-all"
+              >
+                <h3 className="text-xl font-bold text-black mb-3">{item.title}</h3>
+                <p className="text-gray-700">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
 
