@@ -228,9 +228,18 @@ function dateToJD(date: Date): number {
  * Calculate the Sun's geocentric longitude for a given Julian Day
  */
 function getSunLongitude(jd: number): number {
-  const T = (jd - 2451545.0) / 36525;
-  const sunLon = solar.apparentLongitude(T);
-  return (sunLon * 180 / Math.PI + 360) % 360;
+  try {
+    const T = (jd - 2451545.0) / 36525;
+    const sunLon = solar.apparentLongitude(T);
+    let lon = sunLon * 180 / Math.PI;
+    return ((lon % 360) + 360) % 360;
+  } catch (e) {
+    // Fallback calculation
+    const T = (jd - 2451545.0) / 36525;
+    let sunMean = 280.46646 + 36000.76983 * T + 0.0003032 * T * T;
+    sunMean = ((sunMean % 360) + 360) % 360;
+    return sunMean;
+  }
 }
 
 /**
