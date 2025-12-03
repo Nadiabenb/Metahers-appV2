@@ -472,6 +472,83 @@ body {
     50%, 100% { left: 100%; }
   }
 
+  /* Magical Entrance Animations - First Contact Experience */
+  @keyframes magicalFadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+      filter: blur(4px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes floatingParticles {
+    0%, 100% {
+      transform: translateY(0px) scale(1);
+      opacity: 0.6;
+    }
+    50% {
+      transform: translateY(-30px) scale(1.1);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes glowPulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.2);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(139, 92, 246, 0.4);
+    }
+  }
+
+  @keyframes shimmerWave {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
+
+  .magical-hero-title {
+    animation: magicalFadeIn 1s ease-out;
+  }
+
+  .magical-hero-subtitle {
+    animation: magicalFadeIn 1s ease-out 0.2s both;
+  }
+
+  .magical-floating {
+    animation: floatingParticles 4s ease-in-out infinite;
+  }
+
+  .magical-glow {
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  .magical-shimmer {
+    background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+    background-size: 1000px 100%;
+    animation: shimmerWave 3s linear infinite;
+  }
+
+  .particle {
+    position: absolute;
+    pointer-events: none;
+  }
+
+  .particle-star::before {
+    content: '✨';
+    font-size: 1.5rem;
+    opacity: 0;
+    animation: floatingParticles 4s ease-in-out infinite;
+  }
+
   /* Accessibility: Respect reduced motion preference */
   @media (prefers-reduced-motion: reduce) {
     * {
@@ -486,6 +563,14 @@ body {
     }
 
     .purple-shimmer::after {
+      animation: none;
+    }
+
+    .magical-hero-title,
+    .magical-hero-subtitle,
+    .magical-floating,
+    .magical-glow,
+    .magical-shimmer {
       animation: none;
     }
   }

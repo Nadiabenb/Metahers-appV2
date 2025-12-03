@@ -144,17 +144,28 @@ export default function LandingPage() {
         className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden bg-white"
       >
         
+        {/* Magical floating particles */}
+        <div className="absolute -top-20 left-10 text-4xl magical-floating" style={{ animationDelay: '0s' }}>✨</div>
+        <div className="absolute top-32 right-20 text-3xl magical-floating" style={{ animationDelay: '0.5s' }}>💜</div>
+        <div className="absolute top-64 left-1/3 text-2xl magical-floating" style={{ animationDelay: '1s' }}>✨</div>
+
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold mb-6 leading-tight text-black tracking-tight">
-              Master <span className="text-purple-600">AI & Web3</span>
+            <div className="mb-8 inline-block magical-shimmer px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/10 via-purple-600/5 to-purple-600/10">
+              <span className="text-sm uppercase tracking-widest font-semibold text-purple-600">
+                ✨ Welcome to Your Magical World
+              </span>
+            </div>
+
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold mb-6 leading-tight text-black tracking-tight magical-hero-title">
+              You Just Found Something<br /><span className="text-purple-600">Truly Special</span>
             </h1>
-            <p className="text-xl sm:text-2xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto font-medium">
-              Go from overwhelmed to unstoppable. Build AI & Web3 skills while living your life as a solopreneur, mom, or creative.
+            <p className="text-xl sm:text-2xl text-gray-600 mb-8 leading-relaxed max-w-2xl mx-auto font-medium magical-hero-subtitle">
+              A sanctuary for women solopreneurs. Master AI & Web3 on your own terms. Go from overwhelmed to unstoppable, all while living your life authentically.
             </p>
             
             <div className="mb-12 flex flex-col gap-3 justify-center max-w-2xl mx-auto">
