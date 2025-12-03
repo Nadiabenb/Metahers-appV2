@@ -24,7 +24,9 @@ import {
   Clock,
   ChevronDown,
   Check,
-  Lock
+  Lock,
+  Info,
+  Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -128,45 +130,74 @@ const TYPE_COLORS: Record<string, { bg: string; text: string; border: string }> 
   'Reflector': { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-300' },
 };
 
-// Center component for the bodygraph
+// Center component for the bodygraph with tooltips
 function CenterNode({ 
   name, 
   defined, 
   position, 
-  onClick 
+  onClick,
+  theme
 }: { 
   name: string; 
   defined: boolean; 
   position: { top: string; left: string }; 
   onClick: () => void;
+  theme?: string;
 }) {
-  const centerNames: Record<string, string> = {
-    head: 'Head',
-    ajna: 'Ajna',
-    throat: 'Throat',
-    g: 'G Center',
-    heart: 'Heart',
-    sacral: 'Sacral',
-    solarPlexus: 'Solar Plexus',
-    spleen: 'Spleen',
-    root: 'Root',
+  const [showTooltip, setShowTooltip] = useState(false);
+  
+  const centerNames: Record<string, { full: string; short: string; theme: string }> = {
+    head: { full: 'Head Center', short: 'H', theme: 'Inspiration' },
+    ajna: { full: 'Ajna Center', short: 'A', theme: 'Concepts' },
+    throat: { full: 'Throat Center', short: 'T', theme: 'Expression' },
+    g: { full: 'G Center', short: 'G', theme: 'Direction' },
+    heart: { full: 'Heart Center', short: '❤', theme: 'Willpower' },
+    sacral: { full: 'Sacral Center', short: 'S', theme: 'Life Force' },
+    solarPlexus: { full: 'Solar Plexus', short: 'SP', theme: 'Emotion' },
+    spleen: { full: 'Spleen Center', short: 'Sp', theme: 'Intuition' },
+    root: { full: 'Root Center', short: 'R', theme: 'Pressure' },
   };
 
+  const center = centerNames[name] || { full: name, short: name.charAt(0), theme: '' };
+
   return (
-    <motion.button
-      onClick={onClick}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      className={`absolute w-12 h-12 rounded-lg flex items-center justify-center text-xs font-bold transition-all cursor-pointer ${
-        defined 
-          ? 'bg-purple-600 text-white shadow-lg shadow-purple-300' 
-          : 'bg-white border-2 border-gray-300 text-gray-600'
-      }`}
-      style={{ top: position.top, left: position.left }}
-      data-testid={`center-${name}`}
+    <div
+      className="relative"
+      onMouseEnter={() => setShowTooltip(true)}
+      onMouseLeave={() => setShowTooltip(false)}
     >
-      {centerNames[name]?.charAt(0) || name.charAt(0).toUpperCase()}
-    </motion.button>
+      <motion.button
+        onClick={onClick}
+        whileHover={{ scale: 1.15, y: -2 }}
+        whileTap={{ scale: 0.9 }}
+        className={`absolute w-14 h-14 rounded-xl flex flex-col items-center justify-center text-xs font-bold transition-all cursor-pointer font-semibold ${
+          defined 
+            ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white shadow-xl shadow-purple-400/40 border border-purple-500' 
+            : 'bg-white border-2 border-gray-200 text-gray-600 hover:border-purple-300'
+        }`}
+        style={{ top: position.top, left: position.left }}
+        data-testid={`center-${name}`}
+      >
+        <span className="text-[10px] leading-none">{center.short}</span>
+        {defined && <span className="text-[7px] mt-0.5 opacity-80">{center.theme?.substring(0, 3)}</span>}
+      </motion.button>
+
+      {/* Advanced Tooltip */}
+      {showTooltip && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          className="absolute z-50 bottom-full mb-3 left-1/2 -translate-x-1/2 whitespace-nowrap pointer-events-none"
+        >
+          <div className="bg-black text-white text-xs px-3 py-2 rounded-lg font-semibold flex items-center gap-2">
+            <span>{center.full}</span>
+            {defined && <span className="opacity-60">• {center.theme}</span>}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-black" />
+          </div>
+        </motion.div>
+      )}
+    </div>
   );
 }
 
@@ -363,7 +394,7 @@ export default function HumanDesignPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <Card className="max-w-xl mx-auto p-8 border-2 border-purple-200 shadow-xl">
+            <Card className="max-w-xl mx-auto p-8 border-2 border-purple-200 shadow-2xl hover:shadow-purple-300/50 transition-all duration-500 hover:border-purple-300 backdrop-blur-sm bg-white/95">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                   <FormField
@@ -500,11 +531,14 @@ export default function HumanDesignPage() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
+                      whileHover={{ y: -4 }}
                     >
-                      <Card className="p-4 text-center border-2 border-purple-100">
-                        <stat.icon className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-                        <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">{stat.label}</p>
-                        <p className="font-bold text-gray-900">{stat.value}</p>
+                      <Card className="p-4 text-center border-2 border-purple-100 hover:border-purple-300 hover:shadow-lg transition-all duration-300 hover:bg-purple-50/50 cursor-default">
+                        <motion.div whileHover={{ scale: 1.2, rotate: 10 }}>
+                          <stat.icon className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+                        </motion.div>
+                        <p className="text-xs uppercase tracking-wider text-gray-500 mb-1 font-semibold">{stat.label}</p>
+                        <p className="font-bold text-gray-900 text-sm">{stat.value}</p>
                       </Card>
                     </motion.div>
                   ))}
@@ -517,11 +551,18 @@ export default function HumanDesignPage() {
                   {/* Two Column Layout */}
                   <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left: Bodygraph Visualization */}
-                <Card className="p-8 border-2 border-purple-200">
-                  <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
-                    <Sun className="w-6 h-6 text-purple-600" />
-                    Your Bodygraph
-                  </h3>
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Card className="p-8 border-2 border-purple-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300">
+                    <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-3">
+                      <motion.div whileHover={{ rotate: 20, scale: 1.1 }}>
+                        <Sun className="w-6 h-6 text-purple-600" />
+                      </motion.div>
+                      Your Bodygraph
+                    </h3>
                   
                   <div className="relative h-96 bg-gradient-to-b from-purple-50 to-white rounded-xl">
                     {Object.entries(reading.centers).map(([name, center]) => (
@@ -535,6 +576,11 @@ export default function HumanDesignPage() {
                     ))}
                     
                     {/* Connection lines would go here - simplified for now */}
+                  </div>
+                  
+                  <div className="mt-4 p-3 bg-purple-50 rounded-lg border border-purple-100 text-xs text-gray-600 flex items-center gap-2">
+                    <Info className="w-4 h-4 text-purple-600 flex-shrink-0" />
+                    <span>Click a center to learn more about its role in your design</span>
                   </div>
 
                   {/* Selected Center Info */}
@@ -558,7 +604,8 @@ export default function HumanDesignPage() {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </Card>
+                  </Card>
+                </motion.div>
 
                 {/* Right: Detailed Reading */}
                 <div className="space-y-4">
