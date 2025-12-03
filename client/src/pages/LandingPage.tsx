@@ -37,47 +37,47 @@ export default function LandingPage() {
   // Space value props for enhanced cards
   const SPACE_VALUE_PROPS: Record<string, { outcomes: string[]; experienceCount: number; highlight: string }> = {
     "web3": {
-      outcomes: ["Understand blockchain fundamentals", "Navigate Web3 confidently", "Build your first dApp"],
+      outcomes: ["Understand new digital money opportunities", "Confidently participate in the future economy", "Protect & grow your digital assets"],
       experienceCount: 6,
       highlight: "Perfect Starting Point"
     },
     "crypto": {
-      outcomes: ["Master NFT creation & trading", "Understand cryptocurrency", "Launch digital collections"],
+      outcomes: ["Learn what digital currencies actually are", "Discover new income streams", "Build wealth safely & smartly"],
       experienceCount: 12,
       highlight: "Most Comprehensive"
     },
     "ai": {
-      outcomes: ["Build AI-powered workflows", "Master ChatGPT & tools", "Automate your business"],
+      outcomes: ["Use AI to save 10+ hours per week", "Create content 10x faster", "Automate boring tasks & focus on growth"],
       experienceCount: 6,
       highlight: "Highly Practical"
     },
     "metaverse": {
-      outcomes: ["Navigate virtual worlds", "Understand digital ownership", "Create metaverse presence"],
+      outcomes: ["Understand where business is heading", "Build your presence in emerging spaces", "Future-proof your business"],
       experienceCount: 6,
       highlight: "Future-Ready"
     },
     "branding": {
-      outcomes: ["Build magnetic personal brand", "Stand out as thought leader", "Attract ideal clients"],
+      outcomes: ["Build a personal brand that attracts clients", "Position yourself as THE expert", "Charge premium prices for your work"],
       experienceCount: 6,
       highlight: "Career Accelerator"
     },
     "moms": {
-      outcomes: ["Balance tech career & family", "Build flexible income", "Join supportive community"],
+      outcomes: ["Build income while managing family", "Work flexibly on your terms", "Join a supportive community of mom entrepreneurs"],
       experienceCount: 6,
       highlight: "Mom-Focused"
     },
     "app-atelier": {
-      outcomes: ["Build apps with AI", "No coding required", "Launch in days, not months"],
+      outcomes: ["Create digital products without coding", "Launch & sell your ideas online", "Build passive income streams"],
       experienceCount: 6,
       highlight: "No-Code Power"
     },
     "founders-club": {
-      outcomes: ["Turn idea into reality", "Build profitable business", "Get founder mentorship"],
+      outcomes: ["Turn your idea into a profitable business", "Get real business mentorship & support", "Scale faster with a community"],
       experienceCount: 6,
       highlight: "12-Week Accelerator"
     },
     "digital-sales": {
-      outcomes: ["Launch online store in 3 days", "Master Instagram Shopping", "Scale with paid ads"],
+      outcomes: ["Launch your online store quickly", "Sell your products on social media", "Grow revenue with proven strategies"],
       experienceCount: 6,
       highlight: "Quick Launch"
     },
@@ -171,15 +171,15 @@ export default function LandingPage() {
             <div className="mb-12 flex flex-col gap-3 justify-center max-w-2xl mx-auto">
               <div className="flex items-center gap-2 text-gray-700 justify-center">
                 <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium">Real experts + real AI coaching + real human support (from me, Nadia)</span>
+                <span className="text-sm md:text-base font-medium">Plain English guidance—no tech jargon or overwhelming concepts</span>
               </div>
               <div className="flex items-center gap-2 text-gray-700 justify-center">
                 <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium">54 transformational rituals—free to start, upgrade when ready</span>
+                <span className="text-sm md:text-base font-medium">54 guided experiences designed for busy women like you</span>
               </div>
               <div className="flex items-center gap-2 text-gray-700 justify-center">
                 <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                <span className="text-sm md:text-base font-medium">Personalized roadmap based on your goals, not generic courses</span>
+                <span className="text-sm md:text-base font-medium">Start free, learn at your pace, upgrade only if you want more</span>
               </div>
             </div>
             
@@ -253,20 +253,20 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="p-8 border border-gray-200 bg-white hover:shadow-lg transition-shadow">
                 <Bot className="w-10 h-10 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2 text-black">Master AI Tools</h3>
-                <p className="text-sm text-gray-600">Use AI to create content, design, and run your business 10x faster—without technical skills</p>
+                <h3 className="font-semibold text-lg mb-2 text-black">Work Smarter, Not Harder</h3>
+                <p className="text-sm text-gray-600">Use AI to save 10+ hours every week. Create content, design graphics, and manage your business faster—no tech skills needed</p>
               </div>
               
               <div className="p-8 border border-gray-200 bg-white hover:shadow-lg transition-shadow">
                 <Globe className="w-10 h-10 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2 text-black">Build Web3 Wealth</h3>
-                <p className="text-sm text-gray-600">Understand crypto, NFTs, and Web3 opportunities—and actually participate with confidence</p>
+                <h3 className="font-semibold text-lg mb-2 text-black">Build Financial Freedom</h3>
+                <p className="text-sm text-gray-600">Understand the new digital economy, discover new income streams, and build wealth confidently—explained in plain English</p>
               </div>
               
               <div className="p-8 border border-gray-200 bg-white hover:shadow-lg transition-shadow">
                 <Crown className="w-10 h-10 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-2 text-black">Own Your Authority</h3>
-                <p className="text-sm text-gray-600">Build your personal brand, establish thought leadership, and charge premium prices</p>
+                <h3 className="font-semibold text-lg mb-2 text-black">Become the Go-To Expert</h3>
+                <p className="text-sm text-gray-600">Build a personal brand that attracts your ideal clients, position yourself as the expert, and charge what you're worth</p>
               </div>
             </div>
           </motion.div>
@@ -296,7 +296,7 @@ export default function LandingPage() {
                   Nine Learning<br />Spaces
                 </h2>
                 <p className="text-xl text-gray-700 leading-relaxed">
-                  54 transformational experiences to master AI, Web3, and the future
+                  54 guided experiences to grow your income, save time, and build the business life you actually want
                 </p>
               </div>
 
