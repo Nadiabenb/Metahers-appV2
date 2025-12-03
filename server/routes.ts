@@ -21,6 +21,35 @@ import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
 import adminRoutes from "./adminRoutes";
 
+// City search endpoint function
+async function searchCities(query: string) {
+  if (!query || query.length < 2) return [];
+  try {
+    const response = await fetch(
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=10&addresstype=city,town,village&featuretype=city,town,village`,
+      {
+        headers: {
+          "User-Agent": "MetaHersMindSpa/1.0"
+        }
+      }
+    );
+    const results = await response.json() as any[];
+    return results.slice(0, 10).map((r: any) => {
+      const address = r.address || {};
+      const cityName = address.city || address.town || address.village || r.display_name.split(",")[0];
+      const country = address.country || r.display_name.split(",").pop()?.trim() || "";
+      return {
+        name: `${cityName}, ${country}`,
+        latitude: parseFloat(r.lat),
+        longitude: parseFloat(r.lon)
+      };
+    });
+  } catch (error) {
+    console.error("City search error:", error);
+    return [];
+  }
+}
+
 // Initialize Stripe
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -4179,6 +4208,13 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   }));
 
   // ===== HUMAN DESIGN =====
+  // Search for cities by query (uses Nominatim/OpenStreetMap)
+  app.get('/api/cities/search', asyncHandler(async (req: Request, res) => {
+    const query = req.query.q as string;
+    const cities = await searchCities(query);
+    res.json(cities);
+  }));
+
   // Calculate Human Design reading from birth data
   app.post('/api/human-design/calculate', asyncHandler(async (req: Request, res) => {
     const { birthDate, birthTime, birthLocation } = req.body;
