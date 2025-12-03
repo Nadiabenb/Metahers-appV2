@@ -139,87 +139,215 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* PREMIUM HERO - Clean Alo Yoga Style */}
+      {/* PREMIUM HERO - Advanced Interactive */}
       <div 
-        className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden bg-white"
+        className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden bg-gradient-to-b from-white via-white to-purple-50"
       >
-        
-        {/* Magical floating particles */}
-        <div className="absolute -top-20 left-10 text-4xl magical-floating" style={{ animationDelay: '0s' }}>✨</div>
-        <div className="absolute top-32 right-20 text-3xl magical-floating" style={{ animationDelay: '0.5s' }}>💜</div>
-        <div className="absolute top-64 left-1/3 text-2xl magical-floating" style={{ animationDelay: '1s' }}>✨</div>
+        {/* Animated background gradient orbs */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <motion.div
+            animate={{ y: [0, -20, 0], opacity: [0.3, 0.1, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+            className="absolute -top-40 -left-40 w-80 h-80 bg-purple-200 rounded-full blur-3xl opacity-20"
+          />
+          <motion.div
+            animate={{ y: [0, 20, 0], opacity: [0.2, 0.05, 0.2] }}
+            transition={{ duration: 10, repeat: Infinity, delay: 1 }}
+            className="absolute -bottom-20 -right-40 w-96 h-96 bg-purple-300 rounded-full blur-3xl opacity-10"
+          />
+        </div>
 
-        <div className="relative z-10 max-w-3xl mx-auto text-center">
+        <div className="relative z-10 max-w-5xl mx-auto w-full">
+          {/* Animated badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex justify-center mb-8"
+          >
+            <motion.div
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-100 to-purple-50 border-2 border-purple-200 backdrop-blur-sm"
+            >
+              <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse" />
+              <span className="text-sm font-bold uppercase tracking-widest text-purple-600">For Moms, Solopreneurs, Creatives & Artists</span>
+            </motion.div>
+          </motion.div>
+
+          {/* Animated headline with staggered reveal */}
+          <div className="text-center mb-8">
+            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black leading-tight mb-6 text-black">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="block"
+              >
+                The Tools
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="block"
+              >
+                That Will
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="block bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent"
+              >
+                Change Everything
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="block text-4xl sm:text-5xl mt-2"
+              >
+                Are Here. Now.
+              </motion.span>
+            </h1>
+          </div>
+
+          {/* Interactive stat cards with animated counters */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="grid grid-cols-3 gap-4 sm:gap-6 mb-12 max-w-2xl mx-auto"
           >
-            <div className="mb-6 inline-block magical-shimmer px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/10 via-purple-600/5 to-purple-600/10">
-              <span className="text-sm uppercase tracking-widest font-semibold text-purple-600">
-                💜 For Moms, Solopreneurs, Creatives & Artists
-              </span>
-            </div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-4 sm:p-6 bg-white border-2 border-purple-200 rounded-xl backdrop-blur-sm cursor-pointer"
+            >
+              <motion.p className="text-3xl sm:text-4xl font-black text-purple-600 mb-1">
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.7 }}
+                >
+                  500+
+                </motion.span>
+              </motion.p>
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-700">Women</p>
+              <p className="text-xs text-gray-600">15 countries</p>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-4 sm:p-6 bg-white border-2 border-purple-200 rounded-xl backdrop-blur-sm cursor-pointer"
+            >
+              <motion.p className="text-3xl sm:text-4xl font-black text-purple-600 mb-1">
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.8 }}
+                >
+                  54
+                </motion.span>
+              </motion.p>
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-700">Experiences</p>
+              <p className="text-xs text-gray-600">Guided learning</p>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              className="p-4 sm:p-6 bg-white border-2 border-purple-200 rounded-xl backdrop-blur-sm cursor-pointer"
+            >
+              <motion.p className="text-3xl sm:text-4xl font-black text-purple-600 mb-1">
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.9 }}
+                >
+                  15+
+                </motion.span>
+              </motion.p>
+              <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-700">Hours</p>
+              <p className="text-xs text-gray-600">Reclaimed weekly</p>
+            </motion.div>
+          </motion.div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold mb-6 leading-tight text-black tracking-tight magical-hero-title">
-              The Tools That Will<br /><span className="text-purple-600">Change Everything</span><br />Are Here. Now.
-            </h1>
-            <p className="text-xl sm:text-2xl text-gray-700 mb-6 leading-relaxed max-w-2xl mx-auto font-medium magical-hero-subtitle">
-              In the last 12 months, everything shifted. AI got real. New wealth started being built. And 500+ women just like you said YES to learning what comes next. They're not waiting. They're not confused. They're *ahead*. Right now, there's a wave happening—and you're either riding it or watching from the shore. MetaHers shows you how to ride it. How to thrive in both your personal AND professional life. How to build income that actually works. How to join the women who already know what's coming.
+          {/* Animated subheading */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1 }}
+            className="max-w-3xl mx-auto mb-12 text-center"
+          >
+            <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 font-medium">
+              <span className="font-bold text-black">Everything shifted in 12 months.</span> AI went from science fiction to your daily reality. New wealth is being built. <span className="font-bold text-purple-600">500+ women are already ahead.</span> They're not waiting. They're not confused. They're riding the wave.
             </p>
-            
-            <div className="mb-12 flex flex-col gap-4 justify-center max-w-2xl mx-auto bg-purple-50 p-6 rounded-2xl border-2 border-purple-200">
-              <div className="flex items-start gap-3">
-                <Sparkles className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
-                <div className="text-left">
-                  <p className="font-semibold text-black">Reclaim Your Time With AI That Actually Works</p>
-                  <p className="text-sm text-gray-700">Sarah went from 60-hour weeks to 40. Jessica now has weekends with her kids again. Maria stopped feeling behind. Women are getting 15+ hours back every single week. Not promises. Real tools. Real time. Real life change.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Gem className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
-                <div className="text-left">
-                  <p className="font-semibold text-black">Discover Income You Never Knew Was Possible</p>
-                  <p className="text-sm text-gray-700">Solopreneurs charging 2X within months. Artists selling globally from their living room. Moms building passive income around family time. The women who said YES? They're not geniuses. They just learned what's changing. And now they're building.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Heart className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
-                <div className="text-left">
-                  <p className="font-semibold text-black">Build a Life That's Actually YOURS</p>
-                  <p className="text-sm text-gray-700">Not the hustle culture lie. Not the grind. A life where your business works FOR you. Where you thrive personally AND professionally. Where 500+ women have your back. That's MetaHers.</p>
-                </div>
-              </div>
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+              <div className="h-px w-8 bg-purple-300" />
+              <span>Right now, there's a choice to make</span>
+              <div className="h-px w-8 bg-purple-300" />
             </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <motion.button
-                onClick={handleSignup}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-10 py-4 bg-black text-white font-medium text-lg uppercase tracking-wider hover:bg-gray-900 transition-colors flex items-center gap-2"
-                data-testid="button-start-free"
+          </motion.div>
+
+          {/* Three powerful benefits with animations */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.1 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-3xl mx-auto"
+          >
+            {[
+              { icon: Sparkles, title: "Reclaim Your Time", desc: "15+ hours back every week" },
+              { icon: Gem, title: "Unlock Income", desc: "Build multiple revenue streams" },
+              { icon: Heart, title: "Live On Your Terms", desc: "Thrive personally & professionally" }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="p-6 bg-white border-2 border-purple-200 rounded-xl cursor-pointer group"
               >
-                Start Free
-                <ArrowRight className="w-4 h-4" />
-              </motion.button>
-              <motion.button
-                onClick={handleLogin}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 border-2 border-black text-black font-medium text-lg uppercase tracking-wider hover:bg-black hover:text-white transition-all"
-                data-testid="button-login-hero"
-              >
-                Welcome Back
-              </motion.button>
-            </div>
+                <motion.div className="mb-4">
+                  <item.icon className="w-8 h-8 text-purple-600 group-hover:scale-110 transition-transform" />
+                </motion.div>
+                <h3 className="font-bold text-black mb-1">{item.title}</h3>
+                <p className="text-sm text-gray-600">{item.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* CTA Buttons with interactive effects */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.2 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <motion.button
+              onClick={handleSignup}
+              whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
+              whileTap={{ scale: 0.95 }}
+              className="px-10 py-5 bg-black text-white font-bold text-lg uppercase tracking-wider rounded-lg flex items-center gap-3 shadow-lg hover:shadow-2xl transition-all"
+              data-testid="button-start-free"
+            >
+              Start Free
+              <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+                <ArrowRight className="w-5 h-5" />
+              </motion.span>
+            </motion.button>
+            <motion.button
+              onClick={handleLogin}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-5 border-2 border-black text-black font-bold text-lg uppercase tracking-wider rounded-lg hover:bg-black hover:text-white transition-all"
+              data-testid="button-login-hero"
+            >
+              Welcome Back
+            </motion.button>
           </motion.div>
 
           {/* Transformation proof - powerful */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8, delay: 1.3 }}
             className="mt-20 pt-16 border-t-2 border-border/50"
           >
             <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">💜 Meet the Women Who Moved First</p>
