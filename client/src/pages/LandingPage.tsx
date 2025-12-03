@@ -690,6 +690,170 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* AI SUPERIORITY SHOWCASE - Visual Demonstration of AI Power */}
+      <section className="relative py-32 px-6 lg:px-16 bg-gradient-to-b from-purple-50 via-white to-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="mb-20 text-center"
+          >
+            <div className="inline-block mb-6">
+              <motion.div
+                animate={{ rotate: [0, 360] }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute -inset-4 bg-gradient-to-r from-purple-400 via-purple-600 to-purple-400 rounded-full opacity-20 blur-xl"
+              />
+              <div className="relative px-6 py-3 bg-white border-2 border-purple-300 rounded-full">
+                <span className="text-sm font-bold uppercase tracking-widest text-purple-600">Powered by Advanced AI</span>
+              </div>
+            </div>
+            <h2 className="text-5xl lg:text-6xl font-semibold mb-6 text-black">AI That Adapts to You</h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              Every recommendation, every prompt, every insight is personalized in real-time. This is what happens when AI understands your goals.
+            </p>
+          </motion.div>
+
+          {/* Interactive Comparison Grid */}
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            {/* Traditional Approach */}
+            <motion.div
+              initial={{ opacity: 0, x: -40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="p-10 border-2 border-gray-300 rounded-2xl bg-white relative overflow-hidden"
+            >
+              <div className="absolute top-4 right-4 px-3 py-1 bg-gray-200 text-gray-700 text-xs font-bold uppercase rounded-full">Old Way</div>
+              <h3 className="text-2xl font-bold text-gray-700 mb-6">Manual & Time-Consuming</h3>
+              <ul className="space-y-3 text-gray-700">
+                <li className="flex items-start gap-3">
+                  <span className="text-lg text-gray-400 mt-1">✕</span>
+                  <span>Hours spent researching what to learn</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-lg text-gray-400 mt-1">✕</span>
+                  <span>Generic one-size-fits-all courses</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-lg text-gray-400 mt-1">✕</span>
+                  <span>No accountability or personalized feedback</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="text-lg text-gray-400 mt-1">✕</span>
+                  <span>Guessing which skills matter most</span>
+                </li>
+              </ul>
+            </motion.div>
+
+            {/* AI-Powered Approach */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="p-10 border-2 border-purple-400 rounded-2xl bg-gradient-to-br from-purple-50 to-white relative overflow-hidden shadow-lg"
+            >
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-purple-500/5 pointer-events-none"
+                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+              <div className="absolute top-4 right-4 px-3 py-1 bg-purple-600 text-white text-xs font-bold uppercase rounded-full">AI-Powered</div>
+              <h3 className="relative text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent mb-6">Smart & Personalized</h3>
+              <ul className="space-y-3 relative text-gray-700">
+                <li className="flex items-start gap-3">
+                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }} className="text-lg text-purple-600 mt-1">✓</motion.span>
+                  <span><span className="font-semibold text-purple-600">AI instantly understands</span> your goals and learning style</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity, delay: 0.2 }} className="text-lg text-purple-600 mt-1">✓</motion.span>
+                  <span><span className="font-semibold text-purple-600">Personalized journeys</span> that adapt week by week</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity, delay: 0.4 }} className="text-lg text-purple-600 mt-1">✓</motion.span>
+                  <span><span className="font-semibold text-purple-600">Real-time feedback</span> on your progress and insights</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity, delay: 0.6 }} className="text-lg text-purple-600 mt-1">✓</motion.span>
+                  <span><span className="font-semibold text-purple-600">Predictive recommendations</span> show what you need next</span>
+                </li>
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* AI Performance Metrics with Animated Counters */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16"
+          >
+            {[
+              { metric: "10X", label: "Faster Learning Path Discovery", icon: "⚡" },
+              { metric: "99%", label: "Personalization Accuracy", icon: "🎯" },
+              { metric: "24/7", label: "Real-Time AI Coaching", icon: "🤖" },
+              { metric: "0ms", label: "Adaptation Latency", icon: "💨" }
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                whileHover={{ scale: 1.08, y: -8 }}
+                className="p-6 bg-white border-2 border-purple-200 rounded-xl text-center cursor-pointer hover:shadow-xl transition-shadow"
+              >
+                <motion.div
+                  animate={{ scale: [1, 1.2, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                  className="text-4xl mb-3"
+                >
+                  {item.icon}
+                </motion.div>
+                <motion.p className="text-3xl font-black text-purple-600 mb-2">
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    {item.metric}
+                  </motion.span>
+                </motion.p>
+                <p className="text-sm font-semibold text-gray-700">{item.label}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* How AI Makes It Happen */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="p-10 bg-black text-white rounded-2xl text-center relative overflow-hidden"
+          >
+            <motion.div
+              animate={{ opacity: [0.1, 0.2, 0.1] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-transparent to-purple-600/20"
+            />
+            <div className="relative z-10">
+              <h3 className="text-3xl font-bold mb-4">The AI Learning Cycle</h3>
+              <p className="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
+                You complete a ritual → Journal your insights → AI analyzes patterns → Personalized next steps appear. Every interaction makes the system smarter about YOUR goals.
+              </p>
+              <div className="flex flex-wrap justify-center gap-4 text-sm font-semibold">
+                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">🧠 Pattern Recognition</div>
+                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">📊 Real-Time Analysis</div>
+                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">🎯 Predictive Paths</div>
+                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">✨ Continuous Evolution</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* NINE LEARNING SPACES - Enhanced Editorial Grid (From MetaHersWorldPage) */}
       <section className="relative py-32 px-6 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">
