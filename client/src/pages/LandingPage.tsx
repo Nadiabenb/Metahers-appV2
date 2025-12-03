@@ -23,6 +23,8 @@ export default function LandingPage() {
   const [animationsReady, setAnimationsReady] = useState(false);
   const [, setLocation] = useLocation();
   const [filter, setFilter] = useState<'all' | 'free' | 'pro'>('all');
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [hoveredBenefit, setHoveredBenefit] = useState<number | null>(null);
 
   // Simplified - remove heavy parallax animations for better performance
 
@@ -110,7 +112,8 @@ export default function LandingPage() {
 
   const handleSignup = () => {
     trackCTAClick('landing_hero_signup', '/signup', 'free');
-    window.location.href = "/signup";
+    setShowCelebration(true);
+    setTimeout(() => window.location.href = "/signup", 500);
   };
 
   const handleLogin = () => {
@@ -301,14 +304,31 @@ export default function LandingPage() {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="p-6 bg-white border-2 border-purple-200 rounded-xl cursor-pointer group"
+                whileHover={{ scale: 1.08, y: -8 }}
+                onMouseEnter={() => setHoveredBenefit(i)}
+                onMouseLeave={() => setHoveredBenefit(null)}
+                className="relative p-6 bg-white border-2 border-purple-200 rounded-xl cursor-pointer group overflow-hidden"
               >
-                <motion.div className="mb-4">
-                  <item.icon className="w-8 h-8 text-purple-600 group-hover:scale-110 transition-transform" />
+                {/* Gradient overlay on hover */}
+                {hoveredBenefit === i && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="absolute inset-0 bg-gradient-to-br from-purple-50 via-transparent to-purple-50 pointer-events-none"
+                  />
+                )}
+                
+                <motion.div className="relative z-10 mb-4">
+                  <motion.div
+                    animate={hoveredBenefit === i ? { scale: 1.2, rotate: 5 } : { scale: 1, rotate: 0 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                  >
+                    <item.icon className="w-8 h-8 text-purple-600 group-hover:text-purple-700 transition-colors" />
+                  </motion.div>
                 </motion.div>
-                <h3 className="font-bold text-black mb-1">{item.title}</h3>
-                <p className="text-sm text-gray-600">{item.desc}</p>
+                <motion.h3 className="relative z-10 font-bold text-black mb-1 group-hover:text-purple-600 transition-colors">{item.title}</motion.h3>
+                <motion.p className="relative z-10 text-sm text-gray-600 group-hover:text-gray-700 transition-colors">{item.desc}</motion.p>
               </motion.div>
             ))}
           </motion.div>
@@ -320,18 +340,45 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 1.2 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <motion.button
-              onClick={handleSignup}
-              whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,0,0,0.15)" }}
-              whileTap={{ scale: 0.95 }}
-              className="px-10 py-5 bg-black text-white font-bold text-lg uppercase tracking-wider rounded-lg flex items-center gap-3 shadow-lg hover:shadow-2xl transition-all"
-              data-testid="button-start-free"
-            >
-              Start Free
-              <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                <ArrowRight className="w-5 h-5" />
-              </motion.span>
-            </motion.button>
+            <motion.div className="relative">
+              {/* Celebration effect background */}
+              {showCelebration && (
+                <>
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0 bg-purple-400 rounded-lg"
+                  />
+                  {[...Array(12)].map((_, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ x: 0, y: 0, opacity: 1 }}
+                      animate={{
+                        x: Math.cos((i / 12) * Math.PI * 2) * 100,
+                        y: Math.sin((i / 12) * Math.PI * 2) * 100 - 50,
+                        opacity: 0,
+                      }}
+                      transition={{ duration: 0.8 }}
+                      className="absolute top-1/2 left-1/2 w-2 h-2 bg-purple-600 rounded-full pointer-events-none"
+                    />
+                  ))}
+                </>
+              )}
+              
+              <motion.button
+                onClick={handleSignup}
+                whileHover={{ scale: 1.08, boxShadow: "0 30px 50px rgba(147,51,234,0.25)" }}
+                whileTap={{ scale: 0.95 }}
+                className="relative px-10 py-5 bg-gradient-to-r from-black to-gray-900 text-white font-bold text-lg uppercase tracking-wider rounded-lg flex items-center gap-3 shadow-2xl hover:shadow-2xl transition-all"
+                data-testid="button-start-free"
+              >
+                Start Free
+                <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
+                  <ArrowRight className="w-5 h-5" />
+                </motion.span>
+              </motion.button>
+            </motion.div>
             <motion.button
               onClick={handleLogin}
               whileHover={{ scale: 1.05 }}
@@ -352,24 +399,35 @@ export default function LandingPage() {
           >
             <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">💜 Meet the Women Who Moved First</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
-                <p className="text-4xl font-bold text-purple-600 mb-1">2X</p>
-                <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-3">Income | 3 Months</p>
-                <p className="text-sm text-gray-700 mb-3 italic">"Sarah, Freelance Designer</p>
-                <p className="text-sm text-gray-600">"'Six months ago I was charging $40/hr, burned out, and invisible. I learned to use AI to build authority. Now I'm $3K per project. Clients find ME. I feel unstoppable.'"</p>
-              </div>
-              <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
-                <p className="text-4xl font-bold text-purple-600 mb-1">15</p>
-                <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-3">Hours Reclaimed Weekly</p>
-                <p className="text-sm text-gray-700 mb-3 italic">"Jessica, Mom of 3</p>
-                <p className="text-sm text-gray-600">"'I used to spend 20 hours on content. Now AI handles 80% of the work. I have Saturday mornings back. My kids notice. My business is GROWING. And I'm not exhausted.'"</p>
-              </div>
-              <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
-                <p className="text-4xl font-bold text-purple-600 mb-1">3</p>
-                <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-3">New Revenue Streams</p>
-                <p className="text-sm text-gray-700 mb-3 italic">"Maria, Artist & Creative</p>
-                <p className="text-sm text-gray-600">"'I thought I could only sell original paintings. Now I sell prints, digital licenses, merchandise. I'm reaching Japan, Germany, Australia. I feel like I cracked a code most artists don't know exists.'"</p>
-              </div>
+              {[
+                { stat: "2X", label: "Income | 3 Months", name: "Sarah, Freelance Designer", quote: "Six months ago I was charging $40/hr, burned out, and invisible. I learned to use AI to build authority. Now I'm $3K per project. Clients find ME. I feel unstoppable." },
+                { stat: "15", label: "Hours Reclaimed Weekly", name: "Jessica, Mom of 3", quote: "I used to spend 20 hours on content. Now AI handles 80% of the work. I have Saturday mornings back. My kids notice. My business is GROWING. And I'm not exhausted." },
+                { stat: "3", label: "New Revenue Streams", name: "Maria, Artist & Creative", quote: "I thought I could only sell original paintings. Now I sell prints, digital licenses, merchandise. I'm reaching Japan, Germany, Australia. I feel like I cracked a code most artists don't know exists." }
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.15 }}
+                  whileHover={{ scale: 1.05, y: -5 }}
+                  className="relative group text-left p-8 rounded-2xl bg-gradient-to-br from-white via-white to-purple-50 border-2 border-purple-200 hover:shadow-2xl transition-shadow overflow-hidden"
+                >
+                  {/* Hover gradient overlay */}
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 1 }}
+                    className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-purple-600/5 pointer-events-none"
+                  />
+                  
+                  <div className="relative z-10">
+                    <motion.p className="text-4xl font-black text-transparent bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text mb-1">{item.stat}</motion.p>
+                    <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-4">{item.label}</p>
+                    <p className="text-sm text-gray-700 mb-3 italic font-medium">"{item.name}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed">"{item.quote}"</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
         </div>
@@ -442,12 +500,21 @@ export default function LandingPage() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                whileHover={{ scale: 1.02, y: -5 }}
-                className="p-8 bg-white border-2 border-purple-200 rounded-2xl hover:shadow-xl transition-all"
+                transition={{ duration: 0.6, delay: i * 0.08 }}
+                whileHover={{ scale: 1.05, y: -8, boxShadow: "0 25px 50px rgba(147,51,234,0.15)" }}
+                className="relative group p-8 bg-gradient-to-br from-white to-purple-50 border-2 border-purple-200 rounded-2xl overflow-hidden hover:shadow-2xl transition-all"
               >
-                <h3 className="text-xl font-bold text-black mb-3">{item.title}</h3>
-                <p className="text-gray-700">{item.desc}</p>
+                {/* Animated accent bar */}
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.08 + 0.2 }}
+                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-purple-600 to-purple-400 origin-left"
+                />
+                
+                <motion.h3 className="relative z-10 text-xl font-bold text-black mb-3 group-hover:text-purple-600 transition-colors">{item.title}</motion.h3>
+                <motion.p className="relative z-10 text-gray-700 group-hover:text-gray-800 transition-colors">{item.desc}</motion.p>
               </motion.div>
             ))}
           </div>
