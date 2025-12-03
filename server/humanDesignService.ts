@@ -245,37 +245,39 @@ function getPlanetaryPositions(jd: number): Record<string, number> {
   // Earth longitude (for calculating Earth gate - opposite Sun)
   positions['Earth'] = (positions['Sun'] + 180) % 360;
   
-  // Get Earth's heliocentric position for converting other planets to geocentric
-  const earthPos = planetposition.position(planetposition.earth, jd);
+  // Get Time parameter for astronomia calculations
+  const T = (jd - 2451545.0) / 36525;
   
-  // Calculate geocentric positions for planets
-  const planets = [
-    { name: 'Mercury', data: planetposition.mercury },
-    { name: 'Venus', data: planetposition.venus },
-    { name: 'Mars', data: planetposition.mars },
-    { name: 'Jupiter', data: planetposition.jupiter },
-    { name: 'Saturn', data: planetposition.saturn },
-    { name: 'Uranus', data: planetposition.uranus },
-    { name: 'Neptune', data: planetposition.neptune },
-  ];
+  // Calculate simple planetary longitudes using mean longitude approximations
+  // Mercury
+  const mercuryLon = 252.250906 + 149474.070229 * T;
+  positions['Mercury'] = (mercuryLon % 360 + 360) % 360;
   
-  for (const planet of planets) {
-    const helioPos = planetposition.position(planet.data, jd);
-    
-    // Convert heliocentric to geocentric
-    const x = helioPos.range * Math.cos(helioPos.lat) * Math.cos(helioPos.lon) - 
-              earthPos.range * Math.cos(earthPos.lat) * Math.cos(earthPos.lon);
-    const y = helioPos.range * Math.cos(helioPos.lat) * Math.sin(helioPos.lon) - 
-              earthPos.range * Math.cos(earthPos.lat) * Math.sin(earthPos.lon);
-    
-    let geoLon = Math.atan2(y, x) * 180 / Math.PI;
-    geoLon = (geoLon + 360) % 360;
-    
-    positions[planet.name] = geoLon;
-  }
+  // Venus
+  const venusLon = 181.979801 + 58517.815676 * T;
+  positions['Venus'] = (venusLon % 360 + 360) % 360;
+  
+  // Mars
+  const marsLon = 355.433275 + 19140.299314 * T;
+  positions['Mars'] = (marsLon % 360 + 360) % 360;
+  
+  // Jupiter
+  const jupiterLon = 34.351519 + 3034.906885 * T;
+  positions['Jupiter'] = (jupiterLon % 360 + 360) % 360;
+  
+  // Saturn
+  const saturnLon = 50.066190 + 1213.486291 * T;
+  positions['Saturn'] = (saturnLon % 360 + 360) % 360;
+  
+  // Uranus (mean longitude)
+  const uranusLon = 314.055005 + 428.294237 * T;
+  positions['Uranus'] = (uranusLon % 360 + 360) % 360;
+  
+  // Neptune (mean longitude)
+  const neptuneLon = 304.348665 + 218.486200 * T;
+  positions['Neptune'] = (neptuneLon % 360 + 360) % 360;
   
   // Moon - simplified calculation (Mean longitude)
-  const T = (jd - 2451545.0) / 36525;
   const moonLon = 218.3164477 + 481267.88123421 * T - 0.0015786 * T * T;
   positions['Moon'] = (moonLon % 360 + 360) % 360;
   
