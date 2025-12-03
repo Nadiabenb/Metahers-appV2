@@ -13,8 +13,8 @@ import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
-import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages } from "@shared/schema";
-import { sql as drizzleSql, eq } from "drizzle-orm";
+import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds } from "@shared/schema";
+import { sql as drizzleSql, eq, desc, and, sql } from "drizzle-orm";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
@@ -4073,6 +4073,108 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       .returning();
     
     res.json(message[0]);
+  }));
+
+  // ===== ANALYTICS & EVENTS =====
+  // Track user events (for sponsored ads attribution & engagement)
+  app.post('/api/events/track', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { eventType, eventName, properties, adCampaignId, source } = req.body;
+    
+    const event = await db.insert(userEvents)
+      .values({ userId, eventType, eventName, properties, adCampaignId, source })
+      .returning();
+    
+    res.json(event[0]);
+  }));
+
+  // Get user's event history
+  app.get('/api/events/history', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const events = await db.select().from(userEvents)
+      .where(eq(userEvents.userId, userId))
+      .orderBy(desc(userEvents.createdAt))
+      .limit(50);
+    
+    res.json(events);
+  }));
+
+  // Get analytics funnel (signup → purchase → engagement)
+  app.get('/api/analytics/funnel', asyncHandler(async (_req: Request, res) => {
+    const signups = await db.select().from(userEvents)
+      .where(eq(userEvents.eventType, 'signup'));
+    
+    const purchases = await db.select().from(userEvents)
+      .where(eq(userEvents.eventType, 'purchase'));
+    
+    const engagements = await db.select().from(userEvents)
+      .where(eq(userEvents.eventType, 'ritual_complete'));
+    
+    res.json({
+      signups: signups.length,
+      purchases: purchases.length,
+      purchaseRate: ((purchases.length / signups.length) * 100).toFixed(2) + '%',
+      engagements: engagements.length,
+      engagementRate: ((engagements.length / purchases.length) * 100).toFixed(2) + '%'
+    });
+  }));
+
+  // ===== SPONSORED ADS =====
+  // Get active ads for placement
+  app.get('/api/ads/active', asyncHandler(async (req: Request, res) => {
+    const placement = req.query.placement as string || 'dashboard_hero';
+    
+    const ads = await db.select().from(sponsoredAds)
+      .where(and(
+        eq(sponsoredAds.isActive, true),
+        eq(sponsoredAds.placementType, placement)
+      ))
+      .limit(3);
+    
+    res.json(ads);
+  }));
+
+  // Track ad impression
+  app.post('/api/ads/impression', asyncHandler(async (req: Request, res) => {
+    const { adId, userId } = req.body;
+    
+    await db.update(sponsoredAds)
+      .set({ impressions: sql`${sponsoredAds.impressions} + 1` })
+      .where(eq(sponsoredAds.id, adId));
+    
+    if (userId) {
+      await db.insert(userEvents)
+        .values({ userId, eventType: 'ad_impression', eventName: 'ad_impression', adCampaignId: adId });
+    }
+    
+    res.json({ success: true });
+  }));
+
+  // Track ad click
+  app.post('/api/ads/click', asyncHandler(async (req: Request, res) => {
+    const { adId, userId } = req.body;
+    
+    await db.update(sponsoredAds)
+      .set({ clicks: sql`${sponsoredAds.clicks} + 1` })
+      .where(eq(sponsoredAds.id, adId));
+    
+    if (userId) {
+      await db.insert(userEvents)
+        .values({ userId, eventType: 'ad_click', eventName: 'ad_click', adCampaignId: adId });
+    }
+    
+    res.json({ success: true });
+  }));
+
+  // Admin: Create sponsored ad
+  app.post('/api/admin/ads/create', isAuthenticated, isAdmin, asyncHandler(async (req: Request, res) => {
+    const { campaignId, title, description, imageUrl, ctaUrl, placementType, dailyBudget } = req.body;
+    
+    const ad = await db.insert(sponsoredAds)
+      .values({ campaignId, title, description, imageUrl, ctaUrl, placementType, dailyBudget })
+      .returning();
+    
+    res.json(ad[0]);
   }));
 
   const httpServer = createServer(app);

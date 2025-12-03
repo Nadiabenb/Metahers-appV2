@@ -2614,3 +2614,50 @@ export const aiMasteryMessages = pgTable("ai_mastery_messages", {
 export const insertAiMasteryMessageSchema = createInsertSchema(aiMasteryMessages).omit({ id: true, createdAt: true });
 export type InsertAiMasteryMessage = z.infer<typeof insertAiMasteryMessageSchema>;
 export type AiMasteryMessageDB = typeof aiMasteryMessages.$inferSelect;
+
+// User Events (for analytics, sponsored ads attribution, engagement tracking)
+export const userEvents = pgTable("user_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  eventType: varchar("event_type").notNull(), // "signup", "purchase", "ritual_complete", "journal_entry", "ad_impression", "ad_click", "onboarding_complete"
+  eventName: varchar("event_name").notNull(),
+  properties: jsonb("properties").$type<Record<string, any>>(),
+  adCampaignId: varchar("ad_campaign_id"), // For sponsored ad tracking
+  source: varchar("source"), // "organic", "paid_ad", "referral"
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_events_user").on(table.userId),
+  index("idx_events_type").on(table.eventType),
+  index("idx_events_created").on(table.createdAt),
+  index("idx_events_campaign").on(table.adCampaignId),
+]);
+
+export const insertUserEventSchema = createInsertSchema(userEvents).omit({ id: true, createdAt: true });
+export type InsertUserEvent = z.infer<typeof insertUserEventSchema>;
+export type UserEventDB = typeof userEvents.$inferSelect;
+
+// Sponsored Ads (for platform-wide ad management)
+export const sponsoredAds = pgTable("sponsored_ads", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  campaignId: varchar("campaign_id").notNull(),
+  title: varchar("title").notNull(),
+  description: text("description").notNull(),
+  imageUrl: text("image_url"),
+  ctaUrl: varchar("cta_url"),
+  placementType: varchar("placement_type").notNull(), // "dashboard_hero", "sidebar", "ritual_card", "journal_prompt"
+  isActive: boolean("is_active").default(true).notNull(),
+  startDate: timestamp("start_date").defaultNow(),
+  endDate: timestamp("end_date"),
+  dailyBudget: decimal("daily_budget", { precision: 10, scale: 2 }),
+  impressions: integer("impressions").default(0).notNull(),
+  clicks: integer("clicks").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_ads_campaign").on(table.campaignId),
+  index("idx_ads_active").on(table.isActive),
+  index("idx_ads_placement").on(table.placementType),
+]);
+
+export const insertSponsoredAdSchema = createInsertSchema(sponsoredAds).omit({ id: true, createdAt: true });
+export type InsertSponsoredAd = z.infer<typeof insertSponsoredAdSchema>;
+export type SponsoredAdDB = typeof sponsoredAds.$inferSelect;
