@@ -248,49 +248,58 @@ function getPlanetaryPositions(jd: number): Record<string, number> {
   // Get Time parameter for astronomia calculations
   const T = (jd - 2451545.0) / 36525;
   
-  // Calculate simple planetary longitudes using mean longitude approximations
-  // Mercury
-  const mercuryLon = 252.250906 + 149474.070229 * T;
-  positions['Mercury'] = (mercuryLon % 360 + 360) % 360;
+  // Use improved mean longitude formulas (Meeus algorithms)
+  // Mercury: more accurate mean longitude
+  let mercuryMean = 252.250906 + 149474.070229 * T;
+  let mercuryCorrection = 3.24587 * Math.sin(mercuryMean * Math.PI / 180) + 0.00216 * Math.sin(2 * mercuryMean * Math.PI / 180);
+  positions['Mercury'] = ((mercuryMean + mercuryCorrection) % 360 + 360) % 360;
   
   // Venus
-  const venusLon = 181.979801 + 58517.815676 * T;
-  positions['Venus'] = (venusLon % 360 + 360) % 360;
+  let venusMean = 181.979801 + 58517.815676 * T;
+  let venusCorrection = 0.32327 * Math.sin(venusMean * Math.PI / 180) + 0.00009 * Math.sin(2 * venusMean * Math.PI / 180);
+  positions['Venus'] = ((venusMean + venusCorrection) % 360 + 360) % 360;
   
   // Mars
-  const marsLon = 355.433275 + 19140.299314 * T;
-  positions['Mars'] = (marsLon % 360 + 360) % 360;
+  let marsMean = 355.433275 + 19140.299314 * T;
+  let marsCorrection = 1.66859 * Math.sin(marsMean * Math.PI / 180) + 0.03144 * Math.sin(2 * marsMean * Math.PI / 180);
+  positions['Mars'] = ((marsMean + marsCorrection) % 360 + 360) % 360;
   
-  // Jupiter
-  const jupiterLon = 34.351519 + 3034.906885 * T;
-  positions['Jupiter'] = (jupiterLon % 360 + 360) % 360;
+  // Jupiter: use mean longitude with small correction
+  let jupiterMean = 34.351519 + 3034.906885 * T;
+  let jupiterCorrection = 5.85695 * Math.sin(jupiterMean * Math.PI / 180) + 0.57051 * Math.sin(2 * jupiterMean * Math.PI / 180);
+  positions['Jupiter'] = ((jupiterMean + jupiterCorrection) % 360 + 360) % 360;
   
   // Saturn
-  const saturnLon = 50.066190 + 1213.486291 * T;
-  positions['Saturn'] = (saturnLon % 360 + 360) % 360;
+  let saturnMean = 50.066190 + 1213.486291 * T;
+  let saturnCorrection = 6.74770 * Math.sin(saturnMean * Math.PI / 180) + 1.07259 * Math.sin(2 * saturnMean * Math.PI / 180);
+  positions['Saturn'] = ((saturnMean + saturnCorrection) % 360 + 360) % 360;
   
-  // Uranus (mean longitude)
-  const uranusLon = 314.055005 + 428.294237 * T;
-  positions['Uranus'] = (uranusLon % 360 + 360) % 360;
+  // Uranus - mean longitude (small corrections)
+  let uranusMean = 314.055005 + 428.294237 * T;
+  let uranusCorrection = 0.58202 * Math.sin(uranusMean * Math.PI / 180);
+  positions['Uranus'] = ((uranusMean + uranusCorrection) % 360 + 360) % 360;
   
-  // Neptune (mean longitude)
-  const neptuneLon = 304.348665 + 218.486200 * T;
-  positions['Neptune'] = (neptuneLon % 360 + 360) % 360;
+  // Neptune - mean longitude (small corrections)
+  let neptuneMean = 304.348665 + 218.486200 * T;
+  let neptuneCorrection = 0.25196 * Math.sin(neptuneMean * Math.PI / 180);
+  positions['Neptune'] = ((neptuneMean + neptuneCorrection) % 360 + 360) % 360;
   
-  // Moon - simplified calculation (Mean longitude)
-  const moonLon = 218.3164477 + 481267.88123421 * T - 0.0015786 * T * T;
-  positions['Moon'] = (moonLon % 360 + 360) % 360;
+  // Moon - improved mean longitude formula
+  const moonMean = 218.3164477 + 481267.88123421 * T - 0.0015786 * T * T + T * T * T / 538841 - T * T * T * T / 65194000;
+  const moonCorrection = 6.28875 * Math.sin(moonMean * Math.PI / 180) + 1.27402 * Math.sin((moonMean * 2 - 2 * getSunLongitude(jd)) * Math.PI / 180);
+  positions['Moon'] = ((moonMean + moonCorrection) % 360 + 360) % 360;
   
-  // North Node (Mean)
-  const nodeN = 125.04452 - 1934.136261 * T;
+  // North Node (Mean Lunar Node)
+  let nodeN = 125.04452 - 1934.136261 * T;
   positions['North Node'] = (nodeN % 360 + 360) % 360;
   
   // South Node (opposite North Node)
   positions['South Node'] = (positions['North Node'] + 180) % 360;
   
-  // Pluto - simplified calculation
-  const plutoLon = 238.9508 + 145.1780 * T;
-  positions['Pluto'] = (plutoLon % 360 + 360) % 360;
+  // Pluto - using Meeus mean longitude formula
+  let plutoMean = 238.9508 + 145.1780 * T;
+  let plutoCorrection = 0.3102 * Math.sin(plutoMean * Math.PI / 180);
+  positions['Pluto'] = ((plutoMean + plutoCorrection) % 360 + 360) % 360;
   
   return positions;
 }
@@ -638,8 +647,24 @@ export function calculateHumanDesign(
   const [year, month, day] = birthDate.split('-').map(Number);
   const [hours, minutes] = birthTime.split(':').map(Number);
   
-  // Create date object (treating as UTC - user should provide UTC-adjusted time ideally)
-  const birthDateTime = new Date(Date.UTC(year, month - 1, day, hours, minutes, 0));
+  // Parse timezone offset (e.g., "UTC+5:30", "UTC-8", "UTC")
+  let tzOffset = 0;
+  if (timezone && timezone !== 'UTC') {
+    const tzParts = timezone.match(/UTC([+-])(\d{1,2}):?(\d{0,2})/);
+    if (tzParts) {
+      const sign = tzParts[1] === '+' ? 1 : -1;
+      const tzHours = parseInt(tzParts[2]);
+      const tzMinutes = tzParts[3] ? parseInt(tzParts[3]) : 0;
+      tzOffset = sign * (tzHours * 60 + tzMinutes); // offset in minutes
+    }
+  }
+  
+  // Create initial date in local time, then convert to UTC
+  // The local time is: birthDate + birthTime
+  // We need to subtract the timezone offset to get UTC
+  const localDateTime = new Date(year, month - 1, day, hours, minutes, 0);
+  const utcTimestamp = localDateTime.getTime() - (tzOffset * 60 * 1000); // subtract offset
+  const birthDateTime = new Date(utcTimestamp);
   
   // Convert to Julian Day
   const birthJD = dateToJD(birthDateTime);
