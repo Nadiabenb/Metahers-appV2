@@ -157,37 +157,37 @@ export default function LandingPage() {
           >
             <div className="mb-6 inline-block magical-shimmer px-4 py-2 rounded-full bg-gradient-to-r from-purple-600/10 via-purple-600/5 to-purple-600/10">
               <span className="text-sm uppercase tracking-widest font-semibold text-purple-600">
-                🚀 Join 500+ women who doubled their income
+                💜 You're Already Successful. What If You Knew What Comes Next?
               </span>
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold mb-6 leading-tight text-black tracking-tight magical-hero-title">
-              Stop Drowning in<br /><span className="text-purple-600">Work You Hate</span>
+              Welcome to a World<br /><span className="text-purple-600">You Didn't Know</span><br />Existed
             </h1>
             <p className="text-xl sm:text-2xl text-gray-700 mb-6 leading-relaxed max-w-2xl mx-auto font-medium magical-hero-subtitle">
-              You're juggling too much. Too many platforms. Not enough time. Scared you're falling behind. What if you could work 10x smarter, attract premium clients, and actually have time to breathe?
+              You've built an amazing business. You're doing well. But something is changing in how the world works, and women like you are quietly discovering it. Web3. AI magic that actually works. New wealth being built right now. And a community of women just like you exploring it all together.
             </p>
             
             <div className="mb-12 flex flex-col gap-4 justify-center max-w-2xl mx-auto bg-purple-50 p-6 rounded-2xl border-2 border-purple-200">
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
                 <div className="text-left">
-                  <p className="font-semibold text-black">Save 15+ Hours/Week</p>
-                  <p className="text-sm text-gray-700">Women are using AI to automate content, design, and admin work. Imagine getting your time back.</p>
+                  <p className="font-semibold text-black">Discover Income Streams You Didn't Know Were Possible</p>
+                  <p className="text-sm text-gray-700">Women in your community are already building wealth in ways traditional business won't teach you.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
                 <div className="text-left">
-                  <p className="font-semibold text-black">Attract Ideal Clients (And Charge More)</p>
-                  <p className="text-sm text-gray-700">Build authority that attracts premium clients. Members are raising rates by 50%+ within weeks.</p>
+                  <p className="font-semibold text-black">Master AI Tools That Actually Change Everything</p>
+                  <p className="text-sm text-gray-700">Not hype. Real tools that give you 10+ hours back every week. Your competitors are already using them.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
                 <div className="text-left">
-                  <p className="font-semibold text-black">Unlock Income Opportunities You Never Knew Existed</p>
-                  <p className="text-sm text-gray-700">Learn how other women in your community are building multiple revenue streams. No crypto knowledge needed.</p>
+                  <p className="font-semibold text-black">Join 500+ Women on the Same Journey</p>
+                  <p className="text-sm text-gray-700">Explore, learn, and grow together with a community of successful women discovering what's next.</p>
                 </div>
               </div>
             </div>
@@ -222,22 +222,22 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-20 pt-16 border-t-2 border-border/50"
           >
-            <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">💜 Real Transformations From Real Women</p>
+            <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">💜 Women Who Saw What Was Coming</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
                 <p className="text-4xl font-bold text-purple-600 mb-2">2X</p>
-                <p className="text-foreground font-bold text-base mb-1">Income in 3 Months</p>
-                <p className="text-sm text-gray-600">"Sarah, Graphic Designer: 'I was doing $3K/mo. Now I'm consistently $6K+ with premium clients who found me through my authority.'"</p>
+                <p className="text-foreground font-bold text-base mb-1">Her Income in 3 Months</p>
+                <p className="text-sm text-gray-600">"Sarah, Graphic Designer: 'I discovered income opportunities I didn't even know existed. Now I'm confidently charging 2X what I used to.'"</p>
               </div>
               <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
                 <p className="text-4xl font-bold text-purple-600 mb-2">15 hrs</p>
                 <p className="text-foreground font-bold text-base mb-1">Reclaimed Per Week</p>
-                <p className="text-sm text-gray-600">"Jessica, Mom of 3: 'AI handles my content now. I went from stressed to having time for family AND growing my business.'"</p>
+                <p className="text-sm text-gray-600">"Jessica, Mom & Entrepreneur: 'Learning the AI tools here changed my daily life. I actually have time to enjoy what I've built.'"</p>
               </div>
               <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
                 <p className="text-4xl font-bold text-purple-600 mb-2">3</p>
-                <p className="text-foreground font-bold text-base mb-1">New Revenue Streams</p>
-                <p className="text-sm text-gray-600">"Maria, Coach: 'I now have services, digital products, and affiliate income. My business feels future-proof.'"</p>
+                <p className="text-foreground font-bold text-base mb-1">New Income Paths She's Exploring</p>
+                <p className="text-sm text-gray-600">"Maria, Coach: 'I'm amazed at what's possible. I feel like I'm in on a secret that most entrepreneurs don't know about yet.'"</p>
               </div>
             </div>
           </motion.div>
@@ -256,37 +256,37 @@ export default function LandingPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-black">In 30 Days You'll Have...</h2>
-            <p className="text-lg text-gray-600 mb-12 font-medium">Real tangible results from women exactly like you</p>
+            <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-black">What You'll Discover in MetaHers</h2>
+            <p className="text-lg text-gray-600 mb-12 font-medium">The world is changing. These women are already ahead.</p>
             
             <div className="grid md:grid-cols-3 gap-6">
               <div className="p-8 border-2 border-purple-200 bg-white hover:shadow-xl transition-shadow">
                 <Bot className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-3 text-black">AI Workflows That Work 24/7</h3>
+                <h3 className="font-semibold text-lg mb-3 text-black">AI Tools That Actually Save Your Life</h3>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  <li>✓ Automated content calendar (instead of drowning in creation)</li>
-                  <li>✓ AI assistant handling emails & admin (hours back in your week)</li>
-                  <li>✓ Graphics, captions, templates—done in minutes</li>
+                  <li>✓ What AI can actually do for your business (not hype)</li>
+                  <li>✓ Content creation in 1/10 the time</li>
+                  <li>✓ Reclaim 10+ hours every single week</li>
                 </ul>
               </div>
               
               <div className="p-8 border-2 border-purple-200 bg-white hover:shadow-xl transition-shadow">
                 <Globe className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-3 text-black">New Income You Never Knew You Could Build</h3>
+                <h3 className="font-semibold text-lg mb-3 text-black">The Future of Money (Explained Simply)</h3>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  <li>✓ Clear path to premium pricing (raise rates confidently)</li>
-                  <li>✓ Passive income ideas (digital products, memberships)</li>
-                  <li>✓ Understanding what wealthy women know about money</li>
+                  <li>✓ What Web3 actually is (no tech jargon)</li>
+                  <li>✓ How wealth is being built right now</li>
+                  <li>✓ Income opportunities most women don't know about yet</li>
                 </ul>
               </div>
               
               <div className="p-8 border-2 border-purple-200 bg-white hover:shadow-xl transition-shadow">
                 <Crown className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-3 text-black">Authority That Attracts Ideal Clients</h3>
+                <h3 className="font-semibold text-lg mb-3 text-black">Your Place in the Next Era</h3>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  <li>✓ Personal brand strategy (not generic advice)</li>
-                  <li>✓ Positioning as THE expert in your niche</li>
-                  <li>✓ Clients finding YOU instead of you chasing them</li>
+                  <li>✓ How to build authority in emerging spaces</li>
+                  <li>✓ Position yourself as a leader NOW</li>
+                  <li>✓ Be part of the women shaping what comes next</li>
                 </ul>
               </div>
             </div>
