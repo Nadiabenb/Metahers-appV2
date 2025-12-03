@@ -26,7 +26,7 @@ async function searchCities(query: string) {
   if (!query || query.length < 2) return [];
   try {
     const response = await fetch(
-      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=10&addresstype=city,town,village&featuretype=city,town,village`,
+      `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=20&addresstype=city,town,village&featuretype=city,town,village`,
       {
         headers: {
           "User-Agent": "MetaHersMindSpa/1.0"
@@ -34,16 +34,34 @@ async function searchCities(query: string) {
       }
     );
     const results = await response.json() as any[];
-    return results.slice(0, 10).map((r: any) => {
+    
+    // Filter and map results, prefer English names when available
+    const processed = results.map((r: any) => {
       const address = r.address || {};
-      const cityName = address.city || address.town || address.village || r.display_name.split(",")[0];
-      const country = address.country || r.display_name.split(",").pop()?.trim() || "";
+      // Use display_name as primary source to get English names from OSM
+      let displayName = r.display_name || "";
+      
+      // Extract city and country from display_name (format: "City, Region, Country")
+      const parts = displayName.split(",").map((p: string) => p.trim());
+      const cityName = address.city || address.town || address.village || parts[0] || "";
+      const country = address.country || parts[parts.length - 1] || "";
+      
       return {
         name: `${cityName}, ${country}`,
         latitude: parseFloat(r.lat),
-        longitude: parseFloat(r.lon)
+        longitude: parseFloat(r.lon),
+        importance: r.importance || 0
       };
-    });
+    }).filter((r: any) => r.name && r.name.length > 2)
+     .sort((a: any, b: any) => b.importance - a.importance)
+     .slice(0, 10)
+     .map((r: any) => ({
+       name: r.name,
+       latitude: r.latitude,
+       longitude: r.longitude
+     }));
+    
+    return processed;
   } catch (error) {
     console.error("City search error:", error);
     return [];
