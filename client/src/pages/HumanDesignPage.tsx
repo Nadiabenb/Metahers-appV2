@@ -71,6 +71,13 @@ const birthDataSchema = z.object({
 
 type BirthDataForm = z.infer<typeof birthDataSchema>;
 
+// City suggestion type
+interface CityOption {
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+
 // Human Design reading type
 interface HumanDesignReading {
   type: string;
@@ -450,6 +457,89 @@ const CITIES = [
   "Bogota, Colombia", "Medellin, Colombia", "Cali, Colombia", "Barranquilla, Colombia",
 ].sort();
 
+// City search input component
+function CitySearchInput({ 
+  value, 
+  onChange, 
+  onBlur 
+}: { 
+  value: string; 
+  onChange: (value: string) => void; 
+  onBlur: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState<CityOption[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const debouncedSearch = useCallback(async (q: string) => {
+    if (q.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+    setIsLoading(true);
+    try {
+      const response = await fetch(`/api/cities/search?q=${encodeURIComponent(q)}`);
+      const cities = await response.json();
+      setSuggestions(cities || []);
+    } catch (error) {
+      console.error("City search error:", error);
+      setSuggestions([]);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const handleSelect = (cityName: string) => {
+    onChange(cityName);
+    setSearchQuery("");
+    setSuggestions([]);
+    setOpen(false);
+  };
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <div className="border border-purple-200 rounded-lg px-3 py-2 cursor-text bg-white focus-within:border-purple-500">
+          <input
+            type="text"
+            value={value || searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value);
+              debouncedSearch(e.target.value);
+            }}
+            onFocus={() => setOpen(true)}
+            placeholder="Search your birth city..."
+            className="w-full outline-none text-sm"
+            data-testid="input-city-search"
+          />
+        </div>
+      </PopoverTrigger>
+      <PopoverContent className="w-full p-0" align="start">
+        <div className="space-y-2 max-h-64 overflow-y-auto p-2">
+          {isLoading && <p className="text-sm text-gray-500 text-center py-2">Searching...</p>}
+          {!isLoading && suggestions.length === 0 && searchQuery.length >= 2 && (
+            <p className="text-sm text-gray-500 text-center py-2">No cities found</p>
+          )}
+          {!isLoading && searchQuery.length < 2 && (
+            <p className="text-xs text-gray-400 text-center py-2">Type at least 2 characters</p>
+          )}
+          {suggestions.map((city) => (
+            <button
+              key={city.name}
+              onClick={() => handleSelect(city.name)}
+              className="w-full text-left px-3 py-2 rounded hover:bg-purple-100 text-sm transition"
+              data-testid={`city-option-${city.name}`}
+            >
+              {city.name}
+            </button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
 export default function HumanDesignPage() {
   const [reading, setReading] = useState<HumanDesignReading | null>(null);
   const [selectedCenter, setSelectedCenter] = useState<string | null>(null);
@@ -605,18 +695,11 @@ export default function HumanDesignPage() {
                           Birth Location
                         </FormLabel>
                         <FormControl>
-                          <Select value={field.value} onValueChange={field.onChange}>
-                            <SelectTrigger className="border-purple-200 focus:border-purple-500" data-testid="select-birth-location">
-                              <SelectValue placeholder="Select your birth city..." />
-                            </SelectTrigger>
-                            <SelectContent className="max-h-60">
-                              {CITIES.map((city) => (
-                                <SelectItem key={city} value={city}>
-                                  {city}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <CitySearchInput 
+                            value={field.value} 
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
