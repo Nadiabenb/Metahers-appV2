@@ -1,17 +1,14 @@
 /**
  * Human Design Calculation Service
  * Calculates accurate Human Design readings based on birth date, time, and location
- * 
- * Human Design combines:
- * - I Ching (64 hexagrams → 64 gates)
- * - Astrology (planetary positions)
- * - Kabbalah (Tree of Life → 9 centers)
- * - Hindu-Brahmin Chakra system
- * - Quantum Physics
+ * Uses the astronomia library for accurate VSOP87 planetary positions
  */
 
+import * as julian from 'astronomia/julian';
+import * as planetposition from 'astronomia/planetposition';
+import * as solar from 'astronomia/solar';
+
 export interface HumanDesignReading {
-  // Core Profile
   type: 'Generator' | 'Manifesting Generator' | 'Projector' | 'Manifestor' | 'Reflector';
   strategy: string;
   authority: string;
@@ -19,7 +16,6 @@ export interface HumanDesignReading {
   profileDescription: string;
   definition: 'Single' | 'Split' | 'Triple Split' | 'Quadruple Split' | 'No Definition';
   
-  // The 9 Centers
   centers: {
     head: { defined: boolean; theme: string };
     ajna: { defined: boolean; theme: string };
@@ -32,146 +28,121 @@ export interface HumanDesignReading {
     root: { defined: boolean; theme: string };
   };
   
-  // Gates and Channels
   definedGates: number[];
   channels: string[];
   
-  // Incarnation Cross
   incarnationCross: string;
   incarnationCrossDescription: string;
   
-  // Detailed Descriptions
   typeDescription: string;
   strategyDescription: string;
   authorityDescription: string;
   
-  // Life Themes
   lifeTheme: string;
   notSelfTheme: string;
   signature: string;
   
-  // Personalized Insights
   strengths: string[];
   challenges: string[];
   careerGuidance: string;
   relationshipInsights: string;
   
-  // Birth Data Used
   birthData: {
     date: string;
     time: string;
     location: string;
     timezone: string;
   };
+  
+  personalityGates: { gate: number; line: number; planet: string }[];
+  designGates: { gate: number; line: number; planet: string }[];
 }
 
-// Gate positions based on the Rave Mandala (64 gates mapped to zodiac degrees)
-const GATE_POSITIONS: { gate: number; startDegree: number; endDegree: number }[] = [
-  { gate: 41, startDegree: 0, endDegree: 5.625 },
-  { gate: 19, startDegree: 5.625, endDegree: 11.25 },
-  { gate: 13, startDegree: 11.25, endDegree: 16.875 },
-  { gate: 49, startDegree: 16.875, endDegree: 22.5 },
-  { gate: 30, startDegree: 22.5, endDegree: 28.125 },
-  { gate: 55, startDegree: 28.125, endDegree: 33.75 },
-  { gate: 37, startDegree: 33.75, endDegree: 39.375 },
-  { gate: 63, startDegree: 39.375, endDegree: 45 },
-  { gate: 22, startDegree: 45, endDegree: 50.625 },
-  { gate: 36, startDegree: 50.625, endDegree: 56.25 },
-  { gate: 25, startDegree: 56.25, endDegree: 61.875 },
-  { gate: 17, startDegree: 61.875, endDegree: 67.5 },
-  { gate: 21, startDegree: 67.5, endDegree: 73.125 },
-  { gate: 51, startDegree: 73.125, endDegree: 78.75 },
-  { gate: 42, startDegree: 78.75, endDegree: 84.375 },
-  { gate: 3, startDegree: 84.375, endDegree: 90 },
-  { gate: 27, startDegree: 90, endDegree: 95.625 },
-  { gate: 24, startDegree: 95.625, endDegree: 101.25 },
-  { gate: 2, startDegree: 101.25, endDegree: 106.875 },
-  { gate: 23, startDegree: 106.875, endDegree: 112.5 },
-  { gate: 8, startDegree: 112.5, endDegree: 118.125 },
-  { gate: 20, startDegree: 118.125, endDegree: 123.75 },
-  { gate: 16, startDegree: 123.75, endDegree: 129.375 },
-  { gate: 35, startDegree: 129.375, endDegree: 135 },
-  { gate: 45, startDegree: 135, endDegree: 140.625 },
-  { gate: 12, startDegree: 140.625, endDegree: 146.25 },
-  { gate: 15, startDegree: 146.25, endDegree: 151.875 },
-  { gate: 52, startDegree: 151.875, endDegree: 157.5 },
-  { gate: 39, startDegree: 157.5, endDegree: 163.125 },
-  { gate: 53, startDegree: 163.125, endDegree: 168.75 },
-  { gate: 62, startDegree: 168.75, endDegree: 174.375 },
-  { gate: 56, startDegree: 174.375, endDegree: 180 },
-  { gate: 31, startDegree: 180, endDegree: 185.625 },
-  { gate: 33, startDegree: 185.625, endDegree: 191.25 },
-  { gate: 7, startDegree: 191.25, endDegree: 196.875 },
-  { gate: 4, startDegree: 196.875, endDegree: 202.5 },
-  { gate: 29, startDegree: 202.5, endDegree: 208.125 },
-  { gate: 59, startDegree: 208.125, endDegree: 213.75 },
-  { gate: 40, startDegree: 213.75, endDegree: 219.375 },
-  { gate: 64, startDegree: 219.375, endDegree: 225 },
-  { gate: 47, startDegree: 225, endDegree: 230.625 },
-  { gate: 6, startDegree: 230.625, endDegree: 236.25 },
-  { gate: 46, startDegree: 236.25, endDegree: 241.875 },
-  { gate: 18, startDegree: 241.875, endDegree: 247.5 },
-  { gate: 48, startDegree: 247.5, endDegree: 253.125 },
-  { gate: 57, startDegree: 253.125, endDegree: 258.75 },
-  { gate: 32, startDegree: 258.75, endDegree: 264.375 },
-  { gate: 50, startDegree: 264.375, endDegree: 270 },
-  { gate: 28, startDegree: 270, endDegree: 275.625 },
-  { gate: 44, startDegree: 275.625, endDegree: 281.25 },
-  { gate: 1, startDegree: 281.25, endDegree: 286.875 },
-  { gate: 43, startDegree: 286.875, endDegree: 292.5 },
-  { gate: 14, startDegree: 292.5, endDegree: 298.125 },
-  { gate: 34, startDegree: 298.125, endDegree: 303.75 },
-  { gate: 9, startDegree: 303.75, endDegree: 309.375 },
-  { gate: 5, startDegree: 309.375, endDegree: 315 },
-  { gate: 26, startDegree: 315, endDegree: 320.625 },
-  { gate: 11, startDegree: 320.625, endDegree: 326.25 },
-  { gate: 10, startDegree: 326.25, endDegree: 331.875 },
-  { gate: 58, startDegree: 331.875, endDegree: 337.5 },
-  { gate: 38, startDegree: 337.5, endDegree: 343.125 },
-  { gate: 54, startDegree: 343.125, endDegree: 348.75 },
-  { gate: 61, startDegree: 348.75, endDegree: 354.375 },
-  { gate: 60, startDegree: 354.375, endDegree: 360 },
+// Human Design Mandala: Maps zodiac degrees to gates
+// Starting from 0° Aries, going through all 360°
+// Each gate occupies 5.625° (360° / 64 gates)
+// The sequence follows the I Ching hexagram order in the Rave Mandala
+const GATE_SEQUENCE: number[] = [
+  // 0° - 90° (Aries, Taurus, Gemini, Cancer quadrant)
+  17, 21, 51, 42, 3, 27, 24, 2, 23, 8, 20, 16, 35, 45, 12, 15,
+  // 90° - 180° (Leo, Virgo, Libra, Scorpio quadrant)
+  52, 39, 53, 62, 56, 31, 33, 7, 4, 29, 59, 40, 64, 47, 6, 46,
+  // 180° - 270° (Sagittarius, Capricorn, Aquarius, Pisces quadrant)
+  18, 48, 57, 32, 50, 28, 44, 1, 43, 14, 34, 9, 5, 26, 11, 10,
+  // 270° - 360° (back to Aries)
+  58, 38, 54, 61, 60, 41, 19, 13, 49, 30, 55, 37, 63, 22, 36, 25
 ];
+
+// Gate to Center mapping
+const GATE_TO_CENTER: Record<number, string> = {
+  // Head Center (3 gates)
+  64: 'head', 61: 'head', 63: 'head',
+  // Ajna Center (6 gates)
+  47: 'ajna', 24: 'ajna', 4: 'ajna', 17: 'ajna', 43: 'ajna', 11: 'ajna',
+  // Throat Center (11 gates)
+  62: 'throat', 23: 'throat', 56: 'throat', 35: 'throat', 12: 'throat', 
+  45: 'throat', 33: 'throat', 8: 'throat', 31: 'throat', 20: 'throat', 16: 'throat',
+  // G Center (8 gates)
+  7: 'g', 1: 'g', 13: 'g', 25: 'g', 46: 'g', 2: 'g', 15: 'g', 10: 'g',
+  // Heart/Ego Center (4 gates)
+  21: 'heart', 26: 'heart', 51: 'heart', 40: 'heart',
+  // Sacral Center (9 gates)
+  5: 'sacral', 14: 'sacral', 29: 'sacral', 59: 'sacral', 9: 'sacral', 
+  3: 'sacral', 42: 'sacral', 27: 'sacral', 34: 'sacral',
+  // Solar Plexus Center (7 gates)
+  36: 'solarPlexus', 22: 'solarPlexus', 37: 'solarPlexus', 6: 'solarPlexus', 
+  49: 'solarPlexus', 55: 'solarPlexus', 30: 'solarPlexus',
+  // Spleen Center (7 gates)
+  48: 'spleen', 57: 'spleen', 44: 'spleen', 50: 'spleen', 32: 'spleen', 28: 'spleen', 18: 'spleen',
+  // Root Center (9 gates)
+  58: 'root', 38: 'root', 54: 'root', 53: 'root', 60: 'root', 
+  52: 'root', 19: 'root', 39: 'root', 41: 'root',
+};
 
 // Channel definitions (connecting gates)
 const CHANNELS: { gates: [number, number]; name: string; center1: string; center2: string }[] = [
+  { gates: [64, 47], name: "Abstraction", center1: "head", center2: "ajna" },
+  { gates: [61, 24], name: "Awareness", center1: "head", center2: "ajna" },
+  { gates: [63, 4], name: "Logic", center1: "head", center2: "ajna" },
+  { gates: [17, 62], name: "Acceptance", center1: "ajna", center2: "throat" },
+  { gates: [43, 23], name: "Structuring", center1: "ajna", center2: "throat" },
+  { gates: [11, 56], name: "Curiosity", center1: "ajna", center2: "throat" },
+  { gates: [7, 31], name: "The Alpha", center1: "g", center2: "throat" },
   { gates: [1, 8], name: "Inspiration", center1: "g", center2: "throat" },
-  { gates: [2, 14], name: "The Beat", center1: "g", center2: "sacral" },
-  { gates: [3, 60], name: "Mutation", center1: "sacral", center2: "root" },
-  { gates: [4, 63], name: "Logic", center1: "ajna", center2: "head" },
-  { gates: [5, 15], name: "Rhythm", center1: "sacral", center2: "g" },
-  { gates: [6, 59], name: "Intimacy", center1: "solarPlexus", center2: "sacral" },
-  { gates: [7, 31], name: "Alpha", center1: "g", center2: "throat" },
-  { gates: [9, 52], name: "Concentration", center1: "sacral", center2: "root" },
+  { gates: [13, 33], name: "The Prodigal", center1: "g", center2: "throat" },
   { gates: [10, 20], name: "Awakening", center1: "g", center2: "throat" },
+  { gates: [25, 51], name: "Initiation", center1: "g", center2: "heart" },
+  { gates: [2, 14], name: "The Beat", center1: "g", center2: "sacral" },
+  { gates: [15, 5], name: "Rhythm", center1: "g", center2: "sacral" },
+  { gates: [46, 29], name: "Discovery", center1: "g", center2: "sacral" },
   { gates: [10, 34], name: "Exploration", center1: "g", center2: "sacral" },
   { gates: [10, 57], name: "Perfected Form", center1: "g", center2: "spleen" },
-  { gates: [11, 56], name: "Curiosity", center1: "ajna", center2: "throat" },
-  { gates: [12, 22], name: "Openness", center1: "throat", center2: "solarPlexus" },
-  { gates: [13, 33], name: "Prodigal", center1: "g", center2: "throat" },
-  { gates: [16, 48], name: "Wavelength", center1: "throat", center2: "spleen" },
-  { gates: [17, 62], name: "Acceptance", center1: "ajna", center2: "throat" },
-  { gates: [18, 58], name: "Judgment", center1: "spleen", center2: "root" },
-  { gates: [19, 49], name: "Synthesis", center1: "root", center2: "solarPlexus" },
-  { gates: [20, 34], name: "Charisma", center1: "throat", center2: "sacral" },
-  { gates: [20, 57], name: "Brainwave", center1: "throat", center2: "spleen" },
-  { gates: [21, 45], name: "Money Line", center1: "heart", center2: "throat" },
-  { gates: [23, 43], name: "Structuring", center1: "throat", center2: "ajna" },
-  { gates: [24, 61], name: "Awareness", center1: "ajna", center2: "head" },
-  { gates: [25, 51], name: "Initiation", center1: "g", center2: "heart" },
+  { gates: [21, 45], name: "Money", center1: "heart", center2: "throat" },
   { gates: [26, 44], name: "Surrender", center1: "heart", center2: "spleen" },
-  { gates: [27, 50], name: "Preservation", center1: "sacral", center2: "spleen" },
-  { gates: [28, 38], name: "Struggle", center1: "spleen", center2: "root" },
-  { gates: [29, 46], name: "Discovery", center1: "sacral", center2: "g" },
-  { gates: [30, 41], name: "Recognition", center1: "solarPlexus", center2: "root" },
-  { gates: [32, 54], name: "Transformation", center1: "spleen", center2: "root" },
+  { gates: [40, 37], name: "Community", center1: "heart", center2: "solarPlexus" },
+  { gates: [34, 20], name: "Charisma", center1: "sacral", center2: "throat" },
   { gates: [34, 57], name: "Power", center1: "sacral", center2: "spleen" },
-  { gates: [35, 36], name: "Transitoriness", center1: "throat", center2: "solarPlexus" },
-  { gates: [37, 40], name: "Community", center1: "solarPlexus", center2: "heart" },
-  { gates: [39, 55], name: "Emoting", center1: "root", center2: "solarPlexus" },
+  { gates: [59, 6], name: "Intimacy", center1: "sacral", center2: "solarPlexus" },
+  { gates: [27, 50], name: "Preservation", center1: "sacral", center2: "spleen" },
+  { gates: [3, 60], name: "Mutation", center1: "sacral", center2: "root" },
   { gates: [42, 53], name: "Maturation", center1: "sacral", center2: "root" },
-  { gates: [47, 64], name: "Abstraction", center1: "ajna", center2: "head" },
+  { gates: [9, 52], name: "Concentration", center1: "sacral", center2: "root" },
+  { gates: [35, 36], name: "Transitoriness", center1: "throat", center2: "solarPlexus" },
+  { gates: [12, 22], name: "Openness", center1: "throat", center2: "solarPlexus" },
+  { gates: [16, 48], name: "Wavelength", center1: "throat", center2: "spleen" },
+  { gates: [20, 57], name: "Brainwave", center1: "throat", center2: "spleen" },
+  { gates: [30, 41], name: "Recognition", center1: "solarPlexus", center2: "root" },
+  { gates: [55, 39], name: "Emoting", center1: "solarPlexus", center2: "root" },
+  { gates: [49, 19], name: "Synthesis", center1: "solarPlexus", center2: "root" },
+  { gates: [57, 20], name: "Brainwave", center1: "spleen", center2: "throat" },
+  { gates: [48, 16], name: "Wavelength", center1: "spleen", center2: "throat" },
+  { gates: [18, 58], name: "Judgment", center1: "spleen", center2: "root" },
+  { gates: [28, 38], name: "Struggle", center1: "spleen", center2: "root" },
+  { gates: [32, 54], name: "Transformation", center1: "spleen", center2: "root" },
 ];
+
+// Planet names for display
+const PLANET_NAMES = ['Sun', 'Earth', 'Moon', 'North Node', 'South Node', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
 
 // Type descriptions
 const TYPE_INFO: Record<string, { 
@@ -185,96 +156,209 @@ const TYPE_INFO: Record<string, {
     strategy: 'Wait to Respond',
     notSelfTheme: 'Frustration',
     signature: 'Satisfaction',
-    description: 'You are a Generator, the life force of the planet. You have sustainable energy to work and create when doing what you love. Your Sacral center is defined, giving you consistent access to gut responses and life force energy. When you follow your strategy of waiting to respond, life brings you opportunities that light you up.',
-    strategyDescription: 'Your strategy is to Wait to Respond. This means waiting for something from the outside world to respond to, rather than initiating. When something comes into your awareness - a question, an opportunity, a request - check in with your gut. Does it feel like an expansive "uh-huh" or a contracting "uhn-uhn"? Trust this response.',
+    description: 'You are a Generator, the life force of the planet. With a defined Sacral center, you have sustainable energy when doing work you love. Your aura is open and enveloping, drawing life to you.',
+    strategyDescription: 'Your strategy is to Wait to Respond. Don\'t initiate - wait for something from the outside world to respond to. When something comes, check in with your gut: does it feel like an expansive "uh-huh" or a contracting "uhn-uhn"? Trust this visceral response.',
   },
   'Manifesting Generator': {
     strategy: 'Wait to Respond, Then Inform',
     notSelfTheme: 'Frustration & Anger',
-    signature: 'Satisfaction',
-    description: 'You are a Manifesting Generator, a powerful hybrid with the sustainable energy of a Generator and the initiating power of a Manifestor. You have multiple passions and can move quickly between interests. Your path is non-linear, and that\'s your superpower - you\'re designed to sample life and find what truly lights you up.',
-    strategyDescription: 'Your strategy is to Wait to Respond, then Inform. Like Generators, wait for something to respond to with your gut. Once you feel the "uh-huh," inform those who will be impacted before you act. This prevents resistance and smooths your path forward.',
+    signature: 'Satisfaction & Peace',
+    description: 'You are a Manifesting Generator, a hybrid with Generator\'s sustainable energy and Manifestor\'s initiating power. You\'re multi-passionate and move quickly. Your path is non-linear - embrace it.',
+    strategyDescription: 'Your strategy is to Wait to Respond, then Inform. Like a Generator, wait for something to respond to with your gut. Once you get the "uh-huh," inform those who will be impacted before you act. This prevents resistance.',
   },
   'Projector': {
     strategy: 'Wait for the Invitation',
     notSelfTheme: 'Bitterness',
     signature: 'Success',
-    description: 'You are a Projector, here to guide others and see deeply into systems and people. You have a penetrating aura that can see into the core of others. Your gift is recognizing and directing the energy of others. You\'re not here to work in the traditional sense - you\'re here to guide, manage, and bring efficiency.',
-    strategyDescription: 'Your strategy is to Wait for the Invitation. For major life decisions - career, relationships, where to live - wait to be recognized and invited. When someone truly sees your gifts and formally invites you in, that\'s when you can share your wisdom. In between, focus on studying what interests you and being visible.',
+    description: 'You are a Projector, here to guide and direct the energy of others. You have a focused, penetrating aura that sees deeply into others. You\'re designed to be wise about systems and people.',
+    strategyDescription: 'Your strategy is to Wait for the Invitation. For major life decisions - career, love, where to live - wait to be truly recognized and formally invited. In between invitations, study what interests you and make yourself visible.',
   },
   'Manifestor': {
     strategy: 'Inform Before Acting',
     notSelfTheme: 'Anger',
     signature: 'Peace',
-    description: 'You are a Manifestor, the initiator and catalyst. You have the power to make things happen and impact others with your presence. You\'re here to start things and set them in motion. Your closed and repelling aura protects your independence but can create resistance if others feel blindsided by your actions.',
-    strategyDescription: 'Your strategy is to Inform Before Acting. Before you initiate, tell the people who will be impacted what you\'re about to do. This isn\'t asking permission - it\'s simply informing. This reduces resistance and anger in your life, allowing you to move forward with more peace.',
+    description: 'You are a Manifestor, the initiator and catalyst. You have the power to make things happen and impact others. Your closed, repelling aura protects your independence.',
+    strategyDescription: 'Your strategy is to Inform Before Acting. Tell people who will be impacted what you\'re about to do. This isn\'t asking permission - it\'s informing. This reduces resistance and allows you to move with more peace.',
   },
   'Reflector': {
-    strategy: 'Wait a Lunar Cycle',
+    strategy: 'Wait a Lunar Cycle (28 days)',
     notSelfTheme: 'Disappointment',
     signature: 'Surprise',
-    description: 'You are a Reflector, the rarest type (about 1% of population). With no defined centers, you are completely open and deeply connected to the lunar cycle. You are a mirror for your community, reflecting back its health and potential. Your gift is being able to sample and reflect all the different energies around you.',
-    strategyDescription: 'Your strategy is to Wait a Lunar Cycle (28 days) for major decisions. As the moon moves through all 64 gates, you get a full picture of how you feel about something. Talk to trusted friends throughout this process. What surprises you over time reveals your truth.',
+    description: 'You are a Reflector, the rarest type (about 1%). With no defined centers, you sample and reflect all the energies around you. You\'re deeply connected to the lunar cycle and are here to reflect the health of your community.',
+    strategyDescription: 'Your strategy is to Wait a Lunar Cycle (28 days) for major decisions. As the moon moves through all 64 gates, you experience the decision from every perspective. Talk to trusted others and notice what surprises you over time.',
   },
 };
 
 // Authority descriptions
 const AUTHORITY_INFO: Record<string, string> = {
-  'Emotional': 'Your authority is Emotional (Solar Plexus). Never make decisions in the heat of the moment. Ride your emotional wave - feel the highs and lows around the decision. Over time, as the intensity decreases, clarity emerges. There is no truth in the now for you; truth comes with time and emotional clarity.',
-  'Sacral': 'Your authority is Sacral. Trust your gut response - the "uh-huh" (yes) or "uhn-uhn" (no). This response is immediate and comes from your body, not your mind. Ask yourself yes/no questions or have others ask you to access this wisdom. Your body knows before your mind does.',
-  'Splenic': 'Your authority is Splenic. Trust your instincts and intuition - that quiet inner voice or knowing in the moment. Splenic awareness is subtle and doesn\'t repeat. It speaks once, softly. Practice tuning into this immediate, survival-based wisdom.',
-  'Ego': 'Your authority is Ego (Heart/Will). Your willpower and what you want matters. Ask yourself: "Do I really want this?" and "Is my heart in it?" When your will is truly engaged, you have the energy to follow through. Trust your desires.',
-  'Self-Projected': 'Your authority is Self-Projected. Talk things out and listen to what you say. Your truth emerges through your voice - you literally need to hear yourself speak to know your truth. Find trusted sounding boards who can listen without giving advice.',
-  'Mental': 'Your authority is Mental/Environmental (Outer Authority). You need to talk things out with others and be in the right environment to gain clarity. Your mind processes through dialogue. Pay attention to how different environments make you feel.',
-  'Lunar': 'Your authority is Lunar. Wait through a complete lunar cycle (28 days) before making major decisions. During this time, discuss the decision with trusted advisors and notice how your perspective shifts as the moon moves through its phases.',
+  'Emotional': 'Your authority is Emotional (Solar Plexus). Never make decisions in the heat of the moment. Ride your emotional wave - feel the highs and lows. Over time, as the wave settles, clarity emerges. There is no truth in the now for you.',
+  'Sacral': 'Your authority is Sacral. Trust your gut response - the immediate "uh-huh" (yes) or "uhn-uhn" (no). This response comes from your body, not your mind. Ask yourself yes/no questions or have others ask you.',
+  'Splenic': 'Your authority is Splenic. Trust your instincts and intuition - that quiet inner voice in the moment. Splenic awareness is subtle, speaks once, and doesn\'t repeat. It\'s about survival and wellbeing in the now.',
+  'Ego Manifested': 'Your authority is Ego Manifested. What you want matters. Ask yourself: "Do I really want this?" and "Is my heart in it?" When your will is truly engaged, you have the energy to follow through.',
+  'Ego Projected': 'Your authority is Ego Projected. Listen to what you say about what you want. Your truth comes through your voice when you speak about your desires and commitments.',
+  'Self-Projected': 'Your authority is Self-Projected. Talk things out and listen to what you say. Your truth emerges through your voice - you need to hear yourself speak to know your truth. Find trusted sounding boards.',
+  'Environmental': 'Your authority is Environmental (Mental/None). You need to be in the right environment and talk to the right people. Your clarity comes through dialogue and feeling into different spaces.',
+  'Lunar': 'Your authority is Lunar. Wait through a complete lunar cycle (28 days) for major decisions. Talk to trusted advisors and notice how your perspective shifts as the moon moves through its phases.',
 };
 
 // Profile descriptions
 const PROFILE_INFO: Record<string, { name: string; description: string }> = {
-  '1/3': { name: 'Investigator/Martyr', description: 'You need a solid foundation of knowledge before moving forward. You learn through investigation and trial-and-error, discovering what doesn\'t work to find what does. Your life is a journey of deep research and practical experimentation.' },
-  '1/4': { name: 'Investigator/Opportunist', description: 'You combine deep investigation with strong networking abilities. You build a solid foundation of knowledge and share it through your personal network. Opportunities come through people you know.' },
-  '2/4': { name: 'Hermit/Opportunist', description: 'You have natural talents that others recognize before you do. You need alone time to develop your gifts, but opportunities come through your network. Balance solitude with social connection.' },
-  '2/5': { name: 'Hermit/Heretic', description: 'You have natural talents and are seen as someone who can solve problems. Others project their expectations onto you. Guard your alone time while accepting that you\'re meant to be called out to help.' },
-  '3/5': { name: 'Martyr/Heretic', description: 'You learn through trial and error and are seen as someone who can fix things. Your life is experiential - you discover truth through what doesn\'t work. Others see you as a problem-solver.' },
-  '3/6': { name: 'Martyr/Role Model', description: 'Your life unfolds in three phases: experimentation (until ~30), observation (30-50), then becoming a living example. Early chaos leads to deep wisdom that you eventually embody and model.' },
-  '4/6': { name: 'Opportunist/Role Model', description: 'Your network is everything, and you\'re moving toward becoming a role model. The first half of life is about building relationships; the second half is about being a living example of wisdom.' },
-  '4/1': { name: 'Opportunist/Investigator', description: 'You influence through your network while standing on a solid foundation of knowledge. You need to feel secure in your understanding before sharing with others. Your expertise flows through relationships.' },
-  '5/1': { name: 'Heretic/Investigator', description: 'Others see you as someone with answers, and you back this up with deep research. You\'re a practical problem-solver whose solutions are grounded in thorough investigation.' },
-  '5/2': { name: 'Heretic/Hermit', description: 'You\'re projected upon as a savior or problem-solver, yet you need significant alone time. Others call you out to help, but you must protect your hermit time to develop your natural talents.' },
-  '6/2': { name: 'Role Model/Hermit', description: 'You live in three phases: trial and error, then withdrawal and observation, then becoming an exemplary role model. You have natural talents that emerge when you\'re called out.' },
-  '6/3': { name: 'Role Model/Martyr', description: 'Your path moves through experimentation and chaos toward becoming a role model. The first 30 years are about trial and error; mid-life is about processing; later life is about embodying wisdom.' },
+  '1/3': { name: 'Investigator/Martyr', description: 'You need a solid foundation of knowledge and learn through trial-and-error. You investigate deeply and discover what works through experience.' },
+  '1/4': { name: 'Investigator/Opportunist', description: 'You combine deep research with strong networks. You build solid foundations and share through your community.' },
+  '2/4': { name: 'Hermit/Opportunist', description: 'You have natural talents that emerge when called out by your network. Balance alone time to develop gifts with social connection.' },
+  '2/5': { name: 'Hermit/Heretic', description: 'Natural talents that you may not see, but others project upon you as a problem-solver. Guard your hermit time.' },
+  '3/5': { name: 'Martyr/Heretic', description: 'You learn through trial and error and are seen as someone who can fix things. Your experiential wisdom helps others.' },
+  '3/6': { name: 'Martyr/Role Model', description: 'Three life phases: experimentation (until ~30), observation (30-50), then becoming a living example of wisdom.' },
+  '4/6': { name: 'Opportunist/Role Model', description: 'Your network is everything. First half: building relationships. Second half: becoming a role model through your connections.' },
+  '4/1': { name: 'Opportunist/Investigator', description: 'You influence through relationships while standing on solid foundations of knowledge. Your expertise flows through networks.' },
+  '5/1': { name: 'Heretic/Investigator', description: 'Others see you as having answers, backed by deep research. You\'re a practical problem-solver with solid foundations.' },
+  '5/2': { name: 'Heretic/Hermit', description: 'Projected upon as a savior, yet you need significant alone time. Others call you out to help; protect your hermit space.' },
+  '6/2': { name: 'Role Model/Hermit', description: 'Three phases moving toward becoming an exemplary role model with natural talents that emerge when called out.' },
+  '6/3': { name: 'Role Model/Martyr', description: 'Early experimentation leads to later embodiment of wisdom. First 30 years are trial and error; later you become an example.' },
 };
 
-// Calculate sun position (simplified astronomical calculation)
-function calculateSunPosition(date: Date): number {
-  const J2000 = 2451545.0;
-  const daysSinceJ2000 = (date.getTime() / 86400000) + 2440587.5 - J2000;
-  
-  // Mean longitude of the sun
-  const L = (280.46646 + 0.9856474 * daysSinceJ2000) % 360;
-  
-  // Mean anomaly of the sun
-  const g = ((357.528 + 0.9856003 * daysSinceJ2000) % 360) * Math.PI / 180;
-  
-  // Ecliptic longitude
-  const lambda = L + 1.915 * Math.sin(g) + 0.02 * Math.sin(2 * g);
-  
-  return ((lambda % 360) + 360) % 360;
+/**
+ * Convert a Date to Julian Day
+ */
+function dateToJD(date: Date): number {
+  return julian.DateToJD(date);
 }
 
-// Get gate from zodiac degree
-function getGateFromDegree(degree: number): number {
-  const normalizedDegree = ((degree % 360) + 360) % 360;
-  for (const pos of GATE_POSITIONS) {
-    if (normalizedDegree >= pos.startDegree && normalizedDegree < pos.endDegree) {
-      return pos.gate;
+/**
+ * Calculate the Sun's geocentric longitude for a given Julian Day
+ */
+function getSunLongitude(jd: number): number {
+  const T = (jd - 2451545.0) / 36525;
+  const sunLon = solar.apparentLongitude(T);
+  return (sunLon * 180 / Math.PI + 360) % 360;
+}
+
+/**
+ * Calculate geocentric planetary longitudes using astronomia
+ */
+function getPlanetaryPositions(jd: number): Record<string, number> {
+  const positions: Record<string, number> = {};
+  
+  // Sun (from solar module for accuracy)
+  positions['Sun'] = getSunLongitude(jd);
+  
+  // Earth longitude (for calculating Earth gate - opposite Sun)
+  positions['Earth'] = (positions['Sun'] + 180) % 360;
+  
+  // Get Earth's heliocentric position for converting other planets to geocentric
+  const earthPos = planetposition.position(planetposition.earth, jd);
+  
+  // Calculate geocentric positions for planets
+  const planets = [
+    { name: 'Mercury', data: planetposition.mercury },
+    { name: 'Venus', data: planetposition.venus },
+    { name: 'Mars', data: planetposition.mars },
+    { name: 'Jupiter', data: planetposition.jupiter },
+    { name: 'Saturn', data: planetposition.saturn },
+    { name: 'Uranus', data: planetposition.uranus },
+    { name: 'Neptune', data: planetposition.neptune },
+  ];
+  
+  for (const planet of planets) {
+    const helioPos = planetposition.position(planet.data, jd);
+    
+    // Convert heliocentric to geocentric
+    const x = helioPos.range * Math.cos(helioPos.lat) * Math.cos(helioPos.lon) - 
+              earthPos.range * Math.cos(earthPos.lat) * Math.cos(earthPos.lon);
+    const y = helioPos.range * Math.cos(helioPos.lat) * Math.sin(helioPos.lon) - 
+              earthPos.range * Math.cos(earthPos.lat) * Math.sin(earthPos.lon);
+    
+    let geoLon = Math.atan2(y, x) * 180 / Math.PI;
+    geoLon = (geoLon + 360) % 360;
+    
+    positions[planet.name] = geoLon;
+  }
+  
+  // Moon - simplified calculation (Mean longitude)
+  const T = (jd - 2451545.0) / 36525;
+  const moonLon = 218.3164477 + 481267.88123421 * T - 0.0015786 * T * T;
+  positions['Moon'] = (moonLon % 360 + 360) % 360;
+  
+  // North Node (Mean)
+  const nodeN = 125.04452 - 1934.136261 * T;
+  positions['North Node'] = (nodeN % 360 + 360) % 360;
+  
+  // South Node (opposite North Node)
+  positions['South Node'] = (positions['North Node'] + 180) % 360;
+  
+  // Pluto - simplified calculation
+  const plutoLon = 238.9508 + 145.1780 * T;
+  positions['Pluto'] = (plutoLon % 360 + 360) % 360;
+  
+  return positions;
+}
+
+/**
+ * Convert tropical zodiac longitude to Human Design gate and line
+ */
+function longitudeToGateLine(longitude: number): { gate: number; line: number } {
+  // Normalize longitude to 0-360
+  const normalizedLon = ((longitude % 360) + 360) % 360;
+  
+  // Each gate occupies 5.625 degrees (360 / 64)
+  // Each line occupies 0.9375 degrees (5.625 / 6)
+  const gateSize = 5.625;
+  const lineSize = gateSize / 6;
+  
+  // Find which gate index (0-63) this longitude falls into
+  const gateIndex = Math.floor(normalizedLon / gateSize);
+  
+  // Get the gate number from the sequence
+  const gate = GATE_SEQUENCE[gateIndex];
+  
+  // Calculate the line (1-6)
+  const positionInGate = normalizedLon % gateSize;
+  const line = Math.floor(positionInGate / lineSize) + 1;
+  
+  return { gate, line: Math.min(line, 6) };
+}
+
+/**
+ * Calculate the design date (approximately 88 degrees of solar arc before birth)
+ */
+function calculateDesignDate(birthJD: number): number {
+  // In Human Design, the Design is calculated when the Sun was 88 degrees earlier
+  // This is approximately 88-89 days before birth (Sun moves ~1° per day)
+  
+  const birthSunLon = getSunLongitude(birthJD);
+  const designSunLon = (birthSunLon - 88 + 360) % 360;
+  
+  // Binary search to find the exact JD when Sun was at design position
+  let lowJD = birthJD - 92; // Approximately 92 days before
+  let highJD = birthJD - 85; // Approximately 85 days before
+  
+  for (let i = 0; i < 20; i++) { // 20 iterations for precision
+    const midJD = (lowJD + highJD) / 2;
+    const midSunLon = getSunLongitude(midJD);
+    
+    // Handle wraparound at 0/360 degrees
+    let diff = midSunLon - designSunLon;
+    if (diff > 180) diff -= 360;
+    if (diff < -180) diff += 360;
+    
+    if (Math.abs(diff) < 0.001) {
+      return midJD; // Found it
+    }
+    
+    if (diff > 0) {
+      highJD = midJD;
+    } else {
+      lowJD = midJD;
     }
   }
-  return 41; // Default to gate 41 (start of wheel)
+  
+  return (lowJD + highJD) / 2;
 }
 
-// Calculate which centers are defined based on gates
-function calculateDefinedCenters(gates: number[]): Record<string, boolean> {
+/**
+ * Calculate defined centers based on channels
+ */
+function calculateCenters(allGates: number[]): Record<string, boolean> {
   const centers: Record<string, boolean> = {
     head: false,
     ajna: false,
@@ -287,31 +371,9 @@ function calculateDefinedCenters(gates: number[]): Record<string, boolean> {
     root: false,
   };
   
-  // Gate to center mapping
-  const gateToCenter: Record<number, string> = {
-    // Head
-    64: 'head', 61: 'head', 63: 'head',
-    // Ajna
-    47: 'ajna', 24: 'ajna', 4: 'ajna', 17: 'ajna', 43: 'ajna', 11: 'ajna',
-    // Throat
-    62: 'throat', 23: 'throat', 56: 'throat', 35: 'throat', 12: 'throat', 45: 'throat', 33: 'throat', 8: 'throat', 31: 'throat', 20: 'throat', 16: 'throat',
-    // G Center
-    7: 'g', 1: 'g', 13: 'g', 25: 'g', 46: 'g', 2: 'g', 15: 'g', 10: 'g',
-    // Heart
-    21: 'heart', 26: 'heart', 51: 'heart', 40: 'heart',
-    // Sacral
-    5: 'sacral', 14: 'sacral', 29: 'sacral', 59: 'sacral', 9: 'sacral', 3: 'sacral', 42: 'sacral', 27: 'sacral', 34: 'sacral',
-    // Solar Plexus
-    36: 'solarPlexus', 22: 'solarPlexus', 37: 'solarPlexus', 6: 'solarPlexus', 49: 'solarPlexus', 55: 'solarPlexus', 30: 'solarPlexus',
-    // Spleen
-    48: 'spleen', 57: 'spleen', 44: 'spleen', 50: 'spleen', 32: 'spleen', 28: 'spleen', 18: 'spleen',
-    // Root
-    58: 'root', 38: 'root', 54: 'root', 53: 'root', 60: 'root', 52: 'root', 19: 'root', 39: 'root', 41: 'root',
-  };
-  
-  // Check for complete channels
+  // A center is defined only when connected by a complete channel
   for (const channel of CHANNELS) {
-    if (gates.includes(channel.gates[0]) && gates.includes(channel.gates[1])) {
+    if (allGates.includes(channel.gates[0]) && allGates.includes(channel.gates[1])) {
       centers[channel.center1] = true;
       centers[channel.center2] = true;
     }
@@ -320,12 +382,14 @@ function calculateDefinedCenters(gates: number[]): Record<string, boolean> {
   return centers;
 }
 
-// Calculate defined channels
-function calculateChannels(gates: number[]): string[] {
+/**
+ * Get defined channels based on gates
+ */
+function getDefinedChannels(allGates: number[]): string[] {
   const definedChannels: string[] = [];
   
   for (const channel of CHANNELS) {
-    if (gates.includes(channel.gates[0]) && gates.includes(channel.gates[1])) {
+    if (allGates.includes(channel.gates[0]) && allGates.includes(channel.gates[1])) {
       definedChannels.push(`${channel.gates[0]}-${channel.gates[1]} ${channel.name}`);
     }
   }
@@ -333,21 +397,44 @@ function calculateChannels(gates: number[]): string[] {
   return definedChannels;
 }
 
-// Determine type based on defined centers
-function determineType(centers: Record<string, boolean>): 'Generator' | 'Manifesting Generator' | 'Projector' | 'Manifestor' | 'Reflector' {
+/**
+ * Determine Human Design Type based on defined centers
+ */
+function determineType(centers: Record<string, boolean>, allGates: number[]): 'Generator' | 'Manifesting Generator' | 'Projector' | 'Manifestor' | 'Reflector' {
   const hasSacral = centers.sacral;
-  const hasMotorToThroat = (centers.heart && centers.throat) || (centers.solarPlexus && centers.throat) || (centers.root && centers.throat);
   const hasDefinedCenter = Object.values(centers).some(v => v);
+  
+  // Check for motor to throat connection
+  const motorCenters = ['sacral', 'solarPlexus', 'heart', 'root'];
+  let hasMotorToThroat = false;
+  
+  // Check if any motor center has a direct channel to throat
+  if (centers.throat) {
+    // Check channels that connect motors to throat
+    const motorThroatChannels = CHANNELS.filter(ch => 
+      (ch.center1 === 'throat' && motorCenters.includes(ch.center2)) ||
+      (ch.center2 === 'throat' && motorCenters.includes(ch.center1))
+    );
+    
+    for (const channel of motorThroatChannels) {
+      if (allGates.includes(channel.gates[0]) && allGates.includes(channel.gates[1])) {
+        const otherCenter = channel.center1 === 'throat' ? channel.center2 : channel.center1;
+        if (centers[otherCenter]) {
+          hasMotorToThroat = true;
+          break;
+        }
+      }
+    }
+  }
   
   if (!hasDefinedCenter) {
     return 'Reflector';
   }
   
-  if (hasSacral && hasMotorToThroat) {
-    return 'Manifesting Generator';
-  }
-  
   if (hasSacral) {
+    if (hasMotorToThroat) {
+      return 'Manifesting Generator';
+    }
     return 'Generator';
   }
   
@@ -358,62 +445,116 @@ function determineType(centers: Record<string, boolean>): 'Generator' | 'Manifes
   return 'Projector';
 }
 
-// Determine authority based on defined centers
+/**
+ * Determine authority based on defined centers
+ */
 function determineAuthority(centers: Record<string, boolean>, type: string): string {
-  if (centers.solarPlexus) return 'Emotional';
-  if (centers.sacral && type !== 'Projector') return 'Sacral';
-  if (centers.spleen) return 'Splenic';
-  if (centers.heart) return 'Ego';
-  if (centers.g) return 'Self-Projected';
   if (type === 'Reflector') return 'Lunar';
-  return 'Mental';
+  
+  if (centers.solarPlexus) return 'Emotional';
+  if (centers.sacral) return 'Sacral';
+  if (centers.spleen) return 'Splenic';
+  
+  if (centers.heart) {
+    if (centers.throat) return 'Ego Manifested';
+    return 'Ego Projected';
+  }
+  
+  if (centers.g && centers.throat) return 'Self-Projected';
+  
+  return 'Environmental';
 }
 
-// Calculate profile from sun and earth gates
-function calculateProfile(sunGate: number, earthGate: number): string {
-  // Profile is determined by the lines of personality sun and design sun
-  // Simplified calculation based on gate positions
-  const sunLine = ((sunGate % 6) || 6);
-  const earthLine = ((earthGate % 6) || 6);
-  
-  const profiles = ['1/3', '1/4', '2/4', '2/5', '3/5', '3/6', '4/6', '4/1', '5/1', '5/2', '6/2', '6/3'];
-  const index = (sunLine + earthLine) % 12;
-  
-  return profiles[index];
+/**
+ * Calculate profile based on personality and design Sun lines
+ */
+function calculateProfile(personalitySunLine: number, designSunLine: number): string {
+  return `${personalitySunLine}/${designSunLine}`;
 }
 
-// Calculate incarnation cross
-function calculateIncarnationCross(sunGate: number, earthGate: number): { name: string; description: string } {
-  // Simplified incarnation cross calculation
-  const crosses: Record<number, { name: string; description: string }> = {
-    1: { name: 'Right Angle Cross of the Sphinx', description: 'You are here to establish direction and find your unique identity. Your life purpose involves discovering who you truly are and sharing that authentic self with the world.' },
-    2: { name: 'Right Angle Cross of the Driver', description: 'You are here to be driven by your own unique direction and purpose. Your journey is about staying true to your path regardless of external pressures.' },
-    3: { name: 'Right Angle Cross of Laws', description: 'You are here to understand and work with universal principles. Your purpose involves discovering the rules that govern life and sharing that wisdom.' },
-    7: { name: 'Right Angle Cross of the Sphinx', description: 'You are here to be a leader and role model. Your life purpose involves guiding others through your example and clear direction.' },
-    13: { name: 'Right Angle Cross of the Sphinx', description: 'You are here to listen and collect experiences. Your purpose involves gathering wisdom from others and reflecting it back at the right time.' },
-    25: { name: 'Right Angle Cross of the Vessel of Love', description: 'You are here to embody and share unconditional love. Your life purpose is about acceptance and spiritual love for all of humanity.' },
-    41: { name: 'Right Angle Cross of the Unexpected', description: 'You are here to bring new experiences and possibilities. Your purpose involves initiating new beginnings and feeling deeply.' },
-  };
-  
-  return crosses[sunGate] || {
-    name: `Cross of Gate ${sunGate}`,
-    description: `Your incarnation cross brings unique gifts through Gate ${sunGate}. You are here to express the specific energy and wisdom of this gate in the world, contributing your unique perspective to humanity.`
-  };
-}
-
-// Calculate definition type
+/**
+ * Calculate definition type
+ */
 function calculateDefinition(centers: Record<string, boolean>): 'Single' | 'Split' | 'Triple Split' | 'Quadruple Split' | 'No Definition' {
-  const definedCenters = Object.values(centers).filter(v => v).length;
+  const definedCenters = Object.entries(centers).filter(([_, v]) => v).map(([k]) => k);
   
-  if (definedCenters === 0) return 'No Definition';
-  if (definedCenters <= 2) return 'Single';
-  if (definedCenters <= 4) return 'Split';
-  if (definedCenters <= 6) return 'Triple Split';
+  if (definedCenters.length === 0) return 'No Definition';
+  if (definedCenters.length <= 3) return 'Single';
+  if (definedCenters.length <= 5) return 'Split';
+  if (definedCenters.length <= 7) return 'Triple Split';
   return 'Quadruple Split';
 }
 
-// Generate personalized insights
-function generateInsights(type: string, profile: string, authority: string, centers: Record<string, boolean>): {
+/**
+ * Get incarnation cross based on personality and design sun/earth gates
+ */
+function getIncarnationCross(pSun: number, pEarth: number, dSun: number, dEarth: number): { name: string; description: string } {
+  // The incarnation cross is made up of these 4 gates
+  // This is a simplified version - full incarnation cross requires the exact quarter and angle
+  
+  const crossGates = [pSun, pEarth, dSun, dEarth].sort((a, b) => a - b);
+  const key = crossGates.join('-');
+  
+  // Return a generic cross name based on the Personality Sun gate
+  const crossQuarter = Math.floor((pSun - 1) / 16);
+  const quarterNames = ['Initiation', 'Civilization', 'Duality', 'Mutation'];
+  
+  return {
+    name: `Right Angle Cross of ${quarterNames[crossQuarter]} (${pSun}/${pEarth} | ${dSun}/${dEarth})`,
+    description: `Your incarnation cross is composed of Gates ${pSun}, ${pEarth}, ${dSun}, and ${dEarth}. The Personality Sun (Gate ${pSun}) represents your conscious life theme and purpose. The Design Sun (Gate ${dSun}) represents your unconscious contribution. Together, these four gates describe the story of your life's journey and unique contribution.`
+  };
+}
+
+/**
+ * Generate center themes
+ */
+function getCenterTheme(centerName: string, defined: boolean): string {
+  const themes: Record<string, { defined: string; undefined: string }> = {
+    head: {
+      defined: 'Consistent mental pressure and inspiration. You have reliable access to questions and ideas that inspire you and others.',
+      undefined: 'Open to many sources of inspiration. Don\'t get lost in other people\'s questions - they\'re not all yours to answer.',
+    },
+    ajna: {
+      defined: 'Fixed way of processing information. You have a consistent mental process and are certain in your thinking.',
+      undefined: 'Flexible mind that sees multiple perspectives. You\'re not here to be mentally certain - embrace your open-mindedness.',
+    },
+    throat: {
+      defined: 'Consistent voice and ability to manifest. You can reliably express yourself and bring things into form.',
+      undefined: 'Variable expression. Wait for the right timing to speak. You\'re not here to get attention - let others invite your voice.',
+    },
+    g: {
+      defined: 'Strong sense of identity and direction. You know who you are and where you\'re going.',
+      undefined: 'Flexible identity that adapts to environment. You\'re designed to sample different places and people to find where you belong.',
+    },
+    heart: {
+      defined: 'Consistent willpower and ability to make and keep promises. You have reliable ego energy for what you truly value.',
+      undefined: 'Variable willpower. Don\'t make promises to prove your worth - your value isn\'t about what you can will into being.',
+    },
+    sacral: {
+      defined: 'Sustainable life force and work energy. You have consistent access to powerful creative and sexual energy.',
+      undefined: 'Variable energy. Don\'t try to keep up with Sacral beings. Rest before you\'re exhausted. Quality over quantity.',
+    },
+    solarPlexus: {
+      defined: 'Emotional depth and wave. You experience life through emotional cycles. Never make decisions in emotional highs or lows.',
+      undefined: 'Emotional empathy and amplification. You feel others\' emotions deeply. Don\'t make decisions to avoid discomfort.',
+    },
+    spleen: {
+      defined: 'Consistent intuition and instinct. You have reliable access to in-the-moment awareness about what\'s healthy for you.',
+      undefined: 'Amplified intuition from others. Don\'t hold onto what isn\'t healthy - let go of unhealthy people, places, and things.',
+    },
+    root: {
+      defined: 'Consistent adrenaline and pressure to act. You have sustainable stress energy that drives you forward.',
+      undefined: 'Amplified pressure from outside. Don\'t rush - you\'re not here to be under constant pressure. Take your time.',
+    },
+  };
+  
+  return defined ? themes[centerName].defined : themes[centerName].undefined;
+}
+
+/**
+ * Generate personalized insights
+ */
+function generateInsights(type: string, authority: string, centers: Record<string, boolean>): {
   strengths: string[];
   challenges: string[];
   careerGuidance: string;
@@ -426,104 +567,64 @@ function generateInsights(type: string, profile: string, authority: string, cent
   if (type === 'Generator' || type === 'Manifesting Generator') {
     strengths.push('Sustainable life force energy for work you love');
     strengths.push('Powerful gut instincts that guide correct decisions');
+    strengths.push('Magnetic aura that attracts opportunities');
     challenges.push('Learning to wait rather than initiate');
+    challenges.push('Not getting frustrated when things don\'t come quickly');
   }
   
   if (type === 'Projector') {
-    strengths.push('Deep ability to see into and guide others');
-    strengths.push('Efficiency and mastery in your area of focus');
+    strengths.push('Deep ability to see into others and systems');
+    strengths.push('Natural guide who can direct energy efficiently');
+    strengths.push('Wisdom about how things work');
     challenges.push('Waiting for recognition and invitation');
+    challenges.push('Not overworking or trying to keep up with Generators');
   }
   
   if (type === 'Manifestor') {
     strengths.push('Power to initiate and make things happen');
     strengths.push('Independence and self-sufficiency');
-    challenges.push('Informing others before acting');
+    strengths.push('Ability to impact others and create change');
+    challenges.push('Remembering to inform before acting');
+    challenges.push('Dealing with others\' resistance to your impact');
   }
   
   if (type === 'Reflector') {
-    strengths.push('Ability to read environments and people deeply');
-    strengths.push('Unique perspective as community mirror');
-    challenges.push('Waiting through the lunar cycle for clarity');
+    strengths.push('Ability to see the truth of community health');
+    strengths.push('Deep wisdom from sampling all perspectives');
+    strengths.push('Unique ability to feel into environments');
+    challenges.push('Waiting through lunar cycles for clarity');
+    challenges.push('Not taking on others\' identities as your own');
   }
   
   // Center-based insights
-  if (centers.throat) {
-    strengths.push('Consistent ability to communicate and manifest through voice');
-  }
-  if (centers.g) {
-    strengths.push('Strong sense of identity and direction');
-  }
-  if (centers.solarPlexus) {
-    strengths.push('Emotional depth and creative potential');
-    challenges.push('Managing emotional waves and timing');
+  if (centers.throat) strengths.push('Consistent voice and manifestation ability');
+  if (centers.g) strengths.push('Strong sense of self and direction');
+  if (centers.spleen) strengths.push('Reliable intuition and survival instincts');
+  
+  if (!centers.solarPlexus) challenges.push('Navigating amplified emotions from others');
+  if (!centers.sacral && type !== 'Projector' && type !== 'Manifestor') {
+    challenges.push('Managing energy without sustainable power source');
   }
   
-  // Career guidance
   const careerGuidance = type === 'Generator' || type === 'Manifesting Generator'
-    ? 'You thrive when doing work that truly satisfies you. Follow your gut response to opportunities. Your energy is magnetic when you\'re lit up by your work.'
+    ? 'You thrive doing work that truly lights you up. Follow your gut response to opportunities. Your energy is magnetic when you\'re doing what you love - the right work will find you.'
     : type === 'Projector'
-    ? 'You excel in roles where you can guide, advise, and bring efficiency. Wait to be invited into career opportunities. Your gift is seeing how to optimize systems and people.'
+    ? 'You excel in roles where you can guide, advise, and optimize. Wait to be invited into career opportunities. Study what interests you deeply - mastery attracts recognition.'
     : type === 'Manifestor'
-    ? 'You\'re designed to initiate and lead. Entrepreneurship and roles with significant autonomy suit you. Inform your team before making moves to reduce resistance.'
-    : 'You need to sample different environments to find where you belong. Your career should allow flexibility and time for lunar cycle decision-making.';
+    ? 'You\'re designed to initiate and lead. Entrepreneurship or roles with significant autonomy suit you. Inform your team about your plans to reduce resistance.'
+    : 'You need to sample different environments to find where you truly belong. Your career should allow flexibility and honor your lunar decision-making process.';
   
-  // Relationship insights
   const relationshipInsights = authority === 'Emotional'
-    ? 'In relationships, never make major decisions in the heat of emotional highs or lows. Give yourself time to find clarity. Your emotional depth is a gift to be honored.'
+    ? 'In relationships, never commit during emotional highs or lows. Ride your wave and find clarity over time. Your emotional depth is a gift - honor its timing.'
     : authority === 'Sacral'
-    ? 'Trust your gut responses in relationships. If someone makes you feel expansive (uh-huh), lean in. If not (uhn-uhn), honor that response.'
-    : 'In relationships, follow your ' + authority.toLowerCase() + ' authority. Create space for your unique decision-making process and communicate your needs clearly.';
+    ? 'Trust your gut in relationships. That immediate "uh-huh" or "uhn-uhn" tells you everything. Your body knows who and what is correct for you.'
+    : `In relationships, honor your ${authority.toLowerCase()} authority. Create space for your unique decision-making process and communicate your needs.`;
   
   return { strengths, challenges, careerGuidance, relationshipInsights };
 }
 
-// Generate center themes
-function generateCenterThemes(defined: boolean, centerName: string): string {
-  const themes: Record<string, { defined: string; undefined: string }> = {
-    head: {
-      defined: 'Consistent mental pressure and inspiration. You have reliable access to questions and mental stimulation.',
-      undefined: 'Open to many sources of inspiration. Be careful not to get lost in other people\'s questions or mental pressure.',
-    },
-    ajna: {
-      defined: 'Fixed way of processing and thinking. You have a consistent mental process and conceptualization.',
-      undefined: 'Flexible mind that can see multiple perspectives. Don\'t try to appear mentally certain when you\'re not.',
-    },
-    throat: {
-      defined: 'Consistent voice and ability to manifest through communication. You can reliably express and bring things into form.',
-      undefined: 'Variable expression. Don\'t speak just to be noticed. Wait for the right timing to share.',
-    },
-    g: {
-      defined: 'Strong sense of identity, direction, and love. You know who you are and where you\'re going.',
-      undefined: 'Flexible identity that adapts to environment. You\'re designed to sample different places and people to find where you belong.',
-    },
-    heart: {
-      defined: 'Consistent willpower and ability to make promises. You have sustainable ego energy for what you truly value.',
-      undefined: 'Variable willpower. Don\'t make promises to prove your worth. Your value isn\'t measured by what you can will into being.',
-    },
-    sacral: {
-      defined: 'Sustainable life force and work energy. You have consistent access to powerful creative and work energy.',
-      undefined: 'Variable energy. Don\'t overwork or try to keep up with Sacral beings. Rest before you\'re exhausted.',
-    },
-    solarPlexus: {
-      defined: 'Emotional authority and creative depth. You experience life through emotional waves that bring wisdom over time.',
-      undefined: 'Emotional openness and empathy. You amplify others\' emotions. Don\'t make decisions to avoid emotional discomfort.',
-    },
-    spleen: {
-      defined: 'Consistent intuition, instinct, and immune system. You have reliable access to in-the-moment awareness.',
-      undefined: 'Open to intuitive hits from others and environment. Don\'t hold onto what isn\'t healthy for you.',
-    },
-    root: {
-      defined: 'Consistent adrenaline and drive. You have sustainable pressure to get things done.',
-      undefined: 'Variable stress response. Don\'t rush to get things done just to relieve pressure. Work at your own pace.',
-    },
-  };
-  
-  return defined ? themes[centerName]?.defined || '' : themes[centerName]?.undefined || '';
-}
-
 /**
- * Calculate Human Design reading from birth data
+ * Main calculation function
  */
 export function calculateHumanDesign(
   birthDate: string,
@@ -535,84 +636,88 @@ export function calculateHumanDesign(
   const [year, month, day] = birthDate.split('-').map(Number);
   const [hours, minutes] = birthTime.split(':').map(Number);
   
-  const birthDateTime = new Date(year, month - 1, day, hours, minutes);
+  // Create date object (treating as UTC - user should provide UTC-adjusted time ideally)
+  const birthDateTime = new Date(Date.UTC(year, month - 1, day, hours, minutes, 0));
   
-  // Calculate design date (88 degrees of sun's arc before birth = ~88 days)
-  const designDateTime = new Date(birthDateTime.getTime() - (88 * 24 * 60 * 60 * 1000));
+  // Convert to Julian Day
+  const birthJD = dateToJD(birthDateTime);
   
-  // Calculate sun positions
-  const personalitySunDegree = calculateSunPosition(birthDateTime);
-  const designSunDegree = calculateSunPosition(designDateTime);
+  // Calculate Design Julian Day (88° before birth)
+  const designJD = calculateDesignDate(birthJD);
   
-  // Get gates from sun positions
-  const personalitySunGate = getGateFromDegree(personalitySunDegree);
-  const designSunGate = getGateFromDegree(designSunDegree);
+  // Get planetary positions for both dates
+  const personalityPositions = getPlanetaryPositions(birthJD);
+  const designPositions = getPlanetaryPositions(designJD);
   
-  // Calculate earth gates (opposite sun)
-  const personalityEarthDegree = (personalitySunDegree + 180) % 360;
-  const designEarthDegree = (designSunDegree + 180) % 360;
-  const personalityEarthGate = getGateFromDegree(personalityEarthDegree);
-  const designEarthGate = getGateFromDegree(designEarthDegree);
+  // Calculate gates for all planets
+  const personalityGates: { gate: number; line: number; planet: string }[] = [];
+  const designGates: { gate: number; line: number; planet: string }[] = [];
   
-  // Generate more gates based on birth data (simplified planetary simulation)
-  const allGates: number[] = [
-    personalitySunGate,
-    designSunGate,
-    personalityEarthGate,
-    designEarthGate,
-  ];
+  const planetOrder = ['Sun', 'Earth', 'Moon', 'North Node', 'South Node', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'];
   
-  // Add more gates based on time factors (simplified)
-  const hourGate = getGateFromDegree((hours * 15 + personalitySunDegree) % 360);
-  const minuteGate = getGateFromDegree((minutes * 6 + personalitySunDegree) % 360);
-  const monthGate = getGateFromDegree((month * 30) % 360);
-  const dayGate = getGateFromDegree((day * 12) % 360);
+  for (const planet of planetOrder) {
+    if (personalityPositions[planet] !== undefined) {
+      const pGateLine = longitudeToGateLine(personalityPositions[planet]);
+      personalityGates.push({ ...pGateLine, planet });
+    }
+    if (designPositions[planet] !== undefined) {
+      const dGateLine = longitudeToGateLine(designPositions[planet]);
+      designGates.push({ ...dGateLine, planet });
+    }
+  }
   
-  allGates.push(hourGate, minuteGate, monthGate, dayGate);
-  
-  // Remove duplicates
-  const uniqueGates = Array.from(new Set(allGates));
+  // Combine all gates (just gate numbers, no duplicates)
+  const allGateNumbers = Array.from(new Set([
+    ...personalityGates.map(g => g.gate),
+    ...designGates.map(g => g.gate)
+  ]));
   
   // Calculate centers
-  const centers = calculateDefinedCenters(uniqueGates);
+  const centers = calculateCenters(allGateNumbers);
   
   // Determine type
-  const type = determineType(centers);
+  const type = determineType(centers, allGateNumbers);
   
   // Determine authority
   const authority = determineAuthority(centers, type);
   
-  // Calculate profile
-  const profile = calculateProfile(personalitySunGate, personalityEarthGate);
-  const profileInfo = PROFILE_INFO[profile] || { name: profile, description: 'A unique profile bringing distinct gifts.' };
+  // Get personality and design Sun lines for profile
+  const pSunLine = personalityGates.find(g => g.planet === 'Sun')?.line || 1;
+  const dSunLine = designGates.find(g => g.planet === 'Sun')?.line || 1;
+  const profile = calculateProfile(pSunLine, dSunLine);
+  const profileInfo = PROFILE_INFO[profile] || { name: profile, description: 'A unique profile bringing distinct gifts to the world.' };
   
   // Calculate definition
   const definition = calculateDefinition(centers);
   
-  // Calculate channels
-  const channels = calculateChannels(uniqueGates);
+  // Get channels
+  const channels = getDefinedChannels(allGateNumbers);
   
-  // Calculate incarnation cross
-  const incarnationCross = calculateIncarnationCross(personalitySunGate, personalityEarthGate);
+  // Get incarnation cross
+  const pSunGate = personalityGates.find(g => g.planet === 'Sun')?.gate || 1;
+  const pEarthGate = personalityGates.find(g => g.planet === 'Earth')?.gate || 2;
+  const dSunGate = designGates.find(g => g.planet === 'Sun')?.gate || 3;
+  const dEarthGate = designGates.find(g => g.planet === 'Earth')?.gate || 4;
+  const incarnationCross = getIncarnationCross(pSunGate, pEarthGate, dSunGate, dEarthGate);
   
   // Get type info
   const typeInfo = TYPE_INFO[type];
   
   // Generate center themes
   const centerData = {
-    head: { defined: centers.head, theme: generateCenterThemes(centers.head, 'head') },
-    ajna: { defined: centers.ajna, theme: generateCenterThemes(centers.ajna, 'ajna') },
-    throat: { defined: centers.throat, theme: generateCenterThemes(centers.throat, 'throat') },
-    g: { defined: centers.g, theme: generateCenterThemes(centers.g, 'g') },
-    heart: { defined: centers.heart, theme: generateCenterThemes(centers.heart, 'heart') },
-    sacral: { defined: centers.sacral, theme: generateCenterThemes(centers.sacral, 'sacral') },
-    solarPlexus: { defined: centers.solarPlexus, theme: generateCenterThemes(centers.solarPlexus, 'solarPlexus') },
-    spleen: { defined: centers.spleen, theme: generateCenterThemes(centers.spleen, 'spleen') },
-    root: { defined: centers.root, theme: generateCenterThemes(centers.root, 'root') },
+    head: { defined: centers.head, theme: getCenterTheme('head', centers.head) },
+    ajna: { defined: centers.ajna, theme: getCenterTheme('ajna', centers.ajna) },
+    throat: { defined: centers.throat, theme: getCenterTheme('throat', centers.throat) },
+    g: { defined: centers.g, theme: getCenterTheme('g', centers.g) },
+    heart: { defined: centers.heart, theme: getCenterTheme('heart', centers.heart) },
+    sacral: { defined: centers.sacral, theme: getCenterTheme('sacral', centers.sacral) },
+    solarPlexus: { defined: centers.solarPlexus, theme: getCenterTheme('solarPlexus', centers.solarPlexus) },
+    spleen: { defined: centers.spleen, theme: getCenterTheme('spleen', centers.spleen) },
+    root: { defined: centers.root, theme: getCenterTheme('root', centers.root) },
   };
   
-  // Generate personalized insights
-  const insights = generateInsights(type, profile, authority, centers);
+  // Generate insights
+  const insights = generateInsights(type, authority, centers);
   
   return {
     type,
@@ -622,13 +727,13 @@ export function calculateHumanDesign(
     profileDescription: profileInfo.description,
     definition,
     centers: centerData,
-    definedGates: uniqueGates,
+    definedGates: allGateNumbers,
     channels,
     incarnationCross: incarnationCross.name,
     incarnationCrossDescription: incarnationCross.description,
     typeDescription: typeInfo.description,
     strategyDescription: typeInfo.strategyDescription,
-    authorityDescription: AUTHORITY_INFO[authority],
+    authorityDescription: AUTHORITY_INFO[authority] || '',
     lifeTheme: `Living as a ${type} with ${authority} authority`,
     notSelfTheme: typeInfo.notSelfTheme,
     signature: typeInfo.signature,
@@ -642,5 +747,7 @@ export function calculateHumanDesign(
       location: birthLocation,
       timezone,
     },
+    personalityGates,
+    designGates,
   };
 }
