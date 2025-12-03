@@ -260,7 +260,11 @@ function CitySearchInput({
 }
 
 export default function HumanDesignPage() {
-  const [reading, setReading] = useState<HumanDesignReading | null>(null);
+  // Restore reading from sessionStorage on page load
+  const [reading, setReading] = useState<HumanDesignReading | null>(() => {
+    const stored = typeof window !== 'undefined' ? sessionStorage.getItem('humanDesignReading') : null;
+    return stored ? JSON.parse(stored) : null;
+  });
   const [selectedCenter, setSelectedCenter] = useState<string | null>(null);
   const [expandedSection, setExpandedSection] = useState<string | null>('type');
   const { isAuthenticated, isLoading: authLoading } = useAuth();
@@ -282,6 +286,8 @@ export default function HumanDesignPage() {
     },
     onSuccess: (data) => {
       setReading(data);
+      // Save to sessionStorage so it persists across navigation
+      sessionStorage.setItem('humanDesignReading', JSON.stringify(data));
     },
   });
 

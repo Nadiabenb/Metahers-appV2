@@ -33,7 +33,9 @@ export default function LoginPage() {
         description: "You've successfully logged in.",
       });
       
-      setLocation("/home");
+      // Check if user was on Human Design page - redirect back there
+      const hasHumanDesignReading = typeof window !== 'undefined' && sessionStorage.getItem('humanDesignReading');
+      setLocation(hasHumanDesignReading ? "/human-design" : "/home");
     } catch (error: any) {
       toast({
         title: "Login failed",
