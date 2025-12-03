@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { 
   Sparkles, 
   Star, 
@@ -22,7 +23,8 @@ import {
   Calendar,
   Clock,
   ChevronDown,
-  Check
+  Check,
+  Lock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -39,6 +41,7 @@ import {
 } from "@/components/ui/form";
 import { SEO } from "@/components/SEO";
 import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
 
 // Form validation schema
 const birthDataSchema = z.object({
@@ -145,6 +148,8 @@ export default function HumanDesignPage() {
   const [reading, setReading] = useState<HumanDesignReading | null>(null);
   const [selectedCenter, setSelectedCenter] = useState<string | null>(null);
   const [expandedSection, setExpandedSection] = useState<string | null>('type');
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const [, setLocation] = useLocation();
 
   const form = useForm<BirthDataForm>({
     resolver: zodResolver(birthDataSchema),
@@ -343,8 +348,8 @@ export default function HumanDesignPage() {
             className="py-16 px-6 lg:px-16"
           >
             <div className="max-w-6xl mx-auto">
-              {/* Type Header */}
-              <div className="text-center mb-12">
+              {/* Preview Section - Visible to Everyone */}
+              <div className="text-center mb-12 p-8 bg-gradient-to-b from-purple-50 to-white rounded-2xl border-2 border-purple-200">
                 <motion.div
                   initial={{ scale: 0.8 }}
                   animate={{ scale: 1 }}
@@ -357,38 +362,41 @@ export default function HumanDesignPage() {
                   </Badge>
                 </motion.div>
                 <h2 className="text-4xl font-bold text-black mb-4">
-                  {reading.profile} - {reading.incarnationCross}
+                  {reading.profile}
                 </h2>
-                <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+                <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-6">
                   {reading.typeDescription}
                 </p>
+                
+                {/* Preview Stats */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {[
+                    { label: 'Strategy', value: reading.strategy, icon: Compass },
+                    { label: 'Authority', value: reading.authority, icon: Brain },
+                    { label: 'Signature', value: reading.signature, icon: Heart },
+                    { label: 'Not-Self', value: reading.notSelfTheme, icon: Shield },
+                  ].map((stat, i) => (
+                    <motion.div
+                      key={stat.label}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                    >
+                      <Card className="p-4 text-center border-2 border-purple-100">
+                        <stat.icon className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+                        <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">{stat.label}</p>
+                        <p className="font-bold text-gray-900">{stat.value}</p>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
 
-              {/* Quick Stats Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-                {[
-                  { label: 'Strategy', value: reading.strategy, icon: Compass },
-                  { label: 'Authority', value: reading.authority, icon: Brain },
-                  { label: 'Signature', value: reading.signature, icon: Heart },
-                  { label: 'Not-Self', value: reading.notSelfTheme, icon: Shield },
-                ].map((stat, i) => (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                  >
-                    <Card className="p-4 text-center border-2 border-purple-100 hover:border-purple-300 transition-colors">
-                      <stat.icon className="w-6 h-6 text-purple-600 mx-auto mb-2" />
-                      <p className="text-xs uppercase tracking-wider text-gray-500 mb-1">{stat.label}</p>
-                      <p className="font-bold text-gray-900">{stat.value}</p>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Two Column Layout */}
-              <div className="grid lg:grid-cols-2 gap-8">
+              {/* Full Reading - Gated Behind Authentication */}
+              {isAuthenticated ? (
+                <>
+                  {/* Two Column Layout */}
+                  <div className="grid lg:grid-cols-2 gap-8">
                 {/* Left: Bodygraph Visualization */}
                 <Card className="p-8 border-2 border-purple-200">
                   <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
@@ -554,26 +562,78 @@ export default function HumanDesignPage() {
                 </div>
               </Card>
 
-              {/* CTA */}
-              <div className="mt-12 text-center">
-                <Card className="inline-block p-8 border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-pink-50">
-                  <h3 className="text-2xl font-bold text-black mb-4">
-                    Want to Go Deeper?
+                  {/* CTA for Authenticated Users */}
+                  <div className="mt-12 text-center">
+                    <Card className="inline-block p-8 border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-pink-50">
+                      <h3 className="text-2xl font-bold text-black mb-4">
+                        Want to Go Deeper?
+                      </h3>
+                      <p className="text-gray-700 mb-6 max-w-lg">
+                        Explore how your Human Design connects with AI tools, business strategy, and personal transformation in your full Member Dashboard.
+                      </p>
+                      <Button
+                        onClick={() => setLocation('/dashboard')}
+                        className="bg-black hover:bg-gray-900 text-white font-bold uppercase tracking-wider px-8"
+                        data-testid="button-explore-dashboard"
+                      >
+                        Go to Dashboard
+                        <ArrowRight className="w-5 h-5 ml-2" />
+                      </Button>
+                    </Card>
+                  </div>
+                </>
+              ) : (
+                // Sign-in Gate for Unauthenticated Users
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="mt-12 p-12 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl border-3 border-purple-300 text-center"
+                >
+                  <Lock className="w-16 h-16 text-purple-600 mx-auto mb-6" />
+                  <h3 className="text-3xl font-bold text-black mb-4">
+                    Unlock Your Full Human Design Reading
                   </h3>
-                  <p className="text-gray-700 mb-6 max-w-lg">
-                    Join MetaHers Mind Spa to explore how your Human Design connects with 
-                    AI tools, business strategy, and personal transformation.
+                  <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-8">
+                    You've seen your type and strategy. Sign in to access your complete personalized reading including:
                   </p>
-                  <Button
-                    onClick={() => window.location.href = '/signup'}
-                    className="bg-black hover:bg-gray-900 text-white font-bold uppercase tracking-wider px-8"
-                    data-testid="button-join-metahers"
-                  >
-                    Start Your Journey
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </Card>
-              </div>
+                  <ul className="text-left max-w-md mx-auto mb-8 space-y-3">
+                    <li className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-600" />
+                      <span className="text-gray-700">Your detailed bodygraph visualization</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-600" />
+                      <span className="text-gray-700">Authority & decision-making guidance</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-600" />
+                      <span className="text-gray-700">Career and relationship insights</span>
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <Check className="w-5 h-5 text-green-600" />
+                      <span className="text-gray-700">All 9 centers & defined gates analysis</span>
+                    </li>
+                  </ul>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Button
+                      onClick={() => setLocation('/login')}
+                      className="bg-black hover:bg-gray-900 text-white font-bold uppercase tracking-wider px-8 py-3 text-lg"
+                      data-testid="button-sign-in-reading"
+                    >
+                      Sign In
+                    </Button>
+                    <Button
+                      onClick={() => setLocation('/signup')}
+                      variant="outline"
+                      className="border-2 border-black text-black hover:bg-black hover:text-white font-bold uppercase tracking-wider px-8 py-3 text-lg"
+                      data-testid="button-create-account-reading"
+                    >
+                      Create Account
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
             </div>
           </motion.section>
         )}
