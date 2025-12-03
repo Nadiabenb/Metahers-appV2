@@ -226,7 +226,7 @@ function CitySearchInput({
       <PopoverTrigger asChild>
         <input
           type="text"
-          value={value || searchQuery}
+          value={searchQuery}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => setOpen(true)}
           placeholder="Search your birth city..."
