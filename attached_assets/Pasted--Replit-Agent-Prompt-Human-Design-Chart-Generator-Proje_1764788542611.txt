@@ -1,0 +1,140 @@
+# Replit Agent Prompt: Human Design Chart Generator
+
+## Project Overview
+Build a Human Design chart generator API for a women's wellness app called "Metahers". The API should calculate and return Human Design charts based on birth data (date, time, location).
+
+## Requirements
+
+### Core Functionality
+1. **Accept birth data input:**
+   - Date of birth (YYYY-MM-DD)
+   - Time of birth (HH:MM in 24-hour format)
+   - Location (city, country or latitude/longitude)
+
+2. **Calculate and return:**
+   - Human Design Type (Manifestor, Generator, Manifesting Generator, Projector, Reflector)
+   - Authority (Sacral, Emotional, Splenic, Ego, Self-Projected, Environmental, Lunar)
+   - Profile (e.g., 1/3, 2/4, 3/5, etc.)
+   - Defined/Undefined Centers (all 9 centers)
+   - Channels and Gates
+   - Incarnation Cross (if possible)
+
+3. **Output format:** JSON response with all chart data
+
+### Technical Requirements
+- **Must be FREE and open source** - no paid API subscriptions
+- Language: JavaScript/Node.js or Python preferred
+- Should be self-hosted (no external API dependencies if possible)
+- RESTful API endpoint structure
+- Include error handling for invalid birth data
+- Add basic documentation
+
+## Implementation Options to Evaluate
+
+Please research and choose the BEST free option from these:
+
+### Option 1: hdkit (JavaScript)
+- **GitHub:** https://github.com/jdempcy/hdkit
+- **Language:** JavaScript/Node.js
+- **License:** MIT (free)
+- **Pros:** JavaScript-based, has sample apps, generates bodygraphs
+- **Consider:** Setup complexity, documentation quality, maintenance status
+
+### Option 2: SharpAstrology.HumanDesign (C#)
+- **GitHub:** https://github.com/CReizner/SharpAstrology.HumanDesign
+- **Language:** C#/.NET
+- **License:** MIT (free)
+- **Consider:** Would need .NET runtime, cross-platform compatibility
+
+### Option 3: Build from Scratch
+- Use ephemeris libraries (like Swiss Ephemeris) to calculate planetary positions
+- Implement Human Design calculation logic manually
+- **Libraries to consider:**
+  - swisseph (Python or Node.js bindings)
+  - astronomia (JavaScript)
+  - Consider:** Development time vs using existing solution
+
+## Evaluation Criteria
+
+Choose the best option based on:
+1. ✅ **Cost:** Must be 100% free (no API keys or subscriptions)
+2. ✅ **Ease of setup:** Quick to implement in Replit
+3. ✅ **Accuracy:** Produces correct Human Design calculations
+4. ✅ **Documentation:** Has clear usage instructions
+5. ✅ **Maintenance:** Recently updated, not abandoned
+6. ✅ **Dependencies:** Minimal external dependencies
+7. ✅ **Compatibility:** Works well with modern JavaScript/Node.js
+
+## Your Task
+
+1. **Research** all three options above
+2. **Evaluate** based on the criteria
+3. **Choose** the best free solution
+4. **Implement** a working API with these endpoints:
+
+```
+POST /api/chart/generate
+Body: {
+  "birthDate": "1988-06-04",
+  "birthTime": "10:30",
+  "birthLocation": {
+    "city": "Tunis",
+    "country": "Tunisia"
+  }
+}
+
+Response: {
+  "type": "Manifesting Generator",
+  "profile": "3/5",
+  "authority": "Sacral Authority",
+  "strategy": "To Respond",
+  "centers": {
+    "head": false,
+    "ajna": true,
+    "throat": true,
+    "g": true,
+    "heart": false,
+    "sacral": true,
+    "solarPlexus": false,
+    "spleen": true,
+    "root": true
+  },
+  "channels": [...],
+  "gates": {...},
+  "incarnationCross": "..."
+}
+```
+
+5. **Test** with sample birth data
+6. **Document** setup instructions and API usage
+
+## Example Test Cases
+
+Include tests for these birth dates:
+- June 4, 1988, 10:30 AM, Tunis, Tunisia
+- January 1, 1990, 12:00 PM, New York, USA
+- December 25, 1985, 6:45 AM, London, UK
+
+## Bonus Features (if time permits)
+- Add endpoint to generate visual bodygraph (SVG)
+- Calculate compatibility between two charts
+- Add caching for repeated calculations
+- Create simple frontend demo
+
+## Success Criteria
+✅ Working API that calculates Human Design charts
+✅ Uses a free, open-source solution
+✅ Returns accurate Type, Authority, Profile, and Centers
+✅ Clean JSON API response
+✅ Basic error handling
+✅ README with setup and usage instructions
+
+## Notes
+- Prioritize getting a working solution over perfect accuracy
+- Focus on the most important data (Type, Authority, Profile, Centers)
+- Can iterate and improve accuracy later
+- Document any limitations or known issues
+
+---
+
+**Start by evaluating which option is best, explain your reasoning, then implement it. Let me know if you need clarification on any Human Design concepts.**
