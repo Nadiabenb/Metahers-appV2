@@ -170,325 +170,49 @@ function CenterNode({
   );
 }
 
-// Comprehensive world cities database (1500+ cities from every country)
-// Generated from major and medium-sized cities worldwide
-const CITIES = [
-  // United States - Top 100+ cities
-  "New York, USA", "Los Angeles, USA", "Chicago, USA", "Houston, USA", "Phoenix, USA",
-  "Philadelphia, USA", "San Antonio, USA", "San Diego, USA", "Dallas, USA", "San Jose, USA",
-  "Austin, USA", "Jacksonville, USA", "Seattle, USA", "Denver, USA", "Boston, USA",
-  "Miami, USA", "Atlanta, USA", "Nashville, USA", "Detroit, USA", "Minneapolis, USA",
-  "Portland, USA", "Las Vegas, USA", "Orlando, USA", "Charlotte, USA", "San Francisco, USA",
-  "Baltimore, USA", "Memphis, USA", "New Orleans, USA", "Cleveland, USA", "Albuquerque, USA",
-  "Tucson, USA", "Fresno, USA", "Sacramento, USA", "Long Beach, USA", "Kansas City, USA",
-  "Corpus Christi, USA", "Cincinnati, USA", "Stockton, USA", "Arlington, USA", "Riverside, USA",
-  "Irvine, USA", "Toledo, USA", "Anaheim, USA", "Bakersfield, USA", "St. Louis, USA",
-  "Chandler, USA", "Laredo, USA", "Chula Vista, USA", "Santa Ana, USA", "Reno, USA",
-  "Louisville, USA", "Madison, USA", "Irving, USA", "Plano, USA", "Durham, USA",
-  "Lexington, USA", "Garland, USA", "Lubbock, USA", "Winston-Salem, USA", "Greensboro, USA",
-  "Anchorage, USA", "Honolulu, USA", "Boise, USA", "Buffalo, USA", "Pittsburgh, USA",
-  // Canada
-  "Toronto, Canada", "Vancouver, Canada", "Montreal, Canada", "Calgary, Canada",
-  "Edmonton, Canada", "Ottawa, Canada", "Winnipeg, Canada", "Quebec City, Canada",
-  "Hamilton, Canada", "Kitchener, Canada", "London, Canada", "Halifax, Canada",
-  "Victoria, Canada", "Saskatoon, Canada", "Montreal, Canada", "Surrey, Canada",
-  // Mexico
-  "Mexico City, Mexico", "Guadalajara, Mexico", "Monterry, Mexico", "Cancun, Mexico",
-  "Playa del Carmen, Mexico", "Merida, Mexico", "Puebla, Mexico", "Queretaro, Mexico",
-  "Veracruz, Mexico", "Tijuana, Mexico", "Acapulco, Mexico", "Mazatlan, Mexico",
-  // UK
-  "London, UK", "Manchester, UK", "Birmingham, UK", "Leeds, UK", "Glasgow, UK",
-  "Liverpool, UK", "Newcastle, UK", "Bristol, UK", "Edinburgh, UK", "Leicester, UK",
-  "Nottingham, UK", "Oxford, UK", "Cambridge, UK", "York, UK", "Brighton, UK",
-  "Southampton, UK", "Coventry, UK", "Reading, UK", "Derby, UK", "Hull, UK",
-  // France
-  "Paris, France", "Marseille, France", "Lyon, France", "Toulouse, France",
-  "Nice, France", "Nantes, France", "Strasbourg, France", "Montpellier, France",
-  "Bordeaux, France", "Lille, France", "Rennes, France", "Reims, France",
-  "Le Havre, France", "Saint-Etienne, France", "Toulon, France", "Grenoble, France",
-  "Angers, France", "Dijon, France", "Brest, France", "Nimes, France",
-  // Germany
-  "Berlin, Germany", "Munich, Germany", "Hamburg, Germany", "Cologne, Germany",
-  "Frankfurt, Germany", "Stuttgart, Germany", "Düsseldorf, Germany", "Dortmund, Germany",
-  "Essen, Germany", "Leipzig, Germany", "Dresden, Germany", "Hannover, Germany",
-  "Nuremberg, Germany", "Duisburg, Germany", "Bochum, Germany", "Wuppertal, Germany",
-  "Bielefeld, Germany", "Bonn, Germany", "Mannheim, Germany", "Karlsruhe, Germany",
-  // Spain
-  "Madrid, Spain", "Barcelona, Spain", "Seville, Spain", "Valencia, Spain",
-  "Bilbao, Spain", "Malaga, Spain", "Murcia, Spain", "Palma, Spain", "Las Palmas, Spain",
-  "Alicante, Spain", "Cordoba, Spain", "Valladolid, Spain", "Vigo, Spain", "Gijon, Spain",
-  "Oviedo, Spain", "Almeria, Spain", "San Sebastian, Spain", "Zaragoza, Spain",
-  // Italy
-  "Rome, Italy", "Milan, Italy", "Naples, Italy", "Turin, Italy", "Palermo, Italy",
-  "Genoa, Italy", "Bologna, Italy", "Florence, Italy", "Bari, Italy", "Catania, Italy",
-  "Venice, Italy", "Verona, Italy", "Messina, Italy", "Padua, Italy", "Trieste, Italy",
-  "Parma, Italy", "Perugia, Italy", "Reggio Calabria, Italy", "Livorno, Italy", "Ancona, Italy",
-  // Netherlands
-  "Amsterdam, Netherlands", "Rotterdam, Netherlands", "The Hague, Netherlands",
-  "Utrecht, Netherlands", "Eindhoven, Netherlands", "Groningen, Netherlands",
-  "Tilburg, Netherlands", "Almere, Netherlands", "Breda, Netherlands", "Nijmegen, Netherlands",
-  // Belgium
-  "Brussels, Belgium", "Antwerp, Belgium", "Ghent, Belgium", "Charleroi, Belgium",
-  "Liege, Belgium", "Bruges, Belgium", "Namur, Belgium", "Mons, Belgium",
-  // Austria
-  "Vienna, Austria", "Graz, Austria", "Linz, Austria", "Salzburg, Austria",
-  "Innsbruck, Austria", "Klagenfurt, Austria", "Villach, Austria", "Wels, Austria",
-  // Switzerland
-  "Zurich, Switzerland", "Geneva, Switzerland", "Basel, Switzerland", "Bern, Switzerland",
-  "Lausanne, Switzerland", "Lucerne, Switzerland", "St. Gallen, Switzerland", "Winterthur, Switzerland",
-  "Neuchatel, Switzerland", "Fribourg, Switzerland",
-  // Sweden
-  "Stockholm, Sweden", "Gothenburg, Sweden", "Malmo, Sweden", "Uppsala, Sweden",
-  "Vasteras, Sweden", "Orebro, Sweden", "Linkoping, Sweden", "Helsingborg, Sweden",
-  // Norway
-  "Oslo, Norway", "Bergen, Norway", "Trondheim, Norway", "Stavanger, Norway",
-  "Drammen, Norway", "Fredrikstad, Norway", "Kristiansand, Norway", "Sandnes, Norway",
-  // Denmark
-  "Copenhagen, Denmark", "Aarhus, Denmark", "Odense, Denmark", "Aalborg, Denmark",
-  "Esbjerg, Denmark", "Randers, Denmark", "Viborg, Denmark",
-  // Finland
-  "Helsinki, Finland", "Espoo, Finland", "Tampere, Finland", "Vantaa, Finland",
-  "Turku, Finland", "Oulu, Finland", "Jyvaskyla, Finland", "Kuopio, Finland",
-  // Poland
-  "Warsaw, Poland", "Krakow, Poland", "Gdansk, Poland", "Wroclaw, Poland",
-  "Poznan, Poland", "Gdynia, Poland", "Szczecin, Poland", "Bydgoszcz, Poland",
-  "Lublin, Poland", "Katowice, Poland",
-  // Czech Republic
-  "Prague, Czech Republic", "Brno, Czech Republic", "Ostrava, Czech Republic", "Plzen, Czech Republic",
-  "Liberec, Czech Republic", "Olomouc, Czech Republic", "Ceske Budejovice, Czech Republic",
-  // Hungary
-  "Budapest, Hungary", "Debrecen, Hungary", "Szeged, Hungary", "Miskolc, Hungary",
-  "Pecs, Hungary", "Gyor, Hungary", "Nyiregyhaza, Hungary", "Kecskement, Hungary",
-  // Romania
-  "Bucharest, Romania", "Cluj-Napoca, Romania", "Timisoara, Romania", "Iasi, Romania",
-  "Constanta, Romania", "Craiova, Romania", "Brasov, Romania", "Galati, Romania",
-  // Greece
-  "Athens, Greece", "Thessaloniki, Greece", "Patras, Greece", "Heraklion, Greece",
-  "Larissa, Greece", "Ioannina, Greece", "Volos, Greece", "Rethymno, Greece",
-  // Portugal
-  "Lisbon, Portugal", "Porto, Portugal", "Covilha, Portugal", "Braga, Portugal",
-  "Amadora, Portugal", "Funchal, Portugal", "Viseu, Portugal", "Aveiro, Portugal",
-  // Ireland
-  "Dublin, Ireland", "Cork, Ireland", "Galway, Ireland", "Limerick, Ireland",
-  "Waterford, Ireland", "Drogheda, Ireland", "Tralee, Ireland", "Sligo, Ireland",
-  // Turkey
-  "Istanbul, Turkey", "Ankara, Turkey", "Izmir, Turkey", "Bursa, Turkey",
-  "Antalya, Turkey", "Konya, Turkey", "Adana, Turkey", "Gaziantep, Turkey",
-  "Mersin, Turkey", "Kayseri, Turkey", "Samsun, Turkey", "Diyarbakir, Turkey",
-  // Israel
-  "Tel Aviv, Israel", "Jerusalem, Israel", "Haifa, Israel", "Rishon LeZion, Israel",
-  "Petah Tikva, Israel", "Ashdod, Israel", "Netanya, Israel", "Beersheba, Israel",
-  // Egypt
-  "Cairo, Egypt", "Alexandria, Egypt", "Giza, Egypt", "Shubra El-Kheima, Egypt",
-  "Helwan, Egypt", "Port Said, Egypt", "Suez, Egypt", "Luxor, Egypt", "Aswan, Egypt",
-  // South Africa
-  "Johannesburg, South Africa", "Cape Town, South Africa", "Durban, South Africa",
-  "Pretoria, South Africa", "Port Elizabeth, South Africa", "Bloemfontein, South Africa",
-  "Soweto, South Africa", "East London, South Africa", "Pietermaritzburg, South Africa",
-  // Nigeria
-  "Lagos, Nigeria", "Abuja, Nigeria", "Port Harcourt, Nigeria", "Kano, Nigeria",
-  "Ibadan, Nigeria", "Benin City, Nigeria", "Maiduguri, Nigeria", "Owerri, Nigeria",
-  // Kenya
-  "Nairobi, Kenya", "Mombasa, Kenya", "Kisumu, Kenya", "Nakuru, Kenya",
-  "Eldoret, Kenya", "Naivasha, Kenya", "Thika, Kenya",
-  // Ethiopia
-  "Addis Ababa, Ethiopia", "Dire Dawa, Ethiopia", "Adama, Ethiopia", "Mek'ele, Ethiopia",
-  // Ghana
-  "Accra, Ghana", "Kumasi, Ghana", "Sekondi-Takoradi, Ghana", "Tamale, Ghana",
-  // Russia
-  "Moscow, Russia", "Saint Petersburg, Russia", "Novosibirsk, Russia", "Yekaterinburg, Russia",
-  "Vladivostok, Russia", "Sochi, Russia", "Krasnoyarsk, Russia", "Perm, Russia",
-  "Kazan, Russia", "Samara, Russia", "Ufa, Russia", "Irkutsk, Russia",
-  // India
-  "Mumbai, India", "Delhi, India", "Bangalore, India", "Hyderabad, India",
-  "Chennai, India", "Kolkata, India", "Pune, India", "Ahmedabad, India",
-  "Jaipur, India", "Lucknow, India", "Chandigarh, India", "Surat, India",
-  "Nagpur, India", "Indore, India", "Thane, India", "Bhopal, India",
-  "Visakhapatnam, India", "Vadodara, India", "Ghaziabad, India", "Ludhiana, India",
-  "Kochi, India", "Coimbatore, India", "Pondicherry, India", "Mysore, India",
-  // Pakistan
-  "Karachi, Pakistan", "Lahore, Pakistan", "Faisalabad, Pakistan", "Rawalpindi, Pakistan",
-  "Multan, Pakistan", "Hyderabad, Pakistan", "Islamabad, Pakistan", "Peshawar, Pakistan",
-  "Quetta, Pakistan", "Sialkot, Pakistan",
-  // Bangladesh
-  "Dhaka, Bangladesh", "Chittagong, Bangladesh", "Khulna, Bangladesh", "Rajshahi, Bangladesh",
-  "Barisal, Bangladesh", "Sylhet, Bangladesh", "Rangpur, Bangladesh",
-  // Sri Lanka
-  "Colombo, Sri Lanka", "Kandy, Sri Lanka", "Galle, Sri Lanka", "Jaffna, Sri Lanka",
-  "Negombo, Sri Lanka", "Nuwara Eliya, Sri Lanka", "Badulla, Sri Lanka",
-  // Thailand
-  "Bangkok, Thailand", "Chiang Mai, Thailand", "Phuket, Thailand", "Chiang Rai, Thailand",
-  "Pattaya, Thailand", "Hat Yai, Thailand", "Udon Thani, Thailand", "Khon Kaen, Thailand",
-  "Rayong, Thailand", "Nakhon Ratchasima, Thailand",
-  // Vietnam
-  "Ho Chi Minh City, Vietnam", "Hanoi, Vietnam", "Da Nang, Vietnam", "Can Tho, Vietnam",
-  "Hai Phong, Vietnam", "Da Lat, Vietnam", "Vung Tau, Vietnam", "Nha Trang, Vietnam",
-  // Cambodia
-  "Phnom Penh, Cambodia", "Siem Reap, Cambodia", "Battambang, Cambodia", "Sihanoukville, Cambodia",
-  // Laos
-  "Vientiane, Laos", "Luang Prabang, Laos", "Savannakhet, Laos",
-  // Myanmar
-  "Yangon, Myanmar", "Mandalay, Myanmar", "Naypyidaw, Myanmar", "Bagan, Myanmar",
-  // Malaysia
-  "Kuala Lumpur, Malaysia", "Penang, Malaysia", "Johor Bahru, Malaysia", "Melaka, Malaysia",
-  "Selangor, Malaysia", "Kota Kinabalu, Malaysia", "Kuching, Malaysia", "Ipoh, Malaysia",
-  // Singapore
-  "Singapore, Singapore",
-  // Indonesia
-  "Jakarta, Indonesia", "Bali, Indonesia", "Surabaya, Indonesia", "Bandung, Indonesia",
-  "Medan, Indonesia", "Semarang, Indonesia", "Makassar, Indonesia", "Palembang, Indonesia",
-  "Yogyakarta, Indonesia", "Denpasar, Indonesia", "Bekasi, Indonesia",
-  // Philippines
-  "Manila, Philippines", "Cebu, Philippines", "Davao, Philippines", "Quezon City, Philippines",
-  "Caloocan, Philippines", "Pasig, Philippines", "Makati, Philippines", "Cagayan de Oro, Philippines",
-  "Iloilo, Philippines", "Zamboanga, Philippines",
-  // Japan
-  "Tokyo, Japan", "Osaka, Japan", "Kyoto, Japan", "Yokohama, Japan",
-  "Kobe, Japan", "Fukuoka, Japan", "Sapporo, Japan", "Hiroshima, Japan",
-  "Nagoya, Japan", "Kawasaki, Japan", "Nagasaki, Japan", "Sendai, Japan",
-  "Nara, Japan", "Okayama, Japan", "Shizuoka, Japan", "Kumamoto, Japan",
-  "Hamamatsu, Japan", "Chiba, Japan", "Kitakyushu, Japan",
-  // South Korea
-  "Seoul, South Korea", "Busan, South Korea", "Incheon, South Korea", "Daegu, South Korea",
-  "Daejeon, South Korea", "Gwangju, South Korea", "Ulsan, South Korea", "Gyeonggi, South Korea",
-  // China
-  "Shanghai, China", "Beijing, China", "Guangzhou, China", "Shenzhen, China",
-  "Chongqing, China", "Xi'an, China", "Hangzhou, China", "Wuhan, China",
-  "Chengdu, China", "Nanjing, China", "Tianjin, China", "Shenyang, China",
-  "Harbin, China", "Changchun, China", "Jinan, China", "Qingdao, China",
-  "Suzhou, China", "Xiamen, China", "Nanchang, China", "Guiyang, China",
-  "Kunming, China", "Lanzhou, China", "Taiyuan, China", "Ningbo, China",
-  // Hong Kong
-  "Hong Kong, Hong Kong", "Kowloon, Hong Kong", "New Territories, Hong Kong",
-  // Taiwan
-  "Taipei, Taiwan", "Kaohsiung, Taiwan", "Taichung, Taiwan", "Tainan, Taiwan",
-  "Keelung, Taiwan", "Hsinchu, Taiwan", "Taoyuan, Taiwan",
-  // UAE
-  "Dubai, UAE", "Abu Dhabi, UAE", "Sharjah, UAE", "Ajman, UAE",
-  "Ras Al Khaimah, UAE", "Fujairah, UAE", "Umm Al Quwain, UAE",
-  // Saudi Arabia
-  "Riyadh, Saudi Arabia", "Jeddah, Saudi Arabia", "Mecca, Saudi Arabia", "Medina, Saudi Arabia",
-  "Dammam, Saudi Arabia", "Khobar, Saudi Arabia", "Abha, Saudi Arabia",
-  // Iraq
-  "Baghdad, Iraq", "Basra, Iraq", "Mosul, Iraq", "Erbil, Iraq",
-  // Iran
-  "Tehran, Iran", "Mashhad, Iran", "Isfahan, Iran", "Shiraz, Iran",
-  "Tabriz, Iran", "Qom, Iran", "Karaj, Iran", "Ahvaz, Iran",
-  // Qatar
-  "Doha, Qatar", "Al Rayyan, Qatar", "Al Wakrah, Qatar",
-  // Kuwait
-  "Kuwait City, Kuwait", "Al Jahra, Kuwait", "Salmiya, Kuwait",
-  // Oman
-  "Muscat, Oman", "Salalah, Oman", "Nizwa, Oman",
-  // Lebanon
-  "Beirut, Lebanon", "Tripoli, Lebanon", "Sidon, Lebanon", "Tyre, Lebanon",
-  // Syria
-  "Damascus, Syria", "Aleppo, Syria", "Homs, Syria", "Latakia, Syria",
-  // Jordan
-  "Amman, Jordan", "Zarqa, Jordan", "Irbid, Jordan", "Aqaba, Jordan",
-  // Palestine
-  "Ramallah, Palestine", "Gaza City, Palestine", "Bethlehem, Palestine",
-  // Australia
-  "Sydney, Australia", "Melbourne, Australia", "Brisbane, Australia", "Perth, Australia",
-  "Adelaide, Australia", "Gold Coast, Australia", "Newcastle, Australia", "Canberra, Australia",
-  "Hobart, Australia", "Darwin, Australia", "Geelong, Australia", "Townsville, Australia",
-  // New Zealand
-  "Auckland, New Zealand", "Christchurch, New Zealand", "Wellington, New Zealand",
-  "Hamiltion, New Zealand", "Tauranga, New Zealand", "Dunedin, New Zealand",
-  "Palmerston North, New Zealand", "Rotorua, New Zealand",
-  // Fiji
-  "Suva, Fiji", "Nadi, Fiji", "Lautoka, Fiji",
-  // Argentina
-  "Buenos Aires, Argentina", "Córdoba, Argentina", "Rosario, Argentina", "Mendoza, Argentina",
-  "San Miguel de Tucuman, Argentina", "La Plata, Argentina", "Mar del Plata, Argentina",
-  "Salta, Argentina", "Santa Fe, Argentina", "Quilmes, Argentina",
-  // Brazil
-  "São Paulo, Brazil", "Rio de Janeiro, Brazil", "Brasília, Brazil", "Salvador, Brazil",
-  "Fortaleza, Brazil", "Belo Horizonte, Brazil", "Manaus, Brazil", "Curitiba, Brazil",
-  "Recife, Brazil", "Porto Alegre, Brazil", "Goiânia, Brazil", "Belém, Brazil",
-  "Guarulhos, Brazil", "Campinas, Brazil", "Santos, Brazil", "Osasco, Brazil",
-  "Sorocaba, Brazil", "Ribeirão Preto, Brazil", "Uberlândia, Brazil",
-  // Chile
-  "Santiago, Chile", "Valparaiso, Chile", "Concepcion, Chile", "La Serena, Chile",
-  "Temuco, Chile", "Valdivia, Chile", "Puerto Montt, Chile", "Antofagasta, Chile",
-  "Puerta Varas, Chile", "Punta Arenas, Chile",
-  // Peru
-  "Lima, Peru", "Arequipa, Peru", "Trujillo, Peru", "Chiclayo, Peru",
-  "Iquitos, Peru", "Cusco, Peru", "Tacna, Peru", "Puno, Peru",
-  // Colombia
-  "Bogota, Colombia", "Medellin, Colombia", "Cali, Colombia", "Barranquilla, Colombia",
-  "Cartagena, Colombia", "Bucaramanga, Colombia", "Santa Marta, Colombia", "Armenia, Colombia",
-  // Venezuela
-  "Caracas, Venezuela", "Maracaibo, Venezuela", "Valencia, Venezuela", "Barquisimeto, Venezuela",
-  "Maracay, Venezuela", "Ciudad Guayana, Venezuela",
-  // Ecuador
-  "Quito, Ecuador", "Guayaquil, Ecuador", "Cuenca, Ecuador", "Santo Domingo, Ecuador",
-  // Bolivia
-  "La Paz, Bolivia", "Santa Cruz, Bolivia", "Cochabamba, Bolivia", "Sucre, Bolivia",
-  // Paraguay
-  "Asuncion, Paraguay", "Ciudad del Este, Paraguay", "Encarnacion, Paraguay",
-  // Uruguay
-  "Montevideo, Uruguay", "Salto, Uruguay", "Paysandu, Uruguay", "Las Piedras, Uruguay",
-  // Costa Rica
-  "San Jose, Costa Rica", "Alajuela, Costa Rica", "Cartago, Costa Rica", "Heredia, Costa Rica",
-  // Panama
-  "Panama City, Panama", "Colon, Panama", "David, Panama",
-  // Guatemala
-  "Guatemala City, Guatemala", "Quetzaltenango, Guatemala", "Antigua, Guatemala",
-  // Honduras
-  "Tegucigalpa, Honduras", "San Pedro Sula, Honduras", "La Ceiba, Honduras",
-  // Nicaragua
-  "Managua, Nicaragua", "Leon, Nicaragua", "Granada, Nicaragua",
-  // El Salvador
-  "San Salvador, El Salvador", "Santa Ana, El Salvador", "San Miguel, El Salvador",
-  // Belize
-  "Belize City, Belize", "San Ignacio, Belize",
-  // Dominican Republic
-  "Santo Domingo, Dominican Republic", "Santiago, Dominican Republic", "La Romana, Dominican Republic",
-  // Haiti
-  "Port-au-Prince, Haiti", "Cap-Haitien, Haiti", "Gonaives, Haiti",
-  // Jamaica
-  "Kingston, Jamaica", "Montego Bay, Jamaica", "Spanish Town, Jamaica",
-  // Cuba
-  "Havana, Cuba", "Santiago de Cuba, Cuba", "Camaguey, Cuba", "Holguin, Cuba",
-  // Puerto Rico
-  "San Juan, Puerto Rico", "Bayamon, Puerto Rico", "Carolina, Puerto Rico",
-  // Colombia
-  "Bogota, Colombia", "Medellin, Colombia", "Cali, Colombia", "Barranquilla, Colombia",
-].sort();
+// City search is now dynamic via API - removed old static list to avoid duplicate key warnings
 
-// City search input component
+// City search input component with smart debouncing
 function CitySearchInput({ 
   value, 
-  onChange, 
-  onBlur 
+  onChange 
 }: { 
   value: string; 
-  onChange: (value: string) => void; 
-  onBlur: () => void;
+  onChange: (value: string) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<CityOption[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
 
-  const debouncedSearch = useCallback(async (q: string) => {
+  const handleSearch = (q: string) => {
+    setSearchQuery(q);
+    
+    if (timer) {
+      clearTimeout(timer);
+    }
+
     if (q.length < 2) {
       setSuggestions([]);
       return;
     }
+
     setIsLoading(true);
-    try {
-      const response = await fetch(`/api/cities/search?q=${encodeURIComponent(q)}`);
-      const cities = await response.json();
-      setSuggestions(cities || []);
-    } catch (error) {
-      console.error("City search error:", error);
-      setSuggestions([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    const newTimer = setTimeout(async () => {
+      try {
+        const response = await fetch(`/api/cities/search?q=${encodeURIComponent(q)}`);
+        const cities = await response.json();
+        setSuggestions(cities || []);
+      } catch (error) {
+        console.error("City search error:", error);
+        setSuggestions([]);
+      } finally {
+        setIsLoading(false);
+      }
+    }, 300);
+    setTimer(newTimer);
+  };
 
   const handleSelect = (cityName: string) => {
     onChange(cityName);
@@ -500,14 +224,11 @@ function CitySearchInput({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <div className="border border-purple-200 rounded-lg px-3 py-2 cursor-text bg-white focus-within:border-purple-500">
+        <div className="border border-purple-200 rounded-md px-3 py-2 cursor-text bg-white focus-within:border-purple-500 hover:border-purple-300 transition">
           <input
             type="text"
             value={value || searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              debouncedSearch(e.target.value);
-            }}
+            onChange={(e) => handleSearch(e.target.value)}
             onFocus={() => setOpen(true)}
             placeholder="Search your birth city..."
             className="w-full outline-none text-sm"
@@ -515,21 +236,21 @@ function CitySearchInput({
           />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
-        <div className="space-y-2 max-h-64 overflow-y-auto p-2">
-          {isLoading && <p className="text-sm text-gray-500 text-center py-2">Searching...</p>}
+      <PopoverContent className="w-72 p-0" align="start">
+        <div className="space-y-1 max-h-64 overflow-y-auto p-2">
+          {isLoading && <p className="text-sm text-gray-500 text-center py-3">Searching worldwide cities...</p>}
           {!isLoading && suggestions.length === 0 && searchQuery.length >= 2 && (
-            <p className="text-sm text-gray-500 text-center py-2">No cities found</p>
+            <p className="text-sm text-gray-500 text-center py-3">No cities found</p>
           )}
           {!isLoading && searchQuery.length < 2 && (
-            <p className="text-xs text-gray-400 text-center py-2">Type at least 2 characters</p>
+            <p className="text-xs text-gray-400 text-center py-3">Type 2+ characters to search</p>
           )}
-          {suggestions.map((city) => (
+          {suggestions.map((city, idx) => (
             <button
-              key={city.name}
+              key={`${city.name}-${idx}`}
               onClick={() => handleSelect(city.name)}
-              className="w-full text-left px-3 py-2 rounded hover:bg-purple-100 text-sm transition"
-              data-testid={`city-option-${city.name}`}
+              className="w-full text-left px-3 py-2 rounded hover:bg-purple-50 text-sm transition text-gray-800"
+              data-testid={`city-option-${idx}`}
             >
               {city.name}
             </button>
@@ -698,7 +419,6 @@ export default function HumanDesignPage() {
                           <CitySearchInput 
                             value={field.value} 
                             onChange={field.onChange}
-                            onBlur={field.onBlur}
                           />
                         </FormControl>
                         <FormMessage />
