@@ -224,17 +224,15 @@ function CitySearchInput({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <div className="border border-purple-200 rounded-md px-3 py-2 cursor-text bg-white focus-within:border-purple-500 hover:border-purple-300 transition">
-          <input
-            type="text"
-            value={value || searchQuery}
-            onChange={(e) => handleSearch(e.target.value)}
-            onFocus={() => setOpen(true)}
-            placeholder="Search your birth city..."
-            className="w-full outline-none text-sm"
-            data-testid="input-city-search"
-          />
-        </div>
+        <input
+          type="text"
+          value={value || searchQuery}
+          onChange={(e) => handleSearch(e.target.value)}
+          onFocus={() => setOpen(true)}
+          placeholder="Search your birth city..."
+          className="w-full border border-purple-200 rounded-md px-3 py-2 text-sm outline-none bg-white focus:border-purple-500 hover:border-purple-300 transition"
+          data-testid="input-city-search"
+        />
       </PopoverTrigger>
       <PopoverContent className="w-72 p-0" align="start">
         <div className="space-y-1 max-h-64 overflow-y-auto p-2">
