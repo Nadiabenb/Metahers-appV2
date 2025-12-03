@@ -514,190 +514,104 @@ export default function HumanDesignPage() {
               {/* Full Reading - Gated Behind Authentication */}
               {isAuthenticated ? (
                 <>
-                  {/* Two Column Layout */}
-                  <div className="grid lg:grid-cols-2 gap-8">
-                {/* Left: Bodygraph Visualization */}
-                <Card className="p-8 border-2 border-purple-200">
-                  <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
-                    <Sun className="w-6 h-6 text-purple-600" />
-                    Your Bodygraph
-                  </h3>
-                  
-                  <div className="relative h-96 bg-gradient-to-b from-purple-50 to-white rounded-xl">
-                    {Object.entries(reading.centers).map(([name, center]) => (
-                      <CenterNode
-                        key={name}
-                        name={name}
-                        defined={center.defined}
-                        position={centerPositions[name]}
-                        onClick={() => setSelectedCenter(selectedCenter === name ? null : name)}
-                      />
-                    ))}
-                    
-                    {/* Connection lines would go here - simplified for now */}
-                  </div>
-
-                  {/* Selected Center Info */}
-                  <AnimatePresence>
-                    {selectedCenter && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        className="mt-4 p-4 bg-purple-50 rounded-lg"
-                      >
-                        <h4 className="font-bold text-purple-700 mb-2 capitalize">
-                          {selectedCenter === 'g' ? 'G Center' : selectedCenter === 'solarPlexus' ? 'Solar Plexus' : selectedCenter} Center
-                          <Badge className={`ml-2 ${reading.centers[selectedCenter as keyof typeof reading.centers].defined ? 'bg-purple-600' : 'bg-gray-400'}`}>
-                            {reading.centers[selectedCenter as keyof typeof reading.centers].defined ? 'Defined' : 'Undefined'}
-                          </Badge>
-                        </h4>
-                        <p className="text-sm text-gray-700">
-                          {reading.centers[selectedCenter as keyof typeof reading.centers].theme}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </Card>
-
-                {/* Right: Detailed Reading */}
-                <div className="space-y-4">
-                  {/* Expandable Sections */}
-                  {[
-                    { id: 'type', title: 'Your Type & Strategy', icon: Target, content: reading.strategyDescription },
-                    { id: 'authority', title: 'Your Authority', icon: Brain, content: reading.authorityDescription },
-                    { id: 'profile', title: 'Your Profile', icon: Users, content: reading.profileDescription },
-                    { id: 'cross', title: 'Incarnation Cross', icon: Compass, content: reading.incarnationCrossDescription },
-                    { id: 'career', title: 'Career Guidance', icon: Briefcase, content: reading.careerGuidance },
-                    { id: 'relationships', title: 'Relationship Insights', icon: Heart, content: reading.relationshipInsights },
-                  ].map((section) => (
-                    <motion.div key={section.id} layout>
-                      <Card 
-                        className={`border-2 transition-colors cursor-pointer ${
-                          expandedSection === section.id ? 'border-purple-400' : 'border-purple-100 hover:border-purple-200'
-                        }`}
-                        onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
-                      >
-                        <div className="p-4 flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <section.icon className="w-5 h-5 text-purple-600" />
-                            <h4 className="font-bold text-gray-900">{section.title}</h4>
-                          </div>
-                          <motion.div
-                            animate={{ rotate: expandedSection === section.id ? 180 : 0 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <ChevronDown className="w-5 h-5 text-gray-500" />
-                          </motion.div>
-                        </div>
-                        
-                        <AnimatePresence>
-                          {expandedSection === section.id && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                              className="overflow-hidden"
-                            >
-                              <div className="px-4 pb-4 text-gray-700">
-                                {section.content}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </Card>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Strengths & Challenges */}
-              <div className="grid md:grid-cols-2 gap-8 mt-12">
-                <Card className="p-6 border-2 border-green-200 bg-green-50">
-                  <h3 className="text-xl font-bold text-green-700 mb-4 flex items-center gap-2">
-                    <Zap className="w-5 h-5" />
-                    Your Strengths
-                  </h3>
-                  <ul className="space-y-2">
-                    {reading.strengths.map((strength, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-700">
-                        <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                        {strength}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-
-                <Card className="p-6 border-2 border-amber-200 bg-amber-50">
-                  <h3 className="text-xl font-bold text-amber-700 mb-4 flex items-center gap-2">
-                    <Shield className="w-5 h-5" />
-                    Growth Edges
-                  </h3>
-                  <ul className="space-y-2">
-                    {reading.challenges.map((challenge, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-700">
-                        <ArrowRight className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
-                        {challenge}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              </div>
-
-              {/* Defined Gates & Channels */}
-              <Card className="mt-12 p-8 border-2 border-purple-200">
-                <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
-                  <Star className="w-6 h-6 text-purple-600" />
-                  Your Defined Gates & Channels
-                </h3>
-                
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div>
-                    <h4 className="font-bold text-gray-700 mb-3">Active Gates</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {reading.definedGates.map((gate) => (
-                        <Badge key={gate} className="bg-purple-100 text-purple-700 border border-purple-300">
-                          Gate {gate}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-bold text-gray-700 mb-3">Defined Channels</h4>
-                    {reading.channels.length > 0 ? (
-                      <div className="flex flex-wrap gap-2">
-                        {reading.channels.map((channel) => (
-                          <Badge key={channel} className="bg-pink-100 text-pink-700 border border-pink-300">
-                            {channel}
-                          </Badge>
+                  {/* PAGE 2: BODYGRAPH & INSIGHTS */}
+                  <div className="grid lg:grid-cols-2 gap-8 mt-8">
+                    {/* Left: Bodygraph Visualization */}
+                    <Card className="p-8 border-2 border-purple-200">
+                      <h3 className="text-2xl font-bold text-black mb-6 flex items-center gap-2">
+                        <Sun className="w-6 h-6 text-purple-600" />
+                        Your Bodygraph
+                      </h3>
+                      
+                      <div className="relative h-96 bg-gradient-to-b from-purple-50 to-white rounded-xl">
+                        {Object.entries(reading.centers).map(([name, center]) => (
+                          <CenterNode
+                            key={name}
+                            name={name}
+                            defined={center.defined}
+                            position={centerPositions[name]}
+                            onClick={() => setSelectedCenter(selectedCenter === name ? null : name)}
+                          />
                         ))}
                       </div>
-                    ) : (
-                      <p className="text-gray-500 italic">No complete channels defined</p>
-                    )}
-                  </div>
-                </div>
-              </Card>
 
-                  {/* CTA for Authenticated Users */}
-                  <div className="mt-12 text-center">
-                    <Card className="inline-block p-8 border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-pink-50">
-                      <h3 className="text-2xl font-bold text-black mb-4">
-                        Want to Go Deeper?
+                      {/* Selected Center Info */}
+                      <AnimatePresence>
+                        {selectedCenter && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="mt-4 p-4 bg-purple-50 rounded-lg"
+                          >
+                            <h4 className="font-bold text-purple-700 mb-2 capitalize">
+                              {selectedCenter === 'g' ? 'G Center' : selectedCenter === 'solarPlexus' ? 'Solar Plexus' : selectedCenter} Center
+                              <Badge className={`ml-2 ${reading.centers[selectedCenter as keyof typeof reading.centers].defined ? 'bg-purple-600' : 'bg-gray-400'}`}>
+                                {reading.centers[selectedCenter as keyof typeof reading.centers].defined ? 'Defined' : 'Undefined'}
+                              </Badge>
+                            </h4>
+                            <p className="text-sm text-gray-700">
+                              {reading.centers[selectedCenter as keyof typeof reading.centers].theme}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </Card>
+
+                    {/* Right: Quick Insights */}
+                    <div className="space-y-4">
+                      <Card className="p-6 border-2 border-purple-200">
+                        <h4 className="text-lg font-bold text-black mb-3 flex items-center gap-2">
+                          <Target className="w-5 h-5 text-purple-600" />
+                          Your Strategy
+                        </h4>
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          {reading.strategyDescription}
+                        </p>
+                      </Card>
+
+                      <Card className="p-6 border-2 border-purple-200">
+                        <h4 className="text-lg font-bold text-black mb-3 flex items-center gap-2">
+                          <Brain className="w-5 h-5 text-purple-600" />
+                          Your Authority
+                        </h4>
+                        <p className="text-gray-700 text-sm leading-relaxed">
+                          {reading.authorityDescription}
+                        </p>
+                      </Card>
+                    </div>
+                  </div>
+
+                  {/* PAGE 3: KEY TAKEAWAYS */}
+                  <div className="grid md:grid-cols-2 gap-8 mt-12">
+                    <Card className="p-6 border-2 border-green-200 bg-green-50">
+                      <h3 className="text-lg font-bold text-green-700 mb-4 flex items-center gap-2">
+                        <Zap className="w-5 h-5" />
+                        Your Strengths
                       </h3>
-                      <p className="text-gray-700 mb-6 max-w-lg">
-                        Explore how your Human Design connects with AI tools, business strategy, and personal transformation in your full Member Dashboard.
-                      </p>
-                      <Button
-                        onClick={() => setLocation('/dashboard')}
-                        className="bg-black hover:bg-gray-900 text-white font-bold uppercase tracking-wider px-8"
-                        data-testid="button-explore-dashboard"
-                      >
-                        Go to Dashboard
-                        <ArrowRight className="w-5 h-5 ml-2" />
-                      </Button>
+                      <ul className="space-y-2">
+                        {reading.strengths.map((strength, i) => (
+                          <li key={i} className="flex items-start gap-2 text-gray-700 text-sm">
+                            <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                            {strength}
+                          </li>
+                        ))}
+                      </ul>
+                    </Card>
+
+                    <Card className="p-6 border-2 border-amber-200 bg-amber-50">
+                      <h3 className="text-lg font-bold text-amber-700 mb-4 flex items-center gap-2">
+                        <Shield className="w-5 h-5" />
+                        What to Watch For
+                      </h3>
+                      <ul className="space-y-2">
+                        {reading.challenges.map((challenge, i) => (
+                          <li key={i} className="flex items-start gap-2 text-gray-700 text-sm">
+                            <ArrowRight className="w-4 h-4 text-amber-600 mt-0.5 flex-shrink-0" />
+                            {challenge}
+                          </li>
+                        ))}
+                      </ul>
                     </Card>
                   </div>
                 </>
