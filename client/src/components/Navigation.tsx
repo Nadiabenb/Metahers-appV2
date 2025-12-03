@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera, Users } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera, Users, Sun } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -44,6 +44,7 @@ export function Navigation() {
       icon: BookOpen,
       items: [
         { path: "/discover", label: "Discover", icon: Compass, desc: "Explore content" },
+        { path: "/human-design", label: "Human Design", icon: Sun, desc: "Know yourself" },
         { path: "/rituals", label: "Rituals", icon: Zap, desc: "Transform daily" },
         { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build apps" },
         { path: "/blog", label: "Blog & Resources", icon: BookOpen, desc: "Read insights" },
