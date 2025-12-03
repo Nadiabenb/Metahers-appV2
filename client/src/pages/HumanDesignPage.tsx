@@ -39,6 +39,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { SEO } from "@/components/SEO";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/useAuth";
@@ -143,6 +150,38 @@ function CenterNode({
     </motion.button>
   );
 }
+
+// Major cities for Human Design readings
+const CITIES = [
+  "New York, USA", "Los Angeles, USA", "Chicago, USA", "Houston, USA", "Phoenix, USA",
+  "Philadelphia, USA", "San Antonio, USA", "San Diego, USA", "Dallas, USA", "San Jose, USA",
+  "Austin, USA", "Jacksonville, USA", "Seattle, USA", "Denver, USA", "Boston, USA",
+  "Miami, USA", "Atlanta, USA", "Nashville, USA", "Detroit, USA", "Minneapolis, USA",
+  "London, UK", "Manchester, UK", "Birmingham, UK", "Leeds, UK", "Glasgow, UK",
+  "Paris, France", "Marseille, France", "Lyon, France", "Toulouse, France",
+  "Berlin, Germany", "Munich, Germany", "Hamburg, Germany", "Cologne, Germany",
+  "Madrid, Spain", "Barcelona, Spain", "Seville, Spain", "Valencia, Spain",
+  "Rome, Italy", "Milan, Italy", "Naples, Italy", "Turin, Italy",
+  "Amsterdam, Netherlands", "Rotterdam, Netherlands", "The Hague, Netherlands",
+  "Toronto, Canada", "Vancouver, Canada", "Montreal, Canada", "Calgary, Canada",
+  "Sydney, Australia", "Melbourne, Australia", "Brisbane, Australia", "Perth, Australia",
+  "Tokyo, Japan", "Osaka, Japan", "Kyoto, Japan", "Yokohama, Japan",
+  "Shanghai, China", "Beijing, China", "Guangzhou, China", "Shenzhen, China",
+  "Hong Kong, China", "Singapore, Singapore", "Bangkok, Thailand", "Mumbai, India",
+  "Delhi, India", "Bangalore, India", "Kolkata, India", "Dubai, UAE",
+  "Abu Dhabi, UAE", "Istanbul, Turkey", "Ankara, Turkey", "Mexico City, Mexico",
+  "São Paulo, Brazil", "Rio de Janeiro, Brazil", "Brasília, Brazil", "Salvador, Brazil",
+  "Buenos Aires, Argentina", "Córdoba, Argentina", "Auckland, New Zealand",
+  "Christchurch, New Zealand", "Dublin, Ireland", "Cork, Ireland",
+  "Lisbon, Portugal", "Porto, Portugal", "Vienna, Austria", "Zurich, Switzerland",
+  "Geneva, Switzerland", "Brussels, Belgium", "Antwerp, Belgium", "Stockholm, Sweden",
+  "Copenhagen, Denmark", "Oslo, Norway", "Helsinki, Finland", "Athens, Greece",
+  "Cape Town, South Africa", "Johannesburg, South Africa", "Durban, South Africa",
+  "Cairo, Egypt", "Alexandria, Egypt", "Nairobi, Kenya", "Lagos, Nigeria",
+  "Accra, Ghana", "Bangkok, Thailand", "Chiang Mai, Thailand", "Phuket, Thailand",
+  "Ho Chi Minh City, Vietnam", "Hanoi, Vietnam", "Manila, Philippines",
+  "Jakarta, Indonesia", "Bali, Indonesia", "Kuala Lumpur, Malaysia", "Penang, Malaysia",
+];
 
 export default function HumanDesignPage() {
   const [reading, setReading] = useState<HumanDesignReading | null>(null);
@@ -296,15 +335,21 @@ export default function HumanDesignPage() {
                       <FormItem>
                         <FormLabel className="flex items-center gap-2 text-gray-700">
                           <MapPin className="w-4 h-4 text-purple-600" />
-                          Birth Location (City, Country)
+                          Birth Location
                         </FormLabel>
                         <FormControl>
-                          <Input 
-                            placeholder="e.g., New York, USA" 
-                            {...field} 
-                            className="border-purple-200 focus:border-purple-500"
-                            data-testid="input-birth-location"
-                          />
+                          <Select value={field.value} onValueChange={field.onChange}>
+                            <SelectTrigger className="border-purple-200 focus:border-purple-500" data-testid="select-birth-location">
+                              <SelectValue placeholder="Select your birth city..." />
+                            </SelectTrigger>
+                            <SelectContent className="max-h-60">
+                              {CITIES.map((city) => (
+                                <SelectItem key={city} value={city}>
+                                  {city}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
