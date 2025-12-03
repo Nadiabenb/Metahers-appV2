@@ -521,6 +521,125 @@ export default function LandingPage() {
         </div>
       </div>
 
+      {/* JOURNAL + LEARNING EXPERIENCES - Integration Section */}
+      <div className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-16 bg-gradient-to-b from-white to-purple-50">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">Your Journal Becomes Your Breakthrough</h2>
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              Complete a learning experience. Journal your transformation. Watch the insights compound over time.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            {/* Left: Learning Experience Flow */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="space-y-4"
+            >
+              <h3 className="text-2xl font-bold text-black mb-8">The Transformation Cycle</h3>
+              
+              {[
+                { num: "1", title: "Complete a Ritual", desc: "Engage with an AI or Web3 learning experience tailored to your goals" },
+                { num: "2", title: "Reflect & Journal", desc: "AI-powered prompts guide your reflection on what you learned and how it applies to your life" },
+                { num: "3", title: "See Patterns", desc: "Your journal builds over time—moods, insights, and breakthroughs become visible" },
+                { num: "4", title: "Unlock Growth", desc: "Track streaks, celebrate wins, and compound your transformation week by week" }
+              ].map((step, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.12 }}
+                  className="flex gap-6 p-6 bg-white border-2 border-purple-200 rounded-xl hover:shadow-lg transition-all group"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="flex-shrink-0">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      {step.num}
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-black mb-1 group-hover:text-purple-600 transition-colors">{step.title}</h4>
+                    <p className="text-sm text-gray-600">{step.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Right: Journal Stats Showcase */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              className="space-y-4"
+            >
+              <h3 className="text-2xl font-bold text-black mb-8">What Tracking Your Journey Reveals</h3>
+              
+              <motion.div
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="p-8 bg-gradient-to-br from-purple-600 to-purple-500 rounded-2xl text-white shadow-lg"
+              >
+                <p className="text-5xl font-black mb-2">47</p>
+                <p className="text-sm uppercase tracking-widest font-bold opacity-90">Days Consistent</p>
+                <p className="text-xs opacity-75 mt-4">Your current streak—keep the momentum going!</p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="p-8 bg-white border-2 border-purple-200 rounded-2xl"
+              >
+                <p className="text-4xl font-black text-purple-600 mb-2">12,847</p>
+                <p className="text-sm uppercase tracking-widest font-bold text-gray-700">Words Reflected</p>
+                <p className="text-xs text-gray-600 mt-4">Your thoughts, documented. Your journey, captured.</p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05, y: -5 }}
+                className="p-8 bg-white border-2 border-purple-200 rounded-2xl"
+              >
+                <div className="flex gap-4 mb-4">
+                  <div className="w-3 h-3 rounded-full bg-pink-500" />
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  <div className="w-3 h-3 rounded-full bg-purple-500" />
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                </div>
+                <p className="text-sm uppercase tracking-widest font-bold text-gray-700">Mood Evolution</p>
+                <p className="text-xs text-gray-600 mt-2">Trending: More energized, more peaceful, more unstoppable</p>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* CTA to Start Journaling */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-center p-12 bg-white border-2 border-purple-300 rounded-2xl"
+          >
+            <p className="text-gray-700 mb-4 text-lg">Ready to compound your growth? Your first journal entry is waiting.</p>
+            <Button 
+              onClick={handleSignup}
+              className="bg-black hover:bg-gray-900 text-white font-bold uppercase tracking-wider px-8 py-3 rounded-lg"
+              data-testid="button-journal-cta"
+            >
+              Start Journaling Your Transformation
+            </Button>
+          </motion.div>
+        </div>
+      </div>
+
       {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
       <div 
         className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16 bg-gray-50"
