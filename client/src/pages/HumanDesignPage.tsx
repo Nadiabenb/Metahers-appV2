@@ -212,7 +212,7 @@ function CitySearchInput({
   onChange: (value: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(value || "");
   const [suggestions, setSuggestions] = useState<CityOption[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null);
@@ -247,7 +247,7 @@ function CitySearchInput({
 
   const handleSelect = (cityName: string) => {
     onChange(cityName);
-    setSearchQuery("");
+    setSearchQuery(cityName); // Keep the selected city visible
     setSuggestions([]);
     setOpen(false);
   };
