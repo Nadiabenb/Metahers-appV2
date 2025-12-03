@@ -162,32 +162,32 @@ export default function LandingPage() {
             </div>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold mb-6 leading-tight text-black tracking-tight magical-hero-title">
-              The Future is Now.<br /><span className="text-purple-600">Are You Ready?</span>
+              The Tools That Will<br /><span className="text-purple-600">Change Everything</span><br />Are Here. Now.
             </h1>
             <p className="text-xl sm:text-2xl text-gray-700 mb-6 leading-relaxed max-w-2xl mx-auto font-medium magical-hero-subtitle">
-              Whether you're a mom building a business, a solopreneur scaling your dream, a creative selling your art, or a content creator growing your voice—the digital tools that will change everything are arriving NOW. 500+ women are already ahead. They're learning AI. They're discovering new income. They're thriving both professionally and personally. And they're building it all together.
+              In the last 12 months, everything shifted. AI got real. New wealth started being built. And 500+ women just like you said YES to learning what comes next. They're not waiting. They're not confused. They're *ahead*. Right now, there's a wave happening—and you're either riding it or watching from the shore. MetaHers shows you how to ride it. How to thrive in both your personal AND professional life. How to build income that actually works. How to join the women who already know what's coming.
             </p>
             
             <div className="mb-12 flex flex-col gap-4 justify-center max-w-2xl mx-auto bg-purple-50 p-6 rounded-2xl border-2 border-purple-200">
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+                <Sparkles className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
                 <div className="text-left">
-                  <p className="font-semibold text-black">Work Smarter With AI (So You Have Time for What Matters)</p>
-                  <p className="text-sm text-gray-700">Moms and solopreneurs are reclaiming 15+ hours every week. Content creators are producing 10x faster. Artists are reaching new audiences. Your time is precious—learn tools that actually give it back.</p>
+                  <p className="font-semibold text-black">Reclaim Your Time With AI That Actually Works</p>
+                  <p className="text-sm text-gray-700">Sarah went from 60-hour weeks to 40. Jessica now has weekends with her kids again. Maria stopped feeling behind. Women are getting 15+ hours back every single week. Not promises. Real tools. Real time. Real life change.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+                <Gem className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
                 <div className="text-left">
-                  <p className="font-semibold text-black">Unlock Income Possibilities (Some You Never Knew Existed)</p>
-                  <p className="text-sm text-gray-700">Solopreneurs are charging 2x more. Creatives are selling globally. Moms are building passive income around their family. New wealth is being built—learn how women just like you are doing it.</p>
+                  <p className="font-semibold text-black">Discover Income You Never Knew Was Possible</p>
+                  <p className="text-sm text-gray-700">Solopreneurs charging 2X within months. Artists selling globally from their living room. Moms building passive income around family time. The women who said YES? They're not geniuses. They just learned what's changing. And now they're building.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
-                <CheckCircle2 className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+                <Heart className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
                 <div className="text-left">
-                  <p className="font-semibold text-black">Build a Life That Works for YOU (Not the Other Way Around)</p>
-                  <p className="text-sm text-gray-700">Join 500+ women creating businesses and lives on their terms. Thrive personally AND professionally. You're not alone—we're all figuring this out together.</p>
+                  <p className="font-semibold text-black">Build a Life That's Actually YOURS</p>
+                  <p className="text-sm text-gray-700">Not the hustle culture lie. Not the grind. A life where your business works FOR you. Where you thrive personally AND professionally. Where 500+ women have your back. That's MetaHers.</p>
                 </div>
               </div>
             </div>
@@ -222,23 +222,64 @@ export default function LandingPage() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-20 pt-16 border-t-2 border-border/50"
           >
-            <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">💜 Real Women. Real Results. Just Like You.</p>
+            <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">💜 Meet the Women Who Moved First</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
-                <p className="text-4xl font-bold text-purple-600 mb-2">2X</p>
-                <p className="text-foreground font-bold text-base mb-1">Her Income in 3 Months</p>
-                <p className="text-sm text-gray-600">"Sarah, Freelance Designer & Solopreneur: 'I discovered income opportunities I didn't even know existed. Now I'm confidently charging 2X and my clients are lining up.'"</p>
+                <p className="text-4xl font-bold text-purple-600 mb-1">2X</p>
+                <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-3">Income | 3 Months</p>
+                <p className="text-sm text-gray-700 mb-3 italic">"Sarah, Freelance Designer</p>
+                <p className="text-sm text-gray-600">"'Six months ago I was charging $40/hr, burned out, and invisible. I learned to use AI to build authority. Now I'm $3K per project. Clients find ME. I feel unstoppable.'"</p>
               </div>
               <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
-                <p className="text-4xl font-bold text-purple-600 mb-2">15 hrs</p>
-                <p className="text-foreground font-bold text-base mb-1">Reclaimed Per Week</p>
-                <p className="text-sm text-gray-600">"Jessica, Mom of 3 & Content Creator: 'AI handles my content calendar. I went from stressed to having time for my family AND growing my business.'"</p>
+                <p className="text-4xl font-bold text-purple-600 mb-1">15</p>
+                <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-3">Hours Reclaimed Weekly</p>
+                <p className="text-sm text-gray-700 mb-3 italic">"Jessica, Mom of 3</p>
+                <p className="text-sm text-gray-600">"'I used to spend 20 hours on content. Now AI handles 80% of the work. I have Saturday mornings back. My kids notice. My business is GROWING. And I'm not exhausted.'"</p>
               </div>
               <div className="text-left p-6 rounded-2xl bg-white border-2 border-purple-200 hover:shadow-xl transition-shadow">
-                <p className="text-4xl font-bold text-purple-600 mb-2">3</p>
-                <p className="text-foreground font-bold text-base mb-1">New Revenue Streams</p>
-                <p className="text-sm text-gray-600">"Maria, Artist & Creative: 'I thought I could only sell my art one way. Now I'm selling prints, digital products, AND licensing globally. I feel ahead of the curve.'"</p>
+                <p className="text-4xl font-bold text-purple-600 mb-1">3</p>
+                <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-3">New Revenue Streams</p>
+                <p className="text-sm text-gray-700 mb-3 italic">"Maria, Artist & Creative</p>
+                <p className="text-sm text-gray-600">"'I thought I could only sell original paintings. Now I sell prints, digital licenses, merchandise. I'm reaching Japan, Germany, Australia. I feel like I cracked a code most artists don't know exists.'"</p>
               </div>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* WHAT'S HAPPENING - The Wave Section */}
+      <div 
+        className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16 bg-white border-t-2 border-border/30"
+      >
+        <div className="relative max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="text-center mb-12">
+              <p className="text-sm uppercase tracking-widest text-purple-600 font-bold mb-4">What's Actually Happening Right Now</p>
+              <h2 className="text-4xl md:text-5xl font-semibold text-black mb-6">The Wave is Real</h2>
+              <p className="text-xl text-gray-700 leading-relaxed">Globally, women are waking up to what's changing. AI went from science fiction to your daily reality. Web3 went from "what is that?" to "where do I start?" Passive income went from impossible to accessible. And women like you are building NOW—not later. Not when they're "ready." NOW.</p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="p-8 bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 rounded-2xl">
+                <p className="text-5xl font-bold text-purple-600 mb-2">500+</p>
+                <p className="text-lg font-semibold text-black mb-2">Women Already Here</p>
+                <p className="text-gray-700">From 15 countries. Different ages, backgrounds, businesses. All learning. All growing. All thrive personally and professionally.</p>
+              </div>
+              <div className="p-8 bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 rounded-2xl">
+                <p className="text-5xl font-bold text-purple-600 mb-2">54</p>
+                <p className="text-lg font-semibold text-black mb-2">Guided Experiences</p>
+                <p className="text-gray-700">AI, Web3, branding, income, community, leadership. Each one designed to help you move from "confused" to "oh I GET it" to "I'm doing this."</p>
+              </div>
+            </div>
+
+            <div className="bg-black text-white p-10 rounded-2xl text-center">
+              <p className="text-lg mb-4">Here's the thing: <span className="font-semibold">You already know something is changing.</span></p>
+              <p className="text-gray-300">You've felt it. You've wondered about it. You might even be scared to miss it. MetaHers doesn't ask you to become a tech expert or crypto guru. It shows you what's real, what's hype, and how women like you are building incredible lives with these tools.</p>
             </div>
           </motion.div>
         </div>
