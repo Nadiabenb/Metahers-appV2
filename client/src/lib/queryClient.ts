@@ -47,6 +47,38 @@ export async function apiRequest(
   return res;
 }
 
+export async function apiRequestJson<T>(
+  method: string,
+  url: string,
+  data?: unknown | undefined,
+): Promise<T> {
+  const res = await fetch(url, {
+    method,
+    headers: data ? { "Content-Type": "application/json" } : {},
+    body: data ? JSON.stringify(data) : undefined,
+    credentials: "include",
+  });
+
+  if (!res.ok && res.status !== 304) {
+    let errorData: any;
+    try {
+      errorData = await res.json();
+    } catch {
+      errorData = { error: res.statusText };
+    }
+    const message = errorData.error || errorData.message || res.statusText;
+    const code = errorData.code || 'UNKNOWN_ERROR';
+    throw new APIError(res.status, code, message, errorData.details);
+  }
+  
+  const contentType = res.headers.get('content-type');
+  if (res.status === 204 || !contentType?.includes('application/json')) {
+    return {} as T;
+  }
+  
+  return await res.json() as T;
+}
+
 type UnauthorizedBehavior = "returnNull" | "throw";
 export const getQueryFn: <T>(options: {
   on401: UnauthorizedBehavior;

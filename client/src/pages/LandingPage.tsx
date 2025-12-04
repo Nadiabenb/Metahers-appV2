@@ -854,6 +854,77 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* VISION BOARD 2026 - Featured Experience */}
+      <section className="relative py-24 px-6 lg:px-16 bg-gradient-to-br from-purple-50 via-white to-purple-50">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="grid lg:grid-cols-2 gap-12 items-center"
+          >
+            <div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="h-px w-12 bg-purple-600" />
+                <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
+                  New for 2026
+                </span>
+              </div>
+              <h2 className="text-4xl lg:text-5xl font-semibold mb-6 text-black">
+                Vision Board<br />
+                <span className="text-purple-600">Builder</span>
+              </h2>
+              <p className="text-lg text-gray-700 leading-relaxed mb-8">
+                An AI-powered, self-guided experience to clarify your dreams, set powerful intentions, 
+                and connect with women who share your aspirations. Your AI Muse creates personalized 
+                vision tiles across 7 life dimensions.
+              </p>
+              <div className="flex flex-wrap gap-3 mb-8">
+                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">AI-Powered</span>
+                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">7 Life Dimensions</span>
+                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">Vision Sisters Matching</span>
+              </div>
+              <Link href="/vision-board">
+                <Button 
+                  size="lg" 
+                  className="bg-black hover:bg-gray-900 text-white uppercase tracking-wider px-8"
+                  data-testid="button-vision-board-cta"
+                >
+                  Create Your 2026 Vision
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </div>
+            <div className="relative">
+              <div className="bg-white rounded-2xl shadow-xl p-8 border border-purple-100">
+                <div className="grid grid-cols-3 gap-4 mb-6">
+                  {["Career", "Wealth", "Wellness"].map((dim, i) => (
+                    <div key={dim} className="p-4 bg-purple-50 rounded-xl text-center">
+                      <div className="w-10 h-10 mx-auto mb-2 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-700">{dim}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="text-center py-6 border-t border-purple-100">
+                  <p className="text-2xl font-bold text-purple-600 mb-2">Your Word for 2026</p>
+                  <p className="text-gray-500 text-sm">Set your intention and watch it come to life</p>
+                </div>
+              </div>
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute -top-4 -right-4 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg"
+              >
+                Free Access
+              </motion.div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* NINE LEARNING SPACES - Enhanced Editorial Grid (From MetaHersWorldPage) */}
       <section className="relative py-32 px-6 lg:px-16 bg-white">
         <div className="max-w-7xl mx-auto">

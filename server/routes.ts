@@ -13,7 +13,7 @@ import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
-import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds } from "@shared/schema";
+import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema } from "@shared/schema";
 import { sql as drizzleSql, eq, desc, and, sql } from "drizzle-orm";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
@@ -4222,6 +4222,287 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       .returning();
     
     res.json(ad[0]);
+  }));
+
+  // ===== VISION BOARD 2026 =====
+  
+  // Get user's vision board for a specific year
+  app.get('/api/vision-board/:year', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.user?.id;
+    const year = parseInt(req.params.year);
+    
+    if (!userId) {
+      throw new AuthenticationError("Authentication required");
+    }
+    
+    const board = await db.select()
+      .from(visionBoards)
+      .where(and(eq(visionBoards.userId, userId), eq(visionBoards.year, year)))
+      .limit(1);
+    
+    if (board.length === 0) {
+      return res.json(null);
+    }
+    
+    // Get tiles for this board
+    const tiles = await db.select()
+      .from(visionTiles)
+      .where(eq(visionTiles.boardId, board[0].id))
+      .orderBy(visionTiles.position);
+    
+    res.json({ board: board[0], tiles });
+  }));
+  
+  // Create or update vision board
+  app.post('/api/vision-board', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new AuthenticationError("Authentication required");
+    }
+    
+    const { year, coreWord, futureSelfMessage, focusDimensions, status } = req.body;
+    
+    // Check if board exists
+    const existing = await db.select()
+      .from(visionBoards)
+      .where(and(eq(visionBoards.userId, userId), eq(visionBoards.year, year || 2026)))
+      .limit(1);
+    
+    if (existing.length > 0) {
+      // Update existing board
+      const updated = await db.update(visionBoards)
+        .set({ 
+          coreWord: coreWord || existing[0].coreWord,
+          futureSelfMessage: futureSelfMessage || existing[0].futureSelfMessage,
+          focusDimensions: focusDimensions || existing[0].focusDimensions,
+          status: status || existing[0].status,
+          updatedAt: new Date()
+        })
+        .where(eq(visionBoards.id, existing[0].id))
+        .returning();
+      
+      return res.json(updated[0]);
+    }
+    
+    // Create new board
+    const newBoard = await db.insert(visionBoards)
+      .values({
+        userId,
+        year: year || 2026,
+        coreWord,
+        futureSelfMessage,
+        focusDimensions: focusDimensions || [],
+        status: status || "draft"
+      })
+      .returning();
+    
+    res.json(newBoard[0]);
+  }));
+  
+  // Generate AI vision tiles based on user's intentions
+  app.post('/api/vision-board/:boardId/generate-tiles', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.user?.id;
+    const { boardId } = req.params;
+    
+    if (!userId) {
+      throw new AuthenticationError("Authentication required");
+    }
+    
+    // Get the board
+    const board = await db.select()
+      .from(visionBoards)
+      .where(and(eq(visionBoards.id, boardId), eq(visionBoards.userId, userId)))
+      .limit(1);
+    
+    if (board.length === 0) {
+      throw new NotFoundError("Vision board not found");
+    }
+    
+    const { coreWord, futureSelfMessage, focusDimensions } = board[0];
+    
+    if (!focusDimensions || focusDimensions.length === 0) {
+      throw new ValidationError("Please select at least one focus dimension");
+    }
+    
+    // Initialize OpenAI
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    
+    // Generate tiles for each dimension
+    const generatedTiles = [];
+    
+    for (let i = 0; i < focusDimensions.length; i++) {
+      const dimension = focusDimensions[i];
+      
+      const prompt = `You are an empowering life coach helping a woman create her vision board for 2026.
+
+Her core word for the year is: "${coreWord}"
+Her message from her future self: "${futureSelfMessage || 'Not provided'}"
+Focus dimension: ${dimension}
+
+Generate a vision tile with:
+1. A powerful, specific title (3-6 words) that captures her goal in ${dimension}
+2. An empowering affirmation (one sentence, present tense, starting with "I am" or "I have")
+3. An image prompt for generating a beautiful, aspirational image (focus on aesthetic, mood, and visual elements - no text in image)
+
+Respond in JSON format:
+{
+  "title": "...",
+  "affirmation": "...",
+  "imagePrompt": "..."
+}`;
+
+      try {
+        const completion = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [{ role: "user", content: prompt }],
+          response_format: { type: "json_object" }
+        });
+        
+        const content = completion.choices[0]?.message?.content;
+        if (content) {
+          const parsed = JSON.parse(content);
+          
+          // Insert tile
+          const tile = await db.insert(visionTiles)
+            .values({
+              boardId,
+              dimension,
+              title: parsed.title,
+              affirmation: parsed.affirmation,
+              imagePrompt: parsed.imagePrompt,
+              isAiGenerated: true,
+              position: i
+            })
+            .returning();
+          
+          generatedTiles.push(tile[0]);
+        }
+      } catch (error) {
+        console.error(`Error generating tile for ${dimension}:`, error);
+      }
+    }
+    
+    // Update board status
+    await db.update(visionBoards)
+      .set({ status: "tiles_created", updatedAt: new Date() })
+      .where(eq(visionBoards.id, boardId));
+    
+    res.json({ tiles: generatedTiles });
+  }));
+  
+  // Update a vision tile
+  app.patch('/api/vision-board/tile/:tileId', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.user?.id;
+    const { tileId } = req.params;
+    const { title, affirmation, userNotes, imageUrl, position } = req.body;
+    
+    if (!userId) {
+      throw new AuthenticationError("Authentication required");
+    }
+    
+    // Verify ownership
+    const tile = await db.select()
+      .from(visionTiles)
+      .innerJoin(visionBoards, eq(visionTiles.boardId, visionBoards.id))
+      .where(and(eq(visionTiles.id, tileId), eq(visionBoards.userId, userId)))
+      .limit(1);
+    
+    if (tile.length === 0) {
+      throw new NotFoundError("Vision tile not found");
+    }
+    
+    const updated = await db.update(visionTiles)
+      .set({
+        ...(title && { title }),
+        ...(affirmation && { affirmation }),
+        ...(userNotes !== undefined && { userNotes }),
+        ...(imageUrl && { imageUrl }),
+        ...(position !== undefined && { position })
+      })
+      .where(eq(visionTiles.id, tileId))
+      .returning();
+    
+    res.json(updated[0]);
+  }));
+  
+  // Complete vision board
+  app.post('/api/vision-board/:boardId/complete', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.user?.id;
+    const { boardId } = req.params;
+    
+    if (!userId) {
+      throw new AuthenticationError("Authentication required");
+    }
+    
+    const updated = await db.update(visionBoards)
+      .set({ 
+        status: "complete", 
+        completedAt: new Date(),
+        updatedAt: new Date()
+      })
+      .where(and(eq(visionBoards.id, boardId), eq(visionBoards.userId, userId)))
+      .returning();
+    
+    if (updated.length === 0) {
+      throw new NotFoundError("Vision board not found");
+    }
+    
+    res.json(updated[0]);
+  }));
+  
+  // Get potential Vision Sisters (users with similar goals)
+  app.get('/api/vision-board/:boardId/sisters', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.user?.id;
+    const { boardId } = req.params;
+    
+    if (!userId) {
+      throw new AuthenticationError("Authentication required");
+    }
+    
+    // Get the user's board
+    const board = await db.select()
+      .from(visionBoards)
+      .where(and(eq(visionBoards.id, boardId), eq(visionBoards.userId, userId)))
+      .limit(1);
+    
+    if (board.length === 0) {
+      throw new NotFoundError("Vision board not found");
+    }
+    
+    const userDimensions = board[0].focusDimensions || [];
+    
+    // Find other public boards with overlapping dimensions
+    const potentialMatches = await db.select({
+      board: visionBoards,
+      user: users
+    })
+      .from(visionBoards)
+      .innerJoin(users, eq(visionBoards.userId, users.id))
+      .where(and(
+        eq(visionBoards.isPublic, true),
+        eq(visionBoards.status, "complete"),
+        sql`${visionBoards.userId} != ${userId}`
+      ))
+      .limit(10);
+    
+    // Calculate match scores
+    const matches = potentialMatches.map(match => {
+      const theirDimensions = (match.board.focusDimensions || []) as string[];
+      const sharedDimensions = userDimensions.filter((d: string) => theirDimensions.includes(d));
+      const matchScore = Math.round((sharedDimensions.length / Math.max(userDimensions.length, 1)) * 100);
+      
+      return {
+        userId: match.user.id,
+        firstName: match.user.firstName,
+        coreWord: match.board.coreWord,
+        sharedDimensions,
+        matchScore
+      };
+    }).filter(m => m.matchScore > 30)
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 3);
+    
+    res.json(matches);
   }));
 
   const httpServer = createServer(app);

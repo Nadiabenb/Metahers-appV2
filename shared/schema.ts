@@ -2661,3 +2661,93 @@ export const sponsoredAds = pgTable("sponsored_ads", {
 export const insertSponsoredAdSchema = createInsertSchema(sponsoredAds).omit({ id: true, createdAt: true });
 export type InsertSponsoredAd = z.infer<typeof insertSponsoredAdSchema>;
 export type SponsoredAdDB = typeof sponsoredAds.$inferSelect;
+
+// ===== VISION BOARD 2026 =====
+
+// Vision Board main table - stores user's annual vision board
+export const visionBoards = pgTable("vision_boards", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  year: integer("year").notNull().default(2026),
+  coreWord: varchar("core_word"), // User's single word for the year
+  futureSelfMessage: text("future_self_message"), // Message from future self
+  focusDimensions: jsonb("focus_dimensions").$type<string[]>().default(sql`'[]'::jsonb`), // Selected life areas
+  status: varchar("status").notNull().default("draft"), // draft, intention_set, tiles_created, complete
+  aiMuse: jsonb("ai_muse").$type<{ personality?: string; encouragements?: string[] }>(), // AI Muse configuration
+  layoutConfig: jsonb("layout_config").$type<{ columns?: number; style?: string }>(),
+  isPublic: boolean("is_public").default(false).notNull(),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_vb_user").on(table.userId),
+  index("idx_vb_year").on(table.year),
+  index("idx_vb_status").on(table.status),
+]);
+
+export const insertVisionBoardSchema = createInsertSchema(visionBoards).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertVisionBoard = z.infer<typeof insertVisionBoardSchema>;
+export type VisionBoardDB = typeof visionBoards.$inferSelect;
+
+// Vision Tile - individual vision items on the board
+export const visionTiles = pgTable("vision_tiles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  boardId: varchar("board_id").notNull().references(() => visionBoards.id, { onDelete: "cascade" }),
+  dimension: varchar("dimension").notNull(), // career, wealth, learning, wellness, relationships, lifestyle, impact
+  title: varchar("title").notNull(),
+  affirmation: text("affirmation"), // AI-generated affirmation
+  imagePrompt: text("image_prompt"), // Prompt used to generate image
+  imageUrl: text("image_url"), // Generated or user-uploaded image
+  isAiGenerated: boolean("is_ai_generated").default(true).notNull(),
+  position: integer("position").default(0).notNull(), // Order on board
+  gridPosition: jsonb("grid_position").$type<{ row: number; col: number; span?: number }>(),
+  userNotes: text("user_notes"), // User's personal notes
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_tile_board").on(table.boardId),
+  index("idx_tile_dimension").on(table.dimension),
+]);
+
+export const insertVisionTileSchema = createInsertSchema(visionTiles).omit({ id: true, createdAt: true });
+export type InsertVisionTile = z.infer<typeof insertVisionTileSchema>;
+export type VisionTileDB = typeof visionTiles.$inferSelect;
+
+// Vision Sisters - community matching for accountability
+export const visionSisters = pgTable("vision_sisters", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  matchedUserId: varchar("matched_user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  matchScore: integer("match_score").default(0).notNull(), // 0-100 compatibility score
+  sharedDimensions: jsonb("shared_dimensions").$type<string[]>().default(sql`'[]'::jsonb`),
+  sharedCoreThemes: jsonb("shared_core_themes").$type<string[]>().default(sql`'[]'::jsonb`),
+  status: varchar("status").notNull().default("pending"), // pending, connected, declined
+  connectedAt: timestamp("connected_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_vs_user").on(table.userId),
+  index("idx_vs_matched").on(table.matchedUserId),
+  index("idx_vs_status").on(table.status),
+]);
+
+export const insertVisionSisterSchema = createInsertSchema(visionSisters).omit({ id: true, createdAt: true });
+export type InsertVisionSister = z.infer<typeof insertVisionSisterSchema>;
+export type VisionSisterDB = typeof visionSisters.$inferSelect;
+
+// Vision Board Refresh Reminders - quarterly check-ins
+export const visionReminders = pgTable("vision_reminders", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  boardId: varchar("board_id").notNull().references(() => visionBoards.id, { onDelete: "cascade" }),
+  reminderType: varchar("reminder_type").notNull(), // quarterly_review, annual_reset, dimension_focus
+  scheduledFor: timestamp("scheduled_for").notNull(),
+  sentAt: timestamp("sent_at"),
+  isCompleted: boolean("is_completed").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_vr_user").on(table.userId),
+  index("idx_vr_scheduled").on(table.scheduledFor),
+]);
+
+export const insertVisionReminderSchema = createInsertSchema(visionReminders).omit({ id: true, createdAt: true });
+export type InsertVisionReminder = z.infer<typeof insertVisionReminderSchema>;
+export type VisionReminderDB = typeof visionReminders.$inferSelect;
