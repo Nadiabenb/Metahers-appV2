@@ -44,7 +44,7 @@ export function Navigation() {
       icon: BookOpen,
       items: [
         { path: "/discover", label: "Discover", icon: Compass, desc: "Explore content" },
-        { path: "/human-design", label: "Human Design", icon: Sun, desc: "Know yourself" },
+        { path: "/vision-board", label: "Vision Board 2026", icon: Sparkles, desc: "Create your vision" },
         { path: "/rituals", label: "Rituals", icon: Zap, desc: "Transform daily" },
         { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build apps" },
         { path: "/blog", label: "Blog & Resources", icon: BookOpen, desc: "Read insights" },

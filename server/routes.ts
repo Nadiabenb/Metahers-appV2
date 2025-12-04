@@ -9,7 +9,6 @@ import Stripe from "stripe";
 import { Resend } from "resend";
 import OpenAI from "openai";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent, chatWithAppAtelierCoach, generateRecommendations, type Recommendation, cacheMonitor } from "./aiService";
-import { calculateHumanDesign } from "./humanDesignService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
@@ -4223,26 +4222,6 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       .returning();
     
     res.json(ad[0]);
-  }));
-
-  // ===== HUMAN DESIGN =====
-  // Search for cities by query (uses Nominatim/OpenStreetMap)
-  app.get('/api/cities/search', asyncHandler(async (req: Request, res) => {
-    const query = req.query.q as string;
-    const cities = await searchCities(query);
-    res.json(cities);
-  }));
-
-  // Calculate Human Design reading from birth data
-  app.post('/api/human-design/calculate', asyncHandler(async (req: Request, res) => {
-    const { birthDate, birthTime, birthLocation } = req.body;
-    
-    if (!birthDate || !birthTime || !birthLocation) {
-      throw new ValidationError('Birth date, time, and location are required');
-    }
-    
-    const reading = calculateHumanDesign(birthDate, birthTime, birthLocation);
-    res.json(reading);
   }));
 
   const httpServer = createServer(app);
