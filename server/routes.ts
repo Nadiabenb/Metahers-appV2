@@ -4228,12 +4228,8 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   
   // Get user's vision board for a specific year
   app.get('/api/vision-board/:year', isAuthenticated, asyncHandler(async (req: Request, res) => {
-    const userId = req.user?.id;
+    const userId = req.session!.userId as string;
     const year = parseInt(req.params.year);
-    
-    if (!userId) {
-      throw new AuthenticationError("Authentication required");
-    }
     
     const board = await db.select()
       .from(visionBoards)
@@ -4255,10 +4251,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   
   // Create or update vision board
   app.post('/api/vision-board', isAuthenticated, asyncHandler(async (req: Request, res) => {
-    const userId = req.user?.id;
-    if (!userId) {
-      throw new AuthenticationError("Authentication required");
-    }
+    const userId = req.session!.userId as string;
     
     const { year, coreWord, futureSelfMessage, focusDimensions, status } = req.body;
     
@@ -4301,12 +4294,8 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   
   // Generate AI vision tiles based on user's intentions
   app.post('/api/vision-board/:boardId/generate-tiles', isAuthenticated, asyncHandler(async (req: Request, res) => {
-    const userId = req.user?.id;
+    const userId = req.session!.userId as string;
     const { boardId } = req.params;
-    
-    if (!userId) {
-      throw new AuthenticationError("Authentication required");
-    }
     
     // Get the board
     const board = await db.select()
@@ -4392,13 +4381,9 @@ Respond in JSON format:
   
   // Update a vision tile
   app.patch('/api/vision-board/tile/:tileId', isAuthenticated, asyncHandler(async (req: Request, res) => {
-    const userId = req.user?.id;
+    const userId = req.session!.userId as string;
     const { tileId } = req.params;
     const { title, affirmation, userNotes, imageUrl, position } = req.body;
-    
-    if (!userId) {
-      throw new AuthenticationError("Authentication required");
-    }
     
     // Verify ownership
     const tile = await db.select()
@@ -4427,12 +4412,8 @@ Respond in JSON format:
   
   // Complete vision board
   app.post('/api/vision-board/:boardId/complete', isAuthenticated, asyncHandler(async (req: Request, res) => {
-    const userId = req.user?.id;
+    const userId = req.session!.userId as string;
     const { boardId } = req.params;
-    
-    if (!userId) {
-      throw new AuthenticationError("Authentication required");
-    }
     
     const updated = await db.update(visionBoards)
       .set({ 
@@ -4452,12 +4433,8 @@ Respond in JSON format:
   
   // Get potential Vision Sisters (users with similar goals)
   app.get('/api/vision-board/:boardId/sisters', isAuthenticated, asyncHandler(async (req: Request, res) => {
-    const userId = req.user?.id;
+    const userId = req.session!.userId as string;
     const { boardId } = req.params;
-    
-    if (!userId) {
-      throw new AuthenticationError("Authentication required");
-    }
     
     // Get the user's board
     const board = await db.select()
