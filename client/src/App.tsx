@@ -208,7 +208,7 @@ function Router() {
               return <AIDashboard />;
             }} />
 
-            {/* Redirect legacy routes to dashboard */}
+            {/* Redirect authenticated users to dashboard */}
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>
             <Route path="/workspace">{() => <Redirect to="/dashboard" />}</Route>
             <Route path="/progress">{() => <Redirect to="/dashboard" />}</Route>

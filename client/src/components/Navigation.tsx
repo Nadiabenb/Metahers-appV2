@@ -21,12 +21,12 @@ export function Navigation() {
     "Featured": {
       icon: Sparkles,
       items: [
+        ...(isAuthenticated ? [
+          { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, desc: "Your personalized hub" },
+        ] : []),
         { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, desc: "Join our community" },
         { path: "/world", label: "MetaHers World", icon: Globe, desc: "Digital hub" },
         { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, desc: "Premium space" },
-        ...(isAuthenticated ? [
-          { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, desc: "Your workspace" },
-        ] : []),
       ],
     },
     "AI & Tools": {

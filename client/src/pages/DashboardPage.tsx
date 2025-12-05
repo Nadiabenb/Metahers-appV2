@@ -214,10 +214,14 @@ export default function DashboardPage() {
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
               <h1 className="font-semibold text-4xl sm:text-5xl text-black mb-2" data-testid="text-dashboard-title">
-                Welcome Back, {user?.firstName || 'Member'}
+                {(() => {
+                  const hour = new Date().getHours();
+                  const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
+                  return `${greeting}, ${user?.firstName || 'Member'}! ✨`;
+                })()}
               </h1>
               <p className="text-lg text-foreground/70">
-                Your sanctuary for growth and transformation
+                Welcome to your personal sanctuary for growth and transformation
               </p>
             </div>
             
