@@ -4,6 +4,7 @@ import { X, Mail, Sparkles, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 export function EmailCaptureModal() {
   const [isVisible, setIsVisible] = useState(false);
@@ -15,13 +16,13 @@ export function EmailCaptureModal() {
   useEffect(() => {
     const hasSeenModal = localStorage.getItem("emailCaptureShown");
     const hasSubmittedEmail = localStorage.getItem("emailCaptureSubmitted");
-    
+
     if (!hasSeenModal && !hasSubmittedEmail) {
       const timer = setTimeout(() => {
         setIsVisible(true);
         localStorage.setItem("emailCaptureShown", "true");
       }, 15000);
-      
+
       return () => clearTimeout(timer);
     }
   }, []);
@@ -33,22 +34,22 @@ export function EmailCaptureModal() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    
+
     if (!email) return;
-    
+
     setIsSubmitting(true);
-    
+
     try {
       const response = await fetch('/api/email-leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      
+
       if (response.ok) {
         localStorage.setItem("emailCaptureSubmitted", "true");
         setIsSubmitted(true);
-        
+
         setTimeout(() => {
           setIsVisible(false);
         }, 8000);
@@ -82,7 +83,7 @@ export function EmailCaptureModal() {
           >
             <Card className="p-8 relative overflow-hidden">
               <div className="absolute inset-0 gradient-violet-magenta opacity-5" />
-              
+
               <button
                 onClick={handleClose}
                 className="absolute top-4 right-4 text-foreground hover:text-foreground transition-colors"
@@ -149,7 +150,7 @@ export function EmailCaptureModal() {
                   <div className="flex items-center justify-center w-16 h-16 rounded-full bg-[hsl(var(--aurora-teal))]/20 mx-auto mb-6">
                     <Sparkles className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
                   </div>
-                  
+
                   <h2 className="font-cormorant text-3xl font-bold mb-4 metallic-text">
                     Welcome to the Beta!
                   </h2>
