@@ -841,35 +841,28 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
 function Footer() {
   return (
     <footer 
-      className="py-8 px-6 lg:px-16 border-t"
+      className="py-3 px-6 lg:px-16 border-t"
       style={{ 
-        background: '#090712',
+        background: DARK_BG,
         borderColor: 'rgba(255,255,255,0.1)',
       }}
     >
       <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="text-center md:text-left">
             <p 
-              className="text-2xl mb-2"
+              className="text-sm font-semibold"
               style={{ 
-                fontFamily: 'Playfair Display, serif',
                 color: '#FFFFFF',
               }}
             >
-              MetaHers <span className="italic" style={{ color: PINK }}>Mind Spa</span>
-            </p>
-            <p 
-              className="text-sm font-light"
-              style={{ color: 'rgba(255,255,255,0.5)' }}
-            >
-              AI & Web3 Education for Extraordinary Women
+              MetaHers <span style={{ color: PINK }}>Mind Spa</span>
             </p>
           </div>
           
           <div 
-            className="flex gap-8 text-sm"
-            style={{ color: 'rgba(255,255,255,0.5)' }}
+            className="flex gap-4 text-xs"
+            style={{ color: 'rgba(255,255,255,0.6)' }}
           >
             <Link 
               href="/privacy" 
@@ -899,12 +892,12 @@ function Footer() {
         </div>
         
         <div 
-          className="mt-6 pt-6 border-t text-center"
+          className="mt-2 pt-2 border-t text-center"
           style={{ borderColor: 'rgba(255,255,255,0.05)' }}
         >
           <p 
-            className="text-sm font-light"
-            style={{ color: 'rgba(255,255,255,0.3)' }}
+            className="text-xs font-light"
+            style={{ color: 'rgba(255,255,255,0.4)' }}
           >
             © {new Date().getFullYear()} MetaHers. All rights reserved.
           </p>
