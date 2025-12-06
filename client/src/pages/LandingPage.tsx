@@ -508,9 +508,9 @@ function FounderSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="absolute -bottom-6 -right-6 p-8 border backdrop-blur-sm"
+              className="absolute -bottom-6 -right-6 p-8 border"
               style={{ 
-                background: 'rgba(200, 162, 216, 0.25)',
+                background: LAVENDER,
                 borderColor: LAVENDER,
               }}
             >
@@ -518,7 +518,7 @@ function FounderSection() {
                 className="text-3xl mb-1"
                 style={{ 
                   fontFamily: 'Playfair Display, serif',
-                  color: '#FFFFFF',
+                  color: DARK_BG,
                   fontWeight: 400,
                 }}
               >
@@ -526,7 +526,7 @@ function FounderSection() {
               </p>
               <p 
                 className="text-sm uppercase tracking-[0.2em] font-bold"
-                style={{ color: '#FFFFFF' }}
+                style={{ color: DARK_BG }}
               >
                 Founder & Visionary
               </p>
