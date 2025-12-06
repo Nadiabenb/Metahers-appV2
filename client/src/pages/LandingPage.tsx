@@ -654,7 +654,7 @@ function TransformationSection() {
       style={{ background: DARK_CARD }}
       data-testid="section-transformation"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -841,13 +841,13 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
 function Footer() {
   return (
     <footer 
-      className="py-16 px-6 lg:px-16 border-t"
+      className="py-8 px-6 lg:px-16 border-t"
       style={{ 
         background: '#090712',
         borderColor: 'rgba(255,255,255,0.1)',
       }}
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="text-center md:text-left">
             <p 
@@ -899,7 +899,7 @@ function Footer() {
         </div>
         
         <div 
-          className="mt-12 pt-8 border-t text-center"
+          className="mt-6 pt-6 border-t text-center"
           style={{ borderColor: 'rgba(255,255,255,0.05)' }}
         >
           <p 
