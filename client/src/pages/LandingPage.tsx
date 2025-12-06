@@ -3,7 +3,7 @@ import { ArrowRight, Sparkles, ChevronDown, Star, Crown, Gem } from "lucide-reac
 import { SEO } from "@/components/SEO";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import { useRef, useState, useEffect, useMemo } from "react";
-import { Link, useLocation } from "wouter";
+import { useLocation } from "wouter";
 
 // MetaHers Brand Colors
 const LAVENDER = "#D8BFD8";    // Soft lavender for accent text
@@ -838,75 +838,6 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
   );
 }
 
-function Footer() {
-  return (
-    <footer 
-      className="py-3 px-6 lg:px-16 border-t"
-      style={{ 
-        background: DARK_BG,
-        borderColor: 'rgba(255,255,255,0.1)',
-      }}
-    >
-      <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-center md:text-left">
-            <p 
-              className="text-sm font-semibold"
-              style={{ 
-                color: '#FFFFFF',
-              }}
-            >
-              MetaHers <span style={{ color: PINK }}>Mind Spa</span>
-            </p>
-          </div>
-          
-          <div 
-            className="flex gap-4 text-xs"
-            style={{ color: 'rgba(255,255,255,0.6)' }}
-          >
-            <Link 
-              href="/privacy" 
-              className="hover:opacity-100 transition-opacity"
-              style={{ color: 'inherit' }}
-              data-testid="link-privacy"
-            >
-              Privacy
-            </Link>
-            <Link 
-              href="/terms" 
-              className="hover:opacity-100 transition-opacity"
-              style={{ color: 'inherit' }}
-              data-testid="link-terms"
-            >
-              Terms
-            </Link>
-            <a 
-              href="mailto:hello@metahers.ai" 
-              className="hover:opacity-100 transition-opacity"
-              style={{ color: 'inherit' }}
-              data-testid="link-contact"
-            >
-              Contact
-            </a>
-          </div>
-        </div>
-        
-        <div 
-          className="mt-2 pt-2 border-t text-center"
-          style={{ borderColor: 'rgba(255,255,255,0.05)' }}
-        >
-          <p 
-            className="text-xs font-light"
-            style={{ color: 'rgba(255,255,255,0.4)' }}
-          >
-            © {new Date().getFullYear()} MetaHers. All rights reserved.
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 export default function LandingPage() {
   const [, navigate] = useLocation();
   
@@ -929,7 +860,6 @@ export default function LandingPage() {
         <FounderSection />
         <TransformationSection />
         <FinalCTASection onNavigate={handleNavigate} />
-        <Footer />
       </main>
     </>
   );
