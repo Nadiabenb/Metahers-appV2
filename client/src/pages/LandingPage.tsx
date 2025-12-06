@@ -510,7 +510,7 @@ function FounderSection() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="absolute -bottom-6 -right-6 p-8 border"
               style={{ 
-                background: DARK_BG,
+                background: DARK_CARD,
                 borderColor: LAVENDER,
               }}
             >
@@ -519,12 +519,13 @@ function FounderSection() {
                 style={{ 
                   fontFamily: 'Playfair Display, serif',
                   color: '#FFFFFF',
+                  fontWeight: 400,
                 }}
               >
                 Nadia
               </p>
               <p 
-                className="text-sm uppercase tracking-[0.2em]"
+                className="text-sm uppercase tracking-[0.2em] font-semibold"
                 style={{ color: PINK }}
               >
                 Founder & Visionary
