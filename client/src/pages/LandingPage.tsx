@@ -1,1194 +1,664 @@
-import { motion, useScroll, useTransform, useSpring, useReducedMotion, AnimatePresence } from "framer-motion";
-import { Lock, ArrowRight, Star, CheckCircle2, Phone, MessageCircle, ChevronRight, Crown, Sparkles, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, ShoppingCart, BookOpen, Unlock } from "lucide-react";
-import { SiWhatsapp } from "react-icons/si";
-import { OptimizedImage } from "@/components/OptimizedImage";
+import { motion, useScroll, useTransform, useReducedMotion, AnimatePresence, useMotionValue, useInView } from "framer-motion";
+import { ArrowRight, Sparkles, ChevronDown } from "lucide-react";
 import { SEO } from "@/components/SEO";
-import { ChatbotPopup } from "@/components/ChatbotPopup";
-import { trackCTAClick } from "@/lib/analytics";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { heroImage, spaceImages } from "@/lib/imageManifest";
-import nadiaPhoto from "@assets/IMG_0795_1762440425222.jpeg";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import type { SpaceDB } from "@shared/schema";
-import { SpaceCardSkeleton } from "@/components/LoadingSkeleton";
+
+function FloatingOrb({ delay = 0, duration = 25, size = 300, opacity = 0.03 }: { delay?: number; duration?: number; size?: number; opacity?: number }) {
+  const randomX = useMemo(() => Math.random() * 80 + 10, []);
+  const randomY = useMemo(() => Math.random() * 80 + 10, []);
+  
+  return (
+    <motion.div
+      className="absolute rounded-full bg-purple-600 pointer-events-none"
+      style={{
+        width: size,
+        height: size,
+        left: `${randomX}%`,
+        top: `${randomY}%`,
+        opacity,
+        filter: 'blur(100px)',
+      }}
+      animate={{
+        x: [0, 50, -30, 0],
+        y: [0, -40, 30, 0],
+        scale: [1, 1.1, 0.95, 1],
+      }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "easeInOut",
+      }}
+    />
+  );
+}
+
+function MouseGlow() {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const [isVisible, setIsVisible] = useState(false);
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
+      setIsVisible(true);
+    };
+    const handleMouseLeave = () => setIsVisible(false);
+    
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseleave", handleMouseLeave);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [mouseX, mouseY]);
+
+  if (!isVisible) return null;
+
+  return (
+    <motion.div
+      className="fixed w-64 h-64 rounded-full pointer-events-none z-0"
+      style={{
+        background: "radial-gradient(circle, rgba(147,51,234,0.08) 0%, transparent 70%)",
+        x: mouseX,
+        y: mouseY,
+        translateX: "-50%",
+        translateY: "-50%",
+      }}
+    />
+  );
+}
+
+function ImmersiveHero({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.98]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, 50]);
+  
+  const [showContent, setShowContent] = useState(false);
+  const [typedText, setTypedText] = useState("");
+  const fullText = "Where AI Meets Feminine Power";
+  
+  useEffect(() => {
+    const timer = setTimeout(() => setShowContent(true), 300);
+    return () => clearTimeout(timer);
+  }, []);
+  
+  useEffect(() => {
+    if (!showContent) return;
+    let i = 0;
+    const typingInterval = setInterval(() => {
+      if (i < fullText.length) {
+        setTypedText(fullText.slice(0, i + 1));
+        i++;
+      } else {
+        clearInterval(typingInterval);
+      }
+    }, 40);
+    return () => clearInterval(typingInterval);
+  }, [showContent]);
+
+  return (
+    <motion.div
+      ref={heroRef}
+      style={{ opacity, scale }}
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-white"
+    >
+      <div className="absolute inset-0 overflow-hidden">
+        <FloatingOrb delay={0} duration={20} size={400} opacity={0.04} />
+        <FloatingOrb delay={3} duration={25} size={300} opacity={0.03} />
+        <FloatingOrb delay={6} duration={22} size={350} opacity={0.025} />
+      </div>
+      
+      <motion.div style={{ y }} className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+        <AnimatePresence>
+          {showContent && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+                className="mb-10"
+              >
+                <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-purple-600/20 bg-purple-600/5">
+                  <motion.div
+                    animate={{ scale: [1, 1.3, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="w-2 h-2 bg-purple-600 rounded-full"
+                  />
+                  <span className="text-purple-600 text-sm font-bold tracking-[0.2em] uppercase">
+                    MetaHers Mind Spa
+                  </span>
+                </div>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-5xl sm:text-7xl lg:text-8xl font-black text-black mb-8 leading-[0.95] tracking-tight"
+              >
+                <span className="block">Your Vision.</span>
+                <motion.span
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="block mt-2 text-purple-600"
+                >
+                  Amplified.
+                </motion.span>
+              </motion.h1>
+
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                className="h-10 mb-6"
+              >
+                <p className="text-xl sm:text-2xl text-black/80 font-light">
+                  {typedText}
+                  <motion.span
+                    animate={{ opacity: [1, 0] }}
+                    transition={{ duration: 0.5, repeat: Infinity }}
+                    className="inline-block w-0.5 h-6 bg-purple-600 ml-1 align-middle"
+                  />
+                </p>
+              </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="text-lg text-black/70 max-w-2xl mx-auto mb-14"
+              >
+                Step into the future. AI-powered rituals, Web3 mastery, and a sisterhood 
+                of women building extraordinary lives. This isn't another course—it's a transformation.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1.2 }}
+                className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+              >
+                <motion.button
+                  onClick={() => onNavigate("/vision-board")}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative px-10 py-5 bg-black text-white font-bold text-base uppercase tracking-[0.15em] flex items-center gap-3 overflow-hidden"
+                  data-testid="button-start-vision-board"
+                >
+                  <span className="relative z-10">Create Your 2026 Vision</span>
+                  <motion.span
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                    className="relative z-10"
+                  >
+                    <ArrowRight className="w-5 h-5" />
+                  </motion.span>
+                  <motion.div
+                    className="absolute inset-0 bg-purple-600 origin-left"
+                    initial={{ scaleX: 0 }}
+                    whileHover={{ scaleX: 1 }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </motion.button>
+
+                <motion.button
+                  onClick={() => onNavigate("/signup")}
+                  whileHover={{ scale: 1.02, y: -2 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-10 py-5 border-2 border-black text-black font-bold text-base uppercase tracking-[0.15em] hover:bg-black hover:text-white transition-all"
+                  data-testid="button-start-free"
+                >
+                  Start Free
+                </motion.button>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 1 }}
+        className="absolute bottom-12 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="flex flex-col items-center gap-2 text-black/40"
+        >
+          <span className="text-xs uppercase tracking-[0.2em]">Scroll to Explore</span>
+          <ChevronDown className="w-5 h-5" />
+        </motion.div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function VisionBoardShowcase({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const dimensions = ["Career", "Wealth", "Wellness", "Learning", "Relationships", "Lifestyle", "Impact"];
+  
+  return (
+    <section ref={ref} className="relative py-32 px-6 lg:px-16 bg-[#faf8f5] overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden">
+        <FloatingOrb delay={2} duration={30} size={500} opacity={0.02} />
+      </div>
+      
+      <div className="relative max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              >
+                <Sparkles className="w-5 h-5 text-purple-600" />
+              </motion.div>
+              <span className="text-sm uppercase tracking-[0.2em] text-purple-600 font-bold">
+                AI-Powered Ritual
+              </span>
+            </div>
+            
+            <h2 className="text-4xl lg:text-6xl font-black text-black mb-6 leading-[1.1] tracking-tight">
+              Your 2026
+              <span className="block text-purple-600">Vision Board</span>
+            </h2>
+            
+            <p className="text-xl text-black leading-relaxed mb-8">
+              Set your intention. Let AI create personalized vision tiles across seven life dimensions. 
+              Connect with Vision Sisters who share your dreams. This is manifestation, reimagined.
+            </p>
+            
+            <div className="flex flex-wrap gap-2 mb-10">
+              {dimensions.map((dim, i) => (
+                <motion.span
+                  key={dim}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  className="px-4 py-2 bg-white text-black border border-gray-200 text-sm font-medium"
+                >
+                  {dim}
+                </motion.span>
+              ))}
+            </div>
+            
+            <motion.button
+              onClick={() => onNavigate("/vision-board")}
+              whileHover={{ x: 5 }}
+              whileTap={{ scale: 0.98 }}
+              className="group flex items-center gap-3 text-lg font-bold text-black uppercase tracking-[0.1em]"
+              data-testid="button-vision-board-explore"
+            >
+              <span>Start Your Vision Board</span>
+              <motion.div
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                <ArrowRight className="w-5 h-5 text-purple-600" />
+              </motion.div>
+            </motion.button>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative"
+          >
+            <div className="relative bg-white p-8 border border-gray-200">
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                {dimensions.slice(0, 6).map((dim, i) => (
+                  <motion.div
+                    key={dim}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.5, delay: 0.4 + i * 0.1 }}
+                    whileHover={{ y: -5, borderColor: '#9333EA' }}
+                    className="aspect-square bg-[#faf8f5] flex flex-col items-center justify-center p-4 cursor-pointer border border-gray-200 transition-all"
+                  >
+                    <Sparkles className="w-6 h-6 text-purple-600 mb-2" />
+                    <span className="text-xs font-medium text-black text-center uppercase tracking-wider">{dim}</span>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="text-center py-6 border-t border-gray-200"
+              >
+                <p className="text-xl font-black text-black mb-1">Your Core Word</p>
+                <p className="text-black/50 text-sm">The intention that guides your year</p>
+              </motion.div>
+            </div>
+            
+            <motion.div
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 3, repeat: Infinity }}
+              className="absolute -top-4 -right-4 bg-purple-600 text-white px-5 py-2 text-sm font-bold uppercase tracking-wider"
+            >
+              Free Access
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FounderStory() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  return (
+    <section ref={ref} className="relative py-32 px-6 lg:px-16 bg-white overflow-hidden">
+      <div className="relative max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 0.8 }}
+            className="relative order-2 lg:order-1"
+          >
+            <div className="relative aspect-[4/5] overflow-hidden">
+              <img
+                src={nadiaHeroPhoto}
+                alt="Nadia - Founder of MetaHers"
+                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
+              />
+            </div>
+            
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="absolute -bottom-6 -right-6 bg-purple-600 text-white p-6"
+            >
+              <p className="text-2xl font-black">Nadia</p>
+              <p className="text-white/80 text-sm uppercase tracking-wider">Founder & AI Educator</p>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="order-1 lg:order-2"
+          >
+            <p className="text-purple-600 text-sm uppercase tracking-[0.2em] mb-6 font-bold">The Story</p>
+            
+            <h2 className="text-4xl lg:text-5xl font-black mb-8 leading-[1.1] text-black tracking-tight">
+              "I built this for the woman
+              <span className="text-purple-600"> I needed to find."</span>
+            </h2>
+            
+            <div className="space-y-6 text-black text-lg leading-relaxed">
+              <p>
+                After coaching over 300 women across 4 years—through group programs, 
+                live events, and countless calls—I saw the same pattern: brilliant women 
+                overwhelmed by tech, confused by jargon, and stuck on the sidelines.
+              </p>
+              <p>
+                MetaHers is different. It's not about becoming a tech expert. 
+                It's about using AI and Web3 as tools for the life you actually want. 
+                The one with more time. More income. More impact.
+              </p>
+              <p className="font-medium">
+                20 founding members are already inside. This is your invitation.
+              </p>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="mt-10 pt-8 border-t border-gray-200"
+            >
+              <div className="grid grid-cols-3 gap-8">
+                <div>
+                  <p className="text-4xl font-black text-purple-600">300+</p>
+                  <p className="text-sm text-black/50 uppercase tracking-wider">Women Coached</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-black text-purple-600">4</p>
+                  <p className="text-sm text-black/50 uppercase tracking-wider">Years Experience</p>
+                </div>
+                <div>
+                  <p className="text-4xl font-black text-purple-600">54</p>
+                  <p className="text-sm text-black/50 uppercase tracking-wider">AI Rituals</p>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TransformationProof() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const transformations = [
+    {
+      stat: "2X",
+      label: "Income Growth",
+      quote: "From charging $40/hour to $3K per project. Clients find ME now.",
+      name: "Sarah",
+      role: "Freelance Designer"
+    },
+    {
+      stat: "15+",
+      label: "Hours Reclaimed",
+      quote: "I have Saturday mornings back with my kids. AI handles the rest.",
+      name: "Jessica",
+      role: "Mom of 3"
+    },
+    {
+      stat: "3",
+      label: "Revenue Streams",
+      quote: "Prints, digital licenses, merch. Reaching Japan, Germany, Australia.",
+      name: "Maria",
+      role: "Artist & Creative"
+    }
+  ];
+  
+  return (
+    <section ref={ref} className="relative py-32 px-6 lg:px-16 bg-[#faf8f5]">
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-20"
+        >
+          <p className="text-purple-600 text-sm uppercase tracking-[0.2em] mb-4 font-bold">Real Results</p>
+          <h2 className="text-4xl lg:text-5xl font-black text-black tracking-tight">
+            What Transformation Looks Like
+          </h2>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {transformations.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: i * 0.15 }}
+              whileHover={{ y: -8 }}
+              className="relative p-8 bg-white border border-gray-200 hover:border-purple-600 transition-all"
+            >
+              <div className="mb-6">
+                <p className="text-5xl font-black text-purple-600">
+                  {item.stat}
+                </p>
+                <p className="text-sm uppercase tracking-[0.15em] text-black/50 font-bold">{item.label}</p>
+              </div>
+              
+              <p className="text-black mb-6 italic">"{item.quote}"</p>
+              
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-black flex items-center justify-center">
+                  <span className="text-white font-bold">{item.name[0]}</span>
+                </div>
+                <div>
+                  <p className="font-bold text-black">{item.name}</p>
+                  <p className="text-sm text-black/50">{item.role}</p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FinalCTA({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  return (
+    <section ref={ref} className="relative py-32 px-6 lg:px-16 bg-white overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <FloatingOrb delay={1} duration={25} size={600} opacity={0.03} />
+        <FloatingOrb delay={5} duration={30} size={400} opacity={0.025} />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.8 }}
+        className="relative max-w-4xl mx-auto text-center"
+      >
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="inline-block mb-8"
+        >
+          <Sparkles className="w-10 h-10 text-purple-600" />
+        </motion.div>
+        
+        <h2 className="text-4xl lg:text-6xl font-black text-black mb-6 leading-[1.1] tracking-tight">
+          Your Future Self
+          <span className="block text-purple-600">Is Waiting</span>
+        </h2>
+        
+        <p className="text-xl text-black mb-12 max-w-2xl mx-auto">
+          This isn't about learning. It's about becoming. AI mastery. Web3 confidence. 
+          A sisterhood of women building extraordinary lives.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
+          <motion.button
+            onClick={() => onNavigate("/vision-board")}
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-12 py-6 bg-black text-white font-bold text-base uppercase tracking-[0.15em] flex items-center gap-3 hover:bg-purple-600 transition-all"
+            data-testid="button-final-cta"
+          >
+            <span>Begin Your Journey</span>
+            <ArrowRight className="w-5 h-5" />
+          </motion.button>
+        </div>
+        
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : {}}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="mt-8 text-black/60 text-sm uppercase tracking-wider"
+        >
+          Free to start. No credit card required.
+        </motion.p>
+      </motion.div>
+    </section>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="bg-white border-t border-gray-200 py-12 px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-center md:text-left">
+            <p className="text-xl font-black text-black mb-1">MetaHers Mind Spa</p>
+            <p className="text-black/50 text-sm">AI & Web3 Education for Women</p>
+          </div>
+          
+          <div className="flex gap-6 text-sm text-black/50">
+            <Link href="/privacy" className="hover:text-purple-600 transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-purple-600 transition-colors">Terms</Link>
+            <a href="mailto:support@metahers.ai" className="hover:text-purple-600 transition-colors">Contact</a>
+          </div>
+        </div>
+        
+        <div className="mt-8 pt-8 border-t border-gray-200 text-center">
+          <p className="text-black/40 text-sm">
+            © {new Date().getFullYear()} MetaHers. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}
 
 export default function LandingPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const prefersReducedMotion = useReducedMotion();
-  const [animationsReady, setAnimationsReady] = useState(false);
   const [, setLocation] = useLocation();
-  const [filter, setFilter] = useState<'all' | 'free' | 'pro'>('all');
-  const [showCelebration, setShowCelebration] = useState(false);
-  const [hoveredBenefit, setHoveredBenefit] = useState<number | null>(null);
-
-  // Simplified - remove heavy parallax animations for better performance
-
-  const { data: spaces = [], isLoading: spacesLoading } = useQuery<SpaceDB[]>({
-    queryKey: ["/api/spaces"],
-  });
-
-  const { data: experiences = [], isLoading: experiencesLoading } = useQuery<Array<{ id: string; slug: string; spaceId: string; title: string; tier: string }>>({
-    queryKey: ["/api/experiences/all"],
-  });
-
-  // Space value props for enhanced cards
-  const SPACE_VALUE_PROPS: Record<string, { outcomes: string[]; experienceCount: number; highlight: string }> = {
-    "web3": {
-      outcomes: ["Understand new digital money opportunities", "Confidently participate in the future economy", "Protect & grow your digital assets"],
-      experienceCount: 6,
-      highlight: "Perfect Starting Point"
-    },
-    "crypto": {
-      outcomes: ["Learn what digital currencies actually are", "Discover new income streams", "Build wealth safely & smartly"],
-      experienceCount: 12,
-      highlight: "Most Comprehensive"
-    },
-    "ai": {
-      outcomes: ["Use AI to save 10+ hours per week", "Create content 10x faster", "Automate boring tasks & focus on growth"],
-      experienceCount: 6,
-      highlight: "Highly Practical"
-    },
-    "metaverse": {
-      outcomes: ["Understand where business is heading", "Build your presence in emerging spaces", "Future-proof your business"],
-      experienceCount: 6,
-      highlight: "Future-Ready"
-    },
-    "branding": {
-      outcomes: ["Build a personal brand that attracts clients", "Position yourself as THE expert", "Charge premium prices for your work"],
-      experienceCount: 6,
-      highlight: "Career Accelerator"
-    },
-    "moms": {
-      outcomes: ["Build income while managing family", "Work flexibly on your terms", "Join a supportive community of mom entrepreneurs"],
-      experienceCount: 6,
-      highlight: "Mom-Focused"
-    },
-    "app-atelier": {
-      outcomes: ["Create digital products without coding", "Launch & sell your ideas online", "Build passive income streams"],
-      experienceCount: 6,
-      highlight: "No-Code Power"
-    },
-    "founders-club": {
-      outcomes: ["Turn your idea into a profitable business", "Get real business mentorship & support", "Scale faster with a community"],
-      experienceCount: 6,
-      highlight: "12-Week Accelerator"
-    },
-    "digital-sales": {
-      outcomes: ["Launch your online store quickly", "Sell your products on social media", "Grow revenue with proven strategies"],
-      experienceCount: 6,
-      highlight: "Quick Launch"
-    },
-  };
-
-  // Calculate free vs pro counts
-  const freeSpacesCount = spaces.filter(s => s.sortOrder <= 2).length;
-  const totalSpacesCount = spaces.length;
-  const lockedSpacesCount = totalSpacesCount - freeSpacesCount;
-
-  // Filter spaces
-  const filteredSpaces = spaces.filter(space => {
-    if (filter === 'free') return space.sortOrder <= 2;
-    if (filter === 'pro') return space.sortOrder > 2;
-    return true;
-  });
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    const enableAnimations = () => setAnimationsReady(true);
-
-    if ('requestIdleCallback' in window) {
-      requestIdleCallback(enableAnimations, { timeout: 1500 });
-    } else {
-      setTimeout(enableAnimations, 800);
-    }
-  }, [prefersReducedMotion]);
-
-
-  const handleSignup = () => {
-    trackCTAClick('landing_hero_signup', '/signup', 'free');
-    setShowCelebration(true);
-    setTimeout(() => window.location.href = "/signup", 500);
-  };
-
-  const handleLogin = () => {
-    window.location.href = "/login";
+  const prefersReducedMotion = useReducedMotion();
+  
+  const handleNavigate = (path: string) => {
+    setLocation(path);
   };
 
   const schema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "MetaHers Mind Spa",
-    "description": "AI and Web3 education platform designed for women, offering guided learning journeys, personal branding courses, and thought leadership training.",
+    "description": "AI and Web3 education platform designed for women, offering guided learning journeys and transformation rituals.",
     "url": "https://metahers.ai",
     "logo": "https://metahers.ai/icon-512.png",
-    "sameAs": [
-      "https://twitter.com/metahers"
-    ]
   };
 
   return (
-    <div ref={containerRef} className="relative min-h-screen bg-background overflow-x-hidden">
+    <div className="relative bg-white">
       <SEO
-        title="Master AI & Web3 With Personal Mentorship - MetaHers Mind Spa"
-        description="Luxury learning for women solopreneurs, moms & creatives. Nine personalized learning spaces with AI coaching and real human support from founder Nadia. Start FREE—no credit card required."
-        keywords="AI for women solopreneurs, AI for busy moms, AI learning for women, women in AI, AI education for women, Web3 for women, personal mentorship, human-powered AI, luxury learning platform"
+        title="MetaHers Mind Spa - AI & Web3 For Women"
+        description="Step into the future. AI-powered rituals, Web3 mastery, and a sisterhood of women building extraordinary lives. Start your transformation today."
+        keywords="AI for women, Web3 for women, women in tech, AI education, digital transformation, vision board, manifestation"
         url="https://metahers.ai"
         schema={schema}
       />
 
-      {/* PREMIUM HERO - Streamlined Interactive */}
-      <div 
-        className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden bg-white"
-      >
-        {/* Animated background gradient orbs - kept subtle */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <motion.div
-            animate={{ y: [0, -20, 0], opacity: [0.3, 0.1, 0.3] }}
-            transition={{ duration: 8, repeat: Infinity }}
-            className="absolute -top-40 -left-40 w-80 h-80 bg-purple-200 rounded-full blur-3xl opacity-20"
-          />
-          <motion.div
-            animate={{ y: [0, 20, 0], opacity: [0.2, 0.05, 0.2] }}
-            transition={{ duration: 10, repeat: Infinity, delay: 1 }}
-            className="absolute -bottom-20 -right-40 w-96 h-96 bg-purple-300 rounded-full blur-3xl opacity-10"
-          />
-        </div>
-
-        <div className="relative z-10 max-w-4xl mx-auto w-full">
-          {/* Animated badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="flex justify-center mb-8"
-          >
-            <motion.div
-              animate={{ scale: [1, 1.05, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-50 border-2 border-purple-200 backdrop-blur-sm"
-            >
-              <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse" />
-              <span className="text-sm font-bold uppercase tracking-widest text-purple-600">AI & Web3 For Women</span>
-            </motion.div>
-          </motion.div>
-
-          {/* Simplified headline */}
-          <div className="text-center mb-12">
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-6 text-black">
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="block"
-              >
-                Master AI & Web3
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="block"
-              >
-                <span className="text-purple-600">For the Life You Want</span>
-              </motion.span>
-            </h1>
-            
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-lg sm:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto"
-            >
-              A curated community of women building their dreams with AI and Web3. No crypto jargon. No tech overwhelm. Just clarity, community, and real results.
-            </motion.p>
-          </div>
-
-          {/* CTA Buttons - Prominent */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
-          >
-            <motion.div className="relative">
-              {showCelebration && (
-                <>
-                  <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 2, opacity: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="absolute inset-0 bg-purple-400 rounded-lg"
-                  />
-                  {[...Array(12)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ x: 0, y: 0, opacity: 1 }}
-                      animate={{
-                        x: Math.cos((i / 12) * Math.PI * 2) * 100,
-                        y: Math.sin((i / 12) * Math.PI * 2) * 100 - 50,
-                        opacity: 0,
-                      }}
-                      transition={{ duration: 0.8 }}
-                      className="absolute top-1/2 left-1/2 w-2 h-2 bg-purple-600 rounded-full pointer-events-none"
-                    />
-                  ))}
-                </>
-              )}
-              
-              <motion.button
-                onClick={() => setLocation("/vision-board")}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                className="relative px-10 py-5 bg-purple-600 text-white font-bold text-lg uppercase tracking-wider rounded-lg flex items-center gap-3 shadow-xl"
-                data-testid="button-start-vision-board"
-              >
-                Start Vision Board
-                <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                  <ArrowRight className="w-5 h-5" />
-                </motion.span>
-              </motion.button>
-            </motion.div>
-            <motion.button
-              onClick={handleSignup}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-5 border-2 border-black text-black font-bold text-lg uppercase tracking-wider rounded-lg hover:bg-black hover:text-white transition-all"
-              data-testid="button-start-free"
-            >
-              Start Free
-            </motion.button>
-          </motion.div>
-
-          {/* Brief social proof - short and punchy */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="pt-12 border-t border-gray-200"
-          >
-            <p className="text-center text-sm font-bold uppercase tracking-wider text-gray-600 mb-8">What Women Are Seeing</p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                { stat: "2X", label: "Income in 3 Months", desc: "From $40/hr to $3K per project" },
-                { stat: "15+", label: "Hours Reclaimed Weekly", desc: "Saturday mornings back with family" },
-                { stat: "3", label: "New Revenue Streams", desc: "Reaching global audiences" }
-              ].map((item, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.1 }}
-                  className="p-6 rounded-xl bg-purple-50 border border-purple-200 text-center"
-                >
-                  <p className="text-3xl font-black text-purple-600 mb-2">{item.stat}</p>
-                  <p className="text-xs uppercase tracking-widest text-gray-700 font-bold mb-2">{item.label}</p>
-                  <p className="text-sm text-gray-600">{item.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* WHAT'S HAPPENING - The Wave Section */}
-      <div 
-        className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16 bg-white border-t-2 border-border/30"
-      >
-        <div className="relative max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="text-center mb-12">
-              <p className="text-sm uppercase tracking-widest text-purple-600 font-bold mb-4">What's Actually Happening Right Now</p>
-              <h2 className="text-4xl md:text-5xl font-semibold text-black mb-6">The Wave is Real</h2>
-              <p className="text-xl text-gray-700 leading-relaxed">Globally, women are waking up to what's changing. AI went from science fiction to your daily reality. Web3 went from "what is that?" to "where do I start?" Passive income went from impossible to accessible. And women like you are building NOW—not later. Not when they're "ready." NOW.</p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="p-8 bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 rounded-2xl">
-                <p className="text-5xl font-bold text-purple-600 mb-2">20+</p>
-                <p className="text-lg font-semibold text-black mb-2">Founding Members</p>
-                <p className="text-gray-700">Carefully selected women from diverse backgrounds and businesses. All deeply committed. All seeing real results.</p>
-              </div>
-              <div className="p-8 bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 rounded-2xl">
-                <p className="text-5xl font-bold text-purple-600 mb-2">54</p>
-                <p className="text-lg font-semibold text-black mb-2">Guided Experiences</p>
-                <p className="text-gray-700">AI, Web3, branding, income, community, leadership. Each one designed to help you move from "confused" to "oh I GET it" to "I'm doing this."</p>
-              </div>
-            </div>
-
-            <div className="bg-black text-white p-10 rounded-2xl text-center">
-              <p className="text-lg mb-4">Here's the thing: <span className="font-semibold">You already know something is changing.</span></p>
-              <p className="text-gray-300">You've felt it. You've wondered about it. You might even be scared to miss it. MetaHers doesn't ask you to become a tech expert or crypto guru. It shows you what's real, what's hype, and how women like you are building incredible lives with these tools.</p>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* REAL LIFE USE CASES - What This Actually Looks Like */}
-      <div className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-12"
-          >
-            <p className="text-sm uppercase tracking-widest text-purple-600 font-bold mb-4">What This Actually Looks Like</p>
-            <h2 className="text-4xl md:text-5xl font-semibold text-black mb-6">It's Not Just Business</h2>
-            <p className="text-xl text-gray-700 leading-relaxed">MetaHers is for the whole you. Your business AND your life.</p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { title: "Monday Morning", desc: "AI generates your week's meal plans (healthy, family-friendly, with shopping lists). You spend 10 minutes, not 3 hours." },
-              { title: "Workout Time", desc: "Personalized AI workout routines delivered daily. No gym membership guesswork. Fits into your actual schedule." },
-              { title: "Kids' Content", desc: "Create educational books, stories, activity guides for your kids using AI. Something to be proud of, something they'll remember." },
-              { title: "Accountability Crew", desc: "A curated community cheering you on. Real friendships. Real accountability. Weekly meetups, group challenges, support that matters." },
-              { title: "Income Alongside Life", desc: "Build business revenue without sacrificing family dinners. AI handles repetitive work. You focus on real value." },
-              { title: "New Friendships", desc: "Meet women in your exact situation. Solopreneurs, moms, creatives, artists. Network. Partner. Build together." }
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.08 }}
-                whileHover={{ scale: 1.05, y: -8, boxShadow: "0 25px 50px rgba(147,51,234,0.15)" }}
-                className="relative group p-8 bg-gradient-to-br from-white to-purple-50 border-2 border-purple-200 rounded-2xl overflow-hidden hover:shadow-2xl transition-all"
-              >
-                {/* Animated accent bar */}
-                <motion.div
-                  initial={{ scaleX: 0 }}
-                  whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.08 + 0.2 }}
-                  className="absolute top-0 left-0 h-1 bg-gradient-to-r from-purple-600 to-purple-400 origin-left"
-                />
-                
-                <motion.h3 className="relative z-10 text-xl font-bold text-black mb-3 group-hover:text-purple-600 transition-colors">{item.title}</motion.h3>
-                <motion.p className="relative z-10 text-gray-700 group-hover:text-gray-800 transition-colors">{item.desc}</motion.p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* JOURNAL + LEARNING EXPERIENCES - Integration Section */}
-      <div className="relative py-20 sm:py-32 px-4 sm:px-6 lg:px-16 bg-gradient-to-b from-white to-purple-50">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-black mb-4">Your Journal Becomes Your Breakthrough</h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              Complete a learning experience. Journal your transformation. Watch the insights compound over time.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            {/* Left: Learning Experience Flow */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="space-y-4"
-            >
-              <h3 className="text-2xl font-bold text-black mb-8">The Transformation Cycle</h3>
-              
-              {[
-                { num: "1", title: "Complete a Ritual", desc: "Engage with an AI or Web3 learning experience tailored to your goals" },
-                { num: "2", title: "Reflect & Journal", desc: "AI-powered prompts guide your reflection on what you learned and how it applies to your life" },
-                { num: "3", title: "See Patterns", desc: "Your journal builds over time—moods, insights, and breakthroughs become visible" },
-                { num: "4", title: "Unlock Growth", desc: "Track streaks, celebrate wins, and compound your transformation week by week" }
-              ].map((step, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.12 }}
-                  className="flex gap-6 p-6 bg-white border-2 border-purple-200 rounded-xl hover:shadow-lg transition-all group"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-400 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                      {step.num}
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-black mb-1 group-hover:text-purple-600 transition-colors">{step.title}</h4>
-                    <p className="text-sm text-gray-600">{step.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            {/* Right: Journal Stats Showcase */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="space-y-4"
-            >
-              <h3 className="text-2xl font-bold text-black mb-8">What Tracking Your Journey Reveals</h3>
-              
-              <motion.div
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="p-8 bg-gradient-to-br from-purple-600 to-purple-500 rounded-2xl text-white shadow-lg"
-              >
-                <p className="text-5xl font-black mb-2">47</p>
-                <p className="text-sm uppercase tracking-widest font-bold opacity-90">Days Consistent</p>
-                <p className="text-xs opacity-75 mt-4">Your current streak—keep the momentum going!</p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="p-8 bg-white border-2 border-purple-200 rounded-2xl"
-              >
-                <p className="text-4xl font-black text-purple-600 mb-2">12,847</p>
-                <p className="text-sm uppercase tracking-widest font-bold text-gray-700">Words Reflected</p>
-                <p className="text-xs text-gray-600 mt-4">Your thoughts, documented. Your journey, captured.</p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05, y: -5 }}
-                className="p-8 bg-white border-2 border-purple-200 rounded-2xl"
-              >
-                <div className="flex gap-4 mb-4">
-                  <div className="w-3 h-3 rounded-full bg-pink-500" />
-                  <div className="w-3 h-3 rounded-full bg-blue-500" />
-                  <div className="w-3 h-3 rounded-full bg-purple-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                </div>
-                <p className="text-sm uppercase tracking-widest font-bold text-gray-700">Mood Evolution</p>
-                <p className="text-xs text-gray-600 mt-2">Trending: More energized, more peaceful, more unstoppable</p>
-              </motion.div>
-            </motion.div>
-          </div>
-
-          {/* CTA to Start Journaling */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-center p-12 bg-white border-2 border-purple-300 rounded-2xl"
-          >
-            <p className="text-gray-700 mb-4 text-lg">Ready to compound your growth? Your first journal entry is waiting.</p>
-            <Button 
-              onClick={handleSignup}
-              className="bg-black hover:bg-gray-900 text-white font-bold uppercase tracking-wider px-8 py-3 rounded-lg"
-              data-testid="button-journal-cta"
-            >
-              Start Journaling Your Transformation
-            </Button>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* YOUR TRANSFORMATION AWAITS - Outcomes Section */}
-      <div 
-        className="relative py-16 sm:py-24 px-4 sm:px-6 lg:px-16 bg-gray-50"
-      >
-        
-        <div className="relative max-w-5xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <h2 className="text-3xl md:text-4xl font-semibold mb-4 text-black">Built for How Women Actually Live & Work</h2>
-            <p className="text-lg text-gray-600 mb-12 font-medium">Designed for moms, solopreneurs, creatives, and artists. Thrive professionally AND personally.</p>
-            
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="p-8 border-2 border-purple-200 bg-white hover:shadow-xl transition-shadow">
-                <Bot className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-3 text-black">AI Tools (That Actually Save Your Life)</h3>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li>✓ Content creation in 1/10 the time (for creators)</li>
-                  <li>✓ Email, admin, scheduling automated (for everyone)</li>
-                  <li>✓ Reclaim 10+ hours every week for what matters</li>
-                </ul>
-              </div>
-              
-              <div className="p-8 border-2 border-purple-200 bg-white hover:shadow-xl transition-shadow">
-                <Globe className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-3 text-black">The Future of Income (For Women)</h3>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li>✓ Multiple income streams (not just hourly work)</li>
-                  <li>✓ Passive & digital income explained simply</li>
-                  <li>✓ How women are building wealth RIGHT NOW</li>
-                </ul>
-              </div>
-              
-              <div className="p-8 border-2 border-purple-200 bg-white hover:shadow-xl transition-shadow">
-                <Crown className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-                <h3 className="font-semibold text-lg mb-3 text-black">Build Your Life on YOUR Terms</h3>
-                <ul className="space-y-2 text-sm text-gray-700">
-                  <li>✓ Business that works around your life (not vice versa)</li>
-                  <li>✓ Authority & influence in emerging spaces</li>
-                  <li>✓ Community of women figuring it out together</li>
-                </ul>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* AI SUPERIORITY SHOWCASE - Visual Demonstration of AI Power */}
-      <section className="relative py-32 px-6 lg:px-16 bg-gradient-to-b from-purple-50 via-white to-white overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 text-center"
-          >
-            <div className="inline-block mb-6">
-              <motion.div
-                animate={{ rotate: [0, 360] }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute -inset-4 bg-gradient-to-r from-purple-400 via-purple-600 to-purple-400 rounded-full opacity-20 blur-xl"
-              />
-              <div className="relative px-6 py-3 bg-white border-2 border-purple-300 rounded-full">
-                <span className="text-sm font-bold uppercase tracking-widest text-purple-600">Powered by Advanced AI</span>
-              </div>
-            </div>
-            <h2 className="text-5xl lg:text-6xl font-semibold mb-6 text-black">AI That Adapts to You</h2>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
-              Every recommendation, every prompt, every insight is personalized in real-time. This is what happens when AI understands your goals.
-            </p>
-          </motion.div>
-
-          {/* Interactive Comparison Grid */}
-          <div className="grid md:grid-cols-2 gap-8 mb-16">
-            {/* Traditional Approach */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="p-10 border-2 border-gray-300 rounded-2xl bg-white relative overflow-hidden"
-            >
-              <div className="absolute top-4 right-4 px-3 py-1 bg-gray-200 text-gray-700 text-xs font-bold uppercase rounded-full">Old Way</div>
-              <h3 className="text-2xl font-bold text-gray-700 mb-6">Manual & Time-Consuming</h3>
-              <ul className="space-y-3 text-gray-700">
-                <li className="flex items-start gap-3">
-                  <span className="text-lg text-gray-400 mt-1">✕</span>
-                  <span>Hours spent researching what to learn</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-lg text-gray-400 mt-1">✕</span>
-                  <span>Generic one-size-fits-all courses</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-lg text-gray-400 mt-1">✕</span>
-                  <span>No accountability or personalized feedback</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="text-lg text-gray-400 mt-1">✕</span>
-                  <span>Guessing which skills matter most</span>
-                </li>
-              </ul>
-            </motion.div>
-
-            {/* AI-Powered Approach */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="p-10 border-2 border-purple-400 rounded-2xl bg-gradient-to-br from-purple-50 to-white relative overflow-hidden shadow-lg"
-            >
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-purple-500/5 pointer-events-none"
-                animate={{ opacity: [0.3, 0.6, 0.3] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-              <div className="absolute top-4 right-4 px-3 py-1 bg-purple-600 text-white text-xs font-bold uppercase rounded-full">AI-Powered</div>
-              <h3 className="relative text-2xl font-bold bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent mb-6">Smart & Personalized</h3>
-              <ul className="space-y-3 relative text-gray-700">
-                <li className="flex items-start gap-3">
-                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity }} className="text-lg text-purple-600 mt-1">✓</motion.span>
-                  <span><span className="font-semibold text-purple-600">AI instantly understands</span> your goals and learning style</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity, delay: 0.2 }} className="text-lg text-purple-600 mt-1">✓</motion.span>
-                  <span><span className="font-semibold text-purple-600">Personalized journeys</span> that adapt week by week</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity, delay: 0.4 }} className="text-lg text-purple-600 mt-1">✓</motion.span>
-                  <span><span className="font-semibold text-purple-600">Real-time feedback</span> on your progress and insights</span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <motion.span animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1, repeat: Infinity, delay: 0.6 }} className="text-lg text-purple-600 mt-1">✓</motion.span>
-                  <span><span className="font-semibold text-purple-600">Predictive recommendations</span> show what you need next</span>
-                </li>
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* AI Performance Metrics with Animated Counters */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16"
-          >
-            {[
-              { metric: "10X", label: "Faster Learning Path Discovery", icon: "⚡" },
-              { metric: "99%", label: "Personalization Accuracy", icon: "🎯" },
-              { metric: "24/7", label: "Real-Time AI Coaching", icon: "🤖" },
-              { metric: "0ms", label: "Adaptation Latency", icon: "💨" }
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ scale: 1.08, y: -8 }}
-                className="p-6 bg-white border-2 border-purple-200 rounded-xl text-center cursor-pointer hover:shadow-xl transition-shadow"
-              >
-                <motion.div
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-                  className="text-4xl mb-3"
-                >
-                  {item.icon}
-                </motion.div>
-                <motion.p className="text-3xl font-black text-purple-600 mb-2">
-                  <motion.span
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ duration: 0.6 }}
-                  >
-                    {item.metric}
-                  </motion.span>
-                </motion.p>
-                <p className="text-sm font-semibold text-gray-700">{item.label}</p>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* How AI Makes It Happen */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="p-10 bg-black text-white rounded-2xl text-center relative overflow-hidden"
-          >
-            <motion.div
-              animate={{ opacity: [0.1, 0.2, 0.1] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="absolute inset-0 bg-gradient-to-r from-purple-600/20 via-transparent to-purple-600/20"
-            />
-            <div className="relative z-10">
-              <h3 className="text-3xl font-bold mb-4">The AI Learning Cycle</h3>
-              <p className="text-lg text-gray-300 mb-8 max-w-3xl mx-auto">
-                You complete a ritual → Journal your insights → AI analyzes patterns → Personalized next steps appear. Every interaction makes the system smarter about YOUR goals.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4 text-sm font-semibold">
-                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">🧠 Pattern Recognition</div>
-                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">📊 Real-Time Analysis</div>
-                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">🎯 Predictive Paths</div>
-                <div className="px-4 py-2 bg-purple-600/20 border border-purple-500 rounded-full">✨ Continuous Evolution</div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* VISION BOARD 2026 - Featured Experience */}
-      <section className="relative py-24 px-6 lg:px-16 bg-gradient-to-br from-purple-50 via-white to-purple-50">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="grid lg:grid-cols-2 gap-12 items-center"
-          >
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-px w-12 bg-purple-600" />
-                <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
-                  New for 2026
-                </span>
-              </div>
-              <h2 className="text-4xl lg:text-5xl font-semibold mb-6 text-black">
-                Vision Board<br />
-                <span className="text-purple-600">Builder</span>
-              </h2>
-              <p className="text-lg text-gray-700 leading-relaxed mb-8">
-                An AI-powered, self-guided experience to clarify your dreams, set powerful intentions, 
-                and connect with women who share your aspirations. Your AI Muse creates personalized 
-                vision tiles across 7 life dimensions.
-              </p>
-              <div className="flex flex-wrap gap-3 mb-8">
-                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">AI-Powered</span>
-                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">7 Life Dimensions</span>
-                <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm font-medium">Vision Sisters Matching</span>
-              </div>
-              <Link href="/vision-board">
-                <Button 
-                  size="lg" 
-                  className="bg-black hover:bg-gray-900 text-white uppercase tracking-wider px-8"
-                  data-testid="button-vision-board-cta"
-                >
-                  Create Your 2026 Vision
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-            <div className="relative">
-              <div className="bg-white rounded-2xl shadow-xl p-8 border border-purple-100">
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  {["Career", "Wealth", "Wellness"].map((dim, i) => (
-                    <div key={dim} className="p-4 bg-purple-50 rounded-xl text-center">
-                      <div className="w-10 h-10 mx-auto mb-2 bg-purple-100 rounded-lg flex items-center justify-center">
-                        <Sparkles className="w-5 h-5 text-purple-600" />
-                      </div>
-                      <p className="text-sm font-medium text-gray-700">{dim}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="text-center py-6 border-t border-purple-100">
-                  <p className="text-2xl font-bold text-purple-600 mb-2">Your Word for 2026</p>
-                  <p className="text-gray-500 text-sm">Set your intention and watch it come to life</p>
-                </div>
-              </div>
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute -top-4 -right-4 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg"
-              >
-                Free Access
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* NINE LEARNING SPACES - Enhanced Editorial Grid (From MetaHersWorldPage) */}
-      <section className="relative py-32 px-6 lg:px-16 bg-white">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Header with Filter */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-16"
-          >
-            <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-12">
-              <div className="max-w-3xl">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-px w-12 bg-purple-600" />
-                  <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
-                    Choose Your Sanctuary
-                  </span>
-                </div>
-                <h2 className="text-5xl lg:text-7xl font-semibold mb-6 text-black">
-                  Nine Learning<br />Spaces
-                </h2>
-                <p className="text-xl text-gray-700 leading-relaxed">
-                  54 guided experiences to grow your income, save time, and build the business life you actually want
-                </p>
-              </div>
-
-              {/* Filter Tabs */}
-              <div className="flex gap-2 bg-white border border-gray-200 rounded-lg p-1">
-                {[
-                  { value: 'all', label: 'All Spaces', count: totalSpacesCount },
-                  { value: 'free', label: 'Free', count: freeSpacesCount },
-                  { value: 'pro', label: 'PRO', count: lockedSpacesCount }
-                ].map((tab) => (
-                  <button
-                    key={tab.value}
-                    onClick={() => setFilter(tab.value as typeof filter)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      filter === tab.value
-                        ? 'bg-purple-600 text-white shadow-lg'
-                        : 'text-gray-700 hover:bg-gray-100'
-                    }`}
-                    data-testid={`filter-${tab.value}`}
-                  >
-                    {tab.label} ({tab.count})
-                  </button>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Enhanced Space Cards Grid */}
-          <AnimatePresence mode="wait">
-            <motion.div 
-              key={filter}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              {spacesLoading || experiencesLoading ? (
-                <>
-                  <SpaceCardSkeleton />
-                  <SpaceCardSkeleton />
-                  <SpaceCardSkeleton />
-                </>
-              ) : (
-                filteredSpaces
-                  .sort((a, b) => a.sortOrder - b.sortOrder)
-                  .map((space, index) => {
-                    const valueProp = SPACE_VALUE_PROPS[space.slug] || { 
-                      outcomes: ["Master core concepts", "Build practical skills", "Transform your career"], 
-                      experienceCount: 6, 
-                      highlight: "Learning Path" 
-                    };
-                    const spaceExperiences = experiences.filter(e => e.spaceId === space.id);
-                    const freeExperiencesCount = spaceExperiences.filter(e => e.tier === 'free').length;
-                    const actualExperienceCount = spaceExperiences.length;
-
-                    const SpaceIcon = 
-                      space.name === "AI" ? Bot :
-                      space.name === "Web3" ? Globe :
-                      space.name === "NFT/Blockchain/Crypto" ? Gem :
-                      space.name === "Metaverse" ? CompassIcon :
-                      space.name === "Branding" ? Palette :
-                      space.name === "Moms" ? Heart :
-                      space.name === "App Atelier" ? Code2 :
-                      space.name === "Founder's Club" ? Crown :
-                      space.name === "Digital Boutique" ? ShoppingCart :
-                      Sparkles;
-
-                    return (
-                      <motion.div
-                        key={space.id}
-                        initial={{ opacity: 0, y: 40 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 0.5, delay: index * 0.08 }}
-                        className="group relative"
-                        data-testid={`space-card-${space.slug}`}
-                      >
-                        <button
-                          onClick={() => {
-                            if (spaceExperiences.length > 0 && spaceExperiences[0].slug) {
-                              setLocation(`/experiences/${spaceExperiences[0].slug}`);
-                            }
-                          }}
-                          className="w-full text-left focus:outline-none focus-visible:ring-4 focus-visible:ring-purple-600 focus-visible:ring-offset-2 rounded-2xl"
-                        >
-                          <div className="rounded-2xl overflow-hidden border border-gray-200 hover-elevate active-elevate-2 transition-all duration-500 h-full flex flex-col bg-white shadow-lg shadow-gray-100 group-hover:shadow-xl group-hover:shadow-gray-200">
-                            {/* Header Image */}
-                            {spaceImages[space.slug] && (
-                              <div className="relative w-full aspect-[4/3] overflow-hidden">
-                                <img
-                                  src={spaceImages[space.slug].src}
-                                  alt={spaceImages[space.slug].alt}
-                                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                                  loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity duration-500" />
-                                
-                                {/* Floating Badges */}
-                                <div className="absolute top-4 left-4 flex gap-2">
-                                  {valueProp.highlight && (
-                                    <Badge className="bg-purple-600/80 text-white font-semibold">
-                                      {valueProp.highlight}
-                                    </Badge>
-                                  )}
-                                  {freeExperiencesCount > 0 && (
-                                    <Badge className="bg-emerald-500/80 text-white font-semibold">
-                                      {freeExperiencesCount} Free
-                                    </Badge>
-                                  )}
-                                </div>
-
-                                {/* Experience Count */}
-                                <div className="absolute bottom-4 right-4 bg-black/50 rounded-lg px-3 py-1.5 border border-white/20">
-                                  <div className="flex items-center gap-2 text-white">
-                                    <BookOpen className="w-4 h-4" />
-                                    <span className="text-sm font-semibold">{actualExperienceCount} Experiences</span>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Card Content */}
-                            <div className="p-7 flex flex-col flex-1 relative">
-                              <div className="relative z-10">
-                                {/* Title & Icon */}
-                                <div className="flex items-start justify-between mb-5">
-                                  <div className="flex-1">
-                                    <h3 className="font-semibold text-2xl lg:text-3xl text-black group-hover:text-purple-600 transition-colors duration-300 mb-3 leading-tight">
-                                      {space.name}
-                                    </h3>
-                                    <p className="text-sm text-gray-700 line-clamp-2 leading-relaxed">
-                                      {space.description}
-                                    </p>
-                                  </div>
-                                  <div className="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center border border-purple-200 flex-shrink-0 ml-4 shadow-lg shadow-purple-100 group-hover:shadow-xl group-hover:scale-105 transition-all duration-500">
-                                    <SpaceIcon className="w-7 h-7 text-purple-600 group-hover:scale-110 transition-transform duration-500" />
-                                  </div>
-                                </div>
-
-                                {/* Learning Outcomes */}
-                                <div className="flex-1 mb-5">
-                                  <h4 className="text-[10px] uppercase tracking-widest text-gray-700 font-bold mb-4">You'll Master:</h4>
-                                  <ul className="space-y-2.5">
-                                    {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
-                                      <li key={i} className="flex items-start gap-2.5 text-sm text-gray-700 group/item">
-                                        <CheckCircle2 className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5 group-hover/item:scale-110 transition-transform duration-300" />
-                                        <span className="leading-snug">{outcome}</span>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-
-                                {/* CTA Footer */}
-                                <div className="pt-5 border-t border-gray-200">
-                                  <div className="flex items-center justify-between group/cta">
-                                    <span className="text-sm font-bold text-purple-600 group-hover/cta:tracking-wide transition-all duration-300">
-                                      Start Learning
-                                    </span>
-                                    <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center border border-purple-200 group-hover:bg-purple-100 transition-all duration-300">
-                                      <ArrowRight className="w-5 h-5 text-purple-600 group-hover:translate-x-1 transition-transform duration-300" />
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </button>
-                      </motion.div>
-                    );
-                  })
-              )}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </section>
-
-      {/* MEMBERSHIP TIERS - Clean Modern Layout */}
-      <div 
-        className="relative py-16 sm:py-32 lg:py-40 px-4 sm:px-6 lg:px-16 bg-white"
-      >
-        
-        <div className="relative max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-24"
-          >
-            <h2 className="text-5xl lg:text-6xl font-semibold mb-6 text-black tracking-tight">
-              Simple <span className="text-purple-600">Pricing</span>
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Start free. Upgrade when you're ready. No hidden fees.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Free Tier */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="rounded-lg p-12 border border-gray-200 bg-white hover:shadow-lg transition-all duration-300"
-            >
-              <div className="mb-10">
-                <h3 className="text-5xl font-semibold mb-4 text-black">Free Forever</h3>
-                <p className="text-gray-600 text-lg leading-relaxed">
-                  54 transformational rituals, personalized AI coaching, and direct access to Nadia.
-                </p>
-              </div>
-              <motion.button
-                onClick={handleSignup}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="w-full px-8 py-4 bg-black text-white font-medium text-lg uppercase tracking-wider hover:bg-gray-900 transition-all"
-                data-testid="button-start-free-tier"
-              >
-                Start Free
-              </motion.button>
-            </motion.div>
-
-            {/* Pro Tier - Premium */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="rounded-lg p-12 border-2 border-purple-600 relative overflow-hidden bg-white hover:shadow-lg transition-all duration-300"
-            >
-              {/* Exclusive Badge */}
-              <div className="absolute top-6 right-6">
-                <Badge className="bg-purple-600 text-white border-0 px-5 py-2 text-xs font-bold uppercase tracking-wider">
-                  Most Popular
-                </Badge>
-              </div>
-
-              <div className="mb-10">
-                <h3 className="text-5xl font-semibold mb-4 text-black">Ultimate Bundle</h3>
-                <p className="text-gray-600 text-lg leading-relaxed">
-                  All 54 rituals, advanced tools, thought leadership journey, priority support + exclusive group sessions.
-                </p>
-              </div>
-              <motion.button
-                onClick={() => window.location.href = "/upgrade"}
-                whileHover={{ scale: 1.03 }}
-                whileTap={{ scale: 0.97 }}
-                className="w-full px-8 py-4 bg-purple-600 text-white font-medium text-lg uppercase tracking-wider hover:bg-purple-700 transition-all"
-                data-testid="button-upgrade-pro"
-              >
-                Unlock Ultimate Bundle
-              </motion.button>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-
-      {/* MEET NADIA - Editorial Feature Story */}
-      <div 
-        className="relative py-40 px-6 lg:px-16 overflow-hidden bg-gray-50"
-      >
-        
-        <div className="relative max-w-7xl mx-auto">
-          {/* Section Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="mb-20 max-w-3xl"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-px w-12 bg-purple-600" />
-              <span className="text-sm uppercase tracking-widest text-gray-600 font-medium">
-                Human-Powered AI
-              </span>
-            </div>
-            <h2 className="text-5xl lg:text-6xl font-semibold mb-6 text-black">
-              Meet Nadia
-            </h2>
-            <p className="text-xl text-gray-600 leading-relaxed">
-              Your personal guide. Text or call me anytime you need motivation—no extra charge.
-            </p>
-          </motion.div>
-
-          {/* Editorial Layout - Asymmetric */}
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Large Editorial Photo */}
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <div className="editorial-image relative rounded-lg overflow-hidden border border-card-border shadow-2xl">
-                <img 
-                  src={nadiaPhoto} 
-                  alt="Nadia - Founder of MetaHers, holding Join MetaHers sign in luxury purple dress" 
-                  className="w-full h-auto object-cover"
-                />
-                {/* Subtle overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
-              </div>
-
-              {/* Floating Badge - Kinetic Glass */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.3 }}
-                className="absolute -bottom-6 -right-6 kinetic-glass px-8 py-5 rounded-2xl border border-card-border shadow-2xl"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
-                    <Phone className="w-6 h-6 text-purple-400" />
-                  </div>
-                  <div>
-                    <p className="font-bold text-lg">Free Personal Calls</p>
-                    <p className="text-foreground text-sm">Text or Call Anytime</p>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Story Content */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="space-y-8"
-            >
-              {/* Pull Quote Style */}
-              <div className="space-y-4">
-                <p className="text-2xl font-semibold leading-relaxed text-black">
-                  I'm Nadia "The Mompreneur." I built MetaHers because I remember what it's like to be a beginner.
-                </p>
-              </div>
-
-              {/* Bio Card */}
-              <div className="rounded-lg p-8 border border-gray-200 bg-white">
-                <p className="text-lg leading-relaxed text-gray-700">
-                  <span className="font-semibold">CS degree + MBA + Cornell Blockchain certified.</span> Fluent in English, French & Arabic. Former Hotel GM turned Web3 educator.
-                </p>
-              </div>
-
-              {/* Human-Powered Difference */}
-              <div className="rounded-lg p-8 border border-gray-200 bg-white">
-                <div className="flex items-center gap-3 mb-4">
-                  <MessageCircle className="w-6 h-6 text-purple-600" />
-                  <h3 className="text-xl font-semibold text-black">The Human-Powered Difference</h3>
-                </div>
-                <p className="text-gray-700 leading-relaxed">
-                  Unlike AI-only platforms, you get <span className="font-semibold">direct access to me</span>. Call or text when you're stuck. No chatbots, no waiting. Just real human support from someone who remembers being a beginner in 2020.
-                </p>
-              </div>
-
-              {/* CTA */}
-              <button
-                onClick={handleSignup}
-                className="w-full px-12 py-5 bg-purple-600 text-white font-medium text-lg uppercase tracking-wider hover:bg-purple-700 transition-all"
-                data-testid="button-meet-nadia"
-              >
-                Start Your Journey
-              </button>
-            </motion.div>
-          </div>
-        </div>
-      </div>
-
-      {/* Chatbot Popup */}
-      <ChatbotPopup />
-
+      {!prefersReducedMotion && <MouseGlow />}
+      
+      <ImmersiveHero onNavigate={handleNavigate} />
+      <VisionBoardShowcase onNavigate={handleNavigate} />
+      <FounderStory />
+      <TransformationProof />
+      <FinalCTA onNavigate={handleNavigate} />
+      <Footer />
     </div>
   );
 }
