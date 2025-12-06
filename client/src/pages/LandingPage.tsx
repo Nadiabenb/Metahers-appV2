@@ -508,7 +508,7 @@ function FounderSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="absolute -bottom-6 -right-6 p-8 border"
+              className="absolute -bottom-6 -right-6 p-8 border z-10"
               style={{ 
                 background: LAVENDER,
                 borderColor: LAVENDER,
