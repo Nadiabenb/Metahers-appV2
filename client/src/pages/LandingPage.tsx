@@ -5,9 +5,12 @@ import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import { useRef, useState, useEffect, useMemo } from "react";
 import { Link, useLocation } from "wouter";
 
-const GOLD = "#D4AF37";
-const GOLD_LIGHT = "#F4E4BA";
-const CHAMPAGNE = "#F7E7CE";
+// MetaHers Brand Colors
+const LAVENDER = "#D8BFD8";    // Soft lavender for accent text
+const LAVENDER_LIGHT = "#E8D8E8";
+const PINK = "#E879F9";         // Bright pink/magenta for icons
+const DARK_BG = "#0D0B14";      // Purple-tinted dark background
+const DARK_CARD = "#1A1625";    // Elevated card background
 
 function FloatingParticle({ delay = 0, duration = 20 }: { delay?: number; duration?: number }) {
   const randomX = useMemo(() => Math.random() * 100, []);
@@ -22,7 +25,7 @@ function FloatingParticle({ delay = 0, duration = 20 }: { delay?: number; durati
         height: size,
         left: `${randomX}%`,
         top: `${randomY}%`,
-        background: `linear-gradient(135deg, ${GOLD} 0%, ${CHAMPAGNE} 100%)`,
+        background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
       }}
       animate={{
         y: [0, -100, 0],
@@ -45,7 +48,7 @@ function AmbientGlow() {
       <motion.div
         className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
         style={{
-          background: `radial-gradient(circle, ${GOLD}08 0%, transparent 70%)`,
+          background: `radial-gradient(circle, ${PINK}08 0%, transparent 70%)`,
           filter: 'blur(80px)',
         }}
         animate={{
@@ -57,7 +60,7 @@ function AmbientGlow() {
       <motion.div
         className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
-          background: `radial-gradient(circle, ${GOLD}06 0%, transparent 70%)`,
+          background: `radial-gradient(circle, ${LAVENDER}06 0%, transparent 70%)`,
           filter: 'blur(100px)',
         }}
         animate={{
@@ -97,7 +100,7 @@ function CursorGlow() {
     <motion.div
       className="fixed w-80 h-80 rounded-full pointer-events-none z-0"
       style={{
-        background: `radial-gradient(circle, ${GOLD}10 0%, transparent 70%)`,
+        background: `radial-gradient(circle, ${PINK}10 0%, transparent 70%)`,
         x: mouseX,
         y: mouseY,
         translateX: "-50%",
@@ -158,11 +161,11 @@ function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
                     animate={{ rotate: 360 }}
                     transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
                   >
-                    <Crown className="w-5 h-5" style={{ color: GOLD }} />
+                    <Crown className="w-5 h-5" style={{ color: PINK }} />
                   </motion.div>
                   <span 
                     className="text-sm font-light tracking-[0.3em] uppercase"
-                    style={{ color: GOLD_LIGHT }}
+                    style={{ color: LAVENDER_LIGHT }}
                   >
                     Private Membership
                   </span>
@@ -192,7 +195,7 @@ function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
                   className="block text-4xl sm:text-5xl lg:text-7xl font-light mt-4 italic"
                   style={{ 
                     fontFamily: 'Playfair Display, serif',
-                    color: GOLD,
+                    color: LAVENDER,
                   }}
                 >
                   Mind Spa
@@ -206,9 +209,9 @@ function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
                 className="mb-8"
               >
                 <div className="flex items-center justify-center gap-4 mb-6">
-                  <div className="w-16 h-px" style={{ background: `linear-gradient(90deg, transparent, ${GOLD}40)` }} />
-                  <Star className="w-4 h-4" style={{ color: GOLD }} />
-                  <div className="w-16 h-px" style={{ background: `linear-gradient(90deg, ${GOLD}40, transparent)` }} />
+                  <div className="w-16 h-px" style={{ background: `linear-gradient(90deg, transparent, ${LAVENDER}40)` }} />
+                  <Star className="w-4 h-4" style={{ color: PINK }} />
+                  <div className="w-16 h-px" style={{ background: `linear-gradient(90deg, ${LAVENDER}40, transparent)` }} />
                 </div>
                 <p 
                   className="text-xl sm:text-2xl font-extralight tracking-wide max-w-2xl mx-auto"
@@ -230,7 +233,7 @@ function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
                   whileTap={{ scale: 0.98 }}
                   className="group relative px-12 py-5 overflow-hidden"
                   style={{
-                    background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_LIGHT} 50%, ${GOLD} 100%)`,
+                    background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 50%, ${PINK} 100%)`,
                     color: '#0A0A0A',
                   }}
                   data-testid="button-start-vision-board"
@@ -243,7 +246,7 @@ function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
 
                 <motion.button
                   onClick={() => onNavigate("/signup")}
-                  whileHover={{ scale: 1.02, borderColor: GOLD }}
+                  whileHover={{ scale: 1.02, borderColor: LAVENDER }}
                   whileTap={{ scale: 0.98 }}
                   className="px-12 py-5 border font-light text-sm uppercase tracking-[0.2em] transition-all"
                   style={{ 
@@ -290,7 +293,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
     <section 
       ref={ref} 
       className="relative min-h-screen flex items-center py-32 px-6 lg:px-16 overflow-hidden"
-      style={{ background: '#0D0D0D' }}
+      style={{ background: DARK_CARD }}
       data-testid="section-vision-board"
     >
       <AmbientGlow />
@@ -312,11 +315,11 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
                 animate={{ rotate: [0, 360] }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
               >
-                <Gem className="w-5 h-5" style={{ color: GOLD }} />
+                <Gem className="w-5 h-5" style={{ color: PINK }} />
               </motion.div>
               <span 
                 className="text-sm uppercase tracking-[0.3em] font-light"
-                style={{ color: GOLD_LIGHT }}
+                style={{ color: LAVENDER_LIGHT }}
               >
                 Complimentary Experience
               </span>
@@ -331,7 +334,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
               }}
             >
               Your 2026
-              <span className="block italic" style={{ color: GOLD }}>Vision Board</span>
+              <span className="block italic" style={{ color: PINK }}>Vision Board</span>
             </h2>
             
             <p 
@@ -349,7 +352,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={isInView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
-                  whileHover={{ scale: 1.05, borderColor: GOLD }}
+                  whileHover={{ scale: 1.05, borderColor: LAVENDER }}
                   className="px-5 py-3 text-sm font-light tracking-wider border transition-all cursor-default"
                   style={{ 
                     borderColor: 'rgba(255,255,255,0.15)',
@@ -368,7 +371,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
               whileHover={{ x: 10 }}
               whileTap={{ scale: 0.98 }}
               className="group flex items-center gap-4 text-lg font-light tracking-wide"
-              style={{ color: GOLD }}
+              style={{ color: PINK }}
               data-testid="button-vision-board-explore"
             >
               <span>Enter the Experience</span>
@@ -403,7 +406,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
                     transition={{ duration: 0.5, delay: 0.6 + i * 0.1 }}
                     whileHover={{ 
                       scale: 1.05,
-                      borderColor: GOLD,
+                      borderColor: LAVENDER,
                     }}
                     className="aspect-square flex flex-col items-center justify-center p-4 cursor-pointer border transition-all"
                     style={{ 
@@ -412,7 +415,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
                     }}
                     data-testid={`card-dimension-preview-${dim.toLowerCase()}`}
                   >
-                    <Sparkles className="w-6 h-6 mb-3" style={{ color: GOLD }} />
+                    <Sparkles className="w-6 h-6 mb-3" style={{ color: PINK }} />
                     <span 
                       className="text-xs font-light text-center uppercase tracking-widest"
                       style={{ color: 'rgba(255,255,255,0.8)' }}
@@ -434,7 +437,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
                   className="text-xl mb-1"
                   style={{ 
                     fontFamily: 'Playfair Display, serif',
-                    color: GOLD,
+                    color: LAVENDER,
                     fontStyle: 'italic',
                   }}
                 >
@@ -454,7 +457,7 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
               transition={{ duration: 3, repeat: Infinity }}
               className="absolute -top-4 -right-4 px-6 py-3 text-sm font-medium uppercase tracking-wider"
               style={{ 
-                background: GOLD,
+                background: PINK,
                 color: '#0A0A0A',
               }}
             >
@@ -475,7 +478,7 @@ function FounderSection() {
     <section 
       ref={ref} 
       className="relative min-h-screen flex items-center py-32 px-6 lg:px-16 overflow-hidden"
-      style={{ background: '#080808' }}
+      style={{ background: DARK_BG }}
       data-testid="section-founder"
     >
       <div className="relative max-w-7xl mx-auto w-full">
@@ -507,8 +510,8 @@ function FounderSection() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="absolute -bottom-6 -right-6 p-8 border"
               style={{ 
-                background: '#0A0A0A',
-                borderColor: GOLD,
+                background: DARK_BG,
+                borderColor: LAVENDER,
               }}
             >
               <p 
@@ -522,7 +525,7 @@ function FounderSection() {
               </p>
               <p 
                 className="text-sm uppercase tracking-[0.2em]"
-                style={{ color: GOLD }}
+                style={{ color: PINK }}
               >
                 Founder & Visionary
               </p>
@@ -537,7 +540,7 @@ function FounderSection() {
           >
             <p 
               className="text-sm uppercase tracking-[0.3em] mb-8"
-              style={{ color: GOLD }}
+              style={{ color: PINK }}
             >
               The Invitation
             </p>
@@ -551,7 +554,7 @@ function FounderSection() {
               }}
             >
               "I built this sanctuary for the woman{' '}
-              <span className="italic" style={{ color: GOLD }}>
+              <span className="italic" style={{ color: PINK }}>
                 I once needed to find."
               </span>
             </h2>
@@ -592,7 +595,7 @@ function FounderSection() {
                       className="text-4xl mb-2"
                       style={{ 
                         fontFamily: 'Playfair Display, serif',
-                        color: GOLD,
+                        color: LAVENDER,
                       }}
                       data-testid={`text-stat-value-${stat.id}`}
                     >
@@ -647,7 +650,7 @@ function TransformationSection() {
     <section 
       ref={ref} 
       className="relative py-32 px-6 lg:px-16"
-      style={{ background: '#0D0D0D' }}
+      style={{ background: DARK_CARD }}
       data-testid="section-transformation"
     >
       <div className="max-w-7xl mx-auto">
@@ -659,7 +662,7 @@ function TransformationSection() {
         >
           <p 
             className="text-sm uppercase tracking-[0.3em] mb-6"
-            style={{ color: GOLD }}
+            style={{ color: PINK }}
           >
             Member Transformations
           </p>
@@ -671,7 +674,7 @@ function TransformationSection() {
               fontWeight: 300,
             }}
           >
-            Real Results, <span className="italic" style={{ color: GOLD }}>Real Women</span>
+            Real Results, <span className="italic" style={{ color: PINK }}>Real Women</span>
           </h2>
         </motion.div>
 
@@ -684,7 +687,7 @@ function TransformationSection() {
               transition={{ duration: 0.8, delay: i * 0.2 }}
               whileHover={{ 
                 y: -10,
-                borderColor: GOLD,
+                borderColor: LAVENDER,
               }}
               className="relative p-10 border transition-all duration-500"
               style={{ 
@@ -698,7 +701,7 @@ function TransformationSection() {
                   className="text-6xl mb-2"
                   style={{ 
                     fontFamily: 'Playfair Display, serif',
-                    color: GOLD,
+                    color: LAVENDER,
                   }}
                 >
                   {item.stat}
@@ -721,7 +724,7 @@ function TransformationSection() {
               <div className="flex items-center gap-4">
                 <div 
                   className="w-12 h-12 flex items-center justify-center"
-                  style={{ background: GOLD }}
+                  style={{ background: PINK }}
                 >
                   <span 
                     className="font-semibold text-lg"
@@ -756,7 +759,7 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
     <section 
       ref={ref} 
       className="relative min-h-screen flex items-center justify-center py-32 px-6 lg:px-16 overflow-hidden"
-      style={{ background: '#0A0A0A' }}
+      style={{ background: DARK_BG }}
       data-testid="section-final-cta"
     >
       <AmbientGlow />
@@ -778,7 +781,7 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
           transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           className="inline-block mb-10"
         >
-          <Crown className="w-12 h-12" style={{ color: GOLD }} />
+          <Crown className="w-12 h-12" style={{ color: PINK }} />
         </motion.div>
         
         <h2 
@@ -790,7 +793,7 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
           }}
         >
           Your Future Self
-          <span className="block italic mt-2" style={{ color: GOLD }}>Is Already Here</span>
+          <span className="block italic mt-2" style={{ color: PINK }}>Is Already Here</span>
         </h2>
         
         <p 
@@ -808,7 +811,7 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
             whileTap={{ scale: 0.98 }}
             className="group px-14 py-6 flex items-center gap-4"
             style={{
-              background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_LIGHT} 50%, ${GOLD} 100%)`,
+              background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 50%, ${PINK} 100%)`,
               color: '#0A0A0A',
             }}
             data-testid="button-final-cta-vision"
@@ -839,7 +842,7 @@ function Footer() {
     <footer 
       className="py-16 px-6 lg:px-16 border-t"
       style={{ 
-        background: '#080808',
+        background: '#090712',
         borderColor: 'rgba(255,255,255,0.1)',
       }}
     >
@@ -853,7 +856,7 @@ function Footer() {
                 color: '#FFFFFF',
               }}
             >
-              MetaHers <span className="italic" style={{ color: GOLD }}>Mind Spa</span>
+              MetaHers <span className="italic" style={{ color: PINK }}>Mind Spa</span>
             </p>
             <p 
               className="text-sm font-light"
@@ -926,7 +929,7 @@ export default function LandingPage() {
       
       <CursorGlow />
       
-      <main className="relative overflow-hidden" style={{ background: '#0A0A0A' }}>
+      <main className="relative overflow-hidden" style={{ background: DARK_BG }}>
         <HeroSection onNavigate={handleNavigate} />
         <VisionBoardSection onNavigate={handleNavigate} />
         <FounderSection />
