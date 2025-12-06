@@ -23,45 +23,28 @@ export function Navigation() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   const menuSections = {
-    "Featured": {
+    "Your Journey": {
       icon: Sparkles,
       items: [
         ...(isAuthenticated ? [
           { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, desc: "Your personalized hub" },
         ] : []),
-        { path: "/retreat", label: "Free AI Retreat", icon: Sparkles, desc: "Join our community" },
-        { path: "/world", label: "MetaHers World", icon: Globe, desc: "Digital hub" },
-        { path: "/founders-sanctuary", label: "Founder's Sanctuary", icon: Crown, desc: "Premium space" },
+        { path: "/vision-board", label: "Vision Board", icon: Sparkles, desc: "Free entry point" },
       ],
     },
-    "AI & Tools": {
-      icon: TrendingUp,
-      items: [
-        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "AI Mastery curriculum", pro: true },
-        { path: "/playground", label: "AI Playground", icon: Sparkles, desc: "Explore AI" },
-        { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "Master AI tools" },
-        { path: "/ai-glow-up-program", label: "AI Glow-Up", icon: TrendingUp, desc: "Transform yourself", pro: true },
-        { path: "/career-path", label: "Career Path Generator", icon: Target, desc: "Plan your path" },
-        { path: "/companion", label: "AI Companion", icon: MessageSquare, desc: "Chat & learn" },
-      ],
-    },
-    "Learn & Grow": {
+    "Core Membership": {
       icon: BookOpen,
       items: [
-        { path: "/discover", label: "Discover", icon: Compass, desc: "Explore content" },
-        { path: "/vision-board", label: "Vision Board 2026", icon: Sparkles, desc: "Create your vision" },
-        { path: "/rituals", label: "Rituals", icon: Zap, desc: "Transform daily" },
-        { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build apps" },
-        { path: "/blog", label: "Blog & Resources", icon: BookOpen, desc: "Read insights" },
+        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "9 Worlds curriculum", pro: true },
+        { path: "/metamuse", label: "MetaMuse AI", icon: Sparkles, desc: "Your AI companion", pro: true },
+        { path: "/journal", label: "Journal", icon: Edit3, desc: "Track your growth", pro: true },
       ],
     },
-    "Community": {
-      icon: Users,
+    "Premium Cohort": {
+      icon: Crown,
       items: [
-        { path: "/circle", label: "Circle", icon: Users, desc: "Connect with others" },
-        { path: "/shop", label: "Shop", icon: ShoppingBag, desc: "Browse products" },
-        { path: "/retro-camera", label: "Retro Camera", icon: Camera, desc: "Capture moments" },
-        { path: "/vip-cohort", label: "VIP Cohort", icon: Crown, desc: "Exclusive access" },
+        { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "12-week intensive", pro: true },
+        { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build with AI", pro: true },
       ],
     },
   };

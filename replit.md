@@ -145,6 +145,18 @@ public/
 
 ## Recent Changes
 
+### December 6, 2024 - 3-Tier Journey Reorganization
+1. ✅ **Navigation Restructured** - Simplified to show only the 3-tier path:
+   - Your Journey (Vision Board - free entry)
+   - Core Membership (Learning Hub, MetaMuse, Journal - members only)
+   - Premium Cohort (AI Mastery, App Atelier - premium only)
+2. ✅ **Landing Page Enhanced** - Added PricingTierSection with:
+   - Vision Discovery ($0) - AI-powered Vision Board ritual
+   - Core Membership ($79/mo) - Learning Hub + 9 Worlds + community
+   - AI Mastery Cohort ($699) - 12-week intensive + App Atelier
+3. ✅ **Feature Consolidation** - 40+ scattered features mapped into cohesive 3-tier structure
+4. ✅ **Vision Board Fixed** - Database migration completed, feature now fully functional
+
 ### November 27, 2024 - App Store Preparation
 1. ✅ Created comprehensive Privacy Policy page
 2. ✅ Created Terms of Service page
@@ -349,18 +361,25 @@ npm run build -- --report-compressed
 
 ---
 
-## Next Steps for App Store Submission
+## Next Steps for Growth
 
-1. ✅ Create legal pages (Privacy/Terms)
-2. ✅ Add accessibility features
-3. ✅ Set up error handling
-4. ⏳ **Generate App Store screenshots**
-5. ⏳ **Create marketing copy**
-6. ⏳ **Test on real iPhone**
-7. ⏳ **Submit to TestFlight**
-8. ⏳ **Submit to App Review**
+### Immediate Priorities (Tier 1)
+1. ✅ **3-Tier Journey Architecture** - Complete and live
+2. ⏳ **Archive Legacy Pages** - Hide GlowUp, Circle messaging, Events from nav (keep routes for direct URLs)
+3. ⏳ **Membership Onboarding** - Create guided signup flow for each tier
+4. ⏳ **Cohort Curriculum** - Build 12-week AI Mastery program content
+
+### Content & Marketing (Tier 2)
+5. ⏳ Generate App Store screenshots
+6. ⏳ Create marketing copy for each tier
+7. ⏳ Build email sequences for each journey stage
+
+### Technical (Tier 3)
+8. ⏳ Test on real iPhone
+9. ⏳ Submit to TestFlight
+10. ⏳ Submit to App Review
 
 ---
 
-**Last Updated:** November 27, 2024
-**Status:** 🟢 Production-Ready for App Store Submission
+**Last Updated:** December 6, 2024
+**Status:** 🟢 3-Tier Journey Live + Ready for Membership Scaling

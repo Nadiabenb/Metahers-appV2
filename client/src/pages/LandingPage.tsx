@@ -899,6 +899,207 @@ function TransformationSection() {
   );
 }
 
+function PricingTierSection({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const tiers = [
+    {
+      name: "Vision Discovery",
+      price: "Free",
+      description: "Your entry into the sanctuary",
+      features: [
+        "Vision Board ritual (2026)",
+        "7 life dimensions",
+        "AI-powered insights",
+        "Daily reflections",
+      ],
+      cta: "Begin Free",
+      ctaPath: "/vision-board",
+      highlight: false,
+    },
+    {
+      name: "Core Membership",
+      price: "$79",
+      period: "/month",
+      description: "Transform with AI & community",
+      features: [
+        "Learning Hub (9 Worlds)",
+        "54 rituals & experiences",
+        "MetaMuse AI companion",
+        "Journal with streaks",
+        "Monthly community calls",
+        "Vision Board + unlimited updates",
+      ],
+      cta: "Join Membership",
+      ctaPath: "/upgrade",
+      highlight: true,
+    },
+    {
+      name: "AI Mastery Cohort",
+      price: "$699",
+      period: "or 3×$233",
+      description: "Master AI like a founder",
+      features: [
+        "12-week intensive program",
+        "Weekly live labs",
+        "App Atelier sprints",
+        "Executive accountability groups",
+        "Direct Nadia access",
+        "Core Membership included",
+      ],
+      cta: "Apply to Cohort",
+      ctaPath: "/ai-mastery",
+      highlight: false,
+    },
+  ];
+  
+  return (
+    <section 
+      ref={ref}
+      className="relative py-32 px-6 lg:px-16 overflow-hidden"
+      style={{ background: DARK_CARD }}
+      data-testid="section-pricing-tiers"
+    >
+      <AmbientGlow />
+      
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1 }}
+          className="text-center mb-20"
+        >
+          <p 
+            className="text-sm uppercase tracking-[0.3em] mb-6"
+            style={{ color: PINK }}
+          >
+            Your Transformation Path
+          </p>
+          <h2 
+            className="text-4xl lg:text-6xl mb-6"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
+          >
+            Choose Your <span className="italic" style={{ color: LAVENDER }}>Sanctuary Level</span>
+          </h2>
+          <p 
+            className="text-lg font-light max-w-2xl mx-auto"
+            style={{ color: 'rgba(255,255,255,0.6)' }}
+          >
+            Start free. Grow with community. Master with mentorship.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {tiers.map((tier, i) => (
+            <motion.div
+              key={tier.name}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: i * 0.15 }}
+              whileHover={tier.highlight ? { y: -8 } : {}}
+              className="relative p-8 border transition-all"
+              style={{ 
+                borderColor: tier.highlight ? LAVENDER : 'rgba(255,255,255,0.1)',
+                background: tier.highlight ? `linear-gradient(135deg, ${PINK}10 0%, ${LAVENDER}05 100%)` : 'rgba(255,255,255,0.02)',
+                boxShadow: tier.highlight ? `0 8px 32px ${PINK}20` : 'none',
+              }}
+              data-testid={`card-tier-${tier.name.toLowerCase().replace(' ', '-')}`}
+            >
+              {tier.highlight && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={isInView ? { opacity: 1 } : {}}
+                  className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 text-xs font-bold uppercase tracking-wider"
+                  style={{ 
+                    background: PINK,
+                    color: '#0A0A0A',
+                  }}
+                >
+                  Most Popular
+                </motion.div>
+              )}
+              
+              <div className="mb-8">
+                <h3 
+                  className="text-2xl font-semibold mb-2"
+                  style={{ color: '#FFFFFF' }}
+                >
+                  {tier.name}
+                </h3>
+                <p 
+                  className="text-sm"
+                  style={{ color: 'rgba(255,255,255,0.5)' }}
+                >
+                  {tier.description}
+                </p>
+              </div>
+              
+              <div className="mb-8 pb-8 border-b" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+                <div className="flex items-baseline gap-2">
+                  <span 
+                    className="text-5xl font-light"
+                    style={{ color: LAVENDER }}
+                  >
+                    {tier.price}
+                  </span>
+                  {tier.period && (
+                    <span 
+                      className="text-sm"
+                      style={{ color: 'rgba(255,255,255,0.5)' }}
+                    >
+                      {tier.period}
+                    </span>
+                  )}
+                </div>
+              </div>
+              
+              <div className="mb-8 space-y-3">
+                {tier.features.map((feature, j) => (
+                  <motion.div
+                    key={j}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ delay: i * 0.15 + j * 0.08 }}
+                    className="flex items-start gap-3"
+                  >
+                    <span className="mt-1 text-xs" style={{ color: PINK }}>●</span>
+                    <span 
+                      className="text-sm"
+                      style={{ color: 'rgba(255,255,255,0.7)' }}
+                    >
+                      {feature}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+              
+              <motion.button
+                onClick={() => onNavigate(tier.ctaPath)}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full py-3 text-sm font-semibold uppercase tracking-wider transition-all"
+                style={{
+                  background: tier.highlight ? `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)` : 'rgba(255,255,255,0.1)',
+                  color: tier.highlight ? '#0A0A0A' : '#FFFFFF',
+                  borderColor: 'rgba(255,255,255,0.2)',
+                }}
+                data-testid={`button-tier-cta-${tier.name.toLowerCase().replace(' ', '-')}`}
+              >
+                {tier.cta}
+              </motion.button>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -978,7 +1179,7 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
           className="mt-8 text-sm"
           style={{ color: 'rgba(255,255,255,0.4)' }}
         >
-          20 founding members already inside
+          Join our sanctuary of extraordinary women
         </motion.p>
       </motion.div>
     </section>
@@ -1007,6 +1208,7 @@ export default function LandingPage() {
         <NineWorldsSection onNavigate={handleNavigate} />
         <FounderSection />
         <TransformationSection />
+        <PricingTierSection onNavigate={handleNavigate} />
         <FinalCTASection onNavigate={handleNavigate} />
         <footer className="py-3 px-6 lg:px-16 border-t" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.1)' }}>
           <div className="max-w-4xl mx-auto">
