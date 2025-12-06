@@ -142,11 +142,11 @@ export default function LandingPage() {
         schema={schema}
       />
 
-      {/* PREMIUM HERO - Advanced Interactive */}
+      {/* PREMIUM HERO - Streamlined Interactive */}
       <div 
-        className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden bg-gradient-to-b from-white via-white to-purple-50"
+        className="relative min-h-[100vh] sm:min-h-[110vh] flex items-center justify-center px-4 sm:px-6 lg:px-16 py-16 sm:py-32 overflow-hidden bg-white"
       >
-        {/* Animated background gradient orbs */}
+        {/* Animated background gradient orbs - kept subtle */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
             animate={{ y: [0, -20, 0], opacity: [0.3, 0.1, 0.3] }}
@@ -160,7 +160,7 @@ export default function LandingPage() {
           />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto w-full">
+        <div className="relative z-10 max-w-4xl mx-auto w-full">
           {/* Animated badge */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
@@ -171,23 +171,23 @@ export default function LandingPage() {
             <motion.div
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 3, repeat: Infinity }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-purple-100 to-purple-50 border-2 border-purple-200 backdrop-blur-sm"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-50 border-2 border-purple-200 backdrop-blur-sm"
             >
               <span className="w-2 h-2 bg-purple-600 rounded-full animate-pulse" />
-              <span className="text-sm font-bold uppercase tracking-widest text-purple-600">For Women Building Lives & Income</span>
+              <span className="text-sm font-bold uppercase tracking-widest text-purple-600">AI & Web3 For Women</span>
             </motion.div>
           </motion.div>
 
-          {/* Animated headline with staggered reveal */}
-          <div className="text-center mb-8">
-            <h1 className="text-6xl sm:text-7xl lg:text-8xl font-black leading-tight mb-6 text-black">
+          {/* Simplified headline */}
+          <div className="text-center mb-12">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black leading-tight mb-6 text-black">
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="block"
               >
-                The Tools
+                Master AI & Web3
               </motion.span>
               <motion.span
                 initial={{ opacity: 0, y: 20 }}
@@ -195,153 +195,28 @@ export default function LandingPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="block"
               >
-                That Will
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="block bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text text-transparent"
-              >
-                Change Everything
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="block text-4xl sm:text-5xl mt-2"
-              >
-                Are Here. Now.
+                <span className="text-purple-600">For the Life You Want</span>
               </motion.span>
             </h1>
+            
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-lg sm:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto"
+            >
+              500+ women are building their dreams with AI and Web3. No crypto jargon. No tech overwhelm. Just clarity, community, and real results.
+            </motion.p>
           </div>
 
-          {/* Interactive stat cards with animated counters */}
+          {/* CTA Buttons - Prominent */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            className="grid grid-cols-3 gap-4 sm:gap-6 mb-12 max-w-2xl mx-auto"
-          >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="p-4 sm:p-6 bg-white border-2 border-purple-200 rounded-xl backdrop-blur-sm cursor-pointer"
-            >
-              <motion.p className="text-3xl sm:text-4xl font-black text-purple-600 mb-1">
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.7 }}
-                >
-                  500+
-                </motion.span>
-              </motion.p>
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-700">Women</p>
-              <p className="text-xs text-gray-600">15 countries</p>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="p-4 sm:p-6 bg-white border-2 border-purple-200 rounded-xl backdrop-blur-sm cursor-pointer"
-            >
-              <motion.p className="text-3xl sm:text-4xl font-black text-purple-600 mb-1">
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.8 }}
-                >
-                  54
-                </motion.span>
-              </motion.p>
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-700">Experiences</p>
-              <p className="text-xs text-gray-600">Guided learning</p>
-            </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="p-4 sm:p-6 bg-white border-2 border-purple-200 rounded-xl backdrop-blur-sm cursor-pointer"
-            >
-              <motion.p className="text-3xl sm:text-4xl font-black text-purple-600 mb-1">
-                <motion.span
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.9 }}
-                >
-                  15+
-                </motion.span>
-              </motion.p>
-              <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-gray-700">Hours</p>
-              <p className="text-xs text-gray-600">Reclaimed weekly</p>
-            </motion.div>
-          </motion.div>
-
-          {/* Animated subheading */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1 }}
-            className="max-w-3xl mx-auto mb-12 text-center"
-          >
-            <p className="text-lg sm:text-xl text-gray-700 leading-relaxed mb-6 font-medium">
-              <span className="font-bold text-black">Everything shifted in 12 months.</span> AI went from science fiction to your daily reality. Moms are getting weekends back. Solopreneurs are charging more. Creatives are reaching global audiences. And <span className="font-bold text-purple-600">500+ women are building lives—not just side hustles.</span> They're not waiting. They're not confused. They're riding the wave.
-            </p>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-              <div className="h-px w-8 bg-purple-300" />
-              <span>Right now, there's a choice to make</span>
-              <div className="h-px w-8 bg-purple-300" />
-            </div>
-          </motion.div>
-
-          {/* Three powerful benefits with animations */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.1 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 max-w-3xl mx-auto"
-          >
-            {[
-              { icon: Sparkles, title: "Reclaim Your Time", desc: "AI meal preps, workouts, kid's books—15+ hours back weekly" },
-              { icon: Gem, title: "Unlock Income", desc: "Build multiple revenue streams while living your life" },
-              { icon: Heart, title: "Find Your Tribe", desc: "Network with 500+ women building together" }
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ scale: 1.08, y: -8 }}
-                onMouseEnter={() => setHoveredBenefit(i)}
-                onMouseLeave={() => setHoveredBenefit(null)}
-                className="relative p-6 bg-white border-2 border-purple-200 rounded-xl cursor-pointer group overflow-hidden"
-              >
-                {/* Gradient overlay on hover */}
-                {hoveredBenefit === i && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="absolute inset-0 bg-gradient-to-br from-purple-50 via-transparent to-purple-50 pointer-events-none"
-                  />
-                )}
-                
-                <motion.div className="relative z-10 mb-4">
-                  <motion.div
-                    animate={hoveredBenefit === i ? { scale: 1.2, rotate: 5 } : { scale: 1, rotate: 0 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  >
-                    <item.icon className="w-8 h-8 text-purple-600 group-hover:text-purple-700 transition-colors" />
-                  </motion.div>
-                </motion.div>
-                <motion.h3 className="relative z-10 font-bold text-black mb-1 group-hover:text-purple-600 transition-colors">{item.title}</motion.h3>
-                <motion.p className="relative z-10 text-sm text-gray-600 group-hover:text-gray-700 transition-colors">{item.desc}</motion.p>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* CTA Buttons with interactive effects */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 1.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
           >
             <motion.div className="relative">
-              {/* Celebration effect background */}
               {showCelebration && (
                 <>
                   <motion.div
@@ -367,65 +242,54 @@ export default function LandingPage() {
               )}
               
               <motion.button
-                onClick={handleSignup}
-                whileHover={{ scale: 1.08, boxShadow: "0 30px 50px rgba(147,51,234,0.25)" }}
+                onClick={() => setLocation("/vision-board")}
+                whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
-                className="relative px-10 py-5 bg-gradient-to-r from-black to-gray-900 text-white font-bold text-lg uppercase tracking-wider rounded-lg flex items-center gap-3 shadow-2xl hover:shadow-2xl transition-all"
-                data-testid="button-start-free"
+                className="relative px-10 py-5 bg-purple-600 text-white font-bold text-lg uppercase tracking-wider rounded-lg flex items-center gap-3 shadow-xl"
+                data-testid="button-start-vision-board"
               >
-                Start Free
+                Start Vision Board
                 <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>
                   <ArrowRight className="w-5 h-5" />
                 </motion.span>
               </motion.button>
             </motion.div>
             <motion.button
-              onClick={handleLogin}
+              onClick={handleSignup}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="px-8 py-5 border-2 border-black text-black font-bold text-lg uppercase tracking-wider rounded-lg hover:bg-black hover:text-white transition-all"
-              data-testid="button-login-hero"
+              data-testid="button-start-free"
             >
-              Welcome Back
+              Start Free
             </motion.button>
           </motion.div>
 
-          {/* Transformation proof - powerful */}
+          {/* Brief social proof - short and punchy */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 1.3 }}
-            className="mt-20 pt-16 border-t-2 border-border/50"
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="pt-12 border-t border-gray-200"
           >
-            <p className="text-base text-foreground mb-8 font-bold uppercase tracking-wider">💜 Meet the Women Who Moved First</p>
+            <p className="text-center text-sm font-bold uppercase tracking-wider text-gray-600 mb-8">What Women Are Seeing</p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { stat: "2X", label: "Income | 3 Months", name: "Sarah, Freelance Designer", quote: "Six months ago I was charging $40/hr, burned out, and invisible. I learned to use AI to build authority. Now I'm $3K per project. Clients find ME. I feel unstoppable." },
-                { stat: "15", label: "Hours Reclaimed Weekly", name: "Jessica, Mom of 3", quote: "I used to spend 20 hours on content. Now AI handles 80% of the work. I have Saturday mornings back. My kids notice. My business is GROWING. And I'm not exhausted." },
-                { stat: "3", label: "New Revenue Streams", name: "Maria, Artist & Creative", quote: "I thought I could only sell original paintings. Now I sell prints, digital licenses, merchandise. I'm reaching Japan, Germany, Australia. I feel like I cracked a code most artists don't know exists." }
+                { stat: "2X", label: "Income in 3 Months", desc: "From $40/hr to $3K per project" },
+                { stat: "15+", label: "Hours Reclaimed Weekly", desc: "Saturday mornings back with family" },
+                { stat: "3", label: "New Revenue Streams", desc: "Reaching global audiences" }
               ].map((item, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: i * 0.15 }}
-                  whileHover={{ scale: 1.05, y: -5 }}
-                  className="relative group text-left p-8 rounded-2xl bg-gradient-to-br from-white via-white to-purple-50 border-2 border-purple-200 hover:shadow-2xl transition-shadow overflow-hidden"
+                  transition={{ duration: 0.6, delay: i * 0.1 }}
+                  className="p-6 rounded-xl bg-purple-50 border border-purple-200 text-center"
                 >
-                  {/* Hover gradient overlay */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    className="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-purple-600/5 pointer-events-none"
-                  />
-                  
-                  <div className="relative z-10">
-                    <motion.p className="text-4xl font-black text-transparent bg-gradient-to-r from-purple-600 to-purple-500 bg-clip-text mb-1">{item.stat}</motion.p>
-                    <p className="text-xs uppercase tracking-widest text-purple-600 font-bold mb-4">{item.label}</p>
-                    <p className="text-sm text-gray-700 mb-3 italic font-medium">"{item.name}</p>
-                    <p className="text-sm text-gray-600 leading-relaxed">"{item.quote}"</p>
-                  </div>
+                  <p className="text-3xl font-black text-purple-600 mb-2">{item.stat}</p>
+                  <p className="text-xs uppercase tracking-widest text-gray-700 font-bold mb-2">{item.label}</p>
+                  <p className="text-sm text-gray-600">{item.desc}</p>
                 </motion.div>
               ))}
             </div>
