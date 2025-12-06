@@ -508,9 +508,9 @@ function FounderSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="absolute -bottom-6 -right-6 p-8 border"
+              className="absolute -bottom-6 -right-6 p-8 border backdrop-blur-sm"
               style={{ 
-                background: DARK_CARD,
+                background: 'rgba(200, 162, 216, 0.25)',
                 borderColor: LAVENDER,
               }}
             >
@@ -525,8 +525,8 @@ function FounderSection() {
                 Nadia
               </p>
               <p 
-                className="text-sm uppercase tracking-[0.2em] font-semibold"
-                style={{ color: PINK }}
+                className="text-sm uppercase tracking-[0.2em] font-bold"
+                style={{ color: '#FFFFFF' }}
               >
                 Founder & Visionary
               </p>
