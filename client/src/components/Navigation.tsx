@@ -11,6 +11,11 @@ import { trackCTAClick } from "@/lib/analytics";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
+const DARK_BG = "#0A0614";
+const DARK_CARD = "#0D0A1A";
+const LAVENDER = "#C8A2D8";
+const PINK = "#EC4899";
+
 export function Navigation() {
   const [location, setLocation] = useLocation();
   const { isAuthenticated, isLoading, user } = useAuth();
@@ -97,27 +102,28 @@ export function Navigation() {
             handleNavClick(item.path);
           }
         }}
-        className={`w-full p-3 text-left rounded-md transition-all ${
-          isActive 
-            ? 'bg-purple-50 border border-purple-200' 
-            : 'hover:bg-gray-50 border border-transparent'
-        }`}
+        className="w-full p-3 text-left rounded-md transition-all border"
+        style={{
+          background: isActive ? 'rgba(200,162,216,0.15)' : 'transparent',
+          borderColor: isActive ? LAVENDER : 'rgba(255,255,255,0.1)',
+          color: '#ffffff'
+        }}
         data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
       >
         <div className="flex items-start gap-3">
-          <div className="w-8 h-8 bg-black flex items-center justify-center flex-shrink-0 rounded">
-            <Icon className="w-4 h-4 text-white" />
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded" style={{ background: PINK }}>
+            <Icon className="w-4 h-4 text-black" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-black flex items-center gap-2">
+            <p className="text-sm font-semibold flex items-center gap-2" style={{ color: '#ffffff' }}>
               {item.label}
               {item.pro && (
-                <Badge className="text-[10px] px-1 py-0 bg-purple-100 text-purple-700 border-0">
+                <Badge className="text-[10px] px-1 py-0 border-0" style={{ background: LAVENDER, color: '#0A0614' }}>
                   PRO
                 </Badge>
               )}
             </p>
-            <p className="text-xs text-gray-500 mt-0.5">{item.desc}</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>{item.desc}</p>
           </div>
         </div>
       </motion.button>
@@ -130,10 +136,10 @@ export function Navigation() {
     return (
       <div className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <div className="w-6 h-6 bg-black flex items-center justify-center rounded">
-            <SectionIcon className="w-3 h-3 text-white" />
+          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: PINK }}>
+            <SectionIcon className="w-3 h-3 text-black" />
           </div>
-          <h3 className="text-sm font-bold text-black uppercase tracking-wider">{section}</h3>
+          <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>{section}</h3>
         </div>
         <div className="space-y-2">
           {items.map((item) => (
@@ -145,13 +151,14 @@ export function Navigation() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
+    <nav className="sticky top-0 z-50 w-full border-b" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.1)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <button
             onClick={() => handleNavClick("/")}
-            className="text-xl sm:text-2xl font-semibold text-black tracking-tight cursor-pointer"
+            className="text-xl sm:text-2xl font-semibold tracking-tight cursor-pointer"
+            style={{ color: '#ffffff' }}
             data-testid="link-home"
           >
             MetaHers
@@ -172,7 +179,8 @@ export function Navigation() {
                     onClick={() => setActiveMenu(activeMenu === section ? null : section)}
                     variant="ghost"
                     size="sm"
-                    className="gap-1 text-gray-700 hover:text-black uppercase tracking-wider text-xs font-semibold"
+                    className="gap-1 uppercase tracking-wider text-xs font-semibold"
+                    style={{ color: 'rgba(255,255,255,0.7)' }}
                     data-testid={`button-nav-${section.toLowerCase().replace(' ', '-')}`}
                   >
                     {section}
@@ -195,14 +203,16 @@ export function Navigation() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -10 }}
                           transition={{ duration: 0.1 }}
-                          className="absolute top-full left-0 mt-2 w-[320px] bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+                          className="absolute top-full left-0 mt-2 w-[320px] rounded-lg shadow-lg z-50"
+                          style={{ background: DARK_CARD, borderColor: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }}
                         >
                           <MenuSection section={section} items={config.items} />
                           {section === "Featured" && (
-                            <div className="border-t border-gray-100 p-4 bg-gray-50">
+                            <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(200,162,216,0.1)' }}>
                               <Button
                                 onClick={() => handleNavClick("/upgrade")}
-                                className="w-full bg-black hover:bg-gray-900 text-white text-xs uppercase tracking-wider font-semibold"
+                                className="w-full text-white text-xs uppercase tracking-wider font-semibold"
+                                style={{ background: PINK }}
                                 size="sm"
                                 data-testid="nav-membership"
                               >
@@ -228,7 +238,8 @@ export function Navigation() {
                   trackCTAClick('nav_login', '/login');
                   handleNavClick("/login");
                 }}
-                className="bg-black text-white hover:bg-gray-900 uppercase tracking-wider text-xs font-semibold"
+                className="text-white uppercase tracking-wider text-xs font-semibold"
+                style={{ background: PINK }}
                 size="sm"
                 data-testid="button-login-nav"
               >
@@ -241,7 +252,8 @@ export function Navigation() {
                 onClick={handleLogout}
                 variant="ghost"
                 size="sm"
-                className="gap-2 text-gray-700 hover:text-black uppercase tracking-wider text-xs"
+                className="gap-2 uppercase tracking-wider text-xs"
+                style={{ color: 'rgba(255,255,255,0.7)' }}
                 data-testid="button-logout"
               >
                 <LogOut className="w-4 h-4" />
@@ -281,26 +293,26 @@ export function Navigation() {
                 <Button 
                   variant="ghost" 
                   size="icon"
-                  className="text-black"
+                  style={{ color: '#ffffff' }}
                   data-testid="button-mobile-menu"
                 >
                   {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[320px] p-0 bg-white">
+              <SheetContent side="right" className="w-[320px] p-0" style={{ background: DARK_CARD }}>
                 <div className="flex flex-col h-full p-4">
-                  <div className="mb-6 pt-2 border-b border-gray-100 pb-4">
-                    <h2 className="text-2xl font-semibold text-black">Menu</h2>
+                  <div className="mb-6 pt-2 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                    <h2 className="text-2xl font-semibold" style={{ color: '#ffffff' }}>Menu</h2>
                   </div>
 
                   <div className="flex-1 overflow-y-auto space-y-6">
                     {Object.entries(menuSections).map(([section, config]) => (
                       <div key={section}>
                         <div className="flex items-center gap-2 mb-3">
-                          <div className="w-6 h-6 bg-black flex items-center justify-center rounded">
-                            <config.icon className="w-3 h-3 text-white" />
+                          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: PINK }}>
+                            <config.icon className="w-3 h-3 text-black" />
                           </div>
-                          <h3 className="text-xs font-bold text-black uppercase tracking-wider">{section}</h3>
+                          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>{section}</h3>
                         </div>
                         <div className="space-y-2 pl-2">
                           {config.items.map((item) => (
@@ -314,14 +326,15 @@ export function Navigation() {
                                   handleNavClick(item.path);
                                 }
                               }}
-                              className="w-full text-left p-2 rounded hover:bg-gray-100 transition-colors"
+                              className="w-full text-left p-2 rounded transition-colors"
+                              style={{ color: 'rgba(255,255,255,0.7)' }}
                               data-testid={`mobile-nav-${item.label.toLowerCase().replace(' ', '-')}`}
                             >
-                              <p className="text-sm font-medium text-black flex items-center gap-2">
+                              <p className="text-sm font-medium flex items-center gap-2" style={{ color: '#ffffff' }}>
                                 {item.label}
-                                {"pro" in item && item.pro && <Badge className="text-[10px] px-1 bg-purple-100 text-purple-700 border-0">PRO</Badge>}
+                                {"pro" in item && item.pro && <Badge className="text-[10px] px-1 border-0" style={{ background: LAVENDER, color: '#0A0614' }}>PRO</Badge>}
                               </p>
-                              <p className="text-xs text-gray-500">{item.desc}</p>
+                              <p className="text-xs">{item.desc}</p>
                             </button>
                           ))}
                         </div>
@@ -330,7 +343,7 @@ export function Navigation() {
                   </div>
 
                   {/* Mobile Bottom Actions */}
-                  <div className="border-t border-gray-100 pt-4 mt-auto space-y-2">
+                  <div className="pt-4 mt-auto space-y-2" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
                     {!isAuthenticated && !isLoading && (
                       <>
                         <Button
@@ -339,7 +352,8 @@ export function Navigation() {
                             handleNavClick("/login");
                           }}
                           size="sm"
-                          className="w-full bg-black text-white hover:bg-gray-900 uppercase tracking-wider text-xs font-semibold"
+                          className="w-full text-white uppercase tracking-wider text-xs font-semibold"
+                          style={{ background: PINK }}
                           data-testid="button-mobile-login"
                         >
                           <LogIn className="w-4 h-4 mr-2" />
@@ -349,7 +363,8 @@ export function Navigation() {
                           onClick={() => handleNavClick("/signup")}
                           variant="outline"
                           size="sm"
-                          className="w-full border-black text-black hover:bg-gray-50 uppercase tracking-wider text-xs font-semibold"
+                          className="w-full uppercase tracking-wider text-xs font-semibold"
+                          style={{ borderColor: LAVENDER, color: '#ffffff', background: 'transparent' }}
                           data-testid="button-mobile-signup"
                         >
                           Create Account
@@ -362,7 +377,8 @@ export function Navigation() {
                         onClick={handleLogout}
                         variant="outline"
                         size="sm"
-                        className="w-full border-gray-300 text-gray-700 hover:bg-gray-100 uppercase tracking-wider text-xs"
+                        className="w-full uppercase tracking-wider text-xs"
+                        style={{ borderColor: LAVENDER, color: '#ffffff', background: 'transparent' }}
                         data-testid="button-mobile-logout"
                       >
                         <LogOut className="w-4 h-4 mr-2" />
