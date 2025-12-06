@@ -1,5 +1,7 @@
 import { useLocation, Link } from "wouter";
-import { Heart } from "lucide-react";
+
+const DARK_BG = "#0A0614";
+const PINK = "#EC4899";
 
 export function Footer() {
   const [location] = useLocation();
@@ -12,66 +14,32 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-white border-t border-gray-200">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-          {/* Brand */}
+    <footer className="py-3 px-6 lg:px-16 border-t" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.1)' }}>
+      <div className="max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <div>
-            <h3 className="text-lg font-bold text-black mb-4">MetaHers Mind Spa</h3>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Luxury AI & Web3 education for women solopreneurs, moms, and creatives.
+            <p className="text-sm font-semibold" style={{ color: '#FFFFFF' }}>
+              MetaHers <span style={{ color: PINK }}>Mind Spa</span>
             </p>
           </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-sm font-semibold text-gray-800 uppercase tracking-wider mb-4">Quick Links</h4>
-            <nav className="space-y-2">
-              <Link href="/world" className="text-gray-600 hover:text-purple-600 transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 rounded px-2 py-1 inline-block">
-                MetaHers World
-              </Link>
-              <br />
-              <Link href="/retreat" className="text-gray-600 hover:text-purple-600 transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 rounded px-2 py-1 inline-block">
-                Free AI Retreat
-              </Link>
-              <br />
-              <Link href="/companion" className="text-gray-600 hover:text-purple-600 transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 rounded px-2 py-1 inline-block">
-                AI Companion
-              </Link>
-            </nav>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-sm font-semibold text-gray-800 uppercase tracking-wider mb-4">Legal</h4>
-            <nav className="space-y-2">
-              <Link href="/privacy" className="text-gray-600 hover:text-purple-600 transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 rounded px-2 py-1 inline-block">
-                Privacy Policy
-              </Link>
-              <br />
-              <Link href="/terms" className="text-gray-600 hover:text-purple-600 transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 rounded px-2 py-1 inline-block">
-                Terms of Service
-              </Link>
-              <br />
-              <a href="mailto:support@metahers.ai" className="text-gray-600 hover:text-purple-600 transition-colors text-sm focus:outline-none focus:ring-2 focus:ring-purple-600 rounded px-2 py-1 inline-block">
-                Contact Support
-              </a>
-            </nav>
+          
+          <div className="flex gap-4 text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            <Link href="/privacy" className="hover:opacity-100 transition-opacity" style={{ color: 'inherit' }} data-testid="link-privacy">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:opacity-100 transition-opacity" style={{ color: 'inherit' }} data-testid="link-terms">
+              Terms
+            </Link>
+            <a href="mailto:support@metahers.ai" className="hover:opacity-100 transition-opacity" style={{ color: 'inherit' }} data-testid="link-contact">
+              Contact
+            </a>
           </div>
         </div>
-
-        {/* Divider */}
-        <div className="border-t border-gray-200 pt-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-gray-500 text-sm text-center sm:text-left">
-              © {currentYear} MetaHers Mind Spa. All rights reserved.
-            </p>
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <span>Made with</span>
-              <Heart className="w-4 h-4 text-purple-600 fill-purple-600" />
-              <span>for women solopreneurs</span>
-            </div>
-          </div>
+        
+        <div className="mt-2 pt-2 border-t text-center" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
+          <p className="text-xs font-light" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            © {currentYear} MetaHers. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>
