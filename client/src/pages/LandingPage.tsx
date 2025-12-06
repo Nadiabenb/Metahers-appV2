@@ -205,7 +205,7 @@ export default function LandingPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-lg sm:text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto"
             >
-              500+ women are building their dreams with AI and Web3. No crypto jargon. No tech overwhelm. Just clarity, community, and real results.
+              A curated community of women building their dreams with AI and Web3. No crypto jargon. No tech overwhelm. Just clarity, community, and real results.
             </motion.p>
           </div>
 
@@ -316,9 +316,9 @@ export default function LandingPage() {
             
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div className="p-8 bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 rounded-2xl">
-                <p className="text-5xl font-bold text-purple-600 mb-2">500+</p>
-                <p className="text-lg font-semibold text-black mb-2">Women Already Here</p>
-                <p className="text-gray-700">From 15 countries. Different ages, backgrounds, businesses. All learning. All growing. All thrive personally and professionally.</p>
+                <p className="text-5xl font-bold text-purple-600 mb-2">20+</p>
+                <p className="text-lg font-semibold text-black mb-2">Founding Members</p>
+                <p className="text-gray-700">Carefully selected women from diverse backgrounds and businesses. All deeply committed. All seeing real results.</p>
               </div>
               <div className="p-8 bg-gradient-to-br from-purple-50 to-white border-2 border-purple-200 rounded-2xl">
                 <p className="text-5xl font-bold text-purple-600 mb-2">54</p>
@@ -355,7 +355,7 @@ export default function LandingPage() {
               { title: "Monday Morning", desc: "AI generates your week's meal plans (healthy, family-friendly, with shopping lists). You spend 10 minutes, not 3 hours." },
               { title: "Workout Time", desc: "Personalized AI workout routines delivered daily. No gym membership guesswork. Fits into your actual schedule." },
               { title: "Kids' Content", desc: "Create educational books, stories, activity guides for your kids using AI. Something to be proud of, something they'll remember." },
-              { title: "Accountability Crew", desc: "500+ women cheering you on. Real friendships. Real accountability. Weekly meetups, group challenges, support that matters." },
+              { title: "Accountability Crew", desc: "A curated community cheering you on. Real friendships. Real accountability. Weekly meetups, group challenges, support that matters." },
               { title: "Income Alongside Life", desc: "Build business revenue without sacrificing family dinners. AI handles repetitive work. You focus on real value." },
               { title: "New Friendships", desc: "Meet women in your exact situation. Solopreneurs, moms, creatives, artists. Network. Partner. Build together." }
             ].map((item, i) => (
