@@ -470,6 +470,153 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
   );
 }
 
+function NineWorldsSection({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const worlds = [
+    { name: "Web3", description: "Master decentralized technologies", free: true },
+    { name: "NFT/Blockchain/Crypto", description: "Navigate digital assets confidently", free: true },
+    { name: "AI", description: "Transform how you work with AI tools", free: false },
+    { name: "Metaverse", description: "Navigate virtual worlds", free: false },
+    { name: "Branding", description: "Build your personal brand", free: false },
+    { name: "Moms", description: "Balance tech career & family", free: false },
+    { name: "App Atelier", description: "Build apps with AI", free: false },
+    { name: "Founder's Club", description: "12-week accelerator", free: false },
+    { name: "Digital Boutique", description: "Launch your online store", free: false },
+  ];
+
+  return (
+    <section 
+      ref={ref}
+      className="relative min-h-screen flex items-center py-32 px-6 lg:px-16 overflow-hidden"
+      style={{ background: DARK_BG }}
+      data-testid="section-nine-worlds"
+    >
+      <AmbientGlow />
+      
+      <div className="relative max-w-7xl mx-auto w-full">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1 }}
+          className="text-center mb-20"
+        >
+          <p 
+            className="text-sm uppercase tracking-[0.3em] mb-6"
+            style={{ color: PINK }}
+            data-testid="text-nine-worlds-label"
+          >
+            Your Learning Journey
+          </p>
+          
+          <h2 
+            className="text-4xl lg:text-5xl mb-6 leading-[1.2]"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
+            data-testid="heading-nine-worlds"
+          >
+            Explore the 9 Worlds
+          </h2>
+          
+          <p 
+            className="text-lg font-light max-w-2xl mx-auto"
+            style={{ color: 'rgba(255,255,255,0.6)' }}
+            data-testid="text-nine-worlds-description"
+          >
+            54 transformational experiences across Web3, AI, Branding, and more
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          {worlds.map((world, idx) => (
+            <motion.div
+              key={world.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: idx * 0.08 }}
+              whileHover={{ y: -4 }}
+              className="p-8 border cursor-pointer transition-all"
+              style={{ 
+                borderColor: 'rgba(212, 175, 55, 0.2)',
+                background: 'rgba(255,255,255,0.02)',
+              }}
+              data-testid={`card-world-${world.name.toLowerCase().replace(/[\/\s]/g, '-')}`}
+              onClick={() => window.open('https://app.metahers.ai/world', '_blank')}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <h3 
+                  className="text-xl font-semibold"
+                  style={{ color: '#FFFFFF' }}
+                >
+                  {world.name}
+                </h3>
+                {world.free && (
+                  <span 
+                    className="text-xs uppercase tracking-widest px-3 py-1 font-bold"
+                    style={{ 
+                      background: `${PINK}20`,
+                      color: PINK,
+                    }}
+                    data-testid={`badge-free-${world.name.toLowerCase().replace(/[\/\s]/g, '-')}`}
+                  >
+                    Free
+                  </span>
+                )}
+              </div>
+              
+              <p 
+                className="text-sm font-light"
+                style={{ color: 'rgba(255,255,255,0.6)' }}
+              >
+                {world.description}
+              </p>
+              
+              <motion.div
+                animate={{ x: [0, 4, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="mt-6 text-sm font-medium uppercase tracking-wider flex items-center gap-2"
+                style={{ color: LAVENDER }}
+              >
+                Explore <ArrowRight className="w-4 h-4" />
+              </motion.div>
+            </motion.div>
+          ))}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="text-center"
+        >
+          <motion.button
+            onClick={() => window.open('https://app.metahers.ai/world', '_blank')}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="px-10 py-5 flex items-center gap-3 mx-auto"
+            style={{
+              background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 50%, ${PINK} 100%)`,
+              color: '#0A0A0A',
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+            }}
+            data-testid="button-explore-worlds"
+          >
+            <span>Explore All 9 Worlds</span>
+            <ArrowRight className="w-5 h-5" />
+          </motion.button>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 function FounderSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -857,6 +1004,7 @@ export default function LandingPage() {
       <main className="relative overflow-hidden" style={{ background: DARK_BG }}>
         <HeroSection onNavigate={handleNavigate} />
         <VisionBoardSection onNavigate={handleNavigate} />
+        <NineWorldsSection onNavigate={handleNavigate} />
         <FounderSection />
         <TransformationSection />
         <FinalCTASection onNavigate={handleNavigate} />
