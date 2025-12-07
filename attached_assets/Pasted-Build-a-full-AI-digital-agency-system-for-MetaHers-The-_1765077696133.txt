@@ -1,0 +1,142 @@
+Build a full AI digital agency system for MetaHers.
+The system must operate like a multi-agent powerhouse with clear roles, a shared memory, and a user-facing dashboard.
+The final product must be:
+	•	usable internally by MetaHers,
+	•	AND monetizable for women as a standalone SaaS platform.
+
+The system must allow the user to enter their brand details and business goals, then automatically generate platform-specific content, visuals, marketing strategy, and weekly execution plans.
+
+⸻
+
+🎛️ 1. System Overview (What you’re building)
+
+Create a browser-based dashboard where a user:
+	1.	Enters business information
+	2.	Selects goals (brand growth, sales, content creation, automation)
+	3.	Chooses platforms (IG, TikTok, LinkedIn, Substack, X, Pinterest, YouTube Shorts)
+	4.	Activates AI agents
+	5.	Receives a unified strategy + ready-to-post content + analytics
+
+This must function like a digital marketing agency staffed entirely by AI agents, each with a role, workflow, and communication protocol.
+
+⸻
+
+🧠 2. Multi-Agent Architecture
+
+Build at least 7 agents, each with a distinct specialty:
+
+1. Strategist Agent (Head of Agency)
+	•	Reads user’s business info
+	•	Builds global brand strategy, positioning, content pillars
+	•	Creates weekly content calendars
+	•	Delegates tasks to all other agents
+
+2. Social Media Manager Agent
+	•	Creates platform-specific posts: IG, TikTok, LinkedIn, X
+	•	Writes captions, hooks, CTAs
+	•	Optimizes for algorithms
+	•	Suggests posting frequency + time of day
+
+3. Visual Designer Agent
+	•	Generates image prompts for DALL·E, MidJourney, Firefly
+	•	Ensures brand colors, typography, textures, vibes
+	•	Creates full visual identity kits
+
+4. Video Director Agent
+	•	Generates TikTok scripts, IG Reels scripts, B-roll ideas
+	•	Adds on-screen text
+	•	Structures short-form storytelling
+
+5. Copywriter Agent
+	•	Writes Substack newsletters
+	•	Writes LinkedIn articles
+	•	Writes email sequences, landing page copy, ad copy
+
+6. Marketing Analyst Agent
+	•	Audits the user’s brand & competitors
+	•	Suggests growth strategies
+	•	Predicts high-performing content
+	•	Provides analytics (engagement, themes, retention)
+
+7. Automation & Scheduling Agent
+	•	Converts outputs into a post-ready queue
+	•	Recommends tools for autoposting
+	•	Generates batch content plans
+
+⸻
+
+💬 3. Communication Between Agents
+
+Agents must interact using a shared context layer, where:
+	•	Strategist → issues tasks
+	•	Specialists → complete tasks
+	•	Strategist → assembles final deliverable
+	•	Dashboard → displays final package to the user
+
+No agent operates alone; they function in a chain-of-thought workflow (hidden from user).
+
+⸻
+
+🎨 4. MetaHers Branding Rules (Global Style Guide)
+
+All outputs must obey the MetaHers brand identity:
+	•	Feminine × Futuristic × Luxury × Editorial × Tech
+	•	Sculptural couture, architectural silhouettes, soft pinks, champagne, mint
+	•	Robots + women visual storytelling
+	•	Soft cinematic lighting
+	•	Empowering tone: Vogue × Forbes × spa
+	•	Never condescending, never too technical
+
+⸻
+
+📦 5. User Inputs the System Must Accept
+
+Users can upload or type:
+	•	Business name
+	•	Brand story
+	•	Industry
+	•	Target audience
+	•	Color palette & aesthetic preferences
+	•	Products/services
+	•	Content style they prefer
+	•	Main goals (authority, growth, sales, automation, consistency)
+
+The system must adapt all output to these inputs.
+
+⸻
+
+📤 6. Deliverables the System Must Generate
+
+For each user, generate:
+
+A. Strategy Package
+	•	Brand positioning
+	•	Messaging pillars
+	•	Ideal client profile
+	•	Competitor differentiation
+	•	4-week content strategy
+
+B. Social Content Package
+
+For each selected platform:
+	•	14 pre-written posts
+	•	30 TikTok/IG Reel ideas
+	•	7 Carousels with copy
+	•	Captions, hooks, CTAs
+	•	Hashtags and keywords
+
+C. Visual Package
+	•	10–20 image prompts
+	•	Moodboard
+	•	Brand color system
+	•	AI video scenes
+
+D. Email & Funnel Package
+	•	Welcome sequence
+	•	Lead magnet ideas
+	•	Bi-weekly newsletter templates
+
+E. Automation Package
+	•	Posting schedule
+	•	Suggested autoposter tools
+	•	Templates for batch creation
