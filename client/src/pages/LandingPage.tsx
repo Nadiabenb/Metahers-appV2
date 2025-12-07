@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useInView } from "framer-motion";
-import { ArrowRight, Sparkles, ChevronDown, Star, Crown, Gem } from "lucide-react";
+import { ArrowRight, Sparkles, ChevronDown, Star, Crown, Gem, Bot, Zap, Palette, Video, BarChart3, Calendar, Pen } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import { useRef, useState, useEffect, useMemo } from "react";
@@ -899,6 +899,146 @@ function TransformationSection() {
   );
 }
 
+function AIAgencySection({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const agents = [
+    { icon: Zap, name: "Brand Strategist", desc: "Develop your positioning & voice" },
+    { icon: Pen, name: "Copywriter", desc: "Compelling content that converts" },
+    { icon: Palette, name: "Visual Designer", desc: "On-brand graphics & templates" },
+    { icon: Video, name: "Video Producer", desc: "Engaging video concepts" },
+    { icon: BarChart3, name: "Data Analyst", desc: "Track & optimize performance" },
+    { icon: Calendar, name: "Scheduler", desc: "Automated content calendar" },
+  ];
+  
+  return (
+    <section 
+      ref={ref}
+      className="relative py-32 px-6 lg:px-16 overflow-hidden"
+      style={{ background: DARK_BG }}
+      data-testid="section-ai-agency"
+    >
+      <AmbientGlow />
+      
+      <div className="max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1 }}
+          className="text-center mb-16"
+        >
+          <div 
+            className="inline-flex items-center gap-2 px-4 py-2 mb-8"
+            style={{ 
+              background: `linear-gradient(135deg, ${PINK}15 0%, ${LAVENDER}10 100%)`,
+              border: `1px solid ${PINK}30`,
+            }}
+          >
+            <Bot className="w-4 h-4" style={{ color: PINK }} />
+            <span 
+              className="text-xs uppercase tracking-[0.2em] font-semibold"
+              style={{ color: PINK }}
+            >
+              Pro Feature
+            </span>
+          </div>
+          
+          <h2 
+            className="text-4xl lg:text-6xl mb-6"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
+          >
+            Your <span className="italic" style={{ color: LAVENDER }}>AI Agency</span> Team
+          </h2>
+          <p 
+            className="text-lg font-light max-w-2xl mx-auto mb-4"
+            style={{ color: 'rgba(255,255,255,0.6)' }}
+          >
+            7 specialized AI agents working together to build your brand, 
+            create content, and grow your business—24/7.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {agents.map((agent, i) => {
+            const Icon = agent.icon;
+            return (
+              <motion.div
+                key={agent.name}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="p-6 border transition-all"
+                style={{ 
+                  borderColor: 'rgba(255,255,255,0.1)',
+                  background: 'rgba(255,255,255,0.02)',
+                }}
+                data-testid={`card-agent-${agent.name.toLowerCase().replace(' ', '-')}`}
+              >
+                <div 
+                  className="w-12 h-12 flex items-center justify-center mb-4"
+                  style={{ 
+                    background: `linear-gradient(135deg, ${PINK}20 0%, ${LAVENDER}10 100%)`,
+                  }}
+                >
+                  <Icon className="w-6 h-6" style={{ color: PINK }} />
+                </div>
+                <h3 
+                  className="font-semibold mb-2"
+                  style={{ color: '#FFFFFF' }}
+                >
+                  {agent.name}
+                </h3>
+                <p 
+                  className="text-sm"
+                  style={{ color: 'rgba(255,255,255,0.5)' }}
+                >
+                  {agent.desc}
+                </p>
+              </motion.div>
+            );
+          })}
+        </div>
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="text-center"
+        >
+          <motion.button
+            onClick={() => onNavigate("/agency")}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="group px-10 py-4 flex items-center gap-3 mx-auto border"
+            style={{
+              borderColor: PINK,
+              background: 'transparent',
+              color: PINK,
+            }}
+            data-testid="button-explore-agency"
+          >
+            <span className="font-semibold text-sm uppercase tracking-[0.15em]">
+              Explore AI Agency
+            </span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </motion.button>
+          <p 
+            className="mt-4 text-xs"
+            style={{ color: 'rgba(255,255,255,0.4)' }}
+          >
+            Available with Pro membership
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 function PricingTierSection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -942,6 +1082,7 @@ function PricingTierSection({ onNavigate }: { onNavigate: (path: string) => void
       description: "Master AI like a founder",
       features: [
         "12-week intensive program",
+        "AI Agency: Your digital team",
         "Weekly live labs",
         "App Atelier sprints",
         "Executive accountability groups",
@@ -1208,6 +1349,7 @@ export default function LandingPage() {
         <NineWorldsSection onNavigate={handleNavigate} />
         <FounderSection />
         <TransformationSection />
+        <AIAgencySection onNavigate={handleNavigate} />
         <PricingTierSection onNavigate={handleNavigate} />
         <FinalCTASection onNavigate={handleNavigate} />
         <footer className="py-3 px-6 lg:px-16 border-t" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.1)' }}>
