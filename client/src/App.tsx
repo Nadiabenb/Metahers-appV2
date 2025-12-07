@@ -76,6 +76,7 @@ const NewsletterPage = lazy(() => import("@/pages/NewsletterPage"));
 const WaitlistPage = lazy(() => import("@/pages/WaitlistPage"));
 const CheckoutPage = lazy(() => import("@/pages/CheckoutPage"));
 const OnboardingQuizPage = lazy(() => import("@/pages/OnboardingQuizPage"));
+const TierSelectionPage = lazy(() => import("@/pages/TierSelectionPage"));
 const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"));
 const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
 const LearningHubPage = lazy(() => import("@/pages/LearningHubPage"));
@@ -188,6 +189,9 @@ function Router() {
 
         {isAuthenticated ? (
           <>
+            {/* Tier Selection Onboarding */}
+            <Route path="/onboarding/tier-selection" component={TierSelectionPage} />
+            
             {/* Onboarding Quiz */}
             <Route path="/onboarding/quiz" component={OnboardingQuizPage} />
 

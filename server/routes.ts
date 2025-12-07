@@ -1857,8 +1857,21 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   }));
 
   // ===== JOURNAL ROUTES =====
+  // Tier Check: Core Membership+ required for journals
+  const requiresCoreOrPremium: RequestHandler = async (req, res, next) => {
+    if (!req.session || !req.session.userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const { storage } = await import("./storage");
+    const user = await storage.getUser(req.session.userId);
+    if (!user || (user.subscriptionTier !== 'core' && user.subscriptionTier !== 'premium' && user.subscriptionTier !== 'pro_monthly' && user.subscriptionTier !== 'pro_annual' && user.subscriptionTier !== 'sanctuary' && user.subscriptionTier !== 'inner_circle' && user.subscriptionTier !== 'founders_circle')) {
+      return res.status(403).json({ message: "Core Membership or higher required. Upgrade to access journals.", requiredTier: "core" });
+    }
+    return next();
+  };
+
   // List journal entries for a month (for calendar view)
-  app.get('/api/journal/list', isAuthenticated, async (req: Request, res) => {
+  app.get('/api/journal/list', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const month = req.query.month as string; // Expected format: YYYY-MM
@@ -1885,7 +1898,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  app.get('/api/journal', isAuthenticated, async (req: Request, res) => {
+  app.get('/api/journal', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       // Get date from query param, default to today
@@ -1922,7 +1935,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  app.post('/api/journal', isAuthenticated, async (req: Request, res) => {
+  app.post('/api/journal', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
 
@@ -2002,7 +2015,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   });
 
   // AI Journal Prompt Generation (Pro only)
-  app.get('/api/journal/prompt', isAuthenticated, asyncHandler(async (req: Request, res) => {
+  app.get('/api/journal/prompt', isAuthenticated, requiresCoreOrPremium, asyncHandler(async (req: Request, res) => {
     const userId = req.session!.userId as string;
     const user = await storage.getUser(userId);
 
@@ -2028,7 +2041,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   }));
 
   // AI Journal Analysis (Pro only)
-  app.post('/api/journal/analyze', isAuthenticated, async (req: Request, res) => {
+  app.post('/api/journal/analyze', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
