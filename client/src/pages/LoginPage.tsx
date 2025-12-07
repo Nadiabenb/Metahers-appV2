@@ -23,10 +23,10 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await apiRequest('POST', '/api/auth/login', formData);
+      const response = await apiRequest('POST', '/api/auth/login', formData);
       
-      // Invalidate user query to fetch fresh data
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+      // Immediately refetch user data and wait for it to complete
+      await queryClient.refetchQueries({ queryKey: ['/api/auth/user'] });
       
       toast({
         title: "Welcome back!",
