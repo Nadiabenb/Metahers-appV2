@@ -963,6 +963,157 @@ function AIAgencySection({ onNavigate }: { onNavigate: (path: string) => void })
           </p>
         </motion.div>
 
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="grid lg:grid-cols-2 gap-12 mb-20"
+        >
+          <div data-testid="section-agency-about-content">
+            <h3 
+              className="text-3xl font-semibold mb-6"
+              style={{ color: '#FFFFFF' }}
+            >
+              Your Personal Digital Team
+            </h3>
+            <p 
+              className="text-lg font-light mb-6 leading-relaxed"
+              style={{ color: 'rgba(255,255,255,0.7)' }}
+            >
+              Stop juggling multiple tools and freelancers. Your AI Agency is a unified team of specialized agents that work cohesively to build your brand, create compelling content, and scale your business—all powered by advanced AI and available 24/7.
+            </p>
+            
+            <div className="space-y-4" data-testid="list-agency-benefits">
+              {[
+                { label: "Scale Without Hiring", desc: "Professional-grade output at a fraction of agency costs" },
+                { label: "Unified Strategy", desc: "All agents aligned around your brand voice & goals" },
+                { label: "Always Available", desc: "Generate content, analyze data, and strategize anytime" },
+                { label: "Rapid Iteration", desc: "Test ideas, optimize campaigns, and adapt instantly" },
+              ].map((benefit, i) => (
+                <motion.div
+                  key={benefit.label}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.4 + i * 0.08 }}
+                  className="flex gap-4"
+                  data-testid={`benefit-${benefit.label.toLowerCase().replace(' ', '-')}`}
+                >
+                  <div 
+                    className="w-2 h-2 rounded-full mt-2 flex-shrink-0"
+                    style={{ background: PINK }}
+                  />
+                  <div>
+                    <p 
+                      className="font-semibold text-sm"
+                      style={{ color: '#FFFFFF' }}
+                    >
+                      {benefit.label}
+                    </p>
+                    <p 
+                      className="text-sm"
+                      style={{ color: 'rgba(255,255,255,0.5)' }}
+                    >
+                      {benefit.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="p-8 border"
+            style={{ 
+              borderColor: 'rgba(212, 175, 55, 0.2)',
+              background: 'rgba(255,255,255,0.02)',
+            }}
+            data-testid="card-agency-workflow"
+          >
+            <h4 
+              className="font-semibold mb-6 text-lg"
+              style={{ color: LAVENDER }}
+            >
+              How It Works
+            </h4>
+            
+            <div className="space-y-5">
+              {[
+                { num: 1, title: "Set Your Vision", desc: "Define brand, goals, target audience" },
+                { num: 2, title: "AI Agents Strategize", desc: "Agents develop coordinated strategy" },
+                { num: 3, title: "Content Flows", desc: "Agents create, refine, and publish daily" },
+                { num: 4, title: "Data Guides Growth", desc: "Analytics optimize next wave of content" },
+              ].map((step, i) => (
+                <motion.div
+                  key={step.num}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.6 + i * 0.1 }}
+                  className="flex gap-4"
+                  data-testid={`step-${step.num}-${step.title.toLowerCase().replace(' ', '-')}`}
+                >
+                  <div 
+                    className="w-8 h-8 flex items-center justify-center flex-shrink-0 text-xs font-bold"
+                    style={{ 
+                      background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
+                      color: '#0A0A0A',
+                    }}
+                  >
+                    {step.num}
+                  </div>
+                  <div>
+                    <p 
+                      className="font-semibold text-sm"
+                      style={{ color: '#FFFFFF' }}
+                    >
+                      {step.title}
+                    </p>
+                    <p 
+                      className="text-xs"
+                      style={{ color: 'rgba(255,255,255,0.5)' }}
+                    >
+                      {step.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={isInView ? { opacity: 1 } : {}}
+              transition={{ delay: 1 }}
+              className="mt-6 pt-6 border-t"
+              style={{ borderColor: 'rgba(255,255,255,0.1)' }}
+              data-testid="text-agency-dashboard-note"
+            >
+              <p 
+                className="text-xs"
+                style={{ color: 'rgba(255,255,255,0.5)' }}
+              >
+                Manage everything from your intuitive AI Agency Dashboard
+              </p>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center mb-12"
+          data-testid="text-agency-team-intro"
+        >
+          <h3 
+            className="text-2xl font-semibold"
+            style={{ color: LAVENDER }}
+          >
+            Meet Your Team
+          </h3>
+        </motion.div>
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {agents.map((agent, i) => {
             const Icon = agent.icon;
