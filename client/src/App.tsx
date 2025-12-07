@@ -81,6 +81,7 @@ const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"));
 const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
 const LearningHubPage = lazy(() => import("@/pages/LearningHubPage"));
 const VisionBoardPage = lazy(() => import("@/pages/VisionBoardPage"));
+const AgencyDashboardPage = lazy(() => import("@/pages/AgencyDashboardPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -230,6 +231,9 @@ function Router() {
             <Route path="/glow-up/complete" component={GlowUpCompletePage} />
             <Route path="/thought-leadership" component={ThoughtLeadershipPage} />
             <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
+            
+            {/* AI Digital Agency */}
+            <Route path="/agency" component={AgencyDashboardPage} />
           </>
         ) : (
           <>

@@ -2536,7 +2536,7 @@ export const aiMasteryEnrollment = pgTable("ai_mastery_enrollment", {
   enrolledAt: timestamp("enrolled_at").defaultNow(),
   completedAt: timestamp("completed_at"),
 }, (table) => [
-  index("idx_enrollment_user").on(table.userId),
+  index("idx_ai_mastery_enrollment_user").on(table.userId),
 ]);
 
 export const insertAiMasteryEnrollmentSchema = createInsertSchema(aiMasteryEnrollment).omit({ id: true, enrolledAt: true });
@@ -2751,3 +2751,235 @@ export const visionReminders = pgTable("vision_reminders", {
 export const insertVisionReminderSchema = createInsertSchema(visionReminders).omit({ id: true, createdAt: true });
 export type InsertVisionReminder = z.infer<typeof insertVisionReminderSchema>;
 export type VisionReminderDB = typeof visionReminders.$inferSelect;
+
+// ===== AI DIGITAL AGENCY SYSTEM =====
+
+// Business profile types
+export type BusinessGoal = 'brand_growth' | 'sales' | 'content_creation' | 'automation' | 'authority' | 'consistency';
+export type SocialPlatform = 'instagram' | 'tiktok' | 'linkedin' | 'x' | 'pinterest' | 'youtube' | 'substack';
+export type AgentRole = 'strategist' | 'social_media' | 'visual_designer' | 'video_director' | 'copywriter' | 'analyst' | 'scheduler';
+export type AssetType = 'post' | 'carousel' | 'reel_script' | 'tiktok_script' | 'image_prompt' | 'moodboard' | 'email' | 'newsletter' | 'landing_copy' | 'ad_copy' | 'strategy';
+
+// Agency Business Profiles - stores user's business information
+export const agencyBusinesses = pgTable("agency_businesses", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  businessName: varchar("business_name").notNull(),
+  brandStory: text("brand_story"),
+  industry: varchar("industry"),
+  targetAudience: text("target_audience"),
+  products: text("products"), // Products/services description
+  colorPalette: jsonb("color_palette").$type<{ primary?: string; secondary?: string; accent?: string; neutral?: string }>(),
+  aestheticPreferences: text("aesthetic_preferences"),
+  contentStyle: varchar("content_style"), // professional, casual, playful, luxurious, educational
+  goals: jsonb("goals").$type<BusinessGoal[]>().default(sql`'[]'::jsonb`),
+  platforms: jsonb("platforms").$type<SocialPlatform[]>().default(sql`'[]'::jsonb`),
+  competitorUrls: jsonb("competitor_urls").$type<string[]>().default(sql`'[]'::jsonb`),
+  uniqueValueProp: text("unique_value_prop"),
+  idealClientProfile: text("ideal_client_profile"),
+  brandVoice: text("brand_voice"), // Tone and voice description
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_ab_user").on(table.userId),
+  index("idx_ab_active").on(table.isActive),
+]);
+
+export const insertAgencyBusinessSchema = createInsertSchema(agencyBusinesses).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertAgencyBusiness = z.infer<typeof insertAgencyBusinessSchema>;
+export type AgencyBusinessDB = typeof agencyBusinesses.$inferSelect;
+
+// Agency Strategy Packages - generated brand strategies
+export const agencyStrategies = pgTable("agency_strategies", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  businessId: varchar("business_id").notNull().references(() => agencyBusinesses.id, { onDelete: "cascade" }),
+  title: varchar("title").notNull(),
+  brandPositioning: text("brand_positioning"),
+  messagingPillars: jsonb("messaging_pillars").$type<{ pillar: string; description: string }[]>().default(sql`'[]'::jsonb`),
+  idealClientProfile: text("ideal_client_profile"),
+  competitorDifferentiation: text("competitor_differentiation"),
+  contentPillars: jsonb("content_pillars").$type<{ name: string; topics: string[]; frequency: string }[]>().default(sql`'[]'::jsonb`),
+  weeklyCalendar: jsonb("weekly_calendar").$type<{ day: string; platform: string; contentType: string; topic: string }[]>().default(sql`'[]'::jsonb`),
+  monthlyThemes: jsonb("monthly_themes").$type<{ week: number; theme: string; focus: string }[]>().default(sql`'[]'::jsonb`),
+  keyMessages: jsonb("key_messages").$type<string[]>().default(sql`'[]'::jsonb`),
+  toneGuidelines: text("tone_guidelines"),
+  hashtagStrategy: jsonb("hashtag_strategy").$type<{ primary: string[]; secondary: string[]; branded: string[] }>(),
+  status: varchar("status").notNull().default("draft"), // draft, generating, complete, archived
+  generatedAt: timestamp("generated_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_as_business").on(table.businessId),
+  index("idx_as_status").on(table.status),
+]);
+
+export const insertAgencyStrategySchema = createInsertSchema(agencyStrategies).omit({ id: true, createdAt: true });
+export type InsertAgencyStrategy = z.infer<typeof insertAgencyStrategySchema>;
+export type AgencyStrategyDB = typeof agencyStrategies.$inferSelect;
+
+// Agency Sessions - tracks multi-agent orchestration runs
+export const agencySessions = pgTable("agency_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  businessId: varchar("business_id").notNull().references(() => agencyBusinesses.id, { onDelete: "cascade" }),
+  strategyId: varchar("strategy_id").references(() => agencyStrategies.id, { onDelete: "set null" }),
+  sessionType: varchar("session_type").notNull(), // full_package, content_batch, strategy_only, visual_only
+  status: varchar("status").notNull().default("pending"), // pending, running, completed, failed, cancelled
+  progress: integer("progress").default(0).notNull(), // 0-100 percentage
+  currentAgent: varchar("current_agent"), // Which agent is currently active
+  sharedContext: jsonb("shared_context").$type<Record<string, any>>(), // Shared memory between agents
+  errorMessage: text("error_message"),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_ase_business").on(table.businessId),
+  index("idx_ase_status").on(table.status),
+]);
+
+export const insertAgencySessionSchema = createInsertSchema(agencySessions).omit({ id: true, createdAt: true });
+export type InsertAgencySession = z.infer<typeof insertAgencySessionSchema>;
+export type AgencySessionDB = typeof agencySessions.$inferSelect;
+
+// Agency Tasks - individual agent tasks within a session
+export const agencyTasks = pgTable("agency_tasks", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  sessionId: varchar("session_id").notNull().references(() => agencySessions.id, { onDelete: "cascade" }),
+  agentRole: varchar("agent_role").notNull(), // strategist, social_media, visual_designer, etc.
+  taskType: varchar("task_type").notNull(), // generate_strategy, create_posts, design_visuals, etc.
+  inputData: jsonb("input_data").$type<Record<string, any>>(), // Input from previous agent or user
+  outputData: jsonb("output_data").$type<Record<string, any>>(), // Generated output
+  status: varchar("status").notNull().default("pending"), // pending, running, completed, failed, skipped
+  retryCount: integer("retry_count").default(0).notNull(),
+  errorMessage: text("error_message"),
+  tokensUsed: integer("tokens_used").default(0),
+  executionTimeMs: integer("execution_time_ms"),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_at_session").on(table.sessionId),
+  index("idx_at_agent").on(table.agentRole),
+  index("idx_at_status").on(table.status),
+]);
+
+export const insertAgencyTaskSchema = createInsertSchema(agencyTasks).omit({ id: true, createdAt: true });
+export type InsertAgencyTask = z.infer<typeof insertAgencyTaskSchema>;
+export type AgencyTaskDB = typeof agencyTasks.$inferSelect;
+
+// Agency Assets - all generated content pieces
+export const agencyAssets = pgTable("agency_assets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  businessId: varchar("business_id").notNull().references(() => agencyBusinesses.id, { onDelete: "cascade" }),
+  sessionId: varchar("session_id").references(() => agencySessions.id, { onDelete: "set null" }),
+  assetType: varchar("asset_type").notNull(), // post, carousel, reel_script, image_prompt, email, etc.
+  platform: varchar("platform"), // instagram, tiktok, linkedin, etc.
+  title: varchar("title"),
+  content: text("content"), // Main content (caption, script, email body)
+  hook: text("hook"), // Opening hook for posts/videos
+  cta: text("cta"), // Call to action
+  hashtags: jsonb("hashtags").$type<string[]>().default(sql`'[]'::jsonb`),
+  visualPrompt: text("visual_prompt"), // Image generation prompt
+  visualUrl: text("visual_url"), // Generated or uploaded image URL
+  carouselSlides: jsonb("carousel_slides").$type<{ slideNumber: number; content: string; visualPrompt?: string }[]>(),
+  videoScript: jsonb("video_script").$type<{ scene: number; action: string; voiceover: string; onScreenText?: string; bRoll?: string }[]>(),
+  emailSubject: varchar("email_subject"),
+  emailPreheader: varchar("email_preheader"),
+  scheduledFor: timestamp("scheduled_for"),
+  isApproved: boolean("is_approved").default(false).notNull(),
+  isPublished: boolean("is_published").default(false).notNull(),
+  publishedAt: timestamp("published_at"),
+  engagementScore: integer("engagement_score"), // Predicted or actual engagement
+  tags: jsonb("tags").$type<string[]>().default(sql`'[]'::jsonb`),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_aa_business").on(table.businessId),
+  index("idx_aa_session").on(table.sessionId),
+  index("idx_aa_type").on(table.assetType),
+  index("idx_aa_platform").on(table.platform),
+  index("idx_aa_approved").on(table.isApproved),
+]);
+
+export const insertAgencyAssetSchema = createInsertSchema(agencyAssets).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertAgencyAsset = z.infer<typeof insertAgencyAssetSchema>;
+export type AgencyAssetDB = typeof agencyAssets.$inferSelect;
+
+// Agency Visual Packages - brand visual identity kits
+export const agencyVisualPackages = pgTable("agency_visual_packages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  businessId: varchar("business_id").notNull().references(() => agencyBusinesses.id, { onDelete: "cascade" }),
+  sessionId: varchar("session_id").references(() => agencySessions.id, { onDelete: "set null" }),
+  moodboardPrompts: jsonb("moodboard_prompts").$type<{ category: string; prompt: string; style: string }[]>().default(sql`'[]'::jsonb`),
+  colorSystem: jsonb("color_system").$type<{ 
+    primary: { hex: string; usage: string };
+    secondary: { hex: string; usage: string };
+    accent: { hex: string; usage: string };
+    neutral: { hex: string; usage: string };
+    background: { hex: string; usage: string };
+  }>(),
+  typographyGuide: jsonb("typography_guide").$type<{ 
+    headingFont: string;
+    bodyFont: string;
+    accentFont?: string;
+    usage: string;
+  }>(),
+  visualStyle: text("visual_style"), // Overall visual direction description
+  imagePrompts: jsonb("image_prompts").$type<{ category: string; prompt: string; platform?: string }[]>().default(sql`'[]'::jsonb`),
+  videoScenes: jsonb("video_scenes").$type<{ sceneType: string; description: string; mood: string }[]>().default(sql`'[]'::jsonb`),
+  brandTextures: jsonb("brand_textures").$type<string[]>().default(sql`'[]'::jsonb`),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_avp_business").on(table.businessId),
+]);
+
+export const insertAgencyVisualPackageSchema = createInsertSchema(agencyVisualPackages).omit({ id: true, createdAt: true });
+export type InsertAgencyVisualPackage = z.infer<typeof insertAgencyVisualPackageSchema>;
+export type AgencyVisualPackageDB = typeof agencyVisualPackages.$inferSelect;
+
+// Agency Automation Schedules - content posting calendars
+export const agencySchedules = pgTable("agency_schedules", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  businessId: varchar("business_id").notNull().references(() => agencyBusinesses.id, { onDelete: "cascade" }),
+  title: varchar("title").notNull(),
+  platform: varchar("platform").notNull(),
+  dayOfWeek: integer("day_of_week"), // 0-6 (Sunday-Saturday)
+  timeSlot: varchar("time_slot"), // HH:MM format
+  contentType: varchar("content_type"), // post, reel, story, carousel
+  frequency: varchar("frequency").notNull(), // daily, weekly, biweekly, monthly
+  isActive: boolean("is_active").default(true).notNull(),
+  autopostTool: varchar("autopost_tool"), // later, buffer, hootsuite, etc.
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_asc_business").on(table.businessId),
+  index("idx_asc_platform").on(table.platform),
+  index("idx_asc_active").on(table.isActive),
+]);
+
+export const insertAgencyScheduleSchema = createInsertSchema(agencySchedules).omit({ id: true, createdAt: true });
+export type InsertAgencySchedule = z.infer<typeof insertAgencyScheduleSchema>;
+export type AgencyScheduleDB = typeof agencySchedules.$inferSelect;
+
+// Agency Analytics Snapshots - performance tracking
+export const agencyAnalytics = pgTable("agency_analytics", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  businessId: varchar("business_id").notNull().references(() => agencyBusinesses.id, { onDelete: "cascade" }),
+  platform: varchar("platform").notNull(),
+  snapshotDate: varchar("snapshot_date").notNull(), // YYYY-MM-DD format
+  followers: integer("followers"),
+  engagement: decimal("engagement", { precision: 5, scale: 2 }), // Engagement rate percentage
+  impressions: integer("impressions"),
+  reach: integer("reach"),
+  topPerformingContent: jsonb("top_performing_content").$type<{ assetId: string; metric: string; value: number }[]>(),
+  growthTrend: decimal("growth_trend", { precision: 5, scale: 2 }), // Percentage growth
+  recommendations: jsonb("recommendations").$type<string[]>().default(sql`'[]'::jsonb`),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_aan_business").on(table.businessId),
+  index("idx_aan_platform").on(table.platform),
+  index("idx_aan_date").on(table.snapshotDate),
+])
+
+export const insertAgencyAnalyticsSchema = createInsertSchema(agencyAnalytics).omit({ id: true, createdAt: true });
+export type InsertAgencyAnalytics = z.infer<typeof insertAgencyAnalyticsSchema>;
+export type AgencyAnalyticsDB = typeof agencyAnalytics.$inferSelect;

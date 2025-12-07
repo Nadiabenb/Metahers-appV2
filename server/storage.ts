@@ -25,8 +25,8 @@ import {
   appAtelierUsage,
   companions,
   companionActivities,
-  sectionCompletions, // Import sectionCompletions table
-  retroCameraPhotos, // Import retroCameraPhotos table
+  sectionCompletions,
+  retroCameraPhotos,
   womenProfiles,
   profileSkills,
   directMessages,
@@ -34,6 +34,14 @@ import {
   profileServices,
   opportunities,
   profileActivityFeed,
+  agencyBusinesses,
+  agencyStrategies,
+  agencySessions,
+  agencyTasks,
+  agencyAssets,
+  agencyVisualPackages,
+  agencySchedules,
+  agencyAnalytics,
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -106,6 +114,22 @@ import type {
   OpportunityDB,
   InsertProfileActivityFeed,
   ProfileActivityFeedDB,
+  InsertAgencyBusiness,
+  AgencyBusinessDB,
+  InsertAgencyStrategy,
+  AgencyStrategyDB,
+  InsertAgencySession,
+  AgencySessionDB,
+  InsertAgencyTask,
+  AgencyTaskDB,
+  InsertAgencyAsset,
+  AgencyAssetDB,
+  InsertAgencyVisualPackage,
+  AgencyVisualPackageDB,
+  InsertAgencySchedule,
+  AgencyScheduleDB,
+  InsertAgencyAnalytics,
+  AgencyAnalyticsDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -1907,6 +1931,179 @@ export class DatabaseStorage implements IStorage {
   }
 
   // ===== EXPERIENCE PROGRESS =====
+
+  // ===== AI AGENCY OPERATIONS =====
+  
+  // Business operations
+  async createAgencyBusiness(business: InsertAgencyBusiness): Promise<AgencyBusinessDB> {
+    const [result] = await db.insert(agencyBusinesses).values(business).returning();
+    return result;
+  }
+
+  async getAgencyBusiness(id: string): Promise<AgencyBusinessDB | undefined> {
+    const [result] = await db.select().from(agencyBusinesses).where(eq(agencyBusinesses.id, id));
+    return result;
+  }
+
+  async getUserAgencyBusinesses(userId: string): Promise<AgencyBusinessDB[]> {
+    return await db.select().from(agencyBusinesses)
+      .where(and(eq(agencyBusinesses.userId, userId), eq(agencyBusinesses.isActive, true)))
+      .orderBy(desc(agencyBusinesses.createdAt));
+  }
+
+  async updateAgencyBusiness(id: string, data: Partial<InsertAgencyBusiness>): Promise<AgencyBusinessDB> {
+    const [result] = await db.update(agencyBusinesses)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(agencyBusinesses.id, id))
+      .returning();
+    return result;
+  }
+
+  // Strategy operations
+  async createAgencyStrategy(strategy: InsertAgencyStrategy): Promise<AgencyStrategyDB> {
+    const [result] = await db.insert(agencyStrategies).values(strategy).returning();
+    return result;
+  }
+
+  async getAgencyStrategy(id: string): Promise<AgencyStrategyDB | undefined> {
+    const [result] = await db.select().from(agencyStrategies).where(eq(agencyStrategies.id, id));
+    return result;
+  }
+
+  async getBusinessStrategies(businessId: string): Promise<AgencyStrategyDB[]> {
+    return await db.select().from(agencyStrategies)
+      .where(eq(agencyStrategies.businessId, businessId))
+      .orderBy(desc(agencyStrategies.createdAt));
+  }
+
+  async updateAgencyStrategy(id: string, data: Partial<InsertAgencyStrategy>): Promise<AgencyStrategyDB> {
+    const [result] = await db.update(agencyStrategies)
+      .set(data)
+      .where(eq(agencyStrategies.id, id))
+      .returning();
+    return result;
+  }
+
+  // Session operations
+  async createAgencySession(session: InsertAgencySession): Promise<AgencySessionDB> {
+    const [result] = await db.insert(agencySessions).values(session).returning();
+    return result;
+  }
+
+  async getAgencySession(id: string): Promise<AgencySessionDB | undefined> {
+    const [result] = await db.select().from(agencySessions).where(eq(agencySessions.id, id));
+    return result;
+  }
+
+  async getBusinessSessions(businessId: string): Promise<AgencySessionDB[]> {
+    return await db.select().from(agencySessions)
+      .where(eq(agencySessions.businessId, businessId))
+      .orderBy(desc(agencySessions.createdAt));
+  }
+
+  async updateAgencySession(id: string, data: Partial<InsertAgencySession>): Promise<AgencySessionDB> {
+    const [result] = await db.update(agencySessions)
+      .set(data)
+      .where(eq(agencySessions.id, id))
+      .returning();
+    return result;
+  }
+
+  // Task operations
+  async createAgencyTask(task: InsertAgencyTask): Promise<AgencyTaskDB> {
+    const [result] = await db.insert(agencyTasks).values(task).returning();
+    return result;
+  }
+
+  async getSessionTasks(sessionId: string): Promise<AgencyTaskDB[]> {
+    return await db.select().from(agencyTasks)
+      .where(eq(agencyTasks.sessionId, sessionId))
+      .orderBy(agencyTasks.createdAt);
+  }
+
+  async updateAgencyTask(id: string, data: Partial<InsertAgencyTask>): Promise<AgencyTaskDB> {
+    const [result] = await db.update(agencyTasks)
+      .set(data)
+      .where(eq(agencyTasks.id, id))
+      .returning();
+    return result;
+  }
+
+  // Asset operations
+  async createAgencyAsset(asset: InsertAgencyAsset): Promise<AgencyAssetDB> {
+    const [result] = await db.insert(agencyAssets).values(asset).returning();
+    return result;
+  }
+
+  async createAgencyAssets(assets: InsertAgencyAsset[]): Promise<AgencyAssetDB[]> {
+    if (assets.length === 0) return [];
+    return await db.insert(agencyAssets).values(assets).returning();
+  }
+
+  async getBusinessAssets(businessId: string, assetType?: string, platform?: string): Promise<AgencyAssetDB[]> {
+    const conditions = [eq(agencyAssets.businessId, businessId)];
+    if (assetType) {
+      conditions.push(eq(agencyAssets.assetType, assetType));
+    }
+    if (platform) {
+      conditions.push(eq(agencyAssets.platform, platform));
+    }
+    return await db.select().from(agencyAssets)
+      .where(and(...conditions))
+      .orderBy(desc(agencyAssets.createdAt));
+  }
+
+  async getSessionAssets(sessionId: string): Promise<AgencyAssetDB[]> {
+    return await db.select().from(agencyAssets)
+      .where(eq(agencyAssets.sessionId, sessionId))
+      .orderBy(desc(agencyAssets.createdAt));
+  }
+
+  async updateAgencyAsset(id: string, data: Partial<InsertAgencyAsset>): Promise<AgencyAssetDB> {
+    const [result] = await db.update(agencyAssets)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(agencyAssets.id, id))
+      .returning();
+    return result;
+  }
+
+  // Visual package operations
+  async createAgencyVisualPackage(pkg: InsertAgencyVisualPackage): Promise<AgencyVisualPackageDB> {
+    const [result] = await db.insert(agencyVisualPackages).values(pkg).returning();
+    return result;
+  }
+
+  async getBusinessVisualPackages(businessId: string): Promise<AgencyVisualPackageDB[]> {
+    return await db.select().from(agencyVisualPackages)
+      .where(eq(agencyVisualPackages.businessId, businessId))
+      .orderBy(desc(agencyVisualPackages.createdAt));
+  }
+
+  // Schedule operations
+  async createAgencySchedule(schedule: InsertAgencySchedule): Promise<AgencyScheduleDB> {
+    const [result] = await db.insert(agencySchedules).values(schedule).returning();
+    return result;
+  }
+
+  async getBusinessSchedules(businessId: string): Promise<AgencyScheduleDB[]> {
+    return await db.select().from(agencySchedules)
+      .where(eq(agencySchedules.businessId, businessId))
+      .orderBy(agencySchedules.dayOfWeek);
+  }
+
+  // Analytics operations
+  async createAgencyAnalytics(analytics: InsertAgencyAnalytics): Promise<AgencyAnalyticsDB> {
+    const [result] = await db.insert(agencyAnalytics).values(analytics).returning();
+    return result;
+  }
+
+  async getBusinessAnalytics(businessId: string, platform?: string): Promise<AgencyAnalyticsDB[]> {
+    let query = db.select().from(agencyAnalytics).where(eq(agencyAnalytics.businessId, businessId));
+    if (platform) {
+      query = query.where(and(eq(agencyAnalytics.businessId, businessId), eq(agencyAnalytics.platform, platform)));
+    }
+    return await query.orderBy(desc(agencyAnalytics.snapshotDate));
+  }
 }
 
 export const storage = new DatabaseStorage();

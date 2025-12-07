@@ -4495,6 +4495,238 @@ Respond in JSON format:
     res.json(matches);
   }));
 
+  // ===== AI DIGITAL AGENCY ROUTES =====
+  const { startAgencySession } = await import("./lib/agencyOrchestrator");
+
+  // Create a new business profile
+  app.post('/api/agency/business', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { 
+      businessName, brandStory, industry, targetAudience, products,
+      colorPalette, aestheticPreferences, contentStyle, goals, platforms,
+      competitorUrls, uniqueValueProp, idealClientProfile, brandVoice 
+    } = req.body;
+
+    if (!businessName) {
+      return res.status(400).json({ message: "Business name is required" });
+    }
+
+    const business = await storage.createAgencyBusiness({
+      userId,
+      businessName,
+      brandStory,
+      industry,
+      targetAudience,
+      products,
+      colorPalette,
+      aestheticPreferences,
+      contentStyle,
+      goals: goals || [],
+      platforms: platforms || ['instagram'],
+      competitorUrls: competitorUrls || [],
+      uniqueValueProp,
+      idealClientProfile,
+      brandVoice,
+    });
+
+    res.json(business);
+  }));
+
+  // Get user's businesses
+  app.get('/api/agency/businesses', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const businesses = await storage.getUserAgencyBusinesses(userId);
+    res.json(businesses);
+  }));
+
+  // Get a specific business
+  app.get('/api/agency/business/:id', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.id);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+    
+    res.json(business);
+  }));
+
+  // Update a business profile
+  app.patch('/api/agency/business/:id', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.id);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const updated = await storage.updateAgencyBusiness(req.params.id, req.body);
+    res.json(updated);
+  }));
+
+  // Start an agency session (runs multi-agent orchestration)
+  app.post('/api/agency/session/start', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { businessId, sessionType } = req.body;
+
+    if (!businessId) {
+      return res.status(400).json({ message: "Business ID is required" });
+    }
+
+    const business = await storage.getAgencyBusiness(businessId);
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const session = await startAgencySession(businessId, sessionType || 'full_package');
+    res.json(session);
+  }));
+
+  // Get session status and progress
+  app.get('/api/agency/session/:id', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const session = await storage.getAgencySession(req.params.id);
+    if (!session) {
+      throw new NotFoundError("Session not found");
+    }
+
+    const business = await storage.getAgencyBusiness(session.businessId);
+    const userId = req.session!.userId as string;
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Session not found");
+    }
+
+    const tasks = await storage.getSessionTasks(session.id);
+    res.json({ session, tasks });
+  }));
+
+  // Get all sessions for a business
+  app.get('/api/agency/business/:businessId/sessions', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.businessId);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const sessions = await storage.getBusinessSessions(req.params.businessId);
+    res.json(sessions);
+  }));
+
+  // Get strategies for a business
+  app.get('/api/agency/business/:businessId/strategies', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.businessId);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const strategies = await storage.getBusinessStrategies(req.params.businessId);
+    res.json(strategies);
+  }));
+
+  // Get a specific strategy
+  app.get('/api/agency/strategy/:id', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const strategy = await storage.getAgencyStrategy(req.params.id);
+    if (!strategy) {
+      throw new NotFoundError("Strategy not found");
+    }
+
+    const business = await storage.getAgencyBusiness(strategy.businessId);
+    const userId = req.session!.userId as string;
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Strategy not found");
+    }
+
+    res.json(strategy);
+  }));
+
+  // Get assets for a business (with optional filters)
+  app.get('/api/agency/business/:businessId/assets', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.businessId);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const assetType = req.query.type as string | undefined;
+    const platform = req.query.platform as string | undefined;
+    const assets = await storage.getBusinessAssets(req.params.businessId, assetType, platform);
+    res.json(assets);
+  }));
+
+  // Get session assets
+  app.get('/api/agency/session/:sessionId/assets', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const session = await storage.getAgencySession(req.params.sessionId);
+    if (!session) {
+      throw new NotFoundError("Session not found");
+    }
+
+    const business = await storage.getAgencyBusiness(session.businessId);
+    const userId = req.session!.userId as string;
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Session not found");
+    }
+
+    const assets = await storage.getSessionAssets(req.params.sessionId);
+    res.json(assets);
+  }));
+
+  // Update an asset (approve, schedule, etc.)
+  app.patch('/api/agency/asset/:id', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const { isApproved, scheduledFor, content, hook, cta, hashtags } = req.body;
+    const updated = await storage.updateAgencyAsset(req.params.id, {
+      isApproved,
+      scheduledFor: scheduledFor ? new Date(scheduledFor) : undefined,
+      content,
+      hook,
+      cta,
+      hashtags,
+    });
+    res.json(updated);
+  }));
+
+  // Get visual packages for a business
+  app.get('/api/agency/business/:businessId/visuals', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.businessId);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const packages = await storage.getBusinessVisualPackages(req.params.businessId);
+    res.json(packages);
+  }));
+
+  // Get schedules for a business
+  app.get('/api/agency/business/:businessId/schedules', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.businessId);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const schedules = await storage.getBusinessSchedules(req.params.businessId);
+    res.json(schedules);
+  }));
+
+  // Get analytics for a business
+  app.get('/api/agency/business/:businessId/analytics', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const business = await storage.getAgencyBusiness(req.params.businessId);
+    
+    if (!business || business.userId !== userId) {
+      throw new NotFoundError("Business not found");
+    }
+
+    const platform = req.query.platform as string | undefined;
+    const analytics = await storage.getBusinessAnalytics(req.params.businessId, platform);
+    res.json(analytics);
+  }));
+
   const httpServer = createServer(app);
   return httpServer;
 }
