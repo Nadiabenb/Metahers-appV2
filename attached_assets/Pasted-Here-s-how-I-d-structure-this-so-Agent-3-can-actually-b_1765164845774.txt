@@ -1,0 +1,354 @@
+Here’s how I’d structure this so Agent 3 can actually build it cleanly into the MetaHers app.
+
+⸻
+
+1. Define the experience (what we’re building)
+
+Working title:
+MetaHers Balboa Boat AI Lab
+Tagline: “2-hour AI glow-up on the water for 6 women.”
+
+Core elements you want in the app:
+	1.	Sales Page / Landing
+	•	Public page in the MetaHers app with:
+	•	Name, date/time, location (Balboa Island harbor), duration, capacity (6 women).
+	•	What’s included (boat, AI workshop, snacks, 1 month MetaHers Pro).
+	•	Who it’s for (women entrepreneurs, mothers, creatives, etc.).
+	•	Agenda overview for the 2 hours.
+	•	Photos/visuals.
+	•	Clear CTA: “Apply for your seat” / “Request invitation”.
+	2.	Application + Questionnaire
+	•	Form for each woman to fill out before booking is confirmed.
+	•	Stores answers in your database so you can review before the event.
+	•	Triggers a confirmation screen + onboarding flow.
+	3.	Virtual Onboarding (inside the app)
+	•	After you mark someone as “Accepted”:
+	•	They see a workshop-specific onboarding flow:
+	•	Welcome page: “You’re in.”
+	•	About MetaHers + the boat experience.
+	•	Preparation checklist (charged laptop, hotspot, clothes, arrival instructions).
+	•	Link/join info for your WhatsApp / community group if needed.
+	•	Info about their 1-month free MetaHers Pro access.
+	4.	1-Month MetaHers Pro Access
+	•	When attendee is accepted/confirmed, the app:
+	•	Creates a 30-day Pro entitlement for that user.
+	•	Shows them Pro features in the app.
+	5.	Admin View for You
+	•	Inside the app (authenticated, admin-only):
+	•	List of workshop applications.
+	•	View each woman’s answers.
+	•	Set her status: pending, accepted, waitlisted, declined, attended.
+	•	Trigger acceptance email / in-app notification when you change status.
+
+⸻
+
+2. Questionnaire fields (what you want to know before you meet)
+
+Recommended fields to include in the application form:
+
+Section 1 – Basic Info
+	•	Full name
+	•	Email
+	•	Phone / WhatsApp
+	•	Instagram / Website (optional)
+
+Section 2 – Business + Work
+	•	What do you currently do? (job / business / project) – free text
+	•	Do you currently sell a product or service? (Yes/No + short description)
+	•	Rough stage:
+	•	Just starting / idea
+	•	Launched but under $2k/month
+	•	$2k–$10k/month
+	•	$10k+/month
+
+Section 3 – AI + Tech
+	•	Have you used AI tools before? (multi-select)
+	•	Never
+	•	Just ChatGPT
+	•	ChatGPT + AI images
+	•	I’ve used several tools confidently
+	•	What would you MOST love AI to help you with in the next 30 days? (choose 1–2)
+	•	Generate content faster
+	•	Look like a premium brand online
+	•	Build lead magnets / landing pages
+	•	Automate repetitive tasks
+	•	Organize my business + life
+	•	Describe your biggest block / fear with AI in one or two sentences.
+
+Section 4 – This Boat Experience
+	•	What is one clear win you want to leave this boat with?
+	•	Are you comfortable being on camera if we take photos/videos of the workshop? (Yes/No)
+	•	Any accessibility or comfort needs we should know about? (free text)
+	•	Will you be bringing:
+	•	Laptop (fully charged)
+	•	Phone / tablet
+	•	Mobile hotspot
+
+Section 5 – Agreement
+	•	Checkbox: “I understand this workshop is on a small boat in Balboa Island harbor and I am responsible for my own safety, punctuality, and devices.”
+	•	Checkbox: “I agree to the MetaHers terms and refund policy.”
+
+All of this should be stored in a structured way in the DB so you (admin) can easily read it before the event.
+
+⸻
+
+3. Onboarding flow content (post-acceptance)
+
+Steps you want Agent 3 to build into an in-app onboarding flow:
+	1.	Welcome Screen
+	•	“You’re officially confirmed for the MetaHers Balboa Boat AI Lab.”
+	•	Show date, time, meeting point (exact location on Balboa Island).
+	•	Button: “Next: About the Experience.”
+	2.	About MetaHers + This Lab
+	•	Short explanation of MetaHers vision: women, AI, Web3, mind spa, etc.
+	•	What this specific session will cover:
+	•	AI for business,
+	•	AI for daily life,
+	•	Live implementation on their laptop.
+	3.	What to Bring
+	•	Charged laptop + charger.
+	•	Phone with hotspot if they have it.
+	•	Earphones (optional).
+	•	Comfortable, non-slip shoes, warm layer (depending on weather).
+	•	Notebook/pen if they like.
+	4.	Day-of Logistics
+	•	Exact meeting point (pin, address, “we’ll meet at [time] sharp”).
+	•	Parking suggestions / ride-share suggestion.
+	•	What happens if they’re 10–15 minutes late.
+	5.	1-Month Free MetaHers Pro
+	•	Explain:
+	•	What Pro gives them access to (features, AI agents, community, etc.).
+	•	Their access start/end date.
+	•	Where in the app to find Pro-only modules.
+	6.	Community + Follow-up
+	•	Invite link or instructions for joining the MetaHers WhatsApp / community group.
+	•	Ask them for one intention they want to share with the group before the event.
+
+⸻
+
+4. Data + product structure (for Agent 3)
+
+At a high level, tell Agent 3 to:
+	1.	Add DB tables (or extend existing ones)
+Assuming Postgres + an ORM like Drizzle/Prisma (Agent 3 should adapt to actual stack), add something like:
+	•	boat_workshops
+	•	id
+	•	slug
+	•	name
+	•	description
+	•	start_datetime
+	•	end_datetime
+	•	location
+	•	capacity
+	•	price_per_seat
+	•	is_active (boolean)
+	•	boat_workshop_applications
+	•	id
+	•	workshop_id (FK to boat_workshops)
+	•	user_id (FK to users if logged in)
+	•	full_name
+	•	email
+	•	phone
+	•	instagram
+	•	website
+	•	business_description
+	•	revenue_stage
+	•	ai_experience_level
+	•	ai_help_goals (array/json)
+	•	biggest_block
+	•	desired_win
+	•	camera_ok (boolean)
+	•	access_needs
+	•	devices_bringing (json/array)
+	•	agreements (json/booleans)
+	•	status (pending | accepted | waitlisted | declined | attended)
+	•	created_at, updated_at
+	•	If not already present: user_entitlements or subscriptions
+	•	id
+	•	user_id
+	•	type (e.g. pro_trial, pro_paid)
+	•	source (e.g. boat_workshop)
+	•	starts_at
+	•	ends_at
+	•	metadata (json)
+	2.	Public sales page route
+	•	New route: /boat-lab or /experiences/boat-ai-lab (your choice).
+	•	Pull data from boat_workshops for the next active workshop.
+	•	Show:
+	•	Hero, date, capacity, price, agenda, testimonials (placeholder), inclusion list, FAQ, CTA.
+	•	“Apply now” button → application form route.
+	3.	Application form route
+	•	For example: /boat-lab/apply
+	•	Multi-step form with sections listed in §2.
+	•	Validation on frontend + backend.
+	•	On submit:
+	•	Create boat_workshop_applications row.
+	•	If user is logged in, attach their user_id.
+	•	Show “Thank you, your application is received” page.
+	•	Trigger transactional email to the applicant with summary + next steps.
+	4.	Admin interface
+	•	Add admin page: /admin/boat-workshop.
+	•	Features:
+	•	List all applications for each workshop with filters by status.
+	•	Click to view full questionnaire answers.
+	•	Change application status.
+	•	When status is set to accepted:
+	•	Call backend logic to:
+	•	Grant 1-month Pro entitlement (create/update subscription/entitlement entry).
+	•	Trigger “You’re in” email with link to onboarding flow.
+	•	Optional: mark them as attended after the event.
+	5.	Onboarding flow routes
+	•	Add route: /boat-lab/onboarding (protected: only for accepted users).
+	•	Uses the steps from §3:
+	•	Implement as a multi-step UI or progress bar.
+	•	Store simple progress so they can resume.
+	•	Show “Pro access” card with remaining days (based on entitlement dates).
+	6.	Email templates / notifications
+	•	At least two emails:
+	1.	Application received
+	•	Sent immediately on submission.
+	2.	Accepted + onboarding
+	•	Sent when admin changes status to accepted.
+	•	Includes:
+	•	Date/time/location,
+	•	Link to onboarding flow in app,
+	•	Reminder about 1-month Pro access.
+	•	Use whatever email provider the app already uses (Resend, etc.). Agent 3 should detect and follow current patterns.
+	7.	Access control
+	•	Public:
+	•	Sales page + application route.
+	•	Logged-in:
+	•	Onboarding flow.
+	•	Only accepted applications see the onboarding.
+	•	Admin:
+	•	Admin dashboard + status management.
+
+⸻
+
+5. Prompt for Agent 3 in Replit
+
+You can copy–paste this as your main prompt to Agent 3 (adjust app name/path if needed):
+
+⸻
+
+PROMPT FOR AGENT 3
+
+You are working on the existing MetaHers app hosted in this Replit project.
+Your goal: implement a new feature called “MetaHers Balboa Boat AI Lab” and integrate it with the existing stack and design system.
+
+Please follow these instructions:
+	1.	Inspect the current codebase to understand:
+	•	Tech stack (likely Next.js/React + TypeScript + API routes),
+	•	Database layer (ORM, Drizzle/Prisma/etc.),
+	•	How authentication, subscriptions/entitlements, email sending, and admin pages are currently implemented,
+	•	Existing UI components for pages, forms, multi-step flows, and admin dashboards.
+	2.	Add the data models needed for the boat workshop:
+	•	A boat_workshops table/model to store each workshop configuration:
+	•	id, slug, name, description, start_datetime, end_datetime, location, capacity, price_per_seat, is_active, timestamps.
+	•	A boat_workshop_applications table/model:
+	•	id
+	•	workshop_id (FK to boat_workshops)
+	•	user_id (FK to users, nullable if guest)
+	•	full_name, email, phone, instagram, website
+	•	business_description
+	•	revenue_stage
+	•	ai_experience_level
+	•	ai_help_goals (array/json)
+	•	biggest_block
+	•	desired_win
+	•	camera_ok (boolean)
+	•	access_needs
+	•	devices_bringing (array/json)
+	•	agreements (json booleans)
+	•	status enum/string: pending | accepted | waitlisted | declined | attended
+	•	created_at, updated_at
+	•	If the app already has a subscriptions/entitlements table, reuse it.
+Otherwise, create a simple user_entitlements table with:
+	•	id, user_id, type (e.g. "pro_trial"), source (e.g. "boat_workshop"), starts_at, ends_at, metadata (json), timestamps.
+Use the existing migration system (for example Drizzle migrations) and keep style consistent.
+	3.	Create a public sales page for the workshop:
+	•	Route: /boat-lab (or the most appropriate route based on current routing conventions).
+	•	It should:
+	•	Query the next active boat_workshops record.
+	•	Display: name, description, date/time, location, capacity, price, what’s included, who it’s for, 2-hour agenda, FAQ, and a CTA button.
+	•	The CTA button should link to the application form route.
+	•	Use existing layout components and design tokens so the page visually matches the rest of MetaHers app.
+	•	Make all content easily configurable (either seeded data in boat_workshops or a config file).
+	4.	Implement the application + questionnaire:
+	•	Route: /boat-lab/apply.
+	•	Use a multi-step form with these sections:
+	•	Basic info: name, email, phone, Instagram, website.
+	•	Business + work: what they do, revenue stage.
+	•	AI + tech: AI experience level, what they want help with, biggest block.
+	•	About the boat experience: desired win, camera consent, access needs, devices they’ll bring.
+	•	Agreements: liability + terms checkboxes.
+	•	Add both client-side and server-side validation.
+	•	When submitted:
+	•	Create a new boat_workshop_applications record with status = "pending".
+	•	Attach current user_id if the user is logged in.
+	•	After successful submission:
+	•	Redirect to a “thank you / application received” page with a short summary and next steps.
+	•	Trigger an email: “We received your application” (see step 6).
+	5.	Build an admin dashboard for this feature:
+	•	Route: /admin/boat-workshop (or adapt to existing admin route patterns).
+	•	Restrict access to admin users using the existing auth/role system.
+	•	Features:
+	•	List all applications for the most recent upcoming workshop (and allow selecting a workshop).
+	•	Show applicant name, email, status, created_at.
+	•	Filter by status.
+	•	Click an applicant to view full questionnaire answers in a detail view.
+	•	Ability to change status of an application.
+	•	When status is changed to accepted:
+	•	If the applicant has a user_id, create or update a 30-day Pro entitlement for that user:
+	•	type = "pro_trial", source = "boat_workshop", starts_at = now, ends_at = now + 30 days.
+	•	Trigger an “accepted” email with link to the onboarding flow.
+	•	For applicants without a user_id, do not create entitlements yet, but keep their status; we can later ask them to create an account.
+	6.	Email / notification integration:
+	•	Detect which email provider and helper utilities the app already uses (e.g. Resend, etc.) and follow the same patterns.
+	•	Implement at least two transactional emails with reusable templates:
+	1.	Application received:
+	•	Subject example: “We received your MetaHers Balboa Boat AI Lab application”
+	•	Body: thank them, repeat date/time/location in generic form, let them know you’ll review and follow up.
+	2.	Application accepted:
+	•	Subject example: “You’re in: MetaHers Balboa Boat AI Lab confirmed”
+	•	Body: confirm they’re accepted, include workshop date/time/location, what to bring, and a button linking to the onboarding flow route you’ll build in step 7.
+	•	Ensure errors are logged and handled gracefully.
+	7.	Onboarding flow for accepted attendees:
+	•	Route: /boat-lab/onboarding.
+	•	This route should:
+	•	Require an authenticated user.
+	•	Check if the logged-in user has any boat_workshop_applications with status = "accepted" for an upcoming workshop; if not, show an error / “not authorized” message.
+	•	Implement a multi-step onboarding UI (use existing stepper/wizard components if available) with these steps:
+	1.	Welcome & confirmation (date, time, location).
+	2.	About MetaHers and what the workshop covers.
+	3.	What to bring (charged laptop, hotspot, clothes, etc.).
+	4.	Day-of logistics (meeting point, arrival time, parking tips).
+	5.	Pro access explanation:
+	•	Show if they have a Pro entitlement and its end date.
+	•	Display a card: “Your 1-month MetaHers Pro is active until [date].”
+	6.	Community/join link:
+	•	Placeholder for a link/URL to WhatsApp or community group (configurable).
+	•	Store onboarding completion state (even a simple boolean field on boat_workshop_applications or user metadata) so we can show “Onboarding complete” later.
+	8.	Integration with existing Pro features:
+	•	Wherever the app currently checks whether a user is Pro or not, ensure that a valid pro_trial entitlement created from the boat workshop also unlocks those features.
+	•	If there is already a centralized “isProUser”/“currentPlan” helper, integrate the new entitlement logic there instead of duplicating it.
+	9.	Testing & polish:
+	•	Add seed data for one upcoming workshop in boat_workshops for local/dev testing.
+	•	Manually test:
+	•	Viewing sales page → submitting application → receiving email.
+	•	Admin changing status to accepted → entitlement created → accepted email sent.
+	•	Accepted user logging in → accessing /boat-lab/onboarding → going through all steps.
+	•	Pro entitlement correctly grants access to Pro-only sections.
+	•	Ensure TypeScript types are correct, no build errors, and that code style matches the rest of the project.
+	10.	Finally, summarize all changes you made:
+	•	New tables / migrations.
+	•	New routes/pages/components.
+	•	New APIs.
+	•	Any config/env variables required.
+	•	How to test the full flow end-to-end.
+
+Please proceed step by step, keep existing architecture intact, and reuse existing patterns for styling, routing, auth, and emails.
+
+⸻
+
+If you want, next we can draft the exact copy for the sales page and onboarding screens so you can plug it directly into the app once Agent 3 creates the structure.
