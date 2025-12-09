@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, CheckCircle2, Lock, BookOpen, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, Crown, ShoppingCart, Star, TrendingUp, Users } from "lucide-react";
+import { Sparkles, ArrowRight, CheckCircle2, Lock, BookOpen, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, Crown, ShoppingCart, Star, TrendingUp, Users, Ship, Anchor, MapPin, Calendar, UsersRound } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import { WelcomeModal } from "@/components/WelcomeModal";
 import { SEO } from "@/components/SEO";
@@ -620,6 +620,131 @@ export default function HomePage() {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* VOYAGES SECTION - Newport Beach Luxury Experiences */}
+      <section className="py-24 px-6 bg-gradient-to-br from-violet-50 via-white to-amber-50/30 relative overflow-hidden">
+        {/* Subtle ocean wave pattern */}
+        <div className="absolute inset-0 opacity-[0.03]" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='%238B5CF6' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
+        }} />
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-100 to-amber-100 text-violet-700 text-xs uppercase tracking-[0.2em] font-medium rounded-full mb-6">
+              <Anchor className="w-3 h-3" />
+              Newport Beach Experiences
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
+              MetaHers <span className="bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">Voyages</span>
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Intimate luxury experiences where you master AI, Crypto & Web3 aboard Duffy boats, 
+              at exclusive beach picnics, and over champagne brunches. Only 6 women per voyage.
+            </p>
+          </motion.div>
+
+          {/* Voyage Categories */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {[
+              {
+                icon: Bot,
+                title: "AI Voyages",
+                description: "Master ChatGPT, Claude, and AI automation for your business",
+                gradient: "from-violet-500 to-purple-600",
+                bgGradient: "from-violet-50 to-purple-50",
+              },
+              {
+                icon: Gem,
+                title: "Crypto & Web3",
+                description: "Navigate wallets, tokens, and blockchain with confidence",
+                gradient: "from-amber-500 to-yellow-500",
+                bgGradient: "from-amber-50 to-yellow-50",
+              },
+              {
+                icon: Palette,
+                title: "AI Branding",
+                description: "Create stunning visuals and brand assets with AI tools",
+                gradient: "from-pink-500 to-fuchsia-500",
+                bgGradient: "from-pink-50 to-fuchsia-50",
+              },
+            ].map((category, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className={`bg-gradient-to-br ${category.bgGradient} p-6 rounded-lg border border-gray-100 hover:shadow-lg transition-all cursor-pointer group`}
+                onClick={() => setLocation('/voyages')}
+                data-testid={`voyage-category-${index}`}
+              >
+                <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${category.gradient} flex items-center justify-center mb-4`}>
+                  <category.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
+                <p className="text-sm text-gray-600 mb-4">{category.description}</p>
+                <span className="text-sm font-medium text-violet-600 group-hover:text-violet-700 flex items-center gap-1">
+                  Explore voyages <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Experience Highlights */}
+          <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+              {[
+                { icon: Ship, value: "3", label: "Duffy Boat Voyages" },
+                { icon: MapPin, value: "Newport Beach", label: "California" },
+                { icon: UsersRound, value: "6", label: "Women Per Voyage" },
+                { icon: Calendar, value: "Jan 2025", label: "Next Voyage" },
+              ].map((stat, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                >
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-gradient-to-br from-violet-100 to-amber-100 flex items-center justify-center">
+                    <stat.icon className="w-5 h-5 text-violet-600" />
+                  </div>
+                  <div className="text-xl font-semibold text-gray-900">{stat.value}</div>
+                  <div className="text-xs text-gray-500 uppercase tracking-wider">{stat.label}</div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4 }}
+            className="text-center"
+          >
+            <button
+              onClick={() => setLocation('/voyages')}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white text-sm uppercase tracking-[0.15em] font-medium rounded-lg hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg shadow-violet-200"
+              data-testid="button-explore-voyages"
+            >
+              <Ship className="w-4 h-4" />
+              Explore All Voyages
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <p className="text-sm text-gray-500 mt-4">
+              Starting at $497 per experience • Spots fill quickly
+            </p>
+          </motion.div>
         </div>
       </section>
 
