@@ -84,6 +84,7 @@ const VisionBoardPage = lazy(() => import("@/pages/VisionBoardPage"));
 const AgencyDashboardPage = lazy(() => import("@/pages/AgencyDashboardPage"));
 const VoyagesPage = lazy(() => import("@/pages/VoyagesPage"));
 const VoyageDetailPage = lazy(() => import("@/pages/VoyageDetailPage"));
+const VoyageSuccessPage = lazy(() => import("@/pages/VoyageSuccessPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -240,6 +241,7 @@ function Router() {
             {/* MetaHers Voyages */}
             <Route path="/voyages" component={VoyagesPage} />
             <Route path="/voyages/:slug" component={VoyageDetailPage} />
+            <Route path="/voyages/success" component={VoyageSuccessPage} />
           </>
         ) : (
           <>
@@ -248,6 +250,11 @@ function Router() {
             <Route path="/home" component={HomePage} />
             <Route path="/workspace">{() => <Redirect to="/login" />}</Route>
             <Route path="/progress">{() => <Redirect to="/login" />}</Route>
+            
+            {/* Public MetaHers Voyages */}
+            <Route path="/voyages" component={VoyagesPage} />
+            <Route path="/voyages/:slug" component={VoyageDetailPage} />
+            <Route path="/voyages/success" component={VoyageSuccessPage} />
           </>
         )}
         <Route component={NotFound} />

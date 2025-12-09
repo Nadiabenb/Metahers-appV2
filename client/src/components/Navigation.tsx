@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera, Users, Sun, Bot } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera, Users, Sun, Bot, Ship, Anchor } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -46,6 +46,12 @@ export function Navigation() {
         { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "12-week intensive", pro: true },
         { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build with AI", pro: true },
         { path: "/agency", label: "AI Agency", icon: Bot, desc: "Your digital agency team", pro: true },
+      ],
+    },
+    "Voyages": {
+      icon: Anchor,
+      items: [
+        { path: "/voyages", label: "All Voyages", icon: Ship, desc: "Newport Beach experiences" },
       ],
     },
   };
