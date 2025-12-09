@@ -1392,6 +1392,183 @@ function PricingTierSection({ onNavigate }: { onNavigate: (path: string) => void
   );
 }
 
+function VoyagesSection({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
+  const voyageHighlights = [
+    {
+      icon: Bot,
+      title: "AI Mastery Voyage",
+      subtitle: "Master ChatGPT & Claude",
+      description: "Learn to automate your business aboard a pink Duffy boat sailing Balboa Island",
+      gradient: "from-violet-500 to-purple-600",
+    },
+    {
+      icon: Gem,
+      title: "Crypto & Web3 Voyage", 
+      subtitle: "Build Digital Wealth",
+      description: "Discover crypto investing and Web3 opportunities over a luxury beach picnic",
+      gradient: "from-amber-400 to-orange-500",
+    },
+    {
+      icon: Palette,
+      title: "AI Branding Voyage",
+      subtitle: "Create Your Empire",
+      description: "Design your AI-powered personal brand at an exclusive champagne brunch",
+      gradient: "from-pink-500 to-rose-600",
+    },
+  ];
+  
+  return (
+    <section 
+      ref={ref}
+      className="relative py-32 px-6 lg:px-16 overflow-hidden"
+      style={{ 
+        background: `linear-gradient(135deg, ${DARK_BG} 0%, rgba(139, 92, 246, 0.05) 50%, ${DARK_BG} 100%)`,
+      }}
+      data-testid="section-voyages"
+    >
+      <AmbientGlow />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1 }}
+          className="text-center mb-20"
+        >
+          <p 
+            className="text-sm uppercase tracking-[0.3em] mb-6"
+            style={{ color: PINK }}
+          >
+            Luxury Experiences • Only 6 Women Per Voyage
+          </p>
+          <h2 
+            className="text-4xl lg:text-6xl mb-6"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
+          >
+            MetaHers <span className="italic" style={{ color: LAVENDER }}>Voyages</span>
+          </h2>
+          <p 
+            className="text-lg font-light max-w-3xl mx-auto"
+            style={{ color: 'rgba(255,255,255,0.6)' }}
+          >
+            Intimate luxury experiences in Newport Beach. Master AI, Crypto & Web3 aboard pink Duffy boats, 
+            at exclusive beach picnics, and over champagne brunches on Balboa Island.
+          </p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {voyageHighlights.map((voyage, i) => (
+            <motion.div
+              key={voyage.title}
+              initial={{ opacity: 0, y: 40 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: i * 0.15 }}
+              whileHover={{ y: -8 }}
+              className="relative p-8 border transition-all cursor-pointer group"
+              style={{ 
+                borderColor: 'rgba(255,255,255,0.1)',
+                background: 'rgba(255,255,255,0.02)',
+              }}
+              onClick={() => onNavigate('/voyages')}
+              data-testid={`card-voyage-${i}`}
+            >
+              <div 
+                className={`w-14 h-14 rounded-full mb-6 flex items-center justify-center bg-gradient-to-r ${voyage.gradient}`}
+              >
+                <voyage.icon className="w-7 h-7 text-white" />
+              </div>
+              
+              <h3 
+                className="text-xl font-semibold mb-2"
+                style={{ color: '#FFFFFF' }}
+              >
+                {voyage.title}
+              </h3>
+              <p 
+                className="text-sm font-medium mb-3"
+                style={{ color: PINK }}
+              >
+                {voyage.subtitle}
+              </p>
+              <p 
+                className="text-sm font-light"
+                style={{ color: 'rgba(255,255,255,0.6)' }}
+              >
+                {voyage.description}
+              </p>
+              
+              <div className="absolute bottom-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity">
+                <ArrowRight className="w-5 h-5" style={{ color: PINK }} />
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="bg-gradient-to-r from-violet-900/20 via-purple-900/30 to-violet-900/20 border border-violet-500/20 p-8 lg:p-12">
+          <div className="grid md:grid-cols-4 gap-8 text-center mb-10">
+            {[
+              { value: "12", label: "Unique Voyages" },
+              { value: "6", label: "Women Per Group" },
+              { value: "Newport", label: "Beach Location" },
+              { value: "$497+", label: "Starting Price" },
+            ].map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.4, delay: 0.5 + i * 0.1 }}
+              >
+                <div 
+                  className="text-3xl font-semibold mb-2"
+                  style={{ color: LAVENDER }}
+                >
+                  {stat.value}
+                </div>
+                <div 
+                  className="text-xs uppercase tracking-wider"
+                  style={{ color: 'rgba(255,255,255,0.5)' }}
+                >
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          <div className="text-center">
+            <motion.button
+              onClick={() => onNavigate('/voyages')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-12 py-5 text-sm font-semibold uppercase tracking-wider"
+              style={{
+                background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
+                color: '#0A0A0A',
+              }}
+              data-testid="button-explore-voyages"
+            >
+              Explore All Voyages
+              <ArrowRight className="inline-block ml-3 w-4 h-4" />
+            </motion.button>
+            <p 
+              className="text-sm mt-4"
+              style={{ color: 'rgba(255,255,255,0.4)' }}
+            >
+              Pink Duffy boats • Beach picnics • Champagne brunches
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -1502,6 +1679,7 @@ export default function LandingPage() {
         <TransformationSection />
         <AIAgencySection onNavigate={handleNavigate} />
         <PricingTierSection onNavigate={handleNavigate} />
+        <VoyagesSection onNavigate={handleNavigate} />
         <FinalCTASection onNavigate={handleNavigate} />
         <footer className="py-3 px-6 lg:px-16 border-t" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.1)' }}>
           <div className="max-w-4xl mx-auto">
