@@ -6,7 +6,11 @@ import {
   spaces,
   sectionCompletions,
   auditLogs,
-  experienceProgress // Import experienceProgress
+  experienceProgress,
+  voyages,
+  voyageBookings,
+  voyageWaitlist,
+  insertVoyageSchema
 } from '@shared/schema';
 import { eq, sql, and, gte, desc, asc, like, or } from 'drizzle-orm';
 import { isAuthenticated } from './auth';
@@ -609,6 +613,269 @@ router.post('/cache/clear/:pattern', async (req, res) => {
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to clear cache pattern');
     res.status(500).json({ error: 'Failed to clear cache pattern' });
+  }
+});
+
+// ===== VOYAGE MANAGEMENT =====
+
+// Get all voyages with stats
+router.get('/voyages', async (req, res) => {
+  try {
+    const allVoyages = await db
+      .select()
+      .from(voyages)
+      .orderBy(asc(voyages.sequenceNumber));
+
+    // Get booking stats for each voyage
+    const voyagesWithStats = await Promise.all(
+      allVoyages.map(async (voyage) => {
+        const bookings = await db
+          .select({ count: sql<number>`count(*)::int` })
+          .from(voyageBookings)
+          .where(and(
+            eq(voyageBookings.voyageId, voyage.id),
+            eq(voyageBookings.status, 'confirmed')
+          ));
+
+        const waitlist = await db
+          .select({ count: sql<number>`count(*)::int` })
+          .from(voyageWaitlist)
+          .where(eq(voyageWaitlist.voyageId, voyage.id));
+
+        return {
+          ...voyage,
+          confirmedBookings: bookings[0]?.count || 0,
+          waitlistCount: waitlist[0]?.count || 0,
+        };
+      })
+    );
+
+    res.json(voyagesWithStats);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch voyages');
+    res.status(500).json({ error: 'Failed to fetch voyages' });
+  }
+});
+
+// Get single voyage
+router.get('/voyages/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const voyage = await db.select().from(voyages).where(eq(voyages.id, id)).limit(1);
+    
+    if (!voyage || voyage.length === 0) {
+      return res.status(404).json({ error: 'Voyage not found' });
+    }
+
+    // Get bookings for this voyage
+    const bookings = await db
+      .select()
+      .from(voyageBookings)
+      .where(eq(voyageBookings.voyageId, id))
+      .orderBy(desc(voyageBookings.createdAt));
+
+    res.json({ ...voyage[0], bookings });
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch voyage');
+    res.status(500).json({ error: 'Failed to fetch voyage' });
+  }
+});
+
+// Create new voyage
+router.post('/voyages', async (req, res) => {
+  try {
+    const userId = req.session?.userId as string;
+    const voyageData = req.body;
+
+    // Generate slug from title
+    const slug = voyageData.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    // Create the voyage
+    const newVoyage = await db.insert(voyages).values({
+      ...voyageData,
+      slug,
+      learningObjectives: voyageData.learningObjectives || [],
+      included: voyageData.included || [],
+      images: voyageData.images || [],
+      currentBookings: 0,
+    }).returning();
+
+    await logAdminAction(userId, 'create', 'voyage', newVoyage[0].id, { title: voyageData.title });
+
+    res.json(newVoyage[0]);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to create voyage');
+    res.status(500).json({ error: 'Failed to create voyage' });
+  }
+});
+
+// Update voyage
+router.patch('/voyages/:id', async (req, res) => {
+  try {
+    const userId = req.session?.userId as string;
+    const { id } = req.params;
+    const updates = req.body;
+
+    // Update slug if title changed
+    if (updates.title) {
+      updates.slug = updates.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
+    }
+
+    const updated = await db
+      .update(voyages)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(voyages.id, id))
+      .returning();
+
+    if (!updated || updated.length === 0) {
+      return res.status(404).json({ error: 'Voyage not found' });
+    }
+
+    await logAdminAction(userId, 'update', 'voyage', id, { updates: Object.keys(updates) });
+
+    res.json(updated[0]);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to update voyage');
+    res.status(500).json({ error: 'Failed to update voyage' });
+  }
+});
+
+// Delete voyage
+router.delete('/voyages/:id', async (req, res) => {
+  try {
+    const userId = req.session?.userId as string;
+    const { id } = req.params;
+
+    // Check for existing bookings
+    const bookings = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(voyageBookings)
+      .where(and(
+        eq(voyageBookings.voyageId, id),
+        eq(voyageBookings.status, 'confirmed')
+      ));
+
+    if (bookings[0]?.count > 0) {
+      return res.status(400).json({ 
+        error: 'Cannot delete voyage with confirmed bookings. Cancel bookings first.' 
+      });
+    }
+
+    await db.delete(voyages).where(eq(voyages.id, id));
+    await logAdminAction(userId, 'delete', 'voyage', id);
+
+    res.json({ success: true });
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to delete voyage');
+    res.status(500).json({ error: 'Failed to delete voyage' });
+  }
+});
+
+// Get voyage bookings
+router.get('/voyages/:id/bookings', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const bookings = await db
+      .select({
+        id: voyageBookings.id,
+        userId: voyageBookings.userId,
+        status: voyageBookings.status,
+        paymentStatus: voyageBookings.paymentStatus,
+        amount: voyageBookings.amount,
+        confirmationCode: voyageBookings.confirmationCode,
+        createdAt: voyageBookings.createdAt,
+        userEmail: users.email,
+        userName: users.firstName,
+      })
+      .from(voyageBookings)
+      .leftJoin(users, eq(voyageBookings.userId, users.id))
+      .where(eq(voyageBookings.voyageId, id))
+      .orderBy(desc(voyageBookings.createdAt));
+
+    res.json(bookings);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch voyage bookings');
+    res.status(500).json({ error: 'Failed to fetch voyage bookings' });
+  }
+});
+
+// Update booking status
+router.patch('/voyages/bookings/:bookingId', async (req, res) => {
+  try {
+    const userId = req.session?.userId as string;
+    const { bookingId } = req.params;
+    const { status } = req.body;
+
+    const updated = await db
+      .update(voyageBookings)
+      .set({ status, updatedAt: new Date() })
+      .where(eq(voyageBookings.id, bookingId))
+      .returning();
+
+    if (!updated || updated.length === 0) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Update voyage currentBookings count
+    if (status === 'cancelled' || status === 'refunded') {
+      await db
+        .update(voyages)
+        .set({ currentBookings: sql`current_bookings - 1` })
+        .where(eq(voyages.id, updated[0].voyageId));
+    }
+
+    await logAdminAction(userId, 'update', 'voyageBooking', bookingId, { newStatus: status });
+
+    res.json(updated[0]);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to update booking');
+    res.status(500).json({ error: 'Failed to update booking' });
+  }
+});
+
+// Get voyage stats summary
+router.get('/voyages-stats', async (req, res) => {
+  try {
+    const totalVoyages = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(voyages);
+
+    const upcomingVoyages = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(voyages)
+      .where(eq(voyages.status, 'upcoming'));
+
+    const totalBookings = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(voyageBookings)
+      .where(eq(voyageBookings.status, 'confirmed'));
+
+    const totalRevenue = await db
+      .select({ sum: sql<number>`coalesce(sum(amount), 0)::int` })
+      .from(voyageBookings)
+      .where(eq(voyageBookings.paymentStatus, 'paid'));
+
+    const totalWaitlist = await db
+      .select({ count: sql<number>`count(*)::int` })
+      .from(voyageWaitlist);
+
+    res.json({
+      totalVoyages: totalVoyages[0]?.count || 0,
+      upcomingVoyages: upcomingVoyages[0]?.count || 0,
+      totalBookings: totalBookings[0]?.count || 0,
+      totalRevenue: totalRevenue[0]?.sum || 0,
+      totalWaitlist: totalWaitlist[0]?.count || 0,
+    });
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to fetch voyage stats');
+    res.status(500).json({ error: 'Failed to fetch voyage stats' });
   }
 });
 

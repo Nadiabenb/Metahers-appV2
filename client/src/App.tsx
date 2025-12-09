@@ -29,6 +29,7 @@ import ResetPasswordPage from "@/pages/ResetPasswordPage";
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminUsersPage from "@/pages/admin/AdminUsersPage";
 import AdminExperiencesPage from "@/pages/admin/AdminExperiencesPage";
+import AdminVoyagesPage from "@/pages/admin/AdminVoyagesPage";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
@@ -211,6 +212,7 @@ function Router() {
             <Route path="/admin" component={AdminDashboardPage} />
             <Route path="/admin/users" component={AdminUsersPage} />
             <Route path="/admin/experiences" component={AdminExperiencesPage} />
+            <Route path="/admin/voyages" component={AdminVoyagesPage} />
             <Route path="/admin/ai" component={() => {
               const AIDashboard = lazy(() => import('@/pages/admin/AIDashboardPage'));
               return <AIDashboard />;
