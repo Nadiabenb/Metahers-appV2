@@ -2983,3 +2983,228 @@ export const agencyAnalytics = pgTable("agency_analytics", {
 export const insertAgencyAnalyticsSchema = createInsertSchema(agencyAnalytics).omit({ id: true, createdAt: true });
 export type InsertAgencyAnalytics = z.infer<typeof insertAgencyAnalyticsSchema>;
 export type AgencyAnalyticsDB = typeof agencyAnalytics.$inferSelect;
+
+// ===== METAHERS VOYAGES - LUXURY TECH EDUCATION BOOKING =====
+
+// Voyage category type
+export type VoyageCategory = "AI" | "Crypto" | "Web3" | "AI_Branding";
+export type VoyageVenueType = "Duffy_Boat" | "Picnic" | "Brunch";
+export type VoyageStatus = "upcoming" | "full" | "completed" | "cancelled";
+
+// Voyages table - intimate luxury tech education experiences
+export const voyages = pgTable("voyages", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  title: varchar("title").notNull(),
+  slug: varchar("slug").unique().notNull(),
+  category: varchar("category").notNull(), // AI, Crypto, Web3, AI_Branding
+  sequenceNumber: integer("sequence_number").notNull(), // 1-12 in the journey
+  description: text("description").notNull(),
+  learningObjectives: jsonb("learning_objectives").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+  date: timestamp("date").notNull(),
+  time: varchar("time").notNull(), // "10:00 AM" format
+  duration: varchar("duration").notNull(), // "3 hours" format
+  location: varchar("location").notNull(),
+  venueType: varchar("venue_type").notNull(), // Duffy_Boat, Picnic, Brunch
+  latitude: decimal("latitude", { precision: 10, scale: 6 }).notNull(),
+  longitude: decimal("longitude", { precision: 10, scale: 6 }).notNull(),
+  price: integer("price").notNull(), // in cents (e.g., 29700 = $297)
+  maxCapacity: integer("max_capacity").notNull().default(6),
+  currentBookings: integer("current_bookings").notNull().default(0),
+  included: jsonb("included").$type<string[]>().notNull().default(sql`'[]'::jsonb`), // What's included in the experience
+  heroImage: varchar("hero_image"), // Main hero image URL
+  images: jsonb("images").$type<string[]>().default(sql`'[]'::jsonb`), // Gallery images
+  status: varchar("status").notNull().default("upcoming"), // upcoming, full, completed, cancelled
+  featuredTestimonial: text("featured_testimonial"), // Testimonial to show on card
+  hostName: varchar("host_name").default("Melissa"), // Host/facilitator name
+  hostImage: varchar("host_image"), // Host photo URL
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_voyage_slug").on(table.slug),
+  index("idx_voyage_category").on(table.category),
+  index("idx_voyage_status").on(table.status),
+  index("idx_voyage_date").on(table.date),
+  index("idx_voyage_sequence").on(table.sequenceNumber),
+]);
+
+export const insertVoyageSchema = createInsertSchema(voyages).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertVoyage = z.infer<typeof insertVoyageSchema>;
+export type VoyageDB = typeof voyages.$inferSelect;
+
+// Voyage Bookings table - tracks user bookings for voyages
+export const voyageBookings = pgTable("voyage_bookings", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  voyageId: varchar("voyage_id").notNull().references(() => voyages.id, { onDelete: "cascade" }),
+  status: varchar("status").notNull().default("pending"), // pending, confirmed, cancelled, completed, refunded
+  paymentStatus: varchar("payment_status").notNull().default("pending"), // pending, paid, failed, refunded
+  stripeSessionId: varchar("stripe_session_id").unique(),
+  stripePaymentIntentId: varchar("stripe_payment_intent_id"),
+  amount: integer("amount").notNull(), // Amount paid in cents
+  promoCode: varchar("promo_code"), // If used a promo code
+  discountAmount: integer("discount_amount").default(0), // Discount in cents
+  referralCode: varchar("referral_code"), // If referred by someone
+  specialRequests: text("special_requests"), // Any special accommodations
+  confirmationCode: varchar("confirmation_code").unique(), // Human-readable code like "MHV-ABC123"
+  checkedIn: boolean("checked_in").default(false).notNull(),
+  checkedInAt: timestamp("checked_in_at"),
+  completedOnboarding: boolean("completed_onboarding").default(false).notNull(),
+  feedbackRating: integer("feedback_rating"), // 1-5 stars
+  feedbackComment: text("feedback_comment"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_voyage_booking_user").on(table.userId),
+  index("idx_voyage_booking_voyage").on(table.voyageId),
+  index("idx_voyage_booking_status").on(table.status),
+  index("idx_voyage_booking_payment").on(table.paymentStatus),
+  index("idx_voyage_booking_confirmation").on(table.confirmationCode),
+]);
+
+export const insertVoyageBookingSchema = createInsertSchema(voyageBookings).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertVoyageBooking = z.infer<typeof insertVoyageBookingSchema>;
+export type VoyageBookingDB = typeof voyageBookings.$inferSelect;
+
+// Voyage Questionnaires - pre-voyage surveys to personalize the experience
+export const voyageQuestionnaires = pgTable("voyage_questionnaires", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  bookingId: varchar("booking_id").unique().notNull().references(() => voyageBookings.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  
+  // Tech background
+  techComfortLevel: varchar("tech_comfort_level").notNull(), // beginner, intermediate, advanced, expert
+  currentTools: jsonb("current_tools").$type<string[]>().default(sql`'[]'::jsonb`), // Tools they already use
+  
+  // Goals and interests
+  primaryGoal: text("primary_goal").notNull(), // What do you hope to achieve?
+  specificTopics: text("specific_topics"), // Any specific topics you want covered?
+  biggestChallenge: text("biggest_challenge"), // What's your biggest tech challenge?
+  
+  // Personal details for personalization
+  businessType: varchar("business_type"), // entrepreneur, corporate, freelancer, creator
+  industry: varchar("industry"), // Their industry
+  
+  // Logistics
+  dietaryRestrictions: text("dietary_restrictions"),
+  accessibilityNeeds: text("accessibility_needs"),
+  
+  // Marketing
+  howHeardAboutUs: varchar("how_heard_about_us"), // instagram, friend, google, other
+  referredBy: varchar("referred_by"), // Name of referrer if applicable
+  
+  // AI-generated insights
+  aiPersonalization: jsonb("ai_personalization").$type<{
+    suggestedFocus?: string[];
+    personalizedTips?: string[];
+    recommendedPrep?: string[];
+  }>(),
+  
+  completedAt: timestamp("completed_at").defaultNow(),
+}, (table) => [
+  index("idx_vq_booking").on(table.bookingId),
+  index("idx_vq_user").on(table.userId),
+]);
+
+export const insertVoyageQuestionnaireSchema = createInsertSchema(voyageQuestionnaires).omit({ id: true, completedAt: true });
+export type InsertVoyageQuestionnaire = z.infer<typeof insertVoyageQuestionnaireSchema>;
+export type VoyageQuestionnaireDB = typeof voyageQuestionnaires.$inferSelect;
+
+// Voyage Waitlist - for full voyages
+export const voyageWaitlist = pgTable("voyage_waitlist", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").notNull(),
+  userId: varchar("user_id").references(() => users.id, { onDelete: "set null" }), // Optional if not logged in
+  voyageId: varchar("voyage_id").notNull().references(() => voyages.id, { onDelete: "cascade" }),
+  name: varchar("name"),
+  phone: varchar("phone"),
+  notified: boolean("notified").default(false).notNull(), // If they were notified of opening
+  notifiedAt: timestamp("notified_at"),
+  converted: boolean("converted").default(false).notNull(), // If they booked after notification
+  position: integer("position"), // Position in waitlist queue
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_vw_voyage").on(table.voyageId),
+  index("idx_vw_email").on(table.email),
+  index("idx_vw_notified").on(table.notified),
+]);
+
+export const insertVoyageWaitlistSchema = createInsertSchema(voyageWaitlist).omit({ id: true, createdAt: true });
+export type InsertVoyageWaitlist = z.infer<typeof insertVoyageWaitlistSchema>;
+export type VoyageWaitlistDB = typeof voyageWaitlist.$inferSelect;
+
+// Voyage Referrals - referral tracking for viral growth
+export const voyageReferrals = pgTable("voyage_referrals", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  referrerId: varchar("referrer_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  referralCode: varchar("referral_code").unique().notNull(), // Unique code like "MELISSA-VOYAGE"
+  totalReferrals: integer("total_referrals").notNull().default(0),
+  successfulBookings: integer("successful_bookings").notNull().default(0),
+  totalEarnings: integer("total_earnings").notNull().default(0), // In cents
+  rewardType: varchar("reward_type").notNull().default("credit"), // credit, discount, cash
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_vr_referrer").on(table.referrerId),
+  index("idx_vr_code").on(table.referralCode),
+]);
+
+export const insertVoyageReferralSchema = createInsertSchema(voyageReferrals).omit({ id: true, createdAt: true });
+export type InsertVoyageReferral = z.infer<typeof insertVoyageReferralSchema>;
+export type VoyageReferralDB = typeof voyageReferrals.$inferSelect;
+
+// Voyage Preparation Checklist - tracks onboarding completion
+export const voyagePreparation = pgTable("voyage_preparation", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  bookingId: varchar("booking_id").unique().notNull().references(() => voyageBookings.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  
+  // Checklist items (all boolean)
+  watchedWelcomeVideo: boolean("watched_welcome_video").default(false).notNull(),
+  completedQuestionnaire: boolean("completed_questionnaire").default(false).notNull(),
+  joinedCommunity: boolean("joined_community").default(false).notNull(),
+  reviewedMaterials: boolean("reviewed_materials").default(false).notNull(),
+  confirmedAttendance: boolean("confirmed_attendance").default(false).notNull(),
+  addedToCalendar: boolean("added_to_calendar").default(false).notNull(),
+  chargedDevices: boolean("charged_devices").default(false).notNull(),
+  
+  // Community details
+  communityPlatform: varchar("community_platform"), // telegram, discord, whatsapp
+  communityJoinedAt: timestamp("community_joined_at"),
+  
+  // Overall progress
+  completionPercentage: integer("completion_percentage").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_vp_booking").on(table.bookingId),
+  index("idx_vp_user").on(table.userId),
+]);
+
+export const insertVoyagePreparationSchema = createInsertSchema(voyagePreparation).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertVoyagePreparation = z.infer<typeof insertVoyagePreparationSchema>;
+export type VoyagePreparationDB = typeof voyagePreparation.$inferSelect;
+
+// Voyage Testimonials - reviews from past attendees
+export const voyageTestimonials = pgTable("voyage_testimonials", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  voyageId: varchar("voyage_id").references(() => voyages.id, { onDelete: "set null" }), // Can be general if no specific voyage
+  userId: varchar("user_id").references(() => users.id, { onDelete: "set null" }),
+  name: varchar("name").notNull(),
+  title: varchar("title"), // e.g., "Founder, Tech Startup"
+  avatarUrl: varchar("avatar_url"),
+  quote: text("quote").notNull(),
+  rating: integer("rating").notNull().default(5), // 1-5 stars
+  category: varchar("category"), // Which category this testimonial applies to
+  isFeatured: boolean("is_featured").default(false).notNull(),
+  isApproved: boolean("is_approved").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_vt_voyage").on(table.voyageId),
+  index("idx_vt_featured").on(table.isFeatured),
+  index("idx_vt_category").on(table.category),
+]);
+
+export const insertVoyageTestimonialSchema = createInsertSchema(voyageTestimonials).omit({ id: true, createdAt: true });
+export type InsertVoyageTestimonial = z.infer<typeof insertVoyageTestimonialSchema>;
+export type VoyageTestimonialDB = typeof voyageTestimonials.$inferSelect;

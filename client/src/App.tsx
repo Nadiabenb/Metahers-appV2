@@ -82,6 +82,8 @@ const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
 const LearningHubPage = lazy(() => import("@/pages/LearningHubPage"));
 const VisionBoardPage = lazy(() => import("@/pages/VisionBoardPage"));
 const AgencyDashboardPage = lazy(() => import("@/pages/AgencyDashboardPage"));
+const VoyagesPage = lazy(() => import("@/pages/VoyagesPage"));
+const VoyageDetailPage = lazy(() => import("@/pages/VoyageDetailPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -234,6 +236,10 @@ function Router() {
             
             {/* AI Digital Agency */}
             <Route path="/agency" component={AgencyDashboardPage} />
+            
+            {/* MetaHers Voyages */}
+            <Route path="/voyages" component={VoyagesPage} />
+            <Route path="/voyages/:slug" component={VoyageDetailPage} />
           </>
         ) : (
           <>

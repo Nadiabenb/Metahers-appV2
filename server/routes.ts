@@ -14,7 +14,8 @@ import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
 import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema } from "@shared/schema";
-import { sql as drizzleSql, eq, desc, and, sql } from "drizzle-orm";
+import { sql as drizzleSql, eq, desc, and, sql, gte } from "drizzle-orm";
+import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials } from "@shared/schema";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
@@ -4725,6 +4726,414 @@ Respond in JSON format:
     const platform = req.query.platform as string | undefined;
     const analytics = await storage.getBusinessAnalytics(req.params.businessId, platform);
     res.json(analytics);
+  }));
+
+  // ===== METAHERS VOYAGES API ROUTES =====
+
+  // Get all voyages (public)
+  app.get('/api/voyages', asyncHandler(async (req: Request, res) => {
+    const category = req.query.category as string | undefined;
+    const status = req.query.status as string || 'upcoming';
+    
+    let query = db.select().from(voyages).orderBy(voyages.date);
+    
+    const allVoyages = await query;
+    
+    // Filter in JS for simplicity
+    let filtered = allVoyages;
+    if (category && category !== 'all') {
+      filtered = filtered.filter(v => v.category === category);
+    }
+    if (status) {
+      filtered = filtered.filter(v => v.status === status);
+    }
+    
+    res.json(filtered);
+  }));
+
+  // Get single voyage by slug (public)
+  app.get('/api/voyages/:slug', asyncHandler(async (req: Request, res) => {
+    const { slug } = req.params;
+    
+    const voyage = await db.select().from(voyages).where(eq(voyages.slug, slug)).limit(1);
+    
+    if (!voyage || voyage.length === 0) {
+      throw new NotFoundError("Voyage not found");
+    }
+    
+    res.json(voyage[0]);
+  }));
+
+  // Create Stripe checkout session for voyage booking
+  app.post('/api/voyages/checkout', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { voyageId, promoCode } = req.body;
+    
+    if (!voyageId) {
+      throw new ValidationError("Voyage ID is required");
+    }
+    
+    // Get voyage details
+    const voyage = await db.select().from(voyages).where(eq(voyages.id, voyageId)).limit(1);
+    if (!voyage || voyage.length === 0) {
+      throw new NotFoundError("Voyage not found");
+    }
+    
+    const voyageData = voyage[0];
+    
+    // Check capacity
+    if (voyageData.currentBookings >= voyageData.maxCapacity) {
+      throw new ValidationError("This voyage is full. Please join the waitlist.");
+    }
+    
+    // Get user email
+    const user = await storage.getUser(userId);
+    if (!user) {
+      throw new AuthenticationError("User not found");
+    }
+    
+    // Generate confirmation code
+    const confirmationCode = `MHV-${randomBytes(3).toString('hex').toUpperCase()}`;
+    
+    // Create Stripe checkout session
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      mode: 'payment',
+      customer_email: user.email,
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: voyageData.title,
+              description: `${voyageData.venueType.replace('_', ' ')} Experience - ${voyageData.location}`,
+              images: voyageData.heroImage ? [voyageData.heroImage] : [],
+            },
+            unit_amount: voyageData.price,
+          },
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        voyageId,
+        userId,
+        confirmationCode,
+        type: 'voyage_booking',
+      },
+      success_url: `${req.headers.origin}/voyages/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin}/voyages/${voyageData.slug}`,
+    });
+    
+    // Create pending booking
+    await db.insert(voyageBookings).values({
+      userId,
+      voyageId,
+      status: 'pending',
+      paymentStatus: 'pending',
+      stripeSessionId: session.id,
+      amount: voyageData.price,
+      confirmationCode,
+      promoCode: promoCode || null,
+    });
+    
+    res.json({ url: session.url, sessionId: session.id });
+  }));
+
+  // Stripe webhook for voyage bookings
+  app.post('/api/voyages/webhook', asyncHandler(async (req: Request, res) => {
+    const sig = req.headers['stripe-signature'] as string;
+    let event: Stripe.Event;
+    
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.body,
+        sig,
+        process.env.STRIPE_WEBHOOK_SECRET || ''
+      );
+    } catch (err: any) {
+      console.error('Webhook signature verification failed:', err.message);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+    
+    if (event.type === 'checkout.session.completed') {
+      const session = event.data.object as Stripe.Checkout.Session;
+      
+      if (session.metadata?.type === 'voyage_booking') {
+        const { voyageId, userId, confirmationCode } = session.metadata;
+        
+        // Update booking status
+        await db.update(voyageBookings)
+          .set({
+            status: 'confirmed',
+            paymentStatus: 'paid',
+            stripePaymentIntentId: session.payment_intent as string,
+            updatedAt: new Date(),
+          })
+          .where(eq(voyageBookings.stripeSessionId, session.id));
+        
+        // Increment voyage bookings count
+        await db.update(voyages)
+          .set({
+            currentBookings: sql`${voyages.currentBookings} + 1`,
+            updatedAt: new Date(),
+          })
+          .where(eq(voyages.id, voyageId));
+        
+        // Check if voyage is now full
+        const updatedVoyage = await db.select().from(voyages).where(eq(voyages.id, voyageId)).limit(1);
+        if (updatedVoyage[0] && updatedVoyage[0].currentBookings >= updatedVoyage[0].maxCapacity) {
+          await db.update(voyages)
+            .set({ status: 'full', updatedAt: new Date() })
+            .where(eq(voyages.id, voyageId));
+        }
+        
+        // Create preparation checklist
+        const booking = await db.select().from(voyageBookings)
+          .where(eq(voyageBookings.stripeSessionId, session.id)).limit(1);
+        
+        if (booking[0]) {
+          await db.insert(voyagePreparation).values({
+            bookingId: booking[0].id,
+            userId,
+          });
+        }
+        
+        // TODO: Send confirmation email via Resend
+        console.log(`Voyage booking confirmed: ${confirmationCode}`);
+      }
+    }
+    
+    res.json({ received: true });
+  }));
+
+  // Join voyage waitlist (public with email)
+  app.post('/api/voyages/waitlist', asyncHandler(async (req: Request, res) => {
+    const { voyageId, email, name, phone } = req.body;
+    const userId = req.session?.userId as string | undefined;
+    
+    if (!voyageId || !email) {
+      throw new ValidationError("Voyage ID and email are required");
+    }
+    
+    // Check if already on waitlist
+    const existing = await db.select().from(voyageWaitlist)
+      .where(and(
+        eq(voyageWaitlist.voyageId, voyageId),
+        eq(voyageWaitlist.email, email)
+      )).limit(1);
+    
+    if (existing.length > 0) {
+      res.json({ message: "You're already on the waitlist!", alreadyExists: true });
+      return;
+    }
+    
+    // Get current position
+    const currentWaitlist = await db.select().from(voyageWaitlist)
+      .where(eq(voyageWaitlist.voyageId, voyageId));
+    const position = currentWaitlist.length + 1;
+    
+    await db.insert(voyageWaitlist).values({
+      voyageId,
+      email: sanitizeText(email),
+      name: name ? sanitizeText(name) : null,
+      phone: phone ? sanitizeText(phone) : null,
+      userId: userId || null,
+      position,
+    });
+    
+    res.json({ message: "You've joined the waitlist!", position });
+  }));
+
+  // Get user's voyage bookings
+  app.get('/api/voyages/my-bookings', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    
+    const bookings = await db.select({
+      booking: voyageBookings,
+      voyage: voyages,
+    })
+    .from(voyageBookings)
+    .innerJoin(voyages, eq(voyageBookings.voyageId, voyages.id))
+    .where(eq(voyageBookings.userId, userId))
+    .orderBy(desc(voyages.date));
+    
+    res.json(bookings);
+  }));
+
+  // Get user's upcoming voyage (for dashboard)
+  app.get('/api/voyages/upcoming', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    
+    const upcoming = await db.select({
+      booking: voyageBookings,
+      voyage: voyages,
+    })
+    .from(voyageBookings)
+    .innerJoin(voyages, eq(voyageBookings.voyageId, voyages.id))
+    .where(and(
+      eq(voyageBookings.userId, userId),
+      eq(voyageBookings.status, 'confirmed'),
+      gte(voyages.date, new Date())
+    ))
+    .orderBy(voyages.date)
+    .limit(1);
+    
+    res.json(upcoming[0] || null);
+  }));
+
+  // Get preparation checklist
+  app.get('/api/voyages/preparation/:bookingId', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { bookingId } = req.params;
+    
+    const prep = await db.select().from(voyagePreparation)
+      .where(and(
+        eq(voyagePreparation.bookingId, bookingId),
+        eq(voyagePreparation.userId, userId)
+      )).limit(1);
+    
+    if (!prep || prep.length === 0) {
+      throw new NotFoundError("Preparation checklist not found");
+    }
+    
+    res.json(prep[0]);
+  }));
+
+  // Update preparation checklist
+  app.patch('/api/voyages/preparation/:bookingId', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { bookingId } = req.params;
+    const updates = req.body;
+    
+    // Calculate completion percentage
+    const checklistItems = [
+      'watchedWelcomeVideo', 'completedQuestionnaire', 'joinedCommunity',
+      'reviewedMaterials', 'confirmedAttendance', 'addedToCalendar', 'chargedDevices'
+    ];
+    const completed = checklistItems.filter(item => updates[item] === true).length;
+    const completionPercentage = Math.round((completed / checklistItems.length) * 100);
+    
+    await db.update(voyagePreparation)
+      .set({
+        ...updates,
+        completionPercentage,
+        updatedAt: new Date(),
+      })
+      .where(and(
+        eq(voyagePreparation.bookingId, bookingId),
+        eq(voyagePreparation.userId, userId)
+      ));
+    
+    const updated = await db.select().from(voyagePreparation)
+      .where(eq(voyagePreparation.bookingId, bookingId)).limit(1);
+    
+    res.json(updated[0]);
+  }));
+
+  // Submit questionnaire
+  app.post('/api/voyages/questionnaire', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const {
+      bookingId,
+      techComfortLevel,
+      currentTools,
+      primaryGoal,
+      specificTopics,
+      biggestChallenge,
+      businessType,
+      industry,
+      dietaryRestrictions,
+      accessibilityNeeds,
+      howHeardAboutUs,
+      referredBy,
+    } = req.body;
+    
+    if (!bookingId || !techComfortLevel || !primaryGoal) {
+      throw new ValidationError("Required fields are missing");
+    }
+    
+    // Check booking belongs to user
+    const booking = await db.select().from(voyageBookings)
+      .where(and(
+        eq(voyageBookings.id, bookingId),
+        eq(voyageBookings.userId, userId)
+      )).limit(1);
+    
+    if (!booking || booking.length === 0) {
+      throw new NotFoundError("Booking not found");
+    }
+    
+    await db.insert(voyageQuestionnaires).values({
+      bookingId,
+      userId,
+      techComfortLevel,
+      currentTools: currentTools || [],
+      primaryGoal: sanitizeText(primaryGoal),
+      specificTopics: specificTopics ? sanitizeText(specificTopics) : null,
+      biggestChallenge: biggestChallenge ? sanitizeText(biggestChallenge) : null,
+      businessType: businessType || null,
+      industry: industry || null,
+      dietaryRestrictions: dietaryRestrictions ? sanitizeText(dietaryRestrictions) : null,
+      accessibilityNeeds: accessibilityNeeds ? sanitizeText(accessibilityNeeds) : null,
+      howHeardAboutUs: howHeardAboutUs || null,
+      referredBy: referredBy ? sanitizeText(referredBy) : null,
+    });
+    
+    // Update preparation checklist
+    await db.update(voyagePreparation)
+      .set({ completedQuestionnaire: true, updatedAt: new Date() })
+      .where(eq(voyagePreparation.bookingId, bookingId));
+    
+    res.json({ success: true, message: "Questionnaire submitted!" });
+  }));
+
+  // Get referral code for user
+  app.get('/api/voyages/referral', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    
+    let referral = await db.select().from(voyageReferrals)
+      .where(eq(voyageReferrals.referrerId, userId)).limit(1);
+    
+    if (!referral || referral.length === 0) {
+      // Create a referral code
+      const user = await storage.getUser(userId);
+      const firstName = user?.firstName || 'VOYAGER';
+      const code = `${firstName.toUpperCase()}-${randomBytes(3).toString('hex').toUpperCase()}`;
+      
+      await db.insert(voyageReferrals).values({
+        referrerId: userId,
+        referralCode: code,
+      });
+      
+      referral = await db.select().from(voyageReferrals)
+        .where(eq(voyageReferrals.referrerId, userId)).limit(1);
+    }
+    
+    res.json(referral[0]);
+  }));
+
+  // Get voyage testimonials
+  app.get('/api/voyages/testimonials', asyncHandler(async (req: Request, res) => {
+    const voyageId = req.query.voyageId as string | undefined;
+    const category = req.query.category as string | undefined;
+    const featured = req.query.featured === 'true';
+    
+    let allTestimonials = await db.select().from(voyageTestimonials)
+      .where(eq(voyageTestimonials.isApproved, true))
+      .orderBy(desc(voyageTestimonials.createdAt));
+    
+    if (voyageId) {
+      allTestimonials = allTestimonials.filter(t => t.voyageId === voyageId);
+    }
+    if (category) {
+      allTestimonials = allTestimonials.filter(t => t.category === category);
+    }
+    if (featured) {
+      allTestimonials = allTestimonials.filter(t => t.isFeatured);
+    }
+    
+    res.json(allTestimonials);
   }));
 
   const httpServer = createServer(app);

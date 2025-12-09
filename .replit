@@ -15,6 +15,10 @@ run = ["sh", "-c", "npm run start"]
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 35667
+externalPort = 3000
+
 [env]
 PORT = "5000"
 DATABASE_URL = "postgresql://neondb_owner:npg_jv9L6xN9Jcwi@ep-orange-dawn-a5x16rwj.us-east-2.aws.neon.tech/neondb?sslmode=require"
