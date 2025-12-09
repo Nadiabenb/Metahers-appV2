@@ -1,0 +1,745 @@
+# REPLIT AGENT PROMPT - MetaHers Voyages Platform
+
+Build a complete Next.js 14 luxury tech education booking platform called “MetaHers Voyages” where women book intimate experiences (max 6 per event) to learn AI/Web3/Crypto in luxury settings in Newport Beach.
+
+## Tech Stack
+
+- Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- Prisma ORM with PostgreSQL
+- Stripe for payments
+- NextAuth.js for authentication
+- Resend/SendGrid for emails
+- Mapbox GL JS for maps (or Leaflet as fallback)
+
+## Design System & UX Principles
+
+### Brand Identity
+
+**This is a LUXURY LIFESTYLE BRAND, not a typical tech platform**
+
+**Color Palette**:
+
+- Primary: `#8B5CF6` (Purple - sophistication, transformation)
+- Secondary: `#EC4899` (Pink - feminine power, energy)
+- Accent: `#F59E0B` (Gold - premium, luxury)
+- Neutral Light: `#FAFAFA` (backgrounds)
+- Neutral Dark: `#1F2937` (text)
+- Success: `#10B981` (confirmations)
+
+**Typography**:
+
+- Headings: `Playfair Display` (serif, elegant, luxury)
+- Body: `Inter` (sans-serif, clean, readable)
+- Use generous font sizes - nothing feels cramped or small
+
+**Spacing**:
+
+- Use generous white space
+- Padding should feel luxurious, not cramped
+- Mobile: minimum 16px padding on edges
+- Desktop: minimum 24px padding, hero sections 60-80px
+
+### UI Component Guidelines
+
+#### Buttons
+
+```tsx
+// Primary CTA (Book Now, Get Started)
+className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+
+// Secondary (Learn More, View Details)
+className="border-2 border-purple-600 text-purple-600 px-6 py-3 rounded-full font-semibold hover:bg-purple-50 transition-all duration-300"
+
+// Disabled/Full
+className="bg-gray-300 text-gray-500 px-8 py-4 rounded-full font-semibold cursor-not-allowed"
+```
+
+#### Cards
+
+```tsx
+// Voyage cards should have:
+- Soft shadow that increases on hover
+- Rounded corners (rounded-2xl)
+- Hover effect: lift with shadow and subtle scale
+- Image with overlay gradient for text readability
+- Clear hierarchy: image → category badge → title → details → CTA
+
+className="bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 overflow-hidden"
+```
+
+#### Forms
+
+```tsx
+// Input fields
+className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all duration-200"
+
+// Labels above inputs, not floating
+className="block text-sm font-semibold text-gray-700 mb-2"
+```
+
+## Database Schema (Prisma)
+
+```prisma
+model User {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  name          String
+  password      String
+  createdAt     DateTime        @default(now())
+  bookings      Booking[]
+  questionnaires Questionnaire[]
+}
+
+model Voyage {
+  id              String    @id @default(cuid())
+  title           String
+  slug            String    @unique
+  category        String    // "AI", "Crypto", "Web3", "AI_Branding"
+  sequenceNumber  Int       // 1-12
+  description     String    @db.Text
+  learningObjectives String[]
+  date            DateTime
+  time            String
+  duration        String
+  location        String
+  venueType       String    // "Duffy_Boat", "Picnic", "Brunch"
+  latitude        Float
+  longitude       Float
+  price           Int       // in cents
+  maxCapacity     Int       @default(6)
+  currentBookings Int       @default(0)
+  included        String[]
+  images          String[]
+  status          String    @default("upcoming")
+  bookings        Booking[]
+  createdAt       DateTime  @default(now())
+}
+
+model Booking {
+  id              String         @id @default(cuid())
+  userId          String
+  voyageId        String
+  status          String         @default("confirmed")
+  paymentStatus   String
+  stripeSessionId String?        @unique
+  amount          Int
+  createdAt       DateTime       @default(now())
+  user            User           @relation(fields: [userId], references: [id])
+  voyage          Voyage         @relation(fields: [voyageId], references: [id])
+  questionnaire   Questionnaire?
+}
+
+model Questionnaire {
+  id                  String   @id @default(cuid())
+  bookingId           String   @unique
+  userId              String
+  techComfortLevel    String
+  specificTopics      String   @db.Text
+  goals               String   @db.Text
+  concerns            String?  @db.Text
+  dietaryRestrictions String?
+  howHeardAboutUs     String?
+  completedAt         DateTime @default(now())
+  booking             Booking  @relation(fields: [bookingId], references: [id])
+  user                User     @relation(fields: [userId], references: [id])
+}
+
+model Waitlist {
+  id        String   @id @default(cuid())
+  email     String
+  voyageId  String
+  createdAt DateTime @default(now())
+  notified  Boolean  @default(false)
+}
+```
+
+## Detailed Page-by-Page UX Specifications
+
+### HOMEPAGE (`/`)
+
+**Hero Section** (full viewport height):
+
+- Background: Subtle gradient from purple to pink, or hero image with overlay
+- Centered content with max-width 1200px
+- Large headline (64px desktop, 36px mobile): “Transform Your Digital Future in Luxury”
+- Subheadline (24px desktop, 18px mobile): “Intimate tech education experiences for ambitious women”
+- Primary CTA: “Explore Voyages” (gradient button)
+- Secondary CTA: “How It Works” (outline button)
+- Animated scroll indicator at bottom
+
+**How It Works** (3-step visual):
+
+```
+[Icon: Map Pin] → [Icon: Calendar] → [Icon: Sparkles]
+1. Choose Your Voyage    2. Book Your Spot    3. Transform Your Skills
+
+Each step has icon, title, 2-line description
+Clean, spacious layout with visual flow indicators
+```
+
+**Interactive Map Section**:
+
+- Full-width map (min-height 600px)
+- Category filter pills above map (AI, Crypto, Web3, Branding, All)
+- Custom map markers with category colors
+- Hover: Show voyage name and date
+- Click: Open voyage preview modal OR navigate to detail page
+- Mobile: Map is scrollable, markers are tappable
+
+**Featured Voyages Carousel**:
+
+- 3 cards visible on desktop, 1 on mobile
+- Auto-scroll with pause on hover
+- Each card: image, category badge, title, date, price, spots left, CTA
+
+**Social Proof**:
+
+- Testimonial slider with photos
+- Trust indicators: “6 Women Max Per Voyage” “Premium Experiences” “Expert Led”
+
+**Newsletter/Waitlist Signup**:
+
+- Beautiful gradient background
+- “Join the Movement” headline
+- Email input with elegant submit button
+
+### VOYAGES PAGE (`/voyages`)
+
+**Top Section**:
+
+- Page title: “Your Journey Awaits”
+- Category filter pills (AI, Crypto, Web3, Branding, All) - selected state with gradient
+- View toggle: Map View / List View (icon buttons)
+
+**Map View**:
+
+- 60% of viewport height
+- Clustered markers when zoomed out
+- Click marker: Show popup with voyage preview card
+  - Popup: Mini card with image, title, date, price, “View Details” button
+- Smooth zoom and pan animations
+
+**List View** (below map or instead of map):
+
+- Grid: 3 columns desktop, 2 tablet, 1 mobile
+- Each card:
+  
+  ```
+  [Image with gradient overlay]
+  [Category badge - colored pill]
+  [Title - 20px bold]
+  [Icon: Calendar] Date | [Icon: Clock] Time
+  [Icon: MapPin] Location
+  [Icon: Users] X/6 spots left
+  [Price in large gold text]
+  [Book Now button - gradient]
+  OR
+  [Join Waitlist button - outline] if full
+  ```
+- Hover: Card lifts, shadow increases
+- Cards have colored left border matching category
+
+**Filter & Sort Controls** (sticky on scroll):
+
+- Category pills
+- Sort by: Date, Price, Availability
+- Search bar (optional)
+
+**Empty State** (if no voyages match filters):
+
+- Elegant illustration
+- “No voyages found, but we’re planning more!”
+- “Join waitlist” CTA
+
+### VOYAGE DETAIL PAGE (`/voyages/[slug]`)
+
+**Hero Image Section**:
+
+- Full-width hero image with gradient overlay (bottom to top)
+- Breadcrumbs at top: Home > Voyages > [Voyage Name]
+- Title overlaid on image (48px, white)
+- Category badge (top left)
+- Availability badge (top right): “X/6 spots left” in gradient
+
+**Content Layout** (two-column on desktop):
+
+**Left Column (2/3 width)**:
+
+- **Description Section**:
+  - Rich text, generous line height (1.8)
+  - 18px font size
+- **Learning Objectives**:
+  - Grid or list with checkmark icons
+  - Each objective in a card with subtle background
+- **What’s Included**:
+  - Icon list (elegant icons for each item)
+  - 2-column grid on desktop
+- **Location Details**:
+  - Embedded mini map
+  - Address with “Get Directions” link
+  - Parking information
+- **FAQ Accordion**:
+  - Expandable sections
+  - Smooth animations
+
+**Right Column (1/3 width, sticky on scroll)**:
+
+- **Booking Card** (always visible):
+  
+  ```
+  [Date & Time - large, bold]
+  [Location name with icon]
+  [Duration badge]
+  
+  [Price - very large, gold]
+  "per person"
+  
+  [Spots indicator: "4 spots left" with progress bar]
+  
+  [Book Now Button - full width, gradient]
+  OR
+  [Join Waitlist - if full]
+  
+  [100% Satisfaction Guarantee badge]
+  [Trust indicators: secure payment, etc.]
+  ```
+
+**Below Content**:
+
+- **Similar Voyages** carousel (3-4 recommendations)
+- **Testimonials** specific to this topic
+
+**Mobile Optimization**:
+
+- Booking card becomes sticky bottom bar
+- Collapse/expand for details
+- Tappable “Book Now” always visible
+
+### BOOKING FLOW
+
+**Step 1: Login/Signup Modal**:
+
+- Clean modal overlay (blur background)
+- Toggle between Login/Signup
+- Social login options (optional)
+- Email/password with validation
+- “Continue as guest” option (collect email)
+
+**Step 2: Review Booking**:
+
+- Summary card:
+  - Voyage details
+  - Date, time, location
+  - Price breakdown
+  - Cancellation policy link
+- Terms checkbox
+- “Proceed to Payment” button
+
+**Step 3: Stripe Checkout** (embedded or redirect):
+
+- Stripe handles this
+- Brand colors applied if embedded
+
+**Success Page**:
+
+- Celebration animation (confetti or elegant particles)
+- “Your Voyage is Confirmed!” headline
+- Booking summary
+- “What Happens Next” timeline
+- CTA: “Start Onboarding” button
+
+### ONBOARDING FLOW (`/onboarding/[bookingId]`)
+
+**Layout**:
+
+- Progress bar at top (7 steps, current step highlighted in gradient)
+- Content area centered, max-width 800px
+- Beautiful background (subtle pattern or gradient)
+
+**Step 1: Welcome**:
+
+- Large welcome headline with user’s name
+- Personal video or founder photo
+- Warm, conversational text
+- “Let’s Begin” button
+
+**Step 2: About Founder**:
+
+- Founder photo (professional, warm)
+- Bio with personality
+- Credentials (MBA, hotel GM experience)
+- “Continue” button
+
+**Step 3: About MetaHers Voyages**:
+
+- Brand story
+- Mission and values
+- Community benefits
+- Visual timeline of what to expect
+- “Continue” button
+
+**Step 4: Questionnaire**:
+
+- Form with sections:
+  - Tech comfort level (radio buttons with icons)
+  - Goals (textarea with character count)
+  - Specific interests (checkboxes)
+  - Dietary restrictions
+  - How you heard about us
+- Auto-save as they type
+- “Submit & Continue” button
+
+**Step 5: Community Access**:
+
+- “Join Your Private Group” headline
+- Explanation of community benefits
+- Platform choice (Telegram/Discord/WhatsApp)
+- Large “Join Community” button with platform icon
+- “I’ll do this later” skip option
+
+**Step 6: Preparation Checklist**:
+
+- Visual checklist with checkboxes:
+  - ☐ Charge devices
+  - ☐ Download apps
+  - ☐ Review materials
+  - ☐ Set calendar reminder
+  - ☐ Confirm attendance
+- Each item expandable for details
+- Progress indicator (X/5 complete)
+- “Continue to Dashboard” button
+
+**Step 7: Dashboard Welcome**:
+
+- “You’re All Set!” celebration
+- Preview of dashboard
+- Quick tips on using the platform
+- “Go to Dashboard” button
+
+**Mobile**: Stack vertically, larger touch targets, simplified forms
+
+### USER DASHBOARD (`/dashboard`)
+
+**Layout**:
+
+- Sidebar navigation (desktop) or hamburger menu (mobile)
+- Main content area with cards
+
+**Top Section - Upcoming Voyage**:
+
+- Hero card (full-width, gradient background)
+- Voyage image and title
+- Countdown timer (days, hours, minutes)
+- Key details: date, time, location
+- “View Full Details” link
+- “Get Directions” button
+
+**Dashboard Grid** (3 columns desktop, 1 mobile):
+
+**Card: Quick Links**:
+
+- Community Access
+- Resources Library
+- Support/Help
+
+**Card: Preparation Progress**:
+
+- Task completion percentage
+- Visual progress bar
+- “Complete Tasks” CTA
+
+**Card: Your Referrals**:
+
+- Unique referral code (copy button)
+- Referrals count
+- Rewards earned
+
+**Section: Past Voyages**:
+
+- Timeline view
+- Each voyage: thumbnail, title, date
+- Badge collection display
+- “View Certificate” buttons
+
+**Section: Recommended Next Voyages**:
+
+- 3 voyage cards based on history
+- “Browse All Voyages” link
+
+**Mobile Optimization**:
+
+- Cards stack vertically
+- Sticky countdown timer at top
+- Hamburger menu for navigation
+
+### ADMIN PANEL (`/admin`)
+
+**Clean, Professional Interface** (not luxury aesthetic - functional):
+
+**Dashboard Overview**:
+
+- Metrics cards: Total Revenue, Bookings This Month, Upcoming Voyages, Waitlist Total
+- Revenue chart (line graph)
+- Recent bookings table
+- Quick actions: Add Voyage, View Questionnaires, Send Announcement
+
+**Voyages Management**:
+
+- Table view with filters
+- Actions: Edit, Duplicate, Archive
+- Capacity management
+- Image upload interface
+
+**Bookings Management**:
+
+- Filterable table: by voyage, date, status
+- Export to CSV
+- Email attendees (select multiple)
+- View questionnaire responses
+
+**Questionnaire Viewer**:
+
+- List of responses
+- Filter by voyage
+- Mark as reviewed
+- Export function
+- Individual detail view
+
+**Analytics Dashboard**:
+
+- Conversion funnel
+- Popular voyages chart
+- Revenue by category
+- Referral tracking
+
+## Key Features & Interactions
+
+### Map Interactions
+
+- Custom markers with category color coding
+- Hover: Tooltip with voyage name
+- Click: Show preview popup OR navigate to detail
+- Clusters for multiple voyages at same location
+- Zoom to fit all markers on load
+- Mobile: Touch-friendly markers (larger hit area)
+
+### Loading States
+
+- Skeleton screens (not spinners) for cards
+- Smooth fade-in animations when content loads
+- Loading overlay with brand colors for page transitions
+
+### Error States
+
+- Friendly error messages (never technical jargon)
+- Suggestions for what to do next
+- Contact support option
+- Retry button
+
+### Animations
+
+- Smooth page transitions (fade)
+- Card hover: lift + shadow increase
+- Button hover: slight scale + shadow
+- Modal: slide up + fade in background
+- Progress bars: animated fill
+- Success states: confetti or celebration animation
+- All animations: 200-300ms duration
+
+### Mobile Responsiveness
+
+- Touch-friendly: minimum 44px touch targets
+- Sticky CTAs on mobile (bottom bar)
+- Collapsible sections to save space
+- Swipeable carousels
+- Mobile menu: slide-in from left
+- Forms: full-width inputs, large labels
+
+### Accessibility
+
+- Proper heading hierarchy (h1 → h6)
+- Alt text for all images
+- Keyboard navigation support
+- Focus states clearly visible
+- ARIA labels for interactive elements
+- Color contrast meets WCAG AA standards
+
+## Seed Database with These 12 Voyages
+
+**Voyage 1**: “AI Foundations - Your First Intelligent Assistant” | AI | Duffy_Boat | Balboa Island Harbor, Newport Beach | 2025-01-20 10:00 | $297 | 33.6064,-117.8992 | “Launch your AI journey on the water as we inaugurate MetaHers Voyages…” | [“Set up AI assistant”, “Master prompt engineering”, “Automate 3-5 tasks”, “Create AI workflows”, “Understand AI capabilities”, “Build personal AI toolkit”]
+
+**Voyage 2**: “AI Content Creation - Never Stare at a Blank Page Again” | AI | Brunch | Fig & Olive, Fashion Island | 2025-02-08 11:00 | $297 | 33.6156,-117.8765 | “Join us for an elegant brunch where we’ll transform how you create content forever…” | [“Create content 10x faster”, “Maintain authentic voice”, “Build content workflows”, “Generate images with AI”, “Repurpose content”, “Create 30-day calendar”]
+
+**Voyage 3**: “AI for Business Strategy - Data-Driven Decisions” | AI | Picnic | Back Bay Sunset Bluff, Newport Beach | 2025-02-22 16:00 | $297 | 33.6414,-117.8765 | “Watch the sun set over Back Bay while we explore how AI can revolutionize your business intelligence…” | [“Conduct market research”, “Analyze competitors”, “Create financial models”, “Extract insights from data”, “Build strategy frameworks”, “Make data-driven decisions”]
+
+**Voyage 4**: “Crypto Fundamentals - Your Digital Wealth Foundation” | Crypto | Duffy_Boat | Newport Harbor Main Channel | 2025-03-08 14:00 | $347 | 33.6094,-117.8890 | “Demystify cryptocurrency on this intimate harbor voyage…” | [“Understand blockchain”, “Learn crypto differences”, “Set up secure wallet”, “Make first purchase”, “Understand security”, “Explore use cases”]
+
+**Voyage 5**: “DeFi Decoded - Banking Without Banks” | Crypto | Brunch | The Quiet Woman, Corona del Mar | 2025-03-22 11:00 | $347 | 33.5947,-117.8765 | “Discover decentralized finance over an exquisite brunch with harbor views…” | [“Understand DeFi protocols”, “Learn about yield farming”, “Explore lending/borrowing”, “Understand smart contracts”, “Set up DeFi wallets”, “Evaluate opportunities”]
+
+**Voyage 6**: “NFTs & Digital Assets - Own Your Digital Future” | Crypto | Picnic | Little Corona Beach, Corona del Mar | 2025-04-05 15:00 | $347 | 33.5928,-117.8544 | “Explore the world of NFTs and digital ownership in the stunning setting of Little Corona Beach…” | [“Understand NFTs”, “Explore marketplaces”, “Create and mint NFT”, “Understand NFT utility”, “Evaluate projects”, “Explore business opportunities”]
+
+**Voyage 7**: “Web3 Foundations - The Decentralized Internet” | Web3 | Duffy_Boat | Lido Isle Loop, Newport Beach | 2025-04-19 10:00 | $347 | 33.6089,-117.9056 | “Navigate the future of the internet as we cruise through Lido Isle…” | [“Understand Web3 vs Web2”, “Explore dApps”, “Learn about DAOs”, “Connect wallet to Web3”, “Understand tokenomics”, “Identify opportunities”]
+
+**Voyage 8**: “Metaverse & Virtual Worlds - Your Digital Real Estate” | Web3 | Brunch | Basilic Restaurant, Newport Beach | 2025-05-03 11:00 | $347 | 33.6175,-117.9289 | “Step into virtual worlds over French-Swiss inspired brunch…” | [“Understand metaverse platforms”, “Explore virtual real estate”, “Learn avatar economy”, “Understand business opportunities”, “Experience VR/AR”, “Plan metaverse presence”]
+
+**Voyage 9**: “Smart Contracts & Blockchain Development Basics” | Web3 | Picnic | Inspiration Point, Corona del Mar | 2025-05-17 16:00 | $347 | 33.5925,-117.8737 | “Discover the building blocks of blockchain technology while overlooking the Pacific…” | [“Understand smart contracts”, “Explore blockchain platforms”, “Learn use cases”, “Understand gas fees”, “Evaluate projects”, “Plan blockchain integration”]
+
+**Voyage 10**: “AI-Powered Branding - Build Your Magnetic Presence” | AI_Branding | Duffy_Boat | Balboa Bay, Newport Beach | 2025-05-31 14:00 | $347 | 33.6044,-117.8978 | “Transform your personal or business brand with AI on this harbor voyage…” | [“Define brand positioning”, “Create brand messaging”, “Generate visual identity”, “Build style guides”, “Create consistent content”, “Develop brand story”]
+
+**Voyage 11**: “AI Marketing Automation - Scale Your Reach” | AI_Branding | Brunch | Rusty Pelican, Newport Beach | 2025-06-14 11:00 | $347 | 33.6181,-117.8756 | “Multiply your marketing impact with AI automation over brunch with spectacular harbor views…” | [“Build automated funnels”, “Create personalized campaigns”, “Optimize ads with AI”, “Automate social media”, “Set up chatbots”, “Measure ROI”]
+
+**Voyage 12**: “AI Personal Branding - Become a Thought Leader” | AI_Branding | Picnic | Pelican Hill Resort Grounds, Newport Coast | 2025-06-28 16:00 | $397 | 33.5847,-117.8414 | “Culminate your MetaHers Voyages journey with this elevated experience on the grounds of Pelican Hill Resort…” | [“Develop thought leadership”, “Create LinkedIn strategy”, “Generate speaking topics”, “Build content empire”, “Leverage media opportunities”, “Create 90-day plan”]
+
+## Critical Business Logic
+
+### Booking Flow
+
+1. User clicks “Book Now”
+1. Check if logged in → if not, show login/signup modal
+1. Check voyage capacity → if full, show waitlist option
+1. Show booking review page
+1. Create pending booking in database
+1. Redirect to Stripe Checkout
+1. On successful payment (webhook):
+- Update booking to “confirmed”
+- Decrement voyage.currentBookings
+- Send confirmation email
+- Redirect to onboarding
+
+### Capacity Management
+
+- Always check currentBookings < maxCapacity before allowing booking
+- Use database transactions to prevent race conditions
+- Show real-time availability
+- When voyage fills up:
+  - Update status to “full”
+  - Show “Join Waitlist” instead of “Book Now”
+  - Notify waitlist when spots open
+
+### Email Triggers
+
+- Booking confirmation (immediately after payment)
+- Onboarding step 1 (1 hour after booking)
+- Onboarding reminders (if not completed in 24 hours)
+- Pre-voyage reminder (48 hours before)
+- Post-voyage thank you (day after voyage)
+- Questionnaire reminder (if not completed)
+
+## API Endpoints
+
+```typescript
+// Public
+GET  /api/voyages                    // List all voyages (with filters)
+GET  /api/voyages/[slug]             // Single voyage details
+POST /api/waitlist                   // Join waitlist
+
+// Protected (authenticated)
+POST /api/bookings                   // Create booking
+GET  /api/bookings/user              // User's bookings
+POST /api/questionnaires             // Submit questionnaire
+GET  /api/dashboard                  // Dashboard data
+POST /api/referrals                  // Generate referral
+
+// Payment
+POST /api/checkout/session           // Create Stripe session
+POST /api/webhooks/stripe            // Handle webhooks
+
+// Admin only
+GET  /api/admin/voyages              // All voyages management
+PATCH /api/admin/voyages/[id]        // Update voyage
+GET  /api/admin/bookings             // All bookings
+GET  /api/admin/questionnaires       // All responses
+POST /api/admin/messages             // Send messages
+GET  /api/admin/analytics            // Analytics data
+```
+
+## Implementation Strategy
+
+### Phase 1: Foundation (Days 1-2)
+
+- Set up Next.js project
+- Configure Tailwind with custom colors
+- Set up Prisma with schema
+- Seed database with 12 voyages
+- Test database connection
+
+### Phase 2: Core Pages (Days 3-5)
+
+- Build homepage with hero
+- Create voyages page with map
+- Build voyage detail pages
+- Implement category filtering
+- Make everything responsive
+
+### Phase 3: Authentication & Booking (Days 6-8)
+
+- Set up NextAuth
+- Build login/signup modals
+- Integrate Stripe Checkout
+- Implement booking flow
+- Set up webhooks
+- Test end-to-end payment
+
+### Phase 4: Onboarding (Days 9-11)
+
+- Build 7-step onboarding flow
+- Create questionnaire form
+- Implement progress tracking
+- Set up email triggers
+
+### Phase 5: Dashboard (Days 12-13)
+
+- Build user dashboard
+- Show upcoming voyages
+- Display task lists
+- Add referral system
+
+### Phase 6: Admin Panel (Days 14-15)
+
+- Create admin routes
+- Build management interfaces
+- Add analytics dashboard
+- Test admin features
+
+### Phase 7: Polish (Days 16-18)
+
+- Refine animations
+- Optimize images
+- Test on all devices
+- Fix bugs
+- Performance optimization
+- SEO optimization
+
+## Testing Checklist
+
+- [ ] All voyages display on map correctly
+- [ ] Filters work (category, search)
+- [ ] Booking flow completes successfully
+- [ ] Stripe test payments process
+- [ ] Capacity checking prevents overbooking
+- [ ] Emails send at correct times
+- [ ] Onboarding sequence works
+- [ ] Dashboard shows correct data
+- [ ] Admin can manage everything
+- [ ] Mobile responsive on all pages
+- [ ] All forms validate properly
+- [ ] Loading states display
+- [ ] Error states handle gracefully
+
+## Environment Variables
+
+```env
+DATABASE_URL=
+NEXTAUTH_URL=
+NEXTAUTH_SECRET=
+STRIPE_SECRET_KEY=
+STRIPE_PUBLISHABLE_KEY=
+STRIPE_WEBHOOK_SECRET=
+RESEND_API_KEY=
+EMAIL_FROM=
+MAPBOX_ACCESS_TOKEN=
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=
+ADMIN_EMAIL=
+```
+
+Build this incrementally. Test each feature thoroughly before moving to the next. Commit to git after completing each phase. Focus on the luxury user experience - every interaction should feel premium and delightful.
