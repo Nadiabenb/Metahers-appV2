@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
-import { ArrowRight, Star, Crown, Sparkles, Ship, ChevronDown } from "lucide-react";
+import { ArrowRight, Star, Crown, Ship, ChevronDown } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import { useRef, useState, useEffect, useMemo } from "react";
@@ -258,125 +258,69 @@ function PromiseSection({ onNavigate }: { onNavigate: (path: string) => void }) 
     >
       <AmbientGlow />
       
-      <div className="relative max-w-6xl mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          {/* Left: Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
+      <div className="relative max-w-3xl mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+        >
+          <p 
+            className="text-xs uppercase tracking-[0.25em] mb-6"
+            style={{ color: PINK }}
           >
-            <p 
-              className="text-xs uppercase tracking-[0.25em] mb-6"
-              style={{ color: PINK }}
-            >
-              Free Experience
-            </p>
-            
-            <h2 
-              className="text-4xl lg:text-5xl mb-6 leading-[1.15]"
-              style={{ 
-                fontFamily: 'Playfair Display, serif',
-                color: '#FFFFFF',
-                fontWeight: 300,
-              }}
-            >
-              Crystallize Your
-              <span className="block italic" style={{ color: LAVENDER }}>2026 Vision</span>
-            </h2>
-            
-            <p 
-              className="text-lg leading-relaxed mb-8 font-light"
-              style={{ color: 'rgba(255,255,255,0.65)' }}
-            >
-              An AI-powered ritual to define your intentions across seven sacred dimensions—Career, Wealth, Wellness, Learning, Relationships, Lifestyle, and Impact.
-            </p>
-
-            <div className="space-y-4 mb-10">
-              {[
-                "AI guides you to discover your Core Word for the year",
-                "Connect with Vision Sisters who share your dreams",
-                "Daily reflections keep you aligned with your goals",
-              ].map((benefit, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.3 + i * 0.1 }}
-                  className="flex items-start gap-3"
-                >
-                  <Sparkles className="w-4 h-4 mt-1 flex-shrink-0" style={{ color: PINK }} />
-                  <span className="text-sm" style={{ color: 'rgba(255,255,255,0.75)' }}>{benefit}</span>
-                </motion.div>
-              ))}
-            </div>
-            
-            <motion.button
-              onClick={() => onNavigate("/vision-board")}
-              whileHover={{ x: 6 }}
-              className="group flex items-center gap-3 text-base font-light"
-              style={{ color: PINK }}
-              data-testid="button-vision-cta"
-            >
-              <span>Enter the Vision Board</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
-          </motion.div>
-
-          {/* Right: Visual */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
+            Free Experience
+          </p>
+          
+          <h2 
+            className="text-4xl lg:text-5xl mb-6 leading-[1.15]"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
           >
-            <div 
-              className="p-10 border"
-              style={{ 
-                borderColor: 'rgba(255,255,255,0.08)',
-                background: 'rgba(255,255,255,0.02)',
-              }}
-            >
-              <div className="grid grid-cols-3 gap-3 mb-6">
-                {["Career", "Wealth", "Wellness", "Learning", "Love", "Impact"].map((dim, i) => (
-                  <motion.div
-                    key={dim}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ delay: 0.5 + i * 0.08 }}
-                    className="aspect-square flex items-center justify-center border"
-                    style={{ 
-                      borderColor: 'rgba(255,255,255,0.06)',
-                      background: 'rgba(255,255,255,0.02)',
-                    }}
-                  >
-                    <span className="text-[10px] uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                      {dim}
-                    </span>
-                  </motion.div>
-                ))}
-              </div>
-              
-              <div className="text-center pt-6 border-t" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
-                <p className="text-lg italic mb-1" style={{ fontFamily: 'Playfair Display, serif', color: LAVENDER }}>
-                  Your Core Word
-                </p>
-                <p className="text-xs font-light" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                  The intention that guides your year
-                </p>
-              </div>
-            </div>
-            
-            <motion.div
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 3, repeat: Infinity }}
-              className="absolute -top-3 -right-3 px-4 py-2 text-xs font-semibold uppercase tracking-wider"
-              style={{ background: PINK, color: '#0A0A0A' }}
-            >
-              Free
-            </motion.div>
-          </motion.div>
-        </div>
+            Crystallize Your
+            <span className="block italic" style={{ color: LAVENDER }}>2026 Vision</span>
+          </h2>
+          
+          <p 
+            className="text-lg leading-relaxed mb-10 font-light max-w-xl mx-auto"
+            style={{ color: 'rgba(255,255,255,0.65)' }}
+          >
+            An AI-powered ritual to define your intentions across seven sacred dimensions—Career, Wealth, Wellness, Learning, Relationships, Lifestyle, and Impact.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-3 mb-10">
+            {["Career", "Wealth", "Wellness", "Learning", "Love", "Impact", "Lifestyle"].map((dim, i) => (
+              <motion.span
+                key={dim}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: 0.3 + i * 0.06 }}
+                className="px-4 py-2 text-xs uppercase tracking-wider border"
+                style={{ borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)' }}
+              >
+                {dim}
+              </motion.span>
+            ))}
+          </div>
+          
+          <motion.button
+            onClick={() => onNavigate("/vision-board")}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="group px-10 py-4 inline-flex items-center gap-3"
+            style={{ background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`, color: '#0A0A0A' }}
+            data-testid="button-vision-cta"
+          >
+            <span className="font-semibold text-sm uppercase tracking-[0.15em]">Create Your Vision Board</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </motion.button>
+          
+          <p className="text-xs mt-4" style={{ color: 'rgba(255,255,255,0.4)' }}>
+            Free • AI-Powered • Find Your Vision Sisters
+          </p>
+        </motion.div>
       </div>
     </section>
   );
