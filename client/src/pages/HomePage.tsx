@@ -660,6 +660,7 @@ export default function HomePage() {
                 description: "Master ChatGPT, Claude, and AI automation for your business",
                 gradient: "from-violet-500 to-purple-600",
                 bgGradient: "from-violet-50 to-purple-50",
+                slug: "ai",
               },
               {
                 icon: Gem,
@@ -667,6 +668,7 @@ export default function HomePage() {
                 description: "Navigate wallets, tokens, and blockchain with confidence",
                 gradient: "from-amber-500 to-yellow-500",
                 bgGradient: "from-amber-50 to-yellow-50",
+                slug: "crypto",
               },
               {
                 icon: Palette,
@@ -674,17 +676,18 @@ export default function HomePage() {
                 description: "Create stunning visuals and brand assets with AI tools",
                 gradient: "from-pink-500 to-fuchsia-500",
                 bgGradient: "from-pink-50 to-fuchsia-50",
+                slug: "branding",
               },
             ].map((category, index) => (
-              <motion.div
+              <motion.button
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className={`bg-gradient-to-br ${category.bgGradient} p-6 rounded-lg border border-gray-100 hover:shadow-lg transition-all cursor-pointer group`}
+                className={`bg-gradient-to-br ${category.bgGradient} p-6 rounded-lg border border-gray-100 hover:shadow-lg transition-all cursor-pointer group text-left w-full`}
                 onClick={() => setLocation('/voyages')}
-                data-testid={`voyage-category-${index}`}
+                data-testid={`button-voyage-category-${category.slug}`}
               >
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${category.gradient} flex items-center justify-center mb-4`}>
                   <category.icon className="w-6 h-6 text-white" />
@@ -694,7 +697,7 @@ export default function HomePage() {
                 <span className="text-sm font-medium text-violet-600 group-hover:text-violet-700 flex items-center gap-1">
                   Explore voyages <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </span>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
 
@@ -702,10 +705,10 @@ export default function HomePage() {
           <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm mb-12">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
-                { icon: Ship, value: "3", label: "Duffy Boat Voyages" },
-                { icon: MapPin, value: "Newport Beach", label: "California" },
-                { icon: UsersRound, value: "6", label: "Women Per Voyage" },
-                { icon: Calendar, value: "Jan 2025", label: "Next Voyage" },
+                { icon: Ship, value: "3", label: "Duffy Boat Voyages", testId: "duffy-boats" },
+                { icon: MapPin, value: "Newport Beach", label: "California", testId: "location" },
+                { icon: UsersRound, value: "6", label: "Women Per Voyage", testId: "capacity" },
+                { icon: Calendar, value: "Jan 2025", label: "Next Voyage", testId: "next-date" },
               ].map((stat, index) => (
                 <motion.div
                   key={index}
@@ -717,7 +720,7 @@ export default function HomePage() {
                   <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-gradient-to-br from-violet-100 to-amber-100 flex items-center justify-center">
                     <stat.icon className="w-5 h-5 text-violet-600" />
                   </div>
-                  <div className="text-xl font-semibold text-gray-900">{stat.value}</div>
+                  <div className="text-xl font-semibold text-gray-900" data-testid={`text-voyage-stat-${stat.testId}`}>{stat.value}</div>
                   <div className="text-xs text-gray-500 uppercase tracking-wider">{stat.label}</div>
                 </motion.div>
               ))}
