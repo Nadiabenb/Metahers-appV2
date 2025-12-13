@@ -1,425 +1,234 @@
-import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
-import { ArrowRight, Star, Crown, Ship, ChevronDown } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { ArrowRight, Sparkles, Brain, Users, Ship, Zap, Globe, Target, Heart, TrendingUp, Play } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
-import { useRef, useState, useEffect, useMemo } from "react";
+import heroBackground from "@assets/generated_images/Neon_light_trails_hero_2008ed57.png";
+import { useRef } from "react";
 import { useLocation } from "wouter";
 
-// Brand Colors - Unified palette
-const LAVENDER = "#D8BFD8";
-const PINK = "#E879F9";
-const DARK_BG = "#0D0B14";
-
-// Shared Components for Consistency
-function SectionDivider() {
-  return (
-    <div className="flex items-center justify-center py-16">
-      <div className="w-24 h-px" style={{ background: `linear-gradient(90deg, transparent, ${LAVENDER}30, transparent)` }} />
-      <Star className="w-3 h-3 mx-4" style={{ color: LAVENDER, opacity: 0.4 }} />
-      <div className="w-24 h-px" style={{ background: `linear-gradient(90deg, transparent, ${LAVENDER}30, transparent)` }} />
-    </div>
-  );
-}
-
-function AmbientGlow() {
-  return (
-    <>
-      <motion.div
-        className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          background: `radial-gradient(circle, ${PINK}06 0%, transparent 70%)`,
-          filter: 'blur(100px)',
-        }}
-        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          background: `radial-gradient(circle, ${LAVENDER}04 0%, transparent 70%)`,
-          filter: 'blur(120px)',
-        }}
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.2, 0.35, 0.2] }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-      />
-    </>
-  );
-}
-
-function FloatingParticle({ delay = 0, duration = 20 }: { delay?: number; duration?: number }) {
-  const randomX = useMemo(() => Math.random() * 100, []);
-  const randomY = useMemo(() => Math.random() * 100, []);
-  const size = useMemo(() => Math.random() * 2 + 1, []);
-  
-  return (
-    <motion.div
-      className="absolute rounded-full pointer-events-none"
-      style={{
-        width: size,
-        height: size,
-        left: `${randomX}%`,
-        top: `${randomY}%`,
-        background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
-      }}
-      animate={{ y: [0, -80, 0], opacity: [0, 0.6, 0], scale: [0, 1, 0] }}
-      transition={{ duration, delay, repeat: Infinity, ease: "easeInOut" }}
-    />
-  );
-}
+// Brand Colors - Bold palette inspired by Shopify Editions
+const ACCENT = "#E879F9";
+const ACCENT_SECONDARY = "#A855F7";
+const DARK_BG = "#000000";
+const CARD_BG = "#0A0A0A";
+const BORDER = "rgba(255,255,255,0.08)";
 
 // ============================================
-// CHAPTER 1: HERO - The Invitation
+// SECTION 1: HERO - Full Width Cinematic
 // ============================================
 function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 80]);
-  
-  const [showContent, setShowContent] = useState(false);
-  
-  useEffect(() => {
-    const timer = setTimeout(() => setShowContent(true), 400);
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
-    <motion.section
-      ref={heroRef}
-      style={{ opacity, scale }}
+    <section 
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{ background: DARK_BG }}
       data-testid="section-hero"
     >
-      <div className="absolute inset-0" style={{ background: DARK_BG }} />
-      <AmbientGlow />
-      
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 20 }).map((_, i) => (
-          <FloatingParticle key={i} delay={i * 0.7} duration={18 + Math.random() * 8} />
-        ))}
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0">
+        <img 
+          src={heroBackground} 
+          alt="" 
+          className="w-full h-full object-cover opacity-40"
+        />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.8) 100%)' }} />
       </div>
 
-      <motion.div style={{ y }} className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <AnimatePresence>
-          {showContent && (
-            <>
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                className="mb-10"
-              >
-                <div className="inline-flex items-center gap-3 px-5 py-2">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                  >
-                    <Crown className="w-4 h-4" style={{ color: PINK }} />
-                  </motion.div>
-                  <span 
-                    className="text-xs font-light tracking-[0.25em] uppercase"
-                    style={{ color: LAVENDER }}
-                  >
-                    A Private Sanctuary
-                  </span>
-                </div>
-              </motion.div>
+      {/* Animated Gradient Orbs */}
+      <motion.div
+        className="absolute top-1/4 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT}15 0%, transparent 70%)`, filter: 'blur(100px)' }}
+        animate={{ scale: [1, 1.2, 1], x: [0, 50, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT_SECONDARY}10 0%, transparent 70%)`, filter: 'blur(120px)' }}
+        animate={{ scale: [1.1, 1, 1.1], x: [0, -30, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+      />
 
-              <motion.h1
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="mb-6"
-              >
-                <span 
-                  className="block text-6xl sm:text-7xl lg:text-8xl tracking-tight"
-                  style={{ 
-                    fontFamily: 'Playfair Display, serif',
-                    color: '#FFFFFF',
-                    fontWeight: 300,
-                    letterSpacing: '-0.02em',
-                  }}
-                >
-                  MetaHers
-                </span>
-                <span
-                  className="block text-4xl sm:text-5xl lg:text-6xl mt-3 italic"
-                  style={{ 
-                    fontFamily: 'Playfair Display, serif',
-                    color: LAVENDER,
-                    fontWeight: 300,
-                  }}
-                >
-                  Mind Spa
-                </span>
-              </motion.h1>
+      <div className="relative z-10 text-center px-6 max-w-5xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          {/* Badge */}
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8"
+            style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}` }}
+          >
+            <Sparkles className="w-4 h-4" style={{ color: ACCENT }} />
+            <span className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>Winter 2026 Edition</span>
+          </motion.div>
 
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.6 }}
-                className="text-xl sm:text-2xl font-extralight max-w-2xl mx-auto mb-4 leading-relaxed"
-                style={{ color: 'rgba(255,255,255,0.75)' }}
-              >
-                Where extraordinary women master AI & Web3 to build lives of freedom, wealth, and lasting impact.
-              </motion.p>
+          {/* Main Headline - Large & Bold */}
+          <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6" style={{ color: '#FFFFFF' }}>
+            Master AI & Web3.
+            <br />
+            <span style={{ background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_SECONDARY} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              Build Your Empire.
+            </span>
+          </h1>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.9 }}
-                className="flex items-center justify-center gap-8 mb-12 text-sm"
-                style={{ color: 'rgba(255,255,255,0.5)' }}
-              >
-                <span>54 AI Rituals</span>
-                <span style={{ color: PINK }}>•</span>
-                <span>9 Learning Worlds</span>
-                <span style={{ color: PINK }}>•</span>
-                <span>Sisterhood</span>
-              </motion.div>
+          {/* Subheadline */}
+          <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto mb-10" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            54 AI-powered rituals. 9 learning worlds. Luxury experiences for extraordinary women ready to lead in the new digital economy.
+          </p>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 1.1 }}
-                className="flex flex-col sm:flex-row gap-5 justify-center items-center"
-              >
-                <motion.button
-                  onClick={() => onNavigate("/vision-board")}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group px-10 py-4"
-                  style={{
-                    background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
-                    color: '#0A0A0A',
-                  }}
-                  data-testid="button-hero-primary"
-                >
-                  <span className="font-semibold text-sm uppercase tracking-[0.15em] flex items-center gap-3">
-                    Begin Your Vision
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </motion.button>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <motion.button
+              onClick={() => onNavigate("/vision-board")}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="group px-8 py-4 rounded-lg font-semibold text-lg flex items-center gap-3"
+              style={{ background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_SECONDARY} 100%)`, color: '#000000' }}
+              data-testid="button-hero-primary"
+            >
+              Start Free Vision Board
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
 
-                <motion.button
-                  onClick={() => onNavigate("/voyages")}
-                  whileHover={{ scale: 1.02, borderColor: LAVENDER }}
-                  whileTap={{ scale: 0.98 }}
-                  className="px-10 py-4 border font-light text-sm uppercase tracking-[0.15em] transition-all"
-                  style={{ borderColor: 'rgba(255,255,255,0.25)', color: '#FFFFFF' }}
-                  data-testid="button-hero-secondary"
-                >
-                  Explore Voyages
-                </motion.button>
-              </motion.div>
-            </>
-          )}
-        </AnimatePresence>
-      </motion.div>
+            <motion.button
+              onClick={() => onNavigate("/voyages")}
+              whileHover={{ scale: 1.02, background: 'rgba(255,255,255,0.1)' }}
+              whileTap={{ scale: 0.98 }}
+              className="px-8 py-4 rounded-lg font-semibold text-lg flex items-center gap-3 transition-all"
+              style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}`, color: '#FFFFFF' }}
+              data-testid="button-hero-secondary"
+            >
+              <Play className="w-5 h-5" style={{ color: ACCENT }} />
+              Explore Voyages
+            </motion.button>
+          </div>
+        </motion.div>
+      </div>
 
+      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 0.8 }}
+        transition={{ delay: 1.5 }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
       >
         <motion.div
-          animate={{ y: [0, 6, 0] }}
+          animate={{ y: [0, 8, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center gap-2"
-          style={{ color: 'rgba(255,255,255,0.35)' }}
+          className="w-6 h-10 rounded-full border-2 flex items-start justify-center pt-2"
+          style={{ borderColor: 'rgba(255,255,255,0.2)' }}
         >
-          <span className="text-[10px] uppercase tracking-[0.3em]">Discover</span>
-          <ChevronDown className="w-4 h-4" />
+          <motion.div
+            animate={{ opacity: [0.5, 1, 0.5], y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="w-1.5 h-1.5 rounded-full"
+            style={{ background: ACCENT }}
+          />
         </motion.div>
       </motion.div>
-    </motion.section>
-  );
-}
-
-// ============================================
-// CHAPTER 2: THE PROMISE - Vision Board
-// ============================================
-function PromiseSection({ onNavigate }: { onNavigate: (path: string) => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  
-  return (
-    <section 
-      ref={ref} 
-      className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden"
-      style={{ background: DARK_BG }}
-      data-testid="section-promise"
-    >
-      <AmbientGlow />
-      
-      <div className="relative max-w-3xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          <p 
-            className="text-xs uppercase tracking-[0.25em] mb-6"
-            style={{ color: PINK }}
-          >
-            Free Experience
-          </p>
-          
-          <h2 
-            className="text-4xl lg:text-5xl mb-6 leading-[1.15]"
-            style={{ 
-              fontFamily: 'Playfair Display, serif',
-              color: '#FFFFFF',
-              fontWeight: 300,
-            }}
-          >
-            Crystallize Your
-            <span className="block italic" style={{ color: LAVENDER }}>2026 Vision</span>
-          </h2>
-          
-          <p 
-            className="text-lg leading-relaxed mb-10 font-light max-w-xl mx-auto"
-            style={{ color: 'rgba(255,255,255,0.65)' }}
-          >
-            An AI-powered ritual to define your intentions across seven sacred dimensions—Career, Wealth, Wellness, Learning, Relationships, Lifestyle, and Impact.
-          </p>
-
-          <div className="flex flex-wrap justify-center gap-3 mb-10">
-            {["Career", "Wealth", "Wellness", "Learning", "Love", "Impact", "Lifestyle"].map((dim, i) => (
-              <motion.span
-                key={dim}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: 0.3 + i * 0.06 }}
-                className="px-4 py-2 text-xs uppercase tracking-wider border"
-                style={{ borderColor: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.7)' }}
-              >
-                {dim}
-              </motion.span>
-            ))}
-          </div>
-          
-          <motion.button
-            onClick={() => onNavigate("/vision-board")}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="group px-10 py-4 inline-flex items-center gap-3"
-            style={{ background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`, color: '#0A0A0A' }}
-            data-testid="button-vision-cta"
-          >
-            <span className="font-semibold text-sm uppercase tracking-[0.15em]">Create Your Vision Board</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </motion.button>
-          
-          <p className="text-xs mt-4" style={{ color: 'rgba(255,255,255,0.4)' }}>
-            Free • AI-Powered • Find Your Vision Sisters
-          </p>
-        </motion.div>
-      </div>
     </section>
   );
 }
 
 // ============================================
-// CHAPTER 3: SIGNATURE EXPERIENCES
+// SECTION 2: FEATURES - 3-Column Grid
 // ============================================
-function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void }) {
+function FeaturesSection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const experiences = [
+  const features = [
     {
-      title: "9 Learning Worlds",
+      icon: Brain,
+      title: "AI-Powered Learning",
       subtitle: "54 Transformational Rituals",
-      description: "Master AI, Web3, Branding, NFTs, Metaverse, and more through beautiful, guided experiences designed for your success.",
-      cta: "Explore Worlds",
+      description: "Master cutting-edge AI tools through beautifully designed, step-by-step experiences. From ChatGPT to Midjourney, learn it all.",
+      cta: "Explore Rituals",
       path: "/learning-hub",
+      gradient: "from-pink-500 to-purple-600",
     },
     {
+      icon: Users,
       title: "AI Agency Team",
-      subtitle: "Your Digital Empire",
-      description: "7 specialized AI agents—Brand Strategist, Copywriter, Designer, and more—working 24/7 to build your business.",
+      subtitle: "7 Specialized Agents",
+      description: "Your personal AI workforce—strategists, copywriters, designers—working 24/7 to build your business while you sleep.",
       cta: "Meet Your Team",
       path: "/agency",
+      gradient: "from-purple-500 to-blue-600",
     },
     {
+      icon: Ship,
       title: "Luxury Voyages",
-      subtitle: "Newport Beach Experiences",
-      description: "Intimate gatherings aboard pink Duffy boats, beach picnics, and champagne brunches. Only 6 women per voyage.",
+      subtitle: "Only 6 Seats Per Experience",
+      description: "Intimate gatherings on pink Duffy boats, Newport Beach sunset picnics, and champagne brunches with like-minded women.",
       cta: "View Voyages",
       path: "/voyages",
+      gradient: "from-blue-500 to-cyan-500",
     },
   ];
 
   return (
     <section 
       ref={ref}
-      className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden"
-      style={{ background: `linear-gradient(180deg, ${DARK_BG} 0%, rgba(26, 22, 37, 1) 100%)` }}
-      data-testid="section-experiences"
+      className="relative py-24 lg:py-32 px-6 lg:px-16"
+      style={{ background: DARK_BG }}
+      data-testid="section-features"
     >
-      <AmbientGlow />
-      
-      <div className="relative max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.25em] mb-6" style={{ color: PINK }}>
+          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" style={{ background: 'rgba(232, 121, 249, 0.1)', color: ACCENT }}>
             Your Transformation Path
-          </p>
-          <h2 
-            className="text-4xl lg:text-5xl mb-4"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}
-          >
-            Three Paths to <span className="italic" style={{ color: LAVENDER }}>Mastery</span>
+          </span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4" style={{ color: '#FFFFFF' }}>
+            Three paths to mastery
           </h2>
-          <p className="text-base font-light max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Choose how you want to grow—digital learning, AI-powered business, or in-person luxury experiences.
+          <p className="text-lg max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            Choose your journey. Digital learning, AI-powered business, or in-person luxury experiences.
           </p>
         </motion.div>
 
-        <div className="space-y-8">
-          {experiences.map((exp, i) => (
+        {/* 3-Column Feature Grid */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {features.map((feature, i) => (
             <motion.div
-              key={exp.title}
+              key={feature.title}
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.15 }}
-              whileHover={{ x: 8 }}
-              onClick={() => onNavigate(exp.path)}
-              className="group cursor-pointer p-8 lg:p-10 border transition-all duration-300"
-              style={{ 
-                borderColor: 'rgba(255,255,255,0.06)',
-                background: 'rgba(255,255,255,0.01)',
-              }}
-              data-testid={`card-experience-${i}`}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              onClick={() => onNavigate(feature.path)}
+              className="group cursor-pointer rounded-2xl p-8 transition-all duration-300 hover:scale-[1.02]"
+              style={{ background: CARD_BG, border: `1px solid ${BORDER}` }}
+              data-testid={`card-feature-${i}`}
             >
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-                <div className="flex-1">
-                  <p className="text-xs uppercase tracking-[0.2em] mb-2" style={{ color: PINK }}>
-                    {exp.subtitle}
-                  </p>
-                  <h3 className="text-2xl lg:text-3xl font-light mb-3" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF' }}>
-                    {exp.title}
-                  </h3>
-                  <p className="text-sm font-light max-w-lg" style={{ color: 'rgba(255,255,255,0.55)' }}>
-                    {exp.description}
-                  </p>
-                </div>
-                
-                <div className="flex items-center gap-3" style={{ color: LAVENDER }}>
-                  <span className="text-sm font-light">{exp.cta}</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
-                </div>
+              {/* Icon with Gradient Background */}
+              <div className={`w-14 h-14 rounded-xl mb-6 flex items-center justify-center bg-gradient-to-br ${feature.gradient}`}>
+                <feature.icon className="w-7 h-7 text-white" />
+              </div>
+
+              {/* Content */}
+              <p className="text-xs uppercase tracking-wider mb-2" style={{ color: ACCENT }}>
+                {feature.subtitle}
+              </p>
+              <h3 className="text-2xl font-bold mb-3" style={{ color: '#FFFFFF' }}>
+                {feature.title}
+              </h3>
+              <p className="text-base mb-6" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                {feature.description}
+              </p>
+
+              {/* CTA */}
+              <div className="flex items-center gap-2 font-medium group-hover:gap-3 transition-all" style={{ color: ACCENT }}>
+                <span>{feature.cta}</span>
+                <ArrowRight className="w-4 h-4" />
               </div>
             </motion.div>
           ))}
@@ -430,118 +239,224 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
 }
 
 // ============================================
-// CHAPTER 4: PROOF - Founder + Results
+// SECTION 3: VISION BOARD - Large Feature Showcase
 // ============================================
-function ProofSection() {
+function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const results = [
-    { stat: "300+", label: "Women Guided" },
-    { stat: "2X", label: "Avg Income Growth" },
-    { stat: "54", label: "AI Rituals" },
-    { stat: "98%", label: "Would Recommend" },
-  ];
-
-  const testimonials = [
-    { quote: "From charging $40/hour to $3K per project. Clients find ME now.", name: "Sarah", role: "Creative Director" },
-    { quote: "I have Saturday mornings back with my kids. AI handles the rest.", name: "Jessica", role: "Entrepreneur" },
-    { quote: "Prints, digital licenses, merch. Reaching Japan, Germany, Australia.", name: "Maria", role: "Digital Artist" },
+  const dimensions = [
+    { icon: Target, label: "Career", color: "#E879F9" },
+    { icon: TrendingUp, label: "Wealth", color: "#A855F7" },
+    { icon: Heart, label: "Wellness", color: "#EC4899" },
+    { icon: Brain, label: "Learning", color: "#8B5CF6" },
+    { icon: Users, label: "Love", color: "#F472B6" },
+    { icon: Globe, label: "Impact", color: "#C084FC" },
+    { icon: Zap, label: "Lifestyle", color: "#D946EF" },
   ];
 
   return (
     <section 
       ref={ref}
-      className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden"
-      style={{ background: DARK_BG }}
-      data-testid="section-proof"
+      className="relative py-24 lg:py-32 px-6 lg:px-16 overflow-hidden"
+      style={{ background: CARD_BG }}
+      data-testid="section-vision"
     >
-      <div className="relative max-w-6xl mx-auto">
-        {/* Founder Quote */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center mb-24"
-        >
-          <div className="lg:col-span-2">
-            <div className="relative aspect-[3/4] overflow-hidden">
-              <div className="absolute inset-0 z-10" style={{ background: 'linear-gradient(to bottom, transparent 50%, rgba(13, 11, 20, 0.9) 100%)' }} />
-              <img
-                src={nadiaHeroPhoto}
-                alt="Nadia - Founder"
-                className="w-full h-full object-cover"
-                style={{ filter: 'grayscale(20%)' }}
-              />
-              <div className="absolute bottom-6 left-6 z-20">
-                <p className="text-xl mb-1" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF' }}>Nadia</p>
-                <p className="text-xs uppercase tracking-[0.15em]" style={{ color: LAVENDER }}>Founder</p>
-              </div>
-            </div>
-          </div>
-          
-          <div className="lg:col-span-3">
-            <p className="text-xs uppercase tracking-[0.25em] mb-6" style={{ color: PINK }}>The Invitation</p>
-            <blockquote 
-              className="text-2xl lg:text-3xl leading-relaxed mb-8"
-              style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}
-            >
-              "I built this sanctuary for the woman <span className="italic" style={{ color: PINK }}>I once needed to find.</span>"
-            </blockquote>
-            <p className="text-base font-light leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              After coaching over 300 women—through group programs, events, and breakthrough calls—I saw brilliant women overwhelmed by technology, standing on the sidelines. MetaHers is different. It's about using AI and Web3 as tools for the life you actually want.
-            </p>
-          </div>
-        </motion.div>
+      {/* Background Gradient */}
+      <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at center, ${ACCENT}08 0%, transparent 70%)` }} />
 
-        {/* Stats Band */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 py-12 mb-20 border-y"
-          style={{ borderColor: 'rgba(255,255,255,0.06)' }}
-        >
-          {results.map((item, i) => (
+      <div className="relative max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left: Content */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8 }}
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-6" style={{ background: 'rgba(232, 121, 249, 0.1)', color: ACCENT }}>
+              Free Experience
+            </span>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-6" style={{ color: '#FFFFFF' }}>
+              Crystallize your
+              <br />
+              <span style={{ color: ACCENT }}>2026 vision</span>
+            </h2>
+
+            <p className="text-lg mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              An AI-powered ritual to define your intentions across seven sacred dimensions. Discover your Core Word, connect with Vision Sisters, and align with your highest self.
+            </p>
+
+            <motion.button
+              onClick={() => onNavigate("/vision-board")}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="group px-8 py-4 rounded-lg font-semibold text-lg flex items-center gap-3 mb-4"
+              style={{ background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_SECONDARY} 100%)`, color: '#000000' }}
+              data-testid="button-vision-cta"
+            >
+              Create Your Vision Board
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
+
+            <p className="text-sm" style={{ color: 'rgba(255,255,255,0.4)' }}>
+              Free • AI-Powered • Find Your Vision Sisters
+            </p>
+          </motion.div>
+
+          {/* Right: Dimensions Grid */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="grid grid-cols-2 sm:grid-cols-3 gap-4"
+          >
+            {dimensions.map((dim, i) => (
+              <motion.div
+                key={dim.label}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ delay: 0.3 + i * 0.05 }}
+                className="p-6 rounded-xl text-center transition-all hover:scale-105"
+                style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${BORDER}` }}
+              >
+                <dim.icon className="w-8 h-8 mx-auto mb-3" style={{ color: dim.color }} />
+                <p className="text-sm font-medium" style={{ color: 'rgba(255,255,255,0.8)' }}>{dim.label}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================
+// SECTION 4: STATS - Bold Numbers
+// ============================================
+function StatsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const stats = [
+    { value: "300+", label: "Women Transformed" },
+    { value: "2X", label: "Average Income Growth" },
+    { value: "54", label: "AI Rituals" },
+    { value: "98%", label: "Would Recommend" },
+  ];
+
+  return (
+    <section 
+      ref={ref}
+      className="py-20 px-6 lg:px-16"
+      style={{ background: DARK_BG }}
+      data-testid="section-stats"
+    >
+      <div className="max-w-7xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+          {stats.map((stat, i) => (
             <motion.div
-              key={item.label}
-              initial={{ opacity: 0, y: 10 }}
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.4 + i * 0.1 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
               className="text-center"
             >
-              <p className="text-4xl lg:text-5xl mb-2" style={{ fontFamily: 'Playfair Display, serif', color: LAVENDER }}>
-                {item.stat}
+              <p className="text-5xl md:text-6xl lg:text-7xl font-bold mb-2" style={{ background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_SECONDARY} 100%)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                {stat.value}
               </p>
-              <p className="text-[10px] uppercase tracking-[0.2em]" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                {item.label}
+              <p className="text-sm uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                {stat.label}
               </p>
             </motion.div>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================
+// SECTION 5: TESTIMONIALS - Card Grid
+// ============================================
+function TestimonialsSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const testimonials = [
+    { 
+      quote: "From charging $40/hour to $3K per project. Clients find ME now.", 
+      name: "Sarah", 
+      role: "Creative Director",
+      result: "75x revenue increase"
+    },
+    { 
+      quote: "I have Saturday mornings back with my kids. AI handles the rest.", 
+      name: "Jessica", 
+      role: "Entrepreneur",
+      result: "20+ hours saved weekly"
+    },
+    { 
+      quote: "Prints, digital licenses, merch. Reaching Japan, Germany, Australia.", 
+      name: "Maria", 
+      role: "Digital Artist",
+      result: "Global reach achieved"
+    },
+  ];
+
+  return (
+    <section 
+      ref={ref}
+      className="py-24 lg:py-32 px-6 lg:px-16"
+      style={{ background: CARD_BG }}
+      data-testid="section-testimonials"
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
+        >
+          <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" style={{ background: 'rgba(232, 121, 249, 0.1)', color: ACCENT }}>
+            Member Success
+          </span>
+          <h2 className="text-4xl md:text-5xl font-bold" style={{ color: '#FFFFFF' }}>
+            Real results, real women
+          </h2>
         </motion.div>
 
-        {/* Testimonials */}
+        {/* Testimonial Cards */}
         <div className="grid md:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.6 + i * 0.1 }}
-              className="p-8 border"
-              style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.01)' }}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              className="p-8 rounded-2xl"
+              style={{ background: DARK_BG, border: `1px solid ${BORDER}` }}
               data-testid={`testimonial-${i}`}
             >
-              <p className="text-base font-light italic leading-relaxed mb-6" style={{ color: 'rgba(255,255,255,0.75)' }}>
+              {/* Result Badge */}
+              <div className="inline-block px-3 py-1 rounded-full text-xs font-medium mb-6" style={{ background: 'rgba(232, 121, 249, 0.1)', color: ACCENT }}>
+                {t.result}
+              </div>
+
+              {/* Quote */}
+              <p className="text-xl font-medium leading-relaxed mb-8" style={{ color: '#FFFFFF' }}>
                 "{t.quote}"
               </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 flex items-center justify-center" style={{ background: PINK }}>
-                  <span className="font-semibold" style={{ color: '#0A0A0A' }}>{t.name[0]}</span>
+
+              {/* Author */}
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg" style={{ background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_SECONDARY} 100%)`, color: '#000000' }}>
+                  {t.name[0]}
                 </div>
                 <div>
-                  <p className="text-sm" style={{ color: '#FFFFFF' }}>{t.name}</p>
-                  <p className="text-xs" style={{ color: 'rgba(255,255,255,0.45)' }}>{t.role}</p>
+                  <p className="font-semibold" style={{ color: '#FFFFFF' }}>{t.name}</p>
+                  <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>{t.role}</p>
                 </div>
               </div>
             </motion.div>
@@ -553,239 +468,260 @@ function ProofSection() {
 }
 
 // ============================================
-// CHAPTER 5: VOYAGES SPOTLIGHT
+// SECTION 6: FOUNDER - Large Image + Quote
 // ============================================
-function VoyagesSection({ onNavigate }: { onNavigate: (path: string) => void }) {
+function FounderSection() {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section 
       ref={ref}
-      className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden"
-      style={{ background: `linear-gradient(180deg, rgba(26, 22, 37, 1) 0%, ${DARK_BG} 100%)` }}
-      data-testid="section-voyages"
+      className="py-24 lg:py-32 px-6 lg:px-16"
+      style={{ background: DARK_BG }}
+      data-testid="section-founder"
     >
-      <AmbientGlow />
-      
-      <div className="relative max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <div className="inline-flex items-center gap-2 mb-6">
-            <Ship className="w-4 h-4" style={{ color: PINK }} />
-            <span className="text-xs uppercase tracking-[0.25em]" style={{ color: PINK }}>
-              In-Person Luxury Experiences
+      <div className="max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
+              <img
+                src={nadiaHeroPhoto}
+                alt="Nadia - Founder of MetaHers"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 50%)' }} />
+              <div className="absolute bottom-8 left-8">
+                <p className="text-2xl font-bold" style={{ color: '#FFFFFF' }}>Nadia</p>
+                <p className="text-sm uppercase tracking-wider" style={{ color: ACCENT }}>Founder & CEO</p>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Quote */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={isInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-8" style={{ background: 'rgba(232, 121, 249, 0.1)', color: ACCENT }}>
+              The Invitation
             </span>
-          </div>
-          <h2 
-            className="text-4xl lg:text-5xl mb-4"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}
-          >
-            MetaHers <span className="italic" style={{ color: LAVENDER }}>Voyages</span>
-          </h2>
-          <p className="text-base font-light max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Intimate gatherings in Newport Beach. Master AI, Crypto & Web3 aboard pink Duffy boats, at exclusive beach picnics, and over champagne brunches. Only 6 women per voyage.
-          </p>
-        </motion.div>
+            
+            <blockquote className="text-3xl md:text-4xl font-bold leading-tight mb-8" style={{ color: '#FFFFFF' }}>
+              "I built this sanctuary for the woman{" "}
+              <span style={{ color: ACCENT }}>I once needed to find.</span>"
+            </blockquote>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="p-10 lg:p-14 border mb-10"
-          style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.02)' }}
-        >
-          <div className="grid md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: "12", label: "Unique Voyages" },
-              { value: "6", label: "Women Per Group" },
-              { value: "Balboa", label: "Island Location" },
-              { value: "$497+", label: "Starting Price" },
-            ].map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.4 + i * 0.1 }}
-              >
-                <p className="text-3xl mb-1" style={{ fontFamily: 'Playfair Display, serif', color: LAVENDER }}>
-                  {stat.value}
-                </p>
-                <p className="text-[10px] uppercase tracking-[0.15em]" style={{ color: 'rgba(255,255,255,0.45)' }}>
-                  {stat.label}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.6 }}
-          className="text-center"
-        >
-          <motion.button
-            onClick={() => onNavigate('/voyages')}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="px-10 py-4 text-sm font-semibold uppercase tracking-[0.15em]"
-            style={{ background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`, color: '#0A0A0A' }}
-            data-testid="button-voyages-cta"
-          >
-            Explore All Voyages
-            <ArrowRight className="inline-block ml-3 w-4 h-4" />
-          </motion.button>
-          <p className="text-xs mt-4" style={{ color: 'rgba(255,255,255,0.35)' }}>
-            Pink Duffy boats • Beach picnics • Champagne brunches
-          </p>
-        </motion.div>
+            <p className="text-lg leading-relaxed" style={{ color: 'rgba(255,255,255,0.6)' }}>
+              After coaching over 300 women—through group programs, events, and breakthrough calls—I saw brilliant women overwhelmed by technology, standing on the sidelines. MetaHers is different. It's about using AI and Web3 as tools for the life you actually want.
+            </p>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 }
 
 // ============================================
-// CHAPTER 6: FINAL CTA
+// SECTION 7: VOYAGES HIGHLIGHT - Large Cards
 // ============================================
-function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void }) {
+function VoyagesHighlight({ onNavigate }: { onNavigate: (path: string) => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const voyages = [
+    { 
+      title: "AI Mastery Cruise", 
+      location: "Newport Beach, CA",
+      date: "January 2026",
+      spots: 6,
+      price: "$497"
+    },
+    { 
+      title: "Web3 Sunset Picnic", 
+      location: "Balboa Island, CA",
+      date: "February 2026",
+      spots: 6,
+      price: "$347"
+    },
+    { 
+      title: "Crypto Champagne Brunch", 
+      location: "Corona del Mar, CA",
+      date: "March 2026",
+      spots: 6,
+      price: "$297"
+    },
+  ];
+
+  return (
+    <section 
+      ref={ref}
+      className="py-24 lg:py-32 px-6 lg:px-16"
+      style={{ background: CARD_BG }}
+      data-testid="section-voyages-highlight"
+    >
+      <div className="max-w-7xl mx-auto">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+        >
+          <div>
+            <span className="inline-block px-4 py-1.5 rounded-full text-sm font-medium mb-4" style={{ background: 'rgba(232, 121, 249, 0.1)', color: ACCENT }}>
+              Luxury Experiences
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold" style={{ color: '#FFFFFF' }}>
+              Upcoming voyages
+            </h2>
+          </div>
+          <motion.button
+            onClick={() => onNavigate("/voyages")}
+            whileHover={{ scale: 1.02 }}
+            className="group flex items-center gap-2 font-medium"
+            style={{ color: ACCENT }}
+            data-testid="button-voyages-all"
+          >
+            View all voyages
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </motion.button>
+        </motion.div>
+
+        {/* Voyage Cards */}
+        <div className="grid md:grid-cols-3 gap-6">
+          {voyages.map((voyage, i) => (
+            <motion.div
+              key={voyage.title}
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: i * 0.1 }}
+              onClick={() => onNavigate("/voyages")}
+              className="group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.02]"
+              style={{ background: DARK_BG, border: `1px solid ${BORDER}` }}
+              data-testid={`card-voyage-${i}`}
+            >
+              {/* Image Placeholder with Gradient */}
+              <div className="h-48 relative" style={{ background: `linear-gradient(135deg, ${ACCENT}20 0%, ${ACCENT_SECONDARY}20 100%)` }}>
+                <Ship className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16" style={{ color: 'rgba(255,255,255,0.1)' }} />
+                <div className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-medium" style={{ background: ACCENT, color: '#000000' }}>
+                  {voyage.spots} spots
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                <p className="text-xs uppercase tracking-wider mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  {voyage.date} • {voyage.location}
+                </p>
+                <h3 className="text-xl font-bold mb-4" style={{ color: '#FFFFFF' }}>
+                  {voyage.title}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <span className="text-2xl font-bold" style={{ color: ACCENT }}>{voyage.price}</span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" style={{ color: 'rgba(255,255,255,0.5)' }} />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================
+// SECTION 8: FINAL CTA - Full Width
+// ============================================
+function FinalCTA({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section 
       ref={ref}
-      className="relative min-h-[80vh] flex items-center justify-center py-32 px-6 lg:px-16 overflow-hidden"
+      className="py-24 lg:py-32 px-6 lg:px-16 relative overflow-hidden"
       style={{ background: DARK_BG }}
       data-testid="section-final-cta"
     >
-      <AmbientGlow />
-      
-      <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 15 }).map((_, i) => (
-          <FloatingParticle key={i} delay={i * 1} duration={22 + Math.random() * 8} />
-        ))}
-      </div>
+      {/* Background Gradient */}
+      <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at center, ${ACCENT}15 0%, transparent 60%)` }} />
 
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 1 }}
-        className="relative max-w-3xl mx-auto text-center"
+        transition={{ duration: 0.8 }}
+        className="relative max-w-4xl mx-auto text-center"
       >
-        <motion.div
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-          className="inline-block mb-8"
-        >
-          <Crown className="w-10 h-10" style={{ color: PINK }} />
-        </motion.div>
-        
-        <h2 
-          className="text-4xl lg:text-6xl mb-6 leading-[1.1]"
-          style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}
-        >
-          Your Future Self
-          <span className="block italic mt-2" style={{ color: PINK }}>Is Already Here</span>
+        <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6" style={{ color: '#FFFFFF' }}>
+          Ready to transform your future?
         </h2>
-        
-        <p 
-          className="text-lg mb-12 max-w-xl mx-auto font-light"
-          style={{ color: 'rgba(255,255,255,0.6)' }}
-        >
-          This isn't about learning. It's about becoming. AI mastery. Web3 confidence. A sanctuary of women building extraordinary lives together.
+        <p className="text-xl mb-10 max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          Join extraordinary women who are already mastering AI and Web3 to build lives of freedom, wealth, and lasting impact.
         </p>
-        
-        <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
+
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <motion.button
             onClick={() => onNavigate("/vision-board")}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="group px-12 py-5"
-            style={{ background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`, color: '#0A0A0A' }}
-            data-testid="button-final-cta-primary"
+            className="group px-8 py-4 rounded-lg font-semibold text-lg flex items-center gap-3"
+            style={{ background: `linear-gradient(135deg, ${ACCENT} 0%, ${ACCENT_SECONDARY} 100%)`, color: '#000000' }}
+            data-testid="button-final-primary"
           >
-            <span className="font-semibold text-sm uppercase tracking-[0.15em] flex items-center gap-3">
-              Create Your Vision Board
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </span>
+            Start Your Journey Free
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </motion.button>
 
           <motion.button
             onClick={() => onNavigate("/voyages")}
-            whileHover={{ scale: 1.02, borderColor: LAVENDER }}
+            whileHover={{ scale: 1.02, background: 'rgba(255,255,255,0.1)' }}
             whileTap={{ scale: 0.98 }}
-            className="px-12 py-5 border font-light text-sm uppercase tracking-[0.15em] transition-all"
-            style={{ borderColor: 'rgba(255,255,255,0.25)', color: '#FFFFFF' }}
-            data-testid="button-final-cta-secondary"
+            className="px-8 py-4 rounded-lg font-semibold text-lg transition-all"
+            style={{ background: 'rgba(255,255,255,0.05)', border: `1px solid ${BORDER}`, color: '#FFFFFF' }}
+            data-testid="button-final-secondary"
           >
-            Explore Voyages
+            Explore Premium Voyages
           </motion.button>
         </div>
-        
-        <p className="mt-10 text-xs" style={{ color: 'rgba(255,255,255,0.35)' }}>
-          Join our sanctuary of extraordinary women
-        </p>
       </motion.div>
     </section>
   );
 }
 
 // ============================================
-// MAIN PAGE COMPONENT
+// MAIN LANDING PAGE
 // ============================================
 export default function LandingPage() {
-  const [, navigate] = useLocation();
-  
+  const [, setLocation] = useLocation();
+
   const handleNavigate = (path: string) => {
-    navigate(path);
+    setLocation(path);
   };
 
   return (
     <>
-      <SEO 
-        title="MetaHers Mind Spa - Where AI Meets Feminine Power"
-        description="An exclusive sanctuary for extraordinary women mastering AI and Web3. Transform your vision into reality with our AI-powered rituals and sisterhood community."
+      <SEO
+        title="MetaHers Mind Spa - Master AI & Web3 | Women's Tech Education"
+        description="Join extraordinary women mastering AI & Web3. 54 AI rituals, 9 learning worlds, and luxury voyages. Start your transformation journey today."
       />
       
-      <main className="relative overflow-hidden" style={{ background: DARK_BG }}>
+      <main className="overflow-x-hidden" style={{ background: DARK_BG }}>
         <HeroSection onNavigate={handleNavigate} />
-        <SectionDivider />
-        <PromiseSection onNavigate={handleNavigate} />
-        <SectionDivider />
-        <ExperiencesSection onNavigate={handleNavigate} />
-        <SectionDivider />
-        <ProofSection />
-        <SectionDivider />
-        <VoyagesSection onNavigate={handleNavigate} />
-        <SectionDivider />
-        <FinalCTASection onNavigate={handleNavigate} />
-        
-        <footer className="py-6 px-6 lg:px-16 border-t" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.06)' }}>
-          <div className="max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-sm" style={{ color: '#FFFFFF' }}>
-                MetaHers <span style={{ color: PINK }}>Mind Spa</span>
-              </p>
-              
-              <div className="flex gap-6 text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                <a href="/privacy" className="hover:opacity-100 transition-opacity" data-testid="link-privacy">Privacy</a>
-                <a href="/terms" className="hover:opacity-100 transition-opacity" data-testid="link-terms">Terms</a>
-                <a href="mailto:hello@metahers.ai" className="hover:opacity-100 transition-opacity" data-testid="link-contact">Contact</a>
-              </div>
-            </div>
-            
-            <div className="mt-4 pt-4 border-t text-center" style={{ borderColor: 'rgba(255,255,255,0.04)' }}>
-              <p className="text-[10px]" style={{ color: 'rgba(255,255,255,0.3)' }}>
-                © {new Date().getFullYear()} MetaHers. All rights reserved.
-              </p>
-            </div>
-          </div>
-        </footer>
+        <FeaturesSection onNavigate={handleNavigate} />
+        <VisionBoardSection onNavigate={handleNavigate} />
+        <StatsSection />
+        <TestimonialsSection />
+        <FounderSection />
+        <VoyagesHighlight onNavigate={handleNavigate} />
+        <FinalCTA onNavigate={handleNavigate} />
       </main>
     </>
   );
