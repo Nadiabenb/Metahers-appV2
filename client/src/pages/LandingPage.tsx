@@ -140,6 +140,9 @@ function FeaturesSection({ onNavigate }: { onNavigate: (path: string) => void })
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
+  // Force visible on mobile/during load to ensure animations trigger
+  const shouldAnimate = isInView;
+
   const features = [
     {
       icon: Brain,
@@ -173,11 +176,28 @@ function FeaturesSection({ onNavigate }: { onNavigate: (path: string) => void })
   return (
     <section 
       ref={ref}
-      className="relative py-24 lg:py-32 px-6 lg:px-16"
+      className="relative py-24 lg:py-32 px-6 lg:px-16 overflow-hidden"
       style={{ background: DARK_BG }}
       data-testid="section-features"
     >
-      <div className="max-w-7xl mx-auto">
+      {/* Background Gradient */}
+      <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 50%, ${ACCENT}10 0%, ${ACCENT_SECONDARY}05 40%, transparent 80%)` }} />
+      
+      {/* Animated background orbs */}
+      <motion.div
+        className="absolute top-0 right-1/4 w-80 h-80 rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT}08 0%, transparent 70%)`, filter: 'blur(80px)' }}
+        animate={{ scale: [1, 1.15, 1], y: [0, 30, 0] }}
+        transition={{ duration: 13, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute top-1/2 -left-32 w-72 h-72 rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT_SECONDARY}08 0%, transparent 70%)`, filter: 'blur(80px)' }}
+        animate={{ scale: [1.1, 1, 1.1], x: [0, 40, 0] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+      />
+      
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -262,8 +282,22 @@ function VisionBoardSection({ onNavigate }: { onNavigate: (path: string) => void
       style={{ background: CARD_BG }}
       data-testid="section-vision"
     >
-      {/* Background Gradient */}
-      <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at center, ${ACCENT}08 0%, transparent 70%)` }} />
+      {/* Background Gradient - Enhanced visibility */}
+      <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at center, ${ACCENT}15 0%, ${ACCENT_SECONDARY}08 40%, transparent 80%)` }} />
+      
+      {/* Animated background orbs */}
+      <motion.div
+        className="absolute top-1/3 -left-64 w-96 h-96 rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT}10 0%, transparent 70%)`, filter: 'blur(80px)' }}
+        animate={{ scale: [1, 1.3, 1], y: [0, 40, 0] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 -right-64 w-96 h-96 rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT_SECONDARY}10 0%, transparent 70%)`, filter: 'blur(80px)' }}
+        animate={{ scale: [1.2, 1, 1.2], y: [0, -40, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      />
 
       <div className="relative max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -407,10 +441,20 @@ function TestimonialsSection() {
   return (
     <section 
       ref={ref}
-      className="py-24 lg:py-32 px-6 lg:px-16"
+      className="py-24 lg:py-32 px-6 lg:px-16 relative overflow-hidden"
       style={{ background: CARD_BG }}
       data-testid="section-testimonials"
     >
+      {/* Background Gradient Effects */}
+      <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 0%, ${ACCENT}12 0%, transparent 60%)` }} />
+      
+      {/* Animated background orbs */}
+      <motion.div
+        className="absolute -top-40 left-1/4 w-96 h-96 rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT}08 0%, transparent 70%)`, filter: 'blur(80px)' }}
+        animate={{ scale: [1, 1.2, 1], x: [0, 30, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -477,10 +521,20 @@ function FounderSection() {
   return (
     <section 
       ref={ref}
-      className="py-24 lg:py-32 px-6 lg:px-16"
+      className="py-24 lg:py-32 px-6 lg:px-16 relative overflow-hidden"
       style={{ background: DARK_BG }}
       data-testid="section-founder"
     >
+      {/* Background Gradient */}
+      <div className="absolute inset-0" style={{ background: `radial-gradient(ellipse at 50% 100%, ${ACCENT}12 0%, transparent 70%)` }} />
+      
+      {/* Animated background orbs */}
+      <motion.div
+        className="absolute bottom-0 -right-40 w-96 h-96 rounded-full pointer-events-none"
+        style={{ background: `radial-gradient(circle, ${ACCENT_SECONDARY}08 0%, transparent 70%)`, filter: 'blur(80px)' }}
+        animate={{ scale: [1.1, 1, 1.1], x: [0, -30, 0] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+      />
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image */}
