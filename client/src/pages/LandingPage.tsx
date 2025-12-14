@@ -339,7 +339,7 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
       subtitle: "54 Transformational Rituals",
       description: "Master AI, Web3, Branding, NFTs, Metaverse, and more through beautiful, guided experiences designed for your success.",
       cta: "Explore Worlds",
-      path: "/learning-hub",
+      path: "/worlds",
     },
     {
       title: "AI Agency Team",
