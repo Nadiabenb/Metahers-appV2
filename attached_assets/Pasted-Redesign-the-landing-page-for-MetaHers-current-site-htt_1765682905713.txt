@@ -1,0 +1,26 @@
+Redesign the landing page for MetaHers (current site: https://app.metahers.ai or https://metahers.ai), which is a platform empowering women entrepreneurs with AI, Web3, no-code tools, coaching, and community resources (focused on making tech accessible to women without a tech background).
+
+Apply the exact visual and interactive style of the Shopify Editions Winter '26 page (https://www.shopify.com/editions/winter2026):
+
+- Make it a super-long single-page scrolling experience with progressive content revelation.
+- Use a clean, minimalist aesthetic: dominant white/very light backgrounds, ample white space, soft grays, subtle gradients and shadows for depth.
+- Big, bold sans-serif typography for section headings (large-scale, high hierarchy).
+- Category-based vertical sections (e.g., Hero with Sidekick-like AI focus, then sections for Features/Coaching, Community, Resources, Testimonials, etc.).
+- Card-based layouts for features: prominent cards with rounded corners, hover lift effects, icons/images of AI interfaces, prompts, or tools.
+- Heavy use of high-quality screenshots/mockups of the app, AI chats, coaching interfaces, or community elements integrated into cards.
+- Animate-on-scroll effects: fade-ins, slide-ups, scale animations as sections enter viewport (use libraries like AOS or Framer Motion if needed).
+- Parallax scrolling for backgrounds, floating elements (e.g., subtle AI chat bubbles, text overlays, or interactive demo elements).
+- Some background images/animations should be interactive (e.g., clickable hotspots for mini-demos, prompt examples, or links to app actions).
+- Interactive buttons with rounded corners, color accents (use empowering feminine teal/purple/blue tones instead of Shopify's green—keep it modern and inviting).
+- Subtle micro-animations on hover (buttons, cards lift slightly).
+- Responsive design, but optimized for fullscreen desktop to showcase depth and interactions (mobile should stack cleanly).
+
+Structure the page like this:
+1. Large hero section: Bold headline about "The AI Empowerment Renaissance for Women" or similar, tagline on making AI accessible, prominent CTA (e.g., "Join MetaHers" or "Start Your Journey").
+2. Main AI-focused section (like Shopify's Sidekick): Showcase AI tools, agents, coaching with proactive insights, custom workflows.
+3. Subsequent sections: Coaching Programs, Community/MetaMuses, Resources/Library, Testimonials, Blog/Newsletter signup, Footer.
+4. Use grid/card layouts for feature lists, with "Learn more" or "Get started" links.
+
+Build this as a complete React app with Tailwind CSS (or vanilla HTML/CSS/JS if preferred, but add scroll animation libraries). Include placeholder images/text based on MetaHers theme (women in tech, AI interfaces, empowering visuals). Make it engaging, futuristic, and discovery-oriented through scrolling.
+
+First, show me a preview of the key components, then generate the full code.
