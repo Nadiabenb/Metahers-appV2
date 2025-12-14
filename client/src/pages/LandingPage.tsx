@@ -342,6 +342,13 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
       path: "/learning-hub",
     },
     {
+      title: "AI Agency Team",
+      subtitle: "Your Digital Empire",
+      description: "7 specialized AI agents—Brand Strategist, Copywriter, Designer, and more—working 24/7 to build your business.",
+      cta: "Meet Your Team",
+      path: "/agency",
+    },
+    {
       title: "Luxury Voyages",
       subtitle: "Newport Beach Experiences",
       description: "Intimate gatherings aboard pink Duffy boats, beach picnics, and champagne brunches. Only 6 women per voyage.",
@@ -373,10 +380,10 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
             className="text-4xl lg:text-5xl mb-4"
             style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}
           >
-            Two Powerful <span className="italic" style={{ color: LAVENDER }}>Journeys</span>
+            Three Paths to <span className="italic" style={{ color: LAVENDER }}>Mastery</span>
           </h2>
           <p className="text-base font-light max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Choose digital learning rituals or in-person luxury experiences—both designed for your transformation.
+            Choose how you want to grow—digital learning, AI-powered business, or in-person luxury experiences.
           </p>
         </motion.div>
 

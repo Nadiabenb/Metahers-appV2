@@ -192,6 +192,9 @@ function Router() {
         {/* Circle - Networking (public accessible) */}
         <Route path="/circle" component={CircleDiscoveryPage} />
 
+        {/* AI Digital Agency - Public */}
+        <Route path="/agency" component={AgencyDashboardPage} />
+
         {isAuthenticated ? (
           <>
             {/* Tier Selection Onboarding */}
@@ -236,9 +239,6 @@ function Router() {
             <Route path="/glow-up/complete" component={GlowUpCompletePage} />
             <Route path="/thought-leadership" component={ThoughtLeadershipPage} />
             <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
-            
-            {/* AI Digital Agency */}
-            <Route path="/agency" component={AgencyDashboardPage} />
             
             {/* MetaHers Voyages */}
             <Route path="/voyages" component={VoyagesPage} />
