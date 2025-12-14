@@ -335,18 +335,11 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
 
   const experiences = [
     {
-      title: "9 Learning Worlds",
+      title: "Learning Worlds",
       subtitle: "54 Transformational Rituals",
       description: "Master AI, Web3, Branding, NFTs, Metaverse, and more through beautiful, guided experiences designed for your success.",
       cta: "Explore Worlds",
       path: "/learning-hub",
-    },
-    {
-      title: "AI Agency Team",
-      subtitle: "Your Digital Empire",
-      description: "7 specialized AI agents—Brand Strategist, Copywriter, Designer, and more—working 24/7 to build your business.",
-      cta: "Meet Your Team",
-      path: "/agency",
     },
     {
       title: "Luxury Voyages",
@@ -380,10 +373,10 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
             className="text-4xl lg:text-5xl mb-4"
             style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}
           >
-            Three Paths to <span className="italic" style={{ color: LAVENDER }}>Mastery</span>
+            Two Powerful <span className="italic" style={{ color: LAVENDER }}>Journeys</span>
           </h2>
           <p className="text-base font-light max-w-xl mx-auto" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Choose how you want to grow—digital learning, AI-powered business, or in-person luxury experiences.
+            Choose digital learning rituals or in-person luxury experiences—both designed for your transformation.
           </p>
         </motion.div>
 
