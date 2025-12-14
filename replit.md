@@ -145,29 +145,15 @@ public/
 
 ## Recent Changes
 
-### December 14, 2024 - Landing Page Redesign (Production Sync)
-1. ✅ **Landing Page Redesign** - Updated to match production version at app.metahers.ai:
-   - Changed from dark theme to clean white background (#FFFFFF)
-   - Updated all text colors to black (#000000) and grays (#666666, #999999)
-   - Removed animated gradient orbs and complex animations
-   - Simplified button styles to black with white text
-   - Updated section backgrounds to white and light cream (#FAFAF8)
-   - Maintained same section structure and content
-2. ✅ **Design System Update** - Now matches Alo Yoga aesthetic:
-   - Clean white backgrounds throughout
-   - Black typography with proper hierarchy
-   - Minimal borders and subtle shadows
-   - Responsive grid layouts
-   - Uppercase tracking-based labels
-3. ✅ **All Sections Redesigned**:
-   - Hero section with clean white background
-   - Discover/Vision Board section with 7 dimensions grid
-   - Transformation Path with 3-column grid
-   - Stats section with bold numbers
-   - Testimonials with clean cards
-   - Founder section with clean image
-   - Voyages section with stats grid
-   - Final CTA section
+### December 14, 2024 - Landing Page Reverted to Dark Theme with Animations
+1. ✅ **Landing Page Restored** - Reverted to dark theme version with scroll animations:
+   - Dark background with gradient overlays
+   - Pink/purple accent buttons with animation effects
+   - Animated gradient orbs in background
+   - Scroll reveal animations for all sections
+   - Smooth entrance animations with Framer Motion
+   - Interactive hover effects on cards
+   - This is the production version user loves
 
 ### December 9, 2024 - MetaHers Voyages Platform
 1. ✅ **Voyages Database Schema** - Full data model for luxury tech education experiences
