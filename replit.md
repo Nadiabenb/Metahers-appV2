@@ -145,24 +145,42 @@ public/
 
 ## Recent Changes
 
-### December 14, 2024 - Landing Page Reverted to Dark Theme with Animations
-1. ✅ **Landing Page Restored** - Reverted to dark theme version with scroll animations:
-   - Dark background with gradient overlays
-   - Pink/purple accent buttons with animation effects
-   - Animated gradient orbs in background
-   - Scroll reveal animations for all sections
-   - Smooth entrance animations with Framer Motion
-   - Interactive hover effects on cards
-   - This is the production version user loves
-
 ### December 9, 2024 - MetaHers Voyages Platform
-1. ✅ **Voyages Database Schema** - Full data model for luxury tech education experiences
-2. ✅ **Voyages API Routes** - Complete booking flow
-3. ✅ **VoyagesPage** - Luxury landing with filters
-4. ✅ **VoyageDetailPage** - Premium experience view
-5. ✅ **VoyageSuccessPage** - Post-booking confirmation
-6. ✅ **Design System** - Voyage-specific CSS
-7. ✅ **Seed Data** - 12 voyages across categories
+1. ✅ **Voyages Database Schema** - Full data model for luxury tech education experiences:
+   - voyages table: Experience details, pricing, capacity, location
+   - voyageBookings: Booking records with Stripe integration
+   - voyageWaitlist: Queue management for full experiences
+   - voyageQuestionnaires: Pre-voyage personalization surveys
+   - voyagePreparation: Checklist tracking for attendees
+   - voyageReferrals: Ambassador/referral tracking
+   - voyageTestimonials: Social proof management
+2. ✅ **Voyages API Routes** - Complete booking flow:
+   - GET /api/voyages - List with category filtering
+   - GET /api/voyages/:slug - Single voyage details
+   - POST /api/voyages/checkout - Stripe checkout integration
+   - POST /api/voyages/waitlist - Waitlist management
+   - GET /api/voyages/upcoming - User's next voyage
+   - GET /api/voyages/my-bookings - User booking history
+3. ✅ **VoyagesPage** - Luxury landing with:
+   - Hero section with floating particles
+   - Category filters (AI, Crypto, Web3, AI Branding)
+   - Voyage cards with spots indicator
+   - Testimonials section
+   - Newsletter signup
+4. ✅ **VoyageDetailPage** - Premium experience view:
+   - Countdown timer to voyage date
+   - Sticky booking card with Stripe checkout
+   - Learning objectives and what's included
+   - Location with map link
+   - FAQ accordion
+   - Mobile sticky booking bar
+5. ✅ **VoyageSuccessPage** - Post-booking confirmation with confetti
+6. ✅ **Design System** - Voyage-specific luxury CSS:
+   - Category color coding (violet=AI, gold=Crypto, pink=Web3)
+   - voyage-card, voyage-cta, voyage-badge classes
+   - Newport Beach coastal gradients
+   - Premium animations and hover effects
+7. ✅ **Seed Data** - 12 voyages across all categories seeded
 
 ### December 6, 2024 - 3-Tier Journey Reorganization
 1. ✅ **Navigation Restructured** - Simplified to show only the 3-tier path:
