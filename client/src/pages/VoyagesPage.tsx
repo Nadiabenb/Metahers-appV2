@@ -162,6 +162,11 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
     }).format(cents / 100);
   };
 
+  const getCityName = (location: string) => {
+    const parts = location.split(',');
+    return parts[parts.length - 1].trim();
+  };
+
   const voyageImage = VOYAGE_IMAGES[voyage.category] || VOYAGE_IMAGES.default;
 
   return (
@@ -214,7 +219,7 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
           
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
             <MapPin className="w-4 h-4" />
-            <span className="line-clamp-1">{voyage.location}</span>
+            <span className="line-clamp-1">{getCityName(voyage.location)}</span>
           </div>
           
           <div className="space-y-2">
@@ -241,7 +246,7 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
               </Button>
             ) : (
               <Button size="sm" className="voyage-cta text-sm px-4 py-2">
-                Book Now
+                Request Invitation
               </Button>
             )}
           </div>

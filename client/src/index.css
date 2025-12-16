@@ -612,24 +612,76 @@ body {
     );
   }
 
-  /* Voyage Card Styles */
+  /* Voyage Card Styles - Premium Luxury Aesthetic */
   .voyage-card {
-    @apply bg-card rounded-2xl overflow-hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    @apply bg-[#0D0B14] border border-[#2A2540] rounded-2xl overflow-hidden;
+    background: linear-gradient(135deg, #0D0B14 0%, #1A1625 100%);
+    box-shadow: 
+      0 4px 20px rgba(232, 121, 249, 0.08),
+      inset 0 1px 0 rgba(232, 121, 249, 0.05);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+  }
+
+  .voyage-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at top center, rgba(232, 121, 249, 0.05) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
   }
 
   .voyage-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+    transform: translateY(-12px);
+    border-color: rgba(232, 121, 249, 0.2);
+    box-shadow: 
+      0 24px 48px rgba(232, 121, 249, 0.15),
+      0 0 60px rgba(216, 191, 216, 0.08),
+      inset 0 1px 0 rgba(232, 121, 249, 0.1);
+  }
+
+  .voyage-card:hover::before {
+    opacity: 1;
+  }
+
+  .voyage-card > div:first-child {
+    animation: voyage-image-subtle 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes voyage-image-subtle {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.02);
+    }
   }
 
   /* Voyage Category Badge */
   .voyage-badge {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
-    background: var(--category-gradient);
+    @apply inline-flex items-center px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest;
+    background: linear-gradient(135deg, var(--category-gradient));
     color: white;
-    box-shadow: 0 2px 8px var(--category-glow);
+    box-shadow: 
+      0 4px 12px var(--category-glow),
+      inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    animation: voyage-badge-float 3s ease-in-out infinite;
+  }
+
+  @keyframes voyage-badge-float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
   }
 
   /* Voyage Price Display */
@@ -641,37 +693,85 @@ body {
     font-weight: 700;
   }
 
-  /* Voyage CTA Button */
+  /* Voyage CTA Button - Premium Invitation Style */
   .voyage-cta {
-    @apply px-8 py-4 rounded-full font-semibold text-lg text-white;
-    background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
-    transition: all 0.3s ease;
+    @apply px-6 py-2 rounded-full font-semibold text-sm text-white;
+    background: linear-gradient(135deg, #E879F9 0%, #D8BFD8 50%, #E879F9 100%);
+    box-shadow: 
+      0 6px 24px rgba(232, 121, 249, 0.35),
+      inset 0 1px 2px rgba(255, 255, 255, 0.2);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .voyage-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.6s ease;
   }
 
   .voyage-cta:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 30px rgba(139, 92, 246, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 
+      0 12px 32px rgba(232, 121, 249, 0.5),
+      inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.08em;
+  }
+
+  .voyage-cta:hover::before {
+    left: 100%;
   }
 
   .voyage-cta:disabled {
-    @apply bg-gray-300 text-gray-500 cursor-not-allowed;
-    background: #d1d5db;
+    @apply bg-gray-600 text-gray-400 cursor-not-allowed;
+    background: #4B5563;
     box-shadow: none;
     transform: none;
   }
 
-  /* Voyage Waitlist Button */
+  /* Voyage Waitlist Button - Premium Style */
   .voyage-waitlist {
-    @apply px-6 py-3 rounded-full font-semibold border-2;
-    border-color: hsl(270, 60%, 55%);
-    color: hsl(270, 60%, 55%);
-    transition: all 0.3s ease;
+    @apply px-6 py-2 rounded-full font-semibold text-sm;
+    border: 2px solid #E879F9;
+    color: #E879F9;
+    background: transparent;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .voyage-waitlist::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(232, 121, 249, 0.1), rgba(216, 191, 216, 0.1));
+    transition: left 0.5s ease;
+    z-index: -1;
   }
 
   .voyage-waitlist:hover {
     @apply text-white;
-    background: hsl(270, 60%, 55%);
+    border-color: #E879F9;
+    background: linear-gradient(135deg, #E879F9 0%, #D8BFD8 100%);
+    box-shadow: 0 8px 24px rgba(232, 121, 249, 0.3);
+  }
+
+  .voyage-waitlist:hover::before {
+    left: 100%;
   }
 
   /* Spots Indicator */
