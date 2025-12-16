@@ -234,18 +234,18 @@ function HeroSection() {
         >
           <Badge className="bg-white/20 text-white border-white/30 px-4 py-1.5">
             <Anchor className="w-4 h-4 mr-2" />
-            Newport Beach Luxury Experiences
+            Intimate, Intentional Experiences
           </Badge>
           
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white max-w-4xl mx-auto leading-tight">
-            Transform Your 
-            <span className="block text-gradient-gold">Digital Future</span>
-            in Luxury
+            Real-world Experiences 
+            <span className="block text-gradient-gold">Designed for Women</span>
+            Stepping Into the Future
           </h1>
           
           <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">
-            Intimate tech education experiences for ambitious women. 
-            Only 6 seats per voyage.
+            Curated gatherings in intimate settings to explore ideas shaping the future — 
+            thoughtfully, together.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
@@ -262,10 +262,9 @@ function HeroSection() {
               size="lg" 
               variant="outline" 
               className="bg-white/10 border-white/30 text-white hover:bg-white/20"
-              data-testid="button-how-it-works"
+              data-testid="button-learn-more"
             >
-              <Play className="w-5 h-5 mr-2" />
-              How It Works
+              Learn More
             </Button>
           </div>
         </motion.div>
@@ -283,62 +282,70 @@ function HeroSection() {
   );
 }
 
-function HowItWorksSection() {
-  const steps = [
-    {
-      icon: MapPin,
-      title: "Choose Your Voyage",
-      description: "Browse intimate learning experiences across AI, Crypto, Web3, and Branding.",
-    },
-    {
-      icon: Calendar,
-      title: "Book Your Spot",
-      description: "Secure one of only 6 seats with our simple checkout. Your transformation awaits.",
-    },
-    {
-      icon: Sparkles,
-      title: "Transform Your Skills",
-      description: "Learn, connect, and grow in stunning Newport Beach luxury settings.",
-    },
-  ];
-
+function WhatIsVoyageSection() {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Your Journey <span className="text-gradient-tech">Begins Here</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Three simple steps to unlock your tech potential
-          </p>
-        </motion.div>
-        
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              className="relative text-center"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.2 }}
-            >
-              <div className="voyage-step-circle mx-auto mb-6">
-                <step.icon className="w-6 h-6" />
-              </div>
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-6 left-[60%] w-[80%] h-0.5 voyage-divider" />
-              )}
-              <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
-              <p className="text-muted-foreground">{step.description}</p>
-            </motion.div>
-          ))}
+        <div className="max-w-3xl mx-auto">
+          <motion.div 
+            className="mb-12"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              What a Voyage Is
+            </h2>
+            <p className="text-lg text-muted-foreground mb-6">
+              A Voyage is an invitation into a shared moment.
+            </p>
+            <p className="text-lg text-foreground mb-6 leading-relaxed">
+              We gather in intimate settings to explore ideas shaping the future — not through lectures or pressure, but through guided experiences, conversation, and discernment.
+            </p>
+            <p className="text-base text-muted-foreground font-medium mb-4">Each Voyage blends:</p>
+            <ul className="space-y-3 mb-6">
+              <li className="flex gap-3">
+                <span className="text-primary font-bold">•</span>
+                <span className="text-foreground">Real-world presence</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary font-bold">•</span>
+                <span className="text-foreground">Intentional dialogue</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary font-bold">•</span>
+                <span className="text-foreground">Gentle, practical use of emerging tools</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary font-bold">•</span>
+                <span className="text-foreground">Connection with women who value depth and discretion</span>
+              </li>
+            </ul>
+            <p className="text-lg text-foreground italic">
+              You don't come to learn more. You come to see more clearly.
+            </p>
+          </motion.div>
+
+          <motion.div 
+            className="pt-12 border-t"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <h3 className="text-2xl md:text-3xl font-bold mb-6">
+              The Journey
+            </h3>
+            <p className="text-lg text-muted-foreground mb-4">
+              MetaHers Voyages are designed as a sequence.
+            </p>
+            <p className="text-lg text-foreground mb-6 leading-relaxed">
+              Each one builds quietly on the last, offering different perspectives on clarity, visibility, and modern influence. Some women join for a single moment. Others choose to continue the journey.
+            </p>
+            <p className="text-lg text-foreground italic">
+              There is no obligation to attend them all. The path reveals itself as you move through it.
+            </p>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -437,39 +444,56 @@ function TrustIndicators() {
   );
 }
 
-function NewsletterSection() {
+function InvitationSection() {
   const [email, setEmail] = useState("");
 
   return (
     <section className="py-20 voyage-hero-gradient">
       <div className="container mx-auto px-4">
         <motion.div 
-          className="max-w-2xl mx-auto text-center"
+          className="max-w-3xl mx-auto text-center space-y-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-            Join the Movement
-          </h2>
-          <p className="text-lg text-white/90 mb-8">
-            Be the first to know about new voyages and exclusive experiences
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="bg-white/10 border-white/30 text-white placeholder:text-white/60 h-12"
-              data-testid="input-newsletter-email"
-            />
-            <Button 
-              className="bg-white text-purple-600 hover:bg-white/90 h-12 px-8"
-              data-testid="button-subscribe"
-            >
-              Subscribe
-            </Button>
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              Access
+            </h2>
+            <p className="text-lg text-white/90 mb-2">
+              MetaHers Voyages are invitation-based.
+            </p>
+            <p className="text-lg text-white/90">
+              If you feel drawn to this experience, you may request access below. Each request is reviewed personally to preserve the integrity of the circle.
+            </p>
+          </div>
+          
+          <div className="pt-6">
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-white/10 border-white/30 text-white placeholder:text-white/60 h-12"
+                data-testid="input-invitation-email"
+              />
+              <Button 
+                className="bg-white text-purple-600 hover:bg-white/90 h-12 px-8 whitespace-nowrap"
+                data-testid="button-request-invitation"
+              >
+                Request Invitation
+              </Button>
+            </div>
+          </div>
+
+          <div className="pt-12 border-t border-white/20">
+            <p className="text-lg text-white/90 italic">
+              MetaHers Voyages are intentionally small, quiet, and human.
+            </p>
+            <p className="text-base text-white/80 mt-3">
+              They exist for women who are not chasing trends — but choosing how they want to move forward.
+            </p>
           </div>
         </motion.div>
       </div>
@@ -494,7 +518,7 @@ export default function VoyagesPage() {
     <div className="min-h-screen bg-background">
       <HeroSection />
       <TrustIndicators />
-      <HowItWorksSection />
+      <WhatIsVoyageSection />
       
       <section id="voyages" className="py-20">
         <div className="container mx-auto px-4">
@@ -505,10 +529,10 @@ export default function VoyagesPage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Upcoming <span className="text-gradient-tech">Voyages</span>
+              Current <span className="text-gradient-tech">Voyages</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              Choose your path to digital transformation
+              Voyages are hosted in select locations and announced privately. Themes may include Vision & Direction, Digital Presence, AI as a Personal Ally, Creativity & Expression, and Community & Connection.
             </p>
             
             <div className="flex flex-wrap justify-center gap-3">
@@ -548,11 +572,10 @@ export default function VoyagesPage() {
               ) : (
                 <div className="col-span-full text-center py-16">
                   <Sparkles className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">No voyages found</h3>
+                  <h3 className="text-xl font-semibold mb-2">Voyages are limited and exclusive</h3>
                   <p className="text-muted-foreground mb-6">
-                    We're planning more experiences. Join our waitlist!
+                    Availability is limited. Request an invitation below to be considered for upcoming experiences.
                   </p>
-                  <Button className="voyage-cta">Join Waitlist</Button>
                 </div>
               )}
             </motion.div>
@@ -561,7 +584,7 @@ export default function VoyagesPage() {
       </section>
       
       <TestimonialsSection />
-      <NewsletterSection />
+      <InvitationSection />
     </div>
   );
 }
