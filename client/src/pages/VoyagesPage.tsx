@@ -594,7 +594,7 @@ function TestimonialsSection() {
               transition={{ delay: index * 0.1 }}
             >
               <Quote className="w-8 h-8 text-purple-400 mb-4" />
-              <p className="text-foreground mb-6 italic">"{testimonial.quote}"</p>
+              <p className="mb-6 italic text-[#ffffff]">"{testimonial.quote}"</p>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
                   {testimonial.name.charAt(0)}
