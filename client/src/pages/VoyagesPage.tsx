@@ -600,7 +600,7 @@ function TestimonialsSection() {
                   {testimonial.name.charAt(0)}
                 </div>
                 <div>
-                  <p className="font-semibold">{testimonial.name}</p>
+                  <p className="font-semibold text-[#ccc4cc]">{testimonial.name}</p>
                   <p className="text-sm text-muted-foreground">{testimonial.title}</p>
                 </div>
               </div>
