@@ -567,41 +567,60 @@ function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-20 gradient-violet-magenta">
-      <div className="container mx-auto px-4">
+    <section className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden" style={{ background: DARK_BG }}>
+      <AmbientGlow />
+      <div className="relative max-w-6xl mx-auto">
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            What Our <span className="text-gradient-tech">Voyagers</span> Say
+          <p 
+            className="text-xs uppercase tracking-[0.25em] mb-6"
+            style={{ color: PINK }}
+          >
+            Voyager Stories
+          </p>
+          <h2 
+            className="text-4xl lg:text-5xl mb-6 leading-[1.15]"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
+          >
+            What Our <span style={{ color: LAVENDER }}>Community</span> Experiences
           </h2>
-          <p className="text-lg text-muted-foreground">
-            Join a community of ambitious women transforming their digital futures
+          <p className="text-lg font-light max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            Join a growing circle of ambitious women transforming their digital futures
           </p>
         </motion.div>
         
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8">
           {testimonials.map((testimonial, index) => (
             <motion.div
               key={index}
-              className="voyage-testimonial"
+              className="voyage-testimonial-card group"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.15 }}
+              whileHover={{ y: -8 }}
             >
-              <Quote className="w-8 h-8 text-purple-400 mb-4" />
-              <p className="mb-6 italic text-[#ffffff]">"{testimonial.quote}"</p>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold">
-                  {testimonial.name.charAt(0)}
-                </div>
-                <div>
-                  <p className="font-semibold text-[#ccc4cc]">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.title}</p>
+              <div className="p-8 h-full flex flex-col">
+                <Quote className="w-6 h-6 mb-6" style={{ color: PINK }} />
+                <p className="mb-8 italic flex-1 text-lg leading-relaxed font-light" style={{ color: '#FFFFFF' }}>
+                  "{testimonial.quote}"
+                </p>
+                <div className="flex items-center gap-4 pt-6 border-t" style={{ borderColor: 'rgba(232, 121, 249, 0.1)' }}>
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#E879F9] to-[#D8BFD8] flex items-center justify-center text-white font-bold text-lg">
+                    {testimonial.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">{testimonial.name}</p>
+                    <p className="text-sm font-light" style={{ color: 'rgba(255,255,255,0.6)' }}>{testimonial.title}</p>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -614,27 +633,38 @@ function TestimonialsSection() {
 
 function TrustIndicators() {
   const indicators = [
-    { icon: Users, text: "6 Women Max Per Voyage" },
+    { icon: Users, text: "10 Women Max Per Voyage" },
     { icon: Star, text: "Intimate Gatherings" },
     { icon: CheckCircle2, text: "Expert-Led" },
     { icon: Anchor, text: "Curated Locations" },
   ];
 
   return (
-    <div className="py-12 border-y border-border" style={{ background: `${DARK_BG}dd` }}>
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-center gap-8 md:gap-16">
+    <div className="py-16 relative overflow-hidden" style={{ background: DARK_BG }}>
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-0 left-0 w-96 h-96 rounded-full" style={{ background: `radial-gradient(circle, ${PINK}08 0%, transparent 70%)`, filter: 'blur(80px)' }} />
+        <div className="absolute bottom-0 right-0 w-96 h-96 rounded-full" style={{ background: `radial-gradient(circle, ${LAVENDER}08 0%, transparent 70%)`, filter: 'blur(80px)' }} />
+      </div>
+      <div className="relative max-w-6xl mx-auto px-6 lg:px-16">
+        <div className="grid md:grid-cols-4 gap-6">
           {indicators.map((item, index) => (
             <motion.div 
               key={index} 
-              className="flex items-center gap-2 text-sm font-light"
-              initial={{ opacity: 0, y: 10 }}
+              className="trust-badge-item group"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.12 }}
+              whileHover={{ y: -4 }}
             >
-              <item.icon className="w-5 h-5" style={{ color: PINK }} />
-              <span style={{ color: 'rgba(255,255,255,0.8)' }}>{item.text}</span>
+              <div className="p-6 rounded-xl backdrop-blur-sm border transition-all" 
+                style={{ 
+                  background: 'rgba(13, 11, 20, 0.4)',
+                  borderColor: 'rgba(232, 121, 249, 0.15)',
+                }}>
+                <item.icon className="w-8 h-8 mb-4 group-hover:scale-110 transition-transform" style={{ color: PINK }} />
+                <span className="text-sm font-light leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>{item.text}</span>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -647,53 +677,83 @@ function InvitationSection() {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="py-20 voyage-hero-gradient">
-      <div className="container mx-auto px-4">
+    <section className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden" style={{ background: DARK_BG }}>
+      <AmbientGlow />
+      <div className="relative max-w-3xl mx-auto">
         <motion.div 
-          className="max-w-3xl mx-auto text-center space-y-6"
-          initial={{ opacity: 0, y: 20 }}
+          className="text-center space-y-8"
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Access
-            </h2>
-            <p className="text-lg text-white/90 mb-2">
-              MetaHers Voyages are invitation-based.
+            <p 
+              className="text-xs uppercase tracking-[0.25em] mb-6"
+              style={{ color: PINK }}
+            >
+              Join the Circle
             </p>
-            <p className="text-lg text-white/90">
-              If you feel drawn to this experience, you may request access below. Each request is reviewed personally to preserve the integrity of the circle.
+            <h2 
+              className="text-4xl lg:text-5xl mb-8 leading-[1.15]"
+              style={{ 
+                fontFamily: 'Playfair Display, serif',
+                color: '#FFFFFF',
+                fontWeight: 300,
+              }}
+            >
+              Request Your <span style={{ color: LAVENDER }}>Invitation</span>
+            </h2>
+            <p className="text-lg font-light leading-relaxed max-w-2xl mx-auto mb-6" style={{ color: 'rgba(255,255,255,0.75)' }}>
+              MetaHers Voyages are invitation-based experiences designed for women ready to step forward intentionally.
+            </p>
+            <p className="text-base font-light" style={{ color: 'rgba(255,255,255,0.65)' }}>
+              Each request is reviewed personally to ensure alignment with our community values.
             </p>
           </div>
           
-          <div className="pt-6">
+          <motion.div 
+            className="pt-8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
             <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
               <Input
                 type="email"
-                placeholder="Enter your email"
+                placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-white/10 border-white/30 text-white placeholder:text-white/60 h-12"
+                className="premium-invitation-input h-12"
                 data-testid="input-invitation-email"
               />
               <Button 
-                className="bg-white text-purple-600 hover:bg-white/90 h-12 px-8 whitespace-nowrap"
+                className="voyage-cta px-8 whitespace-nowrap"
                 data-testid="button-request-invitation"
               >
-                Request Invitation
+                Request
               </Button>
             </div>
-          </div>
-
-          <div className="pt-12 border-t border-white/20">
-            <p className="text-lg text-white/90 italic">
-              MetaHers Voyages are intentionally small, quiet, and human.
+            <p className="text-xs font-light mt-4" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              We'll be in touch within 48 hours
             </p>
-            <p className="text-base text-white/80 mt-3">
+          </motion.div>
+
+          <motion.div 
+            className="pt-12 border-t" 
+            style={{ borderColor: 'rgba(232, 121, 249, 0.1)' }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
+            <p className="text-lg leading-relaxed font-light italic" style={{ color: 'rgba(255,255,255,0.8)' }}>
+              "MetaHers Voyages are intentionally small, quiet, and human."
+            </p>
+            <p className="text-base font-light mt-4" style={{ color: 'rgba(255,255,255,0.65)' }}>
               They exist for women who are not chasing trends — but choosing how they want to move forward.
             </p>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
@@ -772,26 +832,26 @@ export default function VoyagesPage() {
             </p>
             
             <div className="flex flex-wrap justify-center gap-3">
-              {CATEGORIES.map((cat) => (
+              {CATEGORIES.map((cat, idx) => (
                 <motion.button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  whileHover={{ scale: 1.05 }}
+                  whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
-                    selectedCategory === cat.id 
-                      ? 'border'
-                      : 'border'
-                  }`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.08 }}
+                  className={`voyage-category-filter flex items-center gap-2 px-5 py-3 rounded-full font-light transition-all border`}
                   style={{
-                    background: selectedCategory === cat.id ? `${PINK}20` : 'transparent',
-                    borderColor: selectedCategory === cat.id ? PINK : 'rgba(255,255,255,0.2)',
+                    background: selectedCategory === cat.id ? `${PINK}15` : 'rgba(255,255,255,0.02)',
+                    borderColor: selectedCategory === cat.id ? PINK : 'rgba(255,255,255,0.15)',
                     color: selectedCategory === cat.id ? PINK : 'rgba(255,255,255,0.7)',
+                    boxShadow: selectedCategory === cat.id ? `0 0 20px rgba(232, 121, 249, 0.2)` : 'none',
                   }}
                   data-testid={`filter-${cat.id}`}
                 >
                   <cat.icon className="w-4 h-4" />
-                  <span className="text-sm font-light">{cat.label}</span>
+                  <span className="text-sm">{cat.label}</span>
                 </motion.button>
               ))}
             </div>
@@ -812,11 +872,24 @@ export default function VoyagesPage() {
                 ))
               ) : filteredVoyages.length > 0 ? (
                 <>
-                  {visibleVoyages.map((voyage) => (
-                    <VoyageCard key={voyage.id} voyage={voyage} />
+                  {visibleVoyages.map((voyage, idx) => (
+                    <motion.div
+                      key={voyage.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                    >
+                      <VoyageCard voyage={voyage} />
+                    </motion.div>
                   ))}
-                  {hiddenVoyages.map((voyage) => (
-                    <div key={voyage.id} className="relative voyage-card-locked group">
+                  {hiddenVoyages.map((voyage, idx) => (
+                    <motion.div
+                      key={voyage.id}
+                      className="relative voyage-card-locked group"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: (visibleVoyages.length + idx) * 0.1 }}
+                    >
                       <VoyageCard voyage={voyage} />
                       <div className="absolute inset-0 bg-black/70 backdrop-blur-md rounded-2xl flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-black/75">
                         <div className="text-center space-y-3">
@@ -829,7 +902,7 @@ export default function VoyagesPage() {
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </>
               ) : (

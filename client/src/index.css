@@ -799,6 +799,47 @@ body {
     opacity: 0.6;
   }
 
+  /* Premium Testimonial Card */
+  .voyage-testimonial-card {
+    @apply relative rounded-2xl border overflow-hidden;
+    background: linear-gradient(135deg, rgba(13, 11, 20, 0.6) 0%, rgba(26, 22, 37, 0.6) 100%);
+    border-color: rgba(232, 121, 249, 0.1);
+    box-shadow: 
+      0 4px 20px rgba(232, 121, 249, 0.05),
+      inset 0 1px 0 rgba(232, 121, 249, 0.05);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .voyage-testimonial-card:hover {
+    border-color: rgba(232, 121, 249, 0.15);
+    box-shadow: 
+      0 12px 40px rgba(232, 121, 249, 0.1),
+      inset 0 1px 0 rgba(232, 121, 249, 0.1);
+  }
+
+  /* Trust Badge Items */
+  .trust-badge-item {
+    cursor: pointer;
+  }
+
+  /* Premium Invitation Input */
+  .premium-invitation-input {
+    @apply bg-white/5 border text-white placeholder:text-white/40 focus:border-[#E879F9];
+    border-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+  }
+
+  .premium-invitation-input:focus {
+    @apply ring-0;
+    box-shadow: 0 0 0 3px rgba(232, 121, 249, 0.15);
+    border-color: #E879F9;
+  }
+
+  .premium-invitation-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+  }
+
   /* Voyage Hero Section */
   .voyage-hero {
     position: relative;
