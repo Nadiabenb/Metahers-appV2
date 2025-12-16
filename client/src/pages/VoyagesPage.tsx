@@ -4,6 +4,35 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+
+function CountdownTimer({ targetDate }: { targetDate: Date }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0 });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const now = new Date().getTime();
+      const target = new Date(targetDate).getTime();
+      const diff = target - now;
+
+      if (diff > 0) {
+        setTimeLeft({
+          days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+          minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+        });
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  return (
+    <div className="flex items-center gap-2 text-xs font-medium text-white/80">
+      <Sparkles className="w-3 h-3" />
+      <span>{timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m</span>
+    </div>
+  );
+}
 import luxuryVoyageImage from "@assets/generated_images/luxury_voyage_gathering_with_tech_ambient.png";
 import cryptoVoyageImage from "@assets/generated_images/crypto_voyage_luxury_yacht_experience.png";
 import aiVoyageImage from "@assets/generated_images/ai_mastery_luxury_office_setting.png";
@@ -207,15 +236,18 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
         </div>
         
         <CardContent className="p-5 space-y-4">
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="w-4 h-4" />
-              <span>{formatDate(voyage.date)}</span>
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-1.5">
+                <Calendar className="w-4 h-4" />
+                <span>{formatDate(voyage.date)}</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4" />
+                <span>{voyage.time}</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
-              <span>{voyage.time}</span>
-            </div>
+            <CountdownTimer targetDate={new Date(voyage.date)} />
           </div>
           
           <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
