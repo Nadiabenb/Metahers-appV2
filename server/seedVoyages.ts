@@ -27,7 +27,7 @@ const METAHERS_VOYAGES = [
       "Build your personal creative AI toolkit"
     ],
     included: [
-      "Soft drinks and artisanal snacks",
+      "Soft drinks and gourmet snacks",
       "AI image generation credit pack",
       "Digital vision board template",
       "Private pink Duffy boat experience",
