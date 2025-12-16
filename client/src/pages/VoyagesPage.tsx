@@ -33,11 +33,11 @@ function CountdownTimer({ targetDate }: { targetDate: Date }) {
     </div>
   );
 }
-import luxuryVoyageImage from "@assets/stock_images/luxury_yacht_women_g_6377074b.jpg";
-import cryptoVoyageImage from "@assets/stock_images/blockchain_cryptocur_486829a3.jpg";
-import aiVoyageImage from "@assets/stock_images/ai_artificial_intell_a8024c7b.jpg";
-import web3VoyageImage from "@assets/stock_images/web3_metaverse_women_4a679e5e.jpg";
-import aibrandingVoyageImage from "@assets/stock_images/digital_vision_board_55dd701c.jpg";
+import luxuryVoyageImage from "@assets/generated_images/digital_vision_board_luxury_sanctuary.png";
+import cryptoVoyageImage from "@assets/generated_images/crypto_venture_luxury_experience.png";
+import aiVoyageImage from "@assets/generated_images/ai_mastery_luxury_tech_workspace.png";
+import web3VoyageImage from "@assets/generated_images/web3_metaverse_luxury_voyage.png";
+import aibrandingVoyageImage from "@assets/generated_images/ai_branding_creative_studio.png";
 import { 
   Anchor, 
   Sparkles, 
