@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { useInView } from "framer-motion";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
@@ -21,7 +22,8 @@ import {
   Palette,
   CheckCircle2,
   Play,
-  Quote
+  Quote,
+  Crown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -29,14 +31,55 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { VoyageDB } from "@shared/schema";
+import { SEO } from "@/components/SEO";
+
+// Brand Colors - Unified with Landing Page
+const LAVENDER = "#D8BFD8";
+const PINK = "#E879F9";
+const DARK_BG = "#0D0B14";
 
 const CATEGORIES = [
-  { id: "all", label: "All Voyages", icon: Sparkles },
+  { id: "all", label: "All Experiences", icon: Sparkles },
   { id: "AI", label: "AI Mastery", icon: Brain },
   { id: "Crypto", label: "Crypto", icon: Coins },
   { id: "Web3", label: "Web3", icon: Globe },
   { id: "AI_Branding", label: "AI Branding", icon: Palette },
 ];
+
+function SectionDivider() {
+  return (
+    <div className="flex items-center justify-center py-16">
+      <div className="w-24 h-px" style={{ background: `linear-gradient(90deg, transparent, ${LAVENDER}30, transparent)` }} />
+      <Star className="w-3 h-3 mx-4" style={{ color: LAVENDER, opacity: 0.4 }} />
+      <div className="w-24 h-px" style={{ background: `linear-gradient(90deg, transparent, ${LAVENDER}30, transparent)` }} />
+    </div>
+  );
+}
+
+function AmbientGlow() {
+  return (
+    <>
+      <motion.div
+        className="absolute top-0 left-1/4 w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: `radial-gradient(circle, ${PINK}06 0%, transparent 70%)`,
+          filter: 'blur(100px)',
+        }}
+        animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        className="absolute bottom-0 right-1/4 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background: `radial-gradient(circle, ${LAVENDER}04 0%, transparent 70%)`,
+          filter: 'blur(120px)',
+        }}
+        animate={{ scale: [1.1, 1, 1.1], opacity: [0.2, 0.35, 0.2] }}
+        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 3 }}
+      />
+    </>
+  );
+}
 
 const VENUE_ICONS = {
   Duffy_Boat: Ship,
@@ -178,11 +221,7 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
             </div>
           </div>
           
-          <div className="flex items-center justify-between pt-2">
-            <div>
-              <span className="voyage-price text-2xl">{formatPrice(voyage.price)}</span>
-              <span className="text-sm text-muted-foreground ml-1">per person</span>
-            </div>
+          <div className="flex items-center justify-end pt-2">
             {isFull ? (
               <Button variant="outline" size="sm" className="voyage-waitlist">
                 Join Waitlist
@@ -220,133 +259,267 @@ function VoyageCardSkeleton() {
 }
 
 function HeroSection() {
+  const [showContent, setShowContent] = useState(false);
+  
+  useEffect(() => {
+    const timer = setTimeout(() => setShowContent(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <section className="voyage-hero relative flex items-center justify-center">
-      <div className="absolute inset-0 voyage-hero-gradient" />
-      <FloatingParticles />
+    <motion.section
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      style={{ background: DARK_BG }}
+      data-testid="section-voyage-hero"
+    >
+      <div className="absolute inset-0" style={{ background: DARK_BG }} />
+      <AmbientGlow />
       
-      <div className="relative z-10 container mx-auto px-4 text-center py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="space-y-6"
-        >
-          <Badge className="bg-white/20 text-white border-white/30 px-4 py-1.5">
-            <Anchor className="w-4 h-4 mr-2" />
-            Intimate, Intentional Experiences
-          </Badge>
-          
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white max-w-4xl mx-auto leading-tight">
-            Real-world Experiences 
-            <span className="block text-gradient-gold">Designed for Women</span>
-            Stepping Into the Future
-          </h1>
-          
-          <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto">
-            Curated gatherings in intimate settings to explore ideas shaping the future — 
-            thoughtfully, together.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-            <Button 
-              size="lg" 
-              className="voyage-cta text-lg"
-              data-testid="button-explore-voyages"
-              onClick={() => document.getElementById('voyages')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Explore Voyages
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
-              className="bg-white/10 border-white/30 text-white hover:bg-white/20"
-              data-testid="button-learn-more"
-            >
-              Learn More
-            </Button>
-          </div>
-        </motion.div>
-        
-        <motion.div 
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 voyage-scroll-indicator"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-        >
-          <ChevronDown className="w-8 h-8 text-white/70" />
-        </motion.div>
+      <div className="absolute inset-0 overflow-hidden">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute rounded-full pointer-events-none"
+            style={{
+              width: 4 + Math.random() * 6,
+              height: 4 + Math.random() * 6,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
+            }}
+            animate={{ y: [0, -80, 0], opacity: [0, 0.6, 0], scale: [0, 1, 0] }}
+            transition={{ duration: 18 + Math.random() * 8, delay: i * 0.7, repeat: Infinity, ease: "easeInOut" }}
+          />
+        ))}
       </div>
-    </section>
+
+      <motion.div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <AnimatePresence>
+          {showContent && (
+            <>
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                className="mb-10"
+              >
+                <div className="inline-flex items-center gap-3 px-5 py-2">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+                  >
+                    <Anchor className="w-4 h-4" style={{ color: PINK }} />
+                  </motion.div>
+                  <span 
+                    className="text-xs font-light tracking-[0.25em] uppercase"
+                    style={{ color: LAVENDER }}
+                  >
+                    Intimate Experiences
+                  </span>
+                </div>
+              </motion.div>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="mb-6"
+              >
+                <span 
+                  className="block text-5xl sm:text-6xl lg:text-7xl tracking-tight"
+                  style={{ 
+                    fontFamily: 'Playfair Display, serif',
+                    color: '#FFFFFF',
+                    fontWeight: 300,
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  MetaHers Voyages
+                </span>
+              </motion.h1>
+
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.6 }}
+                className="text-lg sm:text-xl font-extralight max-w-2xl mx-auto mb-4 leading-relaxed"
+                style={{ color: 'rgba(255,255,255,0.75)' }}
+              >
+                Real-world experiences designed for women stepping into the future — thoughtfully, together.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.1 }}
+                className="flex flex-col sm:flex-row gap-5 justify-center items-center"
+              >
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group px-10 py-4"
+                  style={{
+                    background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
+                    color: '#0A0A0A',
+                  }}
+                  data-testid="button-voyage-explore"
+                  onClick={() => document.getElementById('voyages')?.scrollIntoView({ behavior: 'smooth' })}
+                >
+                  <span className="font-semibold text-sm uppercase tracking-[0.15em] flex items-center gap-3">
+                    Explore Voyages
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02, borderColor: LAVENDER }}
+                  whileTap={{ scale: 0.98 }}
+                  className="px-10 py-4 border font-light text-sm uppercase tracking-[0.15em] transition-all"
+                  style={{ borderColor: 'rgba(255,255,255,0.25)', color: '#FFFFFF' }}
+                  data-testid="button-voyage-learn"
+                >
+                  Learn More
+                </motion.button>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.8, duration: 0.8 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          className="flex flex-col items-center gap-2"
+          style={{ color: 'rgba(255,255,255,0.35)' }}
+        >
+          <span className="text-[10px] uppercase tracking-[0.3em]">Discover</span>
+          <ChevronDown className="w-4 h-4" />
+        </motion.div>
+      </motion.div>
+    </motion.section>
   );
 }
 
 function WhatIsVoyageSection() {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  
   return (
-    <section className="py-20 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto">
-          <motion.div 
-            className="mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+    <section 
+      ref={ref}
+      className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden"
+      style={{ background: DARK_BG }}
+    >
+      <AmbientGlow />
+      
+      <div className="relative max-w-3xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="mb-16"
+        >
+          <p 
+            className="text-xs uppercase tracking-[0.25em] mb-6"
+            style={{ color: PINK }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              What a Voyage Is
-            </h2>
-            <p className="text-lg text-muted-foreground mb-6">
-              A Voyage is an invitation into a shared moment.
-            </p>
-            <p className="text-lg text-foreground mb-6 leading-relaxed">
-              We gather in intimate settings to explore ideas shaping the future — not through lectures or pressure, but through guided experiences, conversation, and discernment.
-            </p>
-            <p className="text-base text-muted-foreground font-medium mb-4">Each Voyage blends:</p>
-            <ul className="space-y-3 mb-6">
-              <li className="flex gap-3">
-                <span className="text-primary font-bold">•</span>
-                <span className="text-foreground">Real-world presence</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-primary font-bold">•</span>
-                <span className="text-foreground">Intentional dialogue</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-primary font-bold">•</span>
-                <span className="text-foreground">Gentle, practical use of emerging tools</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-primary font-bold">•</span>
-                <span className="text-foreground">Connection with women who value depth and discretion</span>
-              </li>
-            </ul>
-            <p className="text-lg text-foreground italic">
-              You don't come to learn more. You come to see more clearly.
-            </p>
-          </motion.div>
+            What a Voyage Is
+          </p>
+          
+          <h2 
+            className="text-4xl lg:text-5xl mb-8 leading-[1.15]"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
+          >
+            An Invitation 
+            <span className="block italic" style={{ color: LAVENDER }}>into a shared moment</span>
+          </h2>
+          
+          <p 
+            className="text-lg leading-relaxed mb-8 font-light max-w-2xl"
+            style={{ color: 'rgba(255,255,255,0.7)' }}
+          >
+            We gather in intimate settings to explore ideas shaping the future — not through lectures or pressure, but through guided experiences, conversation, and discernment.
+          </p>
 
-          <motion.div 
-            className="pt-12 border-t"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+          <p 
+            className="text-base uppercase tracking-[0.15em] mb-6"
+            style={{ color: 'rgba(255,255,255,0.6)' }}
           >
-            <h3 className="text-2xl md:text-3xl font-bold mb-6">
-              The Journey
-            </h3>
-            <p className="text-lg text-muted-foreground mb-4">
-              MetaHers Voyages are designed as a sequence.
-            </p>
-            <p className="text-lg text-foreground mb-6 leading-relaxed">
-              Each one builds quietly on the last, offering different perspectives on clarity, visibility, and modern influence. Some women join for a single moment. Others choose to continue the journey.
-            </p>
-            <p className="text-lg text-foreground italic">
-              There is no obligation to attend them all. The path reveals itself as you move through it.
-            </p>
-          </motion.div>
-        </div>
+            Each Voyage blends:
+          </p>
+          
+          <div className="flex flex-col gap-4 mb-8">
+            {["Real-world presence", "Intentional dialogue", "Gentle, practical use of emerging tools", "Connection with women who value depth and discretion"].map((item, i) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.2 + i * 0.08 }}
+                className="flex gap-4"
+              >
+                <span className="text-lg mt-1" style={{ color: PINK }}>•</span>
+                <span style={{ color: 'rgba(255,255,255,0.8)' }}>{item}</span>
+              </motion.div>
+            ))}
+          </div>
+          
+          <p 
+            className="text-lg leading-relaxed font-light italic"
+            style={{ color: 'rgba(255,255,255,0.75)' }}
+          >
+            You don't come to learn more. You come to see more clearly.
+          </p>
+        </motion.div>
+
+        <SectionDivider />
+
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
+          <p 
+            className="text-xs uppercase tracking-[0.25em] mb-6"
+            style={{ color: LAVENDER }}
+          >
+            The Journey
+          </p>
+          
+          <h3 
+            className="text-3xl lg:text-4xl mb-8 leading-[1.15]"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+              fontWeight: 300,
+            }}
+          >
+            Designed as a Sequence
+          </h3>
+
+          <p 
+            className="text-lg leading-relaxed mb-6 font-light max-w-2xl"
+            style={{ color: 'rgba(255,255,255,0.7)' }}
+          >
+            Each one builds quietly on the last, offering different perspectives on clarity, visibility, and modern influence. Some women join for a single moment. Others choose to continue the journey.
+          </p>
+          
+          <p 
+            className="text-lg leading-relaxed font-light italic"
+            style={{ color: 'rgba(255,255,255,0.75)' }}
+          >
+            There is no obligation to attend them all. The path reveals itself as you move through it.
+          </p>
+        </motion.div>
       </div>
     </section>
   );
@@ -423,20 +596,27 @@ function TestimonialsSection() {
 function TrustIndicators() {
   const indicators = [
     { icon: Users, text: "6 Women Max Per Voyage" },
-    { icon: Star, text: "5-Star Experiences" },
-    { icon: CheckCircle2, text: "Expert-Led Sessions" },
-    { icon: Anchor, text: "Newport Beach Luxury" },
+    { icon: Star, text: "Intimate Gatherings" },
+    { icon: CheckCircle2, text: "Expert-Led" },
+    { icon: Anchor, text: "Curated Locations" },
   ];
 
   return (
-    <div className="py-12 border-y border-border bg-muted/30">
+    <div className="py-12 border-y border-border" style={{ background: `${DARK_BG}dd` }}>
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center gap-8 md:gap-16">
           {indicators.map((item, index) => (
-            <div key={index} className="flex items-center gap-2 text-sm font-medium">
-              <item.icon className="w-5 h-5 text-purple-500" />
-              <span>{item.text}</span>
-            </div>
+            <motion.div 
+              key={index} 
+              className="flex items-center gap-2 text-sm font-light"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <item.icon className="w-5 h-5" style={{ color: PINK }} />
+              <span style={{ color: 'rgba(255,255,255,0.8)' }}>{item.text}</span>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -503,6 +683,8 @@ function InvitationSection() {
 
 export default function VoyagesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const ref = useRef<HTMLDivElement | null>(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
   
   const { data: voyages, isLoading } = useQuery<VoyageDB[]>({
     queryKey: ['/api/voyages'],
@@ -515,39 +697,78 @@ export default function VoyagesPage() {
   }, [voyages, selectedCategory]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ background: DARK_BG }}>
+      <SEO 
+        title="Voyages | MetaHers Mind Spa"
+        description="Real-world experiences designed for women stepping into the future — thoughtfully, together."
+      />
+      
       <HeroSection />
       <TrustIndicators />
       <WhatIsVoyageSection />
       
-      <section id="voyages" className="py-20">
-        <div className="container mx-auto px-4">
+      <section 
+        ref={ref}
+        id="voyages" 
+        className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden"
+        style={{ background: DARK_BG }}
+      >
+        <AmbientGlow />
+        
+        <div className="relative max-w-6xl mx-auto">
           <motion.div 
-            className="text-center mb-12"
+            className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Current <span className="text-gradient-tech">Voyages</span>
+            <p 
+              className="text-xs uppercase tracking-[0.25em] mb-6"
+              style={{ color: PINK }}
+            >
+              Current Voyages
+            </p>
+            
+            <h2 
+              className="text-4xl lg:text-5xl mb-8 leading-[1.15]"
+              style={{ 
+                fontFamily: 'Playfair Display, serif',
+                color: '#FFFFFF',
+                fontWeight: 300,
+              }}
+            >
+              Select Your <span className="italic" style={{ color: LAVENDER }}>Experience</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-              Voyages are hosted in select locations and announced privately. Themes may include Vision & Direction, Digital Presence, AI as a Personal Ally, Creativity & Expression, and Community & Connection.
+
+            <p 
+              className="text-lg leading-relaxed font-light max-w-2xl mx-auto mb-12"
+              style={{ color: 'rgba(255,255,255,0.7)' }}
+            >
+              Voyages are hosted in select locations and announced privately. Themes include Vision & Direction, Digital Presence, AI as a Personal Ally, Creativity & Expression, and Community & Connection.
             </p>
             
             <div className="flex flex-wrap justify-center gap-3">
               {CATEGORIES.map((cat) => (
-                <button
+                <motion.button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`voyage-filter flex items-center gap-2 ${
-                    selectedCategory === cat.id ? 'active' : ''
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
+                    selectedCategory === cat.id 
+                      ? 'border'
+                      : 'border'
                   }`}
+                  style={{
+                    background: selectedCategory === cat.id ? `${PINK}20` : 'transparent',
+                    borderColor: selectedCategory === cat.id ? PINK : 'rgba(255,255,255,0.2)',
+                    color: selectedCategory === cat.id ? PINK : 'rgba(255,255,255,0.7)',
+                  }}
                   data-testid={`filter-${cat.id}`}
                 >
                   <cat.icon className="w-4 h-4" />
-                  {cat.label}
-                </button>
+                  <span className="text-sm font-light">{cat.label}</span>
+                </motion.button>
               ))}
             </div>
           </motion.div>
@@ -571,9 +792,9 @@ export default function VoyagesPage() {
                 ))
               ) : (
                 <div className="col-span-full text-center py-16">
-                  <Sparkles className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Voyages are limited and exclusive</h3>
-                  <p className="text-muted-foreground mb-6">
+                  <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: LAVENDER }} />
+                  <h3 className="text-xl font-semibold mb-2" style={{ color: '#FFFFFF' }}>Voyages are limited and exclusive</h3>
+                  <p style={{ color: 'rgba(255,255,255,0.6)' }} className="mb-6">
                     Availability is limited. Request an invitation below to be considered for upcoming experiences.
                   </p>
                 </div>
