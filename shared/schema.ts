@@ -3208,3 +3208,34 @@ export const voyageTestimonials = pgTable("voyage_testimonials", {
 export const insertVoyageTestimonialSchema = createInsertSchema(voyageTestimonials).omit({ id: true, createdAt: true });
 export type InsertVoyageTestimonial = z.infer<typeof insertVoyageTestimonialSchema>;
 export type VoyageTestimonialDB = typeof voyageTestimonials.$inferSelect;
+
+// Voyage Invitation Requests - for invitation-only voyages
+export const voyageInvitationRequests = pgTable("voyage_invitation_requests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  voyageId: varchar("voyage_id").notNull().references(() => voyages.id, { onDelete: "cascade" }),
+  
+  // Request details
+  status: varchar("status").notNull().default("pending"), // pending, approved, declined
+  message: text("message"), // Why they want to attend
+  
+  // User info snapshot (for admin review)
+  userName: varchar("user_name"),
+  userEmail: varchar("user_email").notNull(),
+  
+  // Admin response
+  adminNotes: text("admin_notes"),
+  respondedAt: timestamp("responded_at"),
+  respondedBy: varchar("responded_by").references(() => users.id, { onDelete: "set null" }),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_vir_user").on(table.userId),
+  index("idx_vir_voyage").on(table.voyageId),
+  index("idx_vir_status").on(table.status),
+]);
+
+export const insertVoyageInvitationRequestSchema = createInsertSchema(voyageInvitationRequests).omit({ id: true, createdAt: true, updatedAt: true, respondedAt: true });
+export type InsertVoyageInvitationRequest = z.infer<typeof insertVoyageInvitationRequestSchema>;
+export type VoyageInvitationRequestDB = typeof voyageInvitationRequests.$inferSelect;
