@@ -1,0 +1,97 @@
+Your task is to brainstorm AND produce a demo-ready app experience (UX + logic + light code or wireframe) for a viral AI-powered vision board engine called:
+MetaHers Vision Lab
+This app lives inside the MetaHers app and is used during Vision Board Inauguration Events that introduce women to the MetaHers world.
+These events are:
+Online (global)
+In-person in Orange County (OC)
+Los Angeles (LA – coming soon)
+This is not a generic vision board or a productivity tool.
+This is the entry portal into MetaHers.
+CORE CONTEXT
+The Vision Board Event is:
+The first MetaHers experience a woman attends
+Emotional, identity-based, empowering
+Not educational
+Not technical
+Not about planning tasks
+The Vision Lab app must:
+Help women create the most beautiful, AI-powered digital vision board ever
+Translate feelings, desires, and identity into visuals
+Feel cinematic, intuitive, and luxurious
+Use AI invisibly (no jargon, no explanations)
+Create a strong emotional bond with MetaHers
+The goal:
+After this experience, women should want to explore the rest of MetaHers on their own.
+TARGET USER
+Women who are:
+Curious about the future
+Attracted to elevated experiences
+Open to AI if it feels human and safe
+Overwhelmed by traditional tools and goal-setting
+YOUR OUTPUT MUST INCLUDE (DO NOT SKIP)
+1. PRODUCT CONCEPT (SHORT & CLEAR)
+Explain:
+What MetaHers Vision Lab is
+Why it feels magical
+Why it works as an inauguration experience
+2. UX FLOW (SCREEN BY SCREEN)
+Design the exact app flow:
+Entry / welcome screen
+Event context selection
+Online
+OC in-person
+LA (coming soon teaser)
+Emotional activation (no goal language)
+Vision creation experience
+Vision board reveal
+Share moment
+Gentle invitation into the MetaHers world (no selling)
+Write this like a real app.
+3. VISION CREATION SYSTEM
+Define:
+How users express desires (words, moods, sensations)
+How AI converts this into:
+Images
+Colors
+Symbols
+Short affirmations
+No rigid categories. No checklists.
+4. AI PROMPT SYSTEM (COPY-PASTE READY)
+Provide real prompts, not explanations:
+System prompt
+User input template
+Output schema
+For:
+Vision board generation
+Future Self message (end of year tone)
+One cinematic shareable quote
+Tone: luxurious, calm, human, poetic.
+5. DEMO UI (BUILDABLE)
+Provide ONE:
+Simple React / Next.js demo
+OR clean HTML/CSS prototype
+OR Framer-style component structure
+Must include:
+Vision board canvas
+Image + text composition
+Share card generator
+Minimal UI, no clutter
+6. MVP SCOPE (2–4 WEEKS)
+Define:
+What must be built first
+What can be mocked
+What can come later
+CONSTRAINTS
+No dashboards
+No productivity language
+No AI explanations
+No education content
+No Voyages mentioned in-app
+Think:
+Luxury ritual × emotional activation × future identity
+FINAL INSTRUCTION
+Do not ask questions.
+Do not offer options.
+Make strong product decisions.
+Assume this app will be used by hundreds of women as their first MetaHers experience in 2026.
+Act like this app opens the door to a new world.
