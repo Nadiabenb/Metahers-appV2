@@ -170,9 +170,8 @@ function BookingCard({ voyage }: { voyage: VoyageDB }) {
   return (
     <div className="voyage-booking-card sticky top-24 space-y-6">
       <div className="text-center pb-4 border-b border-border">
-        <p className="text-sm text-muted-foreground mb-1">Starting from</p>
-        <div className="voyage-price text-4xl">{formatPrice(voyage.price)}</div>
-        <p className="text-sm text-muted-foreground">per person</p>
+        <p className="text-sm text-muted-foreground mb-2">Exclusive Invitation</p>
+        <p className="text-lg font-semibold">Invitation-Only Experience</p>
       </div>
       
       <div className="space-y-4">
@@ -229,7 +228,7 @@ function BookingCard({ voyage }: { voyage: VoyageDB }) {
           disabled={bookMutation.isPending}
           data-testid="button-book-now"
         >
-          {bookMutation.isPending ? 'Processing...' : 'Book Now'}
+          {bookMutation.isPending ? 'Processing...' : 'Request Invitation'}
         </Button>
       )}
       
@@ -541,16 +540,12 @@ export default function VoyageDetailPage() {
       
       {/* Mobile Sticky Booking Bar */}
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur-sm border-t border-border lg:hidden z-50">
-        <div className="container mx-auto flex items-center justify-between gap-4">
-          <div>
-            <p className="voyage-price text-2xl">${voyage.price / 100}</p>
-            <p className="text-xs text-muted-foreground">per person</p>
-          </div>
+        <div className="container mx-auto flex items-center justify-center">
           <Button 
             className="voyage-cta flex-1 max-w-xs"
             data-testid="button-book-now-mobile"
           >
-            Book Now
+            Request Invitation
           </Button>
         </div>
       </div>
