@@ -922,8 +922,11 @@ export default function VoyagesPage() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: (visibleVoyages.length + idx) * 0.1 }}
                     >
-                      <VoyageCard voyage={voyage} />
-                      <div className="absolute inset-0 bg-black/70 backdrop-blur-md rounded-2xl flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-black/75">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-2xl z-10" />
+                        <VoyageCard voyage={voyage} />
+                      </div>
+                      <div className="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
                         <div className="text-center space-y-3">
                           <Crown className="w-8 h-8 mx-auto" style={{ color: PINK }} />
                           <p className="text-sm font-semibold uppercase tracking-wider text-white">
