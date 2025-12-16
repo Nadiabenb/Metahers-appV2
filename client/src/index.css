@@ -786,6 +786,19 @@ body {
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  /* Locked Voyage Card - Pro Users Only */
+  .voyage-card-locked {
+    position: relative;
+  }
+
+  .voyage-card-locked > div:first-child {
+    animation: none !important;
+  }
+
+  .voyage-card-locked .voyage-card {
+    opacity: 0.6;
+  }
+
   /* Voyage Hero Section */
   .voyage-hero {
     position: relative;

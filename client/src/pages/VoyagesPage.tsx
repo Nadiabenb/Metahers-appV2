@@ -3,6 +3,7 @@ import { useInView } from "framer-motion";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
 import luxuryVoyageImage from "@assets/generated_images/luxury_voyage_gathering_with_tech_ambient.png";
 import cryptoVoyageImage from "@assets/generated_images/crypto_voyage_luxury_yacht_experience.png";
 import aiVoyageImage from "@assets/generated_images/ai_mastery_luxury_office_setting.png";
@@ -703,6 +704,7 @@ export default function VoyagesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const ref = useRef<HTMLDivElement | null>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const { user } = useAuth();
   
   const { data: voyages, isLoading } = useQuery<VoyageDB[]>({
     queryKey: ['/api/voyages'],
@@ -713,6 +715,10 @@ export default function VoyagesPage() {
     if (selectedCategory === "all") return voyages;
     return voyages.filter(v => v.category === selectedCategory);
   }, [voyages, selectedCategory]);
+
+  const isProUser = user?.isPro === true;
+  const visibleVoyages = isProUser ? filteredVoyages : filteredVoyages.slice(0, 3);
+  const hiddenVoyages = isProUser ? [] : filteredVoyages.slice(3);
 
   return (
     <div className="min-h-screen" style={{ background: DARK_BG }}>
@@ -805,9 +811,27 @@ export default function VoyagesPage() {
                   <VoyageCardSkeleton key={i} />
                 ))
               ) : filteredVoyages.length > 0 ? (
-                filteredVoyages.map((voyage) => (
-                  <VoyageCard key={voyage.id} voyage={voyage} />
-                ))
+                <>
+                  {visibleVoyages.map((voyage) => (
+                    <VoyageCard key={voyage.id} voyage={voyage} />
+                  ))}
+                  {hiddenVoyages.map((voyage) => (
+                    <div key={voyage.id} className="relative voyage-card-locked group">
+                      <VoyageCard voyage={voyage} />
+                      <div className="absolute inset-0 bg-black/70 backdrop-blur-md rounded-2xl flex items-center justify-center z-10 transition-all duration-300 group-hover:bg-black/75">
+                        <div className="text-center space-y-3">
+                          <Crown className="w-8 h-8 mx-auto" style={{ color: PINK }} />
+                          <p className="text-sm font-semibold uppercase tracking-wider text-white">
+                            Pro Members Only
+                          </p>
+                          <p className="text-xs text-white/60 max-w-xs">
+                            Unlock access to exclusive voyages with a MetaHers Pro membership
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
               ) : (
                 <div className="col-span-full text-center py-16">
                   <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: LAVENDER }} />
