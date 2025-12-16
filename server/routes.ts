@@ -15,7 +15,7 @@ import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
 import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema } from "@shared/schema";
 import { sql as drizzleSql, eq, desc, and, sql, gte } from "drizzle-orm";
-import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials } from "@shared/schema";
+import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests } from "@shared/schema";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
@@ -4943,6 +4943,122 @@ Respond in JSON format:
     });
     
     res.json({ message: "You've joined the waitlist!", position });
+  }));
+
+  // Submit voyage invitation request (requires authentication)
+  app.post('/api/voyages/invitation-request', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { voyageId, message } = req.body;
+    
+    if (!voyageId) {
+      throw new ValidationError("Voyage ID is required");
+    }
+    
+    // Get user info for the request
+    const user = await db.select().from(users).where(eq(users.id, userId)).limit(1);
+    if (!user || user.length === 0) {
+      throw new AuthenticationError("User not found");
+    }
+    
+    // Check if already requested
+    const existing = await db.select().from(voyageInvitationRequests)
+      .where(and(
+        eq(voyageInvitationRequests.voyageId, voyageId),
+        eq(voyageInvitationRequests.userId, userId)
+      )).limit(1);
+    
+    if (existing.length > 0) {
+      res.json({ 
+        message: "You've already submitted a request for this voyage!", 
+        alreadyExists: true,
+        status: existing[0].status
+      });
+      return;
+    }
+    
+    // Get voyage details for email
+    const voyage = await db.select().from(voyages).where(eq(voyages.id, voyageId)).limit(1);
+    if (!voyage || voyage.length === 0) {
+      throw new NotFoundError("Voyage not found");
+    }
+    
+    // Create the invitation request
+    const [newRequest] = await db.insert(voyageInvitationRequests).values({
+      userId,
+      voyageId,
+      message: message ? sanitizeText(message) : null,
+      userName: user[0].firstName && user[0].lastName 
+        ? `${user[0].firstName} ${user[0].lastName}` 
+        : user[0].firstName || null,
+      userEmail: user[0].email,
+      status: 'pending',
+    }).returning();
+    
+    // Send email notification to admin
+    try {
+      const resendClient = await getUncachableResendClient();
+      if (resendClient) {
+        await resendClient.client.emails.send({
+          from: resendClient.fromEmail,
+          to: 'melissa@metahers.ai', // Admin email
+          subject: `New Voyage Invitation Request: ${voyage[0].title}`,
+          html: `
+            <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0D0B14; color: #fff; padding: 32px; border-radius: 16px;">
+              <h1 style="color: #E879F9; margin-bottom: 24px;">New Invitation Request</h1>
+              
+              <div style="background: rgba(232, 121, 249, 0.1); border: 1px solid rgba(232, 121, 249, 0.3); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <h2 style="color: #fff; margin: 0 0 8px 0; font-size: 18px;">${voyage[0].title}</h2>
+                <p style="color: #9CA3AF; margin: 0;">${new Date(voyage[0].date).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              </div>
+              
+              <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                <h3 style="color: #D8BFD8; margin: 0 0 16px 0;">Requester Details</h3>
+                <p style="margin: 0 0 8px 0;"><strong>Name:</strong> ${newRequest.userName || 'Not provided'}</p>
+                <p style="margin: 0 0 8px 0;"><strong>Email:</strong> ${newRequest.userEmail}</p>
+                ${message ? `<p style="margin: 16px 0 0 0;"><strong>Message:</strong><br/><span style="color: #9CA3AF;">"${message}"</span></p>` : ''}
+              </div>
+              
+              <p style="color: #9CA3AF; font-size: 14px;">
+                Review this request in your admin dashboard to approve or decline.
+              </p>
+            </div>
+          `,
+        });
+        console.log(`Invitation request email sent for voyage: ${voyage[0].title}`);
+      }
+    } catch (emailError) {
+      console.error('Failed to send invitation request email:', emailError);
+      // Don't fail the request if email fails
+    }
+    
+    res.json({ 
+      message: "Your invitation request has been submitted! We'll be in touch soon.",
+      requestId: newRequest.id,
+      status: 'pending'
+    });
+  }));
+
+  // Check user's invitation request status for a voyage
+  app.get('/api/voyages/invitation-request/:voyageId', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { voyageId } = req.params;
+    
+    const request = await db.select().from(voyageInvitationRequests)
+      .where(and(
+        eq(voyageInvitationRequests.voyageId, voyageId),
+        eq(voyageInvitationRequests.userId, userId)
+      )).limit(1);
+    
+    if (request.length === 0) {
+      res.json({ hasRequested: false });
+      return;
+    }
+    
+    res.json({ 
+      hasRequested: true,
+      status: request[0].status,
+      createdAt: request[0].createdAt
+    });
   }));
 
   // Get user's voyage bookings
