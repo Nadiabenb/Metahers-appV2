@@ -4,35 +4,35 @@ import { voyages } from "@shared/schema";
 const METAHERS_VOYAGES = [
   // AI MASTERY VOYAGES (4)
   {
-    title: "AI Mastery: From Curious to Confident",
-    slug: "ai-mastery-curious-to-confident",
+    title: "MetaHers Vision Voyage",
+    slug: "metahers-vision-voyage",
     category: "AI" as const,
     venueType: "Duffy_Boat" as const,
-    description: "Set sail on Balboa Bay aboard our signature pink Duffy boat as we demystify artificial intelligence together. Learn how to use ChatGPT, Claude, and other AI tools to 10x your productivity. By sunset, you'll have created your first AI workflows and feel like an AI native. Perfect for beginners who want to understand what's possible.",
-    shortDescription: "Master AI fundamentals on a luxury pink Duffy boat cruise around Balboa Bay.",
-    date: new Date("2025-01-18T14:00:00"),
-    time: "2:00 PM",
-    duration: "3 hours",
-    price: 49700, // $497
-    maxCapacity: 10,
-    currentBookings: 3,
-    location: "Balboa Island Ferry Terminal, Balboa",
-    latitude: "33.6075",
-    longitude: "-117.8989",
+    description: "Set sail on Lido Island aboard our signature pink Duffy boat for an intimate AI experience designed exclusively for 8 visionary women. Discover how to generate stunning images and ideas with AI tools like Midjourney and DALL-E. Create your digital vision board together, watch the sunset, and sip on refreshments while envisioning your future. By the end of this voyage, you'll have a collection of AI-generated visuals that capture your authentic brand and business direction.",
+    shortDescription: "Create your AI-powered digital vision board on a luxury pink Duffy boat in Lido Island.",
+    date: new Date("2025-01-20T15:00:00"),
+    time: "3:00 PM",
+    duration: "2.5 hours",
+    price: 39700, // $397
+    maxCapacity: 8,
+    currentBookings: 2,
+    location: "Lido Island, Newport Beach, California",
+    latitude: "33.6020",
+    longitude: "-117.8950",
     learningObjectives: [
-      "Understand how AI actually works (no tech background needed)",
-      "Master ChatGPT and Claude for everyday tasks",
-      "Create your first AI-powered workflows",
-      "Learn prompt engineering secrets",
-      "Build a personal AI toolkit"
+      "Generate stunning visuals with AI image tools",
+      "Create a comprehensive digital vision board",
+      "Master prompt engineering for visual clarity",
+      "Align your brand with AI-generated aesthetics",
+      "Build your personal creative AI toolkit"
     ],
     included: [
-      "Champagne toast at sunset",
-      "Gourmet cheese and charcuterie board",
-      "Digital workbook and AI prompt library",
-      "Private Duffy boat experience",
-      "Post-voyage AI resource guide",
-      "MetaHers community access"
+      "Soft drinks and artisanal snacks",
+      "AI image generation credit pack",
+      "Digital vision board template",
+      "Private pink Duffy boat experience",
+      "Vision board download and sharing guide",
+      "Exclusive MetaHers community access"
     ],
     heroImage: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
     status: "upcoming" as const,
