@@ -119,17 +119,11 @@ function BookingCard({ voyage }: { voyage: VoyageDB }) {
   const { isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [requestMessage, setRequestMessage] = useState('');
   
   const spotsLeft = voyage.maxCapacity - voyage.currentBookings;
   const isFull = spotsLeft <= 0;
-  
-  const formatPrice = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-    }).format(cents / 100);
-  };
 
   const formatDate = (date: Date | string) => {
     const d = new Date(date);
@@ -141,109 +135,193 @@ function BookingCard({ voyage }: { voyage: VoyageDB }) {
     });
   };
 
-  const bookMutation = useMutation({
+  // Check if user has already requested
+  const { data: requestStatus } = useQuery<{ hasRequested: boolean; status?: string }>({
+    queryKey: ['/api/voyages/invitation-request', voyage.id],
+    enabled: isAuthenticated,
+  });
+
+  const requestMutation = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/voyages/checkout', { voyageId: voyage.id });
+      const res = await apiRequest('POST', '/api/voyages/invitation-request', { 
+        voyageId: voyage.id,
+        message: requestMessage 
+      });
       return res.json();
     },
     onSuccess: (data) => {
-      if (data.url) {
-        window.location.href = data.url;
-      }
+      setShowRequestModal(false);
+      setRequestMessage('');
+      queryClient.invalidateQueries({ queryKey: ['/api/voyages/invitation-request', voyage.id] });
+      toast({
+        title: "Request Submitted!",
+        description: data.message || "We'll review your request and be in touch soon.",
+      });
     },
     onError: (error: Error) => {
       toast({
-        title: "Booking Failed",
+        title: "Request Failed",
         description: error.message || "Please try again later",
         variant: "destructive",
       });
     },
   });
 
-  const handleBookNow = () => {
+  const handleRequestInvitation = () => {
     if (!isAuthenticated) {
       setLocation('/login?redirect=/voyages/' + voyage.slug);
       return;
     }
-    bookMutation.mutate();
+    setShowRequestModal(true);
   };
 
+  const hasAlreadyRequested = requestStatus?.hasRequested;
+  const requestStatusText = requestStatus?.status;
+
   return (
-    <div className="voyage-booking-card sticky top-24 space-y-6">
-      <div className="text-center pb-4 border-b border-border">
-        <p className="text-sm text-muted-foreground mb-2">Exclusive Invitation</p>
-        <p className="text-lg font-semibold">Invitation-Only Experience</p>
-      </div>
-      
-      <div className="space-y-4">
-        <div className="flex items-center gap-3">
-          <Calendar className="w-5 h-5 text-purple-500" />
-          <div>
-            <p className="font-medium">{formatDate(voyage.date)}</p>
-            <p className="text-sm text-muted-foreground">{voyage.time} • {voyage.duration}</p>
+    <>
+      <div className="voyage-booking-card sticky top-24 space-y-6">
+        <div className="text-center pb-4 border-b border-border">
+          <p className="text-sm text-muted-foreground mb-2">Exclusive Experience</p>
+          <p className="text-lg font-semibold">Invitation Only</p>
+        </div>
+        
+        <div className="space-y-4">
+          <div className="flex items-center gap-3">
+            <Calendar className="w-5 h-5 text-purple-500" />
+            <div>
+              <p className="font-medium">{formatDate(voyage.date)}</p>
+              <p className="text-sm text-muted-foreground">{voyage.time} • {voyage.duration}</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <MapPin className="w-5 h-5 text-purple-500" />
+            <div>
+              <p className="font-medium">{voyage.location}</p>
+              <a 
+                href={`https://maps.google.com/?q=${voyage.latitude},${voyage.longitude}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-purple-500 hover:underline flex items-center gap-1"
+              >
+                Get Directions <Navigation className="w-3 h-3" />
+              </a>
+            </div>
           </div>
         </div>
         
-        <div className="flex items-center gap-3">
-          <MapPin className="w-5 h-5 text-purple-500" />
-          <div>
-            <p className="font-medium">{voyage.location}</p>
-            <a 
-              href={`https://maps.google.com/?q=${voyage.latitude},${voyage.longitude}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm text-purple-500 hover:underline flex items-center gap-1"
-            >
-              Get Directions <Navigation className="w-3 h-3" />
-            </a>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-sm">
+            <span className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              Availability
+            </span>
+            <span className={`font-medium ${isFull ? 'text-red-500' : 'text-green-500'}`}>
+              {isFull ? 'Full' : `${spotsLeft} of ${voyage.maxCapacity} spots`}
+            </span>
+          </div>
+          <div className="voyage-spots-indicator">
+            <div 
+              className="voyage-spots-fill" 
+              style={{ width: `${(voyage.currentBookings / voyage.maxCapacity) * 100}%` }}
+            />
+          </div>
+        </div>
+        
+        {hasAlreadyRequested ? (
+          <div className="space-y-3">
+            <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 text-center">
+              <CheckCircle2 className="w-8 h-8 text-purple-500 mx-auto mb-2" />
+              <p className="font-medium text-purple-400">Request Submitted</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {requestStatusText === 'pending' && "We're reviewing your request..."}
+                {requestStatusText === 'approved' && "Your invitation has been approved!"}
+                {requestStatusText === 'declined' && "Unfortunately, this voyage is at capacity."}
+              </p>
+            </div>
+          </div>
+        ) : isFull ? (
+          <Button className="w-full voyage-waitlist h-14 text-lg" data-testid="button-join-waitlist">
+            Join Waitlist
+          </Button>
+        ) : (
+          <Button 
+            className="w-full voyage-cta h-14"
+            onClick={handleRequestInvitation}
+            data-testid="button-request-invitation"
+          >
+            Request Invitation
+          </Button>
+        )}
+        
+        <div className="space-y-3">
+          <div className="voyage-trust-badge">
+            <Shield className="w-4 h-4" />
+            <span>Curated for Women Leaders</span>
+          </div>
+          <div className="voyage-trust-badge">
+            <Heart className="w-4 h-4" />
+            <span>Intimate & Intentional</span>
           </div>
         </div>
       </div>
-      
-      <div className="space-y-2">
-        <div className="flex items-center justify-between text-sm">
-          <span className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            Availability
-          </span>
-          <span className={`font-medium ${isFull ? 'text-red-500' : 'text-green-500'}`}>
-            {isFull ? 'Full' : `${spotsLeft} of ${voyage.maxCapacity} spots left`}
-          </span>
+
+      {/* Request Invitation Modal */}
+      {showRequestModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-card border border-border rounded-2xl p-6 max-w-md w-full shadow-xl"
+          >
+            <div className="text-center mb-6">
+              <div className="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Sparkles className="w-8 h-8 text-purple-500" />
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Request Your Invitation</h3>
+              <p className="text-muted-foreground text-sm">
+                Share a bit about yourself and why you'd like to join this exclusive experience.
+              </p>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm font-medium text-muted-foreground mb-2 block">
+                  Tell us about yourself (optional)
+                </label>
+                <textarea
+                  value={requestMessage}
+                  onChange={(e) => setRequestMessage(e.target.value)}
+                  placeholder="I'm a founder building... I'm excited about this voyage because..."
+                  className="w-full h-32 bg-background border border-border rounded-xl p-4 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  data-testid="textarea-request-message"
+                />
+              </div>
+              
+              <div className="flex gap-3">
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                  onClick={() => setShowRequestModal(false)}
+                  data-testid="button-cancel-request"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  className="flex-1 voyage-cta"
+                  onClick={() => requestMutation.mutate()}
+                  disabled={requestMutation.isPending}
+                  data-testid="button-submit-request"
+                >
+                  {requestMutation.isPending ? 'Submitting...' : 'Submit Request'}
+                </Button>
+              </div>
+            </div>
+          </motion.div>
         </div>
-        <div className="voyage-spots-indicator">
-          <div 
-            className="voyage-spots-fill" 
-            style={{ width: `${(voyage.currentBookings / voyage.maxCapacity) * 100}%` }}
-          />
-        </div>
-      </div>
-      
-      {isFull ? (
-        <Button className="w-full voyage-waitlist h-14 text-lg" data-testid="button-join-waitlist">
-          Join Waitlist
-        </Button>
-      ) : (
-        <Button 
-          className="w-full voyage-cta h-14"
-          onClick={handleBookNow}
-          disabled={bookMutation.isPending}
-          data-testid="button-book-now"
-        >
-          {bookMutation.isPending ? 'Processing...' : 'Request Invitation'}
-        </Button>
       )}
-      
-      <div className="space-y-3">
-        <div className="voyage-trust-badge">
-          <Shield className="w-4 h-4" />
-          <span>100% Satisfaction Guarantee</span>
-        </div>
-        <div className="voyage-trust-badge">
-          <CreditCard className="w-4 h-4" />
-          <span>Secure Payment via Stripe</span>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
 
