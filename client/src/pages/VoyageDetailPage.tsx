@@ -42,6 +42,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import type { VoyageDB } from "@shared/schema";
+import visionVoyageHeroImage from "@assets/IMG_2725_1765913672730.png";
 
 const VENUE_ICONS = {
   Duffy_Boat: Ship,
@@ -313,7 +314,9 @@ export default function VoyageDetailPage() {
         <div 
           className="absolute inset-0 bg-gradient-to-br from-purple-600/80 to-pink-600/80"
           style={{
-            backgroundImage: voyage.heroImage ? `url(${voyage.heroImage})` : undefined,
+            backgroundImage: voyage.slug === 'metahers-vision-voyage' 
+              ? `url(${visionVoyageHeroImage})`
+              : voyage.heroImage ? `url(${voyage.heroImage})` : undefined,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
