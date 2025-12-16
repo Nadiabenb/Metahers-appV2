@@ -3,6 +3,11 @@ import { useInView } from "framer-motion";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import luxuryVoyageImage from "@assets/generated_images/luxury_voyage_gathering_with_tech_ambient.png";
+import cryptoVoyageImage from "@assets/generated_images/crypto_voyage_luxury_yacht_experience.png";
+import aiVoyageImage from "@assets/generated_images/ai_mastery_luxury_office_setting.png";
+import web3VoyageImage from "@assets/generated_images/web3_voyage_luxury_resort_experience.png";
+import aibrandingVoyageImage from "@assets/generated_images/ai_branding_luxury_studio_space.png";
 import { 
   Anchor, 
   Sparkles, 
@@ -87,6 +92,15 @@ const VENUE_ICONS = {
   Brunch: UtensilsCrossed,
 };
 
+// Premium voyage images mapping by category
+const VOYAGE_IMAGES: Record<string, string> = {
+  AI: aiVoyageImage,
+  Crypto: cryptoVoyageImage,
+  Web3: web3VoyageImage,
+  AI_Branding: aibrandingVoyageImage,
+  default: luxuryVoyageImage,
+};
+
 const CATEGORY_STYLES = {
   AI: "voyage-category-ai",
   Crypto: "voyage-category-crypto",
@@ -148,6 +162,8 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
     }).format(cents / 100);
   };
 
+  const voyageImage = VOYAGE_IMAGES[voyage.category] || VOYAGE_IMAGES.default;
+
   return (
     <Link href={`/voyages/${voyage.slug}`}>
       <motion.div 
@@ -157,13 +173,10 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
         data-testid={`card-voyage-${voyage.id}`}
       >
         <div className="relative h-48 overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-gradient-to-br from-purple-600/30 to-pink-600/30"
-            style={{
-              backgroundImage: voyage.heroImage ? `url(${voyage.heroImage})` : undefined,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-            }}
+          <img 
+            src={voyageImage}
+            alt={voyage.title}
+            className="absolute inset-0 w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
           
