@@ -419,7 +419,7 @@ export default function VoyageDetailPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
-                  <h2 className="text-2xl font-bold mb-6">What You'll Learn</h2>
+                  <h2 className="text-2xl font-bold mb-6">What You'll Master</h2>
                   <div className="grid sm:grid-cols-2 gap-4">
                     {learningObjectives.map((objective, index) => (
                       <div key={index} className="voyage-objective flex items-start gap-3">
