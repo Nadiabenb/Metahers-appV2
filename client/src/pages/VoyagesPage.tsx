@@ -202,77 +202,119 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
   return (
     <Link href={`/voyages/${voyage.slug}`}>
       <motion.div 
-        className={`voyage-card group cursor-pointer ${categoryStyle}`}
-        whileHover={{ y: -8 }}
-        transition={{ duration: 0.3 }}
+        className={`voyage-card group cursor-pointer ${categoryStyle} border border-white/5 shadow-2xl hover:shadow-[0_20px_60px_rgba(232,121,249,0.15)]`}
+        whileHover={{ y: -12, scale: 1.02 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
         data-testid={`card-voyage-${voyage.id}`}
       >
         <div className="relative h-48 overflow-hidden">
-          <img 
+          <motion.img 
             src={voyageImage}
             alt={voyage.title}
             className="absolute inset-0 w-full h-full object-cover"
+            whileHover={{ scale: 1.08 }}
+            transition={{ duration: 0.6 }}
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
           
-          <div className="absolute top-4 left-4">
+          <motion.div 
+            className="absolute top-4 left-4"
+            whileHover={{ scale: 1.05 }}
+          >
             <span className="voyage-badge">
               {voyage.category.replace('_', ' ')}
             </span>
-          </div>
+          </motion.div>
           
-          <div className="absolute top-4 right-4">
-            <div className="flex items-center gap-1 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-medium">
-              <VenueIcon className="w-3 h-3" />
+          <motion.div 
+            className="absolute top-4 right-4"
+            whileHover={{ scale: 1.05 }}
+          >
+            <div className="flex items-center gap-1 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg">
+              <VenueIcon className="w-3.5 h-3.5" />
               <span>{voyage.venueType.replace('_', ' ')}</span>
             </div>
-          </div>
+          </motion.div>
           
-          <div className="absolute bottom-4 left-4 right-4">
-            <h3 className="text-white font-semibold text-lg line-clamp-2 drop-shadow-lg">
+          <motion.div 
+            className="absolute bottom-4 left-4 right-4"
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <h3 className="text-white font-semibold text-lg line-clamp-2 drop-shadow-lg group-hover:line-clamp-3 transition-all">
               {voyage.title}
             </h3>
-          </div>
+          </motion.div>
         </div>
         
-        <CardContent className="p-5 space-y-4">
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-              <div className="flex items-center gap-1.5">
+        <CardContent className="p-6 space-y-4">
+          <motion.div 
+            className="flex items-center justify-between gap-2 pb-2 border-b border-white/10"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
+            <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-1.5 text-white/70 group-hover:text-white/90 transition-colors">
                 <Calendar className="w-4 h-4" />
-                <span>{formatDate(voyage.date)}</span>
+                <span className="font-medium">{formatDate(voyage.date)}</span>
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center gap-1.5 text-white/70 group-hover:text-white/90 transition-colors">
                 <Clock className="w-4 h-4" />
-                <span>{voyage.time}</span>
+                <span className="font-medium">{voyage.time}</span>
               </div>
             </div>
             <CountdownTimer targetDate={new Date(voyage.date)} />
-          </div>
+          </motion.div>
           
-          <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-            <MapPin className="w-4 h-4" />
-            <span className="line-clamp-1">{getCityName(voyage.location)}</span>
-          </div>
+          <motion.div 
+            className="flex items-center gap-1.5 text-sm text-white/60 group-hover:text-white/80 transition-colors"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <MapPin className="w-4 h-4 text-pink-400" />
+            <span className="line-clamp-1 font-medium">{getCityName(voyage.location)}</span>
+          </motion.div>
           
-          <div className="space-y-2">
+          <motion.div 
+            className="space-y-2"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center gap-1.5">
-                <Users className="w-4 h-4" />
-                <span className={isFull ? "text-red-500 font-medium" : ""}>
-                  {isFull ? "Full" : `${spotsLeft} of ${voyage.maxCapacity} spots left`}
+                <Users className="w-4 h-4 text-lavender-300" />
+                <span className={`font-semibold transition-colors ${isFull ? "text-red-400" : "text-green-400"}`}>
+                  {isFull ? "Spots Full" : `${spotsLeft} Spot${spotsLeft !== 1 ? 's' : ''}`}
                 </span>
               </div>
             </div>
-            <div className="voyage-spots-indicator">
-              <div 
+            <motion.div 
+              className="voyage-spots-indicator"
+              whileHover={{ scale: 1.02 }}
+            >
+              <motion.div 
                 className="voyage-spots-fill" 
                 style={{ width: `${(voyage.currentBookings / voyage.maxCapacity) * 100}%` }}
+                layoutId={`spots-${voyage.id}`}
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
           
-          <div className="flex items-center justify-end pt-2">
+          <motion.div 
+            className="flex items-center justify-end pt-3 group-hover:translate-x-1 transition-transform"
+            whileHover={{ x: 4 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
             {isFull ? (
               <Button variant="outline" size="sm" className="voyage-waitlist">
                 Join Waitlist
@@ -282,7 +324,7 @@ function VoyageCard({ voyage }: { voyage: VoyageDB }) {
                 Request Invitation
               </Button>
             )}
-          </div>
+          </motion.div>
         </CardContent>
       </motion.div>
     </Link>
@@ -863,30 +905,44 @@ export default function VoyagesPage() {
               Voyages are hosted in select locations and announced privately. Themes include Vision & Direction, Digital Presence, AI as a Personal Ally, Creativity & Expression, and Community & Connection.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-3">
-              {CATEGORIES.map((cat, idx) => (
-                <motion.button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.95 }}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.08 }}
-                  className={`voyage-category-filter flex items-center gap-2 px-5 py-3 rounded-full font-light transition-all border`}
-                  style={{
-                    background: selectedCategory === cat.id ? `${PINK}15` : 'rgba(255,255,255,0.02)',
-                    borderColor: selectedCategory === cat.id ? PINK : 'rgba(255,255,255,0.15)',
-                    color: selectedCategory === cat.id ? PINK : 'rgba(255,255,255,0.7)',
-                    boxShadow: selectedCategory === cat.id ? `0 0 20px rgba(232, 121, 249, 0.2)` : 'none',
-                  }}
-                  data-testid={`filter-${cat.id}`}
-                >
-                  <cat.icon className="w-4 h-4" />
-                  <span className="text-sm">{cat.label}</span>
-                </motion.button>
-              ))}
-            </div>
+            <motion.div 
+              className="flex flex-wrap justify-center gap-3"
+              layout
+            >
+              {CATEGORIES.map((cat, idx) => {
+                const isActive = selectedCategory === cat.id;
+                return (
+                  <motion.button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    layout
+                    whileHover={{ scale: 1.08, y: -4 }}
+                    whileTap={{ scale: 0.92 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.08, type: "spring", stiffness: 300, damping: 30 }}
+                    className={`voyage-category-filter flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all border backdrop-blur-sm uppercase tracking-wider`}
+                    style={{
+                      background: isActive 
+                        ? `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`
+                        : 'rgba(255,255,255,0.05)',
+                      borderColor: isActive ? PINK : 'rgba(232, 121, 249, 0.2)',
+                      color: isActive ? '#0A0A0A' : 'rgba(255,255,255,0.8)',
+                      boxShadow: isActive ? `0 12px 40px rgba(232, 121, 249, 0.3)` : '0 4px 16px rgba(0,0,0,0.2)',
+                    }}
+                    data-testid={`filter-${cat.id}`}
+                  >
+                    <motion.div
+                      animate={{ rotate: isActive ? 360 : 0 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <cat.icon className="w-4 h-4" />
+                    </motion.div>
+                    <span className="text-xs sm:text-sm">{cat.label}</span>
+                  </motion.button>
+                );
+              })}
+            </motion.div>
           </motion.div>
           
           <AnimatePresence mode="wait">
