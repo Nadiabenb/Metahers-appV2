@@ -61,144 +61,138 @@ export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
     );
   }
 
-  // Desktop: Spiral/Looped route
+  // Desktop: Clean horizontal flow with elegant curve
   if (isDesktop) {
-    const centerX = 600;
-    const centerY = 400;
-    const maxRadius = 350;
-    const minRadius = 80;
-    const radiusStep = (maxRadius - minRadius) / (sortedVoyages.length - 1);
+    const padding = 80;
+    const svgWidth = 1400;
+    const svgHeight = 280;
+    const nodesPerRow = 6;
+    const spacingX = (svgWidth - padding * 2) / (nodesPerRow - 1);
+    const rowHeight = 100;
+    const topY = 60;
+    const bottomY = topY + rowHeight;
 
-    // Calculate positions in a spiral
+    // Position nodes in two clean rows
     const nodePositions = sortedVoyages.map((voyage, index) => {
-      const angle = (index * 360) / sortedVoyages.length * (Math.PI / 180) + (index * 20) * (Math.PI / 180);
-      const radius = minRadius + index * radiusStep;
-      const x = centerX + Math.cos(angle) * radius;
-      const y = centerY + Math.sin(angle) * radius;
+      const isTopRow = index < nodesPerRow;
+      const posInRow = isTopRow ? index : index - nodesPerRow;
+      const x = padding + posInRow * spacingX;
+      const y = isTopRow ? topY : bottomY;
       return { x, y };
     });
 
-    // Create SVG path connecting all nodes
+    // Create smooth SVG path connecting nodes
     let pathData = `M ${nodePositions[0].x} ${nodePositions[0].y}`;
     for (let i = 1; i < nodePositions.length; i++) {
-      const prev = nodePositions[i - 1];
       const curr = nodePositions[i];
-      const cpx = (prev.x + curr.x) / 2;
-      const cpy = (prev.y + curr.y) / 2;
-      pathData += ` Q ${cpx} ${cpy} ${curr.x} ${curr.y}`;
+      const prev = nodePositions[i - 1];
+      const midX = (prev.x + curr.x) / 2;
+      // Create smooth curve with subtle wave
+      const waveOffset = i % 2 === 0 ? 30 : -30;
+      pathData += ` Q ${midX} ${(prev.y + curr.y) / 2 + waveOffset} ${curr.x} ${curr.y}`;
     }
-    // Close the loop
-    const last = nodePositions[nodePositions.length - 1];
-    const first = nodePositions[0];
-    const cpx = (last.x + first.x) / 2;
-    const cpy = (last.y + first.y) / 2;
-    pathData += ` Q ${cpx} ${cpy} ${first.x} ${first.y}`;
-
-    const svgWidth = 1200;
-    const svgHeight = 800;
 
     return (
       <div className="relative py-24 px-6 lg:px-16 flex flex-col items-center">
-        {/* SVG Canvas with route line and nodes */}
-        <div className="relative w-full flex justify-center">
-          <svg width={svgWidth} height={svgHeight} className="relative">
-            {/* Decorative background gradient */}
-            <defs>
-              <radialGradient id="routeGradient" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor={`${PINK}10`} />
-                <stop offset="100%" stopColor={`${PINK}00`} />
-              </radialGradient>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                <feMerge>
-                  <feMergeNode in="coloredBlur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
+        <svg width={svgWidth} height={svgHeight} className="relative" style={{ overflow: "visible" }}>
+          <defs>
+            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor={`${PINK}40`} />
+              <stop offset="50%" stopColor={`${LAVENDER}40`} />
+              <stop offset="100%" stopColor={`${PINK}40`} />
+            </linearGradient>
+            <filter id="pathGlow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
 
-            {/* Background glow */}
-            <circle cx={centerX} cy={centerY} r={maxRadius + 50} fill="url(#routeGradient)" />
+          {/* Connection line */}
+          <path
+            d={pathData}
+            stroke="url(#lineGradient)"
+            strokeWidth="2"
+            fill="none"
+            filter="url(#pathGlow)"
+            opacity="0.8"
+          />
 
-            {/* Route line with gradient */}
-            <path
-              d={pathData}
-              stroke="rgba(255,255,255,0.15)"
-              strokeWidth="2"
-              fill="none"
-              filter="url(#glow)"
-              style={{ opacity: 0.8 }}
-            />
+          {/* Nodes */}
+          {sortedVoyages.map((voyage, index) => {
+            const pos = nodePositions[index];
+            const isSelected = selectedId === voyage.id;
+            const color = CATEGORY_INFO[voyage.category as keyof typeof CATEGORY_INFO]?.color || PINK;
 
-            {/* Render nodes */}
-            {sortedVoyages.map((voyage, index) => {
-              const pos = nodePositions[index];
-              const isSelected = selectedId === voyage.id;
-              const color = CATEGORY_INFO[voyage.category as keyof typeof CATEGORY_INFO]?.color || PINK;
-
-              return (
-                <g key={voyage.id}>
-                  {/* Node glow (when selected) */}
-                  {isSelected && (
-                    <circle
-                      cx={pos.x}
-                      cy={pos.y}
-                      r={28}
-                      fill={color}
-                      opacity="0.15"
-                      style={{
-                        animation: "pulse 2s ease-in-out infinite",
-                      }}
-                    />
-                  )}
-
-                  {/* Node circle */}
+            return (
+              <g key={voyage.id}>
+                {/* Outer glow ring (selected) */}
+                {isSelected && (
                   <circle
                     cx={pos.x}
                     cy={pos.y}
-                    r={20}
-                    fill={isSelected ? color : "rgba(255,255,255,0.05)"}
-                    stroke={isSelected ? color : "rgba(255,255,255,0.2)"}
-                    strokeWidth="2"
-                    style={{ cursor: "pointer", transition: "all 0.3s ease" }}
-                    onClick={() => setSelectedId(voyage.id)}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "scale(1.15)";
-                      e.currentTarget.style.filter = `drop-shadow(0 0 15px ${color})`;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "scale(1)";
-                      e.currentTarget.style.filter = "none";
+                    r={26}
+                    fill="none"
+                    stroke={color}
+                    strokeWidth="1"
+                    opacity="0.4"
+                    style={{
+                      animation: "pulse-ring 2s ease-in-out infinite",
                     }}
                   />
+                )}
 
-                  {/* Node number text */}
-                  <text
-                    x={pos.x}
-                    y={pos.y}
-                    textAnchor="middle"
-                    dy="0.3em"
-                    fontSize="12"
-                    fontWeight="bold"
-                    fill={isSelected ? "#0A0A0A" : "rgba(255,255,255,0.7)"}
-                    style={{ pointerEvents: "none", userSelect: "none" }}
-                  >
-                    {voyage.sequenceNumber.toString().padStart(2, "0")}
-                  </text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
+                {/* Node circle */}
+                <circle
+                  cx={pos.x}
+                  cy={pos.y}
+                  r={18}
+                  fill={isSelected ? color : "rgba(255,255,255,0.08)"}
+                  stroke={isSelected ? color : "rgba(255,255,255,0.25)"}
+                  strokeWidth="2"
+                  style={{ cursor: "pointer", transition: "all 0.3s ease" }}
+                  onClick={() => setSelectedId(voyage.id)}
+                  onMouseEnter={(e) => {
+                    const target = e.currentTarget;
+                    target.style.r = "22";
+                    target.style.filter = `drop-shadow(0 0 12px ${color})`;
+                  }}
+                  onMouseLeave={(e) => {
+                    const target = e.currentTarget;
+                    target.style.r = isSelected ? "18" : "18";
+                    target.style.filter = "none";
+                  }}
+                />
 
-        {/* Detail Panel - below the route */}
+                {/* Number text */}
+                <text
+                  x={pos.x}
+                  y={pos.y}
+                  textAnchor="middle"
+                  dy="0.3em"
+                  fontSize="13"
+                  fontWeight="bold"
+                  fill={isSelected ? "#0A0A0A" : "rgba(255,255,255,0.7)"}
+                  style={{ pointerEvents: "none", userSelect: "none" }}
+                  fontFamily="Inter, sans-serif"
+                >
+                  {voyage.sequenceNumber.toString().padStart(2, "0")}
+                </text>
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* Detail Panel */}
         <AnimatePresence>
           {selectedVoyage && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="mt-16 max-w-2xl mx-auto p-8 rounded-2xl w-full"
+              className="mt-20 max-w-2xl mx-auto p-8 rounded-2xl w-full"
               style={{
                 background: "rgba(255,255,255,0.03)",
                 border: `1px solid ${selectedColor}30`,
@@ -249,9 +243,9 @@ export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
 
               <div className="mt-8 flex items-center justify-between pt-6 border-t border-white/10">
                 <span className="text-xs text-white/60">
-                  {(selectedVoyage.maxCapacity - selectedVoyage.currentBookings <= 0
+                  {selectedVoyage.maxCapacity - selectedVoyage.currentBookings <= 0
                     ? "Fully Booked"
-                    : `${selectedVoyage.maxCapacity - selectedVoyage.currentBookings} spots available`)}
+                    : `${selectedVoyage.maxCapacity - selectedVoyage.currentBookings} spots available`}
                 </span>
                 <Button
                   className="px-6 font-semibold uppercase tracking-wider text-xs"
@@ -266,9 +260,9 @@ export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
         </AnimatePresence>
 
         <style>{`
-          @keyframes pulse {
-            0%, 100% { r: 28; opacity: 0.15; }
-            50% { r: 35; opacity: 0.25; }
+          @keyframes pulse-ring {
+            0%, 100% { r: 26; stroke-width: 1; opacity: 0.4; }
+            50% { r: 32; stroke-width: 1; opacity: 0.1; }
           }
         `}</style>
       </div>
