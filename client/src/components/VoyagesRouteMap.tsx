@@ -1,8 +1,7 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { VoyageDB } from "@shared/schema";
 import { Button } from "@/components/ui/button";
-import { X } from "lucide-react";
 
 const LAVENDER = "#D8BFD8";
 const PINK = "#E879F9";
@@ -22,6 +21,7 @@ interface VoyagesRouteMapProps {
 
 export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [isDesktop, setIsDesktop] = useState(true);
 
   const sortedVoyages = useMemo(() => {
     return voyages.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
@@ -30,12 +30,20 @@ export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
   const selectedVoyage = sortedVoyages.find((v) => v.id === selectedId) || sortedVoyages[0];
   const selectedColor = CATEGORY_INFO[selectedVoyage?.category as keyof typeof CATEGORY_INFO]?.color || PINK;
 
-  // Set default selected on first render
-  if (!selectedId && sortedVoyages.length > 0 && !isLoading) {
-    setSelectedId(sortedVoyages[0].id);
-  }
+  useEffect(() => {
+    if (!selectedId && sortedVoyages.length > 0 && !isLoading) {
+      setSelectedId(sortedVoyages[0].id);
+    }
+  }, [sortedVoyages, selectedId, isLoading]);
 
-  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 768;
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   if (isLoading) {
     return (
@@ -53,75 +61,134 @@ export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
     );
   }
 
-  // Desktop: Horizontal route with gentle curve
+  // Desktop: Spiral/Looped route
   if (isDesktop) {
-    const nodeSpacing = 120;
-    const startX = 40;
-    const totalWidth = startX * 2 + sortedVoyages.length * nodeSpacing;
-    const svgHeight = 300;
-    const lineY = svgHeight / 2;
+    const centerX = 600;
+    const centerY = 400;
+    const maxRadius = 350;
+    const minRadius = 80;
+    const radiusStep = (maxRadius - minRadius) / (sortedVoyages.length - 1);
 
-    // Generate smooth curve path
-    let pathData = `M ${startX} ${lineY}`;
-    for (let i = 1; i < sortedVoyages.length; i++) {
-      const x = startX + i * nodeSpacing;
-      const curve = 20 * Math.sin((i * Math.PI) / sortedVoyages.length);
-      pathData += ` Q ${x - nodeSpacing / 2} ${lineY + curve} ${x} ${lineY}`;
+    // Calculate positions in a spiral
+    const nodePositions = sortedVoyages.map((voyage, index) => {
+      const angle = (index * 360) / sortedVoyages.length * (Math.PI / 180) + (index * 20) * (Math.PI / 180);
+      const radius = minRadius + index * radiusStep;
+      const x = centerX + Math.cos(angle) * radius;
+      const y = centerY + Math.sin(angle) * radius;
+      return { x, y };
+    });
+
+    // Create SVG path connecting all nodes
+    let pathData = `M ${nodePositions[0].x} ${nodePositions[0].y}`;
+    for (let i = 1; i < nodePositions.length; i++) {
+      const prev = nodePositions[i - 1];
+      const curr = nodePositions[i];
+      const cpx = (prev.x + curr.x) / 2;
+      const cpy = (prev.y + curr.y) / 2;
+      pathData += ` Q ${cpx} ${cpy} ${curr.x} ${curr.y}`;
     }
+    // Close the loop
+    const last = nodePositions[nodePositions.length - 1];
+    const first = nodePositions[0];
+    const cpx = (last.x + first.x) / 2;
+    const cpy = (last.y + first.y) / 2;
+    pathData += ` Q ${cpx} ${cpy} ${first.x} ${first.y}`;
+
+    const svgWidth = 1200;
+    const svgHeight = 800;
 
     return (
-      <div className="relative py-24 px-6 lg:px-16 overflow-x-auto">
-        <div className="relative min-w-max mx-auto">
-          {/* SVG Route Line */}
-          <svg width={totalWidth} height={svgHeight} className="absolute top-0 left-0">
+      <div className="relative py-24 px-6 lg:px-16 flex flex-col items-center">
+        {/* SVG Canvas with route line and nodes */}
+        <div className="relative w-full flex justify-center">
+          <svg width={svgWidth} height={svgHeight} className="relative">
+            {/* Decorative background gradient */}
+            <defs>
+              <radialGradient id="routeGradient" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor={`${PINK}10`} />
+                <stop offset="100%" stopColor={`${PINK}00`} />
+              </radialGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            {/* Background glow */}
+            <circle cx={centerX} cy={centerY} r={maxRadius + 50} fill="url(#routeGradient)" />
+
+            {/* Route line with gradient */}
             <path
               d={pathData}
-              stroke="rgba(255,255,255,0.1)"
+              stroke="rgba(255,255,255,0.15)"
               strokeWidth="2"
               fill="none"
+              filter="url(#glow)"
+              style={{ opacity: 0.8 }}
             />
-          </svg>
 
-          {/* Nodes */}
-          <div className="relative flex gap-0" style={{ width: `${totalWidth}px`, height: `${svgHeight}px` }}>
+            {/* Render nodes */}
             {sortedVoyages.map((voyage, index) => {
-              const x = startX + index * nodeSpacing;
+              const pos = nodePositions[index];
               const isSelected = selectedId === voyage.id;
               const color = CATEGORY_INFO[voyage.category as keyof typeof CATEGORY_INFO]?.color || PINK;
 
               return (
-                <motion.button
-                  key={voyage.id}
-                  className="absolute flex flex-col items-center cursor-pointer"
-                  style={{ left: `${x}px`, top: `${lineY - 30}px` }}
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedId(voyage.id)}
-                  data-testid={`node-voyage-${voyage.id}`}
-                >
-                  {/* Node Circle */}
-                  <motion.div
-                    className="w-16 h-16 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0"
-                    style={{
-                      background: isSelected ? color : "rgba(255,255,255,0.05)",
-                      border: `2px solid ${isSelected ? color : "rgba(255,255,255,0.2)"}`,
-                      color: isSelected ? "#0A0A0A" : "rgba(255,255,255,0.6)",
-                      boxShadow: isSelected ? `0 0 30px ${color}40` : "none",
+                <g key={voyage.id}>
+                  {/* Node glow (when selected) */}
+                  {isSelected && (
+                    <circle
+                      cx={pos.x}
+                      cy={pos.y}
+                      r={28}
+                      fill={color}
+                      opacity="0.15"
+                      style={{
+                        animation: "pulse 2s ease-in-out infinite",
+                      }}
+                    />
+                  )}
+
+                  {/* Node circle */}
+                  <circle
+                    cx={pos.x}
+                    cy={pos.y}
+                    r={20}
+                    fill={isSelected ? color : "rgba(255,255,255,0.05)"}
+                    stroke={isSelected ? color : "rgba(255,255,255,0.2)"}
+                    strokeWidth="2"
+                    style={{ cursor: "pointer", transition: "all 0.3s ease" }}
+                    onClick={() => setSelectedId(voyage.id)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "scale(1.15)";
+                      e.currentTarget.style.filter = `drop-shadow(0 0 15px ${color})`;
                     }}
-                    animate={{
-                      scale: isSelected ? 1.1 : 1,
-                      boxShadow: isSelected
-                        ? `0 0 30px ${color}40, 0 0 60px ${color}20`
-                        : "0 0 0px rgba(0,0,0,0)",
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                      e.currentTarget.style.filter = "none";
                     }}
-                    transition={{ duration: 0.3 }}
+                  />
+
+                  {/* Node number text */}
+                  <text
+                    x={pos.x}
+                    y={pos.y}
+                    textAnchor="middle"
+                    dy="0.3em"
+                    fontSize="12"
+                    fontWeight="bold"
+                    fill={isSelected ? "#0A0A0A" : "rgba(255,255,255,0.7)"}
+                    style={{ pointerEvents: "none", userSelect: "none" }}
                   >
                     {voyage.sequenceNumber.toString().padStart(2, "0")}
-                  </motion.div>
-                </motion.button>
+                  </text>
+                </g>
               );
             })}
-          </div>
+          </svg>
         </div>
 
         {/* Detail Panel - below the route */}
@@ -131,7 +198,7 @@ export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 20 }}
-              className="mt-32 max-w-2xl mx-auto p-8 rounded-2xl"
+              className="mt-16 max-w-2xl mx-auto p-8 rounded-2xl w-full"
               style={{
                 background: "rgba(255,255,255,0.03)",
                 border: `1px solid ${selectedColor}30`,
@@ -197,6 +264,13 @@ export function VoyagesRouteMap({ voyages, isLoading }: VoyagesRouteMapProps) {
             </motion.div>
           )}
         </AnimatePresence>
+
+        <style>{`
+          @keyframes pulse {
+            0%, 100% { r: 28; opacity: 0.15; }
+            50% { r: 35; opacity: 0.25; }
+          }
+        `}</style>
       </div>
     );
   }
