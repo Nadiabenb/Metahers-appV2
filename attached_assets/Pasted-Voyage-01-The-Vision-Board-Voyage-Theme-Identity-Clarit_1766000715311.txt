@@ -1,0 +1,78 @@
+Voyage 01 — The Vision Board Voyage
+Theme: Identity · Clarity · Intention
+Format: AI-powered digital vision board experience
+Location: Duffy boat · Balboa Island / Newport Harbor
+Description:
+A luxury initiation into MetaHers. Women create a personalized, AI-generated digital vision board inside the MetaHers app. This voyage sets direction for lifestyle, business, and self-image while gently onboarding participants into AI without jargon or overwhelm.
+Voyage 02 — Web3 Without Fear
+Theme: Digital Ownership · The New Internet
+Format: Guided learning + discussion
+Location: Café / lounge setting
+Description:
+A soft introduction to Web3, wallets, digital identity, and ownership—explained simply, visually, and practically for women with no tech background.
+Voyage 03 — Crypto Confidence
+Theme: Money · Power · Understanding
+Format: Educational experience
+Location: Private space / café
+Description:
+Crypto explained clearly: what it is, why it matters, and how women can approach it intelligently and safely without hype or pressure.
+Voyage 04 — NFTs Beyond Art
+Theme: Value · Utility · Creativity
+Format: Interactive session
+Location: Creative space
+Description:
+NFTs demystified. Real use cases beyond art—membership, access, storytelling, and digital assets that support brands and communities.
+Voyage 05 — AI Agents for Life & Business
+Theme: Support · Automation · Ease
+Format: Live AI demonstrations
+Location: Lounge / co-working space
+Description:
+Women discover how AI agents can replace overwhelm—handling content, planning, ideas, and daily tasks as a digital assistant.
+Voyage 06 — The Metaverse Experience
+Theme: Presence · Virtual Worlds
+Format: Immersive exploration
+Location: Hybrid / virtual + physical
+Description:
+An introduction to virtual worlds, spatial experiences, and how women can use immersive environments for community, creativity, and business.
+Voyage 07 — Blockchain Made Simple
+Theme: Trust · Infrastructure · Transparency
+Format: Conceptual learning
+Location: Café / lounge
+Description:
+Blockchain explained without jargon—what it actually does, why it exists, and how it quietly powers future systems women interact with.
+Voyage 08 — AI-Powered Content Creation
+Theme: Visibility · Authority · Expression
+Format: Hands-on creation
+Location: Creative studio / café
+Description:
+Women learn how to create high-end content using AI—images, videos, captions—without showing their face if they don’t want to.
+Voyage 09 — AI-Powered Personal Branding
+Theme: Identity · Positioning · Presence
+Format: Strategy + AI tools
+Location: Private session space
+Description:
+Participants shape a magnetic personal brand using AI—clarifying voice, visuals, messaging, and online authority.
+Voyage 10 — Moms Using AI
+Theme: Time · Balance · Support
+Format: Practical use cases
+Location: Café / family-friendly space
+Description:
+How mothers can use AI to reclaim time, organize life, support kids, and build ideas—without becoming “tech people.”
+Voyage 11 — Bitcoin & the Bigger Picture
+Theme: Sovereignty · Long-Term Thinking
+Format: Educational conversation
+Location: Private lounge
+Description:
+Bitcoin explained calmly and clearly—why it exists, how it differs from crypto, and why it matters in the long run.
+Voyage 12 — The MetaHers Salon (Networking Voyage)
+Theme: Connection · Expansion · Community
+Format: Curated networking experience
+Location: Elegant social venue
+Description:
+A refined networking voyage bringing together women from all previous voyages to connect, collaborate, and grow inside the MetaHers ecosystem.
+COMPLETION CHECK
+After updating:
+Confirm there are exactly 12 voyages
+Confirm numbering 01 → 12
+Confirm UI order matches numbering
+Report success or exact error messages only
