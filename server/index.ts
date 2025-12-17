@@ -128,16 +128,27 @@ app.use((req, res, next) => {
       if (app.get("env") === "production") {
         try {
           const { db } = await import("./db");
-          const { transformationalExperiences, spaces } = await import("@shared/schema");
+          const { transformationalExperiences, spaces, voyages } = await import("@shared/schema");
 
           // Check if database is already populated
           const existingExperiences = await db.select().from(transformationalExperiences);
           const existingSpaces = await db.select().from(spaces);
+          const existingVoyages = await db.select().from(voyages);
 
           if (existingSpaces.length === 0 || existingExperiences.length < 54) {
             logger.info('Database appears empty or incomplete. Use /api/admin/populate-database endpoint to seed data.');
           } else {
             logger.info({ spaces: existingSpaces.length, experiences: existingExperiences.length }, 'Database already populated');
+          }
+
+          // Seed voyages if they don't exist
+          if (existingVoyages.length === 0) {
+            logger.info('No voyages found. Seeding voyages data...');
+            const { seedVoyages } = await import("./seedVoyages");
+            await seedVoyages();
+            logger.info('Voyages seeded successfully');
+          } else {
+            logger.info({ voyages: existingVoyages.length }, 'Voyages already populated');
           }
         } catch (error) {
           logger.error({ error: error instanceof Error ? error.message : String(error) }, 'Database seeding check failed');
