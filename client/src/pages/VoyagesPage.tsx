@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { useScroll, useTransform } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, X, ArrowRight } from "lucide-react";
+import { ChevronDown, X, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 import type { VoyageDB } from "@shared/schema";
 import { SEO } from "@/components/SEO";
 
@@ -126,8 +129,38 @@ export default function VoyagesPage() {
   });
 
   const [selectedVoyage, setSelectedVoyage] = useState<VoyageDB | null>(null);
+  const [showRequestModal, setShowRequestModal] = useState(false);
+  const [requestMessage, setRequestMessage] = useState("");
+  const { toast } = useToast();
 
   const sortedVoyages = voyages?.sort((a, b) => a.sequenceNumber - b.sequenceNumber) || [];
+
+  const requestInvitationMutation = useMutation({
+    mutationFn: async () => {
+      if (!selectedVoyage) throw new Error("No voyage selected");
+      const response = await apiRequest("POST", `/api/voyages/invitation-request`, {
+        voyageId: selectedVoyage.id,
+        message: requestMessage || null,
+      });
+      return response;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "Your invitation request has been submitted. We'll be in touch soon!",
+      });
+      setShowRequestModal(false);
+      setRequestMessage("");
+    },
+    onError: (error: any) => {
+      const message = error?.message || "Failed to submit request. Please try again.";
+      toast({
+        title: "Error",
+        description: message,
+        variant: "destructive",
+      });
+    },
+  });
 
   useEffect(() => {
     if (sortedVoyages.length > 0 && !selectedVoyage) {
@@ -350,12 +383,116 @@ export default function VoyagesPage() {
                     : "Fully Booked"}
                 </p>
                 <Button
+                  onClick={() => setShowRequestModal(true)}
+                  disabled={requestInvitationMutation.isPending}
                   className="px-8 font-semibold uppercase tracking-wider text-sm"
                   style={{ background: selectedColor, color: "#0A0A0A" }}
                   data-testid="button-request-voyage"
                 >
-                  Request Invitation
+                  {requestInvitationMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    "Request Invitation"
+                  )}
                 </Button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Request Invitation Modal */}
+      <AnimatePresence>
+        {showRequestModal && selectedVoyage && (
+          <motion.div
+            key="request-modal-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => !requestInvitationMutation.isPending && setShowRequestModal(false)}
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-6 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-xl rounded-2xl p-8 lg:p-10"
+              style={{ background: DARK_BG, border: `1px solid ${selectedColor}30` }}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => !requestInvitationMutation.isPending && setShowRequestModal(false)}
+                disabled={requestInvitationMutation.isPending}
+                className="absolute top-6 right-6 p-2 hover:bg-white/10 rounded-lg transition-colors disabled:opacity-50"
+                data-testid="button-close-request-modal"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+
+              {/* Content */}
+              <div className="mb-8">
+                <h2
+                  className="text-3xl font-light text-white mb-2"
+                  style={{ fontFamily: "Playfair Display, serif" }}
+                >
+                  Request Invitation
+                </h2>
+                <p className="text-sm" style={{ color: "rgba(255,255,255,0.6)" }}>
+                  Join {selectedVoyage.title}
+                </p>
+              </div>
+
+              {/* Form */}
+              <div className="space-y-6">
+                <div>
+                  <label className="text-xs uppercase tracking-[0.15em] font-semibold mb-3 block" style={{ color: selectedColor }}>
+                    Tell us why you'd like to attend (optional)
+                  </label>
+                  <Textarea
+                    placeholder="Share what draws you to this voyage and what you hope to gain..."
+                    value={requestMessage}
+                    onChange={(e) => setRequestMessage(e.target.value)}
+                    disabled={requestInvitationMutation.isPending}
+                    className="min-h-24 resize-none"
+                    data-testid="textarea-invitation-message"
+                  />
+                  <p className="text-xs mt-2" style={{ color: "rgba(255,255,255,0.4)" }}>
+                    {requestMessage.length} characters
+                  </p>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-4 justify-end pt-4 border-t border-white/10">
+                  <Button
+                    onClick={() => setShowRequestModal(false)}
+                    disabled={requestInvitationMutation.isPending}
+                    variant="outline"
+                    className="px-6"
+                    data-testid="button-cancel-invitation"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={() => requestInvitationMutation.mutate()}
+                    disabled={requestInvitationMutation.isPending}
+                    className="px-8 font-semibold uppercase tracking-wider text-sm"
+                    style={{ background: selectedColor, color: "#0A0A0A" }}
+                    data-testid="button-submit-invitation"
+                  >
+                    {requestInvitationMutation.isPending ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Submitting...
+                      </>
+                    ) : (
+                      "Submit Request"
+                    )}
+                  </Button>
+                </div>
               </div>
             </motion.div>
           </motion.div>
