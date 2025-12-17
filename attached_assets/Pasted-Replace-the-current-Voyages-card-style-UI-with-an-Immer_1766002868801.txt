@@ -1,0 +1,36 @@
+Replace the current Voyages card-style UI with an Immersive Map Route (stylized journey line + 12 nodes). Do not change the voyage data.
+NON-NEGOTIABLE RULES
+Do not modify voyage content (titles, descriptions, ordering, fields).
+Do not add new voyages, remove voyages, or reorder them.
+Do not use card components anywhere in the Voyages list.
+Do not fetch Google Maps or any external map API.
+If a file or component name differs from what you expect, search the repo and update the correct place—do not guess.
+REQUIRED UI BEHAVIOR
+Render a route line (SVG or div line) with 12 nodes labeled 01–12.
+Clicking a node selects it and opens/updates a single detail panel (title, theme, format, location, description).
+Hover on desktop shows a subtle highlight/tooltip (optional). Click must work on mobile.
+Default selected node: Voyage 01.
+Maintain strict order 01 → 12 based on the voyages array/source.
+Mobile: show a vertical route (stacked nodes + line) with the same detail panel (still no cards).
+IMPLEMENTATION TASKS
+Locate the current Voyages page where voyages are rendered as cards (search for “Voyage”, “voyages”, “card”, “grid”, “map”).
+Remove the card grid/list UI only.
+Create a new component components/VoyagesRouteMap.tsx (or in the same folder convention used in this repo).
+Use existing voyage data source (DB/query/JSON/state). Do not duplicate content in multiple places.
+Add the component to the Voyages page and ensure styling matches MetaHers (minimal, premium, spacious).
+DETAIL PANEL FIELDS (USE EXISTING DATA)
+Voyage number (01–12)
+Title
+Theme
+Format
+Location
+Description
+COMPLETION CHECK
+Confirm there are exactly 12 nodes.
+Confirm selecting nodes updates the single detail panel.
+Confirm there are zero cards in the voyages list UI.
+Confirm mobile layout is vertical route and usable.
+Do not make any other changes.
+If you want the UI to look ultra-premium (optional spec you can add)
+Add this line at the end of the agent prompt:
+Route line should be an SVG path with nodes positioned in a gentle curve on desktop; nodes evenly spaced on mobile.
