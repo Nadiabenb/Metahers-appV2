@@ -1,6 +1,5 @@
-import { useState, useEffect, useMemo, useRef } from "react";
-import { useInView, useScroll, useTransform } from "framer-motion";
-import { Link } from "wouter";
+import { useState, useEffect, useMemo } from "react";
+import { useScroll, useTransform } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,13 +11,11 @@ import web3VoyageImage from "@assets/generated_images/web3_metaverse_luxury_voya
 import aibrandingVoyageImage from "@assets/generated_images/ai_branding_creative_studio.png";
 import { 
   Anchor, 
-  Sparkles, 
   Calendar, 
   MapPin, 
   Users, 
   Clock, 
   ChevronDown,
-  Star,
   ArrowRight,
   Ship,
   UtensilsCrossed,
@@ -28,8 +25,7 @@ import {
   Globe,
   Palette,
   Quote,
-  Crown,
-  Circle
+  X
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -47,28 +43,24 @@ const CATEGORY_INFO = {
     icon: Brain, 
     color: PINK,
     description: "Harness AI as your creative ally",
-    tagline: "Where technology meets intuition"
   },
   Crypto: { 
     label: "Crypto", 
     icon: Coins, 
     color: "#FFD700",
     description: "Navigate digital assets with confidence",
-    tagline: "Financial sovereignty, demystified"
   },
   Web3: { 
     label: "Web3", 
     icon: Globe, 
     color: "#8B5CF6",
     description: "Step into the decentralized future",
-    tagline: "The next internet, on your terms"
   },
   AI_Branding: { 
     label: "AI Branding", 
     icon: Palette, 
     color: LAVENDER,
     description: "Craft your digital presence with AI",
-    tagline: "Your story, amplified"
   },
 };
 
@@ -173,7 +165,7 @@ function HeroSection() {
                     className="text-xs font-light tracking-[0.25em] uppercase"
                     style={{ color: LAVENDER }}
                   >
-                    A Journey in Four Chapters
+                    A Journey in Twelve Chapters
                   </span>
                 </div>
               </motion.div>
@@ -193,7 +185,7 @@ function HeroSection() {
                     letterSpacing: '-0.02em',
                   }}
                 >
-                  The Voyage Timeline
+                  Your Voyages Await
                 </span>
               </motion.h1>
 
@@ -204,7 +196,7 @@ function HeroSection() {
                 className="text-lg sm:text-xl font-extralight max-w-2xl mx-auto mb-4 leading-relaxed"
                 style={{ color: 'rgba(255,255,255,0.75)' }}
               >
-                Each chapter unfolds a new dimension of possibility. Scroll to begin your journey.
+                Twelve transformational experiences, each a gateway to discovery. Click to explore.
               </motion.p>
 
               <motion.div
@@ -216,16 +208,16 @@ function HeroSection() {
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group px-10 py-4"
+                  className="group px-10 py-4 rounded-lg"
                   style={{
                     background: `linear-gradient(135deg, ${PINK} 0%, ${LAVENDER} 100%)`,
                     color: '#0A0A0A',
                   }}
                   data-testid="button-voyage-begin"
-                  onClick={() => document.getElementById('timeline')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('voyages-grid')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <span className="font-semibold text-sm uppercase tracking-[0.15em] flex items-center gap-3">
-                    Begin Journey
+                    Explore Voyages
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </span>
                 </motion.button>
@@ -255,323 +247,236 @@ function HeroSection() {
   );
 }
 
-function ChapterHeader({ category, index }: { category: string; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const info = CATEGORY_INFO[category as keyof typeof CATEGORY_INFO];
-  const Icon = info?.icon || Sparkles;
-  
-  return (
-    <motion.div
-      ref={ref}
-      className="relative py-24 lg:py-32"
-      initial={{ opacity: 0 }}
-      animate={isInView ? { opacity: 1 } : {}}
-      transition={{ duration: 1 }}
-    >
-      <div className="absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2" 
-        style={{ background: `linear-gradient(180deg, transparent, ${info?.color || PINK}30, transparent)` }} 
-      />
-      
-      <div className="relative max-w-4xl mx-auto px-6 lg:px-16 text-center">
-        <motion.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={isInView ? { scale: 1, opacity: 1 } : {}}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-8"
-          style={{ 
-            background: `linear-gradient(135deg, ${info?.color || PINK}20 0%, ${info?.color || PINK}05 100%)`,
-            border: `1px solid ${info?.color || PINK}40`,
-          }}
-        >
-          <Icon className="w-8 h-8" style={{ color: info?.color || PINK }} />
-        </motion.div>
-        
-        <motion.p
-          initial={{ opacity: 0, y: 10 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.3 }}
-          className="text-xs uppercase tracking-[0.3em] mb-4"
-          style={{ color: info?.color || PINK }}
-        >
-          Chapter {index + 1}
-        </motion.p>
-        
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.4 }}
-          className="text-4xl lg:text-5xl mb-4"
-          style={{ 
-            fontFamily: 'Playfair Display, serif',
-            color: '#FFFFFF',
-            fontWeight: 300,
-          }}
-        >
-          {info?.label || category}
-        </motion.h2>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.5 }}
-          className="text-lg font-light max-w-xl mx-auto mb-2"
-          style={{ color: 'rgba(255,255,255,0.7)' }}
-        >
-          {info?.description}
-        </motion.p>
-        
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ delay: 0.6 }}
-          className="text-sm italic"
-          style={{ color: info?.color || PINK, opacity: 0.8 }}
-        >
-          {info?.tagline}
-        </motion.p>
-      </div>
-    </motion.div>
-  );
+interface ExpandableCardProps {
+  voyage: VoyageDB;
+  isExpanded: boolean;
+  onToggle: () => void;
+  categoryColor: string;
 }
 
-function TimelineVoyageCard({ voyage, index, isLeft, categoryColor }: { 
-  voyage: VoyageDB; 
-  index: number; 
-  isLeft: boolean;
-  categoryColor: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+function ExpandableVoyageCard({ voyage, isExpanded, onToggle, categoryColor }: ExpandableCardProps) {
+  const VenueIcon = VENUE_ICONS[voyage.venueType as keyof typeof VENUE_ICONS] || Ship;
+  const voyageImage = VOYAGE_IMAGES[voyage.category as keyof typeof VOYAGE_IMAGES] || VOYAGE_IMAGES.default;
+  
   const spotsLeft = voyage.maxCapacity - voyage.currentBookings;
   const isFull = spotsLeft <= 0;
-  const VenueIcon = VENUE_ICONS[voyage.venueType as keyof typeof VENUE_ICONS] || Ship;
-  const voyageImage = VOYAGE_IMAGES[voyage.category] || VOYAGE_IMAGES.default;
-  
-  const formatDate = (date: Date | string) => {
-    const d = new Date(date);
-    return d.toLocaleDateString('en-US', { 
-      weekday: 'short',
+
+  const formatDate = (date: Date) => {
+    return new Date(date).toLocaleDateString('en-US', { 
       month: 'short', 
       day: 'numeric',
+      year: 'numeric'
     });
   };
 
   return (
     <motion.div
-      ref={ref}
-      className={`relative flex items-center gap-8 py-8 ${isLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'}`}
-      initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.8, delay: index * 0.1 }}
+      layout
+      onClick={onToggle}
+      className="cursor-pointer group"
+      data-testid={`card-voyage-${voyage.id}`}
     >
-      <div className="hidden lg:flex absolute left-1/2 -translate-x-1/2 z-10">
-        <motion.div
-          initial={{ scale: 0 }}
-          animate={isInView ? { scale: 1 } : {}}
-          transition={{ delay: 0.3, type: "spring" }}
-          className="relative"
-        >
-          <div 
-            className="w-4 h-4 rounded-full"
-            style={{ 
-              background: categoryColor,
-              boxShadow: `0 0 20px ${categoryColor}60`,
-            }}
-          />
-          <motion.div
-            className="absolute inset-0 rounded-full"
-            style={{ border: `2px solid ${categoryColor}` }}
-            animate={{ scale: [1, 1.5, 1], opacity: [1, 0, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-        </motion.div>
-      </div>
-      
-      <div className="lg:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10">
-        <div 
-          className="w-3 h-3 rounded-full"
-          style={{ 
-            background: categoryColor,
-            boxShadow: `0 0 15px ${categoryColor}60`,
-          }}
-        />
-      </div>
+      <motion.div
+        className="relative rounded-2xl overflow-hidden"
+        style={{
+          background: 'rgba(255,255,255,0.03)',
+          border: `1px solid ${categoryColor}20`,
+        }}
+        whileHover={!isExpanded ? { borderColor: `${categoryColor}40`, boxShadow: `0 20px 60px ${categoryColor}15` } : {}}
+        animate={{
+          borderColor: isExpanded ? `${categoryColor}60` : `${categoryColor}20`,
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        {/* Compact View */}
+        <AnimatePresence>
+          {!isExpanded && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="p-4 sm:p-6"
+            >
+              <div className="flex gap-4 items-start">
+                <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 rounded-lg overflow-hidden">
+                  <img 
+                    src={voyageImage}
+                    alt={voyage.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute bottom-1 left-1 flex items-center gap-1 bg-black/40 px-2 py-1 rounded text-xs text-white">
+                    <VenueIcon className="w-3 h-3" />
+                  </div>
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <div>
+                      <h3 className="font-semibold text-base sm:text-lg line-clamp-2 text-white">{voyage.title}</h3>
+                      <p className="text-xs sm:text-sm font-light mt-1" style={{ color: 'rgba(255,255,255,0.6)' }}>
+                        {voyage.sequenceNumber.toString().padStart(2, '0')} — {voyage.category.replace('_', ' ')}
+                      </p>
+                    </div>
+                    <ChevronDown className="w-4 h-4 flex-shrink-0 mt-1" style={{ color: categoryColor }} />
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2 text-xs mb-2" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                    <div className="flex items-center gap-1">
+                      <Calendar className="w-3 h-3" />
+                      <span>{formatDate(voyage.date)}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="w-3 h-3" />
+                      <span className="line-clamp-1">{voyage.location.split(',')[0]}</span>
+                    </div>
+                  </div>
 
-      <div className={`flex-1 ${isLeft ? 'lg:pr-16' : 'lg:pl-16'} pl-8 lg:pl-0`}>
-        <Link href={`/voyages/${voyage.slug}`}>
-          <motion.div 
-            className="group cursor-pointer relative overflow-hidden rounded-2xl"
-            style={{ 
-              background: 'rgba(255,255,255,0.03)',
-              border: `1px solid ${categoryColor}20`,
-            }}
-            whileHover={{ 
-              y: -8, 
-              boxShadow: `0 20px 60px ${categoryColor}15`,
-              borderColor: `${categoryColor}40`,
-            }}
-            transition={{ duration: 0.4 }}
-            data-testid={`card-voyage-${voyage.id}`}
-          >
-            <div className="relative h-48 sm:h-56 overflow-hidden">
-              <motion.img 
-                src={voyageImage}
-                alt={voyage.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                whileHover={{ scale: 1.08 }}
-                transition={{ duration: 0.6 }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-              
-              <div className="absolute top-4 left-4 flex items-center gap-2">
-                <span 
-                  className="px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider"
-                  style={{ 
-                    background: `${categoryColor}20`,
-                    color: categoryColor,
-                    border: `1px solid ${categoryColor}40`,
+                  <div className="flex items-center justify-between">
+                    <span className={`text-xs font-medium ${isFull ? 'text-red-400' : 'text-green-400'}`}>
+                      {isFull ? 'Full' : `${spotsLeft} left`}
+                    </span>
+                    <span className="text-xs font-semibold" style={{ color: categoryColor }}>
+                      ${(voyage.price / 100).toFixed(0)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Expanded View */}
+        <AnimatePresence>
+          {isExpanded && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="p-6 sm:p-8"
+            >
+              <div className="mb-4 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-wider mb-2" style={{ color: categoryColor }}>
+                    {voyage.sequenceNumber.toString().padStart(2, '0')} — {voyage.category.replace('_', ' ')}
+                  </p>
+                  <h2 className="text-2xl sm:text-3xl font-semibold text-white">{voyage.title}</h2>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggle();
                   }}
+                  className="flex-shrink-0 p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  data-testid="button-close-voyage-details"
                 >
-                  {voyage.category.replace('_', ' ')}
-                </span>
+                  <X className="w-5 h-5" style={{ color: 'rgba(255,255,255,0.7)' }} />
+                </button>
               </div>
-              
-              <div className="absolute top-4 right-4">
-                <div className="flex items-center gap-1.5 bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full text-xs font-semibold shadow-lg text-gray-800">
-                  <VenueIcon className="w-3.5 h-3.5" />
-                  <span>{voyage.venueType.replace('_', ' ')}</span>
-                </div>
+
+              <div className="relative w-full h-40 sm:h-56 rounded-xl overflow-hidden mb-6">
+                <img 
+                  src={voyageImage}
+                  alt={voyage.title}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
               </div>
-              
-              <div className="absolute bottom-4 left-4 right-4">
-                <h3 className="text-white font-semibold text-xl line-clamp-2 drop-shadow-lg">
-                  {voyage.title}
-                </h3>
-              </div>
-            </div>
-            
-            <div className="p-6 space-y-4">
-              <p className="text-sm font-light leading-relaxed line-clamp-2" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                {voyage.shortDescription}
-              </p>
-              
-              <div className="flex flex-wrap items-center gap-4 text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4" style={{ color: categoryColor }} />
-                  <span>{formatDate(voyage.date)}</span>
+
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-sm uppercase tracking-wider mb-2 font-semibold" style={{ color: categoryColor }}>
+                    Overview
+                  </h3>
+                  <p className="text-sm sm:text-base font-light leading-relaxed" style={{ color: 'rgba(255,255,255,0.8)' }}>
+                    {voyage.description}
+                  </p>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4" style={{ color: categoryColor }} />
-                  <span>{voyage.time}</span>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs uppercase tracking-wider font-semibold mb-1" style={{ color: categoryColor }}>Date</p>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{formatDate(voyage.date)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider font-semibold mb-1" style={{ color: categoryColor }}>Time</p>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{voyage.time}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider font-semibold mb-1" style={{ color: categoryColor }}>Duration</p>
+                    <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{voyage.duration}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-wider font-semibold mb-1" style={{ color: categoryColor }}>Price</p>
+                    <p className="text-sm font-semibold" style={{ color: categoryColor }}>${(voyage.price / 100).toFixed(0)}</p>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4" style={{ color: categoryColor }} />
-                  <span className="line-clamp-1">{voyage.location.split(',')[0]}</span>
+
+                <div>
+                  <p className="text-xs uppercase tracking-wider font-semibold mb-2" style={{ color: categoryColor }}>Location</p>
+                  <p className="text-sm" style={{ color: 'rgba(255,255,255,0.8)' }}>{voyage.location}</p>
                 </div>
-              </div>
-              
-              <div className="flex items-center justify-between pt-4 border-t" style={{ borderColor: `${categoryColor}15` }}>
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4" style={{ color: categoryColor }} />
+
+                {voyage.learningObjectives.length > 0 && (
+                  <div>
+                    <p className="text-xs uppercase tracking-wider font-semibold mb-3" style={{ color: categoryColor }}>What You'll Learn</p>
+                    <ul className="space-y-2">
+                      {voyage.learningObjectives.map((obj, i) => (
+                        <li key={i} className="text-sm flex gap-2" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                          <span style={{ color: categoryColor }}>•</span>
+                          <span>{obj}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {voyage.included.length > 0 && (
+                  <div>
+                    <p className="text-xs uppercase tracking-wider font-semibold mb-3" style={{ color: categoryColor }}>Included</p>
+                    <ul className="space-y-2">
+                      {voyage.included.map((item, i) => (
+                        <li key={i} className="text-sm flex gap-2" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                          <span style={{ color: categoryColor }}>✓</span>
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between pt-4 border-t border-white/10">
                   <span className={`text-sm font-medium ${isFull ? 'text-red-400' : 'text-green-400'}`}>
                     {isFull ? 'Fully Booked' : `${spotsLeft} spot${spotsLeft !== 1 ? 's' : ''} left`}
                   </span>
+                  <Button 
+                    className="px-6"
+                    style={{ background: categoryColor, color: '#0A0A0A' }}
+                    data-testid="button-request-voyage"
+                  >
+                    {isFull ? 'Join Waitlist' : 'Request Invitation'}
+                  </Button>
                 </div>
-                
-                <motion.div
-                  className="flex items-center gap-2 text-sm font-medium group-hover:gap-3 transition-all"
-                  style={{ color: categoryColor }}
-                >
-                  <span>{isFull ? 'Join Waitlist' : 'Request Invitation'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </motion.div>
               </div>
-            </div>
-          </motion.div>
-        </Link>
-      </div>
-      
-      <div className="hidden lg:block flex-1" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
     </motion.div>
   );
 }
 
-function TimelineChapter({ category, voyages, chapterIndex }: { 
-  category: string; 
-  voyages: VoyageDB[];
-  chapterIndex: number;
-}) {
-  const info = CATEGORY_INFO[category as keyof typeof CATEGORY_INFO];
-  const categoryColor = info?.color || PINK;
-  
+function VoyageGridSkeleton() {
   return (
-    <div className="relative">
-      <div 
-        className="absolute left-0 lg:left-1/2 top-0 bottom-0 w-px lg:-translate-x-1/2" 
-        style={{ background: `linear-gradient(180deg, ${categoryColor}30, ${categoryColor}10)` }}
-      />
-      
-      <ChapterHeader category={category} index={chapterIndex} />
-      
-      <div className="relative pb-16">
-        {voyages.map((voyage, idx) => (
-          <TimelineVoyageCard 
-            key={voyage.id}
-            voyage={voyage}
-            index={idx}
-            isLeft={idx % 2 === 0}
-            categoryColor={categoryColor}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function JourneyProgress({ categories, currentCategory }: { categories: string[]; currentCategory: string }) {
-  return (
-    <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden xl:flex flex-col gap-3">
-      {categories.map((cat, idx) => {
-        const info = CATEGORY_INFO[cat as keyof typeof CATEGORY_INFO];
-        const Icon = info?.icon || Circle;
-        const isActive = cat === currentCategory;
-        
-        return (
-          <motion.button
-            key={cat}
-            onClick={() => {
-              document.getElementById(`chapter-${cat}`)?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="group relative flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-[#0D0B14] rounded-full"
-            whileHover={{ scale: 1.1 }}
-            data-testid={`nav-chapter-${cat}`}
-            aria-label={`Jump to ${info?.label || cat} chapter`}
-          >
-            <motion.div
-              className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
-              style={{ 
-                background: isActive ? `${info?.color}20` : 'rgba(255,255,255,0.05)',
-                border: `1px solid ${isActive ? info?.color : 'rgba(255,255,255,0.1)'}`,
-              }}
-            >
-              <Icon className="w-4 h-4" style={{ color: isActive ? info?.color : 'rgba(255,255,255,0.4)' }} />
-            </motion.div>
-            
-            <div 
-              className="absolute right-full mr-3 px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
-              style={{ 
-                background: 'rgba(13,11,20,0.9)',
-                border: `1px solid ${info?.color}30`,
-              }}
-            >
-              <span className="text-xs font-medium" style={{ color: info?.color }}>
-                {info?.label}
-              </span>
-            </div>
-          </motion.button>
-        );
-      })}
+    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {Array.from({ length: 12 }).map((_, i) => (
+        <div key={i} className="rounded-2xl overflow-hidden p-6 space-y-4" style={{ background: 'rgba(255,255,255,0.03)' }}>
+          <Skeleton className="h-20 w-20 rounded" />
+          <Skeleton className="h-6 w-3/4" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-2/3" />
+        </div>
+      ))}
     </div>
   );
 }
@@ -657,42 +562,36 @@ function TestimonialsSection() {
   );
 }
 
-function InvitationSection() {
+function NewsletterSection() {
   const [email, setEmail] = useState("");
 
   return (
-    <section className="relative py-32 lg:py-40 px-6 lg:px-16 overflow-hidden" style={{ background: DARK_BG }}>
+    <section className="relative py-24 lg:py-32 px-6 lg:px-16 overflow-hidden" style={{ background: DARK_BG }}>
       <AmbientGlow />
       <div className="relative max-w-3xl mx-auto">
-        <motion.div 
-          className="text-center space-y-8"
+        <motion.div
+          className="text-center"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ delay: 0.2 }}
         >
-          <div>
-            <p className="text-xs uppercase tracking-[0.25em] mb-6" style={{ color: PINK }}>
-              Begin Your Journey
-            </p>
-            <h2 
-              className="text-4xl lg:text-5xl mb-8 leading-[1.15]"
-              style={{ 
-                fontFamily: 'Playfair Display, serif',
-                color: '#FFFFFF',
-                fontWeight: 300,
-              }}
-            >
-              Request Your <span style={{ color: LAVENDER }}>Invitation</span>
-            </h2>
-            <p className="text-lg font-light leading-relaxed max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.75)' }}>
-              MetaHers Voyages are invitation-based experiences designed for women ready to step forward intentionally.
-            </p>
-          </div>
+          <h2 
+            className="text-3xl lg:text-4xl font-light mb-6"
+            style={{ 
+              fontFamily: 'Playfair Display, serif',
+              color: '#FFFFFF',
+            }}
+          >
+            Stay Connected
+          </h2>
+          <p className="text-sm font-light mb-8" style={{ color: 'rgba(255,255,255,0.7)' }}>
+            Be the first to know about new voyages and exclusive MetaHers experiences.
+          </p>
           
-          <motion.div 
-            className="pt-8"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
           >
@@ -710,7 +609,7 @@ function InvitationSection() {
                 style={{ background: `linear-gradient(135deg, ${PINK}, ${LAVENDER})`, color: '#0A0A0A' }}
                 data-testid="button-request-invitation"
               >
-                Request
+                Subscribe
               </Button>
             </div>
             <p className="text-xs font-light mt-4" style={{ color: 'rgba(255,255,255,0.5)' }}>
@@ -723,131 +622,84 @@ function InvitationSection() {
   );
 }
 
-function VoyageCardSkeleton() {
-  return (
-    <div className="rounded-2xl overflow-hidden" style={{ background: 'rgba(255,255,255,0.03)' }}>
-      <Skeleton className="h-48" />
-      <div className="p-6 space-y-4">
-        <Skeleton className="h-4 w-3/4" />
-        <Skeleton className="h-4 w-1/2" />
-        <div className="flex gap-4">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-4 w-16" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function VoyagesPage() {
-  const [currentCategory, setCurrentCategory] = useState("AI");
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const { user } = useAuth();
   
   const { data: voyages, isLoading } = useQuery<VoyageDB[]>({
     queryKey: ['/api/voyages'],
   });
 
-  const voyagesByCategory = useMemo(() => {
-    if (!voyages) return {};
-    const grouped: Record<string, VoyageDB[]> = {};
-    const categoryOrder = ['AI', 'Crypto', 'Web3', 'AI_Branding'];
-    
-    categoryOrder.forEach(cat => {
-      const catVoyages = voyages.filter(v => v.category === cat);
-      if (catVoyages.length > 0) {
-        grouped[cat] = catVoyages.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
-      }
-    });
-    
-    return grouped;
+  const sortedVoyages = useMemo(() => {
+    if (!voyages) return [];
+    return voyages.sort((a, b) => a.sequenceNumber - b.sequenceNumber);
   }, [voyages]);
-
-  const categories = useMemo(() => Object.keys(voyagesByCategory), [voyagesByCategory]);
-  const categoriesKey = categories.join(',');
-
-  useEffect(() => {
-    const handleScroll = () => {
-      categories.forEach(cat => {
-        const el = document.getElementById(`chapter-${cat}`);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top < window.innerHeight / 2 && rect.bottom > window.innerHeight / 2) {
-            setCurrentCategory(cat);
-          }
-        }
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [categoriesKey, categories]);
-
-  const isProUser = user?.isPro === true;
 
   return (
     <div className="min-h-screen" style={{ background: DARK_BG }}>
       <SEO 
         title="Voyages | MetaHers Mind Spa"
-        description="A journey in four chapters — real-world experiences designed for women stepping into the future, thoughtfully, together."
+        description="Twelve transformational experiences designed for women stepping into the future, thoughtfully, together. Click to explore each voyage."
       />
       
       <HeroSection />
       
-      {categories.length > 0 && (
-        <JourneyProgress categories={categories} currentCategory={currentCategory} />
-      )}
-      
-      <section id="timeline" className="relative py-16 lg:py-24 px-6 lg:px-16 overflow-hidden">
+      <section id="voyages-grid" className="relative py-16 lg:py-24 px-6 lg:px-16 overflow-hidden">
         <AmbientGlow />
         
-        {isLoading ? (
-          <div className="max-w-4xl mx-auto grid gap-8">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <VoyageCardSkeleton key={i} />
-            ))}
-          </div>
-        ) : categories.length > 0 ? (
-          <div className="max-w-5xl mx-auto">
-            {categories.map((category, idx) => (
-              <div key={category} id={`chapter-${category}`}>
-                <TimelineChapter 
-                  category={category}
-                  voyages={isProUser ? voyagesByCategory[category] : voyagesByCategory[category].slice(0, 2)}
-                  chapterIndex={idx}
-                />
-                
-                {!isProUser && voyagesByCategory[category].length > 2 && (
-                  <motion.div
-                    className="relative py-8 text-center"
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="inline-flex items-center gap-3 px-6 py-4 rounded-xl"
-                      style={{ background: 'rgba(255,255,255,0.03)', border: `1px solid ${PINK}20` }}>
-                      <Crown className="w-5 h-5" style={{ color: PINK }} />
-                      <span className="text-sm font-medium text-white">
-                        {voyagesByCategory[category].length - 2} more {category.replace('_', ' ')} voyages available for Pro members
-                      </span>
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-24">
-            <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: LAVENDER }} />
-            <h3 className="text-xl font-semibold mb-2 text-white">Voyages Coming Soon</h3>
-            <p style={{ color: 'rgba(255,255,255,0.6)' }}>
-              New experiences are being prepared. Request an invitation to be notified.
+        <div className="relative max-w-7xl mx-auto">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-xs uppercase tracking-[0.25em] mb-4" style={{ color: LAVENDER }}>
+              Choose Your Voyage
             </p>
-          </div>
-        )}
+            <h2 
+              className="text-4xl lg:text-5xl mb-6 font-light"
+              style={{ 
+                fontFamily: 'Playfair Display, serif',
+                color: '#FFFFFF',
+              }}
+            >
+              <span className="italic" style={{ color: PINK }}>Twelve</span> Paths to Transformation
+            </h2>
+          </motion.div>
+
+          {isLoading ? (
+            <VoyageGridSkeleton />
+          ) : sortedVoyages.length > 0 ? (
+            <motion.div 
+              layout
+              className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              {sortedVoyages.map((voyage) => {
+                const info = CATEGORY_INFO[voyage.category as keyof typeof CATEGORY_INFO];
+                const categoryColor = info?.color || PINK;
+                
+                return (
+                  <ExpandableVoyageCard
+                    key={voyage.id}
+                    voyage={voyage}
+                    isExpanded={expandedId === voyage.id}
+                    onToggle={() => setExpandedId(expandedId === voyage.id ? null : voyage.id)}
+                    categoryColor={categoryColor}
+                  />
+                );
+              })}
+            </motion.div>
+          ) : (
+            <div className="text-center py-12">
+              <p style={{ color: 'rgba(255,255,255,0.6)' }}>No voyages available at this time.</p>
+            </div>
+          )}
+        </div>
       </section>
-      
+
       <TestimonialsSection />
-      <InvitationSection />
+      <NewsletterSection />
     </div>
   );
 }
