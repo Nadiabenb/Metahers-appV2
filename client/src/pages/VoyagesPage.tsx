@@ -133,7 +133,7 @@ export default function VoyagesPage() {
     if (sortedVoyages.length > 0 && !selectedVoyage) {
       setSelectedVoyage(sortedVoyages[0]);
     }
-  }, [sortedVoyages, selectedVoyage]);
+  }, [sortedVoyages]);
 
   const selectedColor =
     selectedVoyage && CATEGORY_INFO[selectedVoyage.category as keyof typeof CATEGORY_INFO]
