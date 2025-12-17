@@ -5252,6 +5252,50 @@ Respond in JSON format:
     res.json(allTestimonials);
   }));
 
+  // Admin: Get all invitation requests
+  app.get('/api/admin/voyages/invitations', isAdmin, asyncHandler(async (req: Request, res) => {
+    const requests = await db.select({
+      request: voyageInvitationRequests,
+      voyage: voyages,
+    })
+    .from(voyageInvitationRequests)
+    .innerJoin(voyages, eq(voyageInvitationRequests.voyageId, voyages.id))
+    .orderBy(desc(voyageInvitationRequests.createdAt));
+    
+    res.json(requests.map(r => ({
+      ...r.request,
+      voyageTitle: r.voyage.title,
+    })));
+  }));
+
+  // Admin: Approve or decline invitation request
+  app.patch('/api/admin/voyages/invitations/:id', isAdmin, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { id } = req.params;
+    const { status, adminNotes } = req.body;
+    
+    if (!['approved', 'declined'].includes(status)) {
+      throw new ValidationError("Status must be 'approved' or 'declined'");
+    }
+    
+    const [updated] = await db.update(voyageInvitationRequests)
+      .set({
+        status,
+        adminNotes: adminNotes ? sanitizeText(adminNotes) : null,
+        respondedAt: new Date(),
+        respondedBy: userId,
+        updatedAt: new Date(),
+      })
+      .where(eq(voyageInvitationRequests.id, id))
+      .returning();
+    
+    if (!updated) {
+      throw new NotFoundError("Invitation request not found");
+    }
+    
+    res.json({ success: true, updated });
+  }));
+
   const httpServer = createServer(app);
   return httpServer;
 }

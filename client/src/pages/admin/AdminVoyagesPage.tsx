@@ -23,7 +23,11 @@ import {
   Globe,
   Palette,
   AlertCircle,
-  Check
+  Check,
+  Mail,
+  ThumbsUp,
+  ThumbsDown,
+  CheckCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,9 +37,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { VoyageDB } from "@shared/schema";
+import type { VoyageDB, VoyageInvitationRequestDB } from "@shared/schema";
 
 type VoyageWithStats = VoyageDB & {
   confirmedBookings: number;
@@ -113,6 +118,10 @@ export default function AdminVoyagesPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingVoyage, setEditingVoyage] = useState<Partial<VoyageDB> | null>(null);
   const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("voyages");
+  const [invitationFilter, setInvitationFilter] = useState<"all" | "pending" | "approved" | "declined">("pending");
+  const [respondingToId, setRespondingToId] = useState<string | null>(null);
+  const [responseNotes, setResponseNotes] = useState("");
 
   const { data: voyages, isLoading } = useQuery<VoyageWithStats[]>({
     queryKey: ['/api/admin/voyages'],
@@ -120,6 +129,10 @@ export default function AdminVoyagesPage() {
 
   const { data: stats } = useQuery<VoyageStats>({
     queryKey: ['/api/admin/voyages-stats'],
+  });
+
+  const { data: invitations, isLoading: invitationsLoading } = useQuery<(VoyageInvitationRequestDB & { voyageTitle: string })[]>({
+    queryKey: ['/api/admin/voyages/invitations'],
   });
 
   const createMutation = useMutation({
@@ -165,6 +178,36 @@ export default function AdminVoyagesPage() {
     },
     onError: (error: any) => {
       toast({ title: "Failed to delete voyage", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const approveInvitationMutation = useMutation({
+    mutationFn: async ({ id, adminNotes }: { id: string; adminNotes: string }) => {
+      return apiRequest('PATCH', `/api/admin/voyages/invitations/${id}`, { status: 'approved', adminNotes });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/voyages/invitations'] });
+      setRespondingToId(null);
+      setResponseNotes("");
+      toast({ title: "Invitation approved!" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Failed to approve invitation", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const declineInvitationMutation = useMutation({
+    mutationFn: async ({ id, adminNotes }: { id: string; adminNotes: string }) => {
+      return apiRequest('PATCH', `/api/admin/voyages/invitations/${id}`, { status: 'declined', adminNotes });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/voyages/invitations'] });
+      setRespondingToId(null);
+      setResponseNotes("");
+      toast({ title: "Invitation declined!" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Failed to decline invitation", description: error.message, variant: "destructive" });
     },
   });
 
@@ -541,6 +584,10 @@ export default function AdminVoyagesPage() {
     );
   }
 
+  const filteredInvitations = invitations?.filter(inv => 
+    invitationFilter === 'all' ? true : inv.status === invitationFilter
+  ) || [];
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto">
@@ -563,6 +610,17 @@ export default function AdminVoyagesPage() {
             <Plus className="w-4 h-4 mr-2" /> Create Voyage
           </Button>
         </div>
+
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList>
+            <TabsTrigger value="voyages">Voyages</TabsTrigger>
+            <TabsTrigger value="invitations" className="flex items-center gap-2">
+              <Mail className="w-4 h-4" />
+              Invitation Requests {filteredInvitations.length > 0 && <Badge variant="destructive">{filteredInvitations.length}</Badge>}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="voyages" className="mt-6">
 
         <div className="grid md:grid-cols-5 gap-4 mb-8">
           <Card>
@@ -632,10 +690,10 @@ export default function AdminVoyagesPage() {
           </Card>
         </div>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>All Voyages</CardTitle>
-          </CardHeader>
+          <Card>
+            <CardHeader>
+              <CardTitle>All Voyages</CardTitle>
+            </CardHeader>
           <CardContent>
             {isLoading ? (
               <div className="space-y-4">
@@ -743,7 +801,75 @@ export default function AdminVoyagesPage() {
               </div>
             )}
           </CardContent>
-        </Card>
+          </Card>
+          </TabsContent>
+
+          <TabsContent value="invitations" className="mt-6">
+            <div className="space-y-6">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                  <CardTitle>Invitation Requests</CardTitle>
+                  <Select value={invitationFilter} onValueChange={(v: any) => setInvitationFilter(v)}>
+                    <SelectTrigger className="w-40">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Requests</SelectItem>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="approved">Approved</SelectItem>
+                      <SelectItem value="declined">Declined</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </CardHeader>
+                <CardContent>
+                  {invitationsLoading ? (
+                    <div className="space-y-4">{[1, 2, 3].map(i => <Skeleton key={i} className="h-20 w-full" />)}</div>
+                  ) : filteredInvitations.length > 0 ? (
+                    <div className="space-y-4">
+                      {filteredInvitations.map((inv) => (
+                        <div key={inv.id} className="p-4 border rounded-lg space-y-3" data-testid={`invitation-row-${inv.id}`}>
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="font-semibold">{inv.userName || inv.userEmail}</p>
+                              <p className="text-sm text-muted-foreground">{inv.userEmail}</p>
+                              <p className="text-sm font-medium text-blue-600 mt-1">{inv.voyageTitle}</p>
+                            </div>
+                            <Badge variant={inv.status === 'pending' ? 'outline' : inv.status === 'approved' ? 'default' : 'destructive'}>
+                              {inv.status}
+                            </Badge>
+                          </div>
+                          {inv.message && (
+                            <div className="text-sm bg-muted p-3 rounded italic">"{inv.message}"</div>
+                          )}
+                          {inv.adminNotes && (
+                            <div className="text-sm border-l-2 border-purple-600 pl-3">
+                              <p className="text-xs text-muted-foreground">Admin notes:</p>
+                              <p>{inv.adminNotes}</p>
+                            </div>
+                          )}
+                          {inv.status === 'pending' && (
+                            <div className="flex gap-2">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setRespondingToId(inv.id)}
+                                data-testid={`button-respond-${inv.id}`}
+                              >
+                                <CheckCircle className="w-4 h-4 mr-1" /> Review
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">No {invitationFilter !== 'all' ? invitationFilter : ''} invitations</div>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       <Dialog open={!!deleteConfirmId} onOpenChange={() => setDeleteConfirmId(null)}>
@@ -765,6 +891,46 @@ export default function AdminVoyagesPage() {
               disabled={deleteMutation.isPending}
             >
               {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={!!respondingToId} onOpenChange={() => { setRespondingToId(null); setResponseNotes(""); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Respond to Invitation Request</DialogTitle>
+            <DialogDescription>Approve or decline this invitation with optional notes</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div>
+              <Label htmlFor="notes">Admin Notes (optional)</Label>
+              <Textarea
+                id="notes"
+                value={responseNotes}
+                onChange={(e) => setResponseNotes(e.target.value)}
+                placeholder="Add any notes for your records..."
+                className="min-h-24"
+                data-testid="textarea-invitation-notes"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setRespondingToId(null); setResponseNotes(""); }}>Cancel</Button>
+            <Button
+              variant="destructive"
+              onClick={() => respondingToId && declineInvitationMutation.mutate({ id: respondingToId, adminNotes: responseNotes })}
+              disabled={declineInvitationMutation.isPending}
+              data-testid="button-decline-invitation"
+            >
+              <ThumbsDown className="w-4 h-4 mr-2" /> Decline
+            </Button>
+            <Button
+              onClick={() => respondingToId && approveInvitationMutation.mutate({ id: respondingToId, adminNotes: responseNotes })}
+              disabled={approveInvitationMutation.isPending}
+              data-testid="button-approve-invitation"
+            >
+              <ThumbsUp className="w-4 h-4 mr-2" /> Approve
             </Button>
           </DialogFooter>
         </DialogContent>
