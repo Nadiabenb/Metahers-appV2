@@ -543,9 +543,10 @@ function JourneyProgress({ categories, currentCategory }: { categories: string[]
             onClick={() => {
               document.getElementById(`chapter-${cat}`)?.scrollIntoView({ behavior: 'smooth' });
             }}
-            className="group relative flex items-center justify-center"
+            className="group relative flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-[#0D0B14] rounded-full"
             whileHover={{ scale: 1.1 }}
             data-testid={`nav-chapter-${cat}`}
+            aria-label={`Jump to ${info?.label || cat} chapter`}
           >
             <motion.div
               className="w-10 h-10 rounded-full flex items-center justify-center transition-all"
@@ -761,7 +762,8 @@ export default function VoyagesPage() {
     return grouped;
   }, [voyages]);
 
-  const categories = Object.keys(voyagesByCategory);
+  const categories = useMemo(() => Object.keys(voyagesByCategory), [voyagesByCategory]);
+  const categoriesKey = categories.join(',');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -778,7 +780,7 @@ export default function VoyagesPage() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [categories]);
+  }, [categoriesKey, categories]);
 
   const isProUser = user?.isPro === true;
 
