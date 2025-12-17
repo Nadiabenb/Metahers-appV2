@@ -247,17 +247,17 @@ function VoyageGalleryItem({ voyage, index, categoryColor, onSelect }: VoyageGal
 
   const positions = [
     { x: 0, y: 0, scale: 1.1, width: "max-w-3xl" },
-    { x: -120, y: 80, scale: 0.85, width: "max-w-md" },
-    { x: 140, y: 140, scale: 0.8, width: "max-w-sm" },
-    { x: -100, y: 280, scale: 0.9, width: "max-w-lg" },
-    { x: 160, y: 300, scale: 0.75, width: "max-w-sm" },
-    { x: -80, y: 480, scale: 0.95, width: "max-w-2xl" },
-    { x: 120, y: 520, scale: 0.8, width: "max-w-md" },
-    { x: -140, y: 680, scale: 0.85, width: "max-w-lg" },
-    { x: 100, y: 720, scale: 0.9, width: "max-w-md" },
-    { x: -60, y: 880, scale: 1.0, width: "max-w-2xl" },
-    { x: 130, y: 920, scale: 0.8, width: "max-w-md" },
-    { x: -120, y: 1080, scale: 0.85, width: "max-w-lg" },
+    { x: -180, y: 180, scale: 0.85, width: "max-w-md" },
+    { x: 200, y: 280, scale: 0.8, width: "max-w-sm" },
+    { x: -150, y: 420, scale: 0.9, width: "max-w-lg" },
+    { x: 220, y: 560, scale: 0.75, width: "max-w-sm" },
+    { x: -120, y: 720, scale: 0.95, width: "max-w-2xl" },
+    { x: 180, y: 880, scale: 0.8, width: "max-w-md" },
+    { x: -200, y: 1040, scale: 0.85, width: "max-w-lg" },
+    { x: 160, y: 1180, scale: 0.9, width: "max-w-md" },
+    { x: -100, y: 1360, scale: 1.0, width: "max-w-2xl" },
+    { x: 190, y: 1520, scale: 0.8, width: "max-w-md" },
+    { x: -170, y: 1700, scale: 0.85, width: "max-w-lg" },
   ];
 
   const pos = positions[index % positions.length];
@@ -542,15 +542,15 @@ export default function VoyagesPage() {
       
       <HeroSection />
       
-      <section id="voyages-gallery" className="relative py-16 lg:py-32 overflow-x-hidden">
+      <section id="voyages-gallery" className="relative py-16 lg:py-32 overflow-x-hidden px-6 lg:px-16" style={{ minHeight: '3000px' }}>
         <AmbientGlow />
-        <div className="relative">
+        <div className="relative w-full h-full">
           {isLoading ? (
             <div className="px-6 lg:px-16">
               <VoyageGallerySkeleton />
             </div>
           ) : sortedVoyages.length > 0 ? (
-            <div className="relative h-auto min-h-screen">
+            <div className="relative" style={{ height: '2800px' }}>
               {sortedVoyages.map((voyage, index) => {
                 const info = CATEGORY_INFO[voyage.category as keyof typeof CATEGORY_INFO];
                 const categoryColor = info?.color || PINK;
