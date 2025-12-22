@@ -1,0 +1,111 @@
+You are working inside the MetaHers app codebase. I need a FULL, DETAILED, LINEAR ARCHITECTURE DOCUMENT so I can share it with another engineer to debug and refactor the app.
+
+Output format requirements:
+- Use Markdown.
+- Make it linear and exhaustive.
+- Include file paths everywhere.
+- If you are unsure, inspect the codebase to confirm. Do not guess.
+- If you can’t find something, write “NOT FOUND” and list what you searched.
+- Include code blocks for key configs and schemas (trim to the essential parts).
+
+Deliver exactly these sections, in this order:
+
+1) One-Sentence Product Definition
+- What the app does, who it’s for, what the core user journey is.
+
+2) Tech Stack & Runtime
+- Framework (Next.js or other), language, package manager, hosting/deploy, environment.
+- List all major libraries and what each is used for.
+- Show package.json scripts and dependencies summary (grouped).
+
+3) Repository Structure
+- Print the top-level folder tree.
+- Then for /app or /src (whatever exists), print a deeper tree (2–4 levels deep).
+- Call out where routing, components, styles, server code, and utilities live.
+
+4) Routing Map (Complete)
+- List EVERY route/screen in the app.
+- For each route include:
+  - Route path
+  - File path
+  - Purpose (1 sentence)
+  - Access rules (public/auth/role-gated)
+  - Data it loads (which functions/services it calls)
+  - External APIs used (if any)
+
+5) Core User Flows (Step-by-step)
+- Document these flows as numbered steps with the exact routes involved:
+  A) First visit → understand → join
+  B) Signup/login → onboarding → dashboard
+  C) Voyages browse → detail → booking/RSVP
+  D) Tools/Agents → generate output → save/export/share
+  E) Upgrade/payment → confirmation → access unlocked
+
+6) Auth & User Model
+- Auth provider details (Clerk/Supabase/Auth.js/etc).
+- Where auth is initialized, middleware, route protection.
+- User object shape and where it’s stored.
+- Roles/permissions model (if any).
+
+7) Data Layer
+- Database provider (Supabase/Neon/Postgres/etc).
+- ORM (Drizzle/Prisma/etc) and where schema lives.
+- List all tables/collections with:
+  - name
+  - purpose
+  - fields (key fields + types)
+  - indexes/constraints (if present)
+  - relations
+- Include the schema file(s) content in shortened form.
+
+8) API Layer
+- List all API endpoints (REST/Next routes/server actions).
+- For each endpoint:
+  - path + file path
+  - method
+  - input validation
+  - auth requirement
+  - database queries performed
+  - external services called
+  - response format
+
+9) External Integrations
+- OpenAI (where key is used, which models, which endpoints)
+- Payments (Stripe): checkout, webhooks, products/price ids, entitlement logic
+- Email (Resend/etc)
+- Analytics (if any)
+- Storage (S3/Supabase storage/etc)
+- Any third-party services
+
+10) State Management & Caching
+- Client state strategy (React state, Zustand, Redux, etc).
+- Server caching (revalidate, Redis/Upstash, etc).
+- Where cache keys and TTLs are defined.
+
+11) Styling System
+- Tailwind config, design tokens, global styles.
+- Component library usage (shadcn/ui etc).
+- Any themes/dark mode.
+
+12) Feature Modules Inventory
+- List every feature module (Voyages, Mind Spa, Vision Board, Agents, Community, etc).
+- For each module:
+  - entry routes
+  - key components
+  - data dependencies
+  - current status: working/broken/partial (based on code + TODOs)
+
+13) Known Bugs / TODOs from Code
+- Search for TODO/FIXME/HACK and list findings by file path and line context.
+- Also list any obvious dead code, duplicate components, unused routes.
+
+14) How to Run Locally + Environments
+- Required env vars (list each, where read, what for).
+- Dev vs prod differences.
+- Build and deployment steps.
+
+15) “Refactor Readiness” Scorecard
+- Identify the top 10 architectural risks with evidence (file paths).
+- Suggest 5 highest-impact refactors (only based on what exists).
+
+Important: do not produce generic explanations. This must reflect the actual MetaHers repo contents with file paths and route names exactly as in the codebase.
