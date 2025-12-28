@@ -82,6 +82,7 @@ const PrivacyPolicyPage = lazy(() => import("@/pages/PrivacyPolicyPage"));
 const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
 const LearningHubPage = lazy(() => import("@/pages/LearningHubPage"));
 const VisionBoardPage = lazy(() => import("@/pages/VisionBoardPage"));
+const FreeResourcesPage = lazy(() => import("@/pages/FreeResourcesPage"));
 const AgencyDashboardPage = lazy(() => import("@/pages/AgencyDashboardPage"));
 const VoyagesPage = lazy(() => import("@/pages/VoyagesPage"));
 const VoyageDetailPage = lazy(() => import("@/pages/VoyageDetailPage"));
@@ -173,7 +174,7 @@ function Router() {
         {/* Newsletter & Waitlist - Public */}
         <Route path="/newsletter" component={NewsletterPage} />
         <Route path="/waitlist" component={WaitlistPage} />
-        
+
         {/* Legal Pages - Public */}
         <Route path="/privacy" component={PrivacyPolicyPage} />
         <Route path="/terms" component={TermsOfServicePage} />
@@ -189,6 +190,9 @@ function Router() {
         {/* Vision Board Builder - Public */}
         <Route path="/vision-board" component={VisionBoardPage} />
 
+        {/* Free Resources Page - Public */}
+        <Route path="/free-resources" component={FreeResourcesPage} />
+
         {/* Circle - Networking (public accessible) */}
         <Route path="/circle" component={CircleDiscoveryPage} />
 
@@ -199,7 +203,7 @@ function Router() {
           <>
             {/* Tier Selection Onboarding */}
             <Route path="/onboarding/tier-selection" component={TierSelectionPage} />
-            
+
             {/* Onboarding Quiz */}
             <Route path="/onboarding/quiz" component={OnboardingQuizPage} />
 
@@ -239,7 +243,7 @@ function Router() {
             <Route path="/glow-up/complete" component={GlowUpCompletePage} />
             <Route path="/thought-leadership" component={ThoughtLeadershipPage} />
             <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
-            
+
             {/* MetaHers Voyages */}
             <Route path="/voyages" component={VoyagesPage} />
             <Route path="/voyages/:slug" component={VoyageDetailPage} />
@@ -252,7 +256,7 @@ function Router() {
             <Route path="/home" component={HomePage} />
             <Route path="/workspace">{() => <Redirect to="/login" />}</Route>
             <Route path="/progress">{() => <Redirect to="/login" />}</Route>
-            
+
             {/* Public MetaHers Voyages */}
             <Route path="/voyages" component={VoyagesPage} />
             <Route path="/voyages/:slug" component={VoyageDetailPage} />

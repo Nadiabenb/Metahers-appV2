@@ -14,17 +14,42 @@ export function EmailCaptureModal() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const hasSeenModal = localStorage.getItem("emailCaptureShown");
     const hasSubmittedEmail = localStorage.getItem("emailCaptureSubmitted");
+    
+    // Don't show if already submitted
+    if (hasSubmittedEmail) return;
 
-    if (!hasSeenModal && !hasSubmittedEmail) {
-      const timer = setTimeout(() => {
+    // Show modal based on user engagement signals
+    let timeoutId: NodeJS.Timeout;
+    let scrollTriggered = false;
+
+    const handleScroll = () => {
+      if (scrollTriggered) return;
+      
+      const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      
+      // Trigger at 40% scroll depth (user is engaged)
+      if (scrollPercent > 40) {
+        scrollTriggered = true;
         setIsVisible(true);
         localStorage.setItem("emailCaptureShown", "true");
-      }, 15000);
+      }
+    };
 
-      return () => clearTimeout(timer);
-    }
+    // Backup: Show after 8 seconds if no scroll
+    timeoutId = setTimeout(() => {
+      if (!scrollTriggered) {
+        setIsVisible(true);
+        localStorage.setItem("emailCaptureShown", "true");
+      }
+    }, 8000);
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleClose = () => {
@@ -99,10 +124,10 @@ export function EmailCaptureModal() {
                   </div>
 
                   <h2 className="font-cormorant text-3xl md:text-4xl font-bold text-center mb-4 metallic-text">
-                    Get Beta Access
+                    Get Your Free AI Mastery Guide
                   </h2>
                   <p className="text-center text-foreground/80 mb-6">
-                    Join our exclusive beta program and unlock free Pro access. Enter your email to receive your private beta code.
+                    Download "7 AI Prompts That Will 10X Your Productivity" + unlock exclusive beta access to MetaHers Pro features. Join 500+ women building their AI-powered future.
                   </p>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
@@ -152,21 +177,32 @@ export function EmailCaptureModal() {
                   </div>
 
                   <h2 className="font-cormorant text-3xl font-bold mb-4 metallic-text">
-                    Welcome to the Beta!
+                    Check Your Email! 📧
                   </h2>
                   <p className="text-foreground/80 mb-4">
-                    Your exclusive beta code is:
+                    We just sent you:
                   </p>
-                  <div className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/10 to-[hsl(var(--liquid-gold))]/10 border-2 border-[hsl(var(--liquid-gold))]/30 rounded-lg p-4 mb-6">
-                    <code className="text-2xl md:text-3xl font-bold text-[hsl(var(--liquid-gold))] tracking-wider font-mono" data-testid="text-beta-code">
-                      MetaMuse2025
-                    </code>
+                  <div className="bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))]/10 to-[hsl(var(--liquid-gold))]/10 border-2 border-[hsl(var(--liquid-gold))]/30 rounded-lg p-6 mb-6 text-left">
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2">
+                        <span className="text-[hsl(var(--liquid-gold))]">✓</span>
+                        <span className="text-sm">7 AI Prompts Guide (PDF)</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-[hsl(var(--liquid-gold))]">✓</span>
+                        <span className="text-sm">Your Beta Access Code: <strong>MetaMuse2025</strong></span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <span className="text-[hsl(var(--liquid-gold))]">✓</span>
+                        <span className="text-sm">Invitation to our exclusive sisterhood</span>
+                      </li>
+                    </ul>
                   </div>
                   <p className="text-sm text-foreground/70 mb-2">
-                    Go to your <span className="font-semibold">Account</span> page and enter this code to unlock Pro features for free!
+                    <span className="font-semibold">Next Step:</span> Go to your Account page and enter code <strong>MetaMuse2025</strong> to unlock Pro features!
                   </p>
                   <p className="text-xs text-foreground">
-                    This window will close automatically...
+                    Can't find the email? Check your spam folder or contact us.
                   </p>
                 </div>
               )}
