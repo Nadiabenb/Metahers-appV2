@@ -6,6 +6,7 @@ import { WelcomeModal } from "@/components/WelcomeModal";
 import { RecommendationWidget } from "@/components/RecommendationWidget";
 import { PersonalizedRecommendations } from "@/components/PersonalizedRecommendations";
 import { NextExperienceWidget } from "@/components/NextExperienceWidget";
+import { UserJourneyMap } from "@/components/UserJourneyMap";
 import { useAuth } from "@/hooks/useAuth";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -240,6 +241,16 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
+        </motion.div>
+
+        {/* User Journey Map */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.05 }}
+          className="mb-8"
+        >
+          <UserJourneyMap />
         </motion.div>
 
         {/* Personalized Recommendations from Quiz */}
