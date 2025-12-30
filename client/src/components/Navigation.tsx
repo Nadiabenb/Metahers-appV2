@@ -35,7 +35,7 @@ export function Navigation() {
     "Core Membership": {
       icon: BookOpen,
       items: [
-        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "9 Worlds curriculum", pro: true },
+        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "9 Worlds curriculum", pro: false },
         { path: "/metamuse", label: "MetaMuse AI", icon: Sparkles, desc: "Your AI companion", pro: true },
         { path: "/journal", label: "Journal", icon: Edit3, desc: "Track your growth", pro: true },
       ],
@@ -43,9 +43,9 @@ export function Navigation() {
     "Premium Cohort": {
       icon: Crown,
       items: [
-        { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "12-week intensive", pro: true },
-        { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build with AI", pro: true },
-        { path: "/agency", label: "AI Agency", icon: Bot, desc: "Your digital agency team", pro: true },
+        { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "12-week intensive", pro: false },
+        { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build with AI", pro: false },
+        { path: "/agency", label: "AI Agency", icon: Bot, desc: "Your digital agency team", pro: false },
       ],
     },
     "Voyages": {

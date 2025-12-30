@@ -196,7 +196,7 @@ export default function HomePage() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <button
-              onClick={() => setLocation('/rituals/ai-glow-up-facial')}
+              onClick={() => setLocation('/vision-board')}
               className="alo-button text-sm"
               data-testid="button-cta-start"
             >
@@ -767,7 +767,7 @@ export default function HomePage() {
               Join thousands of women building the future with AI & Web3.
             </p>
             <button
-              onClick={() => setLocation('/rituals/ai-glow-up-facial')}
+              onClick={() => setLocation('/vision-board')}
               className="alo-button text-sm"
               data-testid="button-final-cta"
             >
