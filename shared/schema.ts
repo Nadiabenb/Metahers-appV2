@@ -15,6 +15,40 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
+// ===== DRIZZLE DATABASE TABLES =====
+
+// Session storage table (required for Replit Auth)
+export const session = pgTable(
+  "session",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// User storage table
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").unique().notNull(),
+  passwordHash: varchar("password_hash").notNull(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  isPro: boolean("is_pro").default(false).notNull(),
+  subscriptionTier: varchar("subscription_tier").default("free").notNull(), // free, pro_monthly, pro_annual, vip_cohort, executive
+  onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
+  quizUnlockedRitual: varchar("quiz_unlocked_ritual"), // Ritual unlocked via quiz
+  quizCompletedAt: timestamp("quiz_completed_at"), // When they completed the quiz
+  stripeCustomerId: varchar("stripe_customer_id"), // Stripe customer ID for payments
+  stripeSubscriptionId: varchar("stripe_subscription_id"), // Current subscription ID
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export type UpsertUser = typeof users.$inferInsert;
+export type User = typeof users.$inferSelect;
+
 // Menstrual cycle tracking table
 export const menstrualCycles = pgTable("menstrual_cycles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -58,40 +92,6 @@ export const dailySymptoms = pgTable("daily_symptoms", {
 export const insertDailySymptomSchema = createInsertSchema(dailySymptoms).omit({ id: true, createdAt: true });
 export type InsertDailySymptom = z.infer<typeof insertDailySymptomSchema>;
 export type DailySymptom = typeof dailySymptoms.$inferSelect;
-
-// ===== DRIZZLE DATABASE TABLES =====
-
-// Session storage table (required for Replit Auth)
-export const session = pgTable(
-  "session",
-  {
-    sid: varchar("sid").primaryKey(),
-    sess: jsonb("sess").notNull(),
-    expire: timestamp("expire").notNull(),
-  },
-  (table) => [index("IDX_session_expire").on(table.expire)],
-);
-
-// User storage table
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  email: varchar("email").unique().notNull(),
-  passwordHash: varchar("password_hash").notNull(),
-  firstName: varchar("first_name"),
-  lastName: varchar("last_name"),
-  isPro: boolean("is_pro").default(false).notNull(),
-  subscriptionTier: varchar("subscription_tier").default("free").notNull(), // free, pro_monthly, pro_annual, vip_cohort, executive
-  onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
-  quizUnlockedRitual: varchar("quiz_unlocked_ritual"), // Ritual unlocked via quiz
-  quizCompletedAt: timestamp("quiz_completed_at"), // When they completed the quiz
-  stripeCustomerId: varchar("stripe_customer_id"), // Stripe customer ID for payments
-  stripeSubscriptionId: varchar("stripe_subscription_id"), // Current subscription ID
-  createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").defaultNow(),
-});
-
-export type UpsertUser = typeof users.$inferInsert;
-export type User = typeof users.$inferSelect;
 
 // Password reset tokens table
 export const passwordResetTokens = pgTable("password_reset_tokens", {

@@ -87,6 +87,7 @@ const AgencyDashboardPage = lazy(() => import("@/pages/AgencyDashboardPage"));
 const VoyagesPage = lazy(() => import("@/pages/VoyagesPage"));
 const VoyageDetailPage = lazy(() => import("@/pages/VoyageDetailPage"));
 const VoyageSuccessPage = lazy(() => import("@/pages/VoyageSuccessPage"));
+const CycleTrackerPage = lazy(() => import("@/pages/CycleTrackerPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -234,6 +235,7 @@ function Router() {
             <Route path="/rituals/:slug" component={RitualDetailPage} />
             <Route path="/journal" component={JournalPage} />
             <Route path="/journal/history" component={JournalHistoryPage} />
+            <Route path="/cycle-tracker" component={CycleTrackerPage} />
             <Route path="/metamuse" component={MetaMusePage} />
             <Route path="/events" component={EventsPage} />
             <Route path="/account" component={AccountPage} />
