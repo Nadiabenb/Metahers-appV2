@@ -15,6 +15,50 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 
+// Menstrual cycle tracking table
+export const menstrualCycles = pgTable("menstrual_cycles", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  startDate: varchar("start_date").notNull(), // YYYY-MM-DD
+  endDate: varchar("end_date"), // YYYY-MM-DD, null if ongoing
+  cycleLength: integer("cycle_length"), // Calculated or user-set
+  periodLength: integer("period_length"), // Calculated or user-set
+  symptoms: jsonb("symptoms").$type<string[]>().default(sql`'[]'::jsonb`),
+  mood: varchar("mood"),
+  flowIntensity: varchar("flow_intensity"), // light, medium, heavy
+  isPredicted: boolean("is_predicted").default(false).notNull(),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_menstrual_user").on(table.userId),
+  index("idx_menstrual_date").on(table.startDate),
+]);
+
+export const insertMenstrualCycleSchema = createInsertSchema(menstrualCycles).omit({ id: true, createdAt: true });
+export type InsertMenstrualCycle = z.infer<typeof insertMenstrualCycleSchema>;
+export type MenstrualCycle = typeof menstrualCycles.$inferSelect;
+
+// Daily symptoms log (independent of periods but useful for tracking)
+export const dailySymptoms = pgTable("daily_symptoms", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  date: varchar("date").notNull(), // YYYY-MM-DD
+  symptoms: jsonb("symptoms").$type<string[]>().default(sql`'[]'::jsonb`),
+  mood: varchar("mood"),
+  energyLevel: integer("energy_level"), // 1-10
+  stressLevel: integer("stress_level"), // 1-10
+  waterIntake: integer("water_intake"), // glasses
+  sleepHours: decimal("sleep_hours", { precision: 4, scale: 1 }),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_symptoms_user_date").on(table.userId, table.date),
+]);
+
+export const insertDailySymptomSchema = createInsertSchema(dailySymptoms).omit({ id: true, createdAt: true });
+export type InsertDailySymptom = z.infer<typeof insertDailySymptomSchema>;
+export type DailySymptom = typeof dailySymptoms.$inferSelect;
+
 // ===== DRIZZLE DATABASE TABLES =====
 
 // Session storage table (required for Replit Auth)
