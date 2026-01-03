@@ -42,6 +42,8 @@ import {
   agencyVisualPackages,
   agencySchedules,
   agencyAnalytics,
+  menstrualCycles,
+  dailySymptoms,
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -130,6 +132,10 @@ import type {
   AgencyScheduleDB,
   InsertAgencyAnalytics,
   AgencyAnalyticsDB,
+  InsertMenstrualCycle,
+  MenstrualCycle,
+  InsertDailySymptom,
+  DailySymptom,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -1768,6 +1774,86 @@ export class DatabaseStorage implements IStorage {
       averageQuizScore: averageQuizScore,
       sectionsCompleted: completions.length,
     };
+  }
+
+  // ===== MENSTRUAL CYCLE TRACKING =====
+
+  async getMenstrualCycles(userId: string): Promise<MenstrualCycle[]> {
+    return await db
+      .select()
+      .from(menstrualCycles)
+      .where(eq(menstrualCycles.userId, userId))
+      .orderBy(desc(menstrualCycles.startDate));
+  }
+
+  async getLatestMenstrualCycle(userId: string): Promise<MenstrualCycle | undefined> {
+    const [cycle] = await db
+      .select()
+      .from(menstrualCycles)
+      .where(eq(menstrualCycles.userId, userId))
+      .orderBy(desc(menstrualCycles.startDate))
+      .limit(1);
+    return cycle;
+  }
+
+  async upsertMenstrualCycle(cycleData: InsertMenstrualCycle): Promise<MenstrualCycle> {
+    const [cycle] = await db
+      .insert(menstrualCycles)
+      .values({
+        ...cycleData,
+        symptoms: cycleData.symptoms ? sql`${JSON.stringify(cycleData.symptoms)}::jsonb` : sql`'[]'::jsonb`,
+      })
+      .returning();
+    return cycle;
+  }
+
+  async deleteMenstrualCycle(id: string, userId: string): Promise<void> {
+    await db
+      .delete(menstrualCycles)
+      .where(and(eq(menstrualCycles.id, id), eq(menstrualCycles.userId, userId)));
+  }
+
+  // ===== DAILY SYMPTOMS TRACKING =====
+
+  async getDailySymptom(userId: string, date: string): Promise<DailySymptom | undefined> {
+    const [symptom] = await db
+      .select()
+      .from(dailySymptoms)
+      .where(and(eq(dailySymptoms.userId, userId), eq(dailySymptoms.date, date)));
+    return symptom;
+  }
+
+  async getRecentDailySymptoms(userId: string, limit: number = 30): Promise<DailySymptom[]> {
+    return await db
+      .select()
+      .from(dailySymptoms)
+      .where(eq(dailySymptoms.userId, userId))
+      .orderBy(desc(dailySymptoms.date))
+      .limit(limit);
+  }
+
+  async upsertDailySymptom(symptomData: InsertDailySymptom): Promise<DailySymptom> {
+    const existing = await this.getDailySymptom(symptomData.userId, symptomData.date);
+    if (existing) {
+      const [updated] = await db
+        .update(dailySymptoms)
+        .set({
+          ...symptomData,
+          symptoms: symptomData.symptoms ? sql`${JSON.stringify(symptomData.symptoms)}::jsonb` : undefined,
+        })
+        .where(eq(dailySymptoms.id, existing.id))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(dailySymptoms)
+        .values({
+          ...symptomData,
+          symptoms: symptomData.symptoms ? sql`${JSON.stringify(symptomData.symptoms)}::jsonb` : sql`'[]'::jsonb`,
+        })
+        .returning();
+      return created;
+    }
   }
 
   // ===== RETRO CAMERA PHOTOS =====
