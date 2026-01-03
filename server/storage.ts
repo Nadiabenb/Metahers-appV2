@@ -296,6 +296,17 @@ export interface IStorage {
   }): Promise<SectionCompletionDB>;
   getSectionAnalytics(userId: string, experienceId: string): Promise<any>;
 
+  // Menstrual Cycle operations
+  getMenstrualCycles(userId: string): Promise<MenstrualCycle[]>;
+  getLatestMenstrualCycle(userId: string): Promise<MenstrualCycle | undefined>;
+  upsertMenstrualCycle(cycle: InsertMenstrualCycle): Promise<MenstrualCycle>;
+  deleteMenstrualCycle(id: string, userId: string): Promise<void>;
+
+  // Daily Symptoms operations
+  getDailySymptom(userId: string, date: string): Promise<DailySymptom | undefined>;
+  getRecentDailySymptoms(userId: string, limit?: number): Promise<DailySymptom[]>;
+  upsertDailySymptom(symptom: InsertDailySymptom): Promise<DailySymptom>;
+
   // Retro Camera Photos operations
   createRetroCameraPhoto(data: InsertRetroCameraPhoto): Promise<RetroCameraPhotoDB>;
   getRetroCameraPhotos(limit?: number): Promise<Array<RetroCameraPhotoDB & { userFirstName: string | null; userLastName: string | null }>>;
