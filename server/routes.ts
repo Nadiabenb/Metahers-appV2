@@ -1857,6 +1857,158 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   }));
 
+  // ===== MENSTRUAL CYCLE & SYMPTOMS ROUTES =====
+  
+  // Get all menstrual cycles for the user
+  app.get('/api/cycles', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const cycles = await storage.getMenstrualCycles(userId);
+    res.json(cycles);
+  }));
+
+  // Get cycle predictions based on history
+  app.get('/api/cycles/predictions', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const cycles = await storage.getMenstrualCycles(userId);
+    
+    if (cycles.length < 2) {
+      return res.json({ 
+        nextPeriodStart: null, 
+        averageCycleLength: null,
+        averagePeriodLength: null,
+        message: "Need at least 2 cycles for predictions" 
+      });
+    }
+
+    // Calculate averages from last 6 cycles
+    const recentCycles = cycles.slice(0, 6);
+    const cycleLengths = recentCycles
+      .filter(c => c.cycleLength)
+      .map(c => c.cycleLength!);
+    const periodLengths = recentCycles
+      .filter(c => c.periodLength)
+      .map(c => c.periodLength!);
+
+    const averageCycleLength = cycleLengths.length > 0 
+      ? Math.round(cycleLengths.reduce((a, b) => a + b, 0) / cycleLengths.length)
+      : 28; // Default to 28 days
+    const averagePeriodLength = periodLengths.length > 0
+      ? Math.round(periodLengths.reduce((a, b) => a + b, 0) / periodLengths.length)
+      : 5; // Default to 5 days
+
+    // Predict next period based on last cycle start date
+    const lastCycle = cycles[0];
+    const lastStartDate = new Date(lastCycle.startDate);
+    const nextPeriodStart = new Date(lastStartDate);
+    nextPeriodStart.setDate(nextPeriodStart.getDate() + averageCycleLength);
+
+    // Calculate fertile window (typically days 10-17 of a 28-day cycle)
+    const fertileWindowStart = new Date(nextPeriodStart);
+    fertileWindowStart.setDate(fertileWindowStart.getDate() - 18); // 28 - 10
+    const fertileWindowEnd = new Date(nextPeriodStart);
+    fertileWindowEnd.setDate(fertileWindowEnd.getDate() - 11); // 28 - 17
+
+    res.json({
+      nextPeriodStart: nextPeriodStart.toISOString().split('T')[0],
+      nextPeriodEnd: new Date(nextPeriodStart.getTime() + (averagePeriodLength - 1) * 86400000).toISOString().split('T')[0],
+      fertileWindowStart: fertileWindowStart.toISOString().split('T')[0],
+      fertileWindowEnd: fertileWindowEnd.toISOString().split('T')[0],
+      averageCycleLength,
+      averagePeriodLength,
+      cyclesAnalyzed: recentCycles.length
+    });
+  }));
+
+  // Log a new cycle or update existing
+  app.post('/api/cycles', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { startDate, endDate, symptoms, mood, flowIntensity, notes } = req.body;
+
+    if (!startDate) {
+      return res.status(400).json({ message: "Start date is required" });
+    }
+
+    // Calculate period length if end date provided
+    let periodLength: number | undefined;
+    if (endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      periodLength = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+    }
+
+    // Calculate cycle length based on previous cycle
+    let cycleLength: number | undefined;
+    const previousCycle = await storage.getLatestMenstrualCycle(userId);
+    if (previousCycle && previousCycle.startDate !== startDate) {
+      const prevStart = new Date(previousCycle.startDate);
+      const currentStart = new Date(startDate);
+      cycleLength = Math.ceil((currentStart.getTime() - prevStart.getTime()) / (1000 * 60 * 60 * 24));
+    }
+
+    const cycle = await storage.upsertMenstrualCycle({
+      userId,
+      startDate,
+      endDate: endDate || null,
+      cycleLength,
+      periodLength,
+      symptoms: symptoms || [],
+      mood: mood || null,
+      flowIntensity: flowIntensity || null,
+      isPredicted: false,
+      notes: notes || null,
+    });
+
+    res.json(cycle);
+  }));
+
+  // Delete a cycle
+  app.delete('/api/cycles/:id', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { id } = req.params;
+    await storage.deleteMenstrualCycle(id, userId);
+    res.json({ success: true });
+  }));
+
+  // Get daily symptoms for a date range
+  app.get('/api/symptoms', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const limit = parseInt(req.query.limit as string) || 30;
+    const symptoms = await storage.getRecentDailySymptoms(userId, limit);
+    res.json(symptoms);
+  }));
+
+  // Get symptoms for a specific date
+  app.get('/api/symptoms/:date', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { date } = req.params;
+    const symptom = await storage.getDailySymptom(userId, date);
+    res.json(symptom || null);
+  }));
+
+  // Log or update symptoms for a date
+  app.post('/api/symptoms', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const { date, symptoms, mood, energyLevel, stressLevel, waterIntake, sleepHours, notes } = req.body;
+
+    if (!date) {
+      return res.status(400).json({ message: "Date is required" });
+    }
+
+    const symptomEntry = await storage.upsertDailySymptom({
+      userId,
+      date,
+      symptoms: symptoms || [],
+      mood: mood || null,
+      energyLevel: energyLevel || null,
+      stressLevel: stressLevel || null,
+      waterIntake: waterIntake || null,
+      sleepHours: sleepHours || null,
+      notes: notes || null,
+    });
+
+    res.json(symptomEntry);
+  }));
+
   // ===== JOURNAL ROUTES =====
   // Tier Check: Core Membership+ required for journals
   const requiresCoreOrPremium: RequestHandler = async (req, res, next) => {
