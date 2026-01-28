@@ -5448,6 +5448,119 @@ Respond in JSON format:
     res.json({ success: true, updated });
   }));
 
+  // ===== LUNA TELEGRAM BOT WEBHOOK =====
+  // Import Luna service
+  const { handleLunaChat } = await import("./lunaService");
+  
+  // Allowed Telegram user IDs (comma-separated in env var)
+  const ALLOWED_TELEGRAM_IDS = (process.env.LUNA_ALLOWED_TELEGRAM_IDS || "")
+    .split(",")
+    .map(id => id.trim())
+    .filter(id => id.length > 0);
+  
+  // Telegram webhook endpoint
+  app.post('/api/luna/telegram/webhook', asyncHandler(async (req: Request, res) => {
+    const update = req.body;
+    
+    // Extract message info
+    const message = update.message;
+    if (!message || !message.text) {
+      return res.status(200).json({ ok: true });
+    }
+    
+    const chatId = message.chat.id.toString();
+    const userId = message.from?.id?.toString();
+    const text = message.text;
+    
+    // Security: Check if user is in allowlist
+    if (!userId || !ALLOWED_TELEGRAM_IDS.includes(userId)) {
+      await sendTelegramMessage(chatId, "This assistant is private.");
+      return res.status(200).json({ ok: true });
+    }
+    
+    try {
+      // Generate Luna's response
+      const response = await handleLunaChat(text, chatId);
+      
+      // Send response back via Telegram
+      await sendTelegramMessage(chatId, response);
+    } catch (error) {
+      console.error("Luna Telegram error:", error);
+      await sendTelegramMessage(chatId, "I encountered an issue. Please try again in a moment.");
+    }
+    
+    res.status(200).json({ ok: true });
+  }));
+  
+  // Helper function to send Telegram messages
+  async function sendTelegramMessage(chatId: string, text: string): Promise<void> {
+    const token = process.env.TELEGRAM_BOT_TOKEN;
+    if (!token) {
+      console.error("TELEGRAM_BOT_TOKEN not set");
+      return;
+    }
+    
+    // Telegram has a 4096 character limit per message
+    const MAX_LENGTH = 4000;
+    const messages = [];
+    
+    if (text.length <= MAX_LENGTH) {
+      messages.push(text);
+    } else {
+      // Split into chunks at natural break points
+      let remaining = text;
+      while (remaining.length > 0) {
+        if (remaining.length <= MAX_LENGTH) {
+          messages.push(remaining);
+          break;
+        }
+        
+        // Find a good break point
+        let breakPoint = remaining.lastIndexOf('\n\n', MAX_LENGTH);
+        if (breakPoint === -1 || breakPoint < MAX_LENGTH / 2) {
+          breakPoint = remaining.lastIndexOf('\n', MAX_LENGTH);
+        }
+        if (breakPoint === -1 || breakPoint < MAX_LENGTH / 2) {
+          breakPoint = remaining.lastIndexOf(' ', MAX_LENGTH);
+        }
+        if (breakPoint === -1) {
+          breakPoint = MAX_LENGTH;
+        }
+        
+        messages.push(remaining.substring(0, breakPoint));
+        remaining = remaining.substring(breakPoint).trim();
+      }
+    }
+    
+    for (const msg of messages) {
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: msg,
+          parse_mode: "Markdown"
+        })
+      });
+    }
+  }
+
+  // Admin endpoint to list Luna drafts
+  app.get('/api/admin/luna/drafts', isAuthenticated, isAdmin, asyncHandler(async (_req: Request, res) => {
+    const drafts = await storage.getLunaDrafts(100);
+    res.json(drafts);
+  }));
+
+  // Admin endpoint to delete a Luna draft
+  app.delete('/api/admin/luna/drafts/:id', isAuthenticated, isAdmin, asyncHandler(async (req: Request, res) => {
+    const { id } = req.params;
+    const deleted = await storage.deleteLunaDraft(id);
+    if (!deleted) {
+      throw new NotFoundError("Draft not found");
+    }
+    res.json({ success: true });
+  }));
+
   const httpServer = createServer(app);
   return httpServer;
 }

@@ -2227,6 +2227,12 @@ export class DatabaseStorage implements IStorage {
     const result = await db.delete(lunaDrafts).where(eq(lunaDrafts.id, id)).returning();
     return result.length > 0;
   }
+
+  async hasLunaDraftsForChat(telegramChatId: string): Promise<boolean> {
+    const result = await db.select({ count: count() }).from(lunaDrafts)
+      .where(eq(lunaDrafts.telegramChatId, telegramChatId));
+    return (result[0]?.count || 0) > 0;
+  }
 }
 
 export const storage = new DatabaseStorage();

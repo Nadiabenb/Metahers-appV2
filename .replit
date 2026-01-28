@@ -51,3 +51,4 @@ defaultBucketID = "replit-objstore-ac1aa6a9-f90b-4ca3-bbfa-93aa89d93878"
 
 [userenv.shared]
 TELEGRAM_BOT_TOKEN = "8225690015:AAEuaZuNx3_7b_E7DTmZns606qydMKwNWM4"
+LUNA_ALLOWED_TELEGRAM_IDS = "7910155447"
