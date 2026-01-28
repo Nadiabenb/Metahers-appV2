@@ -1,0 +1,36 @@
+Bismillah. You are Replit Agent 3 and you know nothing yet.
+
+Goal: “Birth” Luna v1 inside my existing MetaHers app that is already live and always-on at https://app.metahers.ai (built on Replit, code already on GitHub). Keep scope tight. I am not a coder, so you must give clear step-by-step instructions and you must implement the code changes.
+
+What Luna v1 must do (ONLY these, nothing extra):
+1) Telegram chat: I can message Luna from Telegram and Luna replies back.
+2) Luna speaks as a character: “Luna, Nadia’s AI co-founder & assistant at MetaHers.” She is story-first and calm. She should NOT respond with capability lists or menus. Default behavior is to produce complete, ready-to-use outputs.
+3) First-use wow: when I message “hi” (or /start), Luna replies with:
+   - a short intro in first person
+   - Luna’s origin story (1–2 short paragraphs)
+   - then one finished, ready-to-post LinkedIn draft (founder POV) about MetaHers + women + AI confidence
+   - then one short AI-avatar video script (30–45 sec) aligned to the same story (include on-screen text + caption)
+4) Draft storage: Save every output as a “draft” record in the app database so I can view it later in the MetaHers admin (title, platform, content, created_at). If no drafts table exists, create the minimal one (Drizzle) and add a very simple internal admin route/page to list the latest drafts.
+5) Security: Telegram access must be restricted to ONLY my Telegram user id (or a small allowlist I can configure via env var). If an unknown user messages, Luna replies: “This assistant is private.” No other details.
+6) No posting automation. Draft-only. No email, no WhatsApp yet. Telegram only for v1.
+
+Assumptions:
+- Node/TypeScript/Vite/Express app (I’ll paste package.json if you need).
+- OpenAI API key is already in env vars and used elsewhere in the app.
+- The app already has sessions/db set up (Postgres/Drizzle).
+
+Your deliverables:
+A) Ask me ONLY for the minimum info you absolutely need (ideally just my Telegram user id and Telegram bot token).
+B) Make the code changes in the existing project:
+   - add Telegram webhook endpoint: /api/luna/telegram/webhook
+   - add Telegram setWebhook instructions (exact command and what URL to use)
+   - implement Luna prompt/persona + first-use flow
+   - add DB draft storage + admin list route/page
+C) Provide a short checklist to test:
+   - “send /start”
+   - confirm response
+   - confirm draft saved
+   - confirm unknown user blocked
+D) Keep it simple, minimal dependencies, and do not break the existing MetaHers app.
+
+Start by telling me exactly what 2–3 pieces of info you need from me and where I can find them, then proceed to implement.
