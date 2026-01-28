@@ -46,3 +46,8 @@ integrations = ["javascript_log_in_with_replit:1.0.0", "javascript_database:1.0.
 
 [objectStorage]
 defaultBucketID = "replit-objstore-ac1aa6a9-f90b-4ca3-bbfa-93aa89d93878"
+
+[userenv]
+
+[userenv.shared]
+TELEGRAM_BOT_TOKEN = "8225690015:AAEuaZuNx3_7b_E7DTmZns606qydMKwNWM4"
