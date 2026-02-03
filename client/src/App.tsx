@@ -30,7 +30,6 @@ import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminUsersPage from "@/pages/admin/AdminUsersPage";
 import AdminExperiencesPage from "@/pages/admin/AdminExperiencesPage";
 import AdminVoyagesPage from "@/pages/admin/AdminVoyagesPage";
-import AdminLunaDraftsPage from "@/pages/admin/AdminLunaDraftsPage";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
@@ -222,7 +221,6 @@ function Router() {
             <Route path="/admin/users" component={AdminUsersPage} />
             <Route path="/admin/experiences" component={AdminExperiencesPage} />
             <Route path="/admin/voyages" component={AdminVoyagesPage} />
-            <Route path="/admin/luna-drafts" component={AdminLunaDraftsPage} />
             <Route path="/admin/ai" component={() => {
               const AIDashboard = lazy(() => import('@/pages/admin/AIDashboardPage'));
               return <AIDashboard />;

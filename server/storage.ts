@@ -44,7 +44,6 @@ import {
   agencyAnalytics,
   menstrualCycles,
   dailySymptoms,
-  lunaDrafts,
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -137,8 +136,6 @@ import type {
   MenstrualCycle,
   InsertDailySymptom,
   DailySymptom,
-  InsertLunaDraft,
-  LunaDraftDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -2205,34 +2202,6 @@ export class DatabaseStorage implements IStorage {
     return await query.orderBy(desc(agencyAnalytics.snapshotDate));
   }
 
-  // ===== Luna AI Assistant Draft Operations =====
-  async createLunaDraft(draft: InsertLunaDraft): Promise<LunaDraftDB> {
-    const [result] = await db.insert(lunaDrafts).values(draft).returning();
-    return result;
-  }
-
-  async getLunaDrafts(limit: number = 50): Promise<LunaDraftDB[]> {
-    return await db.select().from(lunaDrafts)
-      .orderBy(desc(lunaDrafts.createdAt))
-      .limit(limit);
-  }
-
-  async getLunaDraftById(id: string): Promise<LunaDraftDB | undefined> {
-    const [result] = await db.select().from(lunaDrafts)
-      .where(eq(lunaDrafts.id, id));
-    return result;
-  }
-
-  async deleteLunaDraft(id: string): Promise<boolean> {
-    const result = await db.delete(lunaDrafts).where(eq(lunaDrafts.id, id)).returning();
-    return result.length > 0;
-  }
-
-  async hasLunaDraftsForChat(telegramChatId: string): Promise<boolean> {
-    const result = await db.select({ count: count() }).from(lunaDrafts)
-      .where(eq(lunaDrafts.telegramChatId, telegramChatId));
-    return (result[0]?.count || 0) > 0;
-  }
 }
 
 export const storage = new DatabaseStorage();
