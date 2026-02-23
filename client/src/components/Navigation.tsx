@@ -45,7 +45,6 @@ export function Navigation() {
       icon: Crown,
       items: [
         { path: "/ai-integration", label: "AI Integration Experience", icon: Sparkles, desc: "Private 4-week integration", pro: false },
-        { path: "/ai-mastery", label: "AI Mastery Program", icon: TrendingUp, desc: "12-week intensive", pro: false },
         { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build with AI", pro: false },
         { path: "/agency", label: "AI Agency", icon: Bot, desc: "Your digital agency team", pro: false },
       ],
