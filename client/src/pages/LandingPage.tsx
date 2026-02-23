@@ -336,18 +336,18 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
 
   const experiences = [
     {
-      title: "Learning Worlds",
-      subtitle: "54 Transformational Rituals",
-      description: "Master AI, Web3, Branding, NFTs, Metaverse, and more through beautiful, guided experiences designed for your success.",
-      cta: "Explore Worlds",
-      path: "/worlds",
+      title: "1 Year Membership",
+      subtitle: "Full Ecosystem Access",
+      description: "Get full access to all 54 rituals, MetaMuse AI, and the App Atelier for an entire year. Our most popular path for consistent growth.",
+      cta: "Join Now",
+      path: "/upgrade",
     },
     {
-      title: "AI Agency Team",
-      subtitle: "Your Digital Empire",
-      description: "7 specialized AI agents—Brand Strategist, Copywriter, Designer, and more—working 24/7 to build your business.",
-      cta: "Meet Your Team",
-      path: "/agency",
+      title: "AI Integration",
+      subtitle: "Private 1:1 Experience",
+      description: "A private 4-week systems architecture experience to build your personal AI Operating System. High-touch, high-impact.",
+      cta: "Learn More",
+      path: "/ai-integration",
     },
     {
       title: "Luxury Voyages",

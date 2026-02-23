@@ -2,7 +2,7 @@
  * Pricing tiers and configuration for MetaHers Mind Spa
  */
 
-export type SubscriptionTier = 'free' | 'pro_monthly' | 'pro_annual' | 'sanctuary' | 'inner_circle' | 'founders_circle' | 'vip_cohort' | 'executive';
+export type SubscriptionTier = 'free' | 'pro_annual' | 'ai_integration';
 
 export type PricingPlan = {
   id: SubscriptionTier;
@@ -36,145 +36,40 @@ export const PRICING_PLANS: Record<SubscriptionTier, PricingPlan> = {
       'Community access',
     ],
   },
-  pro_monthly: {
-    id: 'pro_monthly',
-    name: 'Pro',
-    displayName: 'Pro',
-    price: 19.99,
-    interval: 'month',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID',
-    description: 'Self-paced learning with AI-powered tools',
-    buttonText: 'Start Pro Monthly',
-    features: [
-      'All 5 luxury learning rituals',
-      'AI-powered journal with insights',
-      'Personalized AI coach chat',
-      'Advanced analytics dashboard',
-      '30-day thought leadership journey',
-      'Unlimited AI tools access',
-    ],
-  },
   pro_annual: {
     id: 'pro_annual',
     name: 'Pro Annual',
-    displayName: 'Pro Annual',
-    price: 199,
+    displayName: '1 Year Membership',
+    price: 399,
     interval: 'year',
     stripePriceEnvVar: 'STRIPE_PRICE_ID_ANNUAL',
-    description: 'Save $40 with annual billing',
-    buttonText: 'Subscribe Annually',
-    savings: 'Save $40/year',
-    badge: 'Best Value',
-    features: [
-      'Everything in Pro Monthly',
-      'Save $40 compared to monthly',
-      '2 months free',
-      'Early access to new rituals',
-      'Exclusive annual member perks',
-    ],
-  },
-  sanctuary: {
-    id: 'sanctuary',
-    name: 'Sanctuary',
-    displayName: 'Sanctuary',
-    price: 99,
-    interval: 'month',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID_SANCTUARY',
-    description: 'Guided learning with monthly live group sessions',
-    buttonText: 'Join Sanctuary',
+    description: 'Full access to the MetaHers ecosystem for one year',
+    buttonText: 'Join for 1 Year',
     badge: 'Most Popular',
     features: [
-      'Everything in Pro',
-      'Monthly live group sessions (90 min)',
-      'Guided ritual progression',
-      'Community support & networking',
-      'Priority support (24hr response)',
-      'Early access to new features',
+      'All 54 luxury learning rituals',
+      'Full MetaMuse AI access',
+      'Digital AI Agency team access',
+      'Exclusive community events',
+      'Priority support',
     ],
   },
-  inner_circle: {
-    id: 'inner_circle',
-    name: 'Inner Circle',
-    displayName: 'Inner Circle',
-    price: 399,
-    interval: 'month',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID_INNER_CIRCLE',
-    description: 'Concierge service with 1:1 founder access',
-    buttonText: 'Join Inner Circle',
-    highlighted: true,
-    badge: 'Premium',
-    features: [
-      'Everything in Sanctuary',
-      'Bi-weekly intimate group sessions (8-12 members)',
-      'Quarterly 1:1 strategy calls with founder',
-      'Custom learning path design',
-      'Direct founder access & insights',
-      'Private community & networking',
-      'VIP retreat & event invitations',
-    ],
-  },
-  founders_circle: {
-    id: 'founders_circle',
-    name: "Founder's Circle",
-    displayName: "Founder's Circle",
-    price: 999,
-    interval: 'month',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID_FOUNDERS_CIRCLE',
-    description: 'Personal guide + advisor + connector (limited to 15 members)',
-    buttonText: "Join Founder's Circle",
-    badge: 'Ultra Premium',
-    features: [
-      'Everything in Inner Circle',
-      'Monthly 1:1 power hour with founder',
-      'Direct WhatsApp/Voxer access',
-      'Personalized AI workflows & automations',
-      'Strategic network introductions',
-      'Co-creation opportunities',
-      'Annual private retreat day',
-      'VIP status across all MetaHers events',
-    ],
-  },
-  vip_cohort: {
-    id: 'vip_cohort',
-    name: 'VIP Cohort',
-    displayName: 'VIP Cohort Experience',
-    price: 197,
+  ai_integration: {
+    id: 'ai_integration',
+    name: 'AI Integration',
+    displayName: 'AI Integration Experience',
+    price: 1297,
     interval: 'one_time',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID_VIP',
-    description: '4-week guided program with direct founder mentorship',
-    buttonText: 'Join VIP Cohort',
-    highlighted: true,
-    badge: 'Limited to 10',
+    stripePriceEnvVar: 'STRIPE_PRICE_ID_AI_INTEGRATION',
+    description: 'Private 4-week 1:1 systems architecture experience',
+    buttonText: 'Apply for Integration',
+    badge: 'Premium Cohort',
     features: [
-      'Everything in Pro',
-      '4 weeks of guided ritual progression',
-      '4 live group office hours with founder',
-      'Private VIP community Slack/Discord',
-      'Exclusive ritual bag (worth $150)',
-      'Weekly accountability check-ins',
-      'Certificate of completion',
-      'Lifetime access to cohort materials',
-    ],
-  },
-  executive: {
-    id: 'executive',
-    name: 'Executive',
-    displayName: 'Executive Intensive',
-    price: 499,
-    interval: 'one_time',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID_EXECUTIVE',
-    description: 'Private 1:1 consulting for serious founders and leaders',
-    buttonText: 'Book Executive Session',
-    badge: 'Premium',
-    features: [
-      'Everything in VIP Cohort',
-      '2 private 1:1 sessions with founder',
-      'Custom AI & Web3 playbook for your business',
-      'Personalized learning path',
-      'Direct Slack/WhatsApp access for 30 days',
-      'Strategy session recording',
-      'Exclusive networking introductions',
-      '3 months Pro subscription included',
+      '4 weeks of private 1:1 coaching',
+      'Custom AI Operating System architecture',
+      'Weekly deep integration calls',
+      'Strategic support between sessions',
+      'Full system ownership & autonomy',
     ],
   },
 };
@@ -194,19 +89,19 @@ export function isPaidTier(tier: SubscriptionTier): boolean {
 }
 
 export function isProTier(tier: SubscriptionTier): boolean {
-  return tier === 'pro_monthly' || tier === 'pro_annual' || tier === 'sanctuary' || tier === 'inner_circle' || tier === 'founders_circle' || tier === 'vip_cohort' || tier === 'executive';
+  return tier === 'pro_annual' || tier === 'ai_integration';
 }
 
 export function isSanctuaryTier(tier: SubscriptionTier): boolean {
-  return tier === 'sanctuary' || tier === 'inner_circle' || tier === 'founders_circle';
+  return tier === 'pro_annual';
 }
 
 export function isInnerCircleTier(tier: SubscriptionTier): boolean {
-  return tier === 'inner_circle' || tier === 'founders_circle';
+  return tier === 'ai_integration';
 }
 
 export function isFoundersCircleTier(tier: SubscriptionTier): boolean {
-  return tier === 'founders_circle';
+  return false;
 }
 
 export function formatPrice(price: number, interval: string): string {
