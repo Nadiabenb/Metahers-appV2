@@ -2,14 +2,14 @@
 
 ## Project Overview
 
-**MetaHers Mind Spa** is a lifestyle empowerment platform for women solopreneurs, combining AI and Web3 education with a premium Alo Yoga-inspired aesthetic. Features 54 transformational experiences ("rituals") designed to help women build their digital businesses.
+**MetaHers Mind Spa** is a lifestyle empowerment platform for women solopreneurs, combining AI and Web3 education with a dark luxury "Violet Sanctuary" aesthetic. Features transformational experiences ("rituals") designed to help women build their digital businesses.
 
-**Current Status:** ✅ **Cyber Monday Ready** - Clean Alo Yoga redesign complete
+**Current Status:** ✅ **Violet Sanctuary Theme Complete** - Cohesive dark luxury aesthetic across all pages
 
 **Brand Positioning:**
-- Lifestyle empowerment (Alo Yoga model) not EdTech
-- 54 transformational "rituals" not courses
-- $299 Ultimate Bundle (80% off $1,497 for Cyber Monday)
+- Lifestyle empowerment for women entrepreneurs
+- 2 paid products: 1-Year Membership ($399/yr) + AI Integration Experience ($1,297)
+- Dark luxury feminine aesthetic (Violet Sanctuary)
 
 ---
 
@@ -19,7 +19,7 @@
 - **Frontend:** React 18 + TypeScript + Vite
 - **Backend:** Express.js + Node.js
 - **Database:** PostgreSQL (Neon) + Drizzle ORM
-- **Styling:** Tailwind CSS + Alo Yoga-Inspired Design System
+- **Styling:** Tailwind CSS + Violet Sanctuary Design System
 - **State Management:** React Query (TanStack Query v5)
 - **Forms:** React Hook Form + Zod validation
 - **Icons:** Lucide React + React Icons
