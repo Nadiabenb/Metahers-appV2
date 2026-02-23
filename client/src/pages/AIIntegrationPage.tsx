@@ -314,21 +314,21 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* PROBLEM */}
-      <section className="py-20 md:py-28 px-6 bg-muted/30 border-t border-b border-border">
+      <section className="py-20 md:py-28 px-6 bg-[#1a0b2e] border-t border-b border-white/5">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>The Reality</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light leading-tight text-foreground mb-12 max-w-2xl" data-testid="text-problem-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light leading-tight text-white mb-12 max-w-2xl" data-testid="text-problem-headline">
               You know AI is important.<br />
               But the noise, the tools, the <em className="italic text-primary">"just use ChatGPT"</em> advice {"\u2014"} none of it was built for how you actually lead.
             </h2>
-            <div className="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed space-y-5">
+            <div className="text-base md:text-lg text-white/70 max-w-2xl leading-relaxed space-y-5">
               <p>The AI revolution is accelerating. But the way it is being taught is fragmented, overly technical, and completely disconnected from how visionary women actually build. You end up with a dozen tabs open, a graveyard of half-used tools, and no real system to show for it.</p>
-              <p>You are not behind because you are not technical enough. You are behind because no one has taken the time to architect AI around how <em className="italic text-foreground">you</em> think, lead, and grow.</p>
+              <p>You are not behind because you are not technical enough. You are behind because no one has taken the time to architect AI around how <em className="italic text-white">you</em> think, lead, and grow.</p>
               <p>That is what MetaHers exists to do.</p>
             </div>
             <div className="mt-12 pl-6 border-l-2 border-primary" data-testid="text-emphasis-line">
-              <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-foreground leading-snug">
+              <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-white leading-snug">
                 We do not replace the founder.<br />
                 We elevate her operating system.
               </p>
@@ -404,7 +404,7 @@ export default function AIIntegrationPage() {
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>The Outcome</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-14 leading-tight max-w-xl" data-testid="text-outcomes-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-14 leading-tight max-w-xl" data-testid="text-outcomes-headline">
               What changes by the end of four weeks
             </h2>
           </motion.div>
@@ -422,15 +422,15 @@ export default function AIIntegrationPage() {
               >
                 <ArrowRight className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
                 <div>
-                  <h3 className="font-serif text-xl font-medium text-foreground mb-1 leading-tight">{item.title}</h3>
-                  <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  <h3 className="font-serif text-xl font-medium text-white mb-1 leading-tight">{item.title}</h3>
+                  <p className="text-sm text-white/60">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
           </div>
 
           <div className="mt-14 pl-6 border-l-2 border-primary max-w-xl" data-testid="text-outcomes-close">
-            <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-foreground leading-snug">
+            <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-white leading-snug">
               This is not surface-level productivity.<br />
               This is structural leverage.
             </p>
@@ -439,11 +439,11 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 md:py-28 px-6 bg-muted/30 border-t border-b border-border">
+      <section className="py-20 md:py-28 px-6 bg-[#1a0b2e] border-t border-b border-white/5">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>What People Say</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-14 leading-tight" data-testid="text-testimonials-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-14 leading-tight" data-testid="text-testimonials-headline">
               Women who've experienced<br />Nadia's work firsthand
             </h2>
           </motion.div>
@@ -457,12 +457,12 @@ export default function AIIntegrationPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                <Card className="relative h-full" data-testid={`card-testimonial-${i}`}>
+                <Card className="relative h-full bg-white/5 border-white/10" data-testid={`card-testimonial-${i}`}>
                   <CardContent className="p-8 pt-12">
                     <span className="absolute top-3 left-6 font-serif text-7xl text-primary/20 leading-none select-none" aria-hidden="true">"</span>
-                    <p className="font-serif text-lg italic font-light text-foreground leading-relaxed mb-6">{t.text}</p>
+                    <p className="font-serif text-lg italic font-light text-white/90 leading-relaxed mb-6">{t.text}</p>
                     <p className="font-mono text-[11px] tracking-wider uppercase text-primary">{t.author}</p>
-                    <p className="text-xs text-muted-foreground mt-1">{t.handle}</p>
+                    <p className="text-xs text-white/50 mt-1">{t.handle}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -476,15 +476,15 @@ export default function AIIntegrationPage() {
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>Who This Is For</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-3 leading-tight max-w-xl" data-testid="text-who-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-3 leading-tight max-w-xl" data-testid="text-who-headline">
               You are the right fit if&hellip;
             </h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-xl mb-12 leading-relaxed">
+            <p className="text-base md:text-lg text-white/60 max-w-xl mb-12 leading-relaxed">
               You are a visionary woman founder who has built something real {"\u2014"} and you are ready to operate at a higher level with intelligent systems behind you.
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 border border-border rounded-md overflow-hidden mb-12">
+          <div className="grid sm:grid-cols-2 border border-white/10 rounded-md overflow-hidden mb-12">
             {whoFitItems.map((item, i) => (
               <motion.div
                 key={i}
@@ -492,7 +492,7 @@ export default function AIIntegrationPage() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
-                className={`flex items-start gap-3 p-5 text-sm text-muted-foreground leading-relaxed border-b border-border ${i % 2 === 0 ? 'sm:border-r' : ''} ${i >= whoFitItems.length - 2 ? 'sm:border-b-0' : ''} ${i === whoFitItems.length - 1 ? 'border-b-0' : ''}`}
+                className={`flex items-start gap-3 p-5 text-sm text-white/70 leading-relaxed border-b border-white/10 ${i % 2 === 0 ? 'sm:border-r' : ''} ${i >= whoFitItems.length - 2 ? 'sm:border-b-0' : ''} ${i === whoFitItems.length - 1 ? 'border-b-0' : ''}`}
                 data-testid={`item-who-fit-${i}`}
               >
                 <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
@@ -501,9 +501,9 @@ export default function AIIntegrationPage() {
             ))}
           </div>
 
-          <Card className="border-2 border-primary/30 max-w-xl rounded-sm" data-testid="text-who-not">
+          <Card className="border-2 border-primary/30 max-w-xl rounded-sm bg-primary/5" data-testid="text-who-not">
             <CardContent className="p-7">
-              <p className="font-serif text-lg md:text-xl italic font-light text-muted-foreground leading-relaxed">
+              <p className="font-serif text-lg md:text-xl italic font-light text-white/90 leading-relaxed">
                 This is not for casual experimentation.<br />
                 This is for women who are ready to evolve how they operate.
               </p>
@@ -582,12 +582,12 @@ export default function AIIntegrationPage() {
             <SectionLabel>About Nadia</SectionLabel>
             <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
               <div>
-                <h2 className="font-serif text-3xl sm:text-4xl font-light text-foreground leading-tight mb-7" data-testid="text-about-headline">
+                <h2 className="font-serif text-3xl sm:text-4xl font-light text-white leading-tight mb-7" data-testid="text-about-headline">
                   Built by someone who thinks in systems.
                 </h2>
-                <div className="text-sm md:text-base text-muted-foreground leading-relaxed space-y-4">
-                  <p>I'm Nadia Ben Brahim {"\u2014"} founder of MetaHers. I studied Computer Science and graduated in 2008, then spent the next decade building a career in luxury hospitality, rising from Front Office Manager to <strong className="text-foreground font-semibold">Hotel General Manager in Los Angeles</strong>.</p>
-                  <p>Throughout that career, I became known for one thing above all else: <strong className="text-foreground font-semibold">systems thinking</strong>. I optimized operations, resolved complex technical problems independently, and integrated tools into real-world execution at the highest level.</p>
+                <div className="text-sm md:text-base text-white/60 leading-relaxed space-y-4">
+                  <p>I'm Nadia Ben Brahim {"\u2014"} founder of MetaHers. I studied Computer Science and graduated in 2008, then spent the next decade building a career in luxury hospitality, rising from Front Office Manager to <strong className="text-white font-semibold">Hotel General Manager in Los Angeles</strong>.</p>
+                  <p>Throughout that career, I became known for one thing above all else: <strong className="text-white font-semibold">systems thinking</strong>. I optimized operations, resolved complex technical problems independently, and integrated tools into real-world execution at the highest level.</p>
                   <p>When AI emerged, I did not approach it as a trend. I approached it as infrastructure.</p>
                   <p>MetaHers exists to translate advanced technology into structured, practical leverage for women founders who refuse to be left behind. I do not teach tools. I architect systems around how you think, lead, and grow.</p>
                 </div>
@@ -602,13 +602,13 @@ export default function AIIntegrationPage() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: i * 0.1 }}
                   >
-                    <Card className="border border-primary/20 rounded-sm" data-testid={`card-credential-${i}`}>
+                    <Card className="border border-primary/20 rounded-sm bg-white/5" data-testid={`card-credential-${i}`}>
                       <CardContent className="p-5">
                         <div className="flex items-center gap-2 mb-1">
                           <cred.icon className="w-3.5 h-3.5 text-primary" />
                           <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-primary">{cred.title}</span>
                         </div>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{cred.text}</p>
+                        <p className="text-sm text-white/60 leading-relaxed">{cred.text}</p>
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -666,11 +666,11 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 md:py-28 px-6 bg-muted/30 border-t border-border">
+      <section className="py-20 md:py-28 px-6 bg-[#1a0b2e] border-t border-white/5">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>Questions</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-foreground mb-14 leading-tight" data-testid="text-faq-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-14 leading-tight" data-testid="text-faq-headline">
               Common questions,<br />honest answers.
             </h2>
           </motion.div>
@@ -683,14 +683,14 @@ export default function AIIntegrationPage() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="border-b border-border first:border-t first:border-border"
+                className="border-b border-white/10 first:border-t first:border-white/10"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-start justify-between gap-6 py-7 text-left group"
                   data-testid={`button-faq-${i}`}
                 >
-                  <span className={`font-serif text-lg md:text-xl font-medium leading-snug transition-colors ${openFaq === i ? 'text-primary' : 'text-foreground'}`}>
+                  <span className={`font-serif text-lg md:text-xl font-medium leading-snug transition-colors ${openFaq === i ? 'text-primary' : 'text-white'}`}>
                     {faq.q}
                   </span>
                   <ChevronDown className={`w-5 h-5 text-primary flex-shrink-0 mt-1 transition-transform duration-300 ${openFaq === i ? 'rotate-180' : ''}`} />
@@ -698,7 +698,7 @@ export default function AIIntegrationPage() {
                 <div
                   className={`overflow-hidden transition-all duration-400 ease-in-out ${openFaq === i ? 'max-h-60 pb-7' : 'max-h-0'}`}
                 >
-                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed pr-10">{faq.a}</p>
+                  <p className="text-sm md:text-base text-white/50 leading-relaxed pr-10">{faq.a}</p>
                 </div>
               </motion.div>
             ))}
