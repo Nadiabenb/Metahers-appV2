@@ -220,7 +220,7 @@ export default function AIIntegrationPage() {
       />
 
       {/* HERO */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden bg-black px-6 py-20">
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden px-6 py-20" style={{ background: '#0D0B14' }}>
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139,92,246,0.15) 0%, transparent 70%), radial-gradient(ellipse 40% 30% at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 60%)"
         }} />
@@ -314,7 +314,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* PROBLEM */}
-      <section className="py-20 md:py-28 px-6 bg-[#1a0b2e] border-t border-b border-white/5">
+      <section className="py-20 md:py-28 px-6 border-t border-b border-white/5" style={{ background: '#120E22' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>The Reality</SectionLabel>
@@ -338,7 +338,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* WHAT WE BUILD */}
-      <section className="py-20 md:py-28 px-6 bg-black text-white">
+      <section className="py-20 md:py-28 px-6 text-white" style={{ background: '#0D0B14' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>What We Build Together</SectionLabel>
@@ -385,7 +385,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* MID CTA */}
-      <div className="bg-black py-12 px-6 text-center border-t border-primary/10">
+      <div className="py-12 px-6 text-center border-t border-primary/10" style={{ background: '#0D0B14' }}>
         <p className="font-serif text-lg md:text-xl italic font-light text-white/50 mb-6">
           Ready to stop experimenting and start integrating?
         </p>
@@ -439,7 +439,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 md:py-28 px-6 bg-[#1a0b2e] border-t border-b border-white/5">
+      <section className="py-20 md:py-28 px-6 border-t border-b border-white/5" style={{ background: '#120E22' }}>
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>What People Say</SectionLabel>
@@ -513,7 +513,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* STRUCTURE / 4 WEEKS */}
-      <section className="py-20 md:py-28 px-6 bg-black text-white">
+      <section className="py-20 md:py-28 px-6 text-white" style={{ background: '#0D0B14' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>The Experience</SectionLabel>
@@ -620,7 +620,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* INVESTMENT */}
-      <section className="py-20 md:py-28 px-6 bg-black text-white text-center" id="apply">
+      <section className="py-20 md:py-28 px-6 text-white text-center" id="apply" style={{ background: '#0D0B14' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="flex items-center justify-center gap-3 mb-10">
@@ -666,7 +666,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 md:py-28 px-6 bg-[#1a0b2e] border-t border-white/5">
+      <section className="py-20 md:py-28 px-6 border-t border-white/5" style={{ background: '#120E22' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>Questions</SectionLabel>
@@ -707,7 +707,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="relative py-24 md:py-32 px-6 bg-black text-white text-center overflow-hidden">
+      <section className="relative py-24 md:py-32 px-6 text-white text-center overflow-hidden" style={{ background: '#0D0B14' }}>
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(139,92,246,0.12) 0%, transparent 70%)"
         }} />
@@ -735,7 +735,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* FOOTER NOTE */}
-      <div className="bg-black py-8 px-6 text-center border-t border-primary/10">
+      <div className="py-8 px-6 text-center border-t border-primary/10" style={{ background: '#0D0B14' }}>
         <p className="font-mono text-[11px] tracking-wider text-white/20">
           MetaHers {"\u00B7"} AI Integration Experience {"\u00B7"} Private {"\u00B7"} By Application
         </p>

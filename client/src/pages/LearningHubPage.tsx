@@ -733,7 +733,7 @@ export default function LearningHubPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#0D0B14]">
       <SEO 
         title="AI Mastery Program Learning Hub | MetaHers Mind Spa"
         description="Welcome to your AI Mastery Program dashboard. Complete 4-week curriculum, join live sessions, and connect with 500+ women solopreneurs in our exclusive community."
@@ -806,7 +806,7 @@ export default function LearningHubPage() {
 
             {/* Learning Modules */}
             <div>
-              <h2 className="text-2xl font-bold mb-4 text-gray-800">Your Learning Journey</h2>
+              <h2 className="text-2xl font-bold mb-4 text-white/90">Your Learning Journey</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modules.map((module) => {
                   const Icon = module.icon;
@@ -824,8 +824,8 @@ export default function LearningHubPage() {
                       type="button"
                       className={`border-2 p-6 rounded-lg transition-all text-left w-full ${
                         module.status === "locked"
-                          ? "border-gray-200 opacity-60 bg-white pointer-events-none"
-                          : "border-purple-200 hover:border-purple-400 hover:shadow-lg bg-white cursor-pointer"
+                          ? "border-white/10 opacity-60 bg-[#161225] pointer-events-none"
+                          : "border-purple-500/30 hover:border-purple-400 hover:shadow-lg bg-[#161225] cursor-pointer"
                       }`}
                       data-testid={`card-module-week-${module.week}`}
                     >
@@ -834,38 +834,38 @@ export default function LearningHubPage() {
                           <div
                             className={`p-3 rounded-lg ${
                               module.status === "locked"
-                                ? "bg-gray-100"
-                                : "bg-purple-100"
+                                ? "bg-white/10"
+                                : "bg-purple-900/30"
                             }`}
                           >
                             {module.status === "locked" ? (
-                              <Lock className="w-6 h-6 text-gray-400" />
+                              <Lock className="w-6 h-6 text-white/40" />
                             ) : (
                               <Icon className="w-6 h-6 text-purple-600" />
                             )}
                           </div>
                           <div>
-                            <h3 className="font-bold text-gray-900">Week {module.week}</h3>
+                            <h3 className="font-bold text-white">Week {module.week}</h3>
                             <p className="text-sm text-purple-600 font-medium">{module.title}</p>
                           </div>
                         </div>
                         <ChevronDown className="w-5 h-5 text-purple-600 flex-shrink-0 group-hover:translate-y-1 transition-transform" />
                       </div>
-                      <p className="text-gray-600 text-sm mb-3">{module.description}</p>
+                      <p className="text-white/50 text-sm mb-3">{module.description}</p>
                       <div className="space-y-2 text-sm">
-                        <div className="flex items-center gap-2 text-gray-600">
+                        <div className="flex items-center gap-2 text-white/50">
                           <BookOpen className="w-4 h-4" />
                           <span>{module.lessons.length} Lessons</span>
                         </div>
-                        <div className="flex items-center gap-2 text-gray-600">
+                        <div className="flex items-center gap-2 text-white/50">
                           <Calendar className="w-4 h-4" />
                           <span>{module.nextSession}</span>
                         </div>
                       </div>
                       {module.status === "active" && (
-                        <div className="mt-4 w-full bg-purple-100 rounded-lg p-2">
+                        <div className="mt-4 w-full bg-purple-900/30 rounded-lg p-2">
                           <div className="bg-purple-600 rounded-full h-2" style={{ width: `${module.progress}%` }}></div>
-                          <div className="text-xs text-gray-600 mt-1">{module.progress}% complete</div>
+                          <div className="text-xs text-white/50 mt-1">{module.progress}% complete</div>
                         </div>
                       )}
                     </button>
@@ -876,12 +876,12 @@ export default function LearningHubPage() {
 
             {/* Curriculum Week Details - Mobile Friendly - NOW APPEARS AFTER CARDS */}
             {flippedWeek && (
-              <div className="mt-8 mb-8 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-6 md:p-8 border-2 border-purple-200 shadow-lg" data-week-details>
+              <div className="mt-8 mb-8 bg-gradient-to-br from-purple-900/30 via-pink-900/20 to-[#161225] rounded-2xl p-6 md:p-8 border-2 border-purple-500/30 shadow-lg" data-week-details>
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900">Week {flippedWeek} Details</h3>
+                  <h3 className="text-2xl md:text-3xl font-bold text-white">Week {flippedWeek} Details</h3>
                   <button 
                     onClick={() => setFlippedWeek(null)} 
-                    className="text-gray-400 hover:text-gray-600 transition-colors flex-shrink-0"
+                    className="text-white/50 hover:text-white/70 transition-colors flex-shrink-0"
                     data-testid="button-close-week-details"
                   >
                     <ChevronUp className="w-6 h-6" />
@@ -894,33 +894,33 @@ export default function LearningHubPage() {
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
                         <Clock className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                        <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].duration}</span>
+                        <span className="text-white/70">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].duration}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <Calendar className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                        <span className="text-gray-700">Live Session: {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].liveSession}</span>
+                        <span className="text-white/70">Live Session: {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].liveSession}</span>
                       </div>
                       <div className="flex items-center gap-3">
                         <BookOpen className="w-5 h-5 text-purple-600 flex-shrink-0" />
-                        <span className="text-gray-700">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].modules} Modules</span>
+                        <span className="text-white/70">{curriculumDetails[flippedWeek as keyof typeof curriculumDetails].modules} Modules</span>
                       </div>
                     </div>
                   </div>
 
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-3">What You'll Master</h4>
+                    <h4 className="text-lg font-bold text-white mb-3">What You'll Master</h4>
                     <ul className="space-y-2">
                       {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].keyPoints.map((point, idx) => (
                         <li key={idx} className="flex items-start gap-3">
                           <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700 text-sm md:text-base">{point}</span>
+                          <span className="text-white/70 text-sm md:text-base">{point}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-3">Your Deliverables</h4>
+                    <h4 className="text-lg font-bold text-white mb-3">Your Deliverables</h4>
                     <div className="flex flex-wrap gap-2">
                       {curriculumDetails[flippedWeek as keyof typeof curriculumDetails].deliverables.map((item, idx) => (
                         <Badge key={idx} variant="secondary" className="text-xs md:text-sm">{item}</Badge>
@@ -941,7 +941,7 @@ export default function LearningHubPage() {
 
             {/* Expanded Lesson View - Week 1, 2, 3 & 4 Rich Content */}
             {expandedLesson && (week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons] || week4Lessons[expandedLesson as keyof typeof week4Lessons]) && (
-              <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 rounded-2xl p-8 border-2 border-purple-200 mt-8" data-lesson-expanded>
+              <div className="bg-gradient-to-br from-purple-900/30 via-pink-900/20 to-[#161225] rounded-2xl p-8 border-2 border-purple-500/30 mt-8" data-lesson-expanded>
                 {(() => {
                   const lesson = week1Lessons[expandedLesson as keyof typeof week1Lessons] || week2Lessons[expandedLesson as keyof typeof week2Lessons] || week3Lessons[expandedLesson as keyof typeof week3Lessons] || week4Lessons[expandedLesson as keyof typeof week4Lessons];
                   return (
@@ -950,9 +950,9 @@ export default function LearningHubPage() {
                       <div className="flex items-start justify-between mb-6">
                         <div className="flex-1">
                           <div className="text-5xl mb-3">{lesson.emoji}</div>
-                          <h3 className="text-3xl font-bold text-gray-900 mb-2">{expandedLesson}</h3>
+                          <h3 className="text-3xl font-bold text-white mb-2">{expandedLesson}</h3>
                           <p className="text-lg text-purple-600 font-semibold italic mb-4">{lesson.tagline}</p>
-                          <p className="text-gray-700 leading-relaxed text-lg">{lesson.description}</p>
+                          <p className="text-white/70 leading-relaxed text-lg">{lesson.description}</p>
                         </div>
                         <button 
                           onClick={() => setExpandedLesson(null)}
@@ -965,15 +965,15 @@ export default function LearningHubPage() {
 
                       {/* Learning Objectives */}
                       <div className="mb-8">
-                        <h4 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                           <Target className="w-6 h-6 text-purple-600" />
                           What You'll Learn
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           {lesson.objectives.map((obj, idx) => (
-                            <div key={idx} className="flex gap-3 bg-white p-4 rounded-lg border-2 border-purple-100">
+                            <div key={idx} className="flex gap-3 bg-[#161225] p-4 rounded-lg border-2 border-purple-500/20">
                               <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700">{obj}</span>
+                              <span className="text-white/70">{obj}</span>
                             </div>
                           ))}
                         </div>
@@ -981,30 +981,30 @@ export default function LearningHubPage() {
 
                       {/* Key Topics */}
                       <div className="mb-8">
-                        <h4 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                           <Lightbulb className="w-6 h-6 text-orange-600" />
                           Key Concepts
                         </h4>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                           {lesson.keyTopics.map((topic, idx) => (
-                            <div key={idx} className="bg-white p-5 rounded-lg border-l-4 border-pink-500">
-                              <h5 className="font-bold text-gray-900 mb-2">{topic.title}</h5>
-                              <p className="text-gray-600 text-sm italic">{topic.desc}</p>
+                            <div key={idx} className="bg-[#161225] p-5 rounded-lg border border-pink-500/30">
+                              <h5 className="font-bold text-white mb-2">{topic.title}</h5>
+                              <p className="text-white/50 text-sm italic">{topic.desc}</p>
                             </div>
                           ))}
                         </div>
                       </div>
 
                       {/* Interactive Exercise */}
-                      <div className="mb-8 bg-white rounded-xl p-6 border-2 border-purple-300">
-                        <h4 className="text-xl font-bold text-gray-900 mb-3 flex items-center gap-2">
+                      <div className="mb-8 bg-[#161225] rounded-xl p-6 border-2 border-purple-500/30">
+                        <h4 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
                           <Zap className="w-6 h-6 text-yellow-500" />
                           Your Challenge
                         </h4>
-                        <div className="bg-purple-50 rounded-lg p-5 mb-4">
-                          <p className="text-lg font-semibold text-gray-900 mb-2">{lesson.exercise.title}</p>
-                          <p className="text-gray-700 mb-3">{lesson.exercise.desc}</p>
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                        <div className="bg-purple-900/30 rounded-lg p-5 mb-4">
+                          <p className="text-lg font-semibold text-white mb-2">{lesson.exercise.title}</p>
+                          <p className="text-white/70 mb-3">{lesson.exercise.desc}</p>
+                          <div className="flex items-center gap-2 text-sm text-white/50">
                             <Clock className="w-4 h-4" />
                             <span>Time to complete: {lesson.exercise.timeEstimate}</span>
                           </div>
@@ -1017,7 +1017,7 @@ export default function LearningHubPage() {
 
                       {/* Resources */}
                       <div>
-                        <h4 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <h4 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
                           <Award className="w-6 h-6 text-pink-600" />
                           Resources & Templates
                         </h4>
@@ -1025,12 +1025,12 @@ export default function LearningHubPage() {
                           {lesson.resources.map((resource, idx) => (
                             <button
                               key={idx}
-                              className="text-left bg-white p-4 rounded-lg border-2 border-gray-200 hover:border-purple-400 hover:shadow-md transition-all"
+                              className="text-left bg-[#161225] p-4 rounded-lg border-2 border-white/10 hover:border-purple-400 hover:shadow-md transition-all"
                               data-testid={`button-resource-${resource.title.toLowerCase().replace(/\s+/g, '-')}`}
                             >
                               <div className="flex items-start justify-between">
                                 <div>
-                                  <p className="font-semibold text-gray-900">{resource.title}</p>
+                                  <p className="font-semibold text-white">{resource.title}</p>
                                   <p className="text-xs text-purple-600 font-medium mt-1">{resource.type}</p>
                                 </div>
                                 <ArrowRight className="w-4 h-4 text-purple-600 flex-shrink-0 mt-1" />
@@ -1041,7 +1041,7 @@ export default function LearningHubPage() {
                       </div>
 
                       {/* Lesson Navigation */}
-                      <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t-2 border-gray-200">
+                      <div className="mt-8 flex flex-wrap gap-3 pt-6 border-t-2 border-purple-500/20">
                         {(() => {
                           const currentModule = modules.find(m => (m.week === 1 && week1Lessons[expandedLesson as keyof typeof week1Lessons]) || (m.week === 2 && week2Lessons[expandedLesson as keyof typeof week2Lessons]) || (m.week === 3 && week3Lessons[expandedLesson as keyof typeof week3Lessons]) || (m.week === 4 && week4Lessons[expandedLesson as keyof typeof week4Lessons]));
                           return (currentModule?.lessons || []).map((lessonTitle, idx) => (
@@ -1051,7 +1051,7 @@ export default function LearningHubPage() {
                               className={`px-4 py-2 rounded-lg font-medium transition-all ${
                                 expandedLesson === lessonTitle
                                   ? "bg-purple-600 text-white"
-                                  : "bg-white text-purple-600 border-2 border-purple-200 hover:border-purple-400"
+                                  : "bg-[#161225] text-purple-400 border-2 border-purple-500/30 hover:border-purple-400"
                               }`}
                               data-testid={`button-lesson-nav-${lessonTitle.toLowerCase().replace(/\s+/g, '-')}`}
                             >
@@ -1068,8 +1068,8 @@ export default function LearningHubPage() {
 
             {/* Community Activity & Ask Nadia */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-white rounded-xl p-6 border-2 border-gray-200">
-                <h3 className="text-xl font-bold mb-4 text-gray-800 flex items-center gap-2">
+              <div className="lg:col-span-2 bg-[#161225] rounded-xl p-6 border-2 border-white/10">
+                <h3 className="text-xl font-bold mb-4 text-white/90 flex items-center gap-2">
                   <Users className="w-6 h-6 text-purple-600" />
                   Community Activity
                 </h3>
@@ -1077,17 +1077,17 @@ export default function LearningHubPage() {
                   {(activityLoading ? [] : activityData || recentActivity).map((activity, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg"
+                      className="flex items-start gap-3 p-3 bg-purple-900/30 rounded-lg"
                     >
                       <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
                         {activity.title ? activity.title[0] : (activity.user ? activity.user[0] : 'A')}
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm text-gray-800">
+                        <p className="text-sm text-white/90">
                           <span className="font-semibold">{activity.title || activity.user}</span>
                           {activity.action && ` ${activity.action}`}
                         </p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-white/50">
                           {activity.time || (activity.createdAt ? new Date(activity.createdAt).toLocaleDateString() : 'Recently')}
                         </p>
                       </div>
@@ -1121,8 +1121,8 @@ export default function LearningHubPage() {
 
           {/* Live Sessions Tab */}
           <TabsContent value="sessions" className="space-y-6">
-            <div className="bg-white rounded-xl p-6 border-2 border-purple-200">
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">Upcoming Live Sessions</h2>
+            <div className="bg-[#161225] rounded-xl p-6 border-2 border-purple-500/30">
+              <h2 className="text-2xl font-bold mb-6 text-white/90">Upcoming Live Sessions</h2>
               <div className="space-y-4">
                 {(sessionsLoading ? [] : sessionsData || upcomingSessions).map((session, idx) => {
                   const startDate = session.startTime ? new Date(session.startTime) : null;
@@ -1131,17 +1131,17 @@ export default function LearningHubPage() {
                   return (
                     <div
                       key={idx}
-                      className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-5 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border-2 border-purple-200"
+                      className="flex flex-col sm:flex-row items-start sm:items-center gap-6 p-5 bg-gradient-to-r from-purple-900/30 to-pink-900/20 rounded-xl border-2 border-purple-500/30"
                     >
                       <div className="text-center sm:text-left">
                         <div className="text-3xl font-bold text-purple-600">
                           {dateStr.split(' ')[1] || session.date?.split(" ")[1] || dateStr}
                         </div>
-                        <div className="text-sm text-gray-600">{dateStr.split(' ')[0] || session.date?.split(" ")[0]}</div>
+                        <div className="text-sm text-white/50">{dateStr.split(' ')[0] || session.date?.split(" ")[0]}</div>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-bold text-lg text-gray-800">{session.title}</div>
-                        <div className="text-gray-600 text-sm flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
+                        <div className="font-bold text-lg text-white/90">{session.title}</div>
+                        <div className="text-white/50 text-sm flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
                           <span className="flex items-center gap-1">
                             <Video className="w-4 h-4" />
                             {session.type || 'Live Session'}
@@ -1208,74 +1208,74 @@ export default function LearningHubPage() {
           {/* Community Tab */}
           <TabsContent value="community" className="space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-black mb-6">Your Community</h2>
+              <h2 className="text-2xl font-bold text-white mb-6">Your Community</h2>
 
               {/* Community Features */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-white/10">
                   <div className="flex justify-center mb-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
                       <Users className="w-6 h-6 text-white" />
                     </div>
                   </div>
-                  <h3 className="font-bold text-black mb-2">Private Community</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-bold text-white mb-2">Private Community</h3>
+                  <p className="text-sm text-white/50">
                     Connect with 500+ women solopreneurs
                   </p>
                 </Card>
 
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-white/10">
                   <div className="flex justify-center mb-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-pink-600 to-orange-500 rounded-lg flex items-center justify-center">
                       <MessageCircle className="w-6 h-6 text-white" />
                     </div>
                   </div>
-                  <h3 className="font-bold text-black mb-2">Direct Message Nadia</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-bold text-white mb-2">Direct Message Nadia</h3>
+                  <p className="text-sm text-white/50">
                     Get personal guidance and support
                   </p>
                 </Card>
 
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-white/10">
                   <div className="flex justify-center mb-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-orange-600 to-yellow-500 rounded-lg flex items-center justify-center">
                       <Calendar className="w-6 h-6 text-white" />
                     </div>
                   </div>
-                  <h3 className="font-bold text-black mb-2">Exclusive Events</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-bold text-white mb-2">Exclusive Events</h3>
+                  <p className="text-sm text-white/50">
                     Monthly mastermind sessions
                   </p>
                 </Card>
 
-                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-gray-200">
+                <Card className="p-6 text-center hover:shadow-lg transition-shadow border-2 border-white/10">
                   <div className="flex justify-center mb-4">
                     <div className="w-12 h-12 bg-gradient-to-r from-purple-600 to-pink-500 rounded-lg flex items-center justify-center">
                       <Sparkles className="w-6 h-6 text-white" />
                     </div>
                   </div>
-                  <h3 className="font-bold text-black mb-2">Resource Library</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-bold text-white mb-2">Resource Library</h3>
+                  <p className="text-sm text-white/50">
                     Templates and AI prompts
                   </p>
                 </Card>
               </div>
 
               {/* Community Stats */}
-              <Card className="p-6 border-2 border-gray-200 mb-6">
-                <h3 className="font-bold text-black mb-6">Community Stats</h3>
+              <Card className="p-6 border-2 border-white/10 mb-6">
+                <h3 className="font-bold text-white mb-6">Community Stats</h3>
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <p className="text-3xl font-bold text-purple-600">500+</p>
-                    <p className="text-sm text-gray-600">Members</p>
+                    <p className="text-sm text-white/50">Members</p>
                   </div>
                   <div>
                     <p className="text-3xl font-bold text-pink-600">48</p>
-                    <p className="text-sm text-gray-600">Active Daily</p>
+                    <p className="text-sm text-white/50">Active Daily</p>
                   </div>
                   <div>
                     <p className="text-3xl font-bold text-orange-600">12</p>
-                    <p className="text-sm text-gray-600">Countries</p>
+                    <p className="text-sm text-white/50">Countries</p>
                   </div>
                 </div>
               </Card>

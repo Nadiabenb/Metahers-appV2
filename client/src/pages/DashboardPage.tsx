@@ -194,7 +194,8 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen relative bg-white py-8 px-4 sm:px-6 lg:px-8"
+    <div className="min-h-screen relative py-8 px-4 sm:px-6 lg:px-8"
+      style={{ background: '#0D0B14' }}
     >
       
       <div className="relative z-10">
@@ -214,7 +215,7 @@ export default function DashboardPage() {
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
             <div>
-              <h1 className="font-semibold text-4xl sm:text-5xl text-black mb-2" data-testid="text-dashboard-title">
+              <h1 className="font-light text-4xl sm:text-5xl text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }} data-testid="text-dashboard-title">
                 {(() => {
                   const hour = new Date().getHours();
                   const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
@@ -584,7 +585,7 @@ export default function DashboardPage() {
                 <CardContent className="space-y-3">
                   <div>
                     <p className="text-sm font-medium mb-1">Current Plan</p>
-                    <p className="text-lg font-bold text-purple-600">{plan.displayName}</p>
+                    <p className="text-lg font-bold" style={{ color: '#E879F9' }}>{plan.displayName}</p>
                   </div>
                   <p className="text-sm text-foreground/70">{plan.description}</p>
                   {tier !== 'founders_circle' && (

@@ -131,7 +131,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ background: '#0D0B14' }}>
       <SEO
         title="MetaHers - AI & Web3 for Women Solopreneurs"
         description="Master AI & Web3 to build your business, amplify your influence, and live on your terms. Join thousands of women redefining success."
@@ -140,9 +140,9 @@ export default function HomePage() {
       />
 
       {/* HERO SECTION - Alo Yoga Clean Style with Tech Accent */}
-      <section className="relative min-h-[90vh] flex items-center justify-center bg-white overflow-hidden">
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden" style={{ background: '#0D0B14' }}>
         {/* Subtle tech gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 via-white to-pink-50/20" />
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/10" />
         
         {/* Minimal grid pattern for tech feel */}
         <div 
@@ -171,12 +171,12 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-8xl font-semibold mb-8 tracking-tight leading-[0.95] text-black"
+            className="text-5xl sm:text-6xl lg:text-8xl font-semibold mb-8 tracking-tight leading-[0.95] text-white"
             style={{ letterSpacing: '-0.03em' }}
             data-testid="text-hero-title"
           >
             Become a{' '}
-            <span className="text-purple-600">MetaHers</span>
+            <span className="text-[#E879F9]">MetaHers</span>
             {' '}Woman
           </motion.h1>
 
@@ -184,7 +184,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg sm:text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed font-light"
+            className="text-lg sm:text-xl mb-12 max-w-2xl mx-auto leading-relaxed font-light" style={{ color: 'rgba(255,255,255,0.7)' }}
           >
             Master AI & Web3 to build your business, amplify your influence, and live on your terms. Join thousands of women redefining success.
           </motion.p>
@@ -216,7 +216,7 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="mt-12 flex items-center justify-center gap-8 text-sm text-gray-500"
+            className="mt-12 flex items-center justify-center gap-8 text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}
           >
             <span className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-purple-500" />
@@ -264,9 +264,9 @@ export default function HomePage() {
 
       {/* AI Recommendations - Only for authenticated users */}
       {user && (
-        <section className="py-16 px-6 bg-gray-50">
+        <section className="py-16 px-6" style={{ background: '#161225' }}>
           <div className="max-w-7xl mx-auto">
-            <Suspense fallback={<div className="h-64 animate-pulse bg-gray-100 rounded" />}>
+            <Suspense fallback={<div className="h-64 animate-pulse rounded" style={{ background: '#0D0B14' }} />}>
               <RecommendationWidget />
             </Suspense>
           </div>
@@ -275,7 +275,7 @@ export default function HomePage() {
 
       {/* SPACES SECTION - Clean Grid */}
       {!spacesLoading && spaces.length > 0 && (
-        <section className="py-24 px-6 bg-white">
+        <section className="py-24 px-6" style={{ background: '#0D0B14' }}>
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -284,10 +284,10 @@ export default function HomePage() {
               transition={{ duration: 0.4 }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight text-white">
                 Discover Your Edge
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
                 Nine transformational spaces to master AI, Web3, and build wealth, influence, and impact.
               </p>
             </motion.div>
@@ -326,17 +326,17 @@ export default function HomePage() {
                     >
                       <div className={`relative h-full ${isLocked ? 'opacity-75' : ''}`}>
                         {isLocked && (
-                          <div className="absolute inset-0 z-10 bg-white/90 flex items-center justify-center">
+                          <div className="absolute inset-0 z-10 flex items-center justify-center" style={{ background: 'rgba(13,11,20,0.9)' }}>
                             <motion.div
                               initial={{ scale: 0.9, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
                               transition={{ delay: 0.2 }}
                               className="text-center px-6"
                             >
-                              <div className="w-12 h-12 mx-auto mb-3 rounded-full bg-gray-100 flex items-center justify-center">
-                                <Lock className="w-5 h-5 text-gray-500" />
+                              <div className="w-12 h-12 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ background: '#161225' }}>
+                                <Lock className="w-5 h-5 text-[#C8A2D8]" />
                               </div>
-                              <p className="font-medium text-sm mb-2">Pro Access Required</p>
+                              <p className="font-medium text-sm mb-2 text-white">Pro Access Required</p>
                               <Button
                                 size="sm"
                                 onClick={(e) => {
@@ -362,7 +362,7 @@ export default function HomePage() {
                           className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
                           data-testid={`button-space-${space.slug}`}
                         >
-                          <div className="border border-gray-200 hover:border-gray-300 transition-all duration-300 h-full flex flex-col bg-white group-hover:shadow-lg">
+                          <div className="border border-white/10 hover:border-white/20 transition-all duration-300 h-full flex flex-col group-hover:shadow-lg" style={{ background: '#161225' }}>
                             {spaceImages[space.slug] && (
                               <div className="relative w-full aspect-[4/3] overflow-hidden">
                                 <img
@@ -375,7 +375,7 @@ export default function HomePage() {
                                 
                                 <div className="absolute top-4 left-4 flex gap-2">
                                   {!isLocked && !experiencesLoading && freeExperiencesCount > 0 && (
-                                    <span className="px-2 py-1 bg-white text-black text-xs font-medium uppercase tracking-wider">
+                                    <span className="px-2 py-1 text-white text-xs font-medium uppercase tracking-wider" style={{ background: 'rgba(232,121,249,0.9)' }}>
                                       {freeExperiencesCount} Free
                                     </span>
                                   )}
@@ -391,14 +391,14 @@ export default function HomePage() {
                             )}
 
                             <div className="p-6 flex flex-col flex-1">
-                              <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+                              <p className="text-sm mb-4 line-clamp-2" style={{ color: 'rgba(255,255,255,0.7)' }}>
                                 {space.description}
                               </p>
 
                               <div className="flex-1 mb-4">
                                 <ul className="space-y-2">
                                   {valueProp.outcomes.slice(0, 3).map((outcome, i) => (
-                                    <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                                    <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
                                       <CheckCircle2 className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
                                       <span>{outcome}</span>
                                     </li>
@@ -406,8 +406,8 @@ export default function HomePage() {
                                 </ul>
                               </div>
 
-                              <div className="pt-4 border-t border-gray-100">
-                                <span className="text-sm font-medium text-black uppercase tracking-wider group-hover:text-purple-600 transition-colors flex items-center gap-2">
+                              <div className="pt-4 border-t border-white/10">
+                                <span className="text-sm font-medium text-white uppercase tracking-wider group-hover:text-[#E879F9] transition-colors flex items-center gap-2">
                                   {isLocked ? "Unlock Access" : "Begin Ritual"}
                                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                                 </span>
@@ -425,7 +425,7 @@ export default function HomePage() {
       )}
 
       {/* THE METAHERS DIFFERENCE */}
-      <section className="py-24 px-6 bg-gray-50">
+      <section className="py-24 px-6" style={{ background: '#161225' }}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -434,10 +434,10 @@ export default function HomePage() {
             transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight text-white">
               The MetaHers Difference
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
               We're not another academy. We're a lifestyle movement for women who refuse to be left behind.
             </p>
           </motion.div>
@@ -466,13 +466,14 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-white p-8 border border-gray-200 hover:border-gray-300 transition-all hover:shadow-lg"
+                className="p-8 border border-white/10 hover:border-white/20 transition-all hover:shadow-lg"
+                style={{ background: '#0D0B14' }}
               >
-                <div className="w-12 h-12 bg-purple-50 flex items-center justify-center mb-6">
-                  <feature.icon className="w-6 h-6 text-purple-600" />
+                <div className="w-12 h-12 flex items-center justify-center mb-6" style={{ background: 'rgba(232,121,249,0.1)' }}>
+                  <feature.icon className="w-6 h-6 text-[#E879F9]" />
                 </div>
-                <h3 className="text-xl font-semibold mb-3">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-xl font-semibold mb-3 text-white">{feature.title}</h3>
+                <p style={{ color: 'rgba(255,255,255,0.7)' }}>{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -480,7 +481,7 @@ export default function HomePage() {
       </section>
 
       {/* MEMBER WINS */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-24 px-6" style={{ background: '#0D0B14' }}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -489,10 +490,10 @@ export default function HomePage() {
             transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight text-white">
               What Members Are Accomplishing
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
               Real women. Real results. Real transformation.
             </p>
           </motion.div>
@@ -510,12 +511,13 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-gray-50 p-6 text-center border border-gray-200"
+                className="p-6 text-center border border-white/10"
+                style={{ background: '#161225' }}
               >
                 <div className="text-3xl sm:text-4xl font-semibold mb-2 text-gradient-tech">
                   {win.stat}
                 </div>
-                <p className="text-sm text-gray-600">{win.description}</p>
+                <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>{win.description}</p>
               </motion.div>
             ))}
           </div>
@@ -548,7 +550,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
               <button
                 onClick={() => setLocation('/upgrade')}
-                className="px-10 py-4 bg-white text-black text-sm uppercase tracking-[0.15em] font-medium hover:bg-gray-100 transition-colors"
+                className="px-10 py-4 text-white text-sm uppercase tracking-[0.15em] font-medium transition-colors" style={{ background: '#E879F9' }}
                 data-testid="button-cyber-monday-cta"
               >
                 Get All 9 Spaces for $299
@@ -556,11 +558,11 @@ export default function HomePage() {
               </button>
               <div className="text-center">
                 <div className="text-2xl font-semibold">$299</div>
-                <div className="text-sm text-gray-500 line-through">$1,497</div>
+                <div className="text-sm line-through" style={{ color: 'rgba(255,255,255,0.5)' }}>$1,497</div>
               </div>
             </div>
             
-            <p className="text-sm text-gray-500 mt-8">
+            <p className="text-sm mt-8" style={{ color: 'rgba(255,255,255,0.5)' }}>
               Limited to 100 women this Cyber Monday
             </p>
           </motion.div>
@@ -568,7 +570,7 @@ export default function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-24 px-6 bg-gray-50">
+      <section className="py-24 px-6" style={{ background: '#161225' }}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -577,8 +579,8 @@ export default function HomePage() {
             transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
-            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Trusted by 5,000+ Women</p>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight">
+            <p className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: 'rgba(255,255,255,0.5)' }}>Trusted by 5,000+ Women</p>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-white">
               Why MetaHers Women Win
             </h2>
           </motion.div>
@@ -607,15 +609,16 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="bg-white p-8 border border-gray-200"
+                className="p-8 border border-white/10"
+                style={{ background: '#0D0B14' }}
               >
-                <div className="text-4xl text-purple-300 mb-4">"</div>
-                <p className="text-gray-700 mb-6 leading-relaxed">
+                <div className="text-4xl text-[#E879F9] mb-4">"</div>
+                <p className="mb-6 leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
                   {testimonial.quote}
                 </p>
-                <div className="border-t border-gray-100 pt-4">
-                  <p className="font-semibold">{testimonial.author}</p>
-                  <p className="text-sm text-purple-600">{testimonial.role}</p>
+                <div className="border-t border-white/10 pt-4">
+                  <p className="font-semibold text-white">{testimonial.author}</p>
+                  <p className="text-sm text-[#E879F9]">{testimonial.role}</p>
                 </div>
               </motion.div>
             ))}
@@ -624,7 +627,7 @@ export default function HomePage() {
       </section>
 
       {/* VOYAGES SECTION - Newport Beach Luxury Experiences */}
-      <section className="py-24 px-6 bg-gradient-to-br from-violet-50 via-white to-amber-50/30 relative overflow-hidden">
+      <section className="py-24 px-6 relative overflow-hidden" style={{ background: '#0D0B14' }}>
         {/* Subtle ocean wave pattern */}
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='20' viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.184 20c.357-.13.72-.264 1.088-.402l1.768-.661C33.64 15.347 39.647 14 50 14c10.271 0 15.362 1.222 24.629 4.928.955.383 1.869.74 2.75 1.072h6.225c-2.51-.73-5.139-1.691-8.233-2.928C65.888 13.278 60.562 12 50 12c-10.626 0-16.855 1.397-26.66 5.063l-1.767.662c-2.475.923-4.66 1.674-6.724 2.275h6.335zm0-20C13.258 2.892 8.077 4 0 4V2c5.744 0 9.951-.574 14.85-2h6.334zM77.38 0C85.239 2.966 90.502 4 100 4V2c-6.842 0-11.386-.542-16.396-2h-6.225zM0 14c8.44 0 13.718-1.21 22.272-4.402l1.768-.661C33.64 5.347 39.647 4 50 4c10.271 0 15.362 1.222 24.629 4.928C84.112 12.722 89.438 14 100 14v-2c-10.271 0-15.362-1.222-24.629-4.928C65.888 3.278 60.562 2 50 2 39.374 2 33.145 3.397 23.34 7.063l-1.767.662C13.223 10.84 8.163 12 0 12v2z' fill='%238B5CF6' fill-opacity='0.4' fill-rule='evenodd'/%3E%3C/svg%3E")`,
@@ -638,14 +641,14 @@ export default function HomePage() {
             transition={{ duration: 0.4 }}
             className="text-center mb-16"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-violet-100 to-amber-100 text-violet-700 text-xs uppercase tracking-[0.2em] font-medium rounded-full mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 text-[#E879F9] text-xs uppercase tracking-[0.2em] font-medium rounded-full mb-6" style={{ background: '#161225' }}>
               <Anchor className="w-3 h-3" />
               Newport Beach Experiences
             </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight">
-              MetaHers <span className="bg-gradient-to-r from-violet-600 to-amber-500 bg-clip-text text-transparent">Voyages</span>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-4 tracking-tight text-white">
+              MetaHers <span className="bg-gradient-to-r from-[#E879F9] to-amber-400 bg-clip-text text-transparent">Voyages</span>
             </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p className="text-lg max-w-2xl mx-auto" style={{ color: 'rgba(255,255,255,0.7)' }}>
               Intimate luxury experiences where you master AI, Crypto & Web3 aboard Duffy boats, 
               at exclusive beach picnics, and over champagne brunches. Only 6 women per voyage.
             </p>
@@ -685,16 +688,17 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className={`bg-gradient-to-br ${category.bgGradient} p-6 rounded-lg border border-gray-100 hover:shadow-lg transition-all cursor-pointer group text-left w-full`}
+                className="p-6 rounded-lg border border-white/10 hover:border-white/20 hover:shadow-lg transition-all cursor-pointer group text-left w-full"
+                style={{ background: '#161225' }}
                 onClick={() => setLocation('/voyages')}
                 data-testid={`button-voyage-category-${category.slug}`}
               >
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${category.gradient} flex items-center justify-center mb-4`}>
                   <category.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{category.title}</h3>
-                <p className="text-sm text-gray-600 mb-4">{category.description}</p>
-                <span className="text-sm font-medium text-violet-600 group-hover:text-violet-700 flex items-center gap-1">
+                <h3 className="text-lg font-semibold mb-2 text-white">{category.title}</h3>
+                <p className="text-sm mb-4" style={{ color: 'rgba(255,255,255,0.7)' }}>{category.description}</p>
+                <span className="text-sm font-medium text-[#E879F9] flex items-center gap-1">
                   Explore voyages <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </span>
               </motion.button>
@@ -702,7 +706,7 @@ export default function HomePage() {
           </div>
 
           {/* Experience Highlights */}
-          <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm mb-12">
+          <div className="rounded-2xl border border-white/10 p-8 shadow-sm mb-12" style={{ background: '#161225' }}>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               {[
                 { icon: Ship, value: "3", label: "Duffy Boat Voyages", testId: "duffy-boats" },
@@ -717,11 +721,11 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
                 >
-                  <div className="w-10 h-10 mx-auto mb-3 rounded-full bg-gradient-to-br from-violet-100 to-amber-100 flex items-center justify-center">
-                    <stat.icon className="w-5 h-5 text-violet-600" />
+                  <div className="w-10 h-10 mx-auto mb-3 rounded-full flex items-center justify-center" style={{ background: 'rgba(232,121,249,0.15)' }}>
+                    <stat.icon className="w-5 h-5 text-[#E879F9]" />
                   </div>
-                  <div className="text-xl font-semibold text-gray-900" data-testid={`text-voyage-stat-${stat.testId}`}>{stat.value}</div>
-                  <div className="text-xs text-gray-500 uppercase tracking-wider">{stat.label}</div>
+                  <div className="text-xl font-semibold text-white" data-testid={`text-voyage-stat-${stat.testId}`}>{stat.value}</div>
+                  <div className="text-xs uppercase tracking-wider" style={{ color: 'rgba(255,255,255,0.5)' }}>{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -737,14 +741,14 @@ export default function HomePage() {
           >
             <button
               onClick={() => setLocation('/voyages')}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white text-sm uppercase tracking-[0.15em] font-medium rounded-lg hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg shadow-violet-200"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-violet-600 to-purple-600 text-white text-sm uppercase tracking-[0.15em] font-medium rounded-lg hover:from-violet-700 hover:to-purple-700 transition-all shadow-lg shadow-violet-900/50"
               data-testid="button-explore-voyages"
             >
               <Ship className="w-4 h-4" />
               Explore All Voyages
               <ArrowRight className="w-4 h-4" />
             </button>
-            <p className="text-sm text-gray-500 mt-4">
+            <p className="text-sm mt-4" style={{ color: 'rgba(255,255,255,0.5)' }}>
               Starting at $497 per experience • Spots fill quickly
             </p>
           </motion.div>
@@ -752,7 +756,7 @@ export default function HomePage() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="py-24 px-6 bg-white">
+      <section className="py-24 px-6" style={{ background: '#161225' }}>
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -760,10 +764,10 @@ export default function HomePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 tracking-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold mb-6 tracking-tight text-white">
               Ready to Transform?
             </h2>
-            <p className="text-lg text-gray-600 mb-10">
+            <p className="text-lg mb-10" style={{ color: 'rgba(255,255,255,0.7)' }}>
               Join thousands of women building the future with AI & Web3.
             </p>
             <button

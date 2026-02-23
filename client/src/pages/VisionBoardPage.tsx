@@ -14,13 +14,13 @@ import type { VisionBoardDB, VisionTileDB } from "@shared/schema";
 type Phase = "welcome" | "intention" | "creation" | "reveal";
 
 const LIFE_DIMENSIONS = [
-  { id: "career", label: "Career & Purpose", icon: Briefcase, color: "bg-purple-100 text-purple-700", description: "Your professional growth and impact" },
-  { id: "wealth", label: "Wealth & Abundance", icon: DollarSign, color: "bg-purple-50 text-purple-600", description: "Financial freedom and prosperity" },
-  { id: "learning", label: "Learning & Growth", icon: Book, color: "bg-purple-100 text-purple-700", description: "Skills, knowledge, and personal development" },
-  { id: "wellness", label: "Wellness & Energy", icon: HeartPulse, color: "bg-purple-50 text-purple-600", description: "Physical health and vitality" },
-  { id: "relationships", label: "Relationships", icon: Heart, color: "bg-purple-100 text-purple-700", description: "Love, family, and meaningful connections" },
-  { id: "lifestyle", label: "Lifestyle & Freedom", icon: HomeIcon, color: "bg-purple-50 text-purple-600", description: "How you want to live daily" },
-  { id: "impact", label: "Impact & Legacy", icon: Globe, color: "bg-purple-100 text-purple-700", description: "The difference you want to make" },
+  { id: "career", label: "Career & Purpose", icon: Briefcase, color: "bg-[rgba(232,121,249,0.1)] text-[#E879F9]", description: "Your professional growth and impact" },
+  { id: "wealth", label: "Wealth & Abundance", icon: DollarSign, color: "bg-[rgba(200,162,216,0.1)] text-[#C8A2D8]", description: "Financial freedom and prosperity" },
+  { id: "learning", label: "Learning & Growth", icon: Book, color: "bg-[rgba(232,121,249,0.1)] text-[#E879F9]", description: "Skills, knowledge, and personal development" },
+  { id: "wellness", label: "Wellness & Energy", icon: HeartPulse, color: "bg-[rgba(200,162,216,0.1)] text-[#C8A2D8]", description: "Physical health and vitality" },
+  { id: "relationships", label: "Relationships", icon: Heart, color: "bg-[rgba(232,121,249,0.1)] text-[#E879F9]", description: "Love, family, and meaningful connections" },
+  { id: "lifestyle", label: "Lifestyle & Freedom", icon: HomeIcon, color: "bg-[rgba(200,162,216,0.1)] text-[#C8A2D8]", description: "How you want to live daily" },
+  { id: "impact", label: "Impact & Legacy", icon: Globe, color: "bg-[rgba(232,121,249,0.1)] text-[#E879F9]", description: "The difference you want to make" },
 ];
 
 export default function VisionBoardPage() {
@@ -168,11 +168,11 @@ export default function VisionBoardPage() {
 
   const getDimensionColor = (dimensionId: string) => {
     const dim = LIFE_DIMENSIONS.find(d => d.id === dimensionId);
-    return dim?.color || "bg-gray-100 text-gray-700";
+    return dim?.color || "bg-[rgba(232,121,249,0.1)] text-[#E879F9]";
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ background: '#0D0B14' }}>
       <AnimatePresence mode="wait">
         {phase === "welcome" && (
           <motion.div
@@ -188,7 +188,7 @@ export default function VisionBoardPage() {
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2 }}
               >
-                <Badge className="mb-6 bg-purple-100 text-purple-700 border-0 px-4 py-2">
+                <Badge className="mb-6 bg-[rgba(232,121,249,0.1)] text-[#E879F9] border-0 px-4 py-2">
                   <Sparkles className="w-4 h-4 mr-2" />
                   MetaHers Annual Vision Board Event
                 </Badge>
@@ -198,17 +198,17 @@ export default function VisionBoardPage() {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-black mb-6 tracking-tight"
+                className="text-4xl sm:text-5xl lg:text-6xl font-semibold text-white mb-6 tracking-tight"
               >
                 Your Year in Focus
-                <span className="block text-purple-600">2026</span>
+                <span className="block text-[#E879F9]">2026</span>
               </motion.h1>
 
               <motion.p
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="text-lg text-gray-600 max-w-2xl mb-8"
+                className="text-lg text-[rgba(255,255,255,0.7)] max-w-2xl mb-8"
               >
                 An AI-powered, self-guided vision board experience designed to help you 
                 clarify your dreams, set powerful intentions, and connect with women 
@@ -224,7 +224,7 @@ export default function VisionBoardPage() {
                 <Button
                   onClick={startBreathingExercise}
                   size="lg"
-                  className="bg-black hover:bg-gray-900 text-white px-8 py-6 text-lg uppercase tracking-wider"
+                  className="bg-[#E879F9] hover:bg-[#d565e8] text-[#0D0B14] px-8 py-6 text-lg uppercase tracking-wider"
                   data-testid="button-start-vision"
                 >
                   Begin Your Journey
@@ -239,16 +239,16 @@ export default function VisionBoardPage() {
                 className="mt-16 grid grid-cols-3 gap-8 text-center"
               >
                 <div>
-                  <p className="text-3xl font-bold text-black">3</p>
-                  <p className="text-sm text-gray-500 uppercase tracking-wider">Phases</p>
+                  <p className="text-3xl font-bold text-white">3</p>
+                  <p className="text-sm text-[rgba(255,255,255,0.5)] uppercase tracking-wider">Phases</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-black">AI</p>
-                  <p className="text-sm text-gray-500 uppercase tracking-wider">Powered</p>
+                  <p className="text-3xl font-bold text-white">AI</p>
+                  <p className="text-sm text-[rgba(255,255,255,0.5)] uppercase tracking-wider">Powered</p>
                 </div>
                 <div>
-                  <p className="text-3xl font-bold text-black">∞</p>
-                  <p className="text-sm text-gray-500 uppercase tracking-wider">Connections</p>
+                  <p className="text-3xl font-bold text-white">∞</p>
+                  <p className="text-sm text-[rgba(255,255,255,0.5)] uppercase tracking-wider">Connections</p>
                 </div>
               </motion.div>
             </div>
@@ -271,7 +271,7 @@ export default function VisionBoardPage() {
                         repeat: 1,
                         ease: "easeInOut",
                       }}
-                      className="w-32 h-32 rounded-full bg-purple-600/30 mx-auto mb-8 flex items-center justify-center"
+                      className="w-32 h-32 rounded-full bg-[#E879F9]/30 mx-auto mb-8 flex items-center justify-center"
                     >
                       <motion.div
                         animate={{
@@ -282,11 +282,11 @@ export default function VisionBoardPage() {
                           repeat: 1,
                           ease: "easeInOut",
                         }}
-                        className="w-20 h-20 rounded-full bg-purple-600/50"
+                        className="w-20 h-20 rounded-full bg-[#E879F9]/50"
                       />
                     </motion.div>
-                    <p className="text-xl font-light">Take a deep breath...</p>
-                    <p className="text-gray-400 mt-2">Preparing your sacred space</p>
+                    <p className="text-xl font-light text-white">Take a deep breath...</p>
+                    <p className="text-[rgba(255,255,255,0.5)] mt-2">Preparing your sacred space</p>
                   </div>
                 </motion.div>
               )}
@@ -304,21 +304,21 @@ export default function VisionBoardPage() {
           >
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">
+                <Badge className="mb-4 bg-[rgba(232,121,249,0.1)] text-[#E879F9] border-0">
                   Phase 1: Intention
                 </Badge>
-                <h2 className="text-3xl sm:text-4xl font-semibold text-black mb-4">
+                <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-4">
                   Set Your Intentions for 2026
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+                <p className="text-[rgba(255,255,255,0.7)] max-w-2xl mx-auto">
                   Let's start by exploring what matters most to you. 
                   Your AI Muse will help guide this reflection.
                 </p>
               </div>
 
-              <Card className="mb-8 border-gray-200">
+              <Card className="mb-8 border-[#C8A2D8]/20 bg-[#161225]">
                 <CardContent className="p-6">
-                  <label className="block text-sm font-semibold text-black uppercase tracking-wider mb-3">
+                  <label className="block text-sm font-semibold text-white uppercase tracking-wider mb-3">
                     If you could capture 2026 in one word, what would it be?
                   </label>
                   <input
@@ -326,15 +326,15 @@ export default function VisionBoardPage() {
                     value={coreWord}
                     onChange={(e) => setCoreWord(e.target.value)}
                     placeholder="e.g., Expansion, Liberation, Creation..."
-                    className="w-full px-4 py-3 text-lg border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    className="w-full px-4 py-3 text-lg border border-[#C8A2D8]/20 rounded-lg focus:ring-2 focus:ring-[#E879F9] focus:border-transparent bg-[#0D0B14] text-white placeholder-[rgba(255,255,255,0.5)]"
                     data-testid="input-core-word"
                   />
                 </CardContent>
               </Card>
 
-              <Card className="mb-8 border-gray-200">
+              <Card className="mb-8 border-[#C8A2D8]/20 bg-[#161225]">
                 <CardContent className="p-6">
-                  <label className="block text-sm font-semibold text-black uppercase tracking-wider mb-3">
+                  <label className="block text-sm font-semibold text-white uppercase tracking-wider mb-3">
                     If you met your future self a year from now, what would she tell you?
                   </label>
                   <textarea
@@ -342,14 +342,14 @@ export default function VisionBoardPage() {
                     onChange={(e) => setFutureSelfMessage(e.target.value)}
                     placeholder="Close your eyes, imagine meeting yourself in December 2026..."
                     rows={4}
-                    className="w-full px-4 py-3 text-lg border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+                    className="w-full px-4 py-3 text-lg border border-[#C8A2D8]/20 rounded-lg focus:ring-2 focus:ring-[#E879F9] focus:border-transparent resize-none bg-[#0D0B14] text-white placeholder-[rgba(255,255,255,0.5)]"
                     data-testid="input-future-self"
                   />
                 </CardContent>
               </Card>
 
               <div className="mb-8">
-                <h3 className="text-sm font-semibold text-black uppercase tracking-wider mb-4">
+                <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
                   Select the areas you want to focus on (choose 3-5)
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -362,8 +362,8 @@ export default function VisionBoardPage() {
                         onClick={() => toggleDimension(dim.id)}
                         className={`p-4 rounded-xl border-2 transition-all text-left ${
                           isSelected 
-                            ? "border-purple-600 bg-purple-50" 
-                            : "border-gray-200 hover:border-gray-300"
+                            ? "border-[#E879F9] bg-[rgba(232,121,249,0.1)]" 
+                            : "border-[#C8A2D8]/20 hover:border-[#C8A2D8]/40"
                         }`}
                         data-testid={`button-dimension-${dim.id}`}
                       >
@@ -372,11 +372,11 @@ export default function VisionBoardPage() {
                             <Icon className="w-5 h-5" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-black">{dim.label}</p>
-                            <p className="text-sm text-gray-500 mt-0.5">{dim.description}</p>
+                            <p className="font-medium text-white">{dim.label}</p>
+                            <p className="text-sm text-[rgba(255,255,255,0.5)] mt-0.5">{dim.description}</p>
                           </div>
                           {isSelected && (
-                            <Check className="w-5 h-5 text-purple-600 flex-shrink-0" />
+                            <Check className="w-5 h-5 text-[#E879F9] flex-shrink-0" />
                           )}
                         </div>
                       </button>
@@ -384,7 +384,7 @@ export default function VisionBoardPage() {
                   })}
                 </div>
                 {selectedDimensions.length > 0 && (
-                  <p className="text-sm text-gray-500 mt-3">
+                  <p className="text-sm text-[rgba(255,255,255,0.5)] mt-3">
                     {selectedDimensions.length} area{selectedDimensions.length !== 1 ? "s" : ""} selected
                     {selectedDimensions.length < 3 && " (select at least 3)"}
                   </p>
@@ -395,14 +395,14 @@ export default function VisionBoardPage() {
                 <Button
                   variant="outline"
                   onClick={() => setPhase("welcome")}
-                  className="border-gray-200"
+                  className="border-[#C8A2D8]/20 text-[rgba(255,255,255,0.7)]"
                 >
                   Back
                 </Button>
                 <Button
                   onClick={handleContinueToCreation}
                   disabled={!coreWord || selectedDimensions.length < 3 || saveBoardMutation.isPending}
-                  className="bg-black hover:bg-gray-900 text-white"
+                  className="bg-[#E879F9] hover:bg-[#d565e8] text-[#0D0B14]"
                   data-testid="button-continue-creation"
                 >
                   {saveBoardMutation.isPending ? (
@@ -432,13 +432,13 @@ export default function VisionBoardPage() {
           >
             <div className="max-w-6xl mx-auto">
               <div className="text-center mb-12">
-                <Badge className="mb-4 bg-purple-100 text-purple-700 border-0">
+                <Badge className="mb-4 bg-[rgba(232,121,249,0.1)] text-[#E879F9] border-0">
                   Phase 2: Creation
                 </Badge>
-                <h2 className="text-3xl sm:text-4xl font-semibold text-black mb-4">
+                <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-4">
                   {generateTilesMutation.isPending ? "Your AI Muse is Crafting Your Vision" : "Your Vision Tiles"}
                 </h2>
-                <p className="text-gray-600 max-w-2xl mx-auto">
+                <p className="text-[rgba(255,255,255,0.7)] max-w-2xl mx-auto">
                   {generateTilesMutation.isPending 
                     ? "Based on your intentions, we're generating personalized vision tiles..."
                     : "Review your AI-generated vision tiles. You can customize them to make them truly yours."}
@@ -446,21 +446,21 @@ export default function VisionBoardPage() {
               </div>
 
               {generateTilesMutation.isPending ? (
-                <div className="bg-gray-50 rounded-2xl p-8 mb-8">
+                <div className="bg-[#161225] rounded-2xl p-8 mb-8">
                   <div className="flex items-center justify-center py-20">
                     <div className="text-center">
                       <motion.div
                         animate={{ rotate: 360 }}
                         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                        className="w-16 h-16 border-4 border-purple-200 border-t-purple-600 rounded-full mx-auto mb-6"
+                        className="w-16 h-16 border-4 border-[#C8A2D8]/30 border-t-[#E879F9] rounded-full mx-auto mb-6"
                       />
-                      <p className="text-lg font-medium text-black mb-2">
+                      <p className="text-lg font-medium text-white mb-2">
                         Creating your personalized vision board...
                       </p>
-                      <p className="text-gray-500">
-                        Your word: <span className="text-purple-600 font-semibold">{coreWord}</span>
+                      <p className="text-[rgba(255,255,255,0.5)]">
+                        Your word: <span className="text-[#E879F9] font-semibold">{coreWord}</span>
                       </p>
-                      <p className="text-gray-500 text-sm mt-2">
+                      <p className="text-[rgba(255,255,255,0.5)] text-sm mt-2">
                         Generating {selectedDimensions.length} vision tiles
                       </p>
                     </div>
@@ -478,7 +478,7 @@ export default function VisionBoardPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                       >
-                        <Card className="h-full border-gray-200 hover:border-purple-300 transition-all overflow-hidden">
+                        <Card className="h-full border-[#C8A2D8]/20 hover:border-[#E879F9]/40 transition-all overflow-hidden bg-[#161225]">
                           <div className={`h-2 ${colorClass.replace('text-', 'bg-').split(' ')[0]}`} />
                           <CardHeader className="pb-2">
                             <div className="flex items-start justify-between gap-2">
@@ -489,10 +489,10 @@ export default function VisionBoardPage() {
                                 {LIFE_DIMENSIONS.find(d => d.id === tile.dimension)?.label}
                               </Badge>
                             </div>
-                            <CardTitle className="text-lg mt-3">{tile.title}</CardTitle>
+                            <CardTitle className="text-lg mt-3 text-white">{tile.title}</CardTitle>
                           </CardHeader>
                           <CardContent>
-                            <p className="text-gray-600 italic text-sm mb-4">
+                            <p className="text-[rgba(255,255,255,0.7)] italic text-sm mb-4">
                               "{tile.affirmation}"
                             </p>
                             <div className="flex gap-2">
@@ -512,12 +512,12 @@ export default function VisionBoardPage() {
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <p className="text-gray-500 mb-4">
+                  <p className="text-[rgba(255,255,255,0.5)] mb-4">
                     No tiles generated yet. Click below to generate your vision tiles.
                   </p>
                   <Button
                     onClick={() => currentBoardId && generateTilesMutation.mutate(currentBoardId)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    className="bg-[#E879F9] hover:bg-[#d565e8] text-[#0D0B14]"
                     disabled={!currentBoardId}
                   >
                     <Sparkles className="w-4 h-4 mr-2" />
@@ -531,13 +531,13 @@ export default function VisionBoardPage() {
                   <Button
                     variant="outline"
                     onClick={() => setPhase("intention")}
-                    className="border-gray-200"
+                    className="border-[#C8A2D8]/20 text-[rgba(255,255,255,0.7)]"
                   >
                     Back to Intentions
                   </Button>
                   <Button
                     onClick={() => setPhase("reveal")}
-                    className="bg-black hover:bg-gray-900 text-white"
+                    className="bg-[#E879F9] hover:bg-[#d565e8] text-[#0D0B14]"
                     data-testid="button-continue-reveal"
                   >
                     Complete My Vision
@@ -569,14 +569,14 @@ export default function VisionBoardPage() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4 }}
                 >
-                  <Badge className="mb-6 bg-purple-100 text-purple-700 border-0 px-4 py-2">
+                  <Badge className="mb-6 bg-[rgba(232,121,249,0.1)] text-[#E879F9] border-0 px-4 py-2">
                     <Crown className="w-4 h-4 mr-2" />
                     Your 2026 Vision Board
                   </Badge>
                 </motion.div>
                 
                 <motion.h2 
-                  className="text-4xl sm:text-5xl font-semibold text-black mb-4"
+                  className="text-4xl sm:text-5xl font-semibold text-white mb-4"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.5 }}
@@ -585,7 +585,7 @@ export default function VisionBoardPage() {
                 </motion.h2>
 
                 <motion.p 
-                  className="text-gray-600 max-w-xl mx-auto"
+                  className="text-[rgba(255,255,255,0.7)] max-w-xl mx-auto"
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.6 }}
@@ -611,19 +611,19 @@ export default function VisionBoardPage() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.8 + index * 0.1 }}
                       >
-                        <Card className="h-full bg-gradient-to-br from-white to-gray-50 border-gray-200 overflow-hidden">
+                        <Card className="h-full bg-[#161225] border-[#C8A2D8]/20 overflow-hidden">
                           <div className={`h-1.5 ${colorClass.replace('text-', 'bg-').split(' ')[0]}`} />
                           <CardContent className="p-5">
                             <div className="flex items-center gap-3 mb-3">
                               <div className={`w-8 h-8 rounded-lg ${colorClass} flex items-center justify-center`}>
                                 <Icon className="w-4 h-4" />
                               </div>
-                              <span className="text-xs text-gray-500 uppercase tracking-wider">
+                              <span className="text-xs text-[rgba(255,255,255,0.5)] uppercase tracking-wider">
                                 {LIFE_DIMENSIONS.find(d => d.id === tile.dimension)?.label}
                               </span>
                             </div>
-                            <h3 className="font-semibold text-black mb-2">{tile.title}</h3>
-                            <p className="text-sm text-gray-600 italic">"{tile.affirmation}"</p>
+                            <h3 className="font-semibold text-white mb-2">{tile.title}</h3>
+                            <p className="text-sm text-[rgba(255,255,255,0.7)] italic">"{tile.affirmation}"</p>
                           </CardContent>
                         </Card>
                       </motion.div>
@@ -637,16 +637,16 @@ export default function VisionBoardPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.2 }}
               >
-                <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 mb-8">
+                <Card className="border-[#C8A2D8]/20 bg-[#161225] mb-8">
                   <CardContent className="p-6 text-center">
-                    <h3 className="font-semibold text-black mb-2 flex items-center justify-center gap-2">
-                      <Users className="w-5 h-5 text-purple-600" />
+                    <h3 className="font-semibold text-white mb-2 flex items-center justify-center gap-2">
+                      <Users className="w-5 h-5 text-[#E879F9]" />
                       Vision Sisters
                     </h3>
-                    <p className="text-gray-600 text-sm mb-4">
+                    <p className="text-[rgba(255,255,255,0.7)] text-sm mb-4">
                       Connect with women who share your goals and build accountability partnerships.
                     </p>
-                    <Badge variant="outline" className="border-purple-300 text-purple-700">
+                    <Badge variant="outline" className="border-[#C8A2D8]/20 text-[#C8A2D8]">
                       Coming Soon
                     </Badge>
                   </CardContent>
@@ -662,14 +662,14 @@ export default function VisionBoardPage() {
                 <Button
                   variant="outline"
                   onClick={() => setPhase("creation")}
-                  className="border-gray-200"
+                  className="border-[#C8A2D8]/20 text-[rgba(255,255,255,0.7)]"
                 >
                   Edit My Board
                 </Button>
                 <Button
                   onClick={handleCompleteBoard}
                   disabled={completeBoardMutation.isPending}
-                  className="bg-purple-600 hover:bg-purple-700 text-white"
+                  className="bg-[#E879F9] hover:bg-[#d565e8] text-[#0D0B14]"
                   data-testid="button-complete-board"
                 >
                   {completeBoardMutation.isPending ? (
@@ -681,7 +681,7 @@ export default function VisionBoardPage() {
                 </Button>
                 <Button
                   onClick={() => setLocation("/")}
-                  className="bg-black hover:bg-gray-900 text-white"
+                  className="bg-[#C8A2D8] hover:bg-[#b895c8] text-[#0D0B14]"
                   data-testid="button-back-home"
                 >
                   Back to Home

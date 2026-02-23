@@ -11,10 +11,10 @@ import { trackCTAClick } from "@/lib/analytics";
 import { motion, AnimatePresence } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const DARK_BG = "#0A0614";
-const DARK_CARD = "#0D0A1A";
+const DARK_BG = "#0D0B14";
+const DARK_CARD = "#161225";
 const LAVENDER = "#C8A2D8";
-const PINK = "#EC4899";
+const FUCHSIA = "#E879F9";
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
@@ -102,7 +102,7 @@ export function Navigation() {
         data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
       >
         <div className="flex items-start gap-3">
-          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded" style={{ background: PINK }}>
+          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded" style={{ background: FUCHSIA }}>
             <Icon className="w-4 h-4 text-black" />
           </div>
           <div className="flex-1 min-w-0">
@@ -127,7 +127,7 @@ export function Navigation() {
     return (
       <div className="p-6">
         <div className="flex items-center gap-2 mb-4">
-          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: PINK }}>
+          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: FUCHSIA }}>
             <SectionIcon className="w-3 h-3 text-black" />
           </div>
           <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>{section}</h3>
@@ -203,7 +203,7 @@ export function Navigation() {
                               <Button
                                 onClick={() => handleNavClick("/upgrade")}
                                 className="w-full text-white text-xs uppercase tracking-wider font-semibold"
-                                style={{ background: PINK }}
+                                style={{ background: FUCHSIA }}
                                 size="sm"
                                 data-testid="nav-membership"
                               >
@@ -230,7 +230,7 @@ export function Navigation() {
                   handleNavClick("/login");
                 }}
                 className="text-white uppercase tracking-wider text-xs font-semibold"
-                style={{ background: PINK }}
+                style={{ background: FUCHSIA }}
                 size="sm"
                 data-testid="button-login-nav"
               >
@@ -300,7 +300,7 @@ export function Navigation() {
                     {Object.entries(menuSections).map(([section, config]) => (
                       <div key={section}>
                         <div className="flex items-center gap-2 mb-3">
-                          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: PINK }}>
+                          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: FUCHSIA }}>
                             <config.icon className="w-3 h-3 text-black" />
                           </div>
                           <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>{section}</h3>
@@ -344,7 +344,7 @@ export function Navigation() {
                           }}
                           size="sm"
                           className="w-full text-white uppercase tracking-wider text-xs font-semibold"
-                          style={{ background: PINK }}
+                          style={{ background: FUCHSIA }}
                           data-testid="button-mobile-login"
                         >
                           <LogIn className="w-4 h-4 mr-2" />

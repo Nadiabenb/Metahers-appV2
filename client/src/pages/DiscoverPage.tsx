@@ -123,7 +123,7 @@ export default function DiscoverPage() {
 
   if (stage === "intro") {
     return (
-      <div className="min-h-screen relative bg-white py-12 px-4 sm:px-6 lg:px-8"
+      <div className="min-h-screen relative py-12 px-4 sm:px-6 lg:px-8" style={{ background: '#0D0B14' }}
       >
         
         <div className="relative z-10">
@@ -146,11 +146,11 @@ export default function DiscoverPage() {
               </span>
             </div>
 
-            <h1 className="font-semibold text-5xl sm:text-6xl md:text-7xl text-black leading-tight">
+            <h1 className="font-semibold text-5xl sm:text-6xl md:text-7xl text-white leading-tight">
               Discover Your Ritual
             </h1>
 
-            <p className="text-xl sm:text-2xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl sm:text-2xl max-w-2xl mx-auto leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
               Take this personalized quiz to discover which MetaHers ritual unlocks your potential—
               <span className="text-purple-600 font-semibold"> plus a FREE 1:1 session with the founder</span>.
             </p>
@@ -296,7 +296,7 @@ export default function DiscoverPage() {
               </span>
             </div>
 
-            <h1 className="font-semibold text-4xl sm:text-5xl text-black leading-tight">
+            <h1 className="font-semibold text-4xl sm:text-5xl text-white leading-tight">
               Your Perfect Ritual Is Ready
             </h1>
 

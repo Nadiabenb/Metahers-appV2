@@ -53,7 +53,7 @@ export default function FreeResourcesPage() {
         description="Get your free AI mastery guide, Web3 starter kit, and exclusive beta access. Join 500+ women building their AI-powered future."
       />
       
-      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white py-20 px-6">
+      <div className="min-h-screen py-20 px-6" style={{ background: '#0D0B14' }}>
         <div className="container mx-auto max-w-4xl">
           {!isSuccess ? (
             <motion.div
@@ -63,27 +63,27 @@ export default function FreeResourcesPage() {
             >
               {/* Hero */}
               <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-2 bg-purple-100 px-4 py-2 rounded-full mb-6">
-                  <Sparkles className="w-4 h-4 text-purple-600" />
-                  <span className="text-sm font-semibold text-purple-600">FREE RESOURCES</span>
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6" style={{ background: '#161225' }}>
+                  <Sparkles className="w-4 h-4 text-[#E879F9]" />
+                  <span className="text-sm font-semibold text-[#E879F9]">FREE RESOURCES</span>
                 </div>
                 
                 <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-500 bg-clip-text text-transparent">
                   Your AI Mastery Toolkit
                 </h1>
                 
-                <p className="text-xl text-gray-700 mb-4">
+                <p className="text-xl mb-4" style={{ color: 'rgba(255,255,255,0.7)' }}>
                   Everything you need to start building your AI-powered future—completely free.
                 </p>
                 
-                <p className="text-lg text-gray-600">
+                <p className="text-lg" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Join 500+ women who are already transforming their careers and businesses with AI.
                 </p>
               </div>
 
               {/* What You Get */}
-              <Card className="p-8 mb-8 bg-white shadow-xl">
-                <h2 className="text-2xl font-bold mb-6 text-center">Here's What You Get Instantly:</h2>
+              <Card className="p-8 mb-8 shadow-xl" style={{ background: '#161225' }}>
+                <h2 className="text-2xl font-bold mb-6 text-center text-white">Here's What You Get Instantly:</h2>
                 
                 <div className="space-y-4 mb-8">
                   {benefits.map((benefit, index) => (
@@ -95,7 +95,7 @@ export default function FreeResourcesPage() {
                       className="flex items-start gap-3"
                     >
                       <CheckCircle className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-lg text-gray-700">{benefit}</span>
+                      <span className="text-lg" style={{ color: 'rgba(255,255,255,0.7)' }}>{benefit}</span>
                     </motion.div>
                   ))}
                 </div>
@@ -125,7 +125,7 @@ export default function FreeResourcesPage() {
                     <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
                   
-                  <p className="text-sm text-center text-gray-500">
+                  <p className="text-sm text-center" style={{ color: 'rgba(255,255,255,0.5)' }}>
                     No spam. Unsubscribe anytime. We respect your inbox.
                   </p>
                 </form>
@@ -133,12 +133,12 @@ export default function FreeResourcesPage() {
 
               {/* Social Proof */}
               <div className="text-center">
-                <p className="text-gray-600 mb-4">Trusted by 500+ women entrepreneurs & professionals</p>
+                <p className="mb-4" style={{ color: 'rgba(255,255,255,0.5)' }}>Trusted by 500+ women entrepreneurs & professionals</p>
                 <div className="flex items-center justify-center gap-2">
                   {[...Array(5)].map((_, i) => (
                     <span key={i} className="text-yellow-400 text-2xl">★</span>
                   ))}
-                  <span className="ml-2 text-gray-700 font-semibold">4.9/5 from our community</span>
+                  <span className="ml-2 font-semibold" style={{ color: 'rgba(255,255,255,0.7)' }}>4.9/5 from our community</span>
                 </div>
               </div>
             </motion.div>
@@ -148,18 +148,18 @@ export default function FreeResourcesPage() {
               animate={{ opacity: 1, scale: 1 }}
               className="text-center py-20"
             >
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6" style={{ background: 'rgba(34,197,94,0.15)' }}>
                 <CheckCircle className="w-12 h-12 text-green-500" />
               </div>
               
-              <h2 className="text-4xl font-bold mb-4">Check Your Email! 📧</h2>
+              <h2 className="text-4xl font-bold mb-4 text-white">Check Your Email!</h2>
               
-              <p className="text-xl text-gray-700 mb-8">
+              <p className="text-xl mb-8" style={{ color: 'rgba(255,255,255,0.7)' }}>
                 We just sent your free resources to <strong>{email}</strong>
               </p>
               
-              <Card className="p-6 max-w-xl mx-auto mb-8 bg-purple-50">
-                <h3 className="font-semibold mb-4">What's in your inbox:</h3>
+              <Card className="p-6 max-w-xl mx-auto mb-8" style={{ background: '#161225' }}>
+                <h3 className="font-semibold mb-4 text-white">What's in your inbox:</h3>
                 <ul className="space-y-2 text-left">
                   <li className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-500" />
@@ -186,9 +186,9 @@ export default function FreeResourcesPage() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
                 
-                <p className="text-sm text-gray-600">
+                <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Can't find the email? Check your spam folder or{" "}
-                  <a href="mailto:hello@metahers.ai" className="text-purple-600 underline">contact us</a>
+                  <a href="mailto:hello@metahers.ai" className="text-[#E879F9] underline">contact us</a>
                 </p>
               </div>
             </motion.div>
