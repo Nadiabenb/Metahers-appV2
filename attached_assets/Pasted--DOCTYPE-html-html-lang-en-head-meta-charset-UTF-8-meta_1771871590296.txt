@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetaHers — AI Integration Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #111110;
+    --dark: #1a1917;
+    --gold: #c9a96e;
+    --gold-light: #e8d5b0;
+    --gold-pale: #f5edd8;
+    --cream: #faf7f2;
+    --warm-white: #fefcf8;
+    --text: #2a2825;
+    --text-muted: #6b6560;
+    --border: rgba(201,169,110,0.2);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--warm-white);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--black);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,169,110,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(201,169,110,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 9vw, 110px);
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 300;
+    color: rgba(250,247,242,0.55);
+    letter-spacing: 0.04em;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+  .hero-tags {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    border: 1px solid rgba(201,169,110,0.3);
+    padding: 8px 18px;
+    border-radius: 2px;
+  }
+  .hero-hook {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(250,247,242,0.75);
+    max-width: 680px;
+    line-height: 1.4;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1s;
+  }
+  .cta-primary {
+    display: inline-block;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 18px 44px;
+    border-radius: 2px;
+    transition: background 0.2s ease, transform 0.2s ease;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+  }
+  .cta-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.6s;
+  }
+  .scroll-hint span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(201,169,110,0.4);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(201,169,110,0.4), transparent);
+    animation: scrollPulse 2s ease infinite;
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 24px; }
+  .container { max-width: 820px; margin: 0 auto; }
+  .container-wide { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+  }
+
+  /* PROBLEM */
+  .problem {
+    background: var(--cream);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .problem-intro {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 48px);
+    font-weight: 300;
+    line-height: 1.25;
+    color: var(--text);
+    margin-bottom: 48px;
+    max-width: 700px;
+  }
+  .problem-intro em { font-style: italic; color: var(--gold); }
+  .problem-body { font-size: 17px; color: var(--text-muted); max-width: 640px; line-height: 1.8; }
+  .problem-body p + p { margin-top: 20px; }
+  .emphasis-line {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 3vw, 34px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+    margin-top: 48px;
+    padding-left: 24px;
+    border-left: 2px solid var(--gold);
+    line-height: 1.35;
+  }
+
+  /* BUILD */
+  .build { background: var(--off-black); color: var(--cream); }
+  .build .section-label { color: var(--gold); }
+  .build-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(30px, 4.5vw, 54px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 20px;
+    max-width: 700px;
+  }
+  .build-subhead { font-size: 17px; color: rgba(250,247,242,0.55); max-width: 580px; margin-bottom: 64px; line-height: 1.75; }
+  .deliverables-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    margin-bottom: 64px;
+  }
+  .deliverable-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,169,110,0.12);
+    padding: 32px 28px;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .deliverable-item:hover { background: rgba(201,169,110,0.05); border-color: rgba(201,169,110,0.3); }
+  .deliverable-number { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--gold); opacity: 0.6; margin-bottom: 14px; letter-spacing: 0.1em; }
+  .deliverable-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--cream); margin-bottom: 10px; line-height: 1.2; }
+  .deliverable-desc { font-size: 14px; color: rgba(250,247,242,0.45); line-height: 1.65; }
+  .ownership-note {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold-light);
+    text-align: center;
+    padding: 40px 24px;
+    border-top: 1px solid rgba(201,169,110,0.15);
+  }
+
+  /* MID CTA */
+  .mid-cta {
+    background: var(--off-black);
+    padding: 48px 24px;
+    text-align: center;
+    border-top: 1px solid rgba(201,169,110,0.1);
+  }
+  .mid-cta-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(250,247,242,0.5);
+    margin-bottom: 24px;
+  }
+
+  /* OUTCOMES */
+  .outcomes { background: var(--warm-white); }
+  .outcomes-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 56px;
+    line-height: 1.2;
+    max-width: 640px;
+  }
+  .outcomes-list { display: flex; flex-direction: column; gap: 0; max-width: 700px; }
+  .outcome-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 28px 0;
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+  }
+  .outcome-row:first-child { border-top: 1px solid rgba(201,169,110,0.15); }
+  .outcome-icon { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--gold); padding-top: 3px; flex-shrink: 0; }
+  .outcome-text strong { display: block; font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 4px; line-height: 1.2; }
+  .outcome-text span { font-size: 15px; color: var(--text-muted); }
+  .outcomes-close {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 3vw, 30px);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+    margin-top: 56px;
+    padding-left: 24px;
+    border-left: 2px solid var(--gold);
+    line-height: 1.4;
+    max-width: 600px;
+  }
+
+  /* TESTIMONIALS */
+  .testimonials { background: var(--cream); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .testimonials-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(26px, 3.5vw, 42px);
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 56px;
+    line-height: 1.25;
+  }
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+  .testimonial-card {
+    background: var(--warm-white);
+    border: 1px solid var(--border);
+    padding: 36px 32px;
+    border-radius: 2px;
+    position: relative;
+  }
+  .testimonial-card::before {
+    content: '"';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    color: var(--gold);
+    opacity: 0.25;
+    line-height: 1;
+    position: absolute;
+    top: 16px;
+    left: 24px;
+  }
+  .testimonial-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.55;
+    margin-bottom: 24px;
+    padding-top: 24px;
+  }
+  .testimonial-author { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: var(--gold); text-transform: uppercase; }
+  .testimonial-handle { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+  /* WHO */
+  .who { background: var(--warm-white); }
+  .who-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.2;
+    max-width: 640px;
+  }
+  .who-sub { font-size: 17px; color: var(--text-muted); max-width: 580px; margin-bottom: 52px; line-height: 1.75; }
+  .who-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    max-width: 740px;
+    border: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .who-item {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .who-item:nth-child(even) { border-right: none; }
+  .who-item:nth-last-child(-n+2) { border-bottom: none; }
+  .who-check { color: var(--gold); font-size: 14px; flex-shrink: 0; padding-top: 2px; }
+  .who-not {
+    padding: 28px 32px;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    max-width: 580px;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* STRUCTURE */
+  .structure { background: var(--off-black); color: var(--cream); }
+  .structure .section-label { color: var(--gold); }
+  .structure-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 16px;
+    max-width: 600px;
+    line-height: 1.15;
+  }
+  .structure-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 64px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 4px; }
+  .meta-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: rgba(201,169,110,0.5); text-transform: uppercase; }
+  .meta-value { font-size: 15px; color: rgba(250,247,242,0.75); }
+  .weeks { display: flex; flex-direction: column; gap: 0; }
+  .week {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 32px;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(201,169,110,0.1);
+    align-items: start;
+  }
+  .week:last-child { border-bottom: none; }
+  .week-number { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; color: rgba(201,169,110,0.2); line-height: 1; padding-top: 4px; }
+  .week-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 500; color: var(--cream); margin-bottom: 10px; line-height: 1.2; }
+  .week-desc { font-size: 15px; color: rgba(250,247,242,0.5); line-height: 1.7; max-width: 540px; }
+  .week-outcome {
+    display: inline-block;
+    margin-top: 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    background: rgba(201,169,110,0.08);
+    padding: 6px 14px;
+    border-radius: 2px;
+    border: 1px solid rgba(201,169,110,0.2);
+  }
+  .structure-close {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(20px, 2.5vw, 28px);
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(250,247,242,0.6);
+    text-align: center;
+    padding-top: 56px;
+    border-top: 1px solid rgba(201,169,110,0.1);
+    line-height: 1.4;
+  }
+
+  /* ABOUT */
+  .about { background: var(--warm-white); }
+  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .about-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3.5vw, 46px);
+    font-weight: 300;
+    color: var(--text);
+    line-height: 1.15;
+    margin-bottom: 28px;
+  }
+  .about-body { font-size: 16px; color: var(--text-muted); line-height: 1.8; }
+  .about-body p + p { margin-top: 18px; }
+  .about-body strong { color: var(--text); font-weight: 600; }
+  .about-credentials { display: flex; flex-direction: column; gap: 16px; padding-top: 20px; }
+  .credential {
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    background: var(--cream);
+  }
+  .credential-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .credential-text { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+
+  /* INVESTMENT */
+  .investment { background: var(--black); color: var(--cream); text-align: center; }
+  .investment .section-label { justify-content: center; }
+  .investment .section-label::after { display: none; }
+  .investment-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 4vw, 50px);
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .investment-context { font-size: 16px; color: rgba(250,247,242,0.5); max-width: 580px; margin: 0 auto 48px; line-height: 1.75; }
+  .price-block {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(201,169,110,0.25);
+    padding: 48px 64px;
+    margin-bottom: 16px;
+    border-radius: 2px;
+  }
+  .price-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; }
+  .price-amount { font-family: 'Cormorant Garamond', serif; font-size: clamp(60px, 10vw, 96px); font-weight: 300; color: var(--gold); line-height: 1; margin-bottom: 12px; }
+  .price-includes { font-size: 13px; color: rgba(250,247,242,0.4); line-height: 1.8; text-align: center; }
+  .price-anchor {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(250,247,242,0.4);
+    max-width: 520px;
+    margin: 24px auto 56px;
+    line-height: 1.5;
+  }
+  .cta-block { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .cta-note { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: rgba(250,247,242,0.3); text-transform: uppercase; }
+
+  /* FAQ */
+  .faq { background: var(--cream); border-top: 1px solid var(--border); }
+  .faq-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 3.5vw, 44px);
+    font-weight: 300;
+    color: var(--text);
+    margin-bottom: 56px;
+    line-height: 1.2;
+  }
+  .faq-list { display: flex; flex-direction: column; gap: 0; max-width: 720px; }
+  .faq-item { padding: 32px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .faq-item:first-child { border-top: 1px solid var(--border); }
+  .faq-question {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 24px;
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+  .faq-item.open .faq-question { color: var(--gold); }
+  .faq-toggle { font-family: 'DM Mono', monospace; font-size: 20px; color: var(--gold); flex-shrink: 0; transition: transform 0.3s ease; line-height: 1.3; }
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+  .faq-answer { font-size: 16px; color: var(--text-muted); line-height: 1.75; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, margin-top 0.3s ease; }
+  .faq-item.open .faq-answer { max-height: 400px; margin-top: 16px; }
+
+  /* FINAL CTA */
+  .final-cta {
+    background: var(--off-black);
+    color: var(--cream);
+    text-align: center;
+    padding: 120px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .final-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 50% 60% at 50% 100%, rgba(201,169,110,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .final-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 64px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--cream);
+    max-width: 700px;
+    margin: 0 auto 20px;
+  }
+  .final-headline em { font-style: italic; color: var(--gold); }
+  .final-sub { font-size: 17px; color: rgba(250,247,242,0.45); max-width: 480px; margin: 0 auto 52px; line-height: 1.7; }
+
+  /* FOOTER */
+  footer { background: var(--black); padding: 32px 24px; text-align: center; border-top: 1px solid rgba(201,169,110,0.1); }
+  footer p { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: rgba(250,247,242,0.2); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    section { padding: 72px 20px; }
+    .about-layout { grid-template-columns: 1fr; gap: 48px; }
+    .who-grid { grid-template-columns: 1fr; }
+    .who-item:nth-child(even) { border-right: 1px solid var(--border); }
+    .who-item:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+    .who-item:last-child { border-bottom: none; }
+    .week { grid-template-columns: 1fr; gap: 12px; }
+    .week-number { font-size: 36px; }
+    .price-block { padding: 36px 32px; }
+    .structure-meta { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">MetaHers · AI Integration Experience</p>
+  <h1>META<em>HERS</em></h1>
+  <p class="hero-sub">AI Integration Experience</p>
+  <div class="hero-tags">
+    <span class="tag">Private</span>
+    <span class="tag">4 Weeks</span>
+    <span class="tag">High-Touch</span>
+    <span class="tag">1:1</span>
+  </div>
+  <p class="hero-hook">Most founders are experimenting with AI.<br>Very few are integrating it into how they think, decide, and lead.</p>
+  <a href="#apply" class="cta-primary">Book Your Discovery Call</a>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="container">
+    <div class="section-label">The Reality</div>
+    <p class="problem-intro">You know AI is important.<br>But the noise, the tools, the <em>"just use ChatGPT"</em> advice — none of it was built for how you actually lead.</p>
+    <div class="problem-body">
+      <p>The AI revolution is accelerating. But the way it is being taught is fragmented, overly technical, and completely disconnected from how visionary women actually build. You end up with a dozen tabs open, a graveyard of half-used tools, and no real system to show for it.</p>
+      <p>You are not behind because you are not technical enough. You are behind because no one has taken the time to architect AI around how <em>you</em> think, lead, and grow.</p>
+      <p>That is what MetaHers exists to do.</p>
+    </div>
+    <p class="emphasis-line">We do not replace the founder.<br>We elevate her operating system.</p>
+  </div>
+</section>
+
+<!-- WHAT WE BUILD -->
+<section class="build">
+  <div class="container">
+    <div class="section-label">What We Build Together</div>
+    <h2 class="build-headline">Your Personal<br>AI Operating System</h2>
+    <p class="build-subhead">Over four private weeks, we architect and integrate a system built entirely around your business, your voice, and your leadership style.</p>
+    <div class="deliverables-grid">
+      <div class="deliverable-item">
+        <div class="deliverable-number">01</div>
+        <div class="deliverable-title">Strategic AI Workflow</div>
+        <div class="deliverable-desc">A structured workflow aligned with your specific business model — not a generic template, but a blueprint built around how you operate.</div>
+      </div>
+      <div class="deliverable-item">
+        <div class="deliverable-number">02</div>
+        <div class="deliverable-title">Prompt Intelligence System</div>
+        <div class="deliverable-desc">Strategic prompt systems calibrated to your voice, positioning, and communication style so AI outputs feel like you — refined.</div>
+      </div>
+      <div class="deliverable-item">
+        <div class="deliverable-number">03</div>
+        <div class="deliverable-title">Content Intelligence Layer</div>
+        <div class="deliverable-desc">A content system that compounds your authority over time — generating, organizing, and repurposing your thinking at scale.</div>
+      </div>
+      <div class="deliverable-item">
+        <div class="deliverable-number">04</div>
+        <div class="deliverable-title">Decision-Support Frameworks</div>
+        <div class="deliverable-desc">AI-powered frameworks that support your strategic decisions — so you think with more clarity and move with more confidence.</div>
+      </div>
+      <div class="deliverable-item">
+        <div class="deliverable-number">05</div>
+        <div class="deliverable-title">Automation Architecture</div>
+        <div class="deliverable-desc">Intelligent automation layers that reduce cognitive load on the tasks that drain you, so you can protect your energy for what only you can do.</div>
+      </div>
+      <div class="deliverable-item">
+        <div class="deliverable-number">06</div>
+        <div class="deliverable-title">Custom AI Assistant</div>
+        <div class="deliverable-desc">A custom AI assistant structure designed around your specific cognitive patterns — not a generic chatbot, but an extension of your thinking.</div>
+      </div>
+    </div>
+    <p class="ownership-note">You leave with full ownership. Nothing is rented. Nothing is dependent.<br>Everything is designed to be an extension of you.</p>
+  </div>
+</section>
+
+<!-- MID CTA -->
+<div class="mid-cta">
+  <p class="mid-cta-text">Ready to stop experimenting and start integrating?</p>
+  <a href="#apply" class="cta-primary" style="opacity:1;animation:none;">Book Your Discovery Call</a>
+</div>
+
+<!-- OUTCOMES -->
+<section class="outcomes">
+  <div class="container">
+    <div class="section-label">The Outcome</div>
+    <h2 class="outcomes-headline">What changes by the end of four weeks</h2>
+    <div class="outcomes-list">
+      <div class="outcome-row">
+        <div class="outcome-icon">→</div>
+        <div class="outcome-text">
+          <strong>Founder-Level AI Infrastructure</strong>
+          <span>A fully architected system you own, understand, and can build on — not a setup that depends on someone else to maintain.</span>
+        </div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-icon">→</div>
+        <div class="outcome-text">
+          <strong>Faster Execution, Deeper Output</strong>
+          <span>You move faster without sacrificing the depth and nuance that makes your work distinctly yours.</span>
+        </div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-icon">→</div>
+        <div class="outcome-text">
+          <strong>Elevated Brand Authority</strong>
+          <span>AI-amplified output aligned with your positioning — content and communications that consistently reflect your highest thinking.</span>
+        </div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-icon">→</div>
+        <div class="outcome-text">
+          <strong>Strategic Clarity</strong>
+          <span>Decision fatigue and mental overhead shrink significantly when intelligent systems are doing the heavy cognitive lifting around you.</span>
+        </div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-icon">→</div>
+        <div class="outcome-text">
+          <strong>A Scalable Foundation</strong>
+          <span>Your AI Operating System is built to grow with your business — a living infrastructure, not a one-time fix.</span>
+        </div>
+      </div>
+    </div>
+    <p class="outcomes-close">This is not surface-level productivity.<br>This is structural leverage.</p>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="container-wide">
+    <div class="section-label">What People Say</div>
+    <h2 class="testimonials-headline">Women who've experienced<br>Nadia's work firsthand</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-text">I needed a reboot to learn all about the latest applications — and this was just what I needed. When you take your foot off the gas, you get left behind. This session got me back in the game.</p>
+        <p class="testimonial-author">Lululuna</p>
+        <p class="testimonial-handle">@LululunaThrive</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">MetaHers is poised to assist women understand and leverage new technology for their business. It's a busy and noisy space, and we need someone like Nadia to help make sense of how to apply these new tools in a real, structured way.</p>
+        <p class="testimonial-author">Linda Rey</p>
+        <p class="testimonial-handle">Founder, BizGlitch &nbsp;★★★★★</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">Crazy awesome energy — and in just a few hours, a full tour of Nadia's entire methodology and space. What started as a conversation became the beginning of a very cool partnership.</p>
+        <p class="testimonial-author">Vicki</p>
+        <p class="testimonial-handle">@Drapeta</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-text">Nadia helped me finally get my head wrapped around things I just couldn't figure out on my own. I left with real clarity and understanding. Thank you for letting me pick your brain — it made a real difference.</p>
+        <p class="testimonial-author">sourpower.eth</p>
+        <p class="testimonial-handle">@sourpowww3r</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO THIS IS FOR -->
+<section class="who">
+  <div class="container">
+    <div class="section-label">Who This Is For</div>
+    <h2 class="who-headline">You are the right fit if&hellip;</h2>
+    <p class="who-sub">You are a visionary woman founder who has built something real — and you are ready to operate at a higher level with intelligent systems behind you.</p>
+    <div class="who-grid">
+      <div class="who-item">
+        <span class="who-check">✓</span>
+        <span>You have tried AI tools but nothing has really stuck or integrated into how you actually work</span>
+      </div>
+      <div class="who-item">
+        <span class="who-check">✓</span>
+        <span>You feel behind technologically and want to close that gap — without becoming a tech person</span>
+      </div>
+      <div class="who-item">
+        <span class="who-check">✓</span>
+        <span>You value long-term authority and positioning, not quick hacks or surface-level shortcuts</span>
+      </div>
+      <div class="who-item">
+        <span class="who-check">✓</span>
+        <span>You understand that leverage is a leadership decision — and you are ready to make it</span>
+      </div>
+      <div class="who-item">
+        <span class="who-check">✓</span>
+        <span>You are launching, scaling, or already established — and you want AI to compound your advantage</span>
+      </div>
+      <div class="who-item">
+        <span class="who-check">✓</span>
+        <span>You want to own your systems — not rent them from someone else or stay dependent on a course</span>
+      </div>
+    </div>
+    <p class="who-not">This is not for casual experimentation.<br>This is for women who are ready to evolve how they operate.</p>
+  </div>
+</section>
+
+<!-- STRUCTURE -->
+<section class="structure">
+  <div class="container">
+    <div class="section-label">The Experience</div>
+    <h2 class="structure-headline">Four weeks.<br>One complete system.</h2>
+    <div class="structure-meta">
+      <div class="meta-item">
+        <span class="meta-label">Duration</span>
+        <span class="meta-value">4 Weeks</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Format</span>
+        <span class="meta-value">Private 1:1</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Sessions</span>
+        <span class="meta-value">Weekly Deep Integration Calls</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Support</span>
+        <span class="meta-value">Strategic support between sessions</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Deliverable</span>
+        <span class="meta-value">Your fully architected AI Operating System</span>
+      </div>
+    </div>
+    <div class="weeks">
+      <div class="week">
+        <div class="week-number">01</div>
+        <div>
+          <div class="week-title">Architecture &amp; Strategic Mapping</div>
+          <div class="week-desc">We map your entire business ecosystem — how you think, where you spend your cognitive energy, and where AI can create the most leverage. You leave Week 1 with a clear strategic architecture and a shared language for how your system will be built.</div>
+          <span class="week-outcome">You leave with: Strategic clarity + system blueprint</span>
+        </div>
+      </div>
+      <div class="week">
+        <div class="week-number">02</div>
+        <div>
+          <div class="week-title">System Design &amp; Prompt Intelligence</div>
+          <div class="week-desc">We design and build your custom prompt systems — calibrated to your voice, your positioning, and the specific outputs that matter most in your business. By the end of this week, AI is already responding like an extension of you, not a generic assistant.</div>
+          <span class="week-outcome">You leave with: Prompt library + content intelligence foundations</span>
+        </div>
+      </div>
+      <div class="week">
+        <div class="week-number">03</div>
+        <div>
+          <div class="week-title">Integration &amp; Workflow Alignment</div>
+          <div class="week-desc">We embed your new AI systems into the actual workflows of your day — your content creation, decision-making, communications, and execution rhythms. This is where your AI Operating System stops being a concept and starts running in the background of your business.</div>
+          <span class="week-outcome">You leave with: Live, integrated AI workflows</span>
+        </div>
+      </div>
+      <div class="week">
+        <div class="week-number">04</div>
+        <div>
+          <div class="week-title">Refinement, Optimization &amp; Autonomy</div>
+          <div class="week-desc">We stress-test, refine, and optimize everything. You learn how to evolve the system yourself as your business grows — so this never becomes something you depend on anyone else to maintain. You leave autonomous, not dependent.</div>
+          <span class="week-outcome">You leave with: Full ownership + autonomy to build further</span>
+        </div>
+      </div>
+    </div>
+    <p class="structure-close">You do not leave dependent.<br>You leave integrated.</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div class="container">
+    <div class="section-label">About Nadia</div>
+    <div class="about-layout">
+      <div>
+        <h2 class="about-headline">Built by someone who thinks in systems.</h2>
+        <div class="about-body">
+          <p>I'm Nadia Ben Brahim — founder of MetaHers. I studied Computer Science and graduated in 2008, then spent the next decade building a career in luxury hospitality, rising from Front Office Manager to <strong>Hotel General Manager in Los Angeles</strong>.</p>
+          <p>Throughout that career, I became known for one thing above all else: <strong>systems thinking</strong>. I optimized operations, resolved complex technical problems independently, and integrated tools into real-world execution at the highest level.</p>
+          <p>When AI emerged, I did not approach it as a trend. I approached it as infrastructure.</p>
+          <p>MetaHers exists to translate advanced technology into structured, practical leverage for women founders who refuse to be left behind. I do not teach tools. I architect systems around how you think, lead, and grow.</p>
+        </div>
+      </div>
+      <div class="about-credentials">
+        <div class="credential">
+          <div class="credential-title">Education</div>
+          <div class="credential-text">Computer Science degree (2008) · Bachelor's, Master's &amp; MBA in Hospitality Management</div>
+        </div>
+        <div class="credential">
+          <div class="credential-title">Leadership Background</div>
+          <div class="credential-text">Hotel General Manager, Los Angeles · Career built on operational systems thinking and technical problem-solving</div>
+        </div>
+        <div class="credential">
+          <div class="credential-title">Approach</div>
+          <div class="credential-text">AI as infrastructure, not trend · Systems designed around the individual founder's cognitive style and leadership</div>
+        </div>
+        <div class="credential">
+          <div class="credential-title">Mission</div>
+          <div class="credential-text">Ensuring visionary women are at the forefront of technological evolution — not consuming it passively, but integrating it structurally</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTMENT -->
+<section class="investment" id="apply">
+  <div class="container">
+    <div class="section-label">Investment</div>
+    <h2 class="investment-headline">What this represents</h2>
+    <p class="investment-context">Hiring a dedicated AI operations consultant or systems strategist runs $5,000–$15,000+ for comparable private, hands-on work — if you can even find someone building at this level of personalization. This is four weeks of private 1:1 architecture built around you, with a fully owned system as the deliverable.</p>
+    <div class="price-block">
+      <span class="price-label">Total Investment</span>
+      <div class="price-amount">$1,297</div>
+      <div class="price-includes">
+        4 weeks private 1:1 · Weekly deep integration calls<br>
+        Strategic support between sessions<br>
+        Fully architected AI Operating System · Lifetime ownership
+      </div>
+    </div>
+    <p class="price-anchor">You are not paying for information.<br>You are investing in integration.</p>
+    <div class="cta-block">
+      <a href="#" class="cta-primary" style="opacity:1;animation:none;">Book Your Discovery Call</a>
+      <span class="cta-note">15-minute call · No obligation · Spots are limited</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="container">
+    <div class="section-label">Common Questions</div>
+    <h2 class="faq-headline">Everything you need<br>to know before applying</h2>
+    <div class="faq-list">
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>Is this right for me if I'm just starting out with AI?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">Yes — in fact, this is the ideal starting point. Beginning with a properly architected system means you build good foundations from day one, rather than accumulating months of bad habits and random tools you eventually need to undo. The only prerequisite is that you have a real business and are ready to integrate, not just experiment.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>What if I'm not technical at all?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">This is specifically designed for founders who are not technical. The entire point of this experience is to build AI systems that work around how you already think — not to make you more technical. Nadia's background bridges both worlds: she understands the technology deeply and she understands how non-technical leaders operate. You will never feel out of your depth.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>What happens after the four weeks are over?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">You leave with full, complete ownership of everything we build. Nothing is hosted on a platform that disappears, nothing is locked behind a subscription, and you are not dependent on Nadia to keep things running. Week 4 is specifically dedicated to ensuring you understand how to evolve and expand your system as your business grows.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>How is this different from an AI course or group program?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">Courses teach general frameworks. This builds your specific system. Every session is 1:1, every deliverable is built around your business model, your voice, and your specific operational needs. There is no cohort, no generic modules, no watching videos at 2x speed. This is private architecture work — four weeks of Nadia's full attention on your operating system.</div>
+      </div>
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-question">
+          <span>How do I know if I'm ready?</span>
+          <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">If you have a real business you are actively building — whether launching, scaling, or already established — and you are ready to stop experimenting and start integrating, you are ready. The discovery call is the right place to confirm fit. Book a 15-minute call and you will know immediately whether this is the right next step.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2 class="final-headline">AI will reshape how<br>founders operate.<br><em>The question is how you integrate it.</em></h2>
+    <p class="final-sub">The MetaHers AI Integration Experience is for women who choose to integrate structurally — not consume passively.</p>
+    <a href="#apply" class="cta-primary" style="opacity:1;animation:none;">Book Your Discovery Call</a>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 MetaHers &nbsp;·&nbsp; All rights reserved</p>
+</footer>
+
+<script>
+  function toggleFaq(el) {
+    const isOpen = el.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) el.classList.add('open');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.deliverable-item, .outcome-row, .testimonial-card, .week, .credential, .who-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
