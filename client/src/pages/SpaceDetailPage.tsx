@@ -13,6 +13,12 @@ import { ShareButton } from "@/components/ShareButton";
 import { SEO } from "@/components/SEO";
 import { SpaceDetailSkeleton } from "@/components/LoadingSkeleton";
 
+// Violet Sanctuary Theme
+const DARK_BG = "#0D0B14";
+const DARK_CARD = "#161225";
+const FUCHSIA = "#E879F9";
+const LAVENDER = "#D8BFD8";
+
 type Space = {
   id: string;
   name: string;
@@ -62,13 +68,13 @@ export default function SpaceDetailPage() {
 
   if (!slug) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-6">
+      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: DARK_BG }}>
         <div className="max-w-md text-center">
-          <h2 className="text-2xl font-semibold mb-4">Space Not Found</h2>
-          <p className="text-gray-600 mb-6">The space you're looking for doesn't exist.</p>
-          <button onClick={() => navigate("/world")} className="alo-button text-sm" data-testid="button-back-to-world">
+          <h2 className="text-2xl font-semibold mb-4 text-white">Space Not Found</h2>
+          <p className="mb-6 text-white/70">The space you're looking for doesn't exist.</p>
+          <Button onClick={() => navigate("/world")} size="lg" data-testid="button-back-to-world">
             Back to MetaHers World
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -80,17 +86,17 @@ export default function SpaceDetailPage() {
 
   if (spaceError || !space) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center p-6">
+      <div className="min-h-screen flex items-center justify-center p-6" style={{ background: DARK_BG }}>
         <div className="max-w-md text-center">
-          <h2 className="text-2xl font-semibold mb-4">Unable to Load Space</h2>
-          <p className="text-gray-600 mb-6">We encountered an error while loading this space. Please try again.</p>
+          <h2 className="text-2xl font-semibold mb-4 text-white">Unable to Load Space</h2>
+          <p className="mb-6 text-white/70">We encountered an error while loading this space. Please try again.</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <button onClick={() => window.location.reload()} className="alo-button text-sm" data-testid="button-retry">
+            <Button onClick={() => window.location.reload()} size="lg" data-testid="button-retry">
               Try Again
-            </button>
-            <button onClick={() => navigate("/world")} className="alo-button-outline text-sm" data-testid="button-back-to-world">
+            </Button>
+            <Button onClick={() => navigate("/world")} variant="outline" size="lg" data-testid="button-back-to-world">
               Back to MetaHers World
-            </button>
+            </Button>
           </div>
         </div>
       </div>
@@ -104,23 +110,23 @@ export default function SpaceDetailPage() {
 
   if (experiencesError) {
     return (
-      <div className="min-h-screen bg-white">
-        <div className="bg-gray-50 py-16 px-6">
+      <div className="min-h-screen" style={{ background: DARK_BG }}>
+        <div className="py-16 px-6 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
           <div className="container mx-auto max-w-6xl">
-            <h1 className="text-4xl font-semibold">{space.name}</h1>
+            <h1 className="text-4xl font-semibold text-white">{space.name}</h1>
           </div>
         </div>
         <div className="container mx-auto max-w-6xl px-6 py-16">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-2xl font-semibold mb-4">Unable to Load Experiences</h2>
-            <p className="text-gray-600 mb-6">We encountered an error while loading the experiences for this space.</p>
+            <h2 className="text-2xl font-semibold mb-4 text-white">Unable to Load Experiences</h2>
+            <p className="mb-6 text-white/70">We encountered an error while loading the experiences for this space.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button onClick={() => window.location.reload()} className="alo-button text-sm" data-testid="button-retry-experiences">
+              <Button onClick={() => window.location.reload()} size="lg" data-testid="button-retry-experiences">
                 Try Again
-              </button>
-              <button onClick={() => navigate("/world")} className="alo-button-outline text-sm" data-testid="button-back-to-world-error">
+              </Button>
+              <Button onClick={() => navigate("/world")} variant="outline" size="lg" data-testid="button-back-to-world-error">
                 Back to MetaHers World
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -132,7 +138,7 @@ export default function SpaceDetailPage() {
   const proExperiences = experiences.filter(e => e.tier === "pro");
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen" style={{ background: DARK_BG }}>
       <SEO
         title={`${space.name} Learning Space - Master AI & Web3`}
         description={`${space.description} Explore ${experiences.length} transformational experiences designed for women solopreneurs.`}
@@ -162,12 +168,12 @@ export default function SpaceDetailPage() {
         }}
       />
 
-      {/* Hero Header - Clean Alo Style */}
-      <section className="py-20 px-6 border-b border-gray-100">
+      {/* Hero Header - Violet Sanctuary Style */}
+      <section className="py-20 px-6 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
             <Link href="/world">
-              <button className="text-sm text-gray-600 hover:text-black transition-colors flex items-center gap-2" data-testid="button-back">
+              <button className="text-sm text-white/70 hover:text-white transition-colors flex items-center gap-2" data-testid="button-back">
                 <ArrowLeft className="w-4 h-4" />
                 Back to All Spaces
               </button>
@@ -186,24 +192,24 @@ export default function SpaceDetailPage() {
             transition={{ duration: 0.5 }}
             className="max-w-4xl"
           >
-            <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-6">
+            <p className="text-sm uppercase tracking-[0.2em] mb-6" style={{ color: LAVENDER }}>
               Transformation Ritual
             </p>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight mb-6">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 text-white">
               Master {space.name}
             </h1>
 
-            <p className="text-xl text-gray-600 mb-8 leading-relaxed max-w-3xl">
+            <p className="text-xl mb-8 leading-relaxed max-w-3xl text-white/70">
               {space.description}
             </p>
 
             <div className="flex flex-wrap gap-4">
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 text-sm">
+              <span className="inline-flex items-center gap-2 px-4 py-2 text-sm" style={{ background: 'rgba(216, 191, 216, 0.1)', color: LAVENDER }}>
                 <Trophy className="w-4 h-4" />
                 {experiences.length} Rituals
               </span>
-              <span className="inline-flex items-center gap-2 px-4 py-2 bg-purple-50 text-purple-700 text-sm">
+              <span className="inline-flex items-center gap-2 px-4 py-2 text-sm" style={{ background: `${FUCHSIA}18`, color: FUCHSIA }}>
                 <Sparkles className="w-4 h-4" />
                 {freeExperiences.length} Free Rituals
               </span>
@@ -213,7 +219,7 @@ export default function SpaceDetailPage() {
       </section>
 
       {/* What You'll Accomplish */}
-      <section className="py-16 px-6 bg-gray-50">
+      <section className="py-16 px-6" style={{ background: DARK_CARD }}>
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0, y: 30 }}
@@ -222,12 +228,12 @@ export default function SpaceDetailPage() {
             transition={{ duration: 0.5 }}
           >
             <div className="flex items-center gap-4 mb-8">
-              <div className="w-12 h-12 bg-black flex items-center justify-center">
-                <Sparkles className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 flex items-center justify-center" style={{ background: `${FUCHSIA}18` }}>
+                <Sparkles className="w-6 h-6" style={{ color: FUCHSIA }} />
               </div>
               <div>
-                <h2 className="text-2xl font-semibold">What You'll Accomplish</h2>
-                <p className="text-gray-600">Transformational outcomes for busy women.</p>
+                <h2 className="text-2xl font-semibold text-white">What You'll Accomplish</h2>
+                <p className="text-white/70">Transformational outcomes for busy women.</p>
               </div>
             </div>
 
@@ -257,12 +263,12 @@ export default function SpaceDetailPage() {
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   className="flex items-start gap-4"
                 >
-                  <div className="p-3 bg-white border border-gray-200">
-                    <item.icon className="w-5 h-5" />
+                  <div className="p-3" style={{ background: 'rgba(255,255,255,0.06)', border: `1px solid rgba(255,255,255,0.1)` }}>
+                    <item.icon className="w-5 h-5 text-white/70" />
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-1">{item.title}</h4>
-                    <p className="text-gray-600 text-sm">{item.description}</p>
+                    <h4 className="font-semibold mb-1 text-white">{item.title}</h4>
+                    <p className="text-white/70 text-sm">{item.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -278,8 +284,8 @@ export default function SpaceDetailPage() {
           {freeExperiences.length > 0 && (
             <div className="mb-20">
               <div className="mb-10">
-                <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Free Access</p>
-                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">Start Your Journey</h2>
+                <p className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: LAVENDER }}>Free Access</p>
+                <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">Start Your Journey</h2>
               </div>
 
               <div className="space-y-6">
@@ -293,7 +299,8 @@ export default function SpaceDetailPage() {
                   >
                     <div
                       onClick={() => navigate(`/experiences/${experience.slug}`)}
-                      className="group cursor-pointer bg-white border border-gray-200 hover:border-gray-300 transition-all hover:shadow-lg"
+                      className="group cursor-pointer transition-all"
+                      style={{ background: DARK_CARD, border: '1px solid rgba(255,255,255,0.06)' }}
                       data-testid={`card-experience-${experience.slug}`}
                       role="button"
                       tabIndex={0}
@@ -308,41 +315,41 @@ export default function SpaceDetailPage() {
                         <div className="flex items-start justify-between gap-6 mb-6">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-4">
-                              <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-medium uppercase tracking-wider">
+                              <span className="px-3 py-1 text-xs font-medium uppercase tracking-wider" style={{ background: `${FUCHSIA}18`, color: FUCHSIA }}>
                                 Free
                               </span>
-                              <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs flex items-center gap-1">
+                              <span className="px-3 py-1 text-xs flex items-center gap-1 text-white/70" style={{ background: 'rgba(255,255,255,0.06)' }}>
                                 <Clock className="w-3 h-3" />
                                 {experience.estimatedMinutes} min
                               </span>
                             </div>
-                            <h3 className="text-2xl font-semibold mb-2 group-hover:text-purple-600 transition-colors">
+                            <h3 className="text-2xl font-semibold mb-2 text-white group-hover:opacity-80 transition-opacity">
                               {experience.title}
                             </h3>
-                            <p className="text-gray-600 leading-relaxed">
+                            <p className="text-white/70 leading-relaxed">
                               {experience.description}
                             </p>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-gray-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all flex-shrink-0 mt-2" />
+                          <ArrowRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all flex-shrink-0 mt-2" />
                         </div>
 
                         <div className="mb-6">
-                          <p className="text-xs font-medium uppercase tracking-[0.15em] text-gray-500 mb-3">
+                          <p className="text-xs font-medium uppercase tracking-[0.15em] mb-3" style={{ color: LAVENDER }}>
                             Learning Objectives
                           </p>
                           <ul className="grid md:grid-cols-2 gap-2">
                             {experience.learningObjectives.map((objective, i) => (
                               <li key={i} className="flex items-start gap-2 text-sm">
-                                <CheckCircle2 className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
-                                <span className="text-gray-700">{objective}</span>
+                                <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: FUCHSIA }} />
+                                <span className="text-white/70">{objective}</span>
                               </li>
                             ))}
                           </ul>
                         </div>
 
                         <div className="flex gap-3">
-                          <button
-                            className="px-8 py-3 bg-black text-white text-sm uppercase tracking-wider font-medium hover:bg-gray-900 transition-colors flex items-center gap-2"
+                          <Button
+                            className="flex items-center gap-2"
                             onClick={(e) => {
                               e.stopPropagation();
                               navigate(`/experiences/${experience.slug}`);
@@ -351,9 +358,13 @@ export default function SpaceDetailPage() {
                           >
                             Begin Ritual
                             <ArrowRight className="w-4 h-4" />
-                          </button>
+                          </Button>
                           <button
-                            className={`px-4 py-3 border ${isBookmarked(experience.id) ? 'border-purple-600 text-purple-600' : 'border-gray-300 text-gray-600'} hover:border-purple-600 hover:text-purple-600 transition-colors`}
+                            className="px-4 py-3 transition-colors"
+                            style={{
+                              border: `1px solid ${isBookmarked(experience.id) ? FUCHSIA : 'rgba(255,255,255,0.2)'}`,
+                              color: isBookmarked(experience.id) ? FUCHSIA : 'rgba(255,255,255,0.7)'
+                            }}
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleBookmark(experience.id);
@@ -379,10 +390,10 @@ export default function SpaceDetailPage() {
           {proExperiences.length > 0 && (
             <div>
               <div className="mb-10">
-                <p className="text-sm uppercase tracking-[0.2em] text-gray-500 mb-4">Premium Content</p>
+                <p className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: LAVENDER }}>Premium Content</p>
                 <div className="flex items-center gap-4">
-                  <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">Unlock with Pro</h2>
-                  <span className="px-3 py-1 bg-gray-100 text-gray-700 text-sm">
+                  <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white">Unlock with Pro</h2>
+                  <span className="px-3 py-1 text-sm text-white/70" style={{ background: 'rgba(255,255,255,0.06)' }}>
                     {proExperiences.length} Rituals
                   </span>
                 </div>
@@ -399,7 +410,8 @@ export default function SpaceDetailPage() {
                   >
                     <div
                       onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
-                      className={`group cursor-pointer bg-white border border-gray-200 hover:border-gray-300 transition-all hover:shadow-lg h-full ${!isProUser ? 'opacity-75' : ''}`}
+                      className="group cursor-pointer transition-all h-full"
+                      style={{ background: DARK_CARD, border: '1px solid rgba(255,255,255,0.06)', opacity: !isProUser ? 0.75 : 1 }}
                       data-testid={`card-experience-${experience.slug}`}
                       role="button"
                       tabIndex={0}
@@ -413,29 +425,29 @@ export default function SpaceDetailPage() {
                       <div className="p-6 h-full flex flex-col">
                         <div className="flex items-center gap-2 mb-4">
                           {!isProUser && (
-                            <span className="px-2 py-1 bg-amber-50 text-amber-700 text-xs font-medium uppercase tracking-wider flex items-center gap-1">
+                            <span className="px-2 py-1 text-xs font-medium uppercase tracking-wider flex items-center gap-1" style={{ background: `${FUCHSIA}18`, color: FUCHSIA }}>
                               <Lock className="w-3 h-3" />
                               Pro
                             </span>
                           )}
-                          <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs flex items-center gap-1">
+                          <span className="px-2 py-1 text-xs flex items-center gap-1 text-white/70" style={{ background: 'rgba(255,255,255,0.06)' }}>
                             <Clock className="w-3 h-3" />
                             {experience.estimatedMinutes} min
                           </span>
                         </div>
 
-                        <h3 className="text-xl font-semibold mb-2 group-hover:text-purple-600 transition-colors">
+                        <h3 className="text-xl font-semibold mb-2 text-white group-hover:opacity-80 transition-opacity">
                           {experience.title}
                         </h3>
-                        <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1">
+                        <p className="text-white/70 text-sm leading-relaxed mb-4 flex-1">
                           {experience.description}
                         </p>
 
                         <ul className="space-y-2">
                           {experience.learningObjectives.slice(0, 2).map((objective, i) => (
                             <li key={i} className="flex items-start gap-2 text-sm">
-                              <CheckCircle2 className="w-4 h-4 text-purple-600 flex-shrink-0 mt-0.5" />
-                              <span className="text-gray-700">{objective}</span>
+                              <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: FUCHSIA }} />
+                              <span className="text-white/70">{objective}</span>
                             </li>
                           ))}
                         </ul>
@@ -454,20 +466,20 @@ export default function SpaceDetailPage() {
                   transition={{ duration: 0.4, delay: 0.2 }}
                   className="mt-12 text-center"
                 >
-                  <div className="bg-black text-white p-12 max-w-2xl mx-auto">
-                    <h3 className="text-2xl font-semibold mb-4">
+                  <div className="p-12 max-w-2xl mx-auto" style={{ background: DARK_CARD, border: `1px solid rgba(255,255,255,0.06)` }}>
+                    <h3 className="text-2xl font-semibold mb-4 text-white">
                       Ready to Unlock Everything?
                     </h3>
-                    <p className="text-gray-400 mb-8">
+                    <p className="text-white/70 mb-8">
                       Get unlimited access to all premium rituals and transform your skills.
                     </p>
-                    <button
+                    <Button
                       onClick={() => navigate("/upgrade")}
-                      className="px-10 py-4 bg-white text-black text-sm uppercase tracking-[0.15em] font-medium hover:bg-gray-100 transition-colors"
+                      size="lg"
                       data-testid="button-upgrade-pro"
                     >
                       Upgrade to Pro
-                    </button>
+                    </Button>
                   </div>
                 </motion.div>
               )}
