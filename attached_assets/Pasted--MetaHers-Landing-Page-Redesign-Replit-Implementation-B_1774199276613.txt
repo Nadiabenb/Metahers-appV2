@@ -1,0 +1,410 @@
+# MetaHers Landing Page Redesign — Replit Implementation Brief
+
+---
+
+## OVERVIEW
+
+Redesign the MetaHers Mind Spa landing page to focus on **AI business coaching for women entrepreneurs**. The current page tries to be too many things at once (wellness spa, Web3 education, luxury boat experiences, vision boards, NFTs, digital art) and confuses visitors. The new page has **one clear message**: MetaHers helps women entrepreneurs use AI to grow their businesses, save time, and increase revenue.
+
+**Key strategic shift:**
+- OLD positioning: "A Private Sanctuary — Mind Spa for extraordinary women to master AI & Web3"
+- NEW positioning: "Use AI to grow your business. Not your workload."
+
+---
+
+## BRAND IDENTITY
+
+**Brand name:** MetaHers
+**Tagline:** Use AI to grow your business. Not your workload.
+**Target audience:** Women entrepreneurs, freelancers, and small business owners (ages 28–55) who know AI matters but feel overwhelmed by technical resources
+**Tone of voice:** Confident, warm, direct. Premium but approachable. Never fluffy or overly spiritual. Think high-end business coaching, not wellness retreat.
+**Founder:** Nadia — hospitality executive turned tech entrepreneur and AI coach. Based in Newport Beach, CA. Has coached 300+ women.
+
+---
+
+## COLOR PALETTE
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| Ink (primary text) | #0F0D0B | Headlines, body text, dark buttons |
+| Cream (background) | #FAF7F2 | Page background, light sections |
+| Warm | #F3EDE4 | Secondary backgrounds, hover states |
+| Blush | #E8C4B8 | Decorative accents, soft highlights |
+| Rose (brand accent) | #C4736A | CTAs, links, emphasis text, badges |
+| Gold | #B8914E | Secondary accent, premium indicators |
+| Gold Light | #D4B074 | Dark-background accents |
+| Sage (success) | #7A8B6F | Positive metrics, checkmarks, results |
+| Charcoal | #2D2A26 | Secondary text |
+| Muted | #8A847B | Supporting text, labels |
+| White | #FFFFFF | Cards, feature section backgrounds |
+
+**Do NOT use:** Purple gradients, neon colors, startup-tech blue, or anything that looks like a generic SaaS template.
+
+---
+
+## TYPOGRAPHY
+
+| Role | Font | Weight | Fallback |
+|------|------|--------|----------|
+| Display/Headlines | Playfair Display | 400, 600, 700 (+ italic) | Georgia, serif |
+| Body/UI | DM Sans | 300, 400, 500, 600, 700 | system sans-serif |
+| Monospace (metrics) | JetBrains Mono | 400, 500 | monospace |
+
+Google Fonts import:
+```
+https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap
+```
+
+---
+
+## PAGE STRUCTURE (TOP TO BOTTOM)
+
+The landing page follows a conversion-optimized structure. Each section has a specific job. Build them in this exact order.
+
+---
+
+### SECTION 1: NAVIGATION (Fixed)
+
+**Behavior:** Transparent on load, becomes semi-transparent with blur on scroll (after 50px).
+
+**Contents:**
+- Left: Logo — "Meta" in ink + "Hers" in rose (#C4736A)
+- Right: Links — "How It Works" | "Results" | "Pricing" | "About" | CTA button "GET STARTED FREE"
+- Mobile: Hamburger menu replacing links at 768px breakpoint
+- CTA button style: dark ink background, cream text, pill shape (border-radius: 100px)
+
+**Anchor links:**
+- How It Works → #how-it-works
+- Results → #results
+- Pricing → #pricing
+- About → #about
+- GET STARTED FREE → #start
+
+---
+
+### SECTION 2: HERO
+
+**Job:** Tell visitors what MetaHers does in under 5 seconds.
+
+**Layout:** Two-column grid on desktop (text left, visual card right). Single column on mobile (visual on top).
+
+**Left column content:**
+- Badge (pill shape): "🔴 Now Enrolling — Limited Spots" (pulsing red dot animation)
+- Headline (H1): `Use AI to grow your business. Not your workload.` — "Not your workload." is in italic rose color
+- Subtext: "MetaHers helps women entrepreneurs build AI systems that win clients, save hours, and scale revenue — through private coaching and a community that gets it."
+- Two buttons:
+  - Primary (dark): "Start Free — Build Your Vision →"
+  - Secondary (outlined): "See How It Works"
+
+**Right column — floating results card:**
+A white card with rounded corners (24px) and subtle shadow showing transformation metrics:
+
+| Label | Value |
+|-------|-------|
+| Hourly rate | $40 → $3,000/project (rose highlight) |
+| Client acquisition | Inbound only (rose highlight) |
+| Weekly hours freed | +15 hrs (rose highlight) |
+| Revenue streams | 5 active (rose highlight) |
+
+Bottom row of card shows three stats: "2× Avg Income" | "54 AI Systems" | "98% Recommend"
+
+**Two small floating accent cards** near the main card (hidden on mobile):
+- Top right: "📈 Revenue up 140%"
+- Bottom left: "⏰ Saturday mornings back"
+
+The main card should have a gentle floating animation (translateY oscillation).
+
+**Background:** Subtle radial gradient blobs in blush and gold, positioned off-screen edges. No images required.
+
+---
+
+### SECTION 3: SOCIAL PROOF BAR
+
+**Job:** Instant credibility. Scannable in 2 seconds.
+
+**Layout:** Horizontal row, centered, with vertical dividers between stats. Wraps on mobile.
+
+**Stats:**
+| Number | Label |
+|--------|-------|
+| 300+ | Women Coached |
+| 2× | Avg Income Growth |
+| 98% | Would Recommend |
+| 15+ | Hours Saved Weekly |
+
+Numbers use Playfair Display (large, bold). Labels use DM Sans (small caps, muted color).
+
+---
+
+### SECTION 4: PROBLEM / BRIDGE
+
+**Job:** Make the visitor feel seen. Agitate the pain point, then bridge to the solution.
+
+**Layout:** Single column, centered, max-width 800px.
+
+**Content:**
+
+Eyebrow label: "THE PROBLEM"
+
+Headline (H2): `You know AI is the future. But every course feels like it was built for developers.`
+
+Body paragraphs (use regular paragraph tags, NOT bullet points):
+
+Paragraph 1: "You've seen the headlines. AI is changing everything — how clients find you, how businesses scale, how people work. But every resource you find is either **too technical**, **too generic**, or **taught by someone who's never actually run a business**."
+
+Paragraph 2: "You don't need another prompt library. You need **someone who understands your business to build AI systems that actually work for you** — systems that bring in clients, automate the grind, and give you back your time."
+
+Paragraph 3: "That's what MetaHers does. We don't teach AI theory. **We help you install AI into your business** — with coaching, community, and a step-by-step system designed for women who are too busy for fluff."
+
+Bold text should use the ink color (#0F0D0B) to stand out from the muted (#8A847B) body text.
+
+---
+
+### SECTION 5: FEATURES — "What You Get"
+
+**Job:** Show the six core deliverables clearly.
+
+**Layout:** White background section. Three-column grid on desktop, two on tablet, one on mobile.
+
+**Section header:**
+- Eyebrow: "WHAT YOU GET"
+- Headline (H2): `A complete AI operating system for your business`
+- Subtext: "Not just knowledge — actual systems installed in your workflow that produce results from week one."
+
+**Six feature cards** (cream background, 20px rounded corners, hover lifts up with rose border):
+
+| Icon | Title | Description |
+|------|-------|-------------|
+| 🤖 | MetaMuse AI Assistant | Your private AI guide, trained on business strategy, branding, and content creation — always available, always tailored to you. |
+| 📋 | AI Business Blueprints | 54 ready-to-use AI workflows for client acquisition, content batching, pricing strategies, email sequences, and more. |
+| 👩‍💻 | 1:1 System Builds | Private sessions where we build your custom AI stack together — your client pipeline, content engine, and automation systems. |
+| 🎯 | Vision & Goal Mapping | AI-powered planning across seven dimensions — career, wealth, wellness, learning, relationships, lifestyle, and impact. |
+| 👭 | Private Community | A curated circle of ambitious women sharing wins, strategies, and support. No noise — only members who are doing the work. |
+| 🏖️ | Newport Beach Retreats | Intimate gatherings for members — masterminds, strategy sessions, and connection over champagne. Only 6 women per group. |
+
+Each icon sits in a 48px rounded square with a tinted background matching its category (rose, gold, sage, ink, blush, charcoal).
+
+---
+
+### SECTION 6: TESTIMONIALS
+
+**Job:** Prove results with real stories.
+
+**Section header:**
+- Eyebrow: "REAL RESULTS"
+- Headline (H2): `Women who built AI into their businesses`
+
+**Layout:** Three-column grid. Each card is white with light border, rounded corners.
+
+**Card 1:**
+- Result badge (green pill): "$40/hr → $3K/project"
+- Quote: "From charging $40 an hour to $3K per project. Clients find me now — I stopped chasing."
+- Avatar: Circle with "S" on rose background
+- Name: Sarah
+- Role: Creative Director
+
+**Card 2:**
+- Result badge: "+15 hours/week reclaimed"
+- Quote: "I have Saturday mornings back with my kids. AI handles the repetitive work so I can focus on growth."
+- Avatar: Circle with "J" on gold background
+- Name: Jessica
+- Role: Entrepreneur
+
+**Card 3:**
+- Result badge: "Global reach — 3 continents"
+- Quote: "Prints, digital licenses, merch. I'm reaching Japan, Germany, Australia. AI opened doors I didn't know existed."
+- Avatar: Circle with "M" on sage background
+- Name: Maria
+- Role: Digital Artist
+
+Each card has a large decorative quotation mark (") in blush color, positioned top-right of the card, at low opacity.
+
+---
+
+### SECTION 7: PRICING
+
+**Job:** Convert interest into action with clear, simple tiers.
+
+**Section header:**
+- Eyebrow: "CHOOSE YOUR PATH"
+- Headline: `Start free. Scale when ready.`
+- Subtext: "No pressure. Begin with our free AI Vision Builder and upgrade when you see the value."
+
+**Layout:** Three-column pricing grid, max-width 1060px.
+
+**Tier 1 — Explorer (Free):**
+- Background: cream
+- Button: outlined style
+- Features:
+  - AI Vision Board — map your 2026 goals
+  - 3 sample AI business blueprints
+  - Community preview access
+  - Weekly AI tips newsletter
+- CTA: "Start Free"
+
+**Tier 2 — Member ($49/mo) — FEATURED:**
+- Background: ink (#0F0D0B) with cream text
+- "Most Popular" badge (rose pill) floating above card
+- Slight scale-up (transform: scale 1.03) and strong shadow
+- Price: $49 /month — or $399/year (save $189)
+- Features:
+  - All 54 AI business blueprints
+  - MetaMuse AI assistant — unlimited
+  - Monthly group coaching calls
+  - Private community full access
+  - Vision & goal mapping tools
+  - Member-only retreat invitations
+- CTA: "Join Now" (cream button on dark card)
+- Checkmarks in gold-light color
+
+**Tier 3 — Private ($2,500):**
+- Background: cream
+- Button: solid dark style
+- Price: $2,500 / 4-week intensive
+- Features:
+  - Everything in Member tier
+  - 4 private 1:1 strategy sessions
+  - Custom AI operating system build
+  - Done-with-you automations
+  - 90-day Slack access to Nadia
+  - Newport Beach retreat seat included
+- CTA: "Apply Now"
+
+---
+
+### SECTION 8: FOUNDER
+
+**Job:** Build trust through Nadia's personal story.
+
+**Layout:** Two-column grid. Image/placeholder on left, text on right.
+
+**Left column:**
+- Image placeholder: Rounded rectangle (aspect ratio 3:4) with a gradient from warm to blush. Large "N" initial centered. Replace with Nadia's actual photo when available.
+- Small floating white card at bottom-right corner: "300+" in rose, "Women Coached" label
+
+**Right column:**
+- Eyebrow: "YOUR COACH"
+- Headline: `I built this for the woman I once needed to find.` — "once needed" is in italic rose
+- Paragraph 1: "I'm Nadia — hospitality executive turned tech entrepreneur, mother, and the woman who went from managing luxury hotels to building AI systems that changed how hundreds of women run their businesses."
+- Paragraph 2: "After coaching **300+ women** through group programs, events, and breakthrough calls, I kept seeing the same thing: **brilliant women standing on the sidelines of AI** — not because they couldn't learn it, but because no one showed them how it applied to *their* business."
+- Paragraph 3: "MetaHers isn't another course. It's the coaching, tools, and community I wish existed when I was figuring this out alone — built specifically for women who are ready to stop watching and start building."
+- Signature: "— Nadia" in Playfair Display italic
+
+---
+
+### SECTION 9: FREE CTA (Bottom)
+
+**Job:** Final conversion push with the free lead magnet.
+
+**Layout:** Full-width dark section (ink background, cream text). Centered text.
+
+**Content:**
+- Eyebrow: "FREE — NO ACCOUNT REQUIRED" (gold-light color)
+- Headline: `Build your 2026 AI business vision. Right now.`
+- Subtext: "An AI-powered tool that helps you map your goals across career, revenue, wellness, and impact — and connects you with women on the same path."
+- CTA button (cream/light): "Create Your Vision Board — Free →"
+- Small text below button: "Takes 5 minutes · AI-powered · Find your vision sisters"
+
+**Background decoration:** Subtle radial gradient in rose (low opacity) positioned off top-right.
+
+---
+
+### SECTION 10: FOOTER
+
+**Layout:** Three-column flex (logo | links | copyright). Stacks vertically on mobile.
+
+- Logo: "Meta" + "Hers" (rose)
+- Links: Privacy | Terms | Contact | Instagram
+- Copyright: © 2026 MetaHers. All rights reserved.
+
+---
+
+## DESIGN SPECIFICATIONS
+
+### Spacing
+- Section padding: 7rem top/bottom on desktop, 5rem on mobile
+- Container max-width: 1200px with 2rem horizontal padding
+- Card border-radius: 20px (large cards), 14px (small floating cards), 100px (pills/buttons)
+
+### Buttons
+- Primary: ink background, cream text, pill shape, 1rem 2rem padding
+- Secondary: transparent with 1.5px ink border, pill shape
+- Hover: translateY(-2px) + subtle shadow
+- All buttons use DM Sans, 0.9rem, font-weight 600
+
+### Cards
+- Background: white or cream
+- Shadow: subtle — `0 1px 3px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06)`
+- Hover: lift up 4px + rose-tinted border
+
+### Animations
+- Page load: Hero content fades up with staggered delays (0.1s increments)
+- Scroll: Feature cards, testimonials, and pricing cards fade up when they enter viewport (IntersectionObserver, threshold 0.15)
+- Floating cards: Gentle vertical oscillation (translateY, 6s cycle)
+- Nav: Smooth background transition on scroll
+
+### Responsive breakpoints
+- Desktop: >1024px — full grid layouts
+- Tablet: 768–1024px — two-column grids, single-column hero
+- Mobile: <768px — single-column everything, hamburger nav, stacked buttons
+
+---
+
+## WHAT WAS REMOVED (AND WHY)
+
+These elements from the old landing page should NOT appear on the new page:
+
+| Removed | Reason |
+|---------|--------|
+| "Mind Spa" / "Sanctuary" branding | Sounds like a meditation app, not a business platform |
+| "9 Learning Worlds" | Meaningless to new visitors |
+| "54 AI Rituals" label | Rebranded as "54 AI Business Blueprints" |
+| Voyages as a standalone section | Now a member perk called "Newport Beach Retreats" inside features |
+| Web3 / NFT / Metaverse as primary messaging | AI is the hook in 2026; Web3 becomes internal content |
+| "Sacred dimensions" language | Replaced with practical business language |
+| Pink Duffy boats detail section | Too specific for a landing page; save for member-facing pages |
+| "BEGIN YOUR VISION / EXPLORE VOYAGES" dual CTAs | Replaced with single clear CTA path |
+
+---
+
+## REFERENCE HTML
+
+A complete working HTML reference file is attached alongside this brief (metahers-landing.html). It contains all the exact copy, layout, styling, and animations described above in a single self-contained HTML file. Use it as:
+
+1. **Visual reference** — open it in a browser to see the exact look and feel
+2. **Copy source** — all headline text, paragraph text, and testimonial quotes are final
+3. **CSS reference** — color values, font sizes, spacing, and animation keyframes are all defined
+4. **Component reference** — every section is built and can be adapted to your framework (React, etc.)
+
+You can port this directly into your Replit project's component structure, adapting the HTML/CSS to whatever framework the app uses.
+
+---
+
+## IMPLEMENTATION NOTES
+
+- All anchor links should smooth-scroll to their targets
+- The nav should use a scroll listener to toggle a `.scrolled` class at 50px
+- Use IntersectionObserver for scroll-triggered fade-in animations on cards
+- The hero floating card animation uses CSS `@keyframes float` with translateY
+- The pulsing dot in the hero badge uses `@keyframes pulse` on opacity
+- All interactive elements need hover states as described
+- The page should be fully responsive at 768px and 1024px breakpoints
+- No external images are required — all visuals are CSS-based (gradients, avatars with initials, decorative elements)
+- When Nadia's photo is available, replace the gradient placeholder in the founder section
+
+---
+
+## SUMMARY
+
+The redesigned MetaHers landing page has one goal: **convert visitors into free users (Vision Board) and free users into paying members ($49/mo) or private coaching clients ($2,500).**
+
+The page tells a clear story:
+1. Here's what we do (Hero)
+2. Here's proof it works (Social proof + Testimonials)
+3. Here's the problem you have (Problem section)
+4. Here's what you get (Features)
+5. Here's what it costs (Pricing)
+6. Here's who built it (Founder)
+7. Start free right now (CTA)
+
+Every section drives toward one of two actions: **Start Free** or **Join Now**.
