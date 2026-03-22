@@ -14,7 +14,6 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { CursorSparkles } from "@/components/effects/CursorSparkles";
 import { BreathingLoader } from "@/components/effects/BreathingLoader";
 import { initializeApp } from "@/lib/storage";
-import { CustomCursor } from "@/components/effects/CustomCursor";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -310,7 +309,6 @@ function App() {
               }>
                 <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
                   <CursorSparkles />
-                  <CustomCursor />
                   <Navigation />
                   <main className="flex-1">
                     <Router />
