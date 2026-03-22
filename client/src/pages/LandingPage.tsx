@@ -1,7 +1,6 @@
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
 import { ArrowRight, Star, Crown, ChevronDown, Check } from "lucide-react";
 import { SEO } from "@/components/SEO";
-import { StickyLeadBar } from "@/components/StickyLeadBar";
 import nadiaHeroPhoto from "@assets/IMG_1295_1762876265856.jpg";
 import { useRef, useState, useEffect, useMemo } from "react";
 import { useLocation } from "wouter";
@@ -903,8 +902,6 @@ export default function LandingPage() {
         title="MetaHers Mind Spa - Where AI Meets Feminine Power"
         description="An exclusive sanctuary for extraordinary women mastering AI and Web3. Transform your vision into reality with our AI-powered rituals and sisterhood community."
       />
-      
-      <StickyLeadBar />
       
       <main className="relative overflow-hidden" style={{ background: DARK_BG }}>
         <HeroSection onNavigate={handleNavigate} />
