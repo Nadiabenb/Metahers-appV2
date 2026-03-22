@@ -171,7 +171,6 @@ function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
                 Where extraordinary women master AI & Web3 to build lives of freedom, wealth, and lasting impact.
               </motion.p>
 
-              {/* ENHANCEMENT 1: Real credibility stats replacing filler text */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -191,7 +190,7 @@ function HeroSection({ onNavigate }: { onNavigate: (path: string) => void }) {
                 <span style={{ color: PINK }}>•</span>
                 <span className="flex items-center gap-2">
                   <span className="font-semibold" style={{ color: LAVENDER }}>98%</span>
-                  Would Recommend
+                  Recommend
                 </span>
               </motion.div>
 
@@ -340,7 +339,6 @@ function PromiseSection({ onNavigate }: { onNavigate: (path: string) => void }) 
 
 // ============================================
 // CHAPTER 3: SIGNATURE EXPERIENCES
-// ENHANCEMENT 5: Added feature bullets to each experience row
 // ============================================
 function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -472,7 +470,6 @@ function ExperiencesSection({ onNavigate }: { onNavigate: (path: string) => void
 
 // ============================================
 // CHAPTER 4: PROOF - Founder + Results
-// ENHANCEMENT 2: Added result badges to testimonial cards
 // ============================================
 function ProofSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -592,7 +589,6 @@ function ProofSection() {
               style={{ borderColor: 'rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.01)' }}
               data-testid={`testimonial-${i}`}
             >
-              {/* ENHANCEMENT 2: Result badge */}
               <span
                 className="self-start px-3 py-1 text-[11px] font-semibold uppercase tracking-wider"
                 style={{
@@ -627,7 +623,6 @@ function ProofSection() {
 
 // ============================================
 // CHAPTER 5: PRICING
-// ENHANCEMENT 3: New pricing section showing both paid tiers
 // ============================================
 function PricingSection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -810,7 +805,6 @@ function PricingSection({ onNavigate }: { onNavigate: (path: string) => void }) 
 
 // ============================================
 // CHAPTER 6: FINAL CTA
-// ENHANCEMENT 4: Single focused primary action, Voyages demoted to text link
 // ============================================
 function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -860,7 +854,6 @@ function FinalCTASection({ onNavigate }: { onNavigate: (path: string) => void })
           Start free. Build your 2026 vision in minutes with AI. Then step into the sanctuary of women who are doing the work.
         </p>
         
-        {/* ENHANCEMENT 4: Single primary CTA */}
         <div className="flex flex-col items-center gap-5">
           <motion.button
             onClick={() => onNavigate("/vision-board")}
@@ -922,10 +915,8 @@ export default function LandingPage() {
         <SectionDivider />
         <ProofSection />
         <SectionDivider />
-        {/* ENHANCEMENT 3: Pricing section added here */}
         <PricingSection onNavigate={handleNavigate} />
         <SectionDivider />
-        {/* ENHANCEMENT 6: Standalone Voyages section removed — Voyages now in Experiences section + footer link */}
         <FinalCTASection onNavigate={handleNavigate} />
         
         <footer className="py-6 px-6 lg:px-16 border-t" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.06)' }}>
