@@ -1,67 +1,29 @@
 import { useState } from "react";
-import { useLocation, Link } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera, Users, Sun, Ship, Anchor } from "lucide-react";
-import { SiWhatsapp } from "react-icons/si";
+import { useLocation } from "wouter";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { GlobalSearch } from "@/components/GlobalSearch";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
-import { motion, AnimatePresence } from "framer-motion";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const DARK_BG = "#0D0B14";
-const DARK_CARD = "#161225";
-const LAVENDER = "#C8A2D8";
-const FUCHSIA = "#E879F9";
+const COMMUNITY_URL = "https://t.me/metahers";
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
-  const { isAuthenticated, isLoading, user } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
-  const menuSections = {
-    "Your Journey": {
-      icon: Sparkles,
-      items: [
-        ...(isAuthenticated ? [
-          { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, desc: "Your personalized hub" },
-        ] : []),
-        { path: "/vision-board", label: "Vision Board", icon: Sparkles, desc: "Free entry point" },
-      ],
-    },
-    "Core Membership": {
-      icon: BookOpen,
-      items: [
-        { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "9 Worlds curriculum", pro: false },
-        { path: "/metamuse", label: "MetaMuse AI", icon: Sparkles, desc: "Your AI companion", pro: true },
-        { path: "/journal", label: "Journal", icon: Edit3, desc: "Track your growth", pro: true },
-      ],
-    },
-    "Premium Cohort": {
-      icon: Crown,
-      items: [
-        { path: "/ai-integration", label: "AI Integration Experience", icon: Sparkles, desc: "Private 4-week integration", pro: false },
-        { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build with AI", pro: false },
-      ],
-    },
-    "Voyages": {
-      icon: Anchor,
-      items: [
-        { path: "/voyages", label: "All Voyages", icon: Ship, desc: "Newport Beach experiences" },
-      ],
-    },
+  const handleNavClick = (path: string) => {
+    setLocation(path);
+    setMobileMenuOpen(false);
   };
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include',
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
       });
-
       if (response.ok) {
         window.location.href = "/";
       }
@@ -70,311 +32,271 @@ export function Navigation() {
     }
   };
 
-  const handleNavClick = (path: string) => {
-    setLocation(path);
-    setMobileMenuOpen(false);
-    setActiveMenu(null);
-  };
+  const isActive = (path: string) =>
+    location === path || (path !== "/" && location.startsWith(path));
 
-  const MenuItemCard = ({ item }: { item: any }) => {
-    const Icon = item.icon;
-    const isActive = location === item.path || 
-      (item.path !== "/" && location.startsWith(item.path));
+  const authNavItems = [
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Learn", path: "/learning-hub" },
+    { label: "Journal", path: "/journal" },
+    { label: "Community", path: COMMUNITY_URL, external: true },
+    { label: "Account", path: "/account" },
+  ];
 
-    return (
-      <motion.button
-        onClick={() => {
-          // Check if Pro feature and user is not Pro
-          if ("pro" in item && item.pro && (!isAuthenticated || !user?.isPro)) {
-            handleNavClick("/upgrade");
-          } else {
-            handleNavClick(item.path);
-          }
-        }}
-        className="w-full p-3 text-left rounded-md transition-all border"
-        style={{
-          background: isActive ? 'rgba(200,162,216,0.15)' : 'transparent',
-          borderColor: isActive ? LAVENDER : 'rgba(255,255,255,0.1)',
-          color: '#ffffff'
-        }}
-        data-testid={`nav-${item.label.toLowerCase().replace(' ', '-')}`}
-      >
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 flex items-center justify-center flex-shrink-0 rounded" style={{ background: FUCHSIA }}>
-            <Icon className="w-4 h-4 text-black" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold flex items-center gap-2" style={{ color: '#ffffff' }}>
-              {item.label}
-              {item.pro && (
-                <Badge className="text-[10px] px-1 py-0 border-0" style={{ background: LAVENDER, color: '#0A0614' }}>
-                  PRO
-                </Badge>
-              )}
-            </p>
-            <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.6)' }}>{item.desc}</p>
-          </div>
-        </div>
-      </motion.button>
-    );
-  };
-
-  const MenuSection = ({ section, items }: { section: string; items: any[] }) => {
-    const SectionIcon = menuSections[section as keyof typeof menuSections]?.icon || Sparkles;
-
-    return (
-      <div className="p-6">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: FUCHSIA }}>
-            <SectionIcon className="w-3 h-3 text-black" />
-          </div>
-          <h3 className="text-sm font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>{section}</h3>
-        </div>
-        <div className="space-y-2">
-          {items.map((item) => (
-            <MenuItemCard key={item.path} item={item} />
-          ))}
-        </div>
-      </div>
-    );
-  };
+  const publicNavItems = [
+    { label: "Home", path: "/" },
+    { label: "Blog", path: "/blog" },
+  ];
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b" style={{ background: DARK_BG, borderColor: 'rgba(255,255,255,0.1)' }}>
+    <nav
+      className="sticky top-0 z-50 w-full border-b"
+      style={{ background: "#FEFEFE", borderColor: "#E8E8E8" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <button
-            onClick={() => handleNavClick("/")}
-            className="text-xl sm:text-2xl font-semibold tracking-tight cursor-pointer"
-            style={{ color: '#ffffff' }}
+            onClick={() => handleNavClick(isAuthenticated ? "/dashboard" : "/")}
+            className="cursor-pointer"
+            style={{
+              fontFamily: "Georgia, 'Playfair Display', serif",
+              color: "#1A1A2E",
+              fontSize: "20px",
+              fontWeight: "600",
+              letterSpacing: "-0.01em",
+            }}
             data-testid="link-home"
           >
             MetaHers
           </button>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-2 flex-1 mx-8">
-            {/* Global Search */}
-            <div className="flex-1 max-w-sm">
-              <GlobalSearch />
-            </div>
-
-            {/* Main Menu Items */}
-            <div className="flex items-center gap-2">
-              {Object.entries(menuSections).map(([section, config]) => (
-                <div key={section} className="relative">
-                  <Button
-                    onClick={() => setActiveMenu(activeMenu === section ? null : section)}
-                    variant="ghost"
-                    size="sm"
-                    className="gap-1 uppercase tracking-wider text-xs font-semibold"
-                    style={{ color: 'rgba(255,255,255,0.7)' }}
-                    data-testid={`button-nav-${section.toLowerCase().replace(' ', '-')}`}
-                  >
-                    {section}
-                    <ChevronDown className={`w-3 h-3 transition-transform ${activeMenu === section ? 'rotate-180' : ''}`} />
-                  </Button>
-
-                  {/* Dropdown Menu */}
-                  <AnimatePresence>
-                    {activeMenu === section && (
-                      <>
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="fixed inset-0 z-40"
-                          onClick={() => setActiveMenu(null)}
-                        />
-                        <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -10 }}
-                          transition={{ duration: 0.1 }}
-                          className="absolute top-full left-0 mt-2 w-[320px] rounded-lg shadow-lg z-50"
-                          style={{ background: DARK_CARD, borderColor: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }}
-                        >
-                          <MenuSection section={section} items={config.items} />
-                          {section === "Featured" && (
-                            <div className="p-4" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', background: 'rgba(200,162,216,0.1)' }}>
-                              <Button
-                                onClick={() => handleNavClick("/upgrade")}
-                                className="w-full text-white text-xs uppercase tracking-wider font-semibold"
-                                style={{ background: FUCHSIA }}
-                                size="sm"
-                                data-testid="nav-membership"
-                              >
-                                <Crown className="w-3 h-3 mr-2" />
-                                View Membership
-                              </Button>
-                            </div>
-                          )}
-                        </motion.div>
-                      </>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop Right Actions */}
-          <div className="hidden lg:flex items-center gap-3">
-            {!isAuthenticated && !isLoading && (
-              <Button
-                onClick={() => {
-                  trackCTAClick('nav_login', '/login');
-                  handleNavClick("/login");
-                }}
-                className="text-white uppercase tracking-wider text-xs font-semibold"
-                style={{ background: FUCHSIA }}
-                size="sm"
-                data-testid="button-login-nav"
-              >
-                Sign In
-              </Button>
-            )}
-
-            {isAuthenticated && (
-              <Button
-                onClick={handleLogout}
-                variant="ghost"
-                size="sm"
-                className="gap-2 uppercase tracking-wider text-xs"
-                style={{ color: 'rgba(255,255,255,0.7)' }}
-                data-testid="button-logout"
-              >
-                <LogOut className="w-4 h-4" />
-                Log Out
-              </Button>
-            )}
-
-            {/* WhatsApp */}
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <a
-                  href="https://chat.whatsapp.com/Gc0QaGWvbCUJFytDiaRwRZ?mode=wwt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackCTAClick('nav_whatsapp', 'whatsapp')}
-                  data-testid="button-whatsapp-nav"
+          <div className="hidden lg:flex items-center gap-7">
+            {!isLoading && isAuthenticated ? (
+              <>
+                {authNavItems.map((item) =>
+                  item.external ? (
+                    <a
+                      key={item.label}
+                      href={item.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => trackCTAClick("nav_community", item.path)}
+                      style={{ color: "#6B6B7B", fontSize: "13px" }}
+                      className="font-medium transition-colors hover:text-[#1A1A2E]"
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <button
+                      key={item.label}
+                      onClick={() => handleNavClick(item.path)}
+                      style={{
+                        color: isActive(item.path) ? "#1A1A2E" : "#6B6B7B",
+                        fontSize: "13px",
+                        fontWeight: isActive(item.path) ? "600" : "400",
+                      }}
+                      className="transition-colors hover:text-[#1A1A2E]"
+                      data-testid={`nav-${item.label.toLowerCase()}`}
+                    >
+                      {item.label}
+                    </button>
+                  )
+                )}
+                <button
+                  onClick={handleLogout}
+                  style={{ color: "#6B6B7B", fontSize: "13px" }}
+                  className="font-medium transition-colors hover:text-[#1A1A2E]"
+                  data-testid="button-logout"
                 >
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="text-[#25D366] hover:text-[#128C7E]"
+                  Log Out
+                </button>
+              </>
+            ) : !isLoading ? (
+              <>
+                {publicNavItems.map((item) => (
+                  <button
+                    key={item.label}
+                    onClick={() => handleNavClick(item.path)}
+                    style={{
+                      color: isActive(item.path) ? "#1A1A2E" : "#6B6B7B",
+                      fontSize: "13px",
+                      fontWeight: isActive(item.path) ? "600" : "400",
+                    }}
+                    className="transition-colors hover:text-[#1A1A2E]"
+                    data-testid={`nav-${item.label.toLowerCase()}`}
                   >
-                    <SiWhatsapp className="w-5 h-5" />
-                  </Button>
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Join Free AI Retreat</p>
-              </TooltipContent>
-            </Tooltip>
+                    {item.label}
+                  </button>
+                ))}
+                <button
+                  onClick={() => {
+                    trackCTAClick("nav_login", "/login");
+                    handleNavClick("/login");
+                  }}
+                  style={{ color: "#6B6B7B", fontSize: "13px" }}
+                  className="font-medium transition-colors hover:text-[#1A1A2E]"
+                  data-testid="button-login-nav"
+                >
+                  Log In
+                </button>
+                <button
+                  onClick={() => {
+                    trackCTAClick("nav_signup", "/signup");
+                    handleNavClick("/signup");
+                  }}
+                  className="px-4 py-2 rounded font-semibold uppercase tracking-widest transition-opacity hover:opacity-90"
+                  style={{
+                    background: "#C9A96E",
+                    color: "#1A1A2E",
+                    fontSize: "11px",
+                    letterSpacing: "0.1em",
+                  }}
+                  data-testid="button-join-free-nav"
+                >
+                  Join Free
+                </button>
+              </>
+            ) : null}
           </div>
 
           {/* Mobile Menu */}
           <div className="lg:hidden">
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button 
-                  variant="ghost" 
+                <Button
+                  variant="ghost"
                   size="icon"
-                  style={{ color: '#ffffff' }}
+                  style={{ color: "#1A1A2E" }}
                   data-testid="button-mobile-menu"
                 >
-                  {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                  {mobileMenuOpen ? (
+                    <X className="w-5 h-5" />
+                  ) : (
+                    <Menu className="w-5 h-5" />
+                  )}
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[320px] p-0" style={{ background: DARK_CARD }}>
-                <div className="flex flex-col h-full p-4">
-                  <div className="mb-6 pt-2 pb-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                    <h2 className="text-2xl font-semibold" style={{ color: '#ffffff' }}>Menu</h2>
+              <SheetContent
+                side="right"
+                className="w-[280px] p-0"
+                style={{ background: "#FEFEFE" }}
+              >
+                <div className="flex flex-col h-full p-6">
+                  <div className="mb-8 pt-2">
+                    <p
+                      style={{
+                        fontFamily: "Georgia, serif",
+                        color: "#1A1A2E",
+                        fontSize: "20px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      MetaHers
+                    </p>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto space-y-6">
-                    {Object.entries(menuSections).map(([section, config]) => (
-                      <div key={section}>
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-6 h-6 flex items-center justify-center rounded" style={{ background: FUCHSIA }}>
-                            <config.icon className="w-3 h-3 text-black" />
-                          </div>
-                          <h3 className="text-xs font-bold uppercase tracking-wider" style={{ color: '#ffffff' }}>{section}</h3>
-                        </div>
-                        <div className="space-y-2 pl-2">
-                          {config.items.map((item) => (
-                            <button
-                              key={item.path}
-                              onClick={() => {
-                                // Check if Pro feature and user is not Pro
-                                if ("pro" in item && item.pro && (!isAuthenticated || !user?.isPro)) {
-                                  handleNavClick("/upgrade");
-                                } else {
-                                  handleNavClick(item.path);
-                                }
-                              }}
-                              className="w-full text-left p-2 rounded transition-colors"
-                              style={{ color: 'rgba(255,255,255,0.7)' }}
-                              data-testid={`mobile-nav-${item.label.toLowerCase().replace(' ', '-')}`}
-                            >
-                              <p className="text-sm font-medium flex items-center gap-2" style={{ color: '#ffffff' }}>
-                                {item.label}
-                                {"pro" in item && item.pro && <Badge className="text-[10px] px-1 border-0" style={{ background: LAVENDER, color: '#0A0614' }}>PRO</Badge>}
-                              </p>
-                              <p className="text-xs">{item.desc}</p>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Mobile Bottom Actions */}
-                  <div className="pt-4 mt-auto space-y-2" style={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-                    {!isAuthenticated && !isLoading && (
+                  <div className="flex-1 space-y-1">
+                    {isAuthenticated ? (
                       <>
-                        <Button
+                        {authNavItems.map((item) =>
+                          item.external ? (
+                            <a
+                              key={item.label}
+                              href={item.path}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="block w-full text-left py-3 px-2 rounded transition-colors"
+                              style={{ color: "#6B6B7B", fontSize: "14px" }}
+                              onClick={() => setMobileMenuOpen(false)}
+                            >
+                              {item.label}
+                            </a>
+                          ) : (
+                            <button
+                              key={item.label}
+                              onClick={() => handleNavClick(item.path)}
+                              className="block w-full text-left py-3 px-2 rounded transition-colors"
+                              style={{
+                                color: isActive(item.path)
+                                  ? "#1A1A2E"
+                                  : "#6B6B7B",
+                                fontSize: "14px",
+                                fontWeight: isActive(item.path) ? "600" : "400",
+                              }}
+                              data-testid={`mobile-nav-${item.label.toLowerCase()}`}
+                            >
+                              {item.label}
+                            </button>
+                          )
+                        )}
+                        <button
+                          onClick={handleLogout}
+                          className="block w-full text-left py-3 px-2 rounded transition-colors"
+                          style={{ color: "#6B6B7B", fontSize: "14px" }}
+                          data-testid="button-mobile-logout"
+                        >
+                          Log Out
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {publicNavItems.map((item) => (
+                          <button
+                            key={item.label}
+                            onClick={() => handleNavClick(item.path)}
+                            className="block w-full text-left py-3 px-2 rounded transition-colors"
+                            style={{
+                              color: isActive(item.path)
+                                ? "#1A1A2E"
+                                : "#6B6B7B",
+                              fontSize: "14px",
+                              fontWeight: isActive(item.path) ? "600" : "400",
+                            }}
+                            data-testid={`mobile-nav-${item.label.toLowerCase()}`}
+                          >
+                            {item.label}
+                          </button>
+                        ))}
+                        <button
                           onClick={() => {
-                            trackCTAClick('nav_login_mobile', '/login');
+                            trackCTAClick("nav_login_mobile", "/login");
                             handleNavClick("/login");
                           }}
-                          size="sm"
-                          className="w-full text-white uppercase tracking-wider text-xs font-semibold"
-                          style={{ background: FUCHSIA }}
+                          className="block w-full text-left py-3 px-2 rounded transition-colors"
+                          style={{ color: "#6B6B7B", fontSize: "14px" }}
                           data-testid="button-mobile-login"
                         >
-                          <LogIn className="w-4 h-4 mr-2" />
-                          Sign In
-                        </Button>
-                        <Button
-                          onClick={() => handleNavClick("/signup")}
-                          variant="outline"
-                          size="sm"
-                          className="w-full uppercase tracking-wider text-xs font-semibold"
-                          style={{ borderColor: LAVENDER, color: '#ffffff', background: 'transparent' }}
-                          data-testid="button-mobile-signup"
-                        >
-                          Create Account
-                        </Button>
+                          Log In
+                        </button>
                       </>
                     )}
-
-                    {isAuthenticated && (
-                      <Button
-                        onClick={handleLogout}
-                        variant="outline"
-                        size="sm"
-                        className="w-full uppercase tracking-wider text-xs"
-                        style={{ borderColor: LAVENDER, color: '#ffffff', background: 'transparent' }}
-                        data-testid="button-mobile-logout"
-                      >
-                        <LogOut className="w-4 h-4 mr-2" />
-                        Log Out
-                      </Button>
-                    )}
                   </div>
+
+                  {!isAuthenticated && (
+                    <div
+                      className="pt-4"
+                      style={{ borderTop: "1px solid #E8E8E8" }}
+                    >
+                      <button
+                        onClick={() => {
+                          trackCTAClick("nav_signup_mobile", "/signup");
+                          handleNavClick("/signup");
+                        }}
+                        className="w-full py-3 rounded font-semibold uppercase tracking-widest transition-opacity hover:opacity-90"
+                        style={{
+                          background: "#C9A96E",
+                          color: "#1A1A2E",
+                          fontSize: "12px",
+                          letterSpacing: "0.1em",
+                        }}
+                        data-testid="button-mobile-join-free"
+                      >
+                        Join Free
+                      </button>
+                    </div>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>

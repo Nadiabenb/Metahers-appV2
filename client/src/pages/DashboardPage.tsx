@@ -200,8 +200,8 @@ export default function DashboardPage() {
       
       <div className="relative z-10">
       <SEO
-        title="Dashboard - MetaHers Mind Spa"
-        description="Your personalized dashboard for AI and Web3 learning, exclusive member benefits, and transformational progress tracking."
+        title="Dashboard"
+        description="Your personalized dashboard for AI and Web3 learning, progress tracking, and member benefits."
         keywords="member dashboard, AI learning, Web3 education, progress tracking"
       />
 
@@ -223,7 +223,7 @@ export default function DashboardPage() {
                 })()}
               </h1>
               <p className="text-lg text-foreground/70">
-                Welcome to your personal sanctuary for growth and transformation
+                Your hub for learning, journaling, and growth.
               </p>
             </div>
             
@@ -471,10 +471,10 @@ export default function DashboardPage() {
                           <Progress value={space.progressPercent} className="h-2" />
                         </div>
                       ))}
-                      <Link href="/world">
+                      <Link href="/learning-hub">
                         <Button variant="outline" className="w-full mt-4" data-testid="button-explore-spaces">
                           <BookOpen className="w-4 h-4 mr-2" />
-                          Explore All Spaces
+                          Continue Learning
                         </Button>
                       </Link>
                     </div>
@@ -506,24 +506,26 @@ export default function DashboardPage() {
                       Daily Journal
                     </Button>
                   </Link>
-                  <Link href="/rituals">
-                    <Button variant="outline" className="w-full justify-start" data-testid="button-rituals">
+                  <Link href="/metamuse">
+                    <Button variant="outline" className="w-full justify-start" data-testid="button-try-agent">
                       <Sparkles className="w-4 h-4 mr-2" />
-                      Browse Rituals
+                      Try an Agent
                     </Button>
                   </Link>
-                  <Link href="/events">
-                    <Button variant="outline" className="w-full justify-start" data-testid="button-events">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      View Events
-                    </Button>
-                  </Link>
-                  <Link href="/world">
-                    <Button variant="outline" className="w-full justify-start" data-testid="button-world">
+                  <Link href="/ai-prompts">
+                    <Button variant="outline" className="w-full justify-start" data-testid="button-browse-prompts">
                       <Target className="w-4 h-4 mr-2" />
-                      MetaHers World
+                      Browse Prompts
                     </Button>
                   </Link>
+                  {tier === 'free' && (
+                    <Link href="/upgrade">
+                      <Button variant="default" className="w-full justify-start" data-testid="button-quick-upgrade">
+                        <TrendingUp className="w-4 h-4 mr-2" />
+                        Upgrade
+                      </Button>
+                    </Link>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
