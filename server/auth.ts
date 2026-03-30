@@ -75,22 +75,24 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
   return res.status(401).json({ message: "Unauthorized" });
 };
 
-export const isProUser: RequestHandler = async (req, res, next) => {
+export const isSignatureOrAbove: RequestHandler = async (req, res, next) => {
   if (!req.session || !req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  // Get user and check Pro status
   const { storage } = await import("./storage");
   const user = await storage.getUser(req.session.userId);
-  const { isProTier } = await import("../shared/pricing");
+  const { isSignatureTier } = await import("../shared/pricing");
 
-  if (!user || (!user.isPro && !isProTier(user.subscriptionTier as any))) {
-    return res.status(403).json({ message: "Pro subscription required" });
+  if (!user || (!user.isPro && !isSignatureTier(user.subscriptionTier as any))) {
+    return res.status(403).json({ message: "Signature subscription required" });
   }
 
   return next();
 };
+
+// Backward-compat alias
+export const isProUser = isSignatureOrAbove;
 
 // Thought Leadership freemium access: Free users get days 1-3, Pro gets all 30 days
 export const canAccessThoughtLeadership: RequestHandler = async (req, res, next) => {
@@ -101,62 +103,31 @@ export const canAccessThoughtLeadership: RequestHandler = async (req, res, next)
   return next();
 };
 
-export const isSanctuaryMember: RequestHandler = async (req, res, next) => {
+export const isPrivateOrAbove: RequestHandler = async (req, res, next) => {
   if (!req.session || !req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
   const { storage } = await import("./storage");
   const user = await storage.getUser(req.session.userId);
-  const { isSanctuaryTier } = await import("../shared/pricing");
+  const { isPrivateTier } = await import("../shared/pricing");
 
-  if (!user || !isSanctuaryTier(user.subscriptionTier as any)) {
-    return res.status(403).json({ 
-      message: "Sanctuary tier or higher required",
-      requiredTier: "sanctuary" 
+  if (!user || !isPrivateTier(user.subscriptionTier as any)) {
+    return res.status(403).json({
+      message: "Private tier or higher required",
+      requiredTier: "private_monthly"
     });
   }
 
   return next();
 };
 
-export const isInnerCircleMember: RequestHandler = async (req, res, next) => {
-  if (!req.session || !req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
+// Backward-compat alias
+export const isSanctuaryMember = isPrivateOrAbove;
 
-  const { storage } = await import("./storage");
-  const user = await storage.getUser(req.session.userId);
-  const { isInnerCircleTier } = await import("../shared/pricing");
-
-  if (!user || !isInnerCircleTier(user.subscriptionTier as any)) {
-    return res.status(403).json({ 
-      message: "Inner Circle tier or higher required",
-      requiredTier: "inner_circle" 
-    });
-  }
-
-  return next();
-};
-
-export const isFoundersCircleMember: RequestHandler = async (req, res, next) => {
-  if (!req.session || !req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const { storage } = await import("./storage");
-  const user = await storage.getUser(req.session.userId);
-  const { isFoundersCircleTier } = await import("../shared/pricing");
-
-  if (!user || !isFoundersCircleTier(user.subscriptionTier as any)) {
-    return res.status(403).json({ 
-      message: "Founder's Circle tier required",
-      requiredTier: "founders_circle" 
-    });
-  }
-
-  return next();
-};
+// Backward-compat aliases — both map to private tier in v2
+export const isInnerCircleMember = isPrivateOrAbove;
+export const isFoundersCircleMember = isPrivateOrAbove;
 
 /**
  * Admin middleware - protects sensitive admin endpoints

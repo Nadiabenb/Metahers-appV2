@@ -23,39 +23,39 @@ const fadeUp = {
 const deliverables = [
   {
     number: "01",
-    icon: Cpu,
-    title: "Strategic AI Workflow",
-    desc: "A structured workflow aligned with your specific business model \u2014 not a generic template, but a blueprint built around how you operate.",
+    icon: Calendar,
+    title: "4 x 60-min 1:1 Strategy Sessions",
+    desc: "Private weekly sessions with Nadia, each with a clear agenda and outcome. Not coaching — structured co-building.",
   },
   {
     number: "02",
     icon: Brain,
-    title: "Prompt Intelligence System",
-    desc: "Strategic prompt systems calibrated to your voice, positioning, and communication style so AI outputs feel like you \u2014 refined.",
+    title: "Async Support Between Sessions",
+    desc: "Loom walkthroughs, voice notes, and chat support between calls so momentum never stalls.",
   },
   {
     number: "03",
     icon: Layers,
-    title: "Content Intelligence Layer",
-    desc: "A content system that compounds your authority over time \u2014 generating, organizing, and repurposing your thinking at scale.",
+    title: "Personalized AI Blueprint Document",
+    desc: "A fully documented AI strategy built around your business model, cognitive style, and goals. Yours to keep and evolve.",
   },
   {
     number: "04",
     icon: Target,
-    title: "Decision-Support Frameworks",
-    desc: "AI-powered frameworks that support your strategic decisions \u2014 so you think with more clarity and move with more confidence.",
+    title: "Custom Prompt Library for Your Business",
+    desc: "A library of prompts written specifically for your voice, workflows, and outputs — not generic templates.",
   },
   {
     number: "05",
     icon: Zap,
-    title: "Automation Architecture",
-    desc: "Intelligent automation layers that reduce cognitive load on the tasks that drain you, so you can protect your energy for what only you can do.",
+    title: "Tool Setup Done With You",
+    desc: "We configure your actual tools together — no homework left half-done. You finish each week with working systems.",
   },
   {
     number: "06",
-    icon: Bot,
-    title: "Custom AI Assistant",
-    desc: "A custom AI assistant structure designed around your specific cognitive patterns \u2014 not a generic chatbot, but an extension of your thinking.",
+    icon: Cpu,
+    title: "3 Months Signature Membership",
+    desc: "Full access to all 54 rituals, agents, and the prompt library for three months after the Blueprint wraps.",
   },
 ];
 
@@ -117,27 +117,27 @@ const whoFitItems = [
 const weeks = [
   {
     number: "01",
-    title: "Architecture & Strategic Mapping",
-    desc: "We map your entire business ecosystem \u2014 how you think, where you spend your cognitive energy, and where AI can create the most leverage. You leave Week 1 with a clear strategic architecture and a shared language for how your system will be built.",
+    title: "Audit + Blueprint",
+    desc: "We audit how you currently work, where AI can create the most leverage, and build a personalized blueprint for your system. You leave Week 1 with a clear strategic architecture and a shared language for how your system will be built.",
     outcome: "Strategic clarity + system blueprint",
   },
   {
     number: "02",
-    title: "System Design & Prompt Intelligence",
-    desc: "We design and build your custom prompt systems \u2014 calibrated to your voice, your positioning, and the specific outputs that matter most in your business. By the end of this week, AI is already responding like an extension of you, not a generic assistant.",
-    outcome: "Prompt library + content intelligence foundations",
+    title: "Build Your AI Stack",
+    desc: "We design and build your custom prompt systems and tool stack — calibrated to your voice, your positioning, and the specific outputs that matter most in your business. AI starts responding like an extension of you, not a generic assistant.",
+    outcome: "Prompt library + AI stack configured",
   },
   {
     number: "03",
-    title: "Integration & Workflow Alignment",
-    desc: "We embed your new AI systems into the actual workflows of your day \u2014 your content creation, decision-making, communications, and execution rhythms. This is where your AI Operating System stops being a concept and starts running in the background of your business.",
+    title: "Systemize + Automate",
+    desc: "We embed your new AI systems into the actual workflows of your day — content creation, decision-making, communications, and execution rhythms. This is where your AI blueprint stops being a concept and starts running in the background of your business.",
     outcome: "Live, integrated AI workflows",
   },
   {
     number: "04",
-    title: "Refinement, Optimization & Autonomy",
-    desc: "We stress-test, refine, and optimize everything. You learn how to evolve the system yourself as your business grows \u2014 so this never becomes something you depend on anyone else to maintain. You leave autonomous, not dependent.",
-    outcome: "Full ownership + autonomy to build further",
+    title: "Launch + Monetize",
+    desc: "We stress-test, refine, and optimize everything. You learn how to evolve the system yourself and — if it applies to your business — how to package and monetize your AI expertise. You leave autonomous and ready to build further.",
+    outcome: "Full ownership + monetization strategy",
   },
 ];
 
@@ -214,9 +214,9 @@ export default function AIIntegrationPage() {
   return (
     <div className="min-h-screen bg-background" data-testid="page-ai-integration">
       <SEO
-        title="AI Integration Experience - Private 4-Week 1:1 System"
-        description="A private, high-touch 4-week experience where we architect your personal AI Operating System. Built around how you think, decide, and lead. For visionary women founders ready to integrate AI structurally."
-        keywords="ai integration, ai operating system, women founders, 1:1 ai coaching, ai strategy, prompt engineering, ai automation"
+        title="The AI Blueprint - 4-Week 1:1 with Nadia"
+        description="4 weeks. 1:1 with Nadia. A complete AI system built around your business and life. $997 founding rate."
+        keywords="ai blueprint, ai operating system, women founders, 1:1 ai coaching, ai strategy, prompt engineering, ai automation"
       />
 
       {/* HERO */}
@@ -233,7 +233,7 @@ export default function AIIntegrationPage() {
           className="font-mono text-[11px] tracking-[0.22em] uppercase text-primary mb-8"
           data-testid="text-hero-eyebrow"
         >
-          MetaHers \u00B7 AI Integration Experience
+          MetaHers \u00B7 The AI Blueprint
         </motion.p>
 
         <motion.h1
@@ -255,7 +255,7 @@ export default function AIIntegrationPage() {
           className="font-serif text-xl sm:text-2xl md:text-3xl font-light text-white/55 tracking-wide mb-12"
           data-testid="text-hero-subtitle"
         >
-          AI Integration Experience
+          The AI Blueprint
         </motion.p>
 
         <motion.div
@@ -265,7 +265,7 @@ export default function AIIntegrationPage() {
           variants={fadeUp}
           className="flex flex-wrap gap-3 justify-center mb-14"
         >
-          {["Private", "4 Weeks", "High-Touch", "1:1"].map((tag) => (
+          {["4 Weeks", "1:1 with Nadia", "$997", "Founding Rate"].map((tag) => (
             <Badge
               key={tag}
               variant="outline"
@@ -297,7 +297,7 @@ export default function AIIntegrationPage() {
             data-testid="button-cta-hero"
           >
             <Sparkles className="w-4 h-4 mr-2" />
-            Book Your Discovery Call
+            Apply Now
           </Button>
         </motion.div>
 
@@ -395,7 +395,7 @@ export default function AIIntegrationPage() {
           className="font-mono text-xs tracking-[0.18em] uppercase"
           data-testid="button-cta-mid"
         >
-          Book Your Discovery Call
+          Apply Now
         </Button>
       </div>
 
@@ -635,12 +635,18 @@ export default function AIIntegrationPage() {
             </p>
 
             <div className="inline-flex flex-col items-center bg-white/[0.03] border border-primary/25 px-12 sm:px-16 py-12 rounded-sm mb-4" data-testid="card-price-block">
-              <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary mb-4">Total Investment</span>
-              <span className="font-serif text-6xl sm:text-7xl md:text-8xl font-light text-primary leading-none mb-3">$1,297</span>
-              <div className="text-[13px] text-white/40 leading-relaxed text-center">
-                4 weeks private 1:1 {"\u00B7"} Weekly deep integration calls<br />
-                Strategic support between sessions {"\u00B7"} Full system ownership
+              <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary mb-4">Founding Rate</span>
+              <div className="flex items-baseline gap-4 mb-3">
+                <span className="font-serif text-6xl sm:text-7xl md:text-8xl font-light text-primary leading-none">$997</span>
+                <span className="font-serif text-3xl font-light line-through text-white/30">$1,997</span>
               </div>
+              <div className="text-[13px] text-white/40 leading-relaxed text-center mb-3">
+                4 x 60-min 1:1 sessions {"\u00B7"} Async support between sessions<br />
+                Custom prompt library {"\u00B7"} Full system ownership
+              </div>
+              <span className="font-mono text-[11px] tracking-wider uppercase text-primary/60">
+                Includes 3 months Signature membership
+              </span>
             </div>
 
             <p className="font-serif text-base md:text-lg italic font-light text-white/40 max-w-lg mx-auto mb-14 leading-relaxed">
@@ -655,7 +661,7 @@ export default function AIIntegrationPage() {
                 data-testid="button-cta-investment"
               >
                 <Calendar className="w-4 h-4 mr-2" />
-                Book Your Discovery Call
+                Apply Now
               </Button>
               <span className="font-mono text-[11px] tracking-wider uppercase text-white/30">
                 Application-based {"\u00B7"} Limited availability

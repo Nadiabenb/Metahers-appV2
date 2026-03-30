@@ -155,13 +155,14 @@ export default function DashboardPage() {
 
   const currentStreak = 7;
 
-  const tierBadgeColors = {
+  const tierBadgeColors: Record<string, string> = {
     free: 'bg-muted text-foreground',
+    signature_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
+    private_monthly: 'bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] text-white',
+    ai_blueprint: 'bg-gradient-to-r from-[hsl(var(--liquid-gold))] via-[hsl(var(--magenta-quartz))] to-[hsl(var(--hyper-violet))] text-white',
+    // Legacy values — kept for users with old tier strings in the DB
     pro_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     pro_annual: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
-    sanctuary: 'bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] text-white',
-    inner_circle: 'bg-gradient-to-r from-[hsl(var(--aurora-teal))] to-[hsl(var(--liquid-gold))] text-white',
-    founders_circle: 'bg-gradient-to-r from-[hsl(var(--liquid-gold))] via-[hsl(var(--magenta-quartz))] to-[hsl(var(--hyper-violet))] text-white',
     vip_cohort: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     executive: 'bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--cyber-fuchsia))] text-white',
   };

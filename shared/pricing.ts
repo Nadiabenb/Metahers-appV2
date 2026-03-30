@@ -1,8 +1,4 @@
-/**
- * Pricing tiers and configuration for MetaHers Mind Spa
- */
-
-export type SubscriptionTier = 'free' | 'pro_annual' | 'ai_integration';
+export type SubscriptionTier = 'free' | 'signature_monthly' | 'private_monthly' | 'ai_blueprint';
 
 export type PricingPlan = {
   id: SubscriptionTier;
@@ -10,72 +6,94 @@ export type PricingPlan = {
   displayName: string;
   price: number;
   interval: 'month' | 'year' | 'one_time';
-  stripePriceEnvVar: string; // Environment variable name for Stripe Price ID
+  stripePriceEnvVar: string;
   features: string[];
   highlighted?: boolean;
   badge?: string;
   description: string;
   buttonText: string;
-  savings?: string;
 };
 
 export const PRICING_PLANS: Record<SubscriptionTier, PricingPlan> = {
   free: {
     id: 'free',
     name: 'Free',
-    displayName: 'Free Explorer',
+    displayName: 'Inner Circle',
     price: 0,
     interval: 'month',
     stripePriceEnvVar: '',
-    description: 'Start your journey with one unlocked ritual',
-    buttonText: 'Current Plan',
+    description: 'Start your AI journey with the MetaHers community',
+    buttonText: 'Join Free',
     features: [
-      '1 Ritual unlocked via quiz',
-      'Basic AI journal',
-      'Progress tracking',
-      'Community access',
+      'Weekly AI newsletter',
+      'Telegram community access',
+      '1 free AI agent session',
+      '3 learning rituals',
+      '10 prompts from the library',
+      'Basic journal',
+      'Weekly curated AI resources',
     ],
   },
-  pro_annual: {
-    id: 'pro_annual',
-    name: 'Pro Annual',
-    displayName: '1 Year Membership',
-    price: 399,
-    interval: 'year',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID_ANNUAL',
-    description: 'Full access to the MetaHers ecosystem for one year',
-    buttonText: 'Join for 1 Year',
+  signature_monthly: {
+    id: 'signature_monthly',
+    name: 'Signature',
+    displayName: 'Signature',
+    price: 29,
+    interval: 'month',
+    stripePriceEnvVar: 'STRIPE_PRICE_ID_SIGNATURE',
+    description: 'Full access to the MetaHers ecosystem',
+    buttonText: 'Upgrade to Signature',
+    highlighted: true,
     badge: 'Most Popular',
     features: [
-      'All 54 luxury learning rituals',
-      'Full MetaMuse AI access',
-      'Digital AI Agency team access',
-      'Exclusive community events',
-      'Priority support',
+      'All 54 learning rituals',
+      'Unlimited AI agent access',
+      'Full prompt library',
+      'AI-powered journal coaching',
+      'Full Prompt Playground',
+      'Monthly live workshops',
+      'Early access to product drops',
     ],
   },
-  ai_integration: {
-    id: 'ai_integration',
-    name: 'AI Integration',
-    displayName: 'AI Integration Experience',
-    price: 1297,
-    interval: 'one_time',
-    stripePriceEnvVar: 'STRIPE_PRICE_ID_AI_INTEGRATION',
-    description: 'Private 4-week 1:1 systems architecture experience',
-    buttonText: 'Apply for Integration',
-    badge: 'Premium Cohort',
+  private_monthly: {
+    id: 'private_monthly',
+    name: 'Private',
+    displayName: 'Private',
+    price: 149,
+    interval: 'month',
+    stripePriceEnvVar: 'STRIPE_PRICE_ID_PRIVATE',
+    description: 'White-glove AI integration with founder access',
+    buttonText: 'Apply',
     features: [
-      '4 weeks of private 1:1 coaching',
-      'Custom AI Operating System architecture',
-      'Weekly deep integration calls',
-      'Strategic support between sessions',
-      'Full system ownership & autonomy',
+      'Everything in Signature',
+      '1:1 AI setup concierge',
+      'Priority founder access',
+      'Founding member rate locked',
+    ],
+  },
+  ai_blueprint: {
+    id: 'ai_blueprint',
+    name: 'AI Blueprint',
+    displayName: 'The AI Blueprint',
+    price: 997,
+    interval: 'one_time',
+    stripePriceEnvVar: 'STRIPE_PRICE_ID_BLUEPRINT',
+    description: '4 weeks. 1:1 with Nadia. A complete AI system built around your business and life.',
+    buttonText: 'Apply Now',
+    badge: 'Founding Rate',
+    features: [
+      '4 x 60-min 1:1 strategy sessions',
+      'Async support (Loom, voice notes, chat)',
+      'Personalized AI blueprint document',
+      'Custom prompt library for your business',
+      'Tool setup done with you',
+      '3 months Signature membership included',
     ],
   },
 };
 
 export function getPricingPlan(tier: SubscriptionTier): PricingPlan {
-  return PRICING_PLANS[tier];
+  return PRICING_PLANS[tier] ?? PRICING_PLANS.free;
 }
 
 export function getStripePriceId(tier: SubscriptionTier): string | null {
@@ -88,25 +106,22 @@ export function isPaidTier(tier: SubscriptionTier): boolean {
   return tier !== 'free';
 }
 
-export function isProTier(tier: SubscriptionTier): boolean {
-  return tier === 'pro_annual' || tier === 'ai_integration';
+export function isSignatureTier(tier: SubscriptionTier): boolean {
+  return tier === 'signature_monthly' || tier === 'private_monthly' || tier === 'ai_blueprint';
 }
 
-export function isSanctuaryTier(tier: SubscriptionTier): boolean {
-  return tier === 'pro_annual';
-}
-
-export function isInnerCircleTier(tier: SubscriptionTier): boolean {
-  return tier === 'ai_integration';
-}
-
-export function isFoundersCircleTier(tier: SubscriptionTier): boolean {
-  return false;
+export function isPrivateTier(tier: SubscriptionTier): boolean {
+  return tier === 'private_monthly';
 }
 
 export function formatPrice(price: number, interval: string): string {
   if (price === 0) return 'Free';
   if (interval === 'one_time') return `$${price}`;
-  if (interval === 'year') return `$${price}/year`;
   return `$${price}/mo`;
 }
+
+// Backward-compat aliases for existing code (DashboardPage, MemberWorkspacePage, auth.ts)
+export const isProTier = isSignatureTier;
+export const isSanctuaryTier = isPrivateTier;
+export const isInnerCircleTier = isPrivateTier;
+export const isFoundersCircleTier = isPrivateTier;

@@ -1,18 +1,15 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { PRICING_PLANS, type SubscriptionTier, formatPrice } from "@shared/pricing";
-import { Check, Sparkles, Crown, ArrowRight } from "lucide-react";
+import { PRICING_PLANS, type SubscriptionTier } from "@shared/pricing";
+import { Check, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { trackCTAClick } from "@/lib/analytics";
-import { Badge } from "@/components/ui/badge";
 
-const TIER_ORDER: SubscriptionTier[] = ['pro_annual', 'ai_integration'];
+const GOLD = "#C9A96E";
+const NAVY = "#1A1A2E";
+const BLUSH = "#F2E0D6";
 
-const FUCHSIA = "#E879F9";
-const LAVENDER = "#C8A2D8";
-const DARK_BG = "#0D0B14";
-const DARK_CARD = "#161225";
+const TIER_ORDER: SubscriptionTier[] = ['free', 'signature_monthly', 'private_monthly'];
 
 export default function UpgradePage() {
   const { user } = useAuth();
@@ -23,16 +20,16 @@ export default function UpgradePage() {
   }, []);
 
   const handleUpgrade = async (tier: SubscriptionTier) => {
-    if (tier === 'ai_integration') {
+    if (tier === 'free') return;
+    if (tier === 'private_monthly' || tier === 'ai_blueprint') {
+      trackCTAClick(`upgrade_apply_${tier}`, '/ai-integration');
       window.location.href = '/ai-integration';
       return;
     }
     try {
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
         body: JSON.stringify({ tier }),
       });
@@ -43,10 +40,7 @@ export default function UpgradePage() {
       }
 
       const data = await response.json();
-
-      if (data.upgraded) {
-        window.location.href = '/workspace?upgrade=success';
-      } else if (data.url) {
+      if (data.url) {
         window.location.href = data.url;
       }
     } catch (error) {
@@ -56,193 +50,207 @@ export default function UpgradePage() {
   };
 
   return (
-    <div className="min-h-screen" style={{ background: DARK_BG }}>
-      <section className="relative py-24 px-6 overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(232,121,249,0.1) 0%, transparent 70%)"
-        }} />
-
-        <div className="relative max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-6"
-          >
-            <span className="text-xs font-mono uppercase tracking-[0.25em]" style={{ color: FUCHSIA }}>
-              Membership
-            </span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl mb-6"
-            style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}
-          >
-            Choose Your{' '}
-            <span className="italic" style={{ color: LAVENDER }}>Edge</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="text-lg max-w-2xl mx-auto mb-8 font-light"
-            style={{ color: 'rgba(255,255,255,0.6)' }}
-          >
-            Exclusive membership and high-touch experiences for women building wealth and influence.
-          </motion.p>
-
-          {currentTier !== 'free' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-              className="flex flex-wrap items-center justify-center gap-3"
-            >
-              <span className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>Your current membership:</span>
-              <Badge className="text-xs uppercase tracking-wider no-default-hover-elevate no-default-active-elevate" style={{ background: FUCHSIA, color: DARK_BG }}>
-                {PRICING_PLANS[currentTier]?.displayName || currentTier}
-              </Badge>
-            </motion.div>
-          )}
-        </div>
+    <div className="min-h-screen" style={{ background: BLUSH }}>
+      {/* Header */}
+      <section className="py-20 px-6 text-center" style={{ background: NAVY }}>
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-xs font-mono uppercase tracking-[0.25em] mb-4"
+          style={{ color: GOLD }}
+        >
+          Membership
+        </motion.p>
+        <motion.h1
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-4xl sm:text-5xl font-light mb-4 text-white"
+          style={{ fontFamily: "Georgia, 'Playfair Display', serif" }}
+        >
+          Choose your level
+        </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="text-base max-w-xl mx-auto font-light"
+          style={{ color: 'rgba(255,255,255,0.6)' }}
+        >
+          From community access to white-glove 1:1 — pick what fits where you are right now.
+        </motion.p>
       </section>
 
-      <section className="py-20 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
-            {TIER_ORDER.map((tier, index) => {
-              const plan = PRICING_PLANS[tier];
-              const isCurrentTier = tier === currentTier;
-              const isHighlighted = tier === 'ai_integration';
+      {/* Tier Cards */}
+      <section className="py-16 px-6">
+        <div className="max-w-5xl mx-auto grid gap-6 md:grid-cols-3">
+          {TIER_ORDER.map((tier, index) => {
+            const plan = PRICING_PLANS[tier];
+            const isCurrentTier = tier === currentTier;
+            const isHighlighted = plan.highlighted;
 
-              return (
-                <motion.div
-                  key={tier}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.15 }}
-                >
+            return (
+              <motion.div
+                key={tier}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="relative flex flex-col rounded-sm overflow-hidden"
+                style={{
+                  background: '#FFFFFF',
+                  border: isHighlighted ? `2px solid ${GOLD}` : '1px solid #E0D5CC',
+                  boxShadow: isHighlighted ? `0 8px 32px rgba(201,169,110,0.18)` : '0 2px 8px rgba(0,0,0,0.06)',
+                }}
+                data-testid={`card-tier-${tier}`}
+              >
+                {plan.badge && (
                   <div
-                    className="relative h-full flex flex-col overflow-hidden"
-                    style={{
-                      background: isHighlighted
-                        ? `linear-gradient(135deg, ${DARK_CARD} 0%, rgba(232,121,249,0.08) 100%)`
-                        : DARK_CARD,
-                      border: isHighlighted
-                        ? `2px solid rgba(232,121,249,0.4)`
-                        : '1px solid rgba(255,255,255,0.08)',
-                      boxShadow: isHighlighted
-                        ? '0 0 40px rgba(232,121,249,0.1)'
-                        : 'none',
-                    }}
-                    data-testid={`card-tier-${tier}`}
+                    className="py-2 text-center text-[11px] font-semibold uppercase tracking-widest"
+                    style={{ background: GOLD, color: NAVY }}
                   >
-                    {plan.badge && (
-                      <div className="absolute -top-px left-0 right-0 flex justify-center">
-                        <div
-                          className="px-5 py-1.5 text-[10px] font-mono uppercase tracking-[0.2em]"
-                          style={{ background: `linear-gradient(135deg, ${FUCHSIA}, ${LAVENDER})`, color: DARK_BG }}
-                        >
-                          {plan.badge}
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="p-8 pt-10 text-center" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                      <div className="flex justify-center mb-4">
-                        <div className="w-12 h-12 flex items-center justify-center rounded-full" style={{ background: 'rgba(232,121,249,0.1)', border: '1px solid rgba(232,121,249,0.2)' }}>
-                          {tier === 'ai_integration' ? (
-                            <Sparkles className="w-5 h-5" style={{ color: FUCHSIA }} />
-                          ) : (
-                            <Crown className="w-5 h-5" style={{ color: FUCHSIA }} />
-                          )}
-                        </div>
-                      </div>
-                      <h3 className="text-xl font-medium mb-2" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF' }}>
-                        {plan.displayName}
-                      </h3>
-                      <p className="text-sm mb-5 h-10" style={{ color: 'rgba(255,255,255,0.5)' }}>
-                        {plan.description}
-                      </p>
-                      <div>
-                        <div className="text-4xl font-light" style={{ fontFamily: 'Playfair Display, serif', color: FUCHSIA }}>
-                          ${plan.price}
-                        </div>
-                        <div className="text-xs uppercase tracking-wider mt-1" style={{ color: 'rgba(255,255,255,0.4)' }}>
-                          {plan.interval === 'year' ? 'per year' : 'one-time investment'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-8 flex-1">
-                      <ul className="space-y-3">
-                        {plan.features.map((feature, i) => (
-                          <li key={i} className="flex items-start gap-3 text-sm">
-                            <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: FUCHSIA }} />
-                            <span style={{ color: 'rgba(255,255,255,0.7)' }}>{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="p-8 pt-0">
-                      {isCurrentTier ? (
-                        <button
-                          className="w-full py-3 text-sm uppercase tracking-wider font-medium cursor-not-allowed"
-                          disabled
-                          style={{ border: '1px solid rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.3)', background: 'transparent' }}
-                          data-testid={`button-current-${tier}`}
-                        >
-                          Current Membership
-                        </button>
-                      ) : (
-                        <button
-                          className="w-full py-3.5 text-sm uppercase tracking-[0.12em] font-semibold transition-all"
-                          onClick={() => handleUpgrade(tier)}
-                          style={{
-                            background: isHighlighted
-                              ? `linear-gradient(135deg, ${FUCHSIA}, ${LAVENDER})`
-                              : 'transparent',
-                            color: isHighlighted ? DARK_BG : '#FFFFFF',
-                            border: isHighlighted ? 'none' : '1px solid rgba(255,255,255,0.2)',
-                          }}
-                          data-testid={`button-upgrade-${tier}`}
-                        >
-                          <span className="flex items-center justify-center gap-2">
-                            {plan.buttonText}
-                            <ArrowRight className="w-4 h-4" />
-                          </span>
-                        </button>
-                      )}
-                    </div>
+                    {plan.badge}
                   </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                )}
+
+                <div className="p-8 flex-1">
+                  <h3
+                    className="text-xl font-semibold mb-1"
+                    style={{ fontFamily: "Georgia, serif", color: NAVY }}
+                  >
+                    {plan.displayName}
+                  </h3>
+                  <p className="text-sm mb-6" style={{ color: '#6B6B7B' }}>
+                    {plan.description}
+                  </p>
+
+                  <div className="mb-6">
+                    <span className="text-4xl font-light" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
+                      {plan.price === 0 ? 'Free' : `$${plan.price}`}
+                    </span>
+                    {plan.price > 0 && (
+                      <span className="text-sm ml-1" style={{ color: '#6B6B7B' }}>/mo</span>
+                    )}
+                  </div>
+
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm" style={{ color: '#444' }}>
+                        <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {isCurrentTier ? (
+                    <button
+                      disabled
+                      className="w-full py-3 text-sm uppercase tracking-wider font-medium cursor-not-allowed rounded-sm"
+                      style={{ border: `1px solid #D0C9C0`, color: '#A0978D', background: 'transparent' }}
+                      data-testid={`button-current-${tier}`}
+                    >
+                      Current Plan
+                    </button>
+                  ) : tier === 'free' ? null : (
+                    <button
+                      onClick={() => {
+                        trackCTAClick(`upgrade_${tier}`, '/upgrade');
+                        handleUpgrade(tier);
+                      }}
+                      className="w-full py-3.5 text-sm uppercase tracking-widest font-semibold rounded-sm flex items-center justify-center gap-2 transition-opacity hover:opacity-90"
+                      style={{
+                        background: isHighlighted ? GOLD : 'transparent',
+                        color: isHighlighted ? NAVY : NAVY,
+                        border: isHighlighted ? 'none' : `1px solid ${NAVY}`,
+                      }}
+                      data-testid={`button-upgrade-${tier}`}
+                    >
+                      {plan.buttonText}
+                      <ArrowRight className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </section>
 
-      <section className="py-20 px-6" style={{ background: 'rgba(22,18,37,0.6)' }}>
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl mb-6" style={{ fontFamily: 'Playfair Display, serif', color: '#FFFFFF', fontWeight: 300 }}>
-            Questions About Membership?
-          </h2>
-          <p className="mb-4 font-light" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Our membership and integration programs are designed to provide maximum leverage and structural transformation for your digital business.
-          </p>
-          <p style={{ color: 'rgba(255,255,255,0.55)' }}>
-            Need help choosing? Reach out to{' '}
-            <a href="mailto:help@metahers.ai" style={{ color: FUCHSIA }} className="hover:underline">
-              help@metahers.ai
-            </a>
-          </p>
+      {/* AI Blueprint — Fast Track Section */}
+      <section className="py-16 px-6" style={{ background: NAVY }}>
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <p
+              className="text-xs font-mono uppercase tracking-[0.25em] mb-4"
+              style={{ color: GOLD }}
+            >
+              Want the fast track?
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-light text-white mb-4"
+              style={{ fontFamily: "Georgia, 'Playfair Display', serif" }}
+            >
+              The AI Blueprint
+            </h2>
+            <p className="text-base font-light mb-2" style={{ color: 'rgba(255,255,255,0.65)' }}>
+              4 weeks. 1:1 with Nadia. A complete AI system built around your business and life.
+            </p>
+            <div className="flex items-baseline gap-3 mb-6">
+              <span className="text-4xl font-light text-white" style={{ fontFamily: "Georgia, serif" }}>
+                $997
+              </span>
+              <span className="text-xl line-through" style={{ color: 'rgba(255,255,255,0.35)' }}>$1,997</span>
+              <span
+                className="text-xs font-semibold uppercase tracking-widest px-2 py-1 rounded-sm"
+                style={{ background: GOLD, color: NAVY }}
+              >
+                Founding Rate
+              </span>
+            </div>
+
+            <ul className="grid sm:grid-cols-2 gap-3 mb-8">
+              {PRICING_PLANS.ai_blueprint.features.map((feature, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                  <Check className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
+                  {feature}
+                </li>
+              ))}
+            </ul>
+
+            <p className="text-sm mb-8 italic" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              Includes 3 months Signature membership after completion.
+            </p>
+
+            <button
+              onClick={() => {
+                trackCTAClick('upgrade_ai_blueprint', '/ai-integration');
+                window.location.href = '/ai-integration';
+              }}
+              className="px-8 py-4 text-sm uppercase tracking-widest font-semibold rounded-sm flex items-center gap-2 transition-opacity hover:opacity-90"
+              style={{ background: GOLD, color: NAVY }}
+              data-testid="button-upgrade-ai-blueprint"
+            >
+              Apply Now
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </motion.div>
         </div>
+      </section>
+
+      {/* Footer note */}
+      <section className="py-12 px-6 text-center" style={{ background: BLUSH }}>
+        <p className="text-sm" style={{ color: '#6B6B7B' }}>
+          Questions?{' '}
+          <a href="mailto:help@metahers.ai" style={{ color: NAVY }} className="underline">
+            help@metahers.ai
+          </a>
+        </p>
       </section>
     </div>
   );

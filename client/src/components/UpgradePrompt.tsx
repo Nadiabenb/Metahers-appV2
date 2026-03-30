@@ -18,7 +18,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
         <p className="text-sm text-foreground mb-3">
           {description || `${feature} is a Pro feature`}
         </p>
-        <Link href="/subscribe">
+        <Link href="/upgrade">
           <Button size="sm" className="gap-2" data-testid="button-upgrade-compact">
             <Crown className="w-3 h-3" />
             Upgrade to Pro
@@ -62,7 +62,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
               <span>All 5 Rituals</span>
             </div>
           </div>
-          <Link href="/subscribe">
+          <Link href="/upgrade">
             <Button size="lg" className="gap-2 mt-2" data-testid="button-upgrade-full">
               <Crown className="w-4 h-4" />
               Upgrade to Pro - $19.99/month

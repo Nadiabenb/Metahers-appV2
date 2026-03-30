@@ -36,7 +36,7 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   isPro: boolean("is_pro").default(false).notNull(),
-  subscriptionTier: varchar("subscription_tier").default("free").notNull(), // free, pro_monthly, pro_annual, vip_cohort, executive
+  subscriptionTier: varchar("subscription_tier").default("free").notNull(), // free, signature_monthly, private_monthly, ai_blueprint
   onboardingCompleted: boolean("onboarding_completed").default(false).notNull(),
   quizUnlockedRitual: varchar("quiz_unlocked_ritual"), // Ritual unlocked via quiz
   quizCompletedAt: timestamp("quiz_completed_at"), // When they completed the quiz
