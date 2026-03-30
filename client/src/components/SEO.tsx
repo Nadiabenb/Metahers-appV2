@@ -20,7 +20,7 @@ export function SEO({
   schema
 }: SEOProps) {
   useEffect(() => {
-    const fullTitle = `${title} | MetaHers Mind Spa`;
+    const fullTitle = `${title} | MetaHers`;
     document.title = fullTitle;
     
     const updateMetaTag = (name: string, content: string, property?: boolean) => {
@@ -49,7 +49,7 @@ export function SEO({
     updateMetaTag("og:image", imageUrl, true);
     updateMetaTag("og:type", type, true);
     updateMetaTag("og:url", currentUrl, true);
-    updateMetaTag("og:site_name", "MetaHers Mind Spa", true);
+    updateMetaTag("og:site_name", "MetaHers", true);
     
     updateMetaTag("twitter:card", "summary_large_image");
     updateMetaTag("twitter:title", fullTitle);

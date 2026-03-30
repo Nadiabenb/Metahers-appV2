@@ -49,6 +49,7 @@ export const users = pgTable("users", {
 export type UpsertUser = typeof users.$inferInsert;
 export type User = typeof users.$inferSelect;
 
+// DEPRECATED: Cycle tracker removed in v2 restructure. Tables kept for migration safety.
 // Menstrual cycle tracking table
 export const menstrualCycles = pgTable("menstrual_cycles", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

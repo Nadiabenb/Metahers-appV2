@@ -11,7 +11,6 @@ import { Footer } from "@/components/Footer";
 import { NetworkErrorBoundary } from "@/components/NetworkErrorBoundary";
 import { InstallPrompt } from "@/components/InstallPrompt";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { CursorSparkles } from "@/components/effects/CursorSparkles";
 import { BreathingLoader } from "@/components/effects/BreathingLoader";
 import { initializeApp } from "@/lib/storage";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -41,7 +40,6 @@ const MetaMusePage = lazy(() => import("@/pages/MetaMusePage"));
 const EventsPage = lazy(() => import("@/pages/EventsPage"));
 const AccountPage = lazy(() => import("@/pages/AccountPage"));
 const BlogPage = lazy(() => import("@/pages/BlogPage"));
-const DailyNewsPage = lazy(() => import("@/pages/DailyNewsPage"));
 const GlowUpLandingPage = lazy(() => import("@/pages/GlowUpLandingPage"));
 const GlowUpOnboardingPage = lazy(() => import("@/pages/GlowUpOnboardingPage"));
 const GlowUpDashboardPage = lazy(() => import("@/pages/GlowUpDashboardPage"));
@@ -54,12 +52,9 @@ const ExecutivePage = lazy(() => import("@/pages/ExecutivePage"));
 const AIBuilderRetreatPage = lazy(() => import("@/pages/AIBuilderRetreatPage"));
 const ThoughtLeadershipPage = lazy(() => import("@/pages/ThoughtLeadershipPage"));
 const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
-const RetroCameraPage = lazy(() => import("@/pages/RetroCameraPage"));
 const AdminQuizResultsPage = lazy(() => import("@/pages/AdminQuizResultsPage"));
 const UpgradePage = lazy(() => import("@/pages/UpgradePage"));
 const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
-const CareerPathGeneratorPage = lazy(() => import("@/pages/CareerPathGeneratorPage"));
-const MetaHersWorldPage = lazy(() => import("@/pages/MetaHersWorldPage"));
 const SpaceDetailPage = lazy(() => import("@/pages/SpaceDetailPage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
@@ -82,11 +77,9 @@ const TermsOfServicePage = lazy(() => import("@/pages/TermsOfServicePage"));
 const LearningHubPage = lazy(() => import("@/pages/LearningHubPage"));
 const VisionBoardPage = lazy(() => import("@/pages/VisionBoardPage"));
 const FreeResourcesPage = lazy(() => import("@/pages/FreeResourcesPage"));
-const AgencyDashboardPage = lazy(() => import("@/pages/AgencyDashboardPage"));
 const VoyagesPage = lazy(() => import("@/pages/VoyagesPage"));
 const VoyageDetailPage = lazy(() => import("@/pages/VoyageDetailPage"));
 const VoyageSuccessPage = lazy(() => import("@/pages/VoyageSuccessPage"));
-const CycleTrackerPage = lazy(() => import("@/pages/CycleTrackerPage"));
 const AIIntegrationPage = lazy(() => import("@/pages/AIIntegrationPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
@@ -121,7 +114,7 @@ function Router() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <BreathingLoader size="lg" className="mb-4" />
-          <p className="text-foreground/70">Preparing your sanctuary...</p>
+          <p className="text-foreground/70">Loading...</p>
         </div>
       </div>
     );
@@ -139,12 +132,9 @@ function Router() {
         {/* Public routes - accessible to everyone */}
         <Route path="/retreat" component={RetreatPage} />
         <Route path="/blog" component={BlogPage} />
-        <Route path="/daily" component={DailyNewsPage} />
         <Route path="/playground" component={PromptPlaygroundPage} />
-        <Route path="/career-path" component={CareerPathGeneratorPage} />
         <Route path="/upgrade" component={UpgradePage} />
         <Route path="/shop" component={ShopPage} />
-        <Route path="/retro-camera" component={RetroCameraPage} />
         <Route path="/vip-cohort" component={VIPCohortPage} />
         <Route path="/executive" component={ExecutivePage} />
         <Route path="/ai-builder" component={AIBuilderRetreatPage} />
@@ -157,9 +147,6 @@ function Router() {
 
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
-
-        {/* MetaHers World - Internal Hub */}
-        <Route path="/world" component={MetaHersWorldPage} />
 
         {/* Space Detail Pages - Public */}
         <Route path="/spaces/:slug" component={SpaceDetailPage} />
@@ -198,9 +185,6 @@ function Router() {
         {/* Circle - Networking (public accessible) */}
         <Route path="/circle" component={CircleDiscoveryPage} />
 
-        {/* AI Digital Agency - Public */}
-        <Route path="/agency" component={AgencyDashboardPage} />
-
         {isAuthenticated ? (
           <>
             {/* Tier Selection Onboarding */}
@@ -236,7 +220,6 @@ function Router() {
             <Route path="/rituals/:slug" component={RitualDetailPage} />
             <Route path="/journal" component={JournalPage} />
             <Route path="/journal/history" component={JournalHistoryPage} />
-            <Route path="/cycle-tracker" component={CycleTrackerPage} />
             <Route path="/metamuse" component={MetaMusePage} />
             <Route path="/events" component={EventsPage} />
             <Route path="/account" component={AccountPage} />
@@ -308,7 +291,6 @@ function App() {
                 </div>
               }>
                 <div className="flex flex-col min-h-screen bg-background overflow-x-hidden">
-                  <CursorSparkles />
                   <Navigation />
                   <main className="flex-1">
                     <Router />

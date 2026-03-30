@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation, Link } from "wouter";
-import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera, Users, Sun, Bot, Ship, Anchor, Heart } from "lucide-react";
+import { Sparkles, Calendar, ShoppingBag, BookOpen, MessageSquare, User, LogOut, LogIn, Newspaper, TrendingUp, Compass, Menu, X, Crown, Zap, Code2, Edit3, Briefcase, ArrowUpCircle, Target, ChevronDown, Globe, Layers, LayoutDashboard, Shield, Camera, Users, Sun, Ship, Anchor } from "lucide-react";
 import { SiWhatsapp } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,7 +38,6 @@ export function Navigation() {
         { path: "/learning-hub", label: "Learning Hub", icon: BookOpen, desc: "9 Worlds curriculum", pro: false },
         { path: "/metamuse", label: "MetaMuse AI", icon: Sparkles, desc: "Your AI companion", pro: true },
         { path: "/journal", label: "Journal", icon: Edit3, desc: "Track your growth", pro: true },
-        { path: "/cycle-tracker", label: "Cycle Tracker", icon: Heart, desc: "Wellness & cycle tracking", pro: true },
       ],
     },
     "Premium Cohort": {
@@ -46,7 +45,6 @@ export function Navigation() {
       items: [
         { path: "/ai-integration", label: "AI Integration Experience", icon: Sparkles, desc: "Private 4-week integration", pro: false },
         { path: "/app-atelier", label: "App Atelier", icon: Code2, desc: "Build with AI", pro: false },
-        { path: "/agency", label: "AI Agency", icon: Bot, desc: "Your digital agency team", pro: false },
       ],
     },
     "Voyages": {
