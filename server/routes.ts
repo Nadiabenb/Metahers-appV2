@@ -1,4 +1,4 @@
-import type { Express, Request } from "express";
+import type { Express, Request, RequestHandler } from "express";
 import { createServer, type Server } from "http";
 import { randomBytes } from "crypto";
 import { storage } from "./storage";
@@ -2010,21 +2010,21 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   }));
 
   // ===== JOURNAL ROUTES =====
-  // Tier Check: Core Membership+ required for journals
-  const requiresCoreOrPremium: RequestHandler = async (req, res, next) => {
+  // Tier check for AI-only journal features (Signature+ required)
+  const requiresSignatureForJournal: RequestHandler = async (req, res, next) => {
     if (!req.session || !req.session.userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-    const { storage } = await import("./storage");
+    const { isSignatureTier } = await import("../shared/pricing");
     const user = await storage.getUser(req.session.userId);
-    if (!user || (user.subscriptionTier !== 'core' && user.subscriptionTier !== 'premium' && user.subscriptionTier !== 'pro_monthly' && user.subscriptionTier !== 'pro_annual' && user.subscriptionTier !== 'sanctuary' && user.subscriptionTier !== 'inner_circle' && user.subscriptionTier !== 'founders_circle')) {
-      return res.status(403).json({ message: "Core Membership or higher required. Upgrade to access journals.", requiredTier: "core" });
+    if (!user || !isSignatureTier(user.subscriptionTier as any)) {
+      return res.status(403).json({ message: "AI journal features require Signature membership or higher.", requiredTier: "signature_monthly" });
     }
     return next();
   };
 
   // List journal entries for a month (for calendar view)
-  app.get('/api/journal/list', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
+  app.get('/api/journal/list', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const month = req.query.month as string; // Expected format: YYYY-MM
@@ -2051,7 +2051,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  app.get('/api/journal', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
+  app.get('/api/journal', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       // Get date from query param, default to today
@@ -2088,7 +2088,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  app.post('/api/journal', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
+  app.post('/api/journal', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
 
@@ -2126,10 +2126,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         ? 0 
         : finalContent.trim().split(/\s+/).filter(w => w.length > 0).length;
 
-      // Generate AI insights if content is substantial (Pro only)
+      // Generate AI insights if content is substantial (Signature+ only)
       let aiInsights = undefined;
+      const { isSignatureTier } = await import("../shared/pricing");
       const user = await storage.getUser(userId);
-      if (finalContent.trim().length > 50 && user?.isPro) {
+      if (finalContent.trim().length > 50 && isSignatureTier(user?.subscriptionTier as any)) {
         try {
           aiInsights = await analyzeJournalEntry(finalContent);
         } catch (error) {
@@ -2167,14 +2168,10 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // AI Journal Prompt Generation (Pro only)
-  app.get('/api/journal/prompt', isAuthenticated, requiresCoreOrPremium, asyncHandler(async (req: Request, res) => {
+  // AI Journal Prompt Generation (Signature+ only)
+  app.get('/api/journal/prompt', isAuthenticated, requiresSignatureForJournal, asyncHandler(async (req: Request, res) => {
     const userId = req.session!.userId as string;
     const user = await storage.getUser(userId);
-
-    if (!user?.isPro) {
-      return res.status(403).json({ message: "This feature requires a Pro subscription" });
-    }
 
     const ritualContext = req.query.ritual as string | undefined;
 
@@ -2193,15 +2190,10 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   }));
 
-  // AI Journal Analysis (Pro only)
-  app.post('/api/journal/analyze', isAuthenticated, requiresCoreOrPremium, async (req: Request, res) => {
+  // AI Journal Analysis (Signature+ only)
+  app.post('/api/journal/analyze', isAuthenticated, requiresSignatureForJournal, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
-      const user = await storage.getUser(userId);
-
-      if (!user?.isPro) {
-        return res.status(403).json({ message: "AI insights require a Pro subscription" });
-      }
 
       // Validate request body
       const bodySchema = z.object({
@@ -2224,15 +2216,11 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // AI Journal Coach Chat (Pro only)
-  app.post('/api/journal/chat', isAuthenticated, async (req: Request, res) => {
+  // AI Journal Coach Chat (Signature+ only)
+  app.post('/api/journal/chat', isAuthenticated, requiresSignatureForJournal, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
-
-      if (!user?.isPro) {
-        return res.status(403).json({ message: "AI Journal Coach is a Pro feature" });
-      }
 
       const { message } = req.body;
 

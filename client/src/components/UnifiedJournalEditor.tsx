@@ -17,6 +17,7 @@ import type { StructuredJournalContent, JournalTodoItem, JournalEvent } from "@s
 import { useToast } from "@/hooks/use-toast";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/useAuth";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 
 const MOODS = [
   { emoji: "😊", label: "Happy", value: "happy" },
@@ -36,7 +37,7 @@ interface UnifiedJournalEditorProps {
 export function UnifiedJournalEditor({ selectedDate }: UnifiedJournalEditorProps = {}) {
   const { toast } = useToast();
   const { user } = useAuth();
-  const isPro = user?.isPro || false;
+  const isPro = canAccessSignatureFeatures(user?.subscriptionTier);
   const dateStr = selectedDate || new Date().toISOString().split('T')[0];
   
   // State

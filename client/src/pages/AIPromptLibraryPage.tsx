@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { canAccessSignatureFeatures, getFreePromptLimit } from "@/lib/tierAccess";
+import { UpgradeBanner } from "@/components/UpgradeBanner";
 
 type Prompt = {
   id: string;
@@ -188,15 +191,21 @@ export default function AIPromptLibraryPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const isSignature = canAccessSignatureFeatures(user?.subscriptionTier);
+  const promptLimit = getFreePromptLimit();
 
-  const filteredPrompts = PROMPTS.filter(prompt => {
+  const allFilteredPrompts = PROMPTS.filter(prompt => {
     const matchesCategory = selectedCategory === "All" || prompt.category === selectedCategory;
-    const matchesSearch = 
+    const matchesSearch =
       prompt.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       prompt.prompt.toLowerCase().includes(searchTerm.toLowerCase()) ||
       prompt.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
+
+  const filteredPrompts = isSignature ? allFilteredPrompts : allFilteredPrompts.slice(0, promptLimit);
+  const hasMorePrompts = !isSignature && allFilteredPrompts.length > promptLimit;
 
   const handleCopy = async (prompt: Prompt) => {
     try {
@@ -318,11 +327,20 @@ export default function AIPromptLibraryPage() {
           ))}
         </div>
 
-        {filteredPrompts.length === 0 && (
+        {allFilteredPrompts.length === 0 && (
           <div className="text-center py-12">
             <p className="text-xl text-foreground">
               No prompts found. Try a different search term or category.
             </p>
+          </div>
+        )}
+
+        {hasMorePrompts && (
+          <div className="mt-6">
+            <UpgradeBanner
+              message={`${allFilteredPrompts.length - promptLimit} more prompts available with Signature membership`}
+              context="Upgrade to unlock the full prompt library"
+            />
           </div>
         )}
 

@@ -9,10 +9,14 @@ import { useAuth } from "@/hooks/useAuth";
 import { SEO } from "@/components/SEO";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
+import { canAccessSignatureFeatures, getFreeModuleLimit } from "@/lib/tierAccess";
+import { UpgradeBanner } from "@/components/UpgradeBanner";
 
 export default function LearningHubPage() {
   const { isAuthenticated, user, isLoading } = useAuth();
   const [, setLocation] = useLocation();
+  const isSignature = canAccessSignatureFeatures(user?.subscriptionTier);
+  const freeModuleLimit = getFreeModuleLimit();
   const [activeTab, setActiveTab] = useState("dashboard");
   const [messageText, setMessageText] = useState("");
   const [expandedLesson, setExpandedLesson] = useState<string | null>(null);
@@ -59,14 +63,13 @@ export default function LearningHubPage() {
     }
   });
 
-  // Redirect if not pro (whether authenticated or not)
+  // Redirect unauthenticated users to login
   useEffect(() => {
-    if (!isLoading && (!isAuthenticated || !user?.isPro)) {
-      setLocation("/upgrade");
+    if (!isLoading && !isAuthenticated) {
+      setLocation("/login");
     }
-  }, [isLoading, isAuthenticated, user?.isPro, setLocation]);
+  }, [isLoading, isAuthenticated, setLocation]);
 
-  // Wait for user data to load
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -78,17 +81,7 @@ export default function LearningHubPage() {
     );
   }
 
-  // Show loading if checking auth
-  if (!isAuthenticated || !user?.isPro) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-foreground/70">Redirecting...</p>
-        </div>
-      </div>
-    );
-  }
+  if (!isAuthenticated) return null;
 
   const curriculumDetails = {
     1: {
@@ -204,7 +197,7 @@ export default function LearningHubPage() {
       week: 3,
       title: "Website Building (No Code)",
       description: "Create websites with AI assistance",
-      status: "active",
+      status: isSignature ? "active" : "locked",
       progress: 0,
       lessons: ["Website Platform Selection", "Homepage Design", "Essential Pages", "SEO & Launch"],
       icon: Rocket,
@@ -215,7 +208,7 @@ export default function LearningHubPage() {
       week: 4,
       title: "AI Agents & Automation",
       description: "Deploy autonomous AI agents for your business",
-      status: "active",
+      status: isSignature ? "active" : "locked",
       progress: 0,
       lessons: ["AI Chatbots", "Workflow Automation", "Email Automation", "Social Media Scheduling"],
       icon: Zap,
@@ -809,6 +802,7 @@ export default function LearningHubPage() {
               <h2 className="text-2xl font-bold mb-4 text-white/90">Your Learning Journey</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {modules.map((module) => {
+                  const isLockedForTier = module.week > freeModuleLimit && !isSignature;
                   const Icon = module.icon;
                   const isClickable = module.status !== "locked" && (module.week === 1 || module.week === 2 || module.week === 3 || module.week === 4);
                   return (
@@ -872,6 +866,14 @@ export default function LearningHubPage() {
                   );
                 })}
               </div>
+              {!isSignature && (
+                <div className="mt-6">
+                  <UpgradeBanner
+                    message="Weeks 3 & 4 are included in Signature membership"
+                    context="Upgrade to unlock Website Building and AI Agents & Automation"
+                  />
+                </div>
+              )}
             </div>
 
             {/* Curriculum Week Details - Mobile Friendly - NOW APPEARS AFTER CARDS */}

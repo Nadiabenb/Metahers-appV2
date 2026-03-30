@@ -1,10 +1,28 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, MessageSquare, Sparkles } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import metaMuseIllustration from "@assets/generated_images/MetaMuse_AI_assistant_illustration_941c00b9.png";
+import { useAuth } from "@/hooks/useAuth";
+import { canAccessSignatureFeatures, getFreeAgentSessionLimit } from "@/lib/tierAccess";
+import { UpgradeBanner } from "@/components/UpgradeBanner";
+
+const SESSION_KEY = "metamuse_session_used";
 
 export default function MetaMusePage() {
+  const { user } = useAuth();
+  const isSignature = canAccessSignatureFeatures(user?.subscriptionTier);
+  const sessionUsed = sessionStorage.getItem(SESSION_KEY) === "1";
+  const [showBanner, setShowBanner] = useState(!isSignature && sessionUsed);
+
   const handleOpenMetaMuse = () => {
+    if (!isSignature) {
+      if (sessionStorage.getItem(SESSION_KEY) === "1") {
+        setShowBanner(true);
+        return;
+      }
+      sessionStorage.setItem(SESSION_KEY, "1");
+    }
     window.open(
       "https://chatgpt.com/g/g-676873de461c8191a95b58d1361b6fb6-metamuse-drop-one",
       "_blank"
@@ -50,6 +68,15 @@ export default function MetaMusePage() {
               />
             </div>
           </motion.div>
+
+          {showBanner && (
+            <div className="mb-8 max-w-xl mx-auto">
+              <UpgradeBanner
+                message="You've used your free MetaMuse session"
+                context="Upgrade to Signature for unlimited access to MetaMuse"
+              />
+            </div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
