@@ -93,9 +93,11 @@ export function Navigation() {
                       key={item.label}
                       onClick={() => handleNavClick(item.path)}
                       style={{
-                        color: isActive(item.path) ? "#1A1A2E" : "#6B6B7B",
+                        color: isActive(item.path) ? "#C9A96E" : "#6B6B7B",
                         fontSize: "13px",
                         fontWeight: isActive(item.path) ? "600" : "400",
+                        borderBottom: isActive(item.path) ? "2px solid #C9A96E" : "2px solid transparent",
+                        paddingBottom: "2px",
                       }}
                       className="transition-colors hover:text-[#1A1A2E]"
                       data-testid={`nav-${item.label.toLowerCase()}`}

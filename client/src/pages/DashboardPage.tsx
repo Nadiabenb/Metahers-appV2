@@ -1,73 +1,17 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { SEO } from "@/components/SEO";
-import { WelcomeModal } from "@/components/WelcomeModal";
-import { RecommendationWidget } from "@/components/RecommendationWidget";
-import { PersonalizedRecommendations } from "@/components/PersonalizedRecommendations";
-import { NextExperienceWidget } from "@/components/NextExperienceWidget";
-import { UserJourneyMap } from "@/components/UserJourneyMap";
 import { useAuth } from "@/hooks/useAuth";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Crown, Calendar, Users, Sparkles, ArrowRight, Clock, 
-  Video, Trophy, Flame, Target, Star, TrendingUp, 
-  Award, Zap, CheckCircle2, BookOpen
-} from "lucide-react";
+import { BookOpen, MessageSquare, FileText, FlaskConical, Crown } from "lucide-react";
 import { Link } from "wouter";
-import { formatPrice, getPricingPlan, isSanctuaryTier, isInnerCircleTier, isFoundersCircleTier, type SubscriptionTier } from "@shared/pricing";
-import { format, parseISO } from "date-fns";
-
-type GroupSession = {
-  id: string;
-  title: string;
-  description: string | null;
-  sessionType: string;
-  scheduledDate: string;
-  duration: number;
-  maxCapacity: number;
-  currentAttendees: number;
-  zoomLink: string | null;
-  status: string;
-};
-
-type OneOnOneBooking = {
-  id: string;
-  scheduledDate: string;
-  bookingType: string;
-  duration: number;
-  status: string;
-  meetingLink: string | null;
-  notes: string | null;
-};
-
-type FounderInsight = {
-  id: string;
-  title: string;
-  content: string;
-  category: string;
-  minTierRequired: string;
-  publishedAt: string;
-  viewCount: number;
-};
-
-type Space = {
-  id: string;
-  name: string;
-  slug: string;
-  color: string;
-  sortOrder: number;
-};
+import { isSignatureTier } from "@shared/pricing";
 
 type ExperienceProgress = {
   id: string;
   experienceId: string;
   completedSections: string[];
-  confidenceScore: number | null;
   completedAt: string | null;
   startedAt: string;
 };
@@ -76,7 +20,6 @@ type Experience = {
   id: string;
   title: string;
   slug: string;
-  spaceId: string;
   tier: string;
   estimatedMinutes: number;
   content: {
@@ -84,534 +27,306 @@ type Experience = {
   };
 };
 
+function greeting(name: string) {
+  const hour = new Date().getHours();
+  const time = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
+  return `${time}, ${name}.`;
+}
+
+const GOLD_BTN = "font-semibold uppercase tracking-widest text-xs px-6";
+const GOLD_STYLE = { background: "#C9A96E", color: "#1A1A2E" };
+
+function QuickAction({
+  icon: Icon,
+  title,
+  description,
+  href,
+}: {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  href: string;
+}) {
+  return (
+    <Link href={href}>
+      <Card className="cursor-pointer hover:border-[#C9A96E]/30 transition-colors h-full bg-[#13111C] border-white/10">
+        <CardContent className="pt-6 pb-5 px-5">
+          <Icon className="w-5 h-5 mb-3 text-[#C9A96E]" />
+          <h3 className="font-medium text-sm text-white mb-1">{title}</h3>
+          <p className="text-xs text-white/50">{description}</p>
+        </CardContent>
+      </Card>
+    </Link>
+  );
+}
+
 export default function DashboardPage() {
   const { user } = useAuth();
-  const [showWelcome, setShowWelcome] = useState(false);
-  const tier = (user?.subscriptionTier || 'free') as SubscriptionTier;
-  const plan = getPricingPlan(tier);
-  
-  const hasSanctuaryAccess = isSanctuaryTier(tier);
-  const hasInnerCircleAccess = isInnerCircleTier(tier);
-  const hasFoundersCircleAccess = isFoundersCircleTier(tier);
+  const isPaid = isSignatureTier((user?.subscriptionTier as any) || "free");
+  const isNewMember = !user?.onboardingCompleted;
+  const firstName = user?.firstName || "Member";
 
-  useEffect(() => {
-    if (user && !user.onboardingCompleted) {
-      setShowWelcome(true);
-    }
-  }, [user]);
-
-  // Fetch all required data
-  const { data: upcomingSessions, isLoading: loadingSessions } = useQuery<GroupSession[]>({
-    queryKey: ['/api/sessions/upcoming'],
-    enabled: hasSanctuaryAccess,
-  });
-
-  const { data: upcomingBookings, isLoading: loadingBookings } = useQuery<OneOnOneBooking[]>({
-    queryKey: ['/api/bookings/upcoming'],
-    enabled: hasInnerCircleAccess,
-  });
-
-  const { data: insights, isLoading: loadingInsights } = useQuery<FounderInsight[]>({
-    queryKey: ['/api/insights'],
-    enabled: hasInnerCircleAccess,
-  });
-
-  const { data: spaces = [], isLoading: spacesLoading } = useQuery<Space[]>({
-    queryKey: ["/api/spaces"],
-  });
-
-  const { data: allProgress = [], isLoading: progressLoading } = useQuery<ExperienceProgress[]>({
+  const { data: allProgress = [] } = useQuery<ExperienceProgress[]>({
     queryKey: ["/api/progress/all"],
+    enabled: !isNewMember,
   });
 
-  const { data: allExperiences = [], isLoading: experiencesLoading } = useQuery<Experience[]>({
+  const { data: allExperiences = [] } = useQuery<Experience[]>({
     queryKey: ["/api/experiences/all"],
+    enabled: !isNewMember,
   });
 
-  const handleCompleteOnboarding = async () => {
-    try {
-      await apiRequest('POST', '/api/auth/complete-onboarding', {});
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
-      setShowWelcome(false);
-    } catch (error) {
-      console.error('Error completing onboarding:', error);
-      setShowWelcome(false);
-    }
-  };
+  const completedCount = allProgress.filter((p) => p.completedAt).length;
+  const daysActive = user?.createdAt
+    ? Math.max(1, Math.ceil((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24)))
+    : 1;
 
-  // Calculate statistics
-  const completedExperiences = allProgress.filter(p => p.completedAt).length;
-  const totalMinutesLearned = allProgress.reduce((sum, progress) => {
-    const exp = allExperiences.find(e => e.id === progress.experienceId);
-    if (exp && progress.completedAt) {
-      return sum + exp.estimatedMinutes;
-    }
-    return sum;
-  }, 0);
+  // Find the in-progress or next ritual
+  const inProgressEntry = allProgress.find((p) => !p.completedAt);
+  const inProgressExperience = inProgressEntry
+    ? allExperiences.find((e) => e.id === inProgressEntry.experienceId)
+    : null;
 
-  const averageConfidence = allProgress.length > 0
-    ? Math.round(allProgress.reduce((sum, p) => sum + (p.confidenceScore || 0), 0) / allProgress.length)
-    : 0;
+  const completedIds = new Set(allProgress.filter((p) => p.completedAt).map((p) => p.experienceId));
+  const nextExperience =
+    !inProgressExperience
+      ? allExperiences.find((e) => !completedIds.has(e.id))
+      : null;
 
-  const currentStreak = 7;
+  const FREE_RITUAL_LIMIT = 3;
+  const freeRitualsExhausted = !isPaid && completedCount >= FREE_RITUAL_LIMIT;
 
-  const tierBadgeColors: Record<string, string> = {
-    free: 'bg-muted text-foreground',
-    signature_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
-    private_monthly: 'bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] text-white',
-    ai_blueprint: 'bg-gradient-to-r from-[hsl(var(--liquid-gold))] via-[hsl(var(--magenta-quartz))] to-[hsl(var(--hyper-violet))] text-white',
-    // Legacy values — kept for users with old tier strings in the DB
-    pro_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
-    pro_annual: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
-    vip_cohort: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
-    executive: 'bg-gradient-to-r from-[hsl(var(--liquid-gold))] to-[hsl(var(--cyber-fuchsia))] text-white',
-  };
-
-  const spaceProgress = spaces.map(space => {
-    const spaceExperiences = allExperiences.filter(e => e.spaceId === space.id);
-    const completedInSpace = allProgress.filter(p => {
-      const exp = allExperiences.find(e => e.id === p.experienceId);
-      return exp?.spaceId === space.id && p.completedAt;
-    }).length;
-
-    const progressPercent = spaceExperiences.length > 0
-      ? (completedInSpace / spaceExperiences.length) * 100
-      : 0;
-
-    return {
-      ...space,
-      total: spaceExperiences.length,
-      completed: completedInSpace,
-      progressPercent,
-    };
-  }).sort((a, b) => a.sortOrder - b.sortOrder);
-
-  const COLOR_CLASSES: Record<string, string> = {
-    "hyper-violet": "from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))]",
-    "magenta-quartz": "from-[hsl(var(--magenta-quartz))] to-[hsl(var(--cyber-fuchsia))]",
-    "cyber-fuchsia": "from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))]",
-    "aurora-teal": "from-[hsl(var(--aurora-teal))] to-[hsl(var(--liquid-gold))]",
-    "liquid-gold": "from-[hsl(var(--liquid-gold))] to-[hsl(var(--hyper-violet))]",
-  };
+  // Sections progress for in-progress ritual
+  const totalSections = inProgressExperience?.content?.sections?.length || 0;
+  const completedSections = inProgressEntry?.completedSections?.length || 0;
+  const progressPercent = totalSections > 0 ? Math.round((completedSections / totalSections) * 100) : 0;
 
   return (
-    <div className="min-h-screen relative py-8 px-4 sm:px-6 lg:px-8"
-      style={{ background: '#0D0B14' }}
-    >
-      
-      <div className="relative z-10">
+    <div className="min-h-screen" style={{ background: "#0D0B14" }}>
       <SEO
-        title="Dashboard"
-        description="Your personalized dashboard for AI and Web3 learning, progress tracking, and member benefits."
-        keywords="member dashboard, AI learning, Web3 education, progress tracking"
+        title="Dashboard - MetaHers"
+        description="Your MetaHers member dashboard."
       />
 
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-          className="mb-8"
-        >
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="max-w-4xl mx-auto py-10 px-6">
+        {/* ── State 1: New Member ── */}
+        {isNewMember && (
+          <div className="space-y-8">
             <div>
-              <h1 className="font-light text-4xl sm:text-5xl text-white mb-2" style={{ fontFamily: "'Playfair Display', serif" }} data-testid="text-dashboard-title">
-                {(() => {
-                  const hour = new Date().getHours();
-                  const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
-                  return `${greeting}, ${user?.firstName || 'Member'}! ✨`;
-                })()}
+              <h1
+                className="font-light text-4xl sm:text-5xl text-white mb-3"
+                style={{ fontFamily: "'Playfair Display', serif" }}
+              >
+                Welcome to MetaHers, {firstName}.
               </h1>
-              <p className="text-lg text-foreground/70">
-                Your hub for learning, journaling, and growth.
-              </p>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <Badge className={`${tierBadgeColors[tier]} px-4 py-2 text-sm font-medium`} data-testid="badge-current-tier">
-                {plan?.badge && <Sparkles className="w-4 h-4 mr-2" />}
-                {plan?.displayName || 'Member'}
-              </Badge>
-              {tier !== 'founders_circle' && (
-                <Link href="/upgrade">
-                  <Button variant="default" size="sm" data-testid="button-upgrade">
-                    Upgrade
-                    <ArrowRight className="w-4 h-4 ml-2" />
+
+            {/* Onboarding CTA */}
+            <Card className="bg-[#13111C] border-[#C9A96E]/20">
+              <CardContent className="pt-8 pb-8 px-8">
+                <h2 className="text-white text-xl font-medium mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                  Let's personalize your experience.
+                </h2>
+                <p className="text-white/60 text-sm mb-6">
+                  Take a 2-minute quiz so we can recommend the right starting point for you.
+                </p>
+                <Link href="/onboarding/quiz">
+                  <Button
+                    className={`${GOLD_BTN} px-8 py-3`}
+                    style={GOLD_STYLE}
+                  >
+                    Start Your Quiz
                   </Button>
                 </Link>
-              )}
+              </CardContent>
+            </Card>
+
+            {/* Preview teasers */}
+            <div>
+              <p className="text-white/40 text-xs uppercase tracking-widest mb-4">What you'll unlock</p>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: "54 Learning Rituals", icon: BookOpen },
+                  { label: "AI-Powered Journal", icon: FileText },
+                  { label: "Prompt Library", icon: MessageSquare },
+                ].map(({ label, icon: Icon }) => (
+                  <Card key={label} className="bg-[#13111C] border-white/5 opacity-60 select-none">
+                    <CardContent className="pt-5 pb-5 px-4 text-center">
+                      <Icon className="w-4 h-4 text-[#C9A96E] mx-auto mb-2" />
+                      <p className="text-white/50 text-xs">{label}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
           </div>
-        </motion.div>
+        )}
 
-        {/* User Journey Map */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.05 }}
-          className="mb-8"
-        >
-          <UserJourneyMap />
-        </motion.div>
-
-        {/* Personalized Recommendations from Quiz */}
-        <PersonalizedRecommendations />
-
-        {/* Next Experience */}
-        <NextExperienceWidget />
-
-        {/* Quick Stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
-        >
-          <Card className="hover-elevate" data-testid="card-stat-streak">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
-              <Flame className="w-4 h-4 text-orange-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{currentStreak} days</div>
-              <p className="text-xs text-foreground">Keep it going!</p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-elevate" data-testid="card-stat-completed">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Completed</CardTitle>
-              <Trophy className="w-4 h-4 text-purple-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{completedExperiences}</div>
-              <p className="text-xs text-foreground">Experiences finished</p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-elevate" data-testid="card-stat-time">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Time Invested</CardTitle>
-              <Clock className="w-4 h-4 text-blue-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{Math.round(totalMinutesLearned / 60)}h</div>
-              <p className="text-xs text-foreground">{totalMinutesLearned} minutes</p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-elevate" data-testid="card-stat-confidence">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Confidence</CardTitle>
-              <Star className="w-4 h-4 text-purple-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{averageConfidence}%</div>
-              <p className="text-xs text-foreground">Average score</p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Main Content Grid */}
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Left Column - Next Actions */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* AI Recommendations */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-            >
-              <RecommendationWidget />
-            </motion.div>
-
-            {/* Upcoming Sessions (Sanctuary+) */}
-            {hasSanctuaryAccess && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.25 }}
+        {/* ── State 2 & 3: Active Member ── */}
+        {!isNewMember && (
+          <div className="space-y-8">
+            {/* Greeting */}
+            <div className="flex items-center gap-3">
+              <h1
+                className="font-light text-4xl sm:text-5xl text-white"
+                style={{ fontFamily: "'Playfair Display', serif" }}
               >
-                <Card data-testid="card-upcoming-sessions">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Users className="w-5 h-5 text-primary" />
-                      Upcoming Group Sessions
-                    </CardTitle>
-                    <CardDescription>Join live sessions with fellow members</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {loadingSessions ? (
-                      <div className="text-sm text-foreground">Loading sessions...</div>
-                    ) : upcomingSessions && upcomingSessions.length > 0 ? (
-                      <div className="space-y-3">
-                        {upcomingSessions.slice(0, 3).map((session) => (
-                          <div key={session.id} className="flex items-start justify-between p-3 rounded-lg bg-muted/50 hover-elevate" data-testid={`session-${session.id}`}>
-                            <div className="flex-1">
-                              <h4 className="font-medium text-sm mb-1">{session.title}</h4>
-                              <div className="flex items-center gap-4 text-xs text-foreground">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
-                                  {format(parseISO(session.scheduledDate), 'MMM d, h:mm a')}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <Clock className="w-3 h-3" />
-                                  {session.duration} min
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <Users className="w-3 h-3" />
-                                  {session.currentAttendees}/{session.maxCapacity}
-                                </span>
-                              </div>
-                            </div>
-                            {session.zoomLink && (
-                              <a href={session.zoomLink} target="_blank" rel="noopener noreferrer">
-                                <Button variant="ghost" size="sm" data-testid={`button-join-session-${session.id}`}>
-                                  <Video className="w-4 h-4 mr-2" />
-                                  Join
-                                </Button>
-                              </a>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-sm text-foreground text-center py-8">
-                        No upcoming sessions scheduled yet
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
+                {greeting(firstName)}
+              </h1>
+              {isPaid && (
+                <span
+                  className="inline-flex items-center gap-1 px-3 py-1 rounded text-xs font-medium"
+                  style={{ background: "#C9A96E22", color: "#C9A96E", border: "1px solid #C9A96E44" }}
+                >
+                  <Crown className="w-3 h-3" />
+                  Signature
+                </span>
+              )}
+            </div>
 
-            {/* 1-on-1 Bookings (Inner Circle+) */}
-            {hasInnerCircleAccess && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-              >
-                <Card data-testid="card-upcoming-bookings">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-primary" />
-                      Your 1-on-1 Sessions
-                    </CardTitle>
-                    <CardDescription>Private coaching sessions</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {loadingBookings ? (
-                      <div className="text-sm text-foreground">Loading bookings...</div>
-                    ) : upcomingBookings && upcomingBookings.length > 0 ? (
-                      <div className="space-y-3">
-                        {upcomingBookings.slice(0, 3).map((booking) => (
-                          <div key={booking.id} className="flex items-start justify-between p-3 rounded-lg bg-muted/50 hover-elevate" data-testid={`booking-${booking.id}`}>
-                            <div className="flex-1">
-                              <h4 className="font-medium text-sm mb-1 capitalize">{booking.bookingType.replace('_', ' ')}</h4>
-                              <div className="flex items-center gap-4 text-xs text-foreground">
-                                <span className="flex items-center gap-1">
-                                  <Calendar className="w-3 h-3" />
-                                  {format(parseISO(booking.scheduledDate), 'MMM d, h:mm a')}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                  <Clock className="w-3 h-3" />
-                                  {booking.duration} min
-                                </span>
-                              </div>
-                            </div>
-                            {booking.meetingLink && (
-                              <a href={booking.meetingLink} target="_blank" rel="noopener noreferrer">
-                                <Button variant="ghost" size="sm" data-testid={`button-join-booking-${booking.id}`}>
-                                  <Video className="w-4 h-4 mr-2" />
-                                  Join
-                                </Button>
-                              </a>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-sm text-foreground text-center py-8">
-                        No upcoming 1-on-1 sessions scheduled
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
-
-            {/* Learning Progress by Space */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.35 }}
-            >
-              <Card data-testid="card-space-progress">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Target className="w-5 h-5 text-primary" />
-                    Learning Spaces Progress
-                  </CardTitle>
-                  <CardDescription>Track your journey across all 6 spaces</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {spacesLoading || progressLoading || experiencesLoading ? (
-                    <div className="text-sm text-foreground">Loading progress...</div>
-                  ) : (
-                    <div className="space-y-4">
-                      {spaceProgress.map((space) => (
-                        <div key={space.id} className="space-y-2" data-testid={`space-progress-${space.slug}`}>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-medium">{space.name}</span>
-                            <span className="text-xs text-foreground">
-                              {space.completed} / {space.total} completed
-                            </span>
-                          </div>
-                          <Progress value={space.progressPercent} className="h-2" />
-                        </div>
-                      ))}
-                      <Link href="/learning-hub">
-                        <Button variant="outline" className="w-full mt-4" data-testid="button-explore-spaces">
-                          <BookOpen className="w-4 h-4 mr-2" />
-                          Continue Learning
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-          </div>
-
-          {/* Right Column - Quick Links & Insights */}
-          <div className="space-y-6">
-            {/* Quick Actions */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-            >
-              <Card data-testid="card-quick-actions">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="w-5 h-5 text-primary" />
-                    Quick Actions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Link href="/journal">
-                    <Button variant="outline" className="w-full justify-start" data-testid="button-journal">
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Daily Journal
-                    </Button>
-                  </Link>
-                  <Link href="/metamuse">
-                    <Button variant="outline" className="w-full justify-start" data-testid="button-try-agent">
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      Try an Agent
-                    </Button>
-                  </Link>
-                  <Link href="/ai-prompts">
-                    <Button variant="outline" className="w-full justify-start" data-testid="button-browse-prompts">
-                      <Target className="w-4 h-4 mr-2" />
-                      Browse Prompts
-                    </Button>
-                  </Link>
-                  {tier === 'free' && (
-                    <Link href="/upgrade">
-                      <Button variant="default" className="w-full justify-start" data-testid="button-quick-upgrade">
-                        <TrendingUp className="w-4 h-4 mr-2" />
-                        Upgrade
-                      </Button>
-                    </Link>
-                  )}
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Founder Insights (Inner Circle+) */}
-            {hasInnerCircleAccess && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.25 }}
-              >
-                <Card data-testid="card-founder-insights">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Award className="w-5 h-5 text-primary" />
-                      Founder Insights
-                    </CardTitle>
-                    <CardDescription>Exclusive wisdom from our founder</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    {loadingInsights ? (
-                      <div className="text-sm text-foreground">Loading insights...</div>
-                    ) : insights && insights.length > 0 ? (
-                      <div className="space-y-3">
-                        {insights.slice(0, 3).map((insight) => (
-                          <div key={insight.id} className="p-3 rounded-lg bg-muted/50 hover-elevate cursor-pointer" data-testid={`insight-${insight.id}`}>
-                            <h4 className="font-medium text-sm mb-1">{insight.title}</h4>
-                            <p className="text-xs text-foreground line-clamp-2">{insight.content}</p>
-                            <div className="flex items-center gap-2 mt-2">
-                              <Badge variant="secondary" className="text-xs">{insight.category}</Badge>
-                              <span className="text-xs text-foreground">{insight.viewCount} views</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-sm text-foreground text-center py-8">
-                        No insights available yet
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </motion.div>
-            )}
-
-            {/* Membership Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 }}
-            >
-              <Card data-testid="card-membership-info">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-primary" />
-                    Membership
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
+            {/* Continue Learning card */}
+            <Card className="bg-[#13111C] border-white/10">
+              <CardContent className="pt-7 pb-7 px-7">
+                {freeRitualsExhausted ? (
                   <div>
-                    <p className="text-sm font-medium mb-1">Current Plan</p>
-                    <p className="text-lg font-bold" style={{ color: '#E879F9' }}>{plan.displayName}</p>
-                  </div>
-                  <p className="text-sm text-foreground/70">{plan.description}</p>
-                  {tier !== 'founders_circle' && (
+                    <p className="text-white/50 text-xs uppercase tracking-widest mb-2">Continue Learning</p>
+                    <h2 className="text-white text-lg font-medium mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      You've completed your 3 free rituals.
+                    </h2>
+                    <p className="text-white/50 text-sm mb-5">
+                      Upgrade to access all 54 rituals and the full library.
+                    </p>
                     <Link href="/upgrade">
-                      <Button variant="default" className="w-full" data-testid="button-upgrade-membership">
-                        <TrendingUp className="w-4 h-4 mr-2" />
-                        Upgrade Membership
-                      </Button>
+                      <Button className={GOLD_BTN} style={GOLD_STYLE}>Explore Signature</Button>
                     </Link>
-                  )}
+                  </div>
+                ) : inProgressExperience ? (
+                  <div>
+                    <p className="text-white/50 text-xs uppercase tracking-widest mb-2">Continue Learning</p>
+                    <h2 className="text-white text-lg font-medium mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      {inProgressExperience.title}
+                    </h2>
+                    <div className="flex items-center gap-3 mb-5">
+                      <Progress value={progressPercent} className="h-1.5 flex-1" />
+                      <span className="text-white/40 text-xs whitespace-nowrap">{completedSections}/{totalSections} sections</span>
+                    </div>
+                    <Link href={`/learning-hub/${inProgressExperience.slug}`}>
+                      <Button className={GOLD_BTN} style={GOLD_STYLE}>Continue</Button>
+                    </Link>
+                  </div>
+                ) : nextExperience ? (
+                  <div>
+                    <p className="text-white/50 text-xs uppercase tracking-widest mb-2">
+                      {completedCount === 0 ? "Start Here" : "Recommended for you"}
+                    </p>
+                    <h2 className="text-white text-lg font-medium mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      {nextExperience.title}
+                    </h2>
+                    <Link href={`/learning-hub/${nextExperience.slug}`}>
+                      <Button className={GOLD_BTN} style={GOLD_STYLE}>Begin</Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="text-white/50 text-xs uppercase tracking-widest mb-2">Learning</p>
+                    <h2 className="text-white text-lg font-medium mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      Explore the ritual library.
+                    </h2>
+                    <Link href="/learning-hub">
+                      <Button className={GOLD_BTN} style={GOLD_STYLE}>Browse All</Button>
+                    </Link>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Quick Actions */}
+            <div>
+              <p className="text-white/40 text-xs uppercase tracking-widest mb-4">Quick Actions</p>
+              <div className={`grid gap-3 ${isPaid ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-2 sm:grid-cols-3"}`}>
+                <QuickAction
+                  icon={BookOpen}
+                  title="Journal"
+                  description="Last entry or start your first"
+                  href="/journal"
+                />
+                <QuickAction
+                  icon={MessageSquare}
+                  title={isPaid ? "AI Agents" : "Try an Agent"}
+                  description={isPaid ? "Unlimited access to all 6 agents" : "Ask Bella, Nova, or any of our 6 agents"}
+                  href="/companion"
+                />
+                <QuickAction
+                  icon={FileText}
+                  title="Prompt Library"
+                  description="Browse AI prompts for your business"
+                  href="/ai-prompts"
+                />
+                {isPaid && (
+                  <QuickAction
+                    icon={FlaskConical}
+                    title="Playground"
+                    description="Experiment with AI tools"
+                    href="/playground"
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Progress stats */}
+            <div>
+              <p className="text-white/40 text-xs uppercase tracking-widest mb-4">Your Progress</p>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: "Rituals completed", value: completedCount },
+                  { label: "Days active", value: daysActive },
+                  ...(isPaid
+                    ? [
+                        {
+                          label: "Hours learned",
+                          value: Math.round(
+                            allProgress.reduce((sum, p) => {
+                              const exp = allExperiences.find((e) => e.id === p.experienceId);
+                              return sum + (exp && p.completedAt ? exp.estimatedMinutes : 0);
+                            }, 0) / 60
+                          ),
+                        },
+                      ]
+                    : [{ label: "Journal entries", value: 0 }]),
+                ].map(({ label, value }) => (
+                  <Card key={label} className="bg-[#13111C] border-white/10">
+                    <CardContent className="pt-5 pb-5 px-5">
+                      <p className="text-2xl font-light text-white mb-1">{value}</p>
+                      <p className="text-white/40 text-xs">{label}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+
+            {/* Upgrade banner (free only) */}
+            {!isPaid && (
+              <Card className="bg-[#13111C] border-[#C9A96E]/20">
+                <CardContent className="pt-6 pb-6 px-7 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div>
+                    <p className="text-white font-medium mb-1">Ready for more?</p>
+                    <p className="text-white/50 text-sm">
+                      Signature members get unlimited access to all 54 rituals, all 6 AI agents, and monthly live workshops.
+                    </p>
+                  </div>
+                  <Link href="/upgrade" className="shrink-0">
+                    <Button
+                      className={`${GOLD_BTN} whitespace-nowrap`}
+                      style={GOLD_STYLE}
+                    >
+                      Explore Signature
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
-            </motion.div>
+            )}
           </div>
-        </div>
-      </div>
-
-      {showWelcome && (
-        <WelcomeModal 
-          onComplete={handleCompleteOnboarding}
-          userName={user?.firstName || undefined}
-        />
-      )}
+        )}
       </div>
     </div>
   );
