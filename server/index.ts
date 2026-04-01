@@ -88,10 +88,14 @@ app.use((req, res, next) => {
     const server = await registerRoutes(app);
     logger.info('Routes registered');
 
-    // Register Stripe routes
-    const { registerStripeRoutes } = await import('./stripeRoutes');
-    await registerStripeRoutes(app);
-    logger.info('Stripe routes registered');
+    // Register Stripe routes (gracefully skip if Stripe is not configured)
+    try {
+      const { registerStripeRoutes } = await import('./stripeRoutes');
+      await registerStripeRoutes(app);
+      logger.info('Stripe routes registered');
+    } catch (err: any) {
+      logger.warn({ error: err?.message }, 'Stripe routes skipped — Stripe connection not available');
+    }
 
     // Register admin routes
     app.use('/api/admin', adminRoutes);

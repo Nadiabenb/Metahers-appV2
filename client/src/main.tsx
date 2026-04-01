@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
+import "./components/MetahersHeroVideo.css";
 
 // Register service worker in production
 if ('serviceWorker' in navigator && import.meta.env.PROD) {

@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { Check } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import MetahersHeroVideo from "@/components/MetahersHeroVideo";
 import { useRef, useState } from "react";
 import { useLocation } from "wouter";
 
@@ -54,77 +55,63 @@ function GoldLabel({ children }: { children: React.ReactNode }) {
 // ── Section 1: Hero ──────────────────────────────────────────────
 function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <section
-      className="relative flex items-center justify-center min-h-screen px-6 text-center"
-      style={{ background: "#FEFEFE" }}
-      data-testid="section-hero"
-    >
-      <div className="max-w-3xl mx-auto pt-24 pb-20">
-        <FadeUp>
-          <GoldLabel>The Future Is Feminine</GoldLabel>
-        </FadeUp>
+    <>
+      {/* Animated video — full viewport */}
+      <section
+        style={{ width: "100%", height: "100vh" }}
+        data-testid="section-hero"
+      >
+        <MetahersHeroVideo />
+      </section>
 
-        <FadeUp delay={0.1}>
-          <h1
-            className="mt-2 mb-6 leading-tight"
+      {/* CTA strip directly below the video */}
+      <section
+        className="flex flex-col items-center gap-4 py-14 px-6 text-center"
+        style={{ background: "#FEFEFE" }}
+      >
+        <p
+          className="mb-2 text-lg"
+          style={{ color: MUTED, fontFamily: "Inter, sans-serif", fontWeight: 300 }}
+        >
+          MetaHers is where women learn, build, and thrive with AI &amp; Web3.
+        </p>
+        <div className="flex flex-wrap gap-4 justify-center">
+          <button
+            onClick={() => onNavigate("/signup")}
+            className="px-8 py-3 rounded-sm font-semibold transition-colors"
             style={{
-              fontFamily: "Playfair Display, Georgia, serif",
-              fontSize: "clamp(2.2rem, 5vw, 3.8rem)",
+              background: GOLD,
               color: NAVY,
-              fontWeight: 700,
+              letterSpacing: "0.08em",
+              fontSize: "0.875rem",
             }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = GOLD_HOVER)
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = GOLD)
+            }
+            data-testid="button-join-inner-circle"
           >
-            AI that feels like it was made for you. Because it was.
-          </h1>
-        </FadeUp>
-
-        <FadeUp delay={0.2}>
-          <p
-            className="mb-10 mx-auto max-w-xl leading-relaxed text-lg"
-            style={{ color: MUTED }}
+            Join the Inner Circle
+          </button>
+          <button
+            onClick={() => onNavigate("/companion")}
+            className="px-8 py-3 rounded-sm font-semibold transition-colors"
+            style={{
+              border: `1.5px solid ${GOLD}`,
+              color: NAVY,
+              background: "transparent",
+              letterSpacing: "0.08em",
+              fontSize: "0.875rem",
+            }}
+            data-testid="button-try-agent-free"
           >
-            MetaHers is where women learn, build, and thrive with AI. Six
-            personal AI agents. A global community. One luxurious ecosystem.
-          </p>
-        </FadeUp>
-
-        <FadeUp delay={0.3}>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <button
-              onClick={() => onNavigate("/signup")}
-              className="px-8 py-3 rounded-sm font-semibold transition-colors"
-              style={{
-                background: GOLD,
-                color: NAVY,
-                letterSpacing: "0.08em",
-                fontSize: "0.875rem",
-              }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background = GOLD_HOVER)
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.background = GOLD)
-              }
-            >
-              Join the Inner Circle
-            </button>
-            <button
-              onClick={() => onNavigate("/companion")}
-              className="px-8 py-3 rounded-sm font-semibold transition-colors"
-              style={{
-                border: `1.5px solid ${GOLD}`,
-                color: NAVY,
-                background: "transparent",
-                letterSpacing: "0.08em",
-                fontSize: "0.875rem",
-              }}
-            >
-              Try an Agent Free
-            </button>
-          </div>
-        </FadeUp>
-      </div>
-    </section>
+            Try an Agent Free
+          </button>
+        </div>
+      </section>
+    </>
   );
 }
 
