@@ -1,0 +1,39 @@
+/*
+ * MetahersHeroVideo — Brand CSS Variables
+ *
+ * Optional companion stylesheet. You only need this if you want the brand
+ * colours available as CSS custom properties elsewhere in your project
+ * (e.g. to match buttons, typography, or other components to the video palette).
+ *
+ * The MetahersHeroVideo component itself is fully self-contained and does NOT
+ * require this file to work — it uses inline JavaScript constants.
+ *
+ * Usage: import this file at the top of your global stylesheet or in your
+ * app's root component:
+ *
+ *   import './MetahersHeroVideo.css';
+ */
+
+:root {
+  /* ── Core Brand ────────────────────────────────────────────────────────── */
+  --color-primary:        #1A1A2E;  /* Deep navy  — headers, bold text */
+  --color-secondary:      #E8D5C4;  /* Warm nude  — card / section backgrounds */
+  --color-accent:         #C9A96E;  /* Gold       — highlights, CTAs, animations */
+  --color-accent-hover:   #B8943D;  /* Darker gold — interactive / hover states */
+  --color-accent-bold:    #8B2252;  /* Deep rose  — dramatic emphasis moments */
+
+  /* ── Backgrounds ───────────────────────────────────────────────────────── */
+  --color-bg-light:       #FEFEFE;  /* Clean off-white — main page background */
+  --color-bg-dark:        #1A1A2E;  /* Deep navy  — dark section backgrounds */
+  --color-bg-muted:       #F2E0D6;  /* Soft blush — light section backgrounds */
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+  --color-text-primary:   #2D2D3A;  /* Body text */
+  --color-text-secondary: #6B6B7B;  /* Muted / secondary text */
+  --color-text-inverse:   #FEFEFE;  /* Text on dark backgrounds */
+
+  /* ── Fonts ─────────────────────────────────────────────────────────────── */
+  --color-font-display:   'Outfit', 'Georgia', serif;
+  --color-font-body:      'Inter', 'Helvetica Neue', sans-serif;
+  --color-font-mono:      'JetBrains Mono', 'Courier New', monospace;
+}
