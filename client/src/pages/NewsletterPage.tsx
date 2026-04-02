@@ -53,7 +53,7 @@ export default function NewsletterPage() {
   return (
     <>
       <SEO 
-        title="Newsletter | MetaHers Mind Spa"
+        title="Newsletter | MetaHers"
         description="Join our exclusive newsletter for insider tips, AI breakthroughs, Web3 insights, and exclusive content for women professionals"
       />
       <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--liquid-gold))]/5 to-white py-16 px-4">

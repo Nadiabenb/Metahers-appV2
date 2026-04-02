@@ -15,7 +15,7 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
 
   const steps = [
     {
-      title: `Welcome to MetaHers Mind Spa${userName ? `, ${userName}` : ''}!`,
+      title: `Welcome to MetaHers${userName ? `, ${userName}` : ''}!`,
       description: "Your luxury learning journey begins here. Let's get you started with a quick tour.",
       icon: Sparkles,
       color: "text-[hsl(var(--liquid-gold))]",

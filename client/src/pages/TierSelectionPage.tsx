@@ -104,7 +104,7 @@ export default function TierSelectionPage() {
   return (
     <>
       <SEO
-        title="Choose Your Journey | MetaHers Mind Spa"
+        title="Choose Your Journey | MetaHers"
         description="Select your learning path: Vision Discovery (free), Core Membership ($79/mo), or AI Mastery Cohort ($699)"
       />
       <div

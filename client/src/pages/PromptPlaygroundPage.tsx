@@ -98,7 +98,7 @@ export default function PromptPlaygroundPage() {
   return (
     <div className="min-h-screen bg-background">
       <SEO
-        title="AI Prompt Playground - MetaHers Mind Spa"
+        title="AI Prompt Playground - MetaHers"
         description="Try AI prompts in real-time and see instant results. Learn prompt engineering techniques to unlock AI's full potential for your career and personal growth."
         keywords="AI playground, prompt engineering, ChatGPT prompts, AI learning, prompt templates, AI for beginners"
         type="website"
@@ -266,7 +266,7 @@ export default function PromptPlaygroundPage() {
               Ready to Master AI & Web3?
             </CardTitle>
             <CardDescription className="text-base">
-              Join MetaHers Mind Spa for guided learning rituals, AI coaching, and a supportive community of women in tech
+              Join MetaHers for guided learning rituals, AI coaching, and a supportive community of women in tech
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col sm:flex-row gap-4 justify-center">

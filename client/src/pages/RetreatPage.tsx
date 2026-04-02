@@ -153,7 +153,7 @@ export default function RetreatPage() {
   return (
     <div ref={containerRef} className="relative min-h-screen bg-background overflow-x-hidden">
       <SEO
-        title="Free 3-Day AI Retreat for Women Entrepreneurs - MetaHers Mind Spa"
+        title="Free 3-Day AI Retreat for Women Entrepreneurs - MetaHers"
         description="Join founder Nadia for a transformational 3-day AI retreat. Learn ChatGPT, AI automation, and Web3 basics. Free access + personal mentorship. Limited spots available."
         keywords="AI retreat for women, free AI training, AI for entrepreneurs, ChatGPT workshop, women in AI, AI mentorship, Web3 for women"
         url="https://metahers.ai/retreat"
@@ -291,7 +291,7 @@ export default function RetreatPage() {
             className="text-center mb-20"
           >
             <h2 className="font-serif text-5xl lg:text-6xl font-bold mb-6">
-              Your Mind Spa Journey
+              Your MetaHers Journey
             </h2>
             <p className="text-xl text-foreground max-w-3xl mx-auto">
               Three transformational days designed like a luxury wellness retreat—

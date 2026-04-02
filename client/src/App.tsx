@@ -55,8 +55,6 @@ const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
 const AdminQuizResultsPage = lazy(() => import("@/pages/AdminQuizResultsPage"));
 const UpgradePage = lazy(() => import("@/pages/UpgradePage"));
 const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
-const SpaceDetailPage = lazy(() => import("@/pages/SpaceDetailPage"));
-const SpacesBrowsePage = lazy(() => import("@/pages/SpacesBrowsePage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
@@ -149,16 +147,7 @@ function Router() {
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
 
-        {/* Spaces Browse Page - Public */}
-        <Route path="/spaces" component={SpacesBrowsePage} />
-
-        {/* Space Detail Pages - Public */}
-        <Route path="/spaces/:slug" component={SpaceDetailPage} />
-
-        {/* Nested ritual route — keeps URL under /spaces/... */}
-        <Route path="/spaces/:spaceSlug/rituals/:slug" component={ExperienceDetailPage} />
-
-        {/* Experience Detail Pages - Public (kept for backwards compatibility) */}
+        {/* Experience Detail Pages - Public */}
         <Route path="/experiences/:slug" component={ExperienceDetailPage} />
 
         {/* AI Prompt Library - Public resource */}
@@ -175,7 +164,7 @@ function Router() {
         <Route path="/privacy" component={PrivacyPolicyPage} />
         <Route path="/terms" component={TermsOfServicePage} />
         <Route path="/checkout/:tier/:priceId" component={(props: any) => {
-          const tiers = { pro: { name: 'Pro', price: 29 }, sanctuary: { name: 'Sanctuary', price: 99 }, 'inner-circle': { name: 'Inner Circle', price: 299 } };
+          const tiers = { signature: { name: 'Signature', price: 29 }, private: { name: 'Private', price: 149 }, blueprint: { name: 'AI Blueprint', price: 997 } };
           const tier = tiers[props.tier as keyof typeof tiers];
           return tier ? <CheckoutPage tierName={tier.name} price={tier.price} priceId={props.priceId} /> : <NotFound />;
         }} />

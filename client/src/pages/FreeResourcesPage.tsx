@@ -49,7 +49,7 @@ export default function FreeResourcesPage() {
   return (
     <>
       <SEO 
-        title="Free AI Resources for Women - MetaHers Mind Spa"
+        title="Free AI Resources for Women - MetaHers"
         description="Get your free AI mastery guide, Web3 starter kit, and exclusive beta access. Join 500+ women building their AI-powered future."
       />
       

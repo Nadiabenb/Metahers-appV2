@@ -97,7 +97,7 @@ export default function SignupPage() {
       queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
       
       toast({
-        title: "Welcome to MetaHers Mind Spa!",
+        title: "Welcome to MetaHers!",
         description: "Let's personalize your learning journey...",
       });
       
@@ -120,13 +120,13 @@ export default function SignupPage() {
     <div className="w-screen min-h-screen flex flex-col items-center justify-center relative overflow-auto bg-background">
       <SEO
         title="Join MetaHers - Start Your AI & Web3 Journey Free"
-        description="Create your free account at MetaHers Mind Spa. Join thousands of women mastering AI and Web3 through luxury guided experiences. Start learning today."
+        description="Create your free account at MetaHers. Join thousands of women mastering AI and Web3 through luxury guided experiences. Start learning today."
         keywords="sign up, join metahers, free AI learning, Web3 for women, tech education for women, AI courses"
         type="website"
         schema={{
           "@context": "https://schema.org",
           "@type": "WebPage",
-          "name": "Join MetaHers Mind Spa",
+          "name": "Join MetaHers",
           "description": "Create a free account to start your AI and Web3 learning journey",
           "potentialAction": {
             "@type": "RegisterAction",

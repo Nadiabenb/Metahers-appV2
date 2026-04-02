@@ -176,7 +176,7 @@ export default function VoyagesPage() {
   return (
     <div className="min-h-screen" style={{ background: DARK_BG }}>
       <SEO
-        title="Voyages | MetaHers Mind Spa"
+        title="Voyages | MetaHers"
         description="Twelve transformational experiences designed for women stepping into the future, thoughtfully, together."
       />
 

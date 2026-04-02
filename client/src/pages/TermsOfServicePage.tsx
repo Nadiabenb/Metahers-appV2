@@ -4,8 +4,8 @@ export default function TermsOfServicePage() {
   return (
     <div className="min-h-screen bg-background py-16 px-4 md:px-8">
       <SEO 
-        title="Terms of Service - MetaHers Mind Spa"
-        description="Terms of Service for MetaHers Mind Spa. Read our complete terms and conditions."
+        title="Terms of Service - MetaHers"
+        description="Terms of Service for MetaHers. Read our complete terms and conditions."
       />
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-8 text-foreground">Terms of Service</h1>
@@ -13,7 +13,7 @@ export default function TermsOfServicePage() {
           <p className="text-foreground/90 mb-6"><strong>Effective Date: November 2024</strong></p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Acceptance of Terms</h2>
-          <p className="text-foreground/80 mb-4">By accessing and using MetaHers Mind Spa ("Service"), you accept and agree to be bound by these Terms of Service ("Terms"). If you do not agree to abide by these Terms, you are not authorized to use this Service.</p>
+          <p className="text-foreground/80 mb-4">By accessing and using MetaHers ("Service"), you accept and agree to be bound by these Terms of Service ("Terms"). If you do not agree to abide by these Terms, you are not authorized to use this Service.</p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">2. User Accounts</h2>
           <p className="text-foreground/80 mb-4">To access certain features of the Service, you may be required to create an account. You are responsible for maintaining the confidentiality of your account credentials and are fully responsible for all activities that occur under your account. You agree to:</p>

@@ -32,12 +32,13 @@ type ExperienceProgress = {
 };
 
 const PILLAR_LABELS: Record<string, string> = {
-  ai: "Learn AI", moms: "Learn AI",
-  branding: "Brand with AI", "digital-marketing": "Brand with AI",
-  web3: "Build with AI", crypto: "Build with AI", "app-atelier": "Build with AI", metaverse: "Build with AI",
-  "crypto-investing": "Monetize with AI", "digital-boutique": "Monetize with AI", "founders-club": "Monetize with AI",
+  "learn-ai": "Learn AI",
+  "build-ai": "Build with AI",
+  "monetize-ai": "Monetize with AI",
+  "brand-ai": "Brand with AI",
+  "web3": "Web3 and Crypto",
 };
-const PILLAR_ORDER = ["All", "Learn AI", "Brand with AI", "Build with AI", "Monetize with AI"];
+const PILLAR_ORDER = ["All", "Learn AI", "Build with AI", "Monetize with AI", "Brand with AI", "Web3 and Crypto"];
 
 function CategoryFilter({ active, onChange }: { active: string; onChange: (c: string) => void }) {
   return (

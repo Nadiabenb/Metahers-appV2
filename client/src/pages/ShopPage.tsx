@@ -122,7 +122,7 @@ export default function ShopPage() {
         schema={{
           "@context": "https://schema.org",
           "@type": "Store",
-          "name": "MetaHers Mind Spa Shop",
+          "name": "MetaHers Shop",
           "description": "Limited edition ritual kits with AI-guided experiences",
           "url": "https://shop.metahers.ai",
           "hasOfferCatalog": {
@@ -156,7 +156,7 @@ export default function ShopPage() {
           </div>
 
           <h1 className="font-serif text-5xl md:text-6xl font-bold text-gradient-violet mb-4" data-testid="text-page-title">
-            MetaHers Mind Spa<br/>Drop 001
+            MetaHers<br/>Drop 001
           </h1>
           <p className="text-xl text-foreground/90 max-w-3xl mx-auto leading-relaxed mb-6" data-testid="text-page-subtitle">
             Handmade. Intentional. Soul-led.<br/>

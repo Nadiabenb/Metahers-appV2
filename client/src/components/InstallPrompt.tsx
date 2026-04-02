@@ -87,7 +87,7 @@ export function InstallPrompt() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="font-serif text-lg font-semibold text-foreground mb-1">
-                      Install MetaHers Mind Spa
+                      Install MetaHers
                     </h3>
                     <p className="text-sm text-foreground/70 mb-3">
                       {isIOS 

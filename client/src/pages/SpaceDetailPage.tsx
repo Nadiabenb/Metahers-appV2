@@ -152,7 +152,7 @@ export default function SpaceDetailPage() {
           "description": space.description,
           "provider": {
             "@type": "Organization",
-            "name": "MetaHers Mind Spa",
+            "name": "MetaHers",
             "sameAs": "https://metahers.com"
           },
           "hasCourseInstance": experiences.map(exp => ({

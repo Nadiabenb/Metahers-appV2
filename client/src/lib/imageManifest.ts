@@ -24,7 +24,7 @@ import achievementDiamondImage from "@assets/generated_images/Diamond_gem_purple
 
 export const heroImage = {
   src: heroSanctuaryImage,
-  alt: "Woman in gold dress presenting AI and Web3 with holographic blockchain interface on purple background - MetaHers Mind Spa",
+  alt: "Woman in gold dress presenting AI and Web3 with holographic blockchain interface on purple background - MetaHers",
 };
 
 // Map space slugs to cover images (4:3 aspect ratio)

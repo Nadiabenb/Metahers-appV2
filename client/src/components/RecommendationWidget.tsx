@@ -57,7 +57,7 @@ export function RecommendationWidget() {
           <Sparkles className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h2 className="text-2xl font-serif font-bold text-foreground">Your Mind Spa Recommends</h2>
+          <h2 className="text-2xl font-serif font-bold text-foreground">Your MetaHers Recommends</h2>
           <p className="text-sm text-foreground">Personalized next steps for your journey</p>
         </div>
       </div>

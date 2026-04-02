@@ -46,7 +46,7 @@ export default function AppAtelier() {
   return (
     <div className="min-h-screen bg-background">
       <SEO 
-        title="App Atelier - Build Your App with AI | MetaHers Mind Spa"
+        title="App Atelier - Build Your App with AI | MetaHers"
         description="Learn vibe coding and build your own app in 30 days with AI assistance. Perfect for women founders and solopreneurs ready to ship their ideas."
       />
 

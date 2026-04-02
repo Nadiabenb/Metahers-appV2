@@ -50,7 +50,7 @@ export default function LoginPage() {
     <div className="w-full min-h-screen flex flex-col items-center relative overflow-auto bg-background pt-4 sm:pt-6">
       <SEO
         title="Login - Access Your Learning Sanctuary"
-        description="Sign in to MetaHers Mind Spa to continue your AI and Web3 learning journey. Access your personalized experiences, journal, and progress tracking."
+        description="Sign in to MetaHers to continue your AI and Web3 learning journey. Access your personalized experiences, journal, and progress tracking."
         keywords="login, sign in, member access, AI learning platform, Web3 education"
         type="website"
       />

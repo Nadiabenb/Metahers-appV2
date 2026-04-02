@@ -38,7 +38,7 @@ export default function JournalPage() {
               Daily AI-Powered Journal
             </h1>
             <p className="text-base text-foreground/80 max-w-2xl mx-auto mb-4">
-              MetaHers Mind Spa: Calendar, Notebook & Daily Inspiration
+              MetaHers: Calendar, Notebook & Daily Inspiration
             </p>
             <div className="flex gap-2 justify-center flex-wrap">
               <Button

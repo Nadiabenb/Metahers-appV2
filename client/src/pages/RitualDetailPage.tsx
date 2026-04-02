@@ -52,7 +52,7 @@ export default function RitualDetailPage() {
     "description": ritual.description,
     "provider": {
       "@type": "Organization",
-      "name": "MetaHers Mind Spa",
+      "name": "MetaHers",
       "url": "https://metahers.ai"
     },
     "educationalLevel": "Beginner",

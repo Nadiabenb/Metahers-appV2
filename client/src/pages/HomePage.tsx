@@ -18,7 +18,7 @@ import { spaceImages } from "@/lib/imageManifest";
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "EducationalOrganization",
-  "name": "MetaHers Mind Spa",
+  "name": "MetaHers",
   "url": "https://metahers.ai",
   "logo": "https://metahers.ai/icon-512.png",
   "description": "Luxury AI and Web3 education platform for women. Learn through interactive rituals, personalized coaching, and thought leadership journeys.",
@@ -35,7 +35,7 @@ const organizationSchema = {
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
-  "name": "MetaHers Mind Spa",
+  "name": "MetaHers",
   "url": "https://metahers.ai",
   "potentialAction": {
     "@type": "SearchAction",

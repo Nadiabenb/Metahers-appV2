@@ -74,7 +74,7 @@ export function ChatbotPopup() {
   };
 
   const welcomeMessages = [
-    "Hey gorgeous! 👋 Welcome to MetaHers Mind Spa!",
+    "Hey gorgeous! 👋 Welcome to MetaHers!",
     "Ready to glow up your AI & Web3 skills?",
     "I'm here to help you navigate your transformation journey ✨"
   ];

@@ -68,7 +68,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
     },
     "publisher": {
       "@type": "Organization",
-      "name": "MetaHers Mind Spa",
+      "name": "MetaHers",
       "logo": {
         "@type": "ImageObject",
         "url": "https://metahers.ai/icon-512.png"

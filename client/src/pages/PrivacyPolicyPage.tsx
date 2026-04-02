@@ -4,8 +4,8 @@ export default function PrivacyPolicyPage() {
   return (
     <div className="min-h-screen bg-background py-16 px-4 md:px-8">
       <SEO 
-        title="Privacy Policy - MetaHers Mind Spa"
-        description="Privacy policy for MetaHers Mind Spa. Learn how we collect, use, and protect your data."
+        title="Privacy Policy - MetaHers"
+        description="Privacy policy for MetaHers. Learn how we collect, use, and protect your data."
       />
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold mb-8 text-foreground">Privacy Policy</h1>
@@ -13,7 +13,7 @@ export default function PrivacyPolicyPage() {
           <p className="text-foreground/90 mb-6"><strong>Effective Date: November 2024</strong></p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">1. Introduction</h2>
-          <p className="text-foreground/80 mb-4">MetaHers Mind Spa ("we", "us", "our", or "Company") operates the MetaHers mobile application and website. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.</p>
+          <p className="text-foreground/80 mb-4">MetaHers ("we", "us", "our", or "Company") operates the MetaHers mobile application and website. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our Service.</p>
 
           <h2 className="text-2xl font-semibold mt-8 mb-4 text-foreground">2. Information We Collect</h2>
           <p className="text-foreground/80 mb-4">We may collect information about you in a variety of ways:</p>

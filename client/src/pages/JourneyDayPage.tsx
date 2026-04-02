@@ -37,7 +37,7 @@ export default function JourneyDayPage() {
     "description": seoDescription,
     "provider": {
       "@type": "Organization",
-      "name": "MetaHers Mind Spa",
+      "name": "MetaHers",
       "url": "https://metahers.ai"
     },
     "hasCourseInstance": {

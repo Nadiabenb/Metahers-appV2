@@ -124,7 +124,7 @@ export default function ExperienceDetailPage() {
           "teaches": experience.learningObjectives,
           "provider": {
             "@type": "Organization",
-            "name": "MetaHers Mind Spa",
+            "name": "MetaHers",
             "sameAs": "https://metahers.com"
           },
           "audience": {
