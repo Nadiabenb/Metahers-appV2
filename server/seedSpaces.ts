@@ -40,13 +40,22 @@ const METAHERS_SPACES = [
     sortOrder: 4,
   },
   {
+    id: "nfts",
+    name: "NFTs",
+    slug: "nfts",
+    description: "Create, buy, sell, and leverage NFTs. Understand digital ownership and how to build value in the NFT economy.",
+    icon: "Image",
+    color: "liquid-gold",
+    sortOrder: 5,
+  },
+  {
     id: "branding",
     name: "Branding",
     slug: "branding",
     description: "Build your personal brand and become a thought leader. Master LinkedIn, content systems, and authority positioning while keeping your job.",
-    icon: "✨",
+    icon: "Megaphone",
     color: "#E91E63",
-    sortOrder: 5,
+    sortOrder: 6,
     isActive: true,
   },
   {
@@ -56,7 +65,7 @@ const METAHERS_SPACES = [
     description: "A dedicated space for mothers navigating tech careers and entrepreneurship. Balance, growth, and community for moms building in AI and Web3.",
     icon: "Heart",
     color: "hyper-violet",
-    sortOrder: 6,
+    sortOrder: 7,
   },
   {
     id: "app-atelier",
@@ -65,7 +74,7 @@ const METAHERS_SPACES = [
     description: "Build apps with AI assistance. Turn your ideas into reality with AI-powered development tools and no-code solutions.",
     icon: "Code",
     color: "aurora-teal",
-    sortOrder: 7,
+    sortOrder: 8,
   },
   {
     id: "founders-club",
@@ -74,7 +83,7 @@ const METAHERS_SPACES = [
     description: "12-week business accelerator: Launch your startup from idea to $10K MRR. Build revenue systems, operations, and marketing with AI + no-code tools.",
     icon: "👑",
     color: "#FFD700",
-    sortOrder: 8,
+    sortOrder: 9,
     isActive: true,
   },
   {
@@ -84,7 +93,7 @@ const METAHERS_SPACES = [
     description: "Launch your online store and start selling in 3 days. Master Shopify, Instagram Shopping, TikTok Shop, and automated marketing. Learn by DOING—not watching—in hands-on workshops where you build your e-commerce business in real-time.",
     icon: "ShoppingBag",
     color: "liquid-gold",
-    sortOrder: 9,
+    sortOrder: 10,
   },
 ];
 
