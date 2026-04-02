@@ -6,7 +6,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
 
-const COMMUNITY_URL = "https://t.me/metahers";
+const COMMUNITY_URL = "https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=gi_t";
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
