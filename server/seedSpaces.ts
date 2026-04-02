@@ -109,10 +109,12 @@ export async function seedSpaces() {
           target: spaces.id,
           set: {
             name: space.name,
+            slug: space.slug,
             description: space.description,
             icon: space.icon,
             color: space.color,
             sortOrder: space.sortOrder,
+            isActive: space.isActive ?? true,
             updatedAt: sql`now()`,
           },
         });
