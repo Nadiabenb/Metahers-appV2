@@ -291,7 +291,7 @@ export default function DashboardPage() {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <p className="text-white/40 text-xs uppercase tracking-widest">Explore Your Spaces</p>
-                  <Link href="/spaces">
+                  <Link href="/learning-hub">
                     <span className="text-xs flex items-center gap-1 transition-colors" style={{ color: "#C9A96E" }}>
                       View all <ArrowRight className="w-3 h-3" />
                     </span>
@@ -306,7 +306,7 @@ export default function DashboardPage() {
                       const isLocked = !isPaid && space.sortOrder > 2;
                       const img = spaceImages[space.slug];
                       return (
-                        <Link key={space.id} href={`/spaces/${space.slug}`}>
+                        <Link key={space.id} href="/learning-hub">
                           <div
                             className="relative overflow-hidden cursor-pointer group border border-white/10 hover:border-white/20 transition-colors"
                             style={{ background: "#13111C" }}
