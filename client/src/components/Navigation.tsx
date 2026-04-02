@@ -38,6 +38,7 @@ export function Navigation() {
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard" },
     { label: "Learn", path: "/learning-hub" },
+    { label: "Spaces", path: "/spaces" },
     { label: "Journal", path: "/journal" },
     { label: "Community", path: COMMUNITY_URL, external: true },
     { label: "Account", path: "/account" },
@@ -45,6 +46,7 @@ export function Navigation() {
 
   const publicNavItems = [
     { label: "Home", path: "/" },
+    { label: "Spaces", path: "/spaces" },
     { label: "Blog", path: "/blog" },
   ];
 

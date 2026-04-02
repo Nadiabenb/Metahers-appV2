@@ -56,6 +56,7 @@ const AdminQuizResultsPage = lazy(() => import("@/pages/AdminQuizResultsPage"));
 const UpgradePage = lazy(() => import("@/pages/UpgradePage"));
 const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
 const SpaceDetailPage = lazy(() => import("@/pages/SpaceDetailPage"));
+const SpacesBrowsePage = lazy(() => import("@/pages/SpacesBrowsePage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
@@ -147,6 +148,9 @@ function Router() {
 
         {/* Conversion-Optimized Landing Page for Ads */}
         <Route path="/" component={LandingPage} />
+
+        {/* Spaces Browse Page - Public */}
+        <Route path="/spaces" component={SpacesBrowsePage} />
 
         {/* Space Detail Pages - Public */}
         <Route path="/spaces/:slug" component={SpaceDetailPage} />

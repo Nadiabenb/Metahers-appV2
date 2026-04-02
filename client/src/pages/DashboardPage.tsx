@@ -4,9 +4,18 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, MessageSquare, FileText, FlaskConical, Crown } from "lucide-react";
+import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Lock } from "lucide-react";
 import { Link } from "wouter";
 import { isSignatureTier } from "@shared/pricing";
+import { spaceImages } from "@/lib/imageManifest";
+
+type Space = {
+  id: string;
+  name: string;
+  slug: string;
+  sortOrder: number;
+  isActive: boolean;
+};
 
 type ExperienceProgress = {
   id: string;
@@ -74,6 +83,10 @@ export default function DashboardPage() {
   const { data: allExperiences = [] } = useQuery<Experience[]>({
     queryKey: ["/api/experiences/all"],
     enabled: !isNewMember,
+  });
+
+  const { data: spaces = [] } = useQuery<Space[]>({
+    queryKey: ["/api/spaces"],
   });
 
   const completedCount = allProgress.filter((p) => p.completedAt).length;
@@ -272,6 +285,61 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
+
+            {/* Explore Spaces */}
+            {spaces.length > 0 && (
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <p className="text-white/40 text-xs uppercase tracking-widest">Explore Your Spaces</p>
+                  <Link href="/spaces">
+                    <span className="text-xs flex items-center gap-1 transition-colors" style={{ color: "#C9A96E" }}>
+                      View all <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  {spaces
+                    .filter((s) => s.isActive !== false)
+                    .sort((a, b) => a.sortOrder - b.sortOrder)
+                    .slice(0, 10)
+                    .map((space) => {
+                      const isLocked = !isPaid && space.sortOrder > 2;
+                      const img = spaceImages[space.slug];
+                      return (
+                        <Link key={space.id} href={isLocked ? "/upgrade" : `/spaces/${space.slug}`}>
+                          <div
+                            className="relative overflow-hidden cursor-pointer group border border-white/10 hover:border-white/20 transition-colors"
+                            style={{ background: "#13111C" }}
+                            data-testid={`dashboard-space-card-${space.slug}`}
+                          >
+                            <div className="aspect-square relative">
+                              {img ? (
+                                <img
+                                  src={img.src}
+                                  alt={img.alt}
+                                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                  loading="lazy"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center" style={{ background: "#0D0B14" }} />
+                              )}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                              {isLocked && (
+                                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(13,11,20,0.75)" }}>
+                                  <Lock className="w-4 h-4 text-white/50" />
+                                </div>
+                              )}
+                              <p className="absolute bottom-2 left-2 right-2 text-white text-xs font-medium leading-tight truncate">
+                                {space.name}
+                              </p>
+                            </div>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                </div>
+              </div>
+            )}
 
             {/* Progress stats */}
             <div>
