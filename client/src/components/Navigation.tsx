@@ -45,7 +45,7 @@ export function Navigation() {
 
   const publicNavItems = [
     { label: "Home", path: "/" },
-    { label: "Rituals", path: "/learning-hub" },
+    { label: "Learn", path: "/learning-hub" },
     { label: "Blog", path: "/blog" },
   ];
 
