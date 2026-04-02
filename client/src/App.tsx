@@ -155,7 +155,10 @@ function Router() {
         {/* Space Detail Pages - Public */}
         <Route path="/spaces/:slug" component={SpaceDetailPage} />
 
-        {/* Experience Detail Pages - Public */}
+        {/* Nested ritual route — keeps URL under /spaces/... */}
+        <Route path="/spaces/:spaceSlug/rituals/:slug" component={ExperienceDetailPage} />
+
+        {/* Experience Detail Pages - Public (kept for backwards compatibility) */}
         <Route path="/experiences/:slug" component={ExperienceDetailPage} />
 
         {/* AI Prompt Library - Public resource */}

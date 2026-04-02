@@ -90,8 +90,8 @@ export default function ExperienceDetailPage() {
                 Try Again
               </Button>
             )}
-            <Button variant="outline" onClick={() => navigate("/world")} data-testid="button-back-to-world">
-              Back to MetaHers World
+            <Button variant="outline" onClick={() => navigate("/spaces")} data-testid="button-back-to-world">
+              Browse All Spaces
             </Button>
           </CardContent>
         </Card>

@@ -72,8 +72,8 @@ export default function SpaceDetailPage() {
         <div className="max-w-md text-center">
           <h2 className="text-2xl font-semibold mb-4 text-white">Space Not Found</h2>
           <p className="mb-6 text-white/70">The space you're looking for doesn't exist.</p>
-          <Button onClick={() => navigate("/world")} size="lg" data-testid="button-back-to-world">
-            Back to MetaHers World
+          <Button onClick={() => navigate("/spaces")} size="lg" data-testid="button-back-to-world">
+            Browse All Spaces
           </Button>
         </div>
       </div>
@@ -94,8 +94,8 @@ export default function SpaceDetailPage() {
             <Button onClick={() => window.location.reload()} size="lg" data-testid="button-retry">
               Try Again
             </Button>
-            <Button onClick={() => navigate("/world")} variant="outline" size="lg" data-testid="button-back-to-world">
-              Back to MetaHers World
+            <Button onClick={() => navigate("/spaces")} variant="outline" size="lg" data-testid="button-back-to-world">
+              Browse All Spaces
             </Button>
           </div>
         </div>
@@ -124,8 +124,8 @@ export default function SpaceDetailPage() {
               <Button onClick={() => window.location.reload()} size="lg" data-testid="button-retry-experiences">
                 Try Again
               </Button>
-              <Button onClick={() => navigate("/world")} variant="outline" size="lg" data-testid="button-back-to-world-error">
-                Back to MetaHers World
+              <Button onClick={() => navigate("/spaces")} variant="outline" size="lg" data-testid="button-back-to-world-error">
+                Browse All Spaces
               </Button>
             </div>
           </div>
@@ -172,7 +172,7 @@ export default function SpaceDetailPage() {
       <section className="py-20 px-6 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
-            <Link href="/world">
+            <Link href="/spaces">
               <button className="text-sm text-white/70 hover:text-white transition-colors flex items-center gap-2" data-testid="button-back">
                 <ArrowLeft className="w-4 h-4" />
                 Back to All Spaces
@@ -298,7 +298,7 @@ export default function SpaceDetailPage() {
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
                     <div
-                      onClick={() => navigate(`/experiences/${experience.slug}`)}
+                      onClick={() => navigate(`/spaces/${slug}/rituals/${experience.slug}`)}
                       className="group cursor-pointer transition-all"
                       style={{ background: DARK_CARD, border: '1px solid rgba(255,255,255,0.06)' }}
                       data-testid={`card-experience-${experience.slug}`}
@@ -307,7 +307,7 @@ export default function SpaceDetailPage() {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          navigate(`/experiences/${experience.slug}`);
+                          navigate(`/spaces/${slug}/rituals/${experience.slug}`);
                         }
                       }}
                     >
@@ -352,7 +352,7 @@ export default function SpaceDetailPage() {
                             className="flex items-center gap-2"
                             onClick={(e) => {
                               e.stopPropagation();
-                              navigate(`/experiences/${experience.slug}`);
+                              navigate(`/spaces/${slug}/rituals/${experience.slug}`);
                             }}
                             data-testid={`button-start-${experience.slug}`}
                           >
@@ -409,7 +409,7 @@ export default function SpaceDetailPage() {
                     transition={{ duration: 0.4, delay: index * 0.05 }}
                   >
                     <div
-                      onClick={() => isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade")}
+                      onClick={() => isProUser ? navigate(`/spaces/${slug}/rituals/${experience.slug}`) : navigate("/upgrade")}
                       className="group cursor-pointer transition-all h-full"
                       style={{ background: DARK_CARD, border: '1px solid rgba(255,255,255,0.06)', opacity: !isProUser ? 0.75 : 1 }}
                       data-testid={`card-experience-${experience.slug}`}
@@ -418,7 +418,7 @@ export default function SpaceDetailPage() {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          isProUser ? navigate(`/experiences/${experience.slug}`) : navigate("/upgrade");
+                          isProUser ? navigate(`/spaces/${slug}/rituals/${experience.slug}`) : navigate("/upgrade");
                         }
                       }}
                     >
