@@ -1479,6 +1479,716 @@ export const EXPERIENCES: InsertTransformationalExperience[] = [
       ]
     },
     personalizationEnabled: false
+  },
+
+  // ===== LEARN AI — NEW EXPERIENCES (sortOrder 4-9) =====
+
+  {
+    spaceId: "learn-ai",
+    title: "Prompt Engineering Fundamentals",
+    slug: "prompt-engineering-fundamentals",
+    description: "Learn to write precise, effective prompts that get you the exact output you need from any AI tool.",
+    tier: "free",
+    estimatedMinutes: 50,
+    sortOrder: 4,
+    isActive: true,
+    learningObjectives: [
+      "Understand what separates a weak prompt from a powerful one",
+      "Apply a repeatable prompt structure to any task",
+      "Iterate on AI outputs to refine quality",
+      "Build a personal prompt library you can reuse"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "What Makes a Great Prompt", type: "text", content: "Most people use AI tools like a search engine: they type a vague question and hope for the best. A prompt is actually a brief for a very capable contractor. The more context, constraints, and clarity you provide, the better the result. Think of it this way: if you hired a writer and said 'write something good,' you'd be disappointed. If you said 'write a 200-word Instagram caption for a sustainable fashion brand targeting women 28-40, upbeat tone, ends with a question,' you'd get exactly what you need." },
+        { id: "s2", title: "The Anatomy of an Effective Prompt", type: "text", content: "Every strong prompt has four elements: role, task, context, and format. Role tells the AI what perspective to take (e.g., 'You are an experienced email copywriter'). Task is the specific action you need. Context is the background information that shapes the output. Format tells it how to structure the response, whether that's a list, a paragraph, a table, or a specific length. You don't need all four every time, but adding each one improves your results significantly." },
+        { id: "s3", title: "Practice: Rewrite Bad Prompts", type: "interactive", content: "Take these weak prompts and rewrite each one using the role-task-context-format structure. Prompt 1: 'Write about my business.' Prompt 2: 'Make this email better.' Prompt 3: 'Give me ideas for content.' For each rewrite, add a specific role, a precise task, your actual business context, and the format you want. Then run both versions in an AI tool and compare the outputs side by side. Notice how dramatically the quality changes." },
+        { id: "s4", title: "Advanced Techniques: Chain and Iterate", type: "text", content: "The best results rarely come from one prompt. Start broad and refine: ask for a first draft, then ask the AI to improve specific parts, adjust the tone, or add examples. Chaining prompts means treating each output as input for the next request. You can also use role-playing to unlock better responses: 'Act as a skeptical investor and find weaknesses in this business plan.' Constraint-setting is equally powerful. Telling the AI what NOT to do (no jargon, no bullet points, no clichés) shapes the output as much as telling it what to include." },
+        { id: "s5", title: "Build Your Personal Prompt Library", type: "hands_on_lab", content: "Create a document (a simple Google Doc works) and save your five most-used prompt templates. For each one, write the full prompt with brackets for the parts you swap out, like [your industry] or [your target customer]. Start with these five: a social media caption prompt, an email subject line prompt, a meeting agenda prompt, a feedback request prompt, and a brainstorming prompt. Every time you find a prompt that works well, add it here. Your prompt library becomes one of your most valuable business assets." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "learn-ai",
+    title: "AI Tool Landscape",
+    slug: "ai-tool-landscape",
+    description: "A practical guide to which AI tool does what, so you stop guessing and start choosing the right one every time.",
+    tier: "free",
+    estimatedMinutes: 40,
+    sortOrder: 5,
+    isActive: true,
+    learningObjectives: [
+      "Distinguish between the major AI assistants and their strengths",
+      "Understand the landscape of image, video, and audio AI tools",
+      "Choose the right AI tool for each task in your workflow",
+      "Build a starter AI stack without overspending"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "The Big AI Assistants", type: "text", content: "ChatGPT, Claude, and Gemini are all capable AI assistants, but they have distinct personalities and strengths. ChatGPT is versatile and has the largest ecosystem of integrations and plugins. Claude tends to produce longer, more nuanced writing and is particularly good at following detailed instructions without losing context. Gemini integrates deeply with Google Workspace, making it powerful for people already living in Gmail, Docs, and Sheets. Perplexity is a different category entirely: it searches the live web and cites sources, making it excellent for research rather than creation. For most women building a business, starting with one and going deep beats trying to use all four at once." },
+        { id: "s2", title: "Image Generation Tools", type: "text", content: "MidJourney produces the most visually stunning and artistic images, with a style that feels editorial and high-end. It requires learning a specific prompt language and runs through Discord, which adds a learning curve. DALL-E is built directly into ChatGPT, making it the most convenient option for quick visuals during a workflow. Adobe Firefly is the safest choice for commercial use because it's trained only on licensed images, meaning you won't face copyright concerns when using outputs in paid advertising or client work. Leonardo AI is a strong middle ground: accessible, commercially safe, and capable of consistent character and product images." },
+        { id: "s3", title: "Video, Audio, and Specialized Tools", type: "text", content: "Runway turns text descriptions or still images into short video clips, ideal for social media content without a camera. HeyGen creates talking-head videos where an AI avatar or your own likeness speaks a script you provide, removing the need to film yourself. ElevenLabs clones voices and generates realistic voiceovers from text, useful for podcast production or video narration. For specialized tasks, Notion AI helps you think and write inside your project management tool. Otter AI transcribes meetings in real time. Descript lets you edit video by editing the transcript like a Word document. Each of these tools solves a specific bottleneck." },
+        { id: "s4", title: "Specialized AI Tools for Business", type: "text", content: "Beyond the general assistants, a new wave of AI tools is built for specific business functions. Jasper and Copy.ai focus on marketing copy and long-form content. Canva's AI features handle design without a designer. Klaviyo and Mailchimp have added AI to generate email sequences. Tidio and Intercom use AI for customer support automation. The mistake most entrepreneurs make is chasing every new tool instead of mastering a few. Tools multiply your output; they don't replace your strategy or judgment." },
+        { id: "s5", title: "Choose Your Starter Stack", type: "hands_on_lab", content: "Pick exactly three AI tools to focus on for the next 90 days. Use this framework to choose: one general AI assistant (ChatGPT, Claude, or Gemini), one visual tool (DALL-E, Canva AI, or MidJourney), and one specialized tool that solves your biggest current bottleneck. Write down these three tools, the specific use cases you'll apply each to, and a 30-minute block in your calendar this week to practice each one. Commit to these three before adding anything else. Depth of use beats breadth of tools every time." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "learn-ai",
+    title: "AI for Your Daily Life",
+    slug: "ai-daily-life",
+    description: "Use AI to handle the small daily tasks that drain your energy, from email to meal planning to research.",
+    tier: "free",
+    estimatedMinutes: 35,
+    sortOrder: 6,
+    isActive: true,
+    learningObjectives: [
+      "Identify the daily tasks where AI saves the most time",
+      "Set up AI-assisted email and communication workflows",
+      "Use AI for planning, research, and personal decisions",
+      "Build a morning routine that incorporates AI tools"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "AI as Your Personal Assistant", type: "text", content: "The biggest shift in using AI daily isn't about the tools: it's about the mindset. Most people think AI is for big, complex tasks. The real power is in the hundreds of small tasks that eat your day. Writing a reply to a difficult email. Researching a hotel for a trip. Summarizing a long article you don't have time to read. Creating a grocery list from a meal plan. Each one takes you two to five minutes. AI handles them in twenty seconds. Multiply that across a week and you reclaim several hours." },
+        { id: "s2", title: "Email and Communication", type: "text", content: "Paste a difficult email into your AI assistant and ask it to draft a professional, warm reply. Ask it to make your message shorter without losing the key points. Use it to translate tone: 'rewrite this as firm but not aggressive' or 'make this sound more personable.' For recurring email types, save your best AI-drafted templates and adapt them. You can also use AI to prepare for hard conversations: describe the situation and ask for talking points, potential objections, and how to phrase sensitive feedback." },
+        { id: "s3", title: "Planning and Organization", type: "text", content: "Tell your AI assistant your week's commitments and ask it to suggest a realistic daily schedule. Give it your ingredients and ask for a week of dinner ideas with a shopping list. Ask it to help you break a big project into weekly milestones. Use it to create agendas for meetings you're running. One of the most underused applications is decision-making support: describe a decision you're wrestling with, list your constraints and values, and ask for a structured analysis of your options. You don't have to take its recommendation, but it will surface angles you hadn't considered." },
+        { id: "s4", title: "Learning and Research", type: "text", content: "AI is an exceptional learning accelerator when used correctly. Ask it to explain a concept at the level of 'someone smart who knows nothing about this field.' Ask it to create a five-day learning plan for a skill you want to build. Use it to summarize a book's key frameworks before you read it. When you encounter something confusing, paste it in and ask for a plain-language explanation with a concrete example. The key is to verify important facts, especially statistics and recent events, since AI can sometimes be confidently wrong about specifics." },
+        { id: "s5", title: "Build Your Daily AI Routine", type: "hands_on_lab", content: "Design a simple morning AI ritual that takes ten minutes and sets you up for a more focused day. Here is a starting template: open your AI assistant and paste in your three most important tasks for today, then ask it to help you prioritize based on impact and effort. Ask it to draft any email you've been putting off. Ask it one research question that's been nagging you. Write down the ten-minute routine that feels right for your life, schedule it as a recurring calendar block, and do it five days in a row. After five days, adjust based on what actually helped." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "learn-ai",
+    title: "AI Image Generation Mastery",
+    slug: "ai-image-generation",
+    description: "Create professional, on-brand visuals for your business without hiring a designer or owning a camera.",
+    tier: "pro",
+    estimatedMinutes: 55,
+    sortOrder: 7,
+    isActive: true,
+    learningObjectives: [
+      "Understand how AI image generation works at a practical level",
+      "Use MidJourney and DALL-E to create business-quality visuals",
+      "Write prompt formulas that produce consistent, branded results",
+      "Build a library of brand images you can use across all platforms"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "How AI Image Generation Works", type: "text", content: "AI image generators have learned from hundreds of millions of images across the internet. When you type a description, the AI translates your words into a visual by identifying patterns it has seen before and combining them in new ways. This means the more specific your description, the more the AI can draw on relevant patterns. Vague prompts produce generic results because the AI has too many directions to go. Precise prompts produce striking, specific images because you've narrowed its creative range to exactly what you need." },
+        { id: "s2", title: "MidJourney Deep Dive", type: "text", content: "MidJourney consistently produces the most polished, editorial-quality images of any AI tool currently available. Access it through Discord by joining the MidJourney server and typing your prompt after the /imagine command. The most important parameters are aspect ratio (--ar 16:9 for widescreen, --ar 1:1 for square, --ar 9:16 for vertical) and style version (--v 6 is the current standard). For brand consistency, use the same descriptive style words in every prompt: your brand's aesthetic keywords, color descriptors, and lighting preferences. Save these as a 'style string' you append to every prompt." },
+        { id: "s3", title: "DALL-E and Adobe Firefly for Business", type: "text", content: "DALL-E, built into ChatGPT, shines in iterative workflows because you can describe changes in plain language rather than rewriting the full prompt. Type 'make her expression warmer' or 'remove the background and replace with a clean white studio.' Adobe Firefly deserves special attention for any commercially published work: every image it produces is legally cleared for commercial use because Adobe trained it only on licensed stock photos and Adobe Stock content. If you're running paid ads or creating client deliverables, Firefly removes copyright risk entirely. Use Firefly's generative fill feature to extend images, swap backgrounds, or add elements to existing photos." },
+        { id: "s4", title: "Prompt Formulas for Consistent Results", type: "text", content: "The formula that works across all image AI tools: Subject plus Style plus Lighting plus Composition plus Technical specs. A practical example: 'Confident woman entrepreneur at a minimalist desk, editorial fashion photography style, soft natural window light from the left, medium shot with slight bokeh background, 8K resolution, professional commercial photography.' The words 'editorial,' 'commercial photography,' and specific lighting directions dramatically improve quality. For product imagery, add 'product photography on white background, studio lighting, high contrast, shareable quality.' Save your best-performing formulas exactly as you used them." },
+        { id: "s5", title: "Create Your Brand Image Library", type: "hands_on_lab", content: "Spend this session building ten reusable brand images. First, write three style keywords that describe your brand's visual identity (examples: 'warm golden tones, editorial, modern minimalist'). Then generate images in these five categories: one hero image for your website or bio, two social media graphics featuring your niche topic, two product or service visuals, two behind-the-scenes or lifestyle shots, and three portrait-style images of a professional woman in your industry. Save the exact prompt for every image that you like. By the end, you have a ten-image brand library and a set of proven prompt templates to generate more." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "learn-ai",
+    title: "AI Video and Audio Creation",
+    slug: "ai-video-audio",
+    description: "Produce video content and professional audio without equipment, a film crew, or appearing on camera.",
+    tier: "pro",
+    estimatedMinutes: 60,
+    sortOrder: 8,
+    isActive: true,
+    learningObjectives: [
+      "Understand the AI video and audio tool landscape",
+      "Create a short AI-generated video from a still image or script",
+      "Produce a talking-head video without filming yourself",
+      "Generate professional voiceovers for any content format"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "The AI Video Toolkit", type: "text", content: "Three categories of AI video tools serve different needs. Generation tools like Runway and Sora create video clips from text descriptions or static images: useful for social content, product demos, and abstract visuals. Avatar tools like HeyGen and Synthesia create talking-head videos where a presenter (real or synthetic) delivers your script, removing the need to film yourself. Editing tools like Descript and CapCut use AI to cut, caption, and enhance footage automatically. Most entrepreneurs start with HeyGen for faceless content and CapCut for fast editing, then add Runway once they need more creative visuals." },
+        { id: "s2", title: "Create Your First AI Video", type: "text", content: "Runway's image-to-video feature is the fastest way to create striking content without filming. Upload a high-quality still image (your own photo or one from your AI image library), write a brief motion description like 'slow zoom in, soft light pulse, cinematic atmosphere,' and Runway generates a four-second clip. Chain several of these clips together in CapCut or any simple video editor, add an AI voiceover, and you have a professional video in under an hour. The resulting content looks intentional and elevated, not like a slideshow." },
+        { id: "s3", title: "Talking-Head Videos with HeyGen", type: "text", content: "HeyGen lets you create videos where a presenter delivers your script without you needing to sit in front of a camera. You can use one of HeyGen's pre-built AI avatars, or upload a two-minute video of yourself to create a personal avatar that uses your likeness and your cloned voice going forward. Write your script in the HeyGen editor, choose your avatar, select your voice, and the platform renders a video in minutes. This is transformative for entrepreneurs who are camera-shy, filming-fatigued, or need to produce content in multiple languages." },
+        { id: "s4", title: "AI Voiceovers and Podcasting", type: "text", content: "ElevenLabs produces the most realistic AI voices available and offers voice cloning: record yourself for a few minutes and the platform learns to generate new audio in your voice from any text you provide. This means you can write a podcast script and produce the audio without recording a single session. For those who do record their own voice, Descript's AI features remove filler words, reduce background noise, and fix microphone inconsistencies automatically. Adobe Podcast Enhance is a free tool that runs any recorded audio through AI processing and produces broadcast-quality sound regardless of recording conditions." },
+        { id: "s5", title: "Build a Video Content System", type: "hands_on_lab", content: "Create one piece of video content this week using the following workflow. Write a 90-second script for a topic in your niche: three sentences introducing the problem, three sentences on your perspective, one sentence call to action. Run the script through ElevenLabs or HeyGen to produce audio or a talking-head video. Create two to three visual clips in Runway using images from your brand library. Assemble everything in CapCut: visuals plus voiceover, add captions using CapCut's auto-caption feature, add your brand colors as a title card at the start. Export and post. Document each step you took so you can repeat the system in half the time next week." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "learn-ai",
+    title: "AI Safety and Smart Usage",
+    slug: "ai-safety-smart-usage",
+    description: "Use AI tools confidently by understanding their limits, protecting your privacy, and developing your own critical eye.",
+    tier: "free",
+    estimatedMinutes: 30,
+    sortOrder: 9,
+    isActive: true,
+    learningObjectives: [
+      "Understand where AI tools fail and why",
+      "Protect personal and business data when using AI",
+      "Verify AI outputs before publishing or acting on them",
+      "Develop an ethical framework for your AI use"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "What AI Gets Wrong (and Why)", type: "text", content: "AI tools can produce confident, fluent, completely incorrect information. This is called hallucination: the AI generates plausible-sounding text based on patterns, not facts. It will invent citations, get statistics wrong, confuse dates, and misattribute quotes. The more obscure or recent the topic, the less reliable the output. AI also reflects the biases present in its training data, which means it can produce subtly skewed perspectives on topics related to gender, race, or culture. Knowing this isn't a reason to avoid AI: it's a reason to use it as a first draft and not a final authority." },
+        { id: "s2", title: "Protecting Your Data and Privacy", type: "text", content: "When you paste content into a free AI tool, that content may be used to train future versions of the model. For confidential client information, proprietary business data, or personal financial details, use paid enterprise versions that offer data privacy guarantees, or avoid pasting the sensitive details altogether. Describe the situation abstractly instead of sharing the actual data. Most major AI platforms (ChatGPT Plus, Claude Pro) now offer settings to opt out of training data use. Locate this setting in your account and turn it on before using the tool for sensitive work." },
+        { id: "s3", title: "Fact-Checking AI Outputs", type: "text", content: "Develop a simple fact-checking habit: any statistic, study, quote, or historical claim from an AI tool gets verified before you publish or present it. Search the original source, not just other articles. If an AI cites a Harvard study, search for that study directly on the Harvard website or Google Scholar. For current events, AI tools with a training cutoff date will simply not know what happened recently: use Perplexity (which searches live web) or check the news directly. The rule of thumb is straightforward: trust AI for drafting, logic, and structure; verify AI for facts, dates, and sources." },
+        { id: "s4", title: "Ethical Considerations", type: "text", content: "As AI becomes more capable, a few ethical questions are worth holding as you build your business with it. Transparency with your audience about AI use builds trust rather than eroding it: many creators now disclose when content is AI-assisted, and audiences respect the honesty. Using AI to produce content in someone else's voice or likeness without permission is a legal and ethical issue that is actively evolving. Creating deliberately misleading content with AI tools has real consequences for your brand and your community. Your ethics around AI aren't just about compliance: they're part of the brand you're building." },
+        { id: "s5", title: "Your AI Usage Guidelines", type: "hands_on_lab", content: "Write a one-page personal AI policy for your business. Include four sections: what you use AI for freely (drafting, brainstorming, research starting points), what you always verify before using (facts, statistics, quotes), what you never paste into a free AI tool (client data, financial details, confidential strategies), and how you disclose AI use to your audience. This document takes fifteen minutes to write and removes decision fatigue every time you sit down to work. It also prepares you for client conversations about your process and positions you as someone who uses AI thoughtfully." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  // ===== BUILD WITH AI — NEW EXPERIENCES (sortOrder 2-9) =====
+
+  {
+    spaceId: "build-ai",
+    title: "Build Your Content System",
+    slug: "build-content-system",
+    description: "Design a repeatable AI-powered workflow that takes you from blank page to published content without the friction.",
+    tier: "free",
+    estimatedMinutes: 50,
+    sortOrder: 2,
+    isActive: true,
+    learningObjectives: [
+      "Identify the bottlenecks in your current content process",
+      "Use AI to generate and refine ideas, drafts, and edits",
+      "Repurpose one piece of content across multiple platforms",
+      "Set up a weekly content workflow you can run consistently"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "The Content Creation Bottleneck", type: "text", content: "Most entrepreneurs don't struggle with knowing what to say: they struggle with getting it out of their head and into a publishable format efficiently. Content creation stalls because each piece requires too many decisions. What topic? What angle? What format? What platform? AI doesn't replace your expertise or your voice, but it dramatically reduces the friction between idea and execution. The goal of a content system isn't to automate your personality: it's to remove the administrative overhead so your actual thinking can flow." },
+        { id: "s2", title: "AI-Assisted Ideation and Research", type: "text", content: "Start every content session with ten minutes of AI-assisted ideation. Give your AI assistant your niche and your audience, then ask for twenty content ideas across three formats: educational, opinion, and personal story. You won't use most of them, but two or three will spark something real. For research, ask the AI to summarize the current conversation around your topic, identify the most common questions people ask, and list common misconceptions. This gives you a week of angles in minutes rather than hours of browsing." },
+        { id: "s3", title: "Writing and Editing with AI", type: "text", content: "The fastest workflow: write your raw thoughts in two to three sentences, then ask AI to expand it into a full draft in your brand voice. Give the AI a sample of your existing writing so it can match your style. Then edit the draft yourself, removing anything that doesn't sound like you and adding the specific examples and insights only you can provide. The AI handles structure and flow; you handle substance and authenticity. This split is important: AI makes writing faster, but your unique perspective is what makes it worth reading." },
+        { id: "s4", title: "Repurposing One Piece into Many", type: "text", content: "A single piece of well-researched content can become six to ten pieces across different formats. A long LinkedIn article becomes five individual tips for Instagram, a five-tweet thread, a newsletter section, and a short video script. Ask your AI assistant to repurpose your content for each specific platform with the appropriate tone and length. Pinterest requires different copy than LinkedIn. Instagram captions are different from email. Systematic repurposing means you're not creating from scratch every day: you're extracting maximum value from the ideas you've already developed." },
+        { id: "s5", title: "Set Up Your Content Production Workflow", type: "hands_on_lab", content: "Map your content system in writing using these five steps: decide your one primary content format (the long-form piece you create weekly), list the three to five platforms where it gets repurposed, choose the AI tools for each stage (ideation, drafting, image creation), set a fixed content creation day on your calendar each week, and create a simple checklist of every step from idea to published. Run your first piece through this system end-to-end this week, even if it's imperfect. A working system is better than a perfect plan." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "build-ai",
+    title: "Build a No-Code Website",
+    slug: "build-nocode-website",
+    description: "Launch a professional website this week using AI for copy, design decisions, and SEO, without writing a single line of code.",
+    tier: "pro",
+    estimatedMinutes: 60,
+    sortOrder: 3,
+    isActive: true,
+    learningObjectives: [
+      "Choose the right website platform for your specific needs",
+      "Use AI to write every page of website copy",
+      "Apply basic SEO principles to get found on Google",
+      "Launch a complete, professional site within a week"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Choosing Your Platform", type: "text", content: "Framer is the best choice if you want a visually distinctive, fast-loading site and you are comfortable working from templates. Squarespace is ideal for service businesses and portfolios: clean, reliable, and requires no technical knowledge. Wix gives you more design flexibility than Squarespace but can produce slower sites if over-customized. Webflow is powerful for those who want design control without coding, but it has a steeper learning curve. For solopreneurs just starting out, Squarespace or Framer will serve 90% of needs without frustration. Choose based on your aesthetic sensibility, not feature lists." },
+        { id: "s2", title: "AI-Powered Site Design", type: "text", content: "Before writing a word, ask your AI assistant to produce a site architecture: the five to seven pages your site needs, what each page's goal is, and what the visitor should feel and do on each page. Then describe your brand visually, including colors, mood, and three websites you admire, and ask for specific template recommendations within your chosen platform. AI can also help with design decisions: describe your layout question and ask which option better serves the visitor's journey. You don't need a designer when you understand your audience and use AI to translate that understanding into decisions." },
+        { id: "s3", title: "Writing Website Copy with AI", type: "text", content: "Every page needs a purpose and a next step. Your homepage answers three questions in the first ten seconds: who this is for, what they get, and why you. Give your AI assistant these details: your target customer, their biggest problem, your solution, and your unique angle. Ask it to write a homepage headline plus three supporting statements. For your about page, write five bullet points about your background and ask AI to turn them into a narrative paragraph. For services, describe each offering and ask AI to write the problem, solution, and result structure for each. Always edit the output to sound like you." },
+        { id: "s4", title: "SEO Basics for Your New Site", type: "text", content: "SEO sounds technical but the core is simple: your site needs to contain the words your ideal client types into Google. Ask your AI assistant to identify ten search terms someone would use when looking for what you offer, then make sure those terms appear naturally in your page titles, headings, and body copy. Every page should have a clear title tag (the words that appear as the blue link in search results) and a meta description (the two sentences below the link). Squarespace and Framer both have simple fields for these. Your biggest SEO advantage is specificity: a generic site about 'business coaching' competes with millions of sites, while 'AI business strategy for women consultants' faces far less competition." },
+        { id: "s5", title: "Launch Your Site This Week", type: "hands_on_lab", content: "Follow this five-day plan. Day one: choose your platform, purchase your domain, and select your template. Day two: write all copy using AI assistance for a minimum of five pages: home, about, services, contact, and one free resource or blog post. Day three: customize the template with your brand colors, fonts, and images from your AI image library. Day four: set up the technical basics including your domain connection, Google Analytics, and a contact form. Day five: review every page from the perspective of your ideal client, fix the three most obvious improvements, and press publish. A live site with imperfect details beats a perfect site that stays in draft for months." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "build-ai",
+    title: "Build an Email System",
+    slug: "build-email-system",
+    description: "Build an AI-assisted email marketing engine from your first subscriber to automated sequences that nurture and convert.",
+    tier: "pro",
+    estimatedMinutes: 50,
+    sortOrder: 4,
+    isActive: true,
+    learningObjectives: [
+      "Understand why email outperforms social media for business growth",
+      "Write AI-assisted welcome sequences that convert new subscribers",
+      "Create a newsletter workflow that publishes consistently",
+      "Set up basic email automation without technical knowledge"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Why Email Beats Social Media", type: "text", content: "Your social media audience belongs to the platform. If Instagram shuts down, your followers disappear. Your email list belongs to you: it's a direct line to people who opted in to hear from you, regardless of algorithm changes, platform shifts, or account suspensions. Email also converts at a significantly higher rate than social media. The average email open rate is twenty to thirty percent; the average organic reach of a social post is two to five percent. Building an email list is building an owned audience, and owned audiences are the most valuable asset a solopreneur can have." },
+        { id: "s2", title: "AI-Written Welcome Sequences", type: "text", content: "A welcome sequence is the series of emails someone receives automatically after joining your list. Typically three to five emails over the first two weeks, it introduces you, delivers value, and builds the relationship before you ever sell anything. Ask your AI assistant to write a five-email welcome sequence using this brief: your name, your niche, the free resource or reason someone subscribed, and your signature perspective or approach. The AI will produce drafts: your job is to edit them until they sound exactly like you talking to someone you just met who you want to genuinely help." },
+        { id: "s3", title: "Newsletter Creation with AI", type: "text", content: "A newsletter is not a broadcast: it is a consistent conversation. The best newsletters feel like a letter from someone you trust, not a marketing email. Choose one topic you'll cover each week, a format you can repeat (many popular newsletters use a three-section structure: one insight, one resource, one question), and a publishing day you will protect. Use AI to help you draft the insight section from your rough notes, find relevant resources, and write compelling subject lines. Writing four subject line options and choosing the strongest one takes thirty seconds with AI and dramatically improves open rates." },
+        { id: "s4", title: "Sales Email Frameworks", type: "text", content: "Sales emails perform best when they lead with value, not with the offer. A simple framework: start with a story or observation your reader will recognize, connect it to the problem your offer solves, introduce your offer in one clear sentence, explain the specific result it produces, address the most common objection, and close with a single clear call to action. Ask your AI assistant to draft a sales email using this structure with your offer details. The result will need editing but the structure will be sound. Avoid urgency tactics that feel artificial: real deadlines and genuine scarcity work; manufactured pressure erodes trust." },
+        { id: "s5", title: "Set Up Your Automated Email Flow", type: "hands_on_lab", content: "Choose an email platform this week: ConvertKit is best for creators and solopreneurs, Mailchimp is familiar and beginner-friendly, and Flodesk has the most beautiful templates. Set up your account, create your first list, and build a three-email welcome sequence using the AI drafts you created. Set the sequence to deliver email one immediately on signup, email two three days later, and email three five days after that. Create a simple opt-in: a one-page landing page with a clear headline, three bullet points explaining what subscribers get, and a single form field for email address. Use AI to write the headline and bullets. Your email system is now live." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "build-ai",
+    title: "Build a Client Onboarding Flow",
+    slug: "build-client-onboarding",
+    description: "Automate the way you welcome and serve clients so every new client feels like a priority without manual effort on your end.",
+    tier: "pro",
+    estimatedMinutes: 45,
+    sortOrder: 5,
+    isActive: true,
+    learningObjectives: [
+      "Map your complete client journey from inquiry to delivery",
+      "Use AI to write intake forms, welcome emails, and onboarding documents",
+      "Automate key client touchpoints without losing the personal feel",
+      "Build a repeatable system that scales as you take on more clients"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Mapping Your Client Journey", type: "text", content: "Before automating anything, write down every step a new client takes from first contact to final delivery. A typical journey looks like this: discovery call, proposal sent, contract signed, invoice paid, welcome email received, onboarding questionnaire completed, kickoff call scheduled, work delivered, feedback gathered, testimonial requested, offboarding. Each of these is a touchpoint. Some of them are high-value moments where a personal touch matters. Most of them are administrative steps that AI and automation can handle better and faster than you doing it manually." },
+        { id: "s2", title: "AI for Intake and Qualification", type: "text", content: "Your intake form is the first piece of your brand experience a potential client sees. Ask AI to write a five-question intake form that collects the information you need to assess fit and prepare for a discovery call, phrased in your brand voice. Include questions about their current situation, their desired outcome, their timeline, their budget range, and how they found you. A well-designed intake form pre-qualifies clients before they reach your calendar, saving you from discovery calls with people who aren't the right fit. Use Typeform or Google Forms for a clean, mobile-friendly experience." },
+        { id: "s3", title: "Automated Welcome Sequences", type: "text", content: "The moment a client pays their invoice should trigger a series of automatic emails that make them feel certain they made the right decision. Email one arrives immediately: warmth, confirmation, and what happens next. Email two arrives one day before the kickoff call: the agenda, what to prepare, and a reminder of what you'll accomplish together. Email three arrives after the kickoff: a summary of decisions made and the agreed next steps. Ask AI to draft these three emails using your brand voice and the specifics of your service. Automate them through your email platform or a tool like Dubsado or HoneyBook." },
+        { id: "s4", title: "Delivery and Follow-Up Systems", type: "text", content: "Mid-project check-ins, final delivery emails, and post-project follow-ups are all template-able. A check-in email might simply say: we're at the midpoint, here is what we've completed, here is what's coming, here is what I need from you by Friday. A delivery email confirms what has been delivered, how to access it, what happens if they have questions, and what the next steps are. A thirty-day follow-up asks how things are going and plants the seed for a testimonial or a referral. AI drafts all of these in ten minutes; you personalize them with project specifics." },
+        { id: "s5", title: "Build Your Onboarding Automation", type: "hands_on_lab", content: "This week, build the minimum viable version of your client onboarding system. Step one: write your client journey on paper, marking which steps are manual touchpoints and which can be automated. Step two: ask AI to draft the five most important client-facing documents: intake form, welcome email, kickoff agenda template, delivery email, and follow-up email. Step three: set up these five documents in your preferred tools (email platform plus form tool). Step four: run one current or upcoming client through the full system and note what you'd change. The goal isn't perfection: it's having a system that works better than ad-hoc." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "build-ai",
+    title: "Build AI Chatbots for Your Business",
+    slug: "build-ai-chatbots",
+    description: "Set up AI chatbots that answer customer questions, qualify leads, and book appointments around the clock.",
+    tier: "pro",
+    estimatedMinutes: 55,
+    sortOrder: 6,
+    isActive: true,
+    learningObjectives: [
+      "Understand what AI chatbots can realistically do for a small business",
+      "Choose the right chatbot platform for your use case and budget",
+      "Train a chatbot on your business information and FAQs",
+      "Integrate and launch your chatbot on your website"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "What AI Chatbots Can Do for You", type: "text", content: "An AI chatbot on your website is like having a knowledgeable team member available at all hours who never gets tired of answering the same questions. For service businesses, chatbots handle the FAQ load that would otherwise consume hours of your week: pricing questions, timeline questions, what's included, next steps. For e-commerce, they handle shipping and return questions. For any business, they can qualify leads by asking intake-style questions and routing serious prospects to your calendar. The misconception is that chatbots are for large businesses: the solopreneur benefit is actually greater because they scale your presence without scaling your workload." },
+        { id: "s2", title: "Choosing Your Chatbot Platform", type: "text", content: "Chatbase is the simplest entry point: upload your website content, FAQs, or a document describing your business, and it builds an AI chatbot from that material in minutes. Tidio combines live chat with AI automation and is well-suited to e-commerce. ManyChat specializes in social media chatbots for Instagram and Messenger direct messages, ideal for audience-facing businesses. Intercom is the enterprise option with the most sophisticated routing and handoff features. For most solopreneurs launching their first chatbot, Chatbase offers the fastest path from zero to a functioning, on-brand customer service bot with no technical setup required." },
+        { id: "s3", title: "Training Your Chatbot on Your Business", type: "text", content: "The quality of your chatbot depends entirely on the quality of the information you feed it. Write a comprehensive FAQ document covering every question you receive regularly, your pricing structure and what's included at each tier, your process from first contact to delivery, your policies on revisions, cancellations, and timelines, and your unique approach or methodology. The more specific and complete this document, the more accurately the chatbot will represent your business. Review the chatbot's responses to common questions before going live and refine the source document wherever answers feel off." },
+        { id: "s4", title: "Integrating with Your Website", type: "text", content: "Every major chatbot platform generates a small piece of code (called a widget or embed code) that you paste into your website to install the chat bubble. In Squarespace, this goes in the Code Injection section under advanced settings. In Wix, use the HTML embed element. In WordPress, paste it in the theme's header or use a plugin. In Framer, add it as a custom code component. Set the chatbot to appear after a visitor has spent fifteen to thirty seconds on a page, which filters out quick bounces and shows it to people who are genuinely reading. A welcome message that references the page they're on increases engagement significantly." },
+        { id: "s5", title: "Launch and Optimize Your Chatbot", type: "hands_on_lab", content: "Follow this four-step launch process. Step one: write your FAQ document using AI assistance, then review it for accuracy and completeness. Step two: set up a free Chatbase account, upload your FAQ document, and configure the chatbot with your business name and a brief description of what it helps with. Step three: test it yourself by asking the twenty most common questions you receive, note where it gives incomplete or incorrect answers, and update your FAQ document to fill those gaps. Step four: install the widget on your website, set a warm welcome message, and share the chatbot URL with three trusted people and ask for honest feedback. Iterate based on what you learn in the first two weeks of real use." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "build-ai",
+    title: "Build Automated Social Media",
+    slug: "build-automated-social",
+    description: "Batch-create and schedule a month of social content in one focused session using AI tools.",
+    tier: "pro",
+    estimatedMinutes: 45,
+    sortOrder: 7,
+    isActive: true,
+    learningObjectives: [
+      "Use the content batching method to eliminate daily content stress",
+      "Write and repurpose AI-assisted captions for multiple platforms",
+      "Set up a scheduling system that posts automatically",
+      "Create and execute a 30-day content batch in one session"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "The Content Batching Method", type: "text", content: "Posting daily feels overwhelming because each post requires a full creative context switch: what should I say today, how should I say it, find an image, write a caption, post, engage with comments. Batching eliminates that friction by separating creation from publishing. You enter a creative state once per week or once per month and produce everything at once. This works because creativity has momentum: ideas generate more ideas when you're in flow. The scheduling tools then distribute content automatically, and you engage with comments from a consumption mindset rather than a creation mindset." },
+        { id: "s2", title: "AI-Powered Caption Writing", type: "text", content: "Give your AI assistant your five content pillars (the topics you consistently talk about) and ask it to generate two posts per pillar per week: one educational and one personal or opinion-based. That's ten posts per week, forty per month, generated from a single prompt session. Review the outputs and mark which ones resonate, then ask AI to rewrite the selected ones in your voice. Provide a sample of your best-performing past captions as a style reference. The AI captures your vocabulary, sentence length, and tone when given clear examples, which dramatically reduces the editing time." },
+        { id: "s3", title: "Repurposing Across Platforms", type: "text", content: "A single idea should live on every platform where your audience exists, adapted to each platform's culture and format. LinkedIn rewards longer, more thoughtful posts with strong opening lines and professional framing. Instagram rewards visual-first content with accessible, personable captions. Twitter and Threads reward concise, opinion-forward statements with strong hooks. TikTok and Reels reward entertainment, authenticity, and trend participation. Ask AI to take your core message and rewrite it in four platform-specific formats simultaneously. Each version takes the same idea and dresses it appropriately for its context." },
+        { id: "s4", title: "Scheduling and Automation Tools", type: "text", content: "Buffer is the simplest scheduling tool for beginners: connect your accounts, create posts in the queue, and set the times you want them to go out. Later specializes in visual platforms and has a drag-and-drop calendar that makes Instagram planning intuitive. Publer and Metricool offer more platforms and analytics at competitive price points. All of these tools have AI-assisted caption features built in, so you can draft inside the scheduling platform itself. Pick one, connect your two to three primary platforms, and spend thirty minutes setting your posting schedule for the next month." },
+        { id: "s5", title: "Your 30-Day Content Batch Plan", type: "hands_on_lab", content: "Set aside three hours this week for your first content batch session. Before you start, have these ready: your five content pillars written out, your brand voice guide, three sample captions that represent your best work, and access to your AI tool and scheduling platform. During the session: spend one hour generating forty caption drafts using AI, spend one hour reviewing, editing, and selecting the twenty best, spend thirty minutes sourcing or creating images for each post, and spend thirty minutes scheduling everything in your chosen tool. When you're done, your content calendar is full for the next month. Protect this block every month going forward." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "build-ai",
+    title: "Build AI Workflows with Zapier",
+    slug: "build-ai-workflows",
+    description: "Connect your apps and automate repetitive tasks so your business runs efficiently without you doing everything manually.",
+    tier: "pro",
+    estimatedMinutes: 50,
+    sortOrder: 8,
+    isActive: true,
+    learningObjectives: [
+      "Understand what workflow automation can do for a solo business",
+      "Build your first automated workflow from scratch",
+      "Design multi-step automations for common business tasks",
+      "Identify and automate your three highest-impact workflows"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "What is Workflow Automation", type: "text", content: "Every time you do the same sequence of steps more than once, you're doing work that a machine can do for you. Workflow automation connects two or more apps so that an action in one triggers an action in another. A new client fills out your intake form: automation sends them a welcome email, adds their details to your client spreadsheet, creates a project folder in your drive, and adds a task to your project management tool. What takes you ten minutes of copy-pasting happens in three seconds automatically, every single time, without you touching it. Zapier and Make are the two leading tools for this, and neither requires coding." },
+        { id: "s2", title: "Your First Zap (Step by Step)", type: "text", content: "In Zapier, every automation is called a Zap. A Zap has a trigger (the event that starts the automation) and one or more actions (what happens as a result). Create a free Zapier account and build this beginner Zap: trigger is a new row in a Google Sheet; action is send an email via Gmail. This Zap means that every time someone's information appears in your spreadsheet, they automatically receive an email. Walk through the Zapier setup screen step by step: connect your Google account, choose your sheet, map the email fields, write your email template, and turn the Zap on. Run a test to confirm it works." },
+        { id: "s3", title: "AI-Powered Automations", type: "text", content: "Zapier's OpenAI and Claude integrations allow you to add AI processing to any workflow. A practical example: when a new inquiry arrives in your inbox, automation extracts the key details, sends them to an AI tool with a prompt asking it to draft a personalized response, and delivers the draft to a Google Doc for your review before you send it. Another example: when you publish a new blog post, automation sends the content to an AI tool and asks it to create three social media captions in different tones, then adds those captions to a content planning sheet. These AI-in-the-middle automations turn individual tasks into complete workflows." },
+        { id: "s4", title: "Multi-Step Workflows for Business", type: "text", content: "Once you're comfortable with simple two-step Zaps, multi-step workflows unlock serious leverage. A client offboarding workflow might look like this: client project is marked complete in your project management tool, which triggers a sequence that sends a feedback survey, schedules a reminder to request a testimonial seven days later, moves the client record to an archived folder, and sends you a notification to update your portfolio. Each step in this sequence would take you two to five minutes manually. As a multi-step Zap, it runs itself every time, perfectly, in seconds." },
+        { id: "s5", title: "Build 3 Automations This Week", type: "hands_on_lab", content: "Choose your three highest-impact automations from this list and build them this week. Automation one: new email subscriber joins list, add to a welcome sequence and to your contacts spreadsheet. Automation two: new inquiry form submission, create a task in your project tool, send a confirmation email to the prospect. Automation three: new invoice paid, trigger your client onboarding email sequence and create the project folder. For each one, map the trigger and all required actions on paper before opening Zapier. Then build and test each one before activating. A working automation that runs for a year is one of the highest-return investments of two hours you can make in your business." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "build-ai",
+    title: "Build a Digital Product",
+    slug: "build-digital-product",
+    description: "Use AI to create your first digital product: a template, guide, course, or toolkit that sells while you sleep.",
+    tier: "pro",
+    estimatedMinutes: 55,
+    sortOrder: 9,
+    isActive: true,
+    learningObjectives: [
+      "Choose the right digital product format for your expertise and audience",
+      "Use AI to accelerate product creation from outline to finished asset",
+      "Package and price your product for your market",
+      "Set up a simple sales page and delivery system"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Choosing Your Digital Product Type", type: "text", content: "Templates are the fastest digital products to create and consistently sell well because they solve an immediate, specific problem. A business plan template, a social media caption pack, a financial tracking spreadsheet, a client proposal template. Guides and ebooks work well when your audience needs education on a topic you know deeply and they need a clear, structured walk-through. Mini-courses (three to five short video lessons or written modules) command higher prices and work for audiences who want guided transformation rather than a tool. Start with a template or guide for your first product: they take hours or days to build, not weeks or months." },
+        { id: "s2", title: "AI-Assisted Product Creation", type: "text", content: "Ask your AI assistant to help you build the structure first. For a template: describe the problem it solves and the user's workflow, then ask AI to outline every section the template needs, the logic behind the order, and instructions for each field. For a guide: describe your audience and the outcome they want, then ask AI to generate a complete table of contents, chapter summaries, and key teaching points for each section. Review the structure carefully before writing: a well-planned structure means the writing goes quickly. Then work through each section with AI assistance, writing your expertise into the AI's framework." },
+        { id: "s3", title: "Packaging and Pricing", type: "text", content: "The name and description of your product matters as much as the content. Your title should include either the problem it solves or the outcome it creates, not a clever name that requires explanation. 'The Client Proposal Template That Closes' converts better than 'The Closer.' Pricing signals quality: templates typically sell for $17 to $47, guides for $27 to $97, and mini-courses for $97 to $297. Price too low and buyers question the quality; price at or above the market rate and back it up with a clear outcome statement. Ask AI to write five pricing page descriptions for your product and select the one that most clearly communicates the value." },
+        { id: "s4", title: "Setting Up Your Sales Page", type: "text", content: "A digital product sales page needs six elements: a headline that states the outcome, a subheadline that names the audience and problem, three to five bullet points listing what they get and what each thing does for them, a brief section on who this is for (and who it is not for), one clear call to action button with the price, and a simple money-back guarantee to reduce purchase risk. Ask AI to write a first draft of your sales page using these six sections. The copy should be specific, outcome-focused, and free of industry jargon. Use Gumroad, Lemon Squeezy, or Payhip to host and sell: all three handle payment processing and digital delivery automatically." },
+        { id: "s5", title: "Launch Your First Digital Product", type: "hands_on_lab", content: "Follow this seven-day launch plan. Day one: decide on your product and write a one-paragraph description of what it is and who it's for. Days two and three: build the product using AI to assist with structure and content, aiming for a finished asset by the end of day three. Day four: set up your Gumroad or Lemon Squeezy account, upload the product, and write the sales page using your AI-drafted copy. Day five: send an email to your list and post about the launch on your social platforms. Days six and seven: respond to every question and comment, note the questions people ask (they become your next product), and celebrate having shipped. A launched product with ten buyers is infinitely more valuable than a perfect product that never ships." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  // ===== MONETIZE WITH AI — NEW EXPERIENCES (sortOrder 1-5) =====
+
+  {
+    spaceId: "monetize-ai",
+    title: "Design Your First Offer",
+    slug: "design-first-offer",
+    description: "Move from 'I have a skill' to 'I have an offer' using AI to research your market, define your positioning, and write your pitch.",
+    tier: "free",
+    estimatedMinutes: 45,
+    sortOrder: 1,
+    isActive: true,
+    learningObjectives: [
+      "Define a clear, specific offer that a specific person wants to buy",
+      "Use AI to research your market and identify underserved needs",
+      "Write a one-sentence positioning statement for your offer",
+      "Price your offer with confidence and a clear rationale"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "What Makes an Irresistible Offer", type: "text", content: "An offer is not a service description. It is a specific promise to a specific person: by the end of this, you will have achieved this result, in this timeframe, using this process, and it costs this. Vague offers like 'social media management' or 'business coaching' are easy to ignore because they don't trigger recognition in the buyer's mind. Specific offers like 'a 90-day social media system for interior designers that fills your inquiry form without you posting every day' trigger immediate recognition in exactly the right person and get dismissed by everyone else. The specificity that makes an offer feel too narrow is actually what makes it powerful." },
+        { id: "s2", title: "AI-Powered Market Research", type: "text", content: "Ask your AI assistant to analyze the market for your expertise using this prompt: 'I help [specific audience] with [specific problem]. What are the top five frustrations and desires of this audience? What solutions already exist and what do buyers complain about in those solutions? What is the gap in the market?' Review the response critically: AI synthesizes patterns from a wide range of public information and can surface angles you hadn't considered. Then validate by spending thirty minutes reading recent reviews on similar products or services. Look for the language real buyers use to describe their problem: that language should appear in your offer description." },
+        { id: "s3", title: "Defining Your Transformation Promise", type: "text", content: "Every strong offer has a before and an after. Before: here is the problem the client has, the frustration they feel, and the cost of not solving it. After: here is the specific result they will have, how their situation will be different, and what that change makes possible for them. Write your before-and-after in two sentences. Then give it to your AI assistant and ask it to write three versions of a one-sentence offer headline that captures this transformation. The best version is specific enough to feel personal and broad enough to apply to a meaningful number of people. Test your headline by reading it to someone in your target audience and watching for the moment of recognition on their face." },
+        { id: "s4", title: "Writing Sales Copy with AI", type: "text", content: "Sales copy is not about convincing people to want something they don't want. It's about describing something they already want so clearly that they recognize it. Give your AI assistant your transformation promise, your ideal client description, the three most common objections people have before buying, and three outcomes past clients have achieved. Ask it to write a short sales description using a problem-solution-result structure. The resulting draft will need editing for your voice, but the structural logic of good sales copy (problem first, solution second, proof third, call to action fourth) is something AI handles well." },
+        { id: "s5", title: "Price Your Offer with Confidence", type: "hands_on_lab", content: "Use this framework to price your offer. Step one: what is the cost (in time, money, or stress) to your ideal client if they don't solve this problem in the next year? This anchors the value. Step two: what are comparable offers in your market priced at? Research at least five direct competitors and note their pricing. Step three: where do you sit on the experience spectrum? If you're newer, price at the low end of the market range; if you have proven results, price at the mid to high end. Step four: ask AI to write a pricing justification statement: one paragraph explaining why your price is fair given the outcome. Use this as your mental anchor when someone pushes back on your rate. Write your final offer with the full package description and the price clearly stated, and share it with one trusted person in your target audience before launch." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "monetize-ai",
+    title: "Build a Sales Funnel",
+    slug: "build-sales-funnel",
+    description: "Build the path from stranger to paying client using AI-written landing pages, email sequences, and conversion strategy.",
+    tier: "pro",
+    estimatedMinutes: 55,
+    sortOrder: 2,
+    isActive: true,
+    learningObjectives: [
+      "Understand how a sales funnel works at each stage",
+      "Use AI to write high-converting landing page copy",
+      "Build an email nurture sequence that moves people toward a sale",
+      "Apply basic conversion optimization without technical expertise"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Funnel Fundamentals", type: "text", content: "A funnel is simply a visual metaphor for the path a stranger takes to become a buyer. Wide at the top (many people become aware of you), narrowing as it goes (fewer people engage, fewer still consider buying, fewer still actually buy). Every funnel has the same stages: awareness, interest, consideration, and decision. Your job is not to maximize the number of people who enter the funnel: it's to ensure that the people who enter are genuinely good fits and that nothing unnecessary drops them out along the way. A simple funnel that converts ten percent of visitors is more valuable than a complex funnel that converts two percent." },
+        { id: "s2", title: "AI-Written Landing Pages", type: "text", content: "A landing page is a single-purpose web page designed to get one specific action: usually an email opt-in or a purchase. Give your AI assistant these five inputs: the specific audience, the problem they have, the solution you offer, the key result they'll get, and the one thing you want them to do on this page. Ask it to write a landing page with a headline, a subheadline, three to five benefit bullets, a brief 'who this is for' section, and a clear call to action. Then review the output against this single test: after reading this page, would the right person feel understood and confident enough to take action? Optimize based on that test." },
+        { id: "s3", title: "Email Nurture Sequences", type: "text", content: "Most people who visit your page are not ready to buy the first time they see your offer. A nurture sequence keeps the relationship warm and builds trust over time until they are ready. A five-email nurture sequence for a new lead typically covers: a valuable teaching email on the core problem (day one), a story about how the problem affects someone they can relate to (day three), a framework or tool that gives immediate value (day five), a case study or client result (day eight), and the offer with a clear call to action (day ten). Ask AI to draft each of these five emails using your offer details. The sequence should feel like a conversation, not a pitch." },
+        { id: "s4", title: "Conversion Optimization Basics", type: "text", content: "Conversion optimization sounds technical but it means asking one question: why are people not taking the action I want? The most common reasons are a headline that doesn't connect to the right person, a call to action that's unclear or buried, too many options on one page (a funnel page should have one goal), a price that's presented without context for the value, and a lack of trust signals like testimonials or credentials. You don't need to fix everything at once. Identify the single biggest friction point on your landing page and fix that first, then measure whether conversion improves." },
+        { id: "s5", title: "Launch Your First Funnel", type: "hands_on_lab", content: "Build your minimum viable funnel this week using these four components. Component one: a lead magnet (a free resource people get in exchange for their email). Component two: a landing page (use Carrd or your existing website) with the AI-written copy from this module. Component three: a three-email welcome and nurture sequence in your email platform. Component four: a clear offer at the end of the sequence. To launch, promote your lead magnet in three places: your social media bio, one social post, and one personal message to someone in your network who fits your ideal client profile. Track how many people opt in, open the emails, and engage. These numbers tell you what to improve." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "monetize-ai",
+    title: "AI for Client Acquisition",
+    slug: "ai-client-acquisition",
+    description: "Use AI to find your ideal clients, write outreach messages that get responses, and close with proposals that convert.",
+    tier: "pro",
+    estimatedMinutes: 50,
+    sortOrder: 3,
+    isActive: true,
+    learningObjectives: [
+      "Build a targeted list of ideal prospects using AI research tools",
+      "Write personalized outreach messages that don't feel like spam",
+      "Create a proposal structure that addresses objections proactively",
+      "Set up a follow-up system so no lead falls through the cracks"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Finding Your Ideal Clients with AI", type: "text", content: "The most effective client acquisition starts with a precise description of who you're looking for. Ask your AI assistant to help you build an ideal client profile: industry, role or title, company size if relevant, the specific problem they experience, the indicators that they're actively looking for help, and where they spend their time online. Then use LinkedIn, industry communities, Slack groups, and even Reddit to find people who match that profile. Perplexity is useful for researching specific industries and identifying who the key players are. A targeted list of twenty-five well-researched prospects outperforms a cold list of five hundred every time." },
+        { id: "s2", title: "AI-Powered Outreach Messages", type: "text", content: "Outreach messages fail when they're obviously templated, focus immediately on what you offer, or require the recipient to do work to understand why you're reaching out. The anatomy of a message that gets a response: one specific observation about their work or a problem you noticed in their content or profile, a brief connection to your relevant experience, and a single low-commitment question or request. Ask AI to draft five outreach messages for five different prospect profiles, each referencing something specific about that person. Then edit each one to remove any line that could apply to anyone else. Specificity is what makes outreach feel like a conversation rather than a pitch." },
+        { id: "s3", title: "Writing Proposals That Close", type: "text", content: "A proposal is not a formality: it is the last piece of persuasion before the yes. Structure your proposals in this order: open with a restatement of the client's situation and goals as you understood them from your conversation, showing you listened. Present your recommended approach with enough specificity to feel credible. Outline exactly what is included and what is not included. Present investment with context (explain the value, not just the price). Address the one or two objections you know they'll have, proactively. Close with a clear, simple next step. Ask AI to draft a proposal template using this structure with your service specifics. Customize the restatement of each client's goals for every individual proposal." },
+        { id: "s4", title: "Follow-Up Systems", type: "text", content: "Most deals are lost to silence, not to rejection. People intend to respond and don't. Life intervenes. Your follow-up is not pestering: it is the professional courtesy of making it easy for a busy person to say yes. A follow-up system has four touchpoints over two weeks: day one after your proposal is sent, day four if no response, day eight with a value-add (a relevant article or a quick insight), and day fourteen as a final check-in. Ask AI to draft these four follow-up messages in a warm, confident tone that assumes positive intent without being passive. Save them as templates you adapt for each prospect." },
+        { id: "s5", title: "Build Your Client Acquisition Engine", type: "hands_on_lab", content: "This week, build the infrastructure for consistent client acquisition. Step one: write your ideal client profile on one page. Step two: build a list of fifteen to twenty-five prospects using LinkedIn or community research. Step three: use AI to draft personalized outreach for each, following the specificity rule (one observation unique to them). Step four: set up a simple tracking spreadsheet with columns for name, outreach date, response status, follow-up date, and notes. Step five: send five outreach messages this week and schedule follow-ups in your calendar. Consistency matters more than volume: five thoughtful outreach messages per week for twelve weeks builds a full client pipeline." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "monetize-ai",
+    title: "Passive Income with AI",
+    slug: "passive-income-ai",
+    description: "Build income streams that generate revenue without your direct time, using AI to create the products and systems.",
+    tier: "pro",
+    estimatedMinutes: 45,
+    sortOrder: 4,
+    isActive: true,
+    learningObjectives: [
+      "Evaluate passive income models for realistic potential and effort",
+      "Use AI to create templates, printables, and digital resources",
+      "Set up automated sales and delivery channels",
+      "Build a passive income portfolio with multiple small streams"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Passive Income Models That Work", type: "text", content: "True passive income requires upfront work to create an asset, then ongoing maintenance to keep it running. The models with the best effort-to-return ratios for solopreneurs are digital templates (created once, sold infinitely with zero marginal cost), printables and planners (strong market on Etsy and Gumroad), online courses that sell on autopilot through a funnel, affiliate commissions from products you genuinely use and recommend, and stock content (photos, graphics, templates) sold on marketplaces. The trap is believing passive income is effortless: the best passive income streams require six to twelve months of active work before they run smoothly on their own." },
+        { id: "s2", title: "AI-Created Templates and Printables", type: "text", content: "Templates and printables sell consistently on Etsy, Gumroad, and your own website because they solve an immediate, practical problem. Use AI to develop the content and logic for each template: ask it to design the structure of a business plan template, a social media content calendar, a budget tracker for freelancers, a client onboarding checklist, or a weekly meal planner. AI generates the framework, categories, formulas, and instructions. You design the visual layout in Canva, create a PDF version for the printable, and write the product description. A well-designed template takes two to four hours to create and can sell for $10 to $50 for years." },
+        { id: "s3", title: "Setting Up Passive Sales Channels", type: "text", content: "Etsy is the highest-traffic marketplace for digital downloads: your products are visible to buyers who are already looking for templates and printables without any marketing effort on your part. The downside is that Etsy takes a percentage and owns the customer relationship. Gumroad and Lemon Squeezy let you sell directly and keep the customer relationship, but you're responsible for driving your own traffic. The strongest strategy is both: sell on Etsy for discovery and traffic, and link buyers to your own store and email list for the relationship. Use your AI tool to write Etsy listings: the title, description, and tags are critical for search visibility, and AI can optimize these in minutes." },
+        { id: "s4", title: "Automating Delivery and Support", type: "text", content: "Digital products delivered through Gumroad, Lemon Squeezy, or Etsy are automatically delivered upon purchase: no manual effort required. The support load is minimal but not zero. Set up a simple FAQ page that answers the five most common questions: how to download, what software opens the files, whether there's a refund policy, how to access future updates, and how to contact you with a problem. Ask AI to write this FAQ in a warm, helpful tone. Add it as a dedicated page on your website and link to it from every product description. This reduces support requests by sixty to seventy percent before they even arrive." },
+        { id: "s5", title: "Your Passive Income Launch Plan", type: "hands_on_lab", content: "Design your three-product passive income portfolio this week. Choose three templates or printables in your niche that you could create in the next thirty days. For each one, write: the specific person who needs it, the problem it solves, the price you'll charge, the platform where you'll sell it, and the two-hour creation plan. Then create the first product this week from start to sale. Use AI to build the content framework and write the product description. Build in Canva, export as PDF, upload to Gumroad or Etsy. Post about it once on your social platforms. The first product teaches you the full process. Products two and three will take half the time." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "monetize-ai",
+    title: "Freelancing with AI Services",
+    slug: "freelancing-ai-services",
+    description: "Package your AI skills as premium services, find clients, and charge rates that reflect the value AI helps you deliver.",
+    tier: "pro",
+    estimatedMinutes: 40,
+    sortOrder: 5,
+    isActive: true,
+    learningObjectives: [
+      "Identify AI-powered services that command premium rates",
+      "Package your skills into clear service offerings",
+      "Price AI-assisted work based on value, not time",
+      "Find and close your first AI service clients"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "AI Services That Clients Pay For", type: "text", content: "The most in-demand AI services for freelancers right now fall into five categories. Content creation (AI-assisted writing, email marketing, blog posts, and social media at scale). AI chatbot setup and training for small businesses. Workflow automation using Zapier or Make. AI image and video production for marketing campaigns. And AI strategy consulting: helping businesses identify and implement their first AI tools. Clients value these services not because AI is impressive, but because they solve real problems: they need more content, faster responses, lower costs, and fewer manual tasks. Position yourself as the expert who knows which tools to use and how to implement them." },
+        { id: "s2", title: "Packaging Your AI Skills as Services", type: "text", content: "Productized services are the most efficient way to sell time-based work because they eliminate scope creep and make the value clear from the start. Instead of 'I do social media management,' offer 'Monthly Social Media Package: twelve Instagram posts, four LinkedIn articles, and a monthly analytics report, all AI-assisted for consistency and speed, for $600 per month.' The scope is defined, the deliverables are clear, and the client knows exactly what they're getting. Ask AI to help you write three productized service packages from your skills: one entry-level, one mid-tier, and one premium. Include exactly what's delivered, how often, and at what price." },
+        { id: "s3", title: "Pricing AI-Powered Work", type: "text", content: "The temptation when using AI tools is to lower your prices because the work takes less time. This is backwards. AI allows you to deliver better quality at higher speed, which means you can charge for the value delivered, not the hours spent. If you used to spend ten hours writing a content strategy document and charge $500, and AI now lets you produce the same quality in three hours, you haven't lost value: you've gained leverage. Charge the same or more and take on more clients. The market pays for outcomes, not effort. Position your AI use as an advantage that delivers faster results and more consistent quality, not as a reason for discounts." },
+        { id: "s4", title: "Finding Your First Clients", type: "text", content: "The fastest path to first clients is your existing network, not cold outreach. Make a list of twenty people who know your work: former colleagues, peers in professional communities, social media connections who've engaged with your content. Write each of them a personal message announcing your new service, referencing something specific about their work or situation, and asking if they know anyone who might benefit. You're not asking them to buy: you're asking them to refer. Two to three clients from your network is enough to build testimonials, refine your process, and generate referrals for the next wave. Cold outreach comes after you have proof points to reference." },
+        { id: "s5", title: "Scale from Freelancer to Agency", type: "hands_on_lab", content: "Build your freelance foundation this week. Step one: write three productized service packages using AI to draft the descriptions and deliverables. Step two: set your prices for each package using the value-based framework from this module. Step three: create a simple one-page services document in Canva: your name, what you offer, the three packages with clear descriptions and prices, and your contact information. Step four: send this document to five people in your network with a personal note. Step five: follow up exactly five days later with anyone who hasn't responded. One client from this outreach is your proof of concept. Three clients is a business. Use AI to help you systematize and scale each service as demand grows." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  // ===== BRAND WITH AI — NEW EXPERIENCES (sortOrder 1-7) =====
+
+  {
+    spaceId: "brand-ai",
+    title: "Define Your Brand Voice",
+    slug: "define-brand-voice",
+    description: "Discover the tone, vocabulary, and personality that make your brand distinctly yours, and codify it so AI always writes in your voice.",
+    tier: "free",
+    estimatedMinutes: 40,
+    sortOrder: 1,
+    isActive: true,
+    learningObjectives: [
+      "Define the personality and tone that represent your brand",
+      "Identify the vocabulary and phrases that belong to your voice",
+      "Write a brand voice guide you can use with AI tools",
+      "Test and refine your voice across different content types"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "What is a Brand Voice (and Why It Matters)", type: "text", content: "Brand voice is the consistent personality behind everything you write and say. It's what makes your Instagram caption sound like your email which sounds like your podcast which sounds like you on a call. Without a defined voice, every piece of content requires fresh decisions about tone, which is exhausting and produces an inconsistent experience for your audience. A defined voice makes writing faster, makes AI assistance more accurate, and makes your brand more recognizable over time. Think of it as the difference between a stranger who says different things every time you meet them and a friend whose perspective and humor you know well." },
+        { id: "s2", title: "AI-Assisted Voice Discovery", type: "text", content: "Paste five to ten pieces of your best existing writing into your AI assistant. Ask it to analyze the content and describe: the dominant tone, the recurring themes, the vocabulary level and style, the emotional quality, and three adjectives that best describe the writing personality. Review the analysis and mark what feels accurate and what doesn't. This exercise surfaces patterns you might not have consciously noticed in your own work. Then ask the AI to describe your voice in contrast to your competitors: what makes yours different? This contrast often reveals your most distinctive quality, which is what you want to amplify." },
+        { id: "s3", title: "Writing Your Brand Voice Guide", type: "text", content: "A brand voice guide is a simple reference document that tells anyone (including AI tools) how to write for your brand. It has four sections. First: three to five adjectives that describe your voice, each with a one-sentence explanation and an example sentence. Second: your vocabulary rules, including words you use often, words you never use, and a note on formality level. Third: your writing style preferences, such as short sentences, active voice, no em dashes, no corporate jargon. Fourth: a 'we are this, not that' list (e.g., 'We are direct, not blunt. We are warm, not saccharine.'). This document should fit on one page and feel immediately useful." },
+        { id: "s4", title: "Testing Your Voice Across Content Types", type: "text", content: "A brand voice guide is only useful if it actually produces consistent results across different content types. Test yours by giving your guide to your AI assistant and asking it to write these five pieces using your voice: an Instagram caption for a new service, an email subject line, a homepage headline, a LinkedIn post sharing an opinion, and a response to a negative comment. Review each output against your voice adjectives. Where does it feel right? Where does it feel off? Adjust your guide to be more specific wherever the output missed the mark. The goal is a guide specific enough that the AI can produce something you'd actually post without significant editing." },
+        { id: "s5", title: "Your Voice Consistency Checklist", type: "hands_on_lab", content: "Create a five-question checklist you run on every piece of content before publishing. The questions should reflect your specific voice requirements. Examples: Does this sound like I wrote it, or like a generic brand? Does it use at least one concrete example? Is every sentence under twenty words? Does it make one clear point without hedging? Would my ideal client feel this was written for her specifically? Write your own five questions based on your voice guide. Paste this checklist into your AI prompt alongside your voice guide so the AI checks its own output against your criteria before delivering the draft to you. This saves the review step and produces better first drafts." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "brand-ai",
+    title: "Build Your Visual Identity",
+    slug: "build-visual-identity",
+    description: "Create a cohesive visual brand using AI tools for logo exploration, color palettes, typography, and a brand kit you actually use.",
+    tier: "pro",
+    estimatedMinutes: 50,
+    sortOrder: 2,
+    isActive: true,
+    learningObjectives: [
+      "Define the visual aesthetic that represents your brand",
+      "Use AI to explore logo concepts and visual directions",
+      "Build a color palette and typography system",
+      "Assemble a brand kit that keeps all your content consistent"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Visual Identity Foundations", type: "text", content: "Your visual identity is the first thing people see before they read a word. Color, typography, and imagery all communicate your brand's values and positioning before any copy is read. A consistent visual identity builds recognition: when your audience scrolls past your content, they should identify it as yours within a fraction of a second. Visual consistency also signals professionalism. You don't need a large budget or a professional designer to achieve this: you need clear decisions about a small number of elements applied consistently. Most brand inconsistency comes not from bad taste but from having too many options available and making different choices each time." },
+        { id: "s2", title: "AI-Generated Logo Exploration", type: "text", content: "Before spending money on a designer, use AI image tools to explore visual directions. In MidJourney or DALL-E, try prompts like 'minimal wordmark logo for a luxury wellness brand, black and gold palette, clean sans-serif typography' or 'abstract icon logo for an AI consulting company, geometric, modern, teal and charcoal.' Generate twenty to thirty concepts across different styles and mark the ones that feel right. You're not trying to use these AI outputs as your final logo: you're using them to develop and communicate your visual vision. The best AI explorations become the brief you give a designer or the direction you use in Canva to build a refined version yourself." },
+        { id: "s3", title: "Color Psychology and Palette Creation", type: "text", content: "Color is one of the most powerful communication tools in your brand kit. Warm tones (gold, terracotta, burgundy) signal warmth, luxury, and sensuality. Cool tones (navy, slate, forest green) signal trust, expertise, and calm. Bright, saturated colors signal energy and accessibility. Muted, desaturated tones signal sophistication and restraint. Ask AI to recommend a color palette based on your brand adjectives and your target audience's psychology, then cross-reference those recommendations with the Canva color palette tool or Coolors.co. A workable palette has one primary color, one secondary color, and two neutral tones. Keep it simple: four colors are more powerful than eight when applied consistently." },
+        { id: "s4", title: "Typography That Fits Your Brand", type: "text", content: "Typography does more emotional work than most entrepreneurs realize. A serif font (with small feet on the letters) signals tradition, authority, and refinement. A sans-serif font signals modernity, clarity, and accessibility. A script font signals personality, warmth, and creativity. The safest brand typography system has two fonts: one for headlines (often more personality-forward) and one for body text (clean and readable). Ask AI to recommend font pairings based on your brand adjectives. Google Fonts is free and contains excellent options. Canva's brand kit feature lets you set your fonts once and they apply across all your designs automatically." },
+        { id: "s5", title: "Assemble Your Brand Kit", type: "hands_on_lab", content: "Build your complete brand kit in Canva this week. Your kit should contain: your logo in three formats (full color, white, and black for different backgrounds), your brand colors with their exact hex codes, your two fonts with sizing guidelines for headlines and body text, three to five photography or illustration style examples that represent your visual aesthetic, and a simple one-slide brand overview showing all elements together. Store this kit in a shared folder you can access from any device. Going forward, every piece of content you create starts by opening your brand kit. The discipline of starting from your kit rather than from scratch is what creates the consistency that builds recognition over time." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "brand-ai",
+    title: "Content Pillars Strategy",
+    slug: "content-pillars-strategy",
+    description: "Define the three to five topics you own as a brand and build a content plan that makes you the go-to expert in your niche.",
+    tier: "free",
+    estimatedMinutes: 35,
+    sortOrder: 3,
+    isActive: true,
+    learningObjectives: [
+      "Define three to five content pillars that reflect your expertise and audience needs",
+      "Understand why pillar-based content builds authority faster than random posting",
+      "Generate content ideas for each pillar using AI",
+      "Create a pillar-based content calendar"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Why Content Pillars Matter", type: "text", content: "Random posting is exhausting and ineffective. You're always starting from scratch, you never build depth on any topic, and your audience never knows what to expect from you. Content pillars are the opposite: two to five themes you return to consistently, from different angles and in different formats, over months and years. Authority in your niche is built by being reliably associated with specific topics. When someone thinks of your pillar topics, they think of you. AI is useful here not to replace your expertise, but to help you generate endless angles, formats, and entry points into the topics you already know deeply." },
+        { id: "s2", title: "Discovering Your Natural Pillars", type: "text", content: "Your content pillars should sit at the intersection of three things: what you know deeply, what your audience genuinely needs, and what you enjoy talking about enough to create content on consistently for years. Ask your AI assistant to help you identify pillars using this prompt: 'Based on my expertise in [your field] and my audience of [your ideal client], suggest five content pillar themes that would be both valuable to them and sustainable for me to create content on.' Review the suggestions and stress-test each one: can you generate twenty content ideas on this topic? Do you get energized or drained thinking about it? Could you talk about it for an hour without preparation?" },
+        { id: "s3", title: "Mapping Pillars to Platforms", type: "text", content: "Each platform rewards different content formats and depths. LinkedIn rewards professional insights, opinion pieces, and case studies. Instagram rewards visual storytelling, quick tips, and personal moments. YouTube and TikTok reward how-to content and entertainment. Email rewards depth, intimacy, and exclusive content. Newsletters reward analytical thinking and curation. Your pillars stay consistent across all platforms, but the format adapts. A pillar about 'AI tools for business' becomes a LinkedIn article with a case study, an Instagram carousel of five tools with screenshots, a YouTube tutorial, and an email newsletter with a deep dive on one specific tool. Same pillar, four different formats, four different audiences." },
+        { id: "s4", title: "Content Ideas for Each Pillar", type: "text", content: "Once your pillars are defined, generating content ideas becomes fast. Give your AI assistant one pillar and ask for twenty content ideas across these five formats: educational post, opinion or hot take, personal story, tool or resource recommendation, and myth-busting piece. You will produce eighty to one hundred ideas for four pillars in under thirty minutes. Not all of them will resonate, but ten to fifteen per pillar will spark genuine interest. Create a content idea bank in a simple spreadsheet: pillar, idea, format, status (draft, scheduled, published). Return to this bank every week instead of starting from scratch." },
+        { id: "s5", title: "Your Pillar-Based Content Plan", type: "hands_on_lab", content: "Write your three to five content pillars in one document: each pillar as a topic name, a one-sentence description of what angle you take on it, and the specific audience problem it addresses. Then generate ten content ideas for each pillar using AI. Finally, plan your next four weeks of content by choosing one idea per pillar per week and assigning it to a platform and format. That's twelve to twenty pieces of planned content with clear topics and formats, created in under ninety minutes. Use this plan as your editorial calendar for the month. At the end of the month, review which pieces performed best and let that data inform how much you emphasize each pillar going forward." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "brand-ai",
+    title: "LinkedIn Authority Building",
+    slug: "linkedin-authority",
+    description: "Use AI to build a credible, compelling LinkedIn presence that attracts clients, speaking opportunities, and collaborations.",
+    tier: "pro",
+    estimatedMinutes: 45,
+    sortOrder: 4,
+    isActive: true,
+    learningObjectives: [
+      "Optimize your LinkedIn profile for your ideal client or opportunity",
+      "Apply post frameworks that build authority and generate engagement",
+      "Develop a consistent LinkedIn presence without spending hours on the platform",
+      "Grow your network strategically rather than randomly"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Optimizing Your LinkedIn Profile with AI", type: "text", content: "Your LinkedIn headline is the most valuable real estate on the platform: it appears next to your name in search results, comments, and connection requests. Instead of your job title, use a value statement: what you do, for whom, and the result you create. Ask AI to write five LinkedIn headline options using this formula: [Role] helping [audience] [achieve outcome]. Your About section should answer three questions in the first two sentences (before the 'see more' cutoff): what you do, who you serve, and why it matters. Ask AI to draft your About section using your best speaking points, then edit it into your natural voice." },
+        { id: "s2", title: "Post Frameworks That Build Authority", type: "text", content: "LinkedIn rewards posts that teach, challenge assumptions, or share a specific experience. Three frameworks that consistently perform: the insight post (here is something most people get wrong about your niche topic, here is what's actually true, here is why it matters), the story post (here is a situation I encountered, here is what I did, here is what I learned), and the list post (here are five things I've noticed about your topic after working with clients for X years). Ask AI to draft one post in each framework about your most important content pillar. Edit each until the opening line would make you stop scrolling if you saw it in your feed." },
+        { id: "s3", title: "Engagement Strategies That Work", type: "text", content: "Posting consistently matters, but engagement strategy amplifies your reach. Comment substantively on posts from people in your ideal audience and people in complementary fields: not 'great post' but a one to three sentence addition that shows you have something to contribute. LinkedIn's algorithm rewards posts that generate comments in the first hour, so posting when your audience is online (typically Tuesday through Thursday, 8 to 10 AM or 12 to 1 PM in your target time zone) increases early engagement. Ask AI to help you draft thoughtful comments on three posts per day: give it the post content and your perspective, and ask it to write a comment that adds value to the conversation." },
+        { id: "s4", title: "Growing Your Network Intentionally", type: "text", content: "Sending one hundred random connection requests is less valuable than sending twenty thoughtful ones with personalized notes. When sending a request, reference something specific: a post they wrote, a company they work for, a shared connection, or a shared interest. Ask AI to write personalized connection notes for five prospects at a time: give it their profile summary and your note on why you're connecting, and it will produce a warm, specific message that doesn't feel automated. Aim to connect with ten to fifteen targeted people per week: former colleagues, people in complementary roles to your services, potential clients, and peers in your niche community." },
+        { id: "s5", title: "Your LinkedIn 30-Day Plan", type: "hands_on_lab", content: "Build your LinkedIn momentum plan for the next thirty days. Week one: optimize your headline and About section using AI-drafted copy, connect with twenty people in your target audience, and publish your first post using the insight framework. Week two: publish two posts (one story, one list), comment on ten posts from ideal clients or peers, and send five personalized connection requests. Week three: publish two more posts, send a direct message to three recent connections with a specific question or value-add, and review your post analytics to see what resonated. Week four: publish two posts, share or comment on a piece of content from someone in your network, and note which post got the most engagement. Repeat what worked in month two." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "brand-ai",
+    title: "Instagram Growth Strategy",
+    slug: "instagram-growth",
+    description: "Build an authentic, engaged Instagram audience using AI tools for content creation, captions, and strategy, without burning out.",
+    tier: "pro",
+    estimatedMinutes: 45,
+    sortOrder: 5,
+    isActive: true,
+    learningObjectives: [
+      "Develop a clear Instagram strategy aligned with your business goals",
+      "Use AI to create reels, carousels, and captions efficiently",
+      "Grow your following through genuine engagement rather than tactics",
+      "Build a content calendar you can sustain long-term"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Instagram Strategy Fundamentals", type: "text", content: "Instagram strategy starts with one question: what do you want your audience to do as a result of following you? If the answer is 'visit my website,' your content should regularly create curiosity that's resolved by clicking a link. If the answer is 'inquire about services,' your content should demonstrate expertise and include clear calls to action. If the answer is 'buy from my online store,' your content needs to feature products in context, with clear paths to purchase. Most Instagram accounts underperform not because of the algorithm but because there is no clear connection between the content being created and the business outcome being sought." },
+        { id: "s2", title: "AI-Powered Reel and Story Creation", type: "text", content: "Reels are Instagram's highest-reach content format. A high-performing reel structure follows this pattern: hook in the first one to two seconds (a surprising statement, question, or visual), rapid delivery of value across three to five points, and a clear call to action at the end. Ask AI to script a thirty-second reel for each of your content pillars: give it the topic and your perspective, and ask for a hook-value-CTA script. Use CapCut to add text overlays, transitions, and music to recorded or AI-generated footage. For Stories, use AI to write the copy for your regular content types: polls, Q&A prompts, link slides, and countdowns." },
+        { id: "s3", title: "Caption Writing with AI", type: "text", content: "Instagram captions have two jobs: they keep people on your post longer (which signals quality to the algorithm) and they move your audience toward a specific action. Long captions with real value consistently outperform short ones. Give AI your content pillar topic, your audience, and three talking points, and ask for a two hundred to three hundred word caption in your brand voice with a strong opening sentence and a clear call to action at the end. Always edit for your voice before posting: the most valuable thing you add is specificity, personal experience, and the exact way you would phrase something in conversation." },
+        { id: "s4", title: "Engagement and Growth Tactics", type: "text", content: "Organic growth on Instagram in 2024 comes primarily from three sources: Reels reaching new audiences, hashtag discovery, and shares from existing followers. For hashtags, use a mix of large (one million-plus posts), medium (one hundred thousand to one million), and niche-specific (under one hundred thousand) to maximize visibility across different audience segments. Ask AI to generate thirty relevant hashtags for each of your content pillars, organized by size. For shares, create content that people want to send to someone specific: 'send this to someone who...' is the most underused but most effective call to action for organic growth." },
+        { id: "s5", title: "Your Instagram Content Calendar", type: "hands_on_lab", content: "Build a four-week Instagram content calendar this week using your content pillars as the foundation. Decide your posting frequency: three posts per week is sustainable and sufficient for most solopreneurs. Plan two Reels (highest reach), three feed posts or carousels (depth and saves), and four to five Stories per week (connection and engagement). Use AI to draft captions for all twelve feed posts in one session, then revise them into your voice. Save the scripts for your two Reels. Batch-create the visuals in a two-hour Canva session. Schedule everything through Later or Buffer. When your calendar is full, focus your Instagram time on genuine engagement: responding to comments and DMs with the same thoughtfulness you'd bring to a real conversation." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "brand-ai",
+    title: "Write Your Brand Story",
+    slug: "write-brand-story",
+    description: "Craft the narrative that makes people connect with you emotionally, then distribute it across every platform in your voice.",
+    tier: "free",
+    estimatedMinutes: 40,
+    sortOrder: 6,
+    isActive: true,
+    learningObjectives: [
+      "Understand why stories outperform feature lists in brand communication",
+      "Apply the transformation story framework to your own experience",
+      "Write your origin story with AI assistance",
+      "Adapt your brand story for different platforms and audiences"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "Why Stories Sell Better Than Features", type: "text", content: "People make decisions emotionally and justify them rationally. A list of your credentials or service features appeals to the rational mind, which kicks in after the emotional decision has already been made. A story creates emotional resonance first, which lowers resistance and builds genuine trust. Research in consumer psychology consistently shows that narrative framing produces more persuasion, better recall, and stronger intent to buy than feature-based communication. The specific mechanism is identification: when someone hears your story and thinks 'that is exactly how I felt,' they form a connection with you that no resume or testimonial can replicate." },
+        { id: "s2", title: "The Transformation Story Framework", type: "text", content: "The most powerful brand story structure has five elements: the before (who you were and what you were struggling with before your transformation), the turning point (the moment or decision that changed things), the journey (what you did, learned, and risked during the transformation), the after (who you became and what became possible), and the invitation (how you help your audience experience their own version of this transformation). This framework works because it makes you the guide, not the hero: your story is the credibility that earns you the right to lead someone else through a similar change. Ask AI to prompt you through each of the five elements with specific questions before you write." },
+        { id: "s3", title: "Writing Your Origin Story with AI", type: "text", content: "Gather your raw material first: write three to five sentences in response to each of the five transformation framework elements, without worrying about quality. Then paste your raw notes into your AI assistant and ask it to weave them into a cohesive, emotional narrative of three to four paragraphs in your brand voice. Review the output and make three kinds of edits: add a specific detail that only you would know (a particular feeling, a specific number, a real conversation), remove anything that sounds generic or could be anyone's story, and adjust any language that doesn't sound like you. The final story should feel both vulnerable enough to be real and polished enough to publish." },
+        { id: "s4", title: "Adapting Your Story for Different Platforms", type: "text", content: "Your full brand story, three to four paragraphs, lives on your website's About page. But the same story adapts into shorter formats for each platform. Your LinkedIn bio opens with two sentences of your story. Your Instagram bio gets the single most recognizable line. A reel opens with your before, cuts to your after, and skips the journey. An email newsletter uses one element of your story as context for a teaching point. A podcast intro delivers the thirty-second version. Ask AI to rewrite your full story in five formats: two hundred words for your About page, fifty words for LinkedIn, two sentences for Instagram, a thirty-second spoken script, and a single tweet-length hook. Adapt each output to your voice." },
+        { id: "s5", title: "Your Story Toolkit", type: "hands_on_lab", content: "Build your story toolkit document this week: a single file containing your story in every format you need. Section one: your full origin story (three to four paragraphs). Section two: your LinkedIn bio (one paragraph). Section three: your Instagram bio (two sentences). Section four: your spoken thirty-second introduction. Section five: three story excerpts you can use as social media posts, each leading with a different emotional hook from your story. Use AI to draft every section, then revise each into your voice. Store this document where you can access it from any device. When you need to introduce yourself on a podcast, apply for a speaking opportunity, or write a new platform bio, your story toolkit has every format ready to use." }
+      ]
+    },
+    personalizationEnabled: false
+  },
+
+  {
+    spaceId: "brand-ai",
+    title: "SEO Content Strategy",
+    slug: "seo-content-strategy",
+    description: "Use AI to find what your ideal clients search for and create content that ranks on Google and builds your audience organically.",
+    tier: "pro",
+    estimatedMinutes: 50,
+    sortOrder: 7,
+    isActive: true,
+    learningObjectives: [
+      "Understand SEO fundamentals without the technical jargon",
+      "Use AI tools to identify high-value keywords for your niche",
+      "Write SEO-optimized content that ranks and also reads beautifully",
+      "Build a three-month content plan around search intent"
+    ],
+    content: {
+      sections: [
+        { id: "s1", title: "SEO Fundamentals (No Jargon Version)", type: "text", content: "Search engine optimization means making your content easy for Google to find and recommend when someone searches for what you offer. Google's job is to give searchers the most relevant, high-quality result for their query. Your job is to create content that is genuinely the best answer to a specific question your ideal client is asking. Three factors determine whether your content ranks: relevance (does your content actually address what the searcher wants to know?), quality (is it thorough, well-written, and trustworthy?), and authority (do other credible websites link to yours?). Focus on relevance and quality first: authority builds over time as your content earns trust." },
+        { id: "s2", title: "AI-Powered Keyword Research", type: "text", content: "Keyword research is discovering the exact words and phrases your ideal clients type into Google. Start by giving your AI assistant a description of your business and asking for fifty keywords your target audience might use to search for your services or expertise. Ask it to include a mix of broad terms (AI tools for small business), specific questions (how to use ChatGPT for email marketing), and comparison searches (best AI writing tools for entrepreneurs). Then refine this list using free tools like Google's own search suggestions (type a phrase and note the autocomplete options) and Ubersuggest's free tier, which shows approximate monthly search volume for each term." },
+        { id: "s3", title: "Writing SEO Articles with AI", type: "text", content: "An SEO article has two audiences: the human reader and the search engine. For humans, it needs to be genuinely useful, clearly written, and organized with headers that help them navigate to the information they need. For search engines, it needs to include your target keyword in the title, the first paragraph, at least two subheadings, and naturally throughout the body. Give your AI assistant the target keyword, your audience, and five to seven key points you want to cover, then ask it to produce a full article outline. Review the outline, add your specific examples and insights, then ask AI to write the full draft section by section. Edit each section for your voice before assembling the final piece." },
+        { id: "s4", title: "On-Page Optimization Checklist", type: "text", content: "Before publishing any piece of SEO content, run it through this checklist. The target keyword appears in the page title, the URL, the first one hundred words, at least two subheadings, and the meta description. The article is at least eight hundred words (longer for competitive keywords). Every image has an alt text description including the keyword where relevant. The meta description (the two sentences that appear under your link in Google results) is written to make someone want to click: it should state what the article covers and create curiosity or urgency. Your website loads fast enough on mobile: use Google's free PageSpeed Insights tool to check and follow the recommendations it provides." },
+        { id: "s5", title: "Your 3-Month SEO Content Plan", type: "hands_on_lab", content: "Build your three-month SEO content plan in one session. Step one: take your keyword list from the research stage and select twelve keywords you'll target, one per article, one per week for three months. Prioritize keywords with clear search intent and lower competition. Step two: for each keyword, write a one-sentence article premise: who it's for, what question it answers, and the main argument. Step three: ask AI to draft the full outline for your first article, using the keyword-rich structure from this module. Step four: write and publish article one this week. Step five: set a recurring calendar block for three hours every week to write and publish one article. SEO is a compounding investment: twelve articles published consistently over three months build more authority than twelve articles published all at once." }
+      ]
+    },
+    personalizationEnabled: false
   }
 ];
 

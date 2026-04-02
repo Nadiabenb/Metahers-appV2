@@ -11,7 +11,6 @@ import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 import { Link } from "wouter";
 
 const GOLD = "#C9A96E";
-const FREE_RITUAL_LIMIT = 3;
 
 type Experience = {
   id: string;
@@ -183,8 +182,8 @@ export default function LearningHubPage() {
           (e) => (PILLAR_LABELS[e.spaceId] ?? "Learn AI") === activeCategory
         );
 
-  const isRitualLocked = (exp: Experience, index: number) =>
-    !isPaid && index >= FREE_RITUAL_LIMIT;
+  const isRitualLocked = (exp: Experience) =>
+    !isPaid && exp.tier !== "free";
 
   return (
     <div className="min-h-screen" style={{ background: "#0D0B14" }}>
@@ -225,18 +224,15 @@ export default function LearningHubPage() {
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map((exp, index) => {
-              const locked = isRitualLocked(exp, index);
-              return (
-                <RitualCard
-                  key={exp.id}
-                  experience={exp}
-                  progress={progressById[exp.id]}
-                  isLocked={locked}
-                  onLockedClick={() => setShowLockedModal(true)}
-                />
-              );
-            })}
+            {filtered.map((exp) => (
+              <RitualCard
+                key={exp.id}
+                experience={exp}
+                progress={progressById[exp.id]}
+                isLocked={isRitualLocked(exp)}
+                onLockedClick={() => setShowLockedModal(true)}
+              />
+            ))}
           </div>
         )}
 
