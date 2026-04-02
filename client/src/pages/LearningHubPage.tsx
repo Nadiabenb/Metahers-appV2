@@ -139,7 +139,6 @@ function LockedModal({ onClose }: { onClose: () => void }) {
 
 export default function LearningHubPage() {
   const { isAuthenticated, user, isLoading } = useAuth();
-  const [, setLocation] = useLocation();
   const [activeCategory, setActiveCategory] = useState("All");
   const [showLockedModal, setShowLockedModal] = useState(false);
   const isPaid = canAccessSignatureFeatures(user?.subscriptionTier);
