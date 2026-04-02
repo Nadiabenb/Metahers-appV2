@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import { spaceImages } from "@/lib/imageManifest";
-import { isSignatureTier } from "@shared/pricing";
+import { isSignatureTier, type SubscriptionTier } from "@shared/pricing";
 
 type Space = {
   id: string;
@@ -78,7 +78,7 @@ export default function SpacesBrowsePage() {
   const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const isPaid = isSignatureTier((user?.subscriptionTier as any) || "free");
+  const isPaid = isSignatureTier((user?.subscriptionTier as SubscriptionTier) ?? "free");
   const isProUser = isPaid || !!user?.isPro;
 
   const { data: spaces = [], isLoading: spacesLoading } = useQuery<Space[]>({
@@ -238,7 +238,7 @@ export default function SpacesBrowsePage() {
                               style={{ background: "#1A1A2E", color: "#fff" }}
                               data-testid={`unlock-space-${space.slug}`}
                             >
-                              Unlock
+                              Upgrade
                             </Button>
                           </motion.div>
                         </div>

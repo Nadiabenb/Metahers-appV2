@@ -306,7 +306,7 @@ export default function DashboardPage() {
                       const isLocked = !isPaid && space.sortOrder > 2;
                       const img = spaceImages[space.slug];
                       return (
-                        <Link key={space.id} href={isLocked ? "/upgrade" : `/spaces/${space.slug}`}>
+                        <Link key={space.id} href={`/spaces/${space.slug}`}>
                           <div
                             className="relative overflow-hidden cursor-pointer group border border-white/10 hover:border-white/20 transition-colors"
                             style={{ background: "#13111C" }}
