@@ -109,11 +109,13 @@ function PillarPickerCard({
   pillar,
   count,
   completedCount,
+  isAuthenticated,
   onClick,
 }: {
   pillar: PillarInfo;
   count: number;
   completedCount: number;
+  isAuthenticated: boolean;
   onClick: () => void;
 }) {
   const { Icon, label, tagline, accentColor } = pillar;
@@ -146,8 +148,10 @@ function PillarPickerCard({
             <span className="text-xs font-medium" style={{ color: GOLD }}>
               {count} lessons
             </span>
-            {completedCount > 0 && (
-              <span className="text-xs text-white/30">{completedCount} done</span>
+            {isAuthenticated && (
+              <span className="text-xs text-white/30">
+                {completedCount} done
+              </span>
             )}
           </div>
         </div>
@@ -338,6 +342,10 @@ export default function LearningHubPage() {
     setView("courses");
   };
 
+  const completedCount = progress.filter((p) => p.completedAt).length;
+  const overallPct =
+    totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
+
   if (view === "categories") {
     return (
       <div className="min-h-screen" style={{ background: "#0D0B14" }}>
@@ -353,9 +361,17 @@ export default function LearningHubPage() {
             >
               Content Library
             </h1>
-            <p className="text-white/50 text-sm">
+            <p className="text-white/50 text-sm mb-4">
               Choose a topic to start learning.
             </p>
+            {isAuthenticated && totalCount > 0 && (
+              <div className="flex items-center gap-3 max-w-xs">
+                <Progress value={overallPct} className="h-1.5 flex-1" />
+                <span className="text-xs text-white/40 whitespace-nowrap">
+                  {completedCount} of {totalCount} completed
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -367,6 +383,7 @@ export default function LearningHubPage() {
                   pillar={pillar}
                   count={stats.count}
                   completedCount={stats.completedCount}
+                  isAuthenticated={isAuthenticated}
                   onClick={() => handlePillarClick(pillar.label)}
                 />
               );
