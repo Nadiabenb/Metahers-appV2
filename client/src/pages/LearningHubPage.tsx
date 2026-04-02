@@ -30,6 +30,8 @@ type ExperienceProgress = {
   completedAt: string | null;
 };
 
+const FREE_RITUAL_LIMIT = 2;
+
 const PILLAR_LABELS: Record<string, string> = {
   "learn-ai": "Learn AI",
   "build-ai": "Build with AI",
