@@ -146,7 +146,6 @@ export default function LearningHubPage() {
 
   const { data: experiences = [] } = useQuery<Experience[]>({
     queryKey: ["/api/experiences/all"],
-    enabled: isAuthenticated,
   });
 
   const { data: progress = [] } = useQuery<ExperienceProgress[]>({
@@ -160,11 +159,6 @@ export default function LearningHubPage() {
         <div className="w-6 h-6 border-2 border-[#C9A96E] border-t-transparent rounded-full animate-spin" />
       </div>
     );
-  }
-
-  if (!isAuthenticated) {
-    setLocation("/login");
-    return null;
   }
 
   const progressById = Object.fromEntries(
