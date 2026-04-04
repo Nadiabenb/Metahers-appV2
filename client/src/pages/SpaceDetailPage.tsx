@@ -72,8 +72,8 @@ export default function SpaceDetailPage() {
         <div className="max-w-md text-center">
           <h2 className="text-2xl font-semibold mb-4 text-white">Space Not Found</h2>
           <p className="mb-6 text-white/70">The space you're looking for doesn't exist.</p>
-          <Button onClick={() => navigate("/spaces")} size="lg" data-testid="button-back-to-world">
-            Browse All Spaces
+          <Button onClick={() => navigate("/learning-hub")} size="lg" data-testid="button-back-to-library">
+            Browse Library
           </Button>
         </div>
       </div>
@@ -94,8 +94,8 @@ export default function SpaceDetailPage() {
             <Button onClick={() => window.location.reload()} size="lg" data-testid="button-retry">
               Try Again
             </Button>
-            <Button onClick={() => navigate("/spaces")} variant="outline" size="lg" data-testid="button-back-to-world">
-              Browse All Spaces
+            <Button onClick={() => navigate("/learning-hub")} variant="outline" size="lg" data-testid="button-back-to-library">
+              Browse Library
             </Button>
           </div>
         </div>
@@ -124,8 +124,8 @@ export default function SpaceDetailPage() {
               <Button onClick={() => window.location.reload()} size="lg" data-testid="button-retry-experiences">
                 Try Again
               </Button>
-              <Button onClick={() => navigate("/spaces")} variant="outline" size="lg" data-testid="button-back-to-world-error">
-                Browse All Spaces
+              <Button onClick={() => navigate("/learning-hub")} variant="outline" size="lg" data-testid="button-back-to-library-error">
+                Browse Library
               </Button>
             </div>
           </div>
@@ -172,10 +172,10 @@ export default function SpaceDetailPage() {
       <section className="py-20 px-6 border-b" style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-8">
-            <Link href="/spaces">
+            <Link href="/learning-hub">
               <button className="text-sm text-white/70 hover:text-white transition-colors flex items-center gap-2" data-testid="button-back">
                 <ArrowLeft className="w-4 h-4" />
-                Back to All Spaces
+                Content Library
               </button>
             </Link>
             <ShareButton

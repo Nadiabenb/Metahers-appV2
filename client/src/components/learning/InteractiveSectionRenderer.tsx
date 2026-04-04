@@ -1,13 +1,14 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Lightbulb, CheckCircle2, Sparkles } from "lucide-react";
+import { CheckCircle2, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 
+const GOLD = "#C9A96E";
+
 interface InteractiveSectionRendererProps {
   section: {
-    content: string; // Exercise instructions
+    content: string;
   };
   onComplete: () => void;
   isCompleted: boolean;
@@ -18,7 +19,6 @@ export default function InteractiveSectionRenderer({
   section,
   onComplete,
   isCompleted,
-  spaceColor,
 }: InteractiveSectionRendererProps) {
   const [userResponse, setUserResponse] = useState("");
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -28,92 +28,63 @@ export default function InteractiveSectionRenderer({
     if (!userResponse.trim()) {
       toast({
         title: "Please add your thoughts",
-        description: "Share your insights to continue learning.",
+        description: "Share your insights to continue.",
         variant: "destructive",
       });
       return;
     }
-
     setHasSubmitted(true);
-    onComplete(); // Mark section as complete
-    toast({
-      title: "Excellent work! 🎉",
-      description: "Your reflection has been saved. This section is now complete!",
-    });
+    onComplete();
   };
 
   return (
     <div className="space-y-6">
-      {/* Instructions */}
-      <div className="p-6 rounded-xl bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20">
-        <div className="flex items-start gap-3 mb-4">
-          <Lightbulb className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-          <div>
-            <h4 className="font-serif text-lg font-semibold mb-2">Interactive Exercise</h4>
-            <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-              {section.content}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Response Area */}
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium mb-2">
-            Your Response
-          </label>
-          <Textarea
-            value={userResponse}
-            onChange={(e) => setUserResponse(e.target.value)}
-            placeholder="Take your time to reflect and share your thoughts here..."
-            className="min-h-[200px] resize-none"
-            disabled={hasSubmitted}
-            data-testid="interactive-response-textarea"
-          />
-        </div>
-
-        {!hasSubmitted ? (
-          <Button
-            onClick={handleSubmit}
-            className="w-full sm:w-auto gap-2"
-            data-testid="button-submit-response"
-          >
-            <Sparkles className="w-4 h-4" />
-            Submit Response
-          </Button>
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-4 rounded-lg bg-[hsl(var(--aurora-teal))]/10 border border-[hsl(var(--aurora-teal))]/30"
-          >
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-[hsl(var(--aurora-teal))] flex-shrink-0 mt-0.5" />
-              <div>
-                <p className="font-medium text-[hsl(var(--aurora-teal))] mb-1">
-                  Response Submitted!
-                </p>
-                <p className="text-sm text-foreground">
-                  Great reflection! This hands-on practice helps solidify your learning.
-                </p>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </div>
-
-      {/* Encouragement */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="p-4 rounded-lg bg-muted/30 border border-border"
+      {/* Exercise prompt */}
+      <div
+        className="p-5 rounded-lg"
+        style={{ background: "#0D0B14", border: "1px solid #C9A96E22" }}
       >
-        <p className="text-sm text-foreground text-center italic">
-          "The only way to learn is by doing. Your active participation is transforming knowledge into wisdom."
-        </p>
-      </motion.div>
+        <div className="flex items-start gap-3">
+          <Lightbulb className="w-4 h-4 shrink-0 mt-0.5" style={{ color: GOLD }} />
+          <p className="text-sm text-white/80 leading-relaxed whitespace-pre-wrap">
+            {section.content}
+          </p>
+        </div>
+      </div>
+
+      {/* Response */}
+      <div className="space-y-3">
+        <label className="block text-xs uppercase tracking-widest font-medium text-white/40">
+          Your Response
+        </label>
+        <Textarea
+          value={userResponse}
+          onChange={(e) => setUserResponse(e.target.value)}
+          placeholder="Take your time to reflect and share your thoughts..."
+          className="min-h-[160px] resize-none"
+          disabled={hasSubmitted || isCompleted}
+          data-testid="interactive-response-textarea"
+        />
+      </div>
+
+      {hasSubmitted || isCompleted ? (
+        <div
+          className="flex items-center gap-3 p-4 rounded-lg"
+          style={{ background: "#C9A96E11", border: "1px solid #C9A96E33" }}
+        >
+          <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
+          <p className="text-sm text-white/70">Response submitted. Section complete.</p>
+        </div>
+      ) : (
+        <Button
+          onClick={handleSubmit}
+          className="gap-2 font-semibold"
+          style={{ background: GOLD, color: "#1A1A2E" }}
+          data-testid="button-submit-response"
+        >
+          Submit Response
+        </Button>
+      )}
     </div>
   );
 }

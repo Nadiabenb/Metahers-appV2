@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Code, Terminal, CheckCircle2, Lightbulb } from "lucide-react";
+import { CheckCircle2, Code, Lightbulb, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
+const GOLD = "#C9A96E";
+
 interface HandsOnLabRendererProps {
   section: {
-    content: string; // Lab instructions
+    content: string;
   };
   onComplete: () => void;
   isCompleted: boolean;
@@ -19,7 +20,6 @@ export default function HandsOnLabRenderer({
   section,
   onComplete,
   isCompleted,
-  spaceColor,
 }: HandsOnLabRendererProps) {
   const [userCode, setUserCode] = useState("");
   const [userNotes, setUserNotes] = useState("");
@@ -35,33 +35,26 @@ export default function HandsOnLabRenderer({
       });
       return;
     }
-
     setHasSubmitted(true);
-    onComplete(); // Mark section as complete
-    toast({
-      title: "Lab Completed! 🎉",
-      description: "Excellent hands-on work. This section is now complete!",
-    });
+    onComplete();
   };
 
   return (
     <div className="space-y-6">
-      {/* Instructions */}
-      <div className="p-6 rounded-xl bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))]/10 to-[hsl(var(--hyper-violet))]/5 border border-[hsl(var(--cyber-fuchsia))]/20">
-        <div className="flex items-start gap-3 mb-4">
-          <Terminal className="w-6 h-6 text-[hsl(var(--cyber-fuchsia))] flex-shrink-0 mt-1" />
-          <div>
-            <h4 className="font-serif text-lg font-semibold mb-2">Hands-On Lab</h4>
-            <div className="prose prose-sm max-w-none dark:prose-invert">
-              <p className="text-foreground leading-relaxed whitespace-pre-wrap">
-                {section.content}
-              </p>
-            </div>
-          </div>
+      {/* Lab instructions */}
+      <div
+        className="p-5 rounded-lg"
+        style={{ background: "#0D0B14", border: "1px solid #FFFFFF0F" }}
+      >
+        <div className="flex items-start gap-3">
+          <Terminal className="w-4 h-4 shrink-0 mt-0.5 text-white/40" />
+          <p className="text-sm text-white/80 leading-relaxed whitespace-pre-wrap">
+            {section.content}
+          </p>
         </div>
       </div>
 
-      {/* Work Area */}
+      {/* Work area */}
       <Tabs defaultValue="code" className="w-full">
         <TabsList className="w-full">
           <TabsTrigger value="code" className="flex-1" data-testid="tab-code">
@@ -75,79 +68,47 @@ export default function HandsOnLabRenderer({
         </TabsList>
 
         <TabsContent value="code" className="mt-4">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">
-              Paste your code or implementation here
-            </label>
-            <Textarea
-              value={userCode}
-              onChange={(e) => setUserCode(e.target.value)}
-              placeholder="// Your code here..."
-              className="min-h-[300px] font-mono text-sm resize-none"
-              disabled={hasSubmitted}
-              data-testid="lab-code-textarea"
-            />
-          </div>
+          <Textarea
+            value={userCode}
+            onChange={(e) => setUserCode(e.target.value)}
+            placeholder="// Your code here..."
+            className="min-h-[240px] font-mono text-sm resize-none"
+            disabled={hasSubmitted || isCompleted}
+            data-testid="lab-code-textarea"
+          />
         </TabsContent>
 
         <TabsContent value="notes" className="mt-4">
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">
-              Document your learning and observations
-            </label>
-            <Textarea
-              value={userNotes}
-              onChange={(e) => setUserNotes(e.target.value)}
-              placeholder="What did you build? What challenges did you face? What did you learn?"
-              className="min-h-[300px] resize-none"
-              disabled={hasSubmitted}
-              data-testid="lab-notes-textarea"
-            />
-          </div>
+          <Textarea
+            value={userNotes}
+            onChange={(e) => setUserNotes(e.target.value)}
+            placeholder="What did you build? What challenges did you face? What did you learn?"
+            className="min-h-[240px] resize-none"
+            disabled={hasSubmitted || isCompleted}
+            data-testid="lab-notes-textarea"
+          />
         </TabsContent>
       </Tabs>
 
-      {/* Submit */}
-      {!hasSubmitted ? (
+      {hasSubmitted || isCompleted ? (
+        <div
+          className="flex items-center gap-3 p-4 rounded-lg"
+          style={{ background: "#C9A96E11", border: "1px solid #C9A96E33" }}
+        >
+          <CheckCircle2 className="w-4 h-4 shrink-0" style={{ color: GOLD }} />
+          <p className="text-sm text-white/70">Lab submitted. Section complete.</p>
+        </div>
+      ) : (
         <Button
           onClick={handleSubmit}
-          className="w-full sm:w-auto gap-2"
+          className="gap-2 font-semibold"
+          style={{ background: GOLD, color: "#1A1A2E" }}
           data-testid="button-submit-lab"
         >
           <CheckCircle2 className="w-4 h-4" />
           Submit Lab Work
         </Button>
-      ) : (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="p-6 rounded-xl bg-gradient-to-br from-[hsl(var(--aurora-teal))]/20 to-[hsl(var(--liquid-gold))]/10 border border-[hsl(var(--aurora-teal))]/30"
-        >
-          <div className="flex items-start gap-4">
-            <CheckCircle2 className="w-6 h-6 text-[hsl(var(--aurora-teal))] flex-shrink-0" />
-            <div>
-              <p className="font-serif text-lg font-semibold text-[hsl(var(--aurora-teal))] mb-2">
-                Lab Completed!
-              </p>
-              <p className="text-sm text-foreground">
-                You've completed the hands-on portion. This practical experience is invaluable for mastering the concepts. Well done!
-              </p>
-            </div>
-          </div>
-        </motion.div>
       )}
-
-      {/* Encouragement */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="p-4 rounded-lg bg-muted/30 border border-border"
-      >
-        <p className="text-sm text-foreground text-center italic">
-          "Building with your own hands is how you transform from learner to creator."
-        </p>
-      </motion.div>
     </div>
   );
 }

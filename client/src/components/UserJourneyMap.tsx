@@ -31,7 +31,7 @@ export function UserJourneyMap() {
       icon: Crown,
       status: tier !== 'free' ? 'complete' : 'locked',
       actions: [
-        { label: "9 Learning Worlds", href: "/world", locked: tier === 'free' },
+        { label: "Content Library", href: "/learning-hub", locked: tier === 'free' },
         { label: "MetaMuse AI", href: "/companion", locked: tier === 'free' },
         { label: "AI Journal", href: "/journal", locked: tier === 'free' },
       ],
