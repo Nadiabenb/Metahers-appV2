@@ -38,8 +38,8 @@ export function Navigation() {
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard" },
     { label: "Learn", path: "/learning-hub" },
+    { label: "Tools", path: "/toolkit" },
     { label: "Journal", path: "/journal" },
-    { label: "Community", path: COMMUNITY_URL, external: true },
     { label: "Account", path: "/account" },
   ];
 

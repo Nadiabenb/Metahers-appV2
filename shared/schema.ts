@@ -3285,3 +3285,31 @@ export const insertVoyageInvitationRequestSchema = createInsertSchema(voyageInvi
 export type InsertVoyageInvitationRequest = z.infer<typeof insertVoyageInvitationRequestSchema>;
 export type VoyageInvitationRequestDB = typeof voyageInvitationRequests.$inferSelect;
 
+// ===== AI TOOLKIT =====
+
+export const toolReviews = pgTable("tool_reviews", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  toolSlug: varchar("tool_slug").notNull(),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  rating: integer("rating"),
+  tip: text("tip").notNull(),
+  helpfulCount: integer("helpful_count").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_tool_reviews_slug").on(table.toolSlug),
+  index("idx_tool_reviews_user").on(table.userId),
+]);
+
+export const insertToolReviewSchema = createInsertSchema(toolReviews).omit({ id: true, createdAt: true, helpfulCount: true });
+export type InsertToolReview = z.infer<typeof insertToolReviewSchema>;
+export type ToolReview = typeof toolReviews.$inferSelect;
+
+export const toolReviewHelpful = pgTable("tool_review_helpful", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  reviewId: varchar("review_id").notNull().references(() => toolReviews.id, { onDelete: "cascade" }),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  uniqueIndex("idx_review_helpful_unique").on(table.reviewId, table.userId),
+]);
+

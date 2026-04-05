@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Lock } from "lucide-react";
+import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Lock, Wrench, Users } from "lucide-react";
 import { Link } from "wouter";
 import { isSignatureTier } from "@shared/pricing";
 import { spaceImages } from "@/lib/imageManifest";
@@ -50,23 +50,31 @@ function QuickAction({
   title,
   description,
   href,
+  external,
 }: {
   icon: React.ElementType;
   title: string;
   description: string;
   href: string;
+  external?: boolean;
 }) {
-  return (
-    <Link href={href}>
-      <Card className="cursor-pointer hover:border-[#C9A96E]/30 transition-colors h-full bg-[#13111C] border-white/10">
-        <CardContent className="pt-6 pb-5 px-5">
-          <Icon className="w-5 h-5 mb-3 text-[#C9A96E]" />
-          <h3 className="font-medium text-sm text-white mb-1">{title}</h3>
-          <p className="text-xs text-white/50">{description}</p>
-        </CardContent>
-      </Card>
-    </Link>
+  const card = (
+    <Card className="cursor-pointer hover:border-[#C9A96E]/30 transition-colors h-full bg-[#13111C] border-white/10">
+      <CardContent className="pt-6 pb-5 px-5">
+        <Icon className="w-5 h-5 mb-3 text-[#C9A96E]" />
+        <h3 className="font-medium text-sm text-white mb-1">{title}</h3>
+        <p className="text-xs text-white/50">{description}</p>
+      </CardContent>
+    </Card>
   );
+  if (external) {
+    return (
+      <a href={href} target="_blank" rel="noopener noreferrer">
+        {card}
+      </a>
+    );
+  }
+  return <Link href={href}>{card}</Link>;
 }
 
 export default function DashboardPage() {
@@ -256,12 +264,18 @@ export default function DashboardPage() {
             {/* Quick Actions */}
             <div>
               <p className="text-white/40 text-xs uppercase tracking-widest mb-4">Quick Actions</p>
-              <div className={`grid gap-3 ${isPaid ? "grid-cols-2 sm:grid-cols-4" : "grid-cols-2 sm:grid-cols-3"}`}>
+              <div className={`grid gap-3 ${isPaid ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-2 sm:grid-cols-3"}`}>
                 <QuickAction
                   icon={BookOpen}
                   title="Journal"
                   description="Last entry or start your first"
                   href="/journal"
+                />
+                <QuickAction
+                  icon={Wrench}
+                  title="AI Toolkit"
+                  description="Discover the best AI tools for your business"
+                  href="/toolkit"
                 />
                 <QuickAction
                   icon={MessageSquare}
@@ -274,6 +288,13 @@ export default function DashboardPage() {
                   title="Prompt Library"
                   description="Browse AI prompts for your business"
                   href="/ai-prompts"
+                />
+                <QuickAction
+                  icon={Users}
+                  title="Community"
+                  description="Join the conversation on Telegram"
+                  href="https://t.me/metahers"
+                  external={true}
                 />
                 {isPaid && (
                   <QuickAction

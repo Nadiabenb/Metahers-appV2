@@ -13,7 +13,7 @@ import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
 import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
-import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema } from "@shared/schema";
+import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema, toolReviews, toolReviewHelpful } from "@shared/schema";
 import { sql as drizzleSql, eq, desc, and, sql, gte } from "drizzle-orm";
 import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests } from "@shared/schema";
 // Import all 54 experiences from seed file
@@ -5434,6 +5434,59 @@ Respond in JSON format:
     }
     
     res.json({ success: true, updated });
+  }));
+
+  // === AI TOOLKIT ROUTES ===
+
+  // GET reviews for a tool
+  app.get('/api/toolkit/reviews/:toolSlug', asyncHandler(async (req, res) => {
+    const { toolSlug } = req.params;
+    const reviews = await db
+      .select({
+        id: toolReviews.id,
+        toolSlug: toolReviews.toolSlug,
+        userId: toolReviews.userId,
+        rating: toolReviews.rating,
+        tip: toolReviews.tip,
+        helpfulCount: toolReviews.helpfulCount,
+        createdAt: toolReviews.createdAt,
+        firstName: users.firstName,
+      })
+      .from(toolReviews)
+      .leftJoin(users, eq(toolReviews.userId, users.id))
+      .where(eq(toolReviews.toolSlug, toolSlug))
+      .orderBy(desc(toolReviews.helpfulCount));
+    res.json(reviews);
+  }));
+
+  // POST a new review (authenticated)
+  app.post('/api/toolkit/reviews', isAuthenticated, asyncHandler(async (req, res) => {
+    const { toolSlug, rating, tip } = req.body;
+    if (!toolSlug || !tip || tip.trim().length < 10) {
+      return res.status(400).json({ message: "Tool slug and tip (min 10 characters) required" });
+    }
+    const userId = (req.user as any).id;
+    const [review] = await db
+      .insert(toolReviews)
+      .values({ toolSlug, userId, rating: rating || null, tip: sanitizeText(tip.trim()) })
+      .returning();
+    res.json(review);
+  }));
+
+  // POST mark a review as helpful (authenticated)
+  app.post('/api/toolkit/reviews/:reviewId/helpful', isAuthenticated, asyncHandler(async (req, res) => {
+    const { reviewId } = req.params;
+    const userId = (req.user as any).id;
+    const existing = await db
+      .select()
+      .from(toolReviewHelpful)
+      .where(and(eq(toolReviewHelpful.reviewId, reviewId), eq(toolReviewHelpful.userId, userId)));
+    if (existing.length > 0) {
+      return res.status(400).json({ message: "Already marked as helpful" });
+    }
+    await db.insert(toolReviewHelpful).values({ reviewId, userId });
+    await db.execute(sql`UPDATE tool_reviews SET helpful_count = helpful_count + 1 WHERE id = ${reviewId}`);
+    res.json({ success: true });
   }));
 
   const httpServer = createServer(app);

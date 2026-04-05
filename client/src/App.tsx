@@ -80,6 +80,7 @@ const VoyagesPage = lazy(() => import("@/pages/VoyagesPage"));
 const VoyageDetailPage = lazy(() => import("@/pages/VoyageDetailPage"));
 const VoyageSuccessPage = lazy(() => import("@/pages/VoyageSuccessPage"));
 const AIIntegrationPage = lazy(() => import("@/pages/AIIntegrationPage"));
+const ToolkitPage = lazy(() => import("@/pages/ToolkitPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function LoadingFallback() {
@@ -171,6 +172,9 @@ function Router() {
 
         {/* AI Mastery Program Learning Hub - Public */}
         <Route path="/learning-hub" component={LearningHubPage} />
+
+        {/* AI Toolkit - Public, no tier gating */}
+        <Route path="/toolkit" component={ToolkitPage} />
 
         {/* Vision Board Builder - Public */}
         <Route path="/vision-board" component={VisionBoardPage} />
