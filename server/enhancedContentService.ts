@@ -38,7 +38,7 @@ export interface EnhancedSection extends ExistingSection {
 }
 
 const WOMEN_SOLOPRENEUR_FRAMEWORK = `
-# MetaHers Mind Spa Content Framework
+# MetaHers Content Framework
 
 ## Brand Voice: Forbes-meets-Vogue
 - Luxury editorial quality, not blog post

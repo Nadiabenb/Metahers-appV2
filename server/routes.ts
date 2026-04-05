@@ -82,7 +82,7 @@ async function getResendCredentials() {
   if (process.env.RESEND_API_KEY) {
     return {
       apiKey: process.env.RESEND_API_KEY,
-      fromEmail: process.env.RESEND_FROM_EMAIL || 'MetaHers Mind Spa <help@metahers.ai>'
+      fromEmail: process.env.RESEND_FROM_EMAIL || 'MetaHers <help@metahers.ai>'
     };
   }
 
@@ -114,7 +114,7 @@ async function getResendCredentials() {
     }
     return {
       apiKey: connectionSettings.settings.api_key, 
-      fromEmail: connectionSettings.settings.from_email || 'MetaHers Mind Spa <help@metahers.ai>'
+      fromEmail: connectionSettings.settings.from_email || 'MetaHers <help@metahers.ai>'
     };
   } catch (error) {
     console.warn('Failed to fetch Resend credentials from Replit connector:', error);
@@ -279,7 +279,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Regenerate Harvard-style content for all experiences (admin only)
-  // ⚠️ CRITICAL DATA PROTECTION: This endpoint modifies the CORE VALUE of MetaHers Mind Spa
+  // ⚠️ CRITICAL DATA PROTECTION: This endpoint modifies the CORE VALUE of MetaHers
   // Harvard-style learning content should NEVER be removed without explicit approval
   app.post('/api/admin/regenerate-content', isAuthenticated, isAdmin, async (req: Request, res) => {
     try {
@@ -353,7 +353,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
           const prompt = `Create a comprehensive ${sectionCount}-section learning curriculum for "${exp.title}".
 
-Context: MetaHers Mind Spa - AI learning platform for women solopreneurs
+Context: MetaHers - AI learning platform for women solopreneurs
 Space: ${spaceContext}
 Description: ${exp.description}
 Objectives: ${(exp.learningObjectives as string[]).join(", ")}
@@ -899,7 +899,7 @@ Return ONLY valid JSON:
           <tr>
             <td style="padding: 40px 40px 20px; text-align: center;">
               <h1 style="margin: 0; font-size: 32px; font-weight: 300; color: #F8F8F8; letter-spacing: 1px;">
-                MetaHers Mind Spa
+                MetaHers
               </h1>
               <div style="height: 2px; width: 60px; background: linear-gradient(90deg, #8B5CF6, #EC4899); margin: 20px auto;"></div>
             </td>
@@ -954,7 +954,7 @@ Return ONLY valid JSON:
                 <span style="color: #F8F8F8; font-style: italic;">The MetaHers Team</span>
               </p>
               <p style="margin: 15px 0 0; font-size: 12px; color: #52525B;">
-                © ${new Date().getFullYear()} MetaHers Mind Spa. All rights reserved.
+                © ${new Date().getFullYear()} MetaHers. All rights reserved.
               </p>
             </td>
           </tr>
@@ -1518,7 +1518,7 @@ Return ONLY valid JSON:
 
       const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-      const systemPrompt = `You are an encouraging AI learning coach for MetaHers Mind Spa, helping women solopreneurs learn AI and Web3 concepts.
+      const systemPrompt = `You are an encouraging AI learning coach for MetaHers, helping women solopreneurs learn AI and Web3 concepts.
 
 Current Learning Context:
 - Experience: ${experienceTitle}
@@ -1659,7 +1659,7 @@ Always remember: The learner is investing time to build valuable skills. Your jo
         messages: [
           {
             role: "system",
-            content: "You are a helpful AI assistant for MetaHers Mind Spa. Provide clear, professional, and empowering responses. Keep responses concise (under 300 words) unless the user asks for more detail."
+            content: "You are a helpful AI assistant for MetaHers. Provide clear, professional, and empowering responses. Keep responses concise (under 300 words) unless the user asks for more detail."
           },
           {
             role: "user",
@@ -1728,7 +1728,7 @@ Always remember: The learner is investing time to build valuable skills. Your jo
       }
 
       // Build prompt from answers
-      const prompt = `You are a career advisor for MetaHers Mind Spa, helping women transition into AI and Web3 careers.
+      const prompt = `You are a career advisor for MetaHers, helping women transition into AI and Web3 careers.
 
 User Profile:
 - Current Situation: ${answers.current_role || 'Not specified'}
@@ -2998,23 +2998,39 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         case 'customer.subscription.created':
         case 'customer.subscription.updated': {
           const subscription = event.data.object as Stripe.Subscription;
-          const userId = subscription.metadata?.userId || 
+          const userId = subscription.metadata?.userId ||
             (await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer).metadata?.userId;
 
           if (userId) {
+            const priceId = subscription.items.data[0].price.id;
+
             await storage.upsertSubscription({
               userId,
               stripeCustomerId: subscription.customer as string,
               stripeSubscriptionId: subscription.id,
-              stripePriceId: subscription.items.data[0].price.id,
+              stripePriceId: priceId,
               status: subscription.status,
               currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
               cancelAtPeriodEnd: subscription.cancel_at_period_end || false,
             });
 
-            // Update user's Pro status
             const isActive = subscription.status === 'active' || subscription.status === 'trialing';
             await storage.updateUserProStatus(userId, isActive);
+
+            // Map Stripe Price ID to internal subscription tier
+            const priceTierMap: Record<string, string> = {
+              [process.env.STRIPE_PRICE_ID_SIGNATURE || '']: 'signature_monthly',
+              [process.env.STRIPE_PRICE_ID_PRIVATE || '']: 'private_monthly',
+              // Legacy mappings for existing subscribers
+              [process.env.STRIPE_PRICE_ID || '']: 'signature_monthly',
+              [process.env.STRIPE_PRICE_ID_ANNUAL || '']: 'signature_monthly',
+            };
+            const tier = priceTierMap[priceId];
+            if (isActive && tier) {
+              await storage.updateUserSubscriptionTier(userId, tier);
+            } else if (!isActive) {
+              await storage.updateUserSubscriptionTier(userId, 'free');
+            }
           }
           break;
         }
@@ -3035,8 +3051,8 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
               cancelAtPeriodEnd: true,
             });
 
-            // Remove user's Pro status
             await storage.updateUserProStatus(userId, false);
+            await storage.updateUserSubscriptionTier(userId, 'free');
           }
           break;
         }

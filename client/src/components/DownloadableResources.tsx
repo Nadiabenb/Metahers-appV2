@@ -132,10 +132,10 @@ export default function DownloadableResources({
               <div>
                 <p className="font-semibold mb-1">Unlock All Resources</p>
                 <p className="text-sm text-foreground">
-                  Upgrade to Pro to download premium templates and workbooks
+                  Upgrade to Signature to download premium templates and workbooks
                 </p>
               </div>
-              <Button variant="default" data-testid="button-upgrade-for-resources">
+              <Button variant="default" onClick={() => window.location.href = '/upgrade'} data-testid="button-upgrade-for-resources">
                 Upgrade Now
               </Button>
             </div>

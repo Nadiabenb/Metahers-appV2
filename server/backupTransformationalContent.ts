@@ -7,7 +7,7 @@ import * as path from "path";
  * CRITICAL DATA PROTECTION: Backup Script for Transformational Experiences
  * 
  * This script backs up all Harvard-style learning content to prevent data loss.
- * The content in transformationalExperiences is the CORE VALUE of MetaHers Mind Spa
+ * The content in transformationalExperiences is the CORE VALUE of MetaHers
  * and should NEVER be deleted without explicit user approval.
  * 
  * Run this manually: tsx server/backupTransformationalContent.ts

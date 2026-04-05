@@ -546,7 +546,7 @@ export const insertThoughtLeadershipProgressSchema = createInsertSchema(thoughtL
 export type InsertThoughtLeadershipProgress = z.infer<typeof insertThoughtLeadershipProgressSchema>;
 export type ThoughtLeadershipProgressDB = typeof thoughtLeadershipProgress.$inferSelect;
 
-// Mind Spa Membership - Group Sessions table (for Sanctuary tier and above)
+// MetaHers Membership - Group Sessions table (for Sanctuary tier and above)
 export const groupSessions = pgTable("group_sessions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: varchar("title").notNull(), // "Monthly Ritual Session - January 2025"
@@ -573,7 +573,7 @@ export const insertGroupSessionSchema = createInsertSchema(groupSessions).omit({
 export type InsertGroupSession = z.infer<typeof insertGroupSessionSchema>;
 export type GroupSessionDB = typeof groupSessions.$inferSelect;
 
-// Mind Spa Membership - Session Registrations table (tracks who's attending)
+// MetaHers Membership - Session Registrations table (tracks who's attending)
 export const sessionRegistrations = pgTable("session_registrations", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   sessionId: varchar("session_id").notNull().references(() => groupSessions.id, { onDelete: "cascade" }),
@@ -590,7 +590,7 @@ export const insertSessionRegistrationSchema = createInsertSchema(sessionRegistr
 export type InsertSessionRegistration = z.infer<typeof insertSessionRegistrationSchema>;
 export type SessionRegistrationDB = typeof sessionRegistrations.$inferSelect;
 
-// Mind Spa Membership - 1:1 Bookings table (for Inner Circle quarterly and Founder's Circle monthly)
+// MetaHers Membership - 1:1 Bookings table (for Inner Circle quarterly and Founder's Circle monthly)
 export const oneOnOneBookings = pgTable("one_on_one_bookings", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
@@ -615,7 +615,7 @@ export const insertOneOnOneBookingSchema = createInsertSchema(oneOnOneBookings).
 export type InsertOneOnOneBooking = z.infer<typeof insertOneOnOneBookingSchema>;
 export type OneOnOneBookingDB = typeof oneOnOneBookings.$inferSelect;
 
-// Mind Spa Membership - Founder Insights table (exclusive content for Inner Circle and above)
+// MetaHers Membership - Founder Insights table (exclusive content for Inner Circle and above)
 export const founderInsights = pgTable("founder_insights", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: varchar("title").notNull(),
@@ -639,7 +639,7 @@ export const insertFounderInsightSchema = createInsertSchema(founderInsights).om
 export type InsertFounderInsight = z.infer<typeof insertFounderInsightSchema>;
 export type FounderInsightDB = typeof founderInsights.$inferSelect;
 
-// Mind Spa Membership - Insight Interactions table (tracks views, likes)
+// MetaHers Membership - Insight Interactions table (tracks views, likes)
 export const insightInteractions = pgTable("insight_interactions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   insightId: varchar("insight_id").notNull().references(() => founderInsights.id, { onDelete: "cascade" }),
@@ -1194,7 +1194,7 @@ export const shopProducts: ShopProduct[] = [
     type: "bundle",
     price: 499,
     scents: [],
-    description: "All three limited edition Ritual Bags. 18 handcrafted products. 3 AI ritual unlocks. The complete MetaHers Mind Spa experience.",
+    description: "All three limited edition Ritual Bags. 18 handcrafted products. 3 AI ritual unlocks. The complete MetaHers experience.",
     image: "bundle",
     stock: 6,
     theme: "The complete collection"

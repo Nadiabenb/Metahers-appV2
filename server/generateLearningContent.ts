@@ -32,7 +32,7 @@ async function generateComprehensiveLearningContent(
 **Your Mission:** Create content that makes women feel "I can do this" not "this is too technical for me."
 
 **Context:**
-- Platform: MetaHers Mind Spa - where luxury wellness meets cutting-edge tech education
+- Platform: MetaHers - where luxury wellness meets cutting-edge tech education
 - Audience: Women solopreneurs, moms, career-changers who may have ZERO tech background
 - Space: ${spaceContext}
 - Description: ${experienceDescription}
@@ -133,7 +133,7 @@ Return ONLY valid JSON:
     messages: [
       {
         role: "system",
-        content: "You are an expert curriculum designer for MetaHers Mind Spa. Create comprehensive, actionable learning content for women solopreneurs. Return only valid JSON."
+        content: "You are an expert curriculum designer for MetaHers. Create comprehensive, actionable learning content for women solopreneurs. Return only valid JSON."
       },
       { role: "user", content: prompt }
     ],

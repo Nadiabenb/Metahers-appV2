@@ -7,7 +7,7 @@ import { execSync } from "child_process";
 /**
  * ⚠️ CRITICAL DATA PROTECTION WARNING ⚠️
  * 
- * This script modifies Harvard-style learning content - the CORE VALUE of MetaHers Mind Spa.
+ * This script modifies Harvard-style learning content - the CORE VALUE of MetaHers.
  * 
  * BEFORE RUNNING THIS SCRIPT:
  * 1. Create a backup: tsx server/backupTransformationalContent.ts
@@ -34,7 +34,7 @@ async function generateComprehensiveLearningContent(
   
   const prompt = `Create a comprehensive ${sectionCount}-section learning curriculum for a course titled "${experienceTitle}".
 
-Context: This is for MetaHers Mind Spa, an AI-powered learning platform for women solopreneurs learning AI, Web3, and digital business skills.
+Context: This is for MetaHers, an AI-powered learning platform for women solopreneurs learning AI, Web3, and digital business skills.
 
 Space: ${spaceContext}
 Description: ${experienceDescription}
@@ -95,7 +95,7 @@ Return ONLY valid JSON matching this exact structure:
     messages: [
       {
         role: "system",
-        content: "You are an expert curriculum designer for MetaHers Mind Spa, creating Harvard Business School quality learning content for women solopreneurs. Your content is research-backed, actionable, and empowering. Return only valid JSON with no markdown formatting."
+        content: "You are an expert curriculum designer for MetaHers, creating Harvard Business School quality learning content for women solopreneurs. Your content is research-backed, actionable, and empowering. Return only valid JSON with no markdown formatting."
       },
       { role: "user", content: prompt }
     ],

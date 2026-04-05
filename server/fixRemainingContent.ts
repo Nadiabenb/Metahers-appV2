@@ -15,7 +15,7 @@ async function generateComprehensiveLearningContent(
   
   const prompt = `Create a comprehensive ${sectionCount}-section learning curriculum for a course titled "${experienceTitle}".
 
-Context: This is for MetaHers Mind Spa, an AI-powered learning platform for women solopreneurs learning AI, Web3, and digital business skills.
+Context: This is for MetaHers, an AI-powered learning platform for women solopreneurs learning AI, Web3, and digital business skills.
 
 Space: ${spaceContext}
 Description: ${experienceDescription}
@@ -50,7 +50,7 @@ Return ONLY valid JSON matching this structure:
     messages: [
       {
         role: "system",
-        content: "You are an expert curriculum designer for MetaHers Mind Spa. Create comprehensive, actionable learning content for women solopreneurs. Return only valid JSON."
+        content: "You are an expert curriculum designer for MetaHers. Create comprehensive, actionable learning content for women solopreneurs. Return only valid JSON."
       },
       { role: "user", content: prompt }
     ],

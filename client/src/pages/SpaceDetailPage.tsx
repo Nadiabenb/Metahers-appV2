@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ShareButton } from "@/components/ShareButton";
 import { SEO } from "@/components/SEO";
 import { SpaceDetailSkeleton } from "@/components/LoadingSkeleton";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 
 // Violet Sanctuary Theme
 const DARK_BG = "#0D0B14";
@@ -64,7 +65,7 @@ export default function SpaceDetailPage() {
   });
 
   const isAuthenticated = !!user;
-  const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
+  const isProUser = canAccessSignatureFeatures(user?.subscriptionTier);
 
   if (!slug) {
     return (

@@ -77,7 +77,7 @@ export async function generateJournalPrompt(
     ? `\nRecent reflections: ${previousEntries.slice(0, 2).join(" | ")}`
     : "";
 
-  const prompt = `You are a mindful journal coach for MetaHers Mind Spa, a luxury learning experience combining AI, Web3, and personal reflection.
+  const prompt = `You are a mindful journal coach for MetaHers, a luxury learning experience combining AI, Web3, and personal reflection.
 
 ${context}${previousContext}
 
@@ -102,7 +102,7 @@ Return only the prompt, nothing else.`;
 }
 
 export async function analyzeJournalEntry(content: string): Promise<AIInsights> {
-  const prompt = `You are analyzing a journal entry from someone learning about AI and Web3 at MetaHers Mind Spa.
+  const prompt = `You are analyzing a journal entry from someone learning about AI and Web3 at MetaHers.
 
 Journal Entry:
 "${content}"
@@ -144,7 +144,7 @@ export async function chatWithJournalCoach(
     ? `\n\nUser's recent journal entries:\n${journalHistory.slice(0, 3).join("\n---\n")}`
     : "";
 
-  const systemPrompt = `You are a supportive AI journal coach at MetaHers Mind Spa, helping users reflect on their learning journey in AI and Web3.
+  const systemPrompt = `You are a supportive AI journal coach at MetaHers, helping users reflect on their learning journey in AI and Web3.
 
 Your role:
 - Provide warm, encouraging feedback on their reflections
@@ -208,7 +208,7 @@ export async function chatWithAppAtelierCoach(
 
   // 💰 OPTIMIZED FOR PROMPT CACHING (>1024 tokens)
   // Static knowledge base gets cached, reducing costs by ~50% for repeat conversations
-  const systemPrompt = `You are an encouraging AI coding coach at MetaHers Mind Spa's App Atelier.
+  const systemPrompt = `You are an encouraging AI coding coach at MetaHers's App Atelier.
 
 Your role is to help women founders and solopreneurs build real apps using AI-assisted "vibe coding."
 
@@ -521,7 +521,7 @@ export async function generateRecommendations(context: UserContext): Promise<Rec
   }
 
   try {
-    const systemPrompt = `You are a personalized learning coach for MetaHers Mind Spa, an AI and Web3 education platform for women entrepreneurs.
+    const systemPrompt = `You are a personalized learning coach for MetaHers, an AI and Web3 education platform for women entrepreneurs.
 
 Your role:
 - Analyze user progress and recommend next learning steps

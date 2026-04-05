@@ -16,10 +16,14 @@ import { useNotifications } from "@/hooks/useNotifications";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
+import { getPricingPlan, type SubscriptionTier } from "@shared/pricing";
 
 export default function AccountPage() {
   const { data: stats, isLoading } = useStats();
   const { user } = useAuth();
+  const isPaid = canAccessSignatureFeatures(user?.subscriptionTier);
+  const plan = getPricingPlan((user?.subscriptionTier || 'free') as SubscriptionTier);
   const { toast } = useToast();
   const [betaCode, setBetaCode] = useState("");
   const { soundsEnabled, toggleSounds, playSound } = useSoundEffects();
@@ -297,15 +301,15 @@ export default function AccountPage() {
                       Subscription Status
                     </h3>
                     <p className="text-foreground/80">
-                      {user?.isPro ? 'Pro Plan - Access to all rituals' : 'Free Plan - Access to 1 ritual'}
+                      {plan.displayName}
                     </p>
                   </div>
-                  <div className={`backdrop-blur-md px-3 py-1 rounded-full text-sm font-medium border ${user?.isPro ? 'bg-[hsl(var(--liquid-gold))]/20 text-[hsl(var(--liquid-gold))] border-[hsl(var(--liquid-gold))]/30' : 'bg-card/50 text-foreground border-border'}`}>
-                    {user?.isPro ? 'Pro' : 'Free'}
+                  <div className={`backdrop-blur-md px-3 py-1 rounded-full text-sm font-medium border ${isPaid ? 'bg-[hsl(var(--liquid-gold))]/20 text-[hsl(var(--liquid-gold))] border-[hsl(var(--liquid-gold))]/30' : 'bg-card/50 text-foreground border-border'}`}>
+                    {isPaid ? plan.displayName : 'Free'}
                   </div>
                 </div>
 
-                {!user?.isPro && (
+                {!isPaid && (
                   <div className="bg-gradient-to-br from-[hsl(var(--liquid-gold))]/10 to-[hsl(var(--cyber-fuchsia))]/5 border border-[hsl(var(--liquid-gold))]/30 rounded-xl p-6">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 rounded-full bg-[hsl(var(--liquid-gold))]/20 flex items-center justify-center flex-shrink-0">

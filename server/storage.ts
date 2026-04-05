@@ -219,7 +219,7 @@ export interface IStorage {
   createThoughtLeadershipProgress(progress: InsertThoughtLeadershipProgress): Promise<ThoughtLeadershipProgressDB>;
   updateThoughtLeadershipProgress(userId: string, updates: Partial<ThoughtLeadershipProgressDB>): Promise<ThoughtLeadershipProgressDB>;
 
-  // Mind Spa Membership - Group Sessions operations
+  // MetaHers Membership - Group Sessions operations
   createGroupSession(session: InsertGroupSession): Promise<GroupSessionDB>;
   getGroupSessionById(id: string): Promise<GroupSessionDB | undefined>;
   getUpcomingGroupSessions(sessionType?: string, limit?: number): Promise<GroupSessionDB[]>;
@@ -228,7 +228,7 @@ export interface IStorage {
   incrementSessionAttendees(id: string): Promise<void>;
   decrementSessionAttendees(id: string): Promise<void>;
 
-  // Mind Spa Membership - Session Registrations operations
+  // MetaHers Membership - Session Registrations operations
   createSessionRegistration(registration: InsertSessionRegistration): Promise<SessionRegistrationDB>;
   getSessionRegistration(sessionId: string, userId: string): Promise<SessionRegistrationDB | undefined>;
   getUserSessionRegistrations(userId: string, status?: string): Promise<SessionRegistrationDB[]>;
@@ -236,7 +236,7 @@ export interface IStorage {
   updateSessionRegistration(id: string, updates: Partial<SessionRegistrationDB>): Promise<SessionRegistrationDB>;
   cancelSessionRegistration(id: string): Promise<void>;
 
-  // Mind Spa Membership - 1:1 Bookings operations
+  // MetaHers Membership - 1:1 Bookings operations
   createOneOnOneBooking(booking: InsertOneOnOneBooking): Promise<OneOnOneBookingDB>;
   getOneOnOneBookingById(id: string): Promise<OneOnOneBookingDB | undefined>;
   getUserOneOnOneBookings(userId: string, status?: string): Promise<OneOnOneBookingDB[]>;
@@ -244,14 +244,14 @@ export interface IStorage {
   updateOneOnOneBooking(id: string, updates: Partial<OneOnOneBookingDB>): Promise<OneOnOneBookingDB>;
   cancelOneOnOneBooking(id: string): Promise<void>;
 
-  // Mind Spa Membership - Founder Insights operations
+  // MetaHers Membership - Founder Insights operations
   createFounderInsight(insight: InsertFounderInsight): Promise<FounderInsightDB>;
   getFounderInsightById(id: string): Promise<FounderInsightDB | undefined>;
   getFounderInsights(minTierRequired?: string, limit?: number): Promise<FounderInsightDB[]>;
   updateFounderInsight(id: string, updates: Partial<FounderInsightDB>): Promise<FounderInsightDB>;
   deleteFounderInsight(id: string): Promise<void>;
 
-  // Mind Spa Membership - Insight Interactions operations
+  // MetaHers Membership - Insight Interactions operations
   createInsightInteraction(interaction: InsertInsightInteraction): Promise<InsightInteractionDB>;
   getInsightInteraction(insightId: string, userId: string): Promise<InsightInteractionDB | undefined>;
   markInsightAsViewed(insightId: string, userId: string): Promise<void>;
@@ -1141,7 +1141,7 @@ export class DatabaseStorage implements IStorage {
     return updated;
   }
 
-  // Mind Spa Membership - Group Sessions operations
+  // MetaHers Membership - Group Sessions operations
   async createGroupSession(sessionData: InsertGroupSession): Promise<GroupSessionDB> {
     const [session] = await db
       .insert(groupSessions)
@@ -1219,7 +1219,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(groupSessions.id, id));
   }
 
-  // Mind Spa Membership - Session Registrations operations
+  // MetaHers Membership - Session Registrations operations
   async createSessionRegistration(registrationData: InsertSessionRegistration): Promise<SessionRegistrationDB> {
     const [registration] = await db
       .insert(sessionRegistrations)
@@ -1280,7 +1280,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(sessionRegistrations.id, id));
   }
 
-  // Mind Spa Membership - 1:1 Bookings operations
+  // MetaHers Membership - 1:1 Bookings operations
   async createOneOnOneBooking(bookingData: InsertOneOnOneBooking): Promise<OneOnOneBookingDB> {
     const [booking] = await db
       .insert(oneOnOneBookings)
@@ -1348,7 +1348,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(oneOnOneBookings.id, id));
   }
 
-  // Mind Spa Membership - Founder Insights operations
+  // MetaHers Membership - Founder Insights operations
   async createFounderInsight(insightData: InsertFounderInsight): Promise<FounderInsightDB> {
     const [insight] = await db
       .insert(founderInsights)
@@ -1395,7 +1395,7 @@ export class DatabaseStorage implements IStorage {
       .where(eq(founderInsights.id, id));
   }
 
-  // Mind Spa Membership - Insight Interactions operations
+  // MetaHers Membership - Insight Interactions operations
   async createInsightInteraction(interactionData: InsertInsightInteraction): Promise<InsightInteractionDB> {
     const [interaction] = await db
       .insert(insightInteractions)

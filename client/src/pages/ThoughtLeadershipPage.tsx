@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { SEO } from "@/components/SEO";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 import { useAuth } from "@/hooks/useAuth";
 import { Link } from "wouter";
 import { BrandOnboarding } from "@/components/BrandOnboarding";
@@ -157,10 +158,7 @@ export default function ThoughtLeadershipPage() {
   const isPracticeSubmitted = progress?.practicesSubmitted?.includes(progress?.currentDay || 0);
   const existingReflection = progress?.practiceReflections?.[progress?.currentDay || 0];
 
-  // Check if user is Pro
-  const isProUser = user?.isPro || user?.subscriptionTier === 'pro' ||
-                    user?.subscriptionTier === 'sanctuary' || user?.subscriptionTier === 'inner_circle' ||
-                    user?.subscriptionTier === 'founders_circle';
+  const isProUser = canAccessSignatureFeatures(user?.subscriptionTier);
 
   // Free users get days 1-3, Pro users get all 30
   const currentDayLocked = (progress?.currentDay || 1) > 3 && !isProUser;

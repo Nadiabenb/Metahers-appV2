@@ -19,33 +19,25 @@ export default function UpgradePage() {
     document.title = "Membership - MetaHers";
   }, []);
 
-  const handleUpgrade = async (tier: SubscriptionTier) => {
+  const handleUpgrade = (tier: SubscriptionTier) => {
     if (tier === 'free') return;
-    if (tier === 'private_monthly' || tier === 'ai_blueprint') {
-      trackCTAClick(`upgrade_apply_${tier}`, '/ai-integration');
-      window.location.href = '/ai-integration';
+
+    if (tier === 'signature_monthly') {
+      trackCTAClick('upgrade_signature', 'stripe_payment_link');
+      window.open('https://buy.stripe.com/8x28wQaT11jK5R8cX63Nm0a', '_blank');
       return;
     }
-    try {
-      const response = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ tier }),
-      });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to create checkout session');
-      }
+    if (tier === 'private_monthly') {
+      trackCTAClick('upgrade_private', 'stripe_payment_link');
+      window.open('https://buy.stripe.com/14A5kE7GP6E493kcX63Nm0b', '_blank');
+      return;
+    }
 
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.error('Error creating checkout session:', error);
-      alert('Failed to start checkout. Please try again or contact support.');
+    if (tier === 'ai_blueprint') {
+      trackCTAClick('upgrade_blueprint', '/ai-integration');
+      window.location.href = '/ai-integration';
+      return;
     }
   };
 

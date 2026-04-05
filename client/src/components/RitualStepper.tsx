@@ -10,6 +10,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 
 interface RitualStepperProps {
   steps: RitualStep[];
@@ -29,7 +30,7 @@ export function RitualStepper({
   const [showPaywall, setShowPaywall] = useState(false);
   const [openSteps, setOpenSteps] = useState<number[]>([]);
   
-  const userIsPro = user?.isPro || false;
+  const userIsPro = canAccessSignatureFeatures(user?.subscriptionTier);
 
   useEffect(() => {
     if (completedSteps.length > 0) {
@@ -217,7 +218,7 @@ export function RitualStepper({
                 <Button
                   size="lg"
                   className="gap-2 shadow-lg bg-[hsl(var(--gold-highlight))] text-black"
-                  onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
+                  onClick={() => window.open("https://buy.stripe.com/8x28wQaT11jK5R8cX63Nm0a", "_blank")}
                   data-testid="button-unlock-pro"
                 >
                   <Lock className="w-5 h-5" />
@@ -242,10 +243,10 @@ export function RitualStepper({
               Upgrade to unlock all steps
             </h3>
             <p className="text-foreground/80 mb-4">
-              Subscribe to Pro for $19.99/month to unlock all rituals and premium features.
+              Upgrade to Signature for $29/month to unlock all rituals and premium features.
             </p>
             <Button
-              onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
+              onClick={() => window.open("https://buy.stripe.com/8x28wQaT11jK5R8cX63Nm0a", "_blank")}
               className="gap-2"
               data-testid="button-upgrade-paywall"
             >
