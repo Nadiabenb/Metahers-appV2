@@ -304,7 +304,12 @@ export default function AccountPage() {
                       {plan.displayName}
                     </p>
                   </div>
-                  <div className={`backdrop-blur-md px-3 py-1 rounded-full text-sm font-medium border ${isPaid ? 'bg-[hsl(var(--liquid-gold))]/20 text-[hsl(var(--liquid-gold))] border-[hsl(var(--liquid-gold))]/30' : 'bg-card/50 text-foreground border-border'}`}>
+                  <div
+                    className="px-3 py-1 rounded-full text-sm font-medium border"
+                    style={isPaid
+                      ? { background: '#C9A96E22', color: '#C9A96E', border: '1px solid #C9A96E44' }
+                      : { background: '#1C1926', color: 'rgba(255,255,255,0.5)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  >
                     {isPaid ? plan.displayName : 'Free'}
                   </div>
                 </div>
@@ -317,28 +322,30 @@ export default function AccountPage() {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-serif text-lg font-semibold text-foreground mb-2">
-                          Upgrade to Pro
+                          Upgrade to Signature
                         </h4>
-                        <p className="text-sm text-foreground/80 mb-4">
-                          Unlock all 5 rituals, exclusive content, and MetaMuse AI Squad access. 
-                          Available with any Ritual Bag purchase.
+                        <p className="text-sm text-foreground/80 mb-1">
+                          Unlock all rituals, AI agents, and the full prompt library.
+                        </p>
+                        <p className="text-xs text-foreground/50 mb-4">
+                          Signature — $29/mo &nbsp;·&nbsp; Private — $149/mo
                         </p>
                         <div className="flex gap-3">
                           <Button
-                            onClick={() => window.open("https://buy.stripe.com/aFa28s2mvbYo4N44qA3Nm08", "_blank")}
+                            onClick={() => window.open("https://buy.stripe.com/8x28wQaT11jK5R8cX63Nm0a", "_blank")}
                             className="gap-2"
-                            data-testid="button-upgrade"
+                            data-testid="button-upgrade-signature"
                           >
                             <Crown className="w-4 h-4" />
-                            Subscribe Now - $19.99/mo
+                            Signature — $29/mo
                           </Button>
                           <Button
-                            onClick={() => window.location.href = "/shop"}
+                            onClick={() => window.open("https://buy.stripe.com/14A5kE7GP6E493kcX63Nm0b", "_blank")}
                             variant="outline"
                             className="gap-2"
-                            data-testid="button-view-shop"
+                            data-testid="button-upgrade-private"
                           >
-                            View Shop
+                            Private — $149/mo
                           </Button>
                         </div>
                       </div>

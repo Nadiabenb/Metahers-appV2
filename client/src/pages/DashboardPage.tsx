@@ -102,17 +102,29 @@ export default function DashboardPage() {
     ? Math.max(1, Math.ceil((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24)))
     : 1;
 
-  // Find the in-progress or next ritual
+  // Find the in-progress or next ritual — prioritize AI pillar experiences
+  const AI_PRIORITY_SLUGS = ['ai-essentials', 'prompt-engineering-fundamentals'];
+  const AI_PILLAR_SPACES = ['learn-ai', 'build-ai', 'monetize-ai', 'brand-ai'];
+
   const inProgressEntry = allProgress.find((p) => !p.completedAt);
   const inProgressExperience = inProgressEntry
     ? allExperiences.find((e) => e.id === inProgressEntry.experienceId)
     : null;
 
   const completedIds = new Set(allProgress.filter((p) => p.completedAt).map((p) => p.experienceId));
-  const nextExperience =
-    !inProgressExperience
-      ? allExperiences.find((e) => !completedIds.has(e.id))
-      : null;
+
+  // For "Start Here": prefer AI essentials slugs, then AI pillar spaces, then anything
+  const nextExperience = !inProgressExperience
+    ? (() => {
+        const incomplete = allExperiences.filter((e) => !completedIds.has(e.id));
+        return (
+          incomplete.find((e) => AI_PRIORITY_SLUGS.includes(e.slug)) ||
+          incomplete.find((e) => AI_PILLAR_SPACES.some((s) => e.slug?.startsWith(s) || (e as any).spaceId === s)) ||
+          incomplete.find((e) => !e.slug?.includes('web3')) ||
+          incomplete[0]
+        );
+      })()
+    : null;
 
   const FREE_RITUAL_LIMIT = 3;
   const freeRitualsExhausted = !isPaid && completedCount >= FREE_RITUAL_LIMIT;

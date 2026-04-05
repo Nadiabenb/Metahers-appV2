@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { 
+import {
   ArrowRight, Brain, Cpu, Layers, Target, Zap, Bot,
-  CheckCircle, ChevronDown, Sparkles, Calendar, Clock, 
+  CheckCircle, ChevronDown, Sparkles, Calendar, Clock,
   Users, GraduationCap, Briefcase, Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { SEO } from "@/components/SEO";
 import { trackCTAClick } from "@/lib/analytics";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -204,11 +209,41 @@ function SectionLabel({ children }: { children: string }) {
 
 export default function AIIntegrationPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const { toast } = useToast();
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    businessName: "",
+    businessDescription: "",
+    challenge: "",
+    successVision: "",
+    source: "",
+    revenueRange: "",
+  });
 
   const handleCTA = (source: string) => {
-    trackCTAClick(`ai_integration_${source}`, '/signup', 'ai_integration');
-    localStorage.setItem('ai_integration_interest', 'true');
-    window.location.href = "/signup";
+    trackCTAClick(`ai_integration_${source}`, '#apply', 'ai_integration');
+    document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      await apiRequest('POST', '/api/blueprint/apply', form);
+      setSubmitted(true);
+      toast({ title: "Application submitted", description: "Nadia will be in touch within 48 hours." });
+    } catch (err: any) {
+      toast({ title: "Submission failed", description: err.message || "Please try again.", variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -712,30 +747,171 @@ export default function AIIntegrationPage() {
         </div>
       </section>
 
-      {/* FINAL CTA */}
-      <section className="relative py-24 md:py-32 px-6 text-white text-center overflow-hidden" style={{ background: '#0D0B14' }}>
+      {/* APPLICATION FORM */}
+      <section id="apply" className="relative py-24 md:py-32 px-6 text-white overflow-hidden" style={{ background: '#0D0B14' }}>
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(139,92,246,0.12) 0%, transparent 70%)"
+          background: "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(139,92,246,0.10) 0%, transparent 70%)"
         }} />
 
         <div className="relative z-10 max-w-2xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
-            <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light text-white leading-tight mb-5" data-testid="text-final-headline">
-              The founders who move <em className="italic text-primary">first</em> don't just adapt.
-            </h2>
-            <p className="text-base md:text-lg text-white/45 max-w-md mx-auto mb-12 leading-relaxed">
-              They set the pace. They build the infrastructure. And they never look back.
-            </p>
+            <div className="text-center mb-12">
+              <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary mb-4">The AI Blueprint</p>
+              <h2 className="font-serif text-4xl sm:text-5xl font-light text-white leading-tight mb-4" data-testid="text-apply-headline">
+                Apply for The AI Blueprint
+              </h2>
+              <p className="text-base text-white/50 max-w-md mx-auto leading-relaxed">
+                4 weeks. 1:1 with Nadia. Tell us about your business so we can determine if the Blueprint is the right fit.
+              </p>
+            </div>
 
-            <Button
-              size="lg"
-              onClick={() => handleCTA('final')}
-              className="font-mono text-xs tracking-[0.18em] uppercase"
-              data-testid="button-cta-final"
-            >
-              <Sparkles className="w-4 h-4 mr-2" />
-              Begin Your Integration
-            </Button>
+            {submitted ? (
+              <div className="text-center py-16 border border-primary/20 rounded-sm" style={{ background: 'rgba(201,169,110,0.05)' }} data-testid="div-apply-confirmation">
+                <CheckCircle className="w-12 h-12 text-primary mx-auto mb-4" />
+                <h3 className="font-serif text-2xl font-light text-white mb-3">Application received.</h3>
+                <p className="text-white/50 text-sm max-w-sm mx-auto leading-relaxed">
+                  Thank you for applying. Nadia will review your application and reach out within 48 hours.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6" data-testid="form-blueprint-apply">
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="name" className="text-sm text-white/70 font-mono tracking-wide">Full Name *</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={form.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Your full name"
+                      className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-sm text-white/70 font-mono tracking-wide">Email *</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="you@yourbusiness.com"
+                      className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="businessName" className="text-sm text-white/70 font-mono tracking-wide">Business Name</Label>
+                  <Input
+                    id="businessName"
+                    name="businessName"
+                    value={form.businessName}
+                    onChange={handleChange}
+                    placeholder="Your business or brand name"
+                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="businessDescription" className="text-sm text-white/70 font-mono tracking-wide">What does your business do? *</Label>
+                  <Textarea
+                    id="businessDescription"
+                    name="businessDescription"
+                    value={form.businessDescription}
+                    onChange={handleChange}
+                    required
+                    rows={3}
+                    placeholder="Describe your business in 2-3 sentences"
+                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50 resize-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="challenge" className="text-sm text-white/70 font-mono tracking-wide">What's your biggest challenge with AI right now? *</Label>
+                  <Textarea
+                    id="challenge"
+                    name="challenge"
+                    value={form.challenge}
+                    onChange={handleChange}
+                    required
+                    rows={3}
+                    placeholder="Be specific — what's not working or what feels unclear?"
+                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50 resize-none"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="successVision" className="text-sm text-white/70 font-mono tracking-wide">What would success look like after 4 weeks? *</Label>
+                  <Textarea
+                    id="successVision"
+                    name="successVision"
+                    value={form.successVision}
+                    onChange={handleChange}
+                    required
+                    rows={3}
+                    placeholder="Describe the outcome you're hoping for"
+                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50 resize-none"
+                  />
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="revenueRange" className="text-sm text-white/70 font-mono tracking-wide">Monthly Revenue Range</Label>
+                    <select
+                      id="revenueRange"
+                      name="revenueRange"
+                      value={form.revenueRange}
+                      onChange={handleChange}
+                      className="w-full h-10 px-3 rounded-md text-sm bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-primary/50"
+                    >
+                      <option value="" className="bg-[#0D0B14]">Select range</option>
+                      <option value="pre-revenue" className="bg-[#0D0B14]">Pre-revenue</option>
+                      <option value="under-1k" className="bg-[#0D0B14]">Under $1K/mo</option>
+                      <option value="1k-5k" className="bg-[#0D0B14]">$1K – $5K/mo</option>
+                      <option value="5k-10k" className="bg-[#0D0B14]">$5K – $10K/mo</option>
+                      <option value="10k-plus" className="bg-[#0D0B14]">$10K+/mo</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="source" className="text-sm text-white/70 font-mono tracking-wide">How did you hear about MetaHers?</Label>
+                    <select
+                      id="source"
+                      name="source"
+                      value={form.source}
+                      onChange={handleChange}
+                      className="w-full h-10 px-3 rounded-md text-sm bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-primary/50"
+                    >
+                      <option value="" className="bg-[#0D0B14]">Select source</option>
+                      <option value="instagram" className="bg-[#0D0B14]">Instagram</option>
+                      <option value="x-twitter" className="bg-[#0D0B14]">X / Twitter</option>
+                      <option value="google" className="bg-[#0D0B14]">Google</option>
+                      <option value="referral" className="bg-[#0D0B14]">Friend / Referral</option>
+                      <option value="newsletter" className="bg-[#0D0B14]">Newsletter</option>
+                      <option value="other" className="bg-[#0D0B14]">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <Button
+                    type="submit"
+                    disabled={submitting}
+                    size="lg"
+                    className="w-full font-mono text-xs tracking-[0.18em] uppercase"
+                    style={{ background: '#C9A96E', color: '#1A1A2E' }}
+                    data-testid="button-submit-application"
+                  >
+                    {submitting ? "Submitting..." : "Submit Application"}
+                  </Button>
+                  <p className="text-center text-white/25 font-mono text-[11px] tracking-wider mt-4">
+                    Application-based · Limited availability · No payment required to apply
+                  </p>
+                </div>
+              </form>
+            )}
           </motion.div>
         </div>
       </section>
@@ -743,7 +919,7 @@ export default function AIIntegrationPage() {
       {/* FOOTER NOTE */}
       <div className="py-8 px-6 text-center border-t border-primary/10" style={{ background: '#0D0B14' }}>
         <p className="font-mono text-[11px] tracking-wider text-white/20">
-          MetaHers {"\u00B7"} AI Integration Experience {"\u00B7"} Private {"\u00B7"} By Application
+          MetaHers · The AI Blueprint · Private · By Application
         </p>
       </div>
     </div>

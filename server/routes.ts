@@ -5505,6 +5505,53 @@ Respond in JSON format:
     res.json({ success: true });
   }));
 
+  // Blueprint application submissions
+  app.post('/api/blueprint/apply', asyncHandler(async (req: Request, res: Response) => {
+    const { name, email, businessName, businessDescription, challenge, successVision, source, revenueRange } = req.body;
+
+    if (!name || !email || !businessDescription || !challenge || !successVision) {
+      return res.status(400).json({ message: "Please fill in all required fields" });
+    }
+
+    const resendClient = await getUncachableResendClient();
+    if (resendClient) {
+      // Notify Nadia
+      await resendClient.client.emails.send({
+        from: resendClient.fromEmail,
+        to: 'nadia@metahers.ai',
+        subject: `New Blueprint Application: ${name}`,
+        html: `
+          <h2>New AI Blueprint Application</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Business:</strong> ${businessName || 'Not provided'}</p>
+          <p><strong>Description:</strong> ${businessDescription}</p>
+          <p><strong>Challenge:</strong> ${challenge}</p>
+          <p><strong>Success Vision:</strong> ${successVision}</p>
+          <p><strong>Source:</strong> ${source || 'Not specified'}</p>
+          <p><strong>Revenue Range:</strong> ${revenueRange || 'Not specified'}</p>
+        `,
+      });
+
+      // Confirm to applicant
+      await resendClient.client.emails.send({
+        from: resendClient.fromEmail,
+        to: email,
+        subject: 'Your AI Blueprint Application — MetaHers',
+        html: `
+          <h2>Thank you for applying, ${name}.</h2>
+          <p>We've received your application for The AI Blueprint.</p>
+          <p>Nadia will personally review your submission and reach out within 48 hours to discuss next steps.</p>
+          <p>In the meantime, explore the platform at <a href="https://app.metahers.ai">app.metahers.ai</a>.</p>
+          <br/>
+          <p>The MetaHers Team</p>
+        `,
+      });
+    }
+
+    res.json({ success: true, message: "Application submitted successfully" });
+  }));
+
   const httpServer = createServer(app);
   return httpServer;
 }
