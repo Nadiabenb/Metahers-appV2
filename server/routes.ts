@@ -5514,7 +5514,7 @@ Respond in JSON format:
     }
 
     // Step 1: Save to database first — never lose application data
-    let savedApplication: { id: string } | null = null;
+    let savedApplication: { id: string };
     try {
       const inserted = await db.insert(blueprintApplications).values({
         name,
@@ -5528,9 +5528,10 @@ Respond in JSON format:
         emailSentToNadia: false,
         emailSentToApplicant: false,
       }).returning({ id: blueprintApplications.id });
-      savedApplication = inserted[0] || null;
+      savedApplication = inserted[0];
     } catch (dbError) {
-      console.error('[Blueprint] Failed to save application to database:', dbError);
+      console.error('[Blueprint] Critical: failed to save application to database:', dbError);
+      return res.status(500).json({ message: "Failed to save your application. Please try again." });
     }
 
     // Step 2: Attempt to send emails
@@ -5610,8 +5611,8 @@ Respond in JSON format:
     res.json({ success: true, message: "Application submitted successfully" });
   }));
 
-  // Admin: list all Blueprint applications
-  app.get('/api/admin/blueprint/applications', isAuthenticated, isAdmin, asyncHandler(async (_req: Request, res: Response) => {
+  // Admin backup: list all Blueprint applications (requires admin)
+  app.get('/api/blueprint/applications', isAuthenticated, isAdmin, asyncHandler(async (_req: Request, res: Response) => {
     const applications = await db
       .select()
       .from(blueprintApplications)
