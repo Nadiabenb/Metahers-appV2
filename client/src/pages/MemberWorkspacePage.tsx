@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Crown, Calendar, Users, Sparkles, ArrowRight, Clock, Video, FileText } from "lucide-react";
 import { Link } from "wouter";
 import { formatPrice, getPricingPlan, isSanctuaryTier, isInnerCircleTier, isFoundersCircleTier, type SubscriptionTier } from "@shared/pricing";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 import { format, parseISO } from "date-fns";
 
 type GroupSession = {
@@ -445,7 +446,7 @@ export default function MemberWorkspacePage() {
                         Journal
                       </Button>
                     </Link>
-                    {user?.isPro && (
+                    {canAccessSignatureFeatures(user?.subscriptionTier) && (
                       <Link href="/thought-leadership">
                         <Button variant="ghost" className="w-full justify-start" data-testid="button-quick-link-thought-leadership">
                           <Crown className="w-4 h-4 mr-2" />

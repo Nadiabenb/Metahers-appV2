@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import type { GlowUpProfileDB } from "@shared/schema";
 import { useAuth } from "@/hooks/useAuth";
 import { Crown } from "lucide-react";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 
 export default function GlowUpOnboardingPage() {
   const [, setLocation] = useLocation();
@@ -32,8 +33,8 @@ export default function GlowUpOnboardingPage() {
     queryKey: ['/api/glow-up/profile'],
   });
 
-  // Check if user is Pro
-  if (user && !user.isPro) {
+  // Check if user has Signature access
+  if (user && !canAccessSignatureFeatures(user?.subscriptionTier)) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-primary/5">
         <Card className="w-full max-w-2xl p-8 md:p-12 text-center">

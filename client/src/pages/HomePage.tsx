@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 
 const RecommendationWidget = lazy(() => import("@/components/RecommendationWidget").then(m => ({ default: m.RecommendationWidget })));
 import { useAuth } from "@/hooks/useAuth";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { spaceImages } from "@/lib/imageManifest";
 
@@ -111,7 +112,7 @@ export default function HomePage() {
     queryKey: ["/api/experiences/all"],
   });
 
-  const isProUser = !!user?.isPro || user?.subscriptionTier === "pro";
+  const isProUser = canAccessSignatureFeatures(user?.subscriptionTier);
 
   useEffect(() => {
     if (user && !user.onboardingCompleted) {

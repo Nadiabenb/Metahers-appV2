@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 
 export default function GlowUpLandingPage() {
   const [, setLocation] = useLocation();
   const { user, isAuthenticated } = useAuth();
+  const isSignature = canAccessSignatureFeatures(user?.subscriptionTier);
 
   const benefits = [
     "14-day personalized AI brand-building program",
@@ -39,7 +41,7 @@ export default function GlowUpLandingPage() {
 
   const handleGetStarted = () => {
     if (isAuthenticated) {
-      if (user?.isPro) {
+      if (isSignature) {
         setLocation("/glow-up");
       } else {
         setLocation("/account");
@@ -107,7 +109,7 @@ export default function GlowUpLandingPage() {
               data-testid="button-get-started"
             >
               <TrendingUp className="w-5 h-5" />
-              {isAuthenticated ? (user?.isPro ? "Start Program" : "Upgrade to Pro") : "Get Started Free"}
+              {isAuthenticated ? (isSignature ? "Start Program" : "Upgrade to Signature") : "Get Started Free"}
               <ArrowRight className="w-5 h-5" />
             </Button>
           </motion.div>
@@ -118,7 +120,7 @@ export default function GlowUpLandingPage() {
             transition={{ duration: 0.3, delay: 0.25 }}
             className="text-sm text-foreground"
           >
-            {!user?.isPro && "Use beta code 'MetaMuse2025' for free Pro access"}
+            {!isSignature && "Use beta code 'MetaMuse2025' for free access"}
           </motion.p>
         </div>
       </section>
@@ -226,10 +228,10 @@ export default function GlowUpLandingPage() {
               data-testid="button-cta-bottom"
             >
               <Crown className="w-5 h-5" />
-              {isAuthenticated ? (user?.isPro ? "Start Your Glow-Up" : "Upgrade to Pro") : "Get Started Now"}
+              {isAuthenticated ? (isSignature ? "Start Your Glow-Up" : "Upgrade to Signature") : "Get Started Now"}
             </Button>
 
-            {!user?.isPro && (
+            {!isSignature && (
               <p className="mt-6 text-sm text-foreground">
                 Beta testers: Use code 'MetaMuse2025' for free access
               </p>

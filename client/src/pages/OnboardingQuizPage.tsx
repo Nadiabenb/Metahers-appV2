@@ -14,77 +14,76 @@ import { ArrowRight, Sparkles, CheckCircle2, SkipForward } from "lucide-react";
 const QUESTIONS = [
   {
     id: "goal",
-    title: "What's your main goal?",
-    description: "This helps us personalize your learning path",
+    title: "What's your main goal right now?",
+    description: "This shapes your entire learning path",
     options: [
-      { value: "master_ai", label: "Master AI for my business" },
-      { value: "build_web3", label: "Build Web3 wealth" },
-      { value: "own_authority", label: "Own my authority & expertise" },
-      { value: "advance_career", label: "Advance my career" },
+      { value: "learn_ai", label: "Learn AI — understand tools and strategies that actually apply to my business" },
+      { value: "build_ai", label: "Build with AI — create apps, automations, or products without code" },
+      { value: "monetize_ai", label: "Monetize with AI — launch offers, land clients, and generate revenue" },
+      { value: "brand_ai", label: "Brand with AI — grow my presence, content, and thought leadership" },
     ],
   },
   {
     id: "experienceLevel",
-    title: "What's your experience level?",
-    description: "Be honest - we tailor content to your level",
+    title: "How familiar are you with AI tools?",
+    description: "Be honest — we tailor content to exactly where you are",
     options: [
-      { value: "beginner", label: "Never touched AI/Web3" },
-      { value: "intermediate", label: "Some exposure" },
-      { value: "comfortable", label: "Pretty comfortable" },
-      { value: "expert", label: "I'm an expert" },
+      { value: "beginner", label: "Just getting started — I've barely scratched the surface" },
+      { value: "intermediate", label: "Some experience — I use a few tools but want to go deeper" },
+      { value: "comfortable", label: "Fairly comfortable — I use AI regularly in my work" },
+      { value: "advanced", label: "Advanced — I'm building systems and want expert-level strategies" },
     ],
   },
   {
     id: "role",
-    title: "What's your role or situation?",
-    description: "Understanding your context matters",
+    title: "How would you describe yourself?",
+    description: "We tailor examples and strategies to your context",
     options: [
-      { value: "solopreneur", label: "Solopreneur" },
-      { value: "mom", label: "Mom juggling multiple roles" },
-      { value: "creative", label: "Creative or artist" },
-      { value: "executive", label: "Executive or founder" },
-      { value: "freelancer", label: "Freelancer" },
+      { value: "solopreneur", label: "Solopreneur running my own business" },
+      { value: "mom", label: "Mom building something around my life" },
+      { value: "creative", label: "Creative — designer, writer, or artist" },
+      { value: "freelancer", label: "Freelancer or service provider" },
     ],
   },
   {
     id: "timeAvailability",
-    title: "How much time can you dedicate?",
-    description: "We'll match experiences to your schedule",
+    title: "How much time can you dedicate each week?",
+    description: "We'll match experiences to your real schedule",
     options: [
-      { value: "casual", label: "Casual learner" },
-      { value: "5hrs_week", label: "3-5 hours per week" },
-      { value: "intensive", label: "Intensive (10+ hours)" },
+      { value: "casual", label: "30 minutes or less — I need quick wins" },
+      { value: "5hrs_week", label: "1-3 hours — I'm consistent but busy" },
+      { value: "intensive", label: "5+ hours — I'm ready to go all in" },
     ],
   },
   {
     id: "painPoint",
-    title: "What's your biggest challenge?",
-    description: "We'll prioritize what matters most",
+    title: "What's your biggest challenge with AI right now?",
+    description: "We'll make sure to address this head-on",
     options: [
-      { value: "overwhelmed", label: "Overwhelmed by complexity" },
-      { value: "tech_scared", label: "Tech intimidates me" },
-      { value: "no_time", label: "I don't have enough time" },
-      { value: "imposter_syndrome", label: "Imposter syndrome" },
+      { value: "overwhelmed", label: "Overwhelmed — too many tools, don't know where to start" },
+      { value: "tech_scared", label: "Tech anxiety — the technical side intimidates me" },
+      { value: "no_time", label: "No time — I need practical strategies I can implement fast" },
+      { value: "imposter_syndrome", label: "Imposter syndrome — I wonder if AI is really for someone like me" },
     ],
   },
   {
     id: "learningStyle",
     title: "How do you learn best?",
-    description: "Your preferred learning style",
+    description: "Your preferred format shapes how we deliver content",
     options: [
-      { value: "video", label: "Video learning" },
-      { value: "written", label: "Written guides & articles" },
-      { value: "interactive", label: "Interactive projects" },
-      { value: "coaching", label: "Live group coaching" },
+      { value: "written", label: "Reading — articles, guides, and walkthroughs" },
+      { value: "interactive", label: "Doing — hands-on exercises and real projects" },
+      { value: "coaching", label: "Community — group learning and live support" },
+      { value: "video", label: "Watching — video-led lessons and demos" },
     ],
   },
 ];
 
 const EXPERIENCE_MATCHING = {
-  master_ai: ["ai-builder", "prompt-playground", "companion"],
-  build_web3: ["vip-cohort", "executive", "thought-leadership"],
-  own_authority: ["ai-glow-up", "app-atelier", "thought-leadership"],
-  advance_career: ["career-path", "vip-cohort", "executive"],
+  learn_ai: ["moms-balance", "digital-boutique-launch", "founders-club-launch"],
+  build_ai: ["app-atelier-ai-tools", "founders-club-launch", "digital-boutique-launch"],
+  monetize_ai: ["founders-club-launch", "digital-boutique-launch", "moms-balance"],
+  brand_ai: ["digital-boutique-launch", "founders-club-launch", "app-atelier-ai-tools"],
 };
 
 export default function OnboardingQuizPage() {
@@ -140,10 +139,10 @@ export default function OnboardingQuizPage() {
     setIsSubmitting(true);
     try {
       // Map answers to response format and get recommendations
-      const goal = responses.goal || "master_ai";
+      const goal = responses.goal || "learn_ai";
       const experienceSlugs =
         EXPERIENCE_MATCHING[goal as keyof typeof EXPERIENCE_MATCHING] ||
-        EXPERIENCE_MATCHING.master_ai;
+        EXPERIENCE_MATCHING.learn_ai;
 
       const payload = {
         goal,

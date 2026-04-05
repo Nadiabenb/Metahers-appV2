@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import { spaceImages } from "@/lib/imageManifest";
-import { isSignatureTier, type SubscriptionTier } from "@shared/pricing";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 
 type Space = {
   id: string;
@@ -78,8 +78,7 @@ export default function SpacesBrowsePage() {
   const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const isPaid = isSignatureTier((user?.subscriptionTier as SubscriptionTier) ?? "free");
-  const isProUser = isPaid || !!user?.isPro;
+  const isProUser = canAccessSignatureFeatures(user?.subscriptionTier);
 
   const { data: spaces = [], isLoading: spacesLoading } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
