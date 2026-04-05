@@ -3313,3 +3313,27 @@ export const toolReviewHelpful = pgTable("tool_review_helpful", {
   uniqueIndex("idx_review_helpful_unique").on(table.reviewId, table.userId),
 ]);
 
+// ===== BLUEPRINT APPLICATIONS =====
+
+export const blueprintApplications = pgTable("blueprint_applications", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: varchar("name").notNull(),
+  email: varchar("email").notNull(),
+  businessName: varchar("business_name"),
+  businessDescription: text("business_description").notNull(),
+  challenge: text("challenge").notNull(),
+  successVision: text("success_vision").notNull(),
+  revenueRange: varchar("revenue_range"),
+  source: varchar("source"),
+  emailSentToNadia: boolean("email_sent_to_nadia").default(false).notNull(),
+  emailSentToApplicant: boolean("email_sent_to_applicant").default(false).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_blueprint_applications_email").on(table.email),
+  index("idx_blueprint_applications_created").on(table.createdAt),
+]);
+
+export const insertBlueprintApplicationSchema = createInsertSchema(blueprintApplications).omit({ id: true, createdAt: true });
+export type InsertBlueprintApplication = z.infer<typeof insertBlueprintApplicationSchema>;
+export type BlueprintApplicationDB = typeof blueprintApplications.$inferSelect;
+

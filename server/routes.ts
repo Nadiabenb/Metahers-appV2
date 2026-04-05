@@ -15,7 +15,7 @@ import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
 import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema, toolReviews, toolReviewHelpful } from "@shared/schema";
 import { sql as drizzleSql, eq, desc, and, sql, gte } from "drizzle-orm";
-import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests } from "@shared/schema";
+import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests, blueprintApplications } from "@shared/schema";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
@@ -5513,43 +5513,110 @@ Respond in JSON format:
       return res.status(400).json({ message: "Please fill in all required fields" });
     }
 
+    // Step 1: Save to database first — never lose application data
+    let savedApplication: { id: string } | null = null;
+    try {
+      const inserted = await db.insert(blueprintApplications).values({
+        name,
+        email,
+        businessName: businessName || null,
+        businessDescription,
+        challenge,
+        successVision,
+        revenueRange: revenueRange || null,
+        source: source || null,
+        emailSentToNadia: false,
+        emailSentToApplicant: false,
+      }).returning({ id: blueprintApplications.id });
+      savedApplication = inserted[0] || null;
+    } catch (dbError) {
+      console.error('[Blueprint] Failed to save application to database:', dbError);
+    }
+
+    // Step 2: Attempt to send emails
     const resendClient = await getUncachableResendClient();
-    if (resendClient) {
+    if (!resendClient) {
+      console.error('[Blueprint] Resend client unavailable — emails not sent for application from:', email,
+        '| RESEND_API_KEY set:', !!process.env.RESEND_API_KEY);
+    } else {
+      let nadiaEmailSent = false;
+      let applicantEmailSent = false;
+
       // Notify Nadia
-      await resendClient.client.emails.send({
-        from: resendClient.fromEmail,
-        to: 'nadia@metahers.ai',
-        subject: `New Blueprint Application: ${name}`,
-        html: `
-          <h2>New AI Blueprint Application</h2>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Business:</strong> ${businessName || 'Not provided'}</p>
-          <p><strong>Description:</strong> ${businessDescription}</p>
-          <p><strong>Challenge:</strong> ${challenge}</p>
-          <p><strong>Success Vision:</strong> ${successVision}</p>
-          <p><strong>Source:</strong> ${source || 'Not specified'}</p>
-          <p><strong>Revenue Range:</strong> ${revenueRange || 'Not specified'}</p>
-        `,
-      });
+      try {
+        const { data: nadiaData, error: nadiaError } = await resendClient.client.emails.send({
+          from: resendClient.fromEmail,
+          to: 'nadia@metahers.ai',
+          subject: `New Blueprint Application: ${name}`,
+          html: `
+            <h2>New AI Blueprint Application</h2>
+            <p><strong>Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Business:</strong> ${businessName || 'Not provided'}</p>
+            <p><strong>Description:</strong> ${businessDescription}</p>
+            <p><strong>Challenge:</strong> ${challenge}</p>
+            <p><strong>Success Vision:</strong> ${successVision}</p>
+            <p><strong>Source:</strong> ${source || 'Not specified'}</p>
+            <p><strong>Revenue Range:</strong> ${revenueRange || 'Not specified'}</p>
+          `,
+        });
+        if (nadiaError) {
+          console.error('[Blueprint] Resend API error sending to nadia@metahers.ai:', JSON.stringify(nadiaError));
+        } else {
+          nadiaEmailSent = true;
+          console.log('[Blueprint] Notification email sent to nadia@metahers.ai, id:', nadiaData?.id);
+        }
+      } catch (emailError) {
+        console.error('[Blueprint] Network error sending notification email to nadia@metahers.ai:', emailError);
+      }
 
       // Confirm to applicant
-      await resendClient.client.emails.send({
-        from: resendClient.fromEmail,
-        to: email,
-        subject: 'Your AI Blueprint Application — MetaHers',
-        html: `
-          <h2>Thank you for applying, ${name}.</h2>
-          <p>We've received your application for The AI Blueprint.</p>
-          <p>Nadia will personally review your submission and reach out within 48 hours to discuss next steps.</p>
-          <p>In the meantime, explore the platform at <a href="https://app.metahers.ai">app.metahers.ai</a>.</p>
-          <br/>
-          <p>The MetaHers Team</p>
-        `,
-      });
+      try {
+        const { data: applicantData, error: applicantError } = await resendClient.client.emails.send({
+          from: resendClient.fromEmail,
+          to: email,
+          subject: 'Your AI Blueprint Application — MetaHers',
+          html: `
+            <h2>Thank you for applying, ${name}.</h2>
+            <p>We've received your application for The AI Blueprint.</p>
+            <p>Nadia will personally review your submission and reach out within 48 hours to discuss next steps.</p>
+            <p>In the meantime, explore the platform at <a href="https://app.metahers.ai">app.metahers.ai</a>.</p>
+            <br/>
+            <p>The MetaHers Team</p>
+          `,
+        });
+        if (applicantError) {
+          console.error('[Blueprint] Resend API error sending confirmation to applicant:', email, JSON.stringify(applicantError));
+        } else {
+          applicantEmailSent = true;
+          console.log('[Blueprint] Confirmation email sent to applicant:', email, 'id:', applicantData?.id);
+        }
+      } catch (emailError) {
+        console.error('[Blueprint] Network error sending confirmation email to applicant:', email, emailError);
+      }
+
+      // Update email status flags in DB
+      if (savedApplication && (nadiaEmailSent || applicantEmailSent)) {
+        try {
+          await db.update(blueprintApplications)
+            .set({ emailSentToNadia: nadiaEmailSent, emailSentToApplicant: applicantEmailSent })
+            .where(eq(blueprintApplications.id, savedApplication.id));
+        } catch (updateError) {
+          console.error('[Blueprint] Failed to update email status flags:', updateError);
+        }
+      }
     }
 
     res.json({ success: true, message: "Application submitted successfully" });
+  }));
+
+  // Admin: list all Blueprint applications
+  app.get('/api/admin/blueprint/applications', isAuthenticated, isAdmin, asyncHandler(async (_req: Request, res: Response) => {
+    const applications = await db
+      .select()
+      .from(blueprintApplications)
+      .orderBy(desc(blueprintApplications.createdAt));
+    res.json(applications);
   }));
 
   const httpServer = createServer(app);
