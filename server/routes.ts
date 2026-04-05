@@ -74,6 +74,10 @@ if (!process.env.STRIPE_SECRET_KEY) {
 }
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Email configuration
+const FROM_EMAIL = 'MetaHers <hello@metahers.ai>';
+const REPLY_TO_EMAIL = 'nadia@metahers.ai';
+
 // Resend email client (using Replit-managed connection)
 let connectionSettings: any;
 
@@ -82,7 +86,7 @@ async function getResendCredentials() {
   if (process.env.RESEND_API_KEY) {
     return {
       apiKey: process.env.RESEND_API_KEY,
-      fromEmail: process.env.RESEND_FROM_EMAIL || 'MetaHers <help@metahers.ai>'
+      fromEmail: process.env.RESEND_FROM_EMAIL || FROM_EMAIL
     };
   }
 
@@ -114,7 +118,7 @@ async function getResendCredentials() {
     }
     return {
       apiKey: connectionSettings.settings.api_key, 
-      fromEmail: connectionSettings.settings.from_email || 'MetaHers <help@metahers.ai>'
+      fromEmail: connectionSettings.settings.from_email || FROM_EMAIL
     };
   } catch (error) {
     console.warn('Failed to fetch Resend credentials from Replit connector:', error);
@@ -881,6 +885,7 @@ Return ONLY valid JSON:
           const result = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: email,
+          reply_to: REPLY_TO_EMAIL,
           subject: 'Reset Your MetaHers Password',
           html: `
 <!DOCTYPE html>
@@ -5157,6 +5162,7 @@ Respond in JSON format:
         await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: 'melissa@metahers.ai', // Admin email
+          reply_to: REPLY_TO_EMAIL,
           subject: `New Voyage Invitation Request: ${voyage[0].title}`,
           html: `
             <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0D0B14; color: #fff; padding: 32px; border-radius: 16px;">
@@ -5548,6 +5554,7 @@ Respond in JSON format:
         const { data: nadiaData, error: nadiaError } = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: 'nadia@metahers.ai',
+          reply_to: REPLY_TO_EMAIL,
           subject: `New Blueprint Application: ${name}`,
           html: `
             <h2>New AI Blueprint Application</h2>
@@ -5576,6 +5583,7 @@ Respond in JSON format:
         const { data: applicantData, error: applicantError } = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: email,
+          reply_to: REPLY_TO_EMAIL,
           subject: 'Your AI Blueprint Application — MetaHers',
           html: `
             <h2>Thank you for applying, ${name}.</h2>
