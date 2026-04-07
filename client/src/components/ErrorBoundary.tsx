@@ -61,7 +61,7 @@ export class ErrorBoundary extends Component<Props, State> {
       `Stack: ${this.state.error?.stack}\n\n` +
       `Component Stack: ${this.state.errorInfo?.componentStack}`
     );
-    window.location.href = `mailto:hello@metahers.ai?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:nadia@metahers.ai?subject=${subject}&body=${body}`;
   };
 
   render() {

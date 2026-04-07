@@ -188,7 +188,7 @@ export default function FreeResourcesPage() {
                 
                 <p className="text-sm" style={{ color: 'rgba(255,255,255,0.5)' }}>
                   Can't find the email? Check your spam folder or{" "}
-                  <a href="mailto:hello@metahers.ai" className="text-[#E879F9] underline">contact us</a>
+                  <a href="mailto:nadia@metahers.ai" className="text-[#E879F9] underline">contact us</a>
                 </p>
               </div>
             </motion.div>

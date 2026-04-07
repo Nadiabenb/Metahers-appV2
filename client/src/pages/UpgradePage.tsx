@@ -239,8 +239,8 @@ export default function UpgradePage() {
       <section className="py-12 px-6 text-center" style={{ background: BLUSH }}>
         <p className="text-sm" style={{ color: '#6B6B7B' }}>
           Questions?{' '}
-          <a href="mailto:hello@metahers.ai" style={{ color: NAVY }} className="underline">
-            hello@metahers.ai
+          <a href="mailto:nadia@metahers.ai" style={{ color: NAVY }} className="underline">
+            nadia@metahers.ai
           </a>
         </p>
       </section>

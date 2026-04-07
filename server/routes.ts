@@ -75,7 +75,7 @@ if (!process.env.STRIPE_SECRET_KEY) {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 // Email configuration
-const FROM_EMAIL = 'MetaHers <hello@metahers.ai>';
+const FROM_EMAIL = 'MetaHers <notifications@app.metahers.ai>';
 const REPLY_TO_EMAIL = 'nadia@metahers.ai';
 
 // Resend email client (using Replit-managed connection)
@@ -882,6 +882,7 @@ Return ONLY valid JSON:
       } else {
         try {
           console.log(`📧 Attempting to send password reset email to: ${email}`);
+          console.log('RESEND FROM =', FROM_EMAIL);
           const result = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: email,
@@ -5159,6 +5160,7 @@ Respond in JSON format:
     try {
       const resendClient = await getUncachableResendClient();
       if (resendClient) {
+        console.log('RESEND FROM =', FROM_EMAIL);
         await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: 'melissa@metahers.ai', // Admin email
@@ -5551,6 +5553,7 @@ Respond in JSON format:
 
       // Notify Nadia
       try {
+        console.log('RESEND FROM =', FROM_EMAIL);
         const { data: nadiaData, error: nadiaError } = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: 'nadia@metahers.ai',
@@ -5580,6 +5583,7 @@ Respond in JSON format:
 
       // Confirm to applicant
       try {
+        console.log('RESEND FROM =', FROM_EMAIL);
         const { data: applicantData, error: applicantError } = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: email,
