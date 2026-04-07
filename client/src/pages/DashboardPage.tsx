@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Lock, Wrench, Users } from "lucide-react";
+import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Wrench, Users } from "lucide-react";
 import { Link } from "wouter";
 import { isSignatureTier } from "@shared/pricing";
 import { spaceImages } from "@/lib/imageManifest";
@@ -174,6 +174,49 @@ export default function DashboardPage() {
               </CardContent>
             </Card>
 
+            {/* Day 1 starter kit — only show before any activity */}
+            {completedCount === 0 && (
+              <div>
+                <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Start here</p>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {[
+                    {
+                      emoji: "✦",
+                      title: "Try an AI Agent",
+                      body: "Ask Bella anything about your business. She's built for solopreneurs.",
+                      href: "/companion",
+                      cta: "Open Bella →",
+                    },
+                    {
+                      emoji: "⬡",
+                      title: "Browse the AI Toolkit",
+                      body: "Curated tools for writing, content, automation — plain language, no overwhelm.",
+                      href: "/toolkit",
+                      cta: "Explore tools →",
+                    },
+                    {
+                      emoji: "◈",
+                      title: "Start your first ritual",
+                      body: "A guided AI learning experience matched to your goals.",
+                      href: "/learning-hub",
+                      cta: "Begin learning →",
+                    },
+                  ].map(({ emoji, title, body, href, cta }) => (
+                    <Link key={title} href={href}>
+                      <Card className="cursor-pointer h-full bg-[#13111C] border-white/10 hover:border-[#C9A96E]/30 transition-colors">
+                        <CardContent className="pt-5 pb-5 px-5">
+                          <span className="text-lg mb-3 block" style={{ color: "#C9A96E" }}>{emoji}</span>
+                          <h3 className="text-white text-sm font-medium mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>{title}</h3>
+                          <p className="text-white/40 text-xs leading-relaxed mb-3">{body}</p>
+                          <span className="text-xs font-medium" style={{ color: "#C9A96E" }}>{cta}</span>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Preview teasers */}
             <div>
               <p className="text-white/40 text-xs uppercase tracking-widest mb-4">What you'll unlock</p>
@@ -222,16 +265,26 @@ export default function DashboardPage() {
               <CardContent className="pt-7 pb-7 px-7">
                 {freeRitualsExhausted ? (
                   <div>
-                    <p className="text-white/50 text-xs uppercase tracking-widest mb-2">Continue Learning</p>
-                    <h2 className="text-white text-lg font-medium mb-1" style={{ fontFamily: "'Playfair Display', serif" }}>
-                      You've completed your 3 free rituals.
+                    <p className="text-white/50 text-xs uppercase tracking-widest mb-2">You're on a roll ✦</p>
+                    <h2 className="text-white text-lg font-medium mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
+                      You've completed all 3 of your free rituals.
                     </h2>
-                    <p className="text-white/50 text-sm mb-5">
-                      Upgrade to access all 54 rituals and the full library.
+                    <p className="text-white/50 text-sm mb-1">
+                      That puts you ahead of most people who say they want to learn AI.
                     </p>
-                    <Link href="/upgrade">
-                      <Button className={GOLD_BTN} style={GOLD_STYLE}>Explore Signature</Button>
-                    </Link>
+                    <p className="text-white/40 text-sm mb-5">
+                      Signature unlocks all 54 rituals, unlimited agent access, and the full AI toolkit — from $29/month.
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <Link href="/upgrade">
+                        <Button className={GOLD_BTN} style={GOLD_STYLE}>Unlock Everything</Button>
+                      </Link>
+                      <Link href="/companion">
+                        <Button variant="ghost" className="text-white/50 hover:text-white text-xs uppercase tracking-widest font-semibold">
+                          Try an Agent Instead
+                        </Button>
+                      </Link>
+                    </div>
                   </div>
                 ) : inProgressExperience ? (
                   <div>
@@ -358,8 +411,9 @@ export default function DashboardPage() {
                               )}
                               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                               {isLocked && (
-                                <div className="absolute inset-0 flex items-center justify-center" style={{ background: "rgba(13,11,20,0.75)" }}>
-                                  <Lock className="w-4 h-4 text-white/50" />
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-1" style={{ background: "rgba(13,11,20,0.82)" }}>
+                                  <Crown className="w-4 h-4" style={{ color: "#C9A96E" }} />
+                                  <span className="text-xs font-medium tracking-widest uppercase" style={{ color: "#C9A96E", fontSize: "9px" }}>Signature</span>
                                 </div>
                               )}
                               <p className="absolute bottom-2 left-2 right-2 text-white text-xs font-medium leading-tight truncate">

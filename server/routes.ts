@@ -2514,8 +2514,8 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
 
       // Determine limits based on subscription tier
       const tier = user.subscriptionTier;
-      const hasFullAccess = tier === 'vip_cohort' || tier === 'executive';
-      const messageLimit = hasFullAccess ? null : 5; // Free tier gets 5 messages
+      const hasFullAccess = tier === 'signature_monthly' || tier === 'private_monthly' || tier === 'ai_blueprint' || tier === 'vip_cohort' || tier === 'executive';
+      const messageLimit = hasFullAccess ? null : 15; // Free tier gets 15 messages to experience real value
 
       res.json({
         messageCount,
@@ -2545,14 +2545,14 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         return res.status(404).json({ message: "User not found" });
       }
 
-      // Check if user has full access (Inner Circle or Executive Intensive)
-      const hasFullAccess = user.subscriptionTier === 'vip_cohort' || user.subscriptionTier === 'executive';
+      // Check if user has full access (any paid tier)
+      const hasFullAccess = user.subscriptionTier === 'signature_monthly' || user.subscriptionTier === 'private_monthly' || user.subscriptionTier === 'ai_blueprint' || user.subscriptionTier === 'vip_cohort' || user.subscriptionTier === 'executive';
 
       // For free tier users, check message limit
       if (!hasFullAccess) {
         const usage = await storage.getAppAtelierUsage(userId);
         const messageCount = usage?.messageCount || 0;
-        const MESSAGE_LIMIT = 5;
+        const MESSAGE_LIMIT = 15;
 
         if (messageCount >= MESSAGE_LIMIT) {
           return res.status(403).json({ 

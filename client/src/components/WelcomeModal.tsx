@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Sparkles, BookOpen, Crown, ArrowRight } from "lucide-react";
+import { Sparkles, Bot, Wrench, ArrowRight, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
@@ -15,22 +15,22 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
 
   const steps = [
     {
-      title: `Welcome to MetaHers${userName ? `, ${userName}` : ''}!`,
-      description: "Your luxury learning journey begins here. Let's get you started with a quick tour.",
+      title: `Welcome to MetaHers${userName ? `, ${userName}` : ""}.`,
+      description:
+        "You've joined a community of ambitious women using AI to build businesses, grow brands, and work smarter. Let's show you around.",
       icon: Sparkles,
-      color: "text-[hsl(var(--liquid-gold))]",
     },
     {
-      title: "Learn Through Rituals",
-      description: "Our 5 guided rituals teach you AI, blockchain, crypto, NFTs, and the metaverse—all wrapped in a calm, spa-like experience. Start with your first free ritual today.",
-      icon: Sparkles,
-      color: "text-[hsl(--hyper-violet))]",
+      title: "Your AI toolkit is ready.",
+      description:
+        "Meet Bella, Nova, Luna, Sage, Noor, and Vita — six AI agents built for different parts of your business. Plus a curated library of the best AI tools, organised by what you actually need to do.",
+      icon: Bot,
     },
     {
-      title: "Track Your Progress",
-      description: "Use your personal journal to reflect on each session, track your mood, and watch your learning streak grow. Pro members get AI-powered insights and coaching.",
-      icon: BookOpen,
-      color: "text-[hsl(var(--aurora-teal))]",
+      title: "Learn by doing.",
+      description:
+        "Start with a 2-minute quiz and we'll recommend your first learning experience based on your goals. Free members get access to rituals, the AI tools library, agent conversations, and the prompt library.",
+      icon: Wrench,
     },
   ];
 
@@ -54,36 +54,35 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className="w-full max-w-2xl"
+          className="w-full max-w-xl"
         >
-          <Card className="editorial-card p-8 md:p-12 relative overflow-hidden">
-            <div className="absolute inset-0 gradient-violet-fuchsia opacity-10" />
-            
+          <Card className="editorial-card p-8 md:p-10 relative overflow-hidden">
             <div className="relative z-10">
-              {/* Progress indicator */}
-              <div className="flex gap-2 mb-8">
+              {/* Progress dots */}
+              <div className="flex gap-2 mb-8 justify-center">
                 {steps.map((_, index) => (
                   <div
                     key={index}
-                    className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                      index <= step
-                        ? 'bg-[hsl(var(--liquid-gold))]'
-                        : 'bg-border'
-                    }`}
+                    className="h-1.5 rounded-full transition-all duration-300"
+                    style={{
+                      width: index === step ? "28px" : "8px",
+                      background: index <= step ? "#C9A96E" : "rgba(255,255,255,0.15)",
+                    }}
                   />
                 ))}
               </div>
 
               {/* Content */}
-              <div className="text-center space-y-6 mb-8">
+              <div className="text-center space-y-5 mb-8">
                 <motion.div
                   key={step}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20"
+                  className="inline-flex items-center justify-center w-16 h-16 rounded-full"
+                  style={{ background: "rgba(201,169,110,0.15)" }}
                 >
-                  <Icon className={`w-10 h-10 ${currentStep.color}`} />
+                  <Icon className="w-8 h-8" style={{ color: "#C9A96E" }} />
                 </motion.div>
 
                 <motion.div
@@ -92,10 +91,13 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: 0.1 }}
                 >
-                  <h2 className="font-cormorant text-3xl md:text-4xl font-bold metallic-text mb-3">
+                  <h2
+                    className="text-2xl md:text-3xl font-light text-white mb-3"
+                    style={{ fontFamily: "'Playfair Display', serif" }}
+                  >
                     {currentStep.title}
                   </h2>
-                  <p className="text-lg text-foreground max-w-lg mx-auto">
+                  <p className="text-white/60 text-base max-w-md mx-auto leading-relaxed">
                     {currentStep.description}
                   </p>
                 </motion.div>
@@ -107,20 +109,22 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
                   <Button
                     variant="ghost"
                     onClick={onComplete}
+                    className="text-white/40 hover:text-white/60"
                     data-testid="button-skip-onboarding"
                   >
-                    Skip Tour
+                    Skip
                   </Button>
                 )}
                 <Button
                   size="lg"
                   onClick={handleNext}
-                  className="gap-2 min-w-[200px]"
+                  className="gap-2 min-w-[200px] font-semibold uppercase tracking-widest text-xs"
+                  style={{ background: "#C9A96E", color: "#1A1A2E" }}
                   data-testid="button-next-step"
                 >
                   {isLastStep ? (
                     <>
-                      Start Your Journey
+                      Take me in
                       <Sparkles className="w-4 h-4" />
                     </>
                   ) : (
@@ -132,22 +136,23 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
                 </Button>
               </div>
 
-              {/* Pro CTA on last step */}
+              {/* Signature CTA on last step — soft, not pushy */}
               {isLastStep && (
                 <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
                   className="mt-6 text-center"
                 >
-                  <p className="text-sm text-foreground mb-3">
-                    Ready to unlock all rituals and AI features?
+                  <p className="text-white/30 text-xs mb-2">
+                    Want unlimited access from day one?
                   </p>
-                  <Link href="/subscribe">
-                    <Button variant="outline" size="sm" className="gap-2">
+                  <Link href="/upgrade" onClick={onComplete}>
+                    <button className="text-xs flex items-center gap-1 mx-auto transition-colors"
+                      style={{ color: "#C9A96E" }}>
                       <Crown className="w-3 h-3" />
-                      Explore Pro - $19.99/month
-                    </Button>
+                      Explore Signature — from $29/month
+                    </button>
                   </Link>
                 </motion.div>
               )}
