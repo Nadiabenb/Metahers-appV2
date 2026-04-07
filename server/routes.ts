@@ -139,6 +139,184 @@ async function getUncachableResendClient() {
   };
 }
 
+// Send membership notification + welcome emails
+async function sendMembershipEmails(params: {
+  type: 'free' | 'signature' | 'private';
+  memberEmail: string;
+  memberName?: string | null;
+}) {
+  const resend = await getUncachableResendClient();
+  if (!resend) {
+    console.warn('Resend not configured — skipping membership emails');
+    return;
+  }
+
+  const { type, memberEmail, memberName } = params;
+  const displayName = memberName || memberEmail.split('@')[0];
+
+  const tierConfig = {
+    free: {
+      memberSubject: 'Welcome to MetaHers Inner Circle ✨',
+      memberBody: `
+        <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #2d2d2d;">
+          <div style="background: linear-gradient(135deg, #f9f3ee 0%, #fdf8f4 100%); padding: 40px 32px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: 2px solid #C9A96E;">
+            <h1 style="font-family: 'Georgia', serif; color: #C9A96E; font-size: 28px; margin: 0 0 8px;">MetaHers</h1>
+            <p style="color: #8a7560; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Inner Circle</p>
+          </div>
+          <div style="background: #ffffff; padding: 40px 32px;">
+            <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">Welcome, ${displayName} ✨</h2>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">You're officially part of the MetaHers Inner Circle — a community of ambitious women building businesses and careers powered by AI.</p>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 24px;">Here's how to get started:</p>
+            <table style="width: 100%; border-collapse: collapse; margin: 0 0 28px;">
+              <tr>
+                <td style="padding: 12px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; margin-bottom: 8px; display: block;">
+                  <strong style="color: #C9A96E;">01 →</strong>&nbsp; Complete your AI skills quiz to unlock your personalised learning path
+                </td>
+              </tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr>
+                <td style="padding: 12px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;">
+                  <strong style="color: #C9A96E;">02 →</strong>&nbsp; Explore the AI Tools Library — curated picks to reduce overwhelm and spark ideas
+                </td>
+              </tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr>
+                <td style="padding: 12px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;">
+                  <strong style="color: #C9A96E;">03 →</strong>&nbsp; Meet your six AI agents — Bella, Nova, Luna, Sage, Noor &amp; Vita — each built for a specific part of your business
+                </td>
+              </tr>
+            </table>
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="https://app.metahers.ai/dashboard" style="background: #C9A96E; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">Enter Your Dashboard →</a>
+            </div>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 28px 0 0; font-size: 13px;">Ready to accelerate? Our <strong>Signature membership</strong> unlocks the full learning curriculum, all six AI agents, and our private community. <a href="https://app.metahers.ai/upgrade" style="color: #C9A96E;">Explore Signature →</a></p>
+          </div>
+          <div style="background: #f9f3ee; padding: 24px 32px; border-radius: 0 0 12px 12px; text-align: center;">
+            <p style="color: #8a7560; font-size: 12px; margin: 0;">MetaHers · <a href="https://metahers.ai" style="color: #C9A96E; text-decoration: none;">metahers.ai</a></p>
+          </div>
+        </div>
+      `,
+      nadiaSubject: `🌸 New Inner Circle Member: ${memberEmail}`,
+      nadiaBody: `
+        <h2>New Inner Circle Signup</h2>
+        <p><strong>Name:</strong> ${memberName || 'Not provided'}</p>
+        <p><strong>Email:</strong> ${memberEmail}</p>
+        <p><strong>Tier:</strong> Inner Circle (Free)</p>
+        <p><strong>Time:</strong> ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })} PT</p>
+      `,
+    },
+    signature: {
+      memberSubject: "Welcome to MetaHers Signature — You're In 🌟",
+      memberBody: `
+        <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #2d2d2d;">
+          <div style="background: linear-gradient(135deg, #f9f3ee 0%, #fdf8f4 100%); padding: 40px 32px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: 2px solid #C9A96E;">
+            <h1 style="font-family: 'Georgia', serif; color: #C9A96E; font-size: 28px; margin: 0 0 8px;">MetaHers</h1>
+            <p style="color: #8a7560; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Signature Member</p>
+          </div>
+          <div style="background: #ffffff; padding: 40px 32px;">
+            <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">You're a Signature Member, ${displayName} 🌟</h2>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">Your membership is now active. You have full access to everything MetaHers has to offer.</p>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 24px;"><strong>What's unlocked for you:</strong></p>
+            <table style="width: 100%; border-collapse: collapse; margin: 0 0 28px;">
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Full AI learning curriculum — all four pillars (Learn, Build, Monetize, Brand with AI)</td></tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; All six AI agents — Bella, Nova, Luna, Sage, Noor &amp; Vita — unlimited access</td></tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Curated AI Tools Library with editorial picks and how-to guides</td></tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Private community access and member networking</td></tr>
+            </table>
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="https://app.metahers.ai/dashboard" style="background: #C9A96E; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">Go to Your Dashboard →</a>
+            </div>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 28px 0 0; font-size: 13px;">Questions? Reply to this email — we read every message. Welcome to the inside. 💛</p>
+          </div>
+          <div style="background: #f9f3ee; padding: 24px 32px; border-radius: 0 0 12px 12px; text-align: center;">
+            <p style="color: #8a7560; font-size: 12px; margin: 0;">MetaHers · <a href="https://metahers.ai" style="color: #C9A96E; text-decoration: none;">metahers.ai</a></p>
+          </div>
+        </div>
+      `,
+      nadiaSubject: `💛 New Signature Member: ${memberEmail}`,
+      nadiaBody: `
+        <h2>New Signature Subscription</h2>
+        <p><strong>Name:</strong> ${memberName || 'Not provided'}</p>
+        <p><strong>Email:</strong> ${memberEmail}</p>
+        <p><strong>Tier:</strong> Signature (~$29/month)</p>
+        <p><strong>Time:</strong> ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })} PT</p>
+      `,
+    },
+    private: {
+      memberSubject: 'Welcome to MetaHers Private — Your Exclusive Access Awaits 🔑',
+      memberBody: `
+        <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #2d2d2d;">
+          <div style="background: linear-gradient(135deg, #2d2520 0%, #3d2f28 100%); padding: 40px 32px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: 2px solid #C9A96E;">
+            <h1 style="font-family: 'Georgia', serif; color: #C9A96E; font-size: 28px; margin: 0 0 8px;">MetaHers</h1>
+            <p style="color: #d4b896; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Private Member</p>
+          </div>
+          <div style="background: #ffffff; padding: 40px 32px;">
+            <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">Welcome to Private, ${displayName} 🔑</h2>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">You've joined our most exclusive tier. Everything in Signature, plus priority access, advanced experiences, and direct support from Nadia's team.</p>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 24px;"><strong>Your Private benefits:</strong></p>
+            <table style="width: 100%; border-collapse: collapse; margin: 0 0 28px;">
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Everything in Signature, fully unlocked</td></tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Priority support and direct access to Nadia's team</td></tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Advanced AI implementation experiences and workshops</td></tr>
+              <tr><td style="height: 8px;"></td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; First access to new features, cohorts, and retreats</td></tr>
+            </table>
+            <div style="text-align: center; margin: 32px 0;">
+              <a href="https://app.metahers.ai/dashboard" style="background: #C9A96E; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">Enter Your Private Dashboard →</a>
+            </div>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 28px 0 0; font-size: 13px;">Expect a personal onboarding message from our team within 24 hours. You're in the inner sanctum now. 💛</p>
+          </div>
+          <div style="background: #f9f3ee; padding: 24px 32px; border-radius: 0 0 12px 12px; text-align: center;">
+            <p style="color: #8a7560; font-size: 12px; margin: 0;">MetaHers · <a href="https://metahers.ai" style="color: #C9A96E; text-decoration: none;">metahers.ai</a></p>
+          </div>
+        </div>
+      `,
+      nadiaSubject: `🔑 New Private Member: ${memberEmail}`,
+      nadiaBody: `
+        <h2 style="color: #C9A96E;">⭐ New Private Subscription</h2>
+        <p><strong>Name:</strong> ${memberName || 'Not provided'}</p>
+        <p><strong>Email:</strong> ${memberEmail}</p>
+        <p><strong>Tier:</strong> Private (~$149/month)</p>
+        <p><strong>Time:</strong> ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })} PT</p>
+        <p style="color: #888; font-size: 13px;">Follow up within 24 hours with a personal welcome message.</p>
+      `,
+    },
+  };
+
+  const config = tierConfig[type];
+
+  // Send welcome email to new member
+  try {
+    await resend.client.emails.send({
+      from: resend.fromEmail,
+      to: memberEmail,
+      subject: config.memberSubject,
+      html: config.memberBody,
+    });
+    console.log(`[Email] Welcome email sent to ${memberEmail} (${type})`);
+  } catch (err) {
+    console.error(`[Email] Failed to send welcome email to ${memberEmail}:`, err);
+  }
+
+  // Send notification to Nadia
+  try {
+    await resend.client.emails.send({
+      from: resend.fromEmail,
+      to: 'nadia@metahers.ai',
+      subject: config.nadiaSubject,
+      html: config.nadiaBody,
+    });
+    console.log(`[Email] Nadia notification sent for new ${type} member: ${memberEmail}`);
+  } catch (err) {
+    console.error(`[Email] Failed to send Nadia notification for ${memberEmail}:`, err);
+  }
+}
+
 // Simple in-memory cache for recommendations
 const recommendationCache = new Map<string, { data: Recommendation; timestamp: number }>();
 const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
@@ -673,6 +851,13 @@ Return ONLY valid JSON:
       quizUnlockedRitual: unlockedRitual,
       quizCompletedAt: quizSubmission ? new Date() : null,
     });
+
+    // Send welcome email to new Inner Circle member (fire-and-forget)
+    sendMembershipEmails({
+      type: 'free',
+      memberEmail: user.email,
+      memberName: user.firstName,
+    }).catch(err => console.error('[Email] Membership email error:', err));
 
     // Set up session
     req.session!.userId = user.id;
@@ -3036,6 +3221,20 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
               await storage.updateUserSubscriptionTier(userId, tier);
             } else if (!isActive) {
               await storage.updateUserSubscriptionTier(userId, 'free');
+            }
+
+            // Send welcome email for new paid subscription (fire-and-forget)
+            if (event.type === 'customer.subscription.created' && isActive && tier) {
+              storage.getUser(userId).then(member => {
+                if (member) {
+                  const emailType = (tier === 'private_monthly' ? 'private' : 'signature') as 'private' | 'signature';
+                  sendMembershipEmails({
+                    type: emailType,
+                    memberEmail: member.email,
+                    memberName: member.firstName,
+                  }).catch(err => console.error('[Email] Paid welcome email error:', err));
+                }
+              }).catch(err => console.error('[Email] Failed to fetch user for welcome email:', err));
             }
           }
           break;
