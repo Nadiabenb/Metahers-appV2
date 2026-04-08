@@ -182,10 +182,10 @@ export default function DashboardPage() {
                   {[
                     {
                       emoji: "✦",
-                      title: "Try an AI Agent",
-                      body: "Ask Bella anything about your business. She's built for solopreneurs.",
-                      href: "/companion",
-                      cta: "Open Bella →",
+                      title: "Meet your AI agent",
+                      body: "One agent matched to your goals — your personal AI specialist.",
+                      href: "/agents",
+                      cta: "Meet your agent →",
                     },
                     {
                       emoji: "⬡",
@@ -279,7 +279,7 @@ export default function DashboardPage() {
                       <Link href="/upgrade">
                         <Button className={GOLD_BTN} style={GOLD_STYLE}>Unlock Everything</Button>
                       </Link>
-                      <Link href="/companion">
+                      <Link href="/agents">
                         <Button variant="ghost" className="text-white/50 hover:text-white text-xs uppercase tracking-widest font-semibold">
                           Try an Agent Instead
                         </Button>
@@ -344,9 +344,9 @@ export default function DashboardPage() {
                 />
                 <QuickAction
                   icon={MessageSquare}
-                  title={isPaid ? "AI Agents" : "Try an Agent"}
-                  description={isPaid ? "Unlimited access to all 6 agents" : "Ask Bella, Nova, or any of our 6 agents"}
-                  href="/companion"
+                  title={isPaid ? "AI Agents" : "Meet your agent"}
+                  description={isPaid ? "All 6 agents unlocked — your full AI team" : "One agent matched to your goal, free"}
+                  href="/agents"
                 />
                 <QuickAction
                   icon={FileText}

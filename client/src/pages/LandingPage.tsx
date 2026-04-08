@@ -96,7 +96,7 @@ function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
             Join the Inner Circle
           </button>
           <button
-            onClick={() => onNavigate("/companion")}
+            onClick={() => onNavigate("/agents")}
             className="px-8 py-3 rounded-sm font-semibold transition-colors"
             style={{
               border: `1.5px solid ${GOLD}`,
@@ -277,7 +277,7 @@ function AgentsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
 
         <FadeUp className="text-center">
           <button
-            onClick={() => onNavigate("/companion")}
+            onClick={() => onNavigate("/agents")}
             className="px-8 py-3 rounded-sm font-semibold"
             style={{
               border: `1.5px solid ${GOLD}`,

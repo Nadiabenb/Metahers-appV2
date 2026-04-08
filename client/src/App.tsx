@@ -58,7 +58,7 @@ const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
-const CompanionPage = lazy(() => import("@/pages/CompanionPage"));
+const AgentsPage = lazy(() => import("@/pages/AgentsPage"));
 const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
 const RetreatPage = lazy(() => import("@/pages/RetreatPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
@@ -154,8 +154,9 @@ function Router() {
         {/* AI Prompt Library - Public resource */}
         <Route path="/ai-prompts" component={AIPromptLibraryPage} />
 
-        {/* Companion - Public */}
-        <Route path="/companion" component={CompanionPage} />
+        {/* AI Agents Directory */}
+        <Route path="/agents" component={AgentsPage} />
+        <Route path="/companion" component={() => { window.location.replace('/agents'); return null; }} />
 
         {/* Newsletter & Waitlist - Public */}
         <Route path="/newsletter" component={NewsletterPage} />

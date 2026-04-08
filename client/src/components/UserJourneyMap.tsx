@@ -32,7 +32,7 @@ export function UserJourneyMap() {
       status: tier !== 'free' ? 'complete' : 'locked',
       actions: [
         { label: "Content Library", href: "/learning-hub", locked: tier === 'free' },
-        { label: "MetaMuse AI", href: "/companion", locked: tier === 'free' },
+        { label: "AI Agents", href: "/agents", locked: false },
         { label: "AI Journal", href: "/journal", locked: tier === 'free' },
       ],
       color: "from-violet-500 to-purple-500",
