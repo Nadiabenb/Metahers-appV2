@@ -119,15 +119,15 @@ export default function SignupPage() {
   return (
     <div className="w-screen min-h-screen flex flex-col items-center justify-center relative overflow-auto bg-background">
       <SEO
-        title="Join MetaHers - Start Your AI & Web3 Journey Free"
-        description="Create your free account at MetaHers. Join thousands of women mastering AI and Web3 through luxury guided experiences. Start learning today."
-        keywords="sign up, join metahers, free AI learning, Web3 for women, tech education for women, AI courses"
+        title="Join MetaHers — Start Free"
+        description="Create your free MetaHers account. Get matched with an AI agent, access the curated AI toolkit, and start your personalised learning path — no experience needed."
+        keywords="join metahers, free AI community for women, AI tools for entrepreneurs, AI learning for women, solopreneur AI"
         type="website"
         schema={{
           "@context": "https://schema.org",
           "@type": "WebPage",
           "name": "Join MetaHers",
-          "description": "Create a free account to start your AI and Web3 learning journey",
+          "description": "Create a free account to join the MetaHers AI community for ambitious women.",
           "potentialAction": {
             "@type": "RegisterAction",
             "target": "https://metahers.com/signup"

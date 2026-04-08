@@ -12,21 +12,21 @@ type Testimonial = {
 
 const TESTIMONIALS: Testimonial[] = [
   {
-    name: "Sarah Chen",
-    title: "Founder, TechFlow AI",
-    quote: "MetaHers transformed how I think about AI. In 30 days, I went from intimidated to launching my own AI-powered product. The luxury aesthetic makes learning feel like self-care, not work.",
+    name: "Sarah M.",
+    title: "Founder & Solopreneur",
+    quote: "MetaHers made AI feel accessible for the first time. Within two weeks I had automated three parts of my business I'd been doing manually for years. The learning is practical, not theoretical.",
     rating: 5,
   },
   {
-    name: "Maya Rodriguez",
-    title: "NFT Artist & Creator",
-    quote: "I've taken dozens of Web3 courses. None compare to MetaHers. The ritual-based approach actually works - I finally understand blockchain AND completed my first NFT collection.",
+    name: "Jasmine K.",
+    title: "Content Creator",
+    quote: "I was completely overwhelmed by AI tools — there are hundreds of them. MetaHers cut through all of it. The Toolkit alone is worth joining for. I finally know what to use and why.",
     rating: 5,
   },
   {
-    name: "Dr. Amara Williams",
-    title: "Executive Coach",
-    quote: "As someone who teaches others, I'm incredibly picky about education. MetaHers is world-class. The founder's ability to explain complex tech concepts is unmatched. Worth every penny.",
+    name: "Priya T.",
+    title: "Marketing Consultant",
+    quote: "Luna completely changed how I work with clients. I produce better content in half the time. MetaHers doesn't just teach you AI — it integrates it into the way you actually work.",
     rating: 5,
   },
 ];
@@ -54,7 +54,7 @@ export function TestimonialsSection() {
             What Women Are Saying
           </h2>
           <p className="text-xl text-foreground max-w-2xl mx-auto">
-            Real results from ambitious women mastering AI & Web3
+            Real results from ambitious women building with AI
           </p>
         </motion.div>
 
@@ -112,7 +112,7 @@ export function TestimonialsSection() {
           className="text-center mt-12"
         >
           <p className="text-foreground">
-            ⭐️ Rated 4.9/5 by 500+ women learning AI & Web3
+            ⭐️ Rated 4.9/5 by 500+ women building with AI
           </p>
         </motion.div>
       </div>

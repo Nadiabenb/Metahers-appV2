@@ -73,7 +73,7 @@ function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
           className="mb-2 text-lg"
           style={{ color: MUTED, fontFamily: "Inter, sans-serif", fontWeight: 300 }}
         >
-          MetaHers is where women learn, build, and thrive with AI &amp; Web3.
+          MetaHers is where ambitious women learn AI, build with AI, and grow with AI.
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <button
@@ -220,12 +220,12 @@ function PillarsSection() {
 
 // ── Section 4: Agent Suite ───────────────────────────────────────
 const AGENTS = [
-  { name: "Bella", role: "Lifestyle concierge", accent: GOLD },
-  { name: "Nova", role: "Content strategy", accent: ROSE },
-  { name: "Luna", role: "Wellness guide", accent: "#2A8E8E" },
-  { name: "Sage", role: "Business strategy", accent: "#3A5FA0" },
-  { name: "Noor", role: "Spiritual wellness", accent: "#B07A20" },
-  { name: "Vita", role: "Health and fitness", accent: "#C0533A" },
+  { name: "Bella", role: "Digital Artist & Creative Director", accent: GOLD },
+  { name: "Nova", role: "Build & Automation Specialist", accent: ROSE },
+  { name: "Luna", role: "Marketing Maestro", accent: "#2A8E8E" },
+  { name: "Sage", role: "AI Strategy & Learning Guide", accent: "#3A5FA0" },
+  { name: "Noor", role: "Creative Ghostwriter", accent: "#B07A20" },
+  { name: "Vita", role: "AI Wellness Coach", accent: "#C0533A" },
 ];
 
 function AgentsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
@@ -405,11 +405,11 @@ const TIERS = [
     name: "Inner Circle",
     price: "Free",
     priceNote: "",
-    highlight: true,
+    highlight: false,
     features: [
       "Weekly AI newsletter",
       "Community access",
-      "1 free agent session",
+      "1 AI agent matched to your goal",
       "Curated resources",
     ],
     cta: "Join Free",
@@ -420,16 +420,16 @@ const TIERS = [
     name: "Signature",
     price: "$29",
     priceNote: "/mo",
-    highlight: false,
+    highlight: true,
     features: [
-      "All 6 AI agents unlimited",
-      "Exclusive content library",
+      "All 6 AI agents — unlimited",
+      "Full learning curriculum",
+      "Curated AI toolkit + reviews",
       "Monthly virtual gatherings",
-      "Early product access",
     ],
-    cta: "Coming Soon",
-    ctaPath: "",
-    disabled: true,
+    cta: "Join Signature",
+    ctaPath: "/upgrade",
+    disabled: false,
   },
   {
     name: "Private",

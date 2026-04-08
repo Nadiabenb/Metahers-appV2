@@ -40,9 +40,13 @@ export function PersonalizedRecommendations() {
 
   const goalLabels = {
     master_ai: "Master AI",
-    build_web3: "Build Web3 Wealth",
+    build_web3: "Build with AI",
     own_authority: "Own Your Authority",
     advance_career: "Advance Your Career",
+    learn_ai: "Learn AI",
+    build_ai: "Build with AI",
+    monetize_ai: "Monetize with AI",
+    brand_ai: "Brand with AI",
   };
 
   const levelLabels = {
