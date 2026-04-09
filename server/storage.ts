@@ -44,6 +44,10 @@ import {
   agencyAnalytics,
   menstrualCycles,
   dailySymptoms,
+  quizResponses,
+  agentUsage,
+  agentConversations,
+  agentEvents,
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -136,6 +140,14 @@ import type {
   MenstrualCycle,
   InsertDailySymptom,
   DailySymptom,
+  QuizResponseDB,
+  InsertAgentUsage,
+  AgentUsageDB,
+  InsertAgentConversation,
+  AgentConversationDB,
+  AgentConversationMessage,
+  InsertAgentEvent,
+  AgentEventDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count } from "drizzle-orm";
@@ -201,6 +213,7 @@ export interface IStorage {
   getQuizSubmissionByEmail(email: string): Promise<QuizSubmissionDB | undefined>;
   getAllQuizSubmissions(): Promise<QuizSubmissionDB[]>;
   updateQuizSubmission(id: string, updates: Partial<QuizSubmissionDB>): Promise<QuizSubmissionDB>;
+  getOnboardingQuizResponse(userId: string): Promise<QuizResponseDB | undefined>;
 
   // Cohort capacity operations
   getCohortCapacity(cohortName: string): Promise<CohortCapacityDB | undefined>;
@@ -349,6 +362,32 @@ export interface IStorage {
   // MetaHers Circle - Activity Feed operations
   addActivityFeed(activity: InsertProfileActivityFeed): Promise<ProfileActivityFeedDB>;
   getProfileActivity(profileId: string, limit?: number): Promise<ProfileActivityFeedDB[]>;
+
+  // Concierge agent operations
+  getAgentUsage(userId: string): Promise<AgentUsageDB | undefined>;
+  incrementAgentUsage(userId: string, agentId: string): Promise<AgentUsageDB>;
+  getLatestAgentConversation(userId: string, agentId: string): Promise<AgentConversationDB | undefined>;
+  getAgentConversationById(userId: string, conversationId: string): Promise<AgentConversationDB | undefined>;
+  getAgentConversationsByAgent(userId: string, agentId: string, limit?: number): Promise<AgentConversationDB[]>;
+  createAgentConversation(data: InsertAgentConversation): Promise<AgentConversationDB>;
+  appendAgentConversationMessages(
+    userId: string,
+    conversationId: string,
+    messages: AgentConversationMessage[],
+  ): Promise<AgentConversationDB>;
+  createAgentEvent(data: InsertAgentEvent): Promise<AgentEventDB>;
+}
+
+const MAX_AGENT_CONVERSATION_MESSAGES = 40;
+
+function normalizeAgentConversationMessages(
+  messages: AgentConversationMessage[],
+): AgentConversationMessage[] {
+  if (messages.length <= MAX_AGENT_CONVERSATION_MESSAGES) {
+    return messages;
+  }
+
+  return messages.slice(-MAX_AGENT_CONVERSATION_MESSAGES);
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1001,6 +1040,15 @@ export class DatabaseStorage implements IStorage {
       .where(eq(quizSubmissions.id, id))
       .returning();
     return updated;
+  }
+
+  async getOnboardingQuizResponse(userId: string): Promise<QuizResponseDB | undefined> {
+    const [response] = await db
+      .select()
+      .from(quizResponses)
+      .where(eq(quizResponses.userId, userId))
+      .limit(1);
+    return response;
   }
 
   // Cohort capacity operations
@@ -2200,6 +2248,128 @@ export class DatabaseStorage implements IStorage {
       query = query.where(and(eq(agencyAnalytics.businessId, businessId), eq(agencyAnalytics.platform, platform)));
     }
     return await query.orderBy(desc(agencyAnalytics.snapshotDate));
+  }
+
+  // Concierge agent operations
+  async getAgentUsage(userId: string): Promise<AgentUsageDB | undefined> {
+    const [usage] = await db
+      .select()
+      .from(agentUsage)
+      .where(eq(agentUsage.userId, userId))
+      .limit(1);
+    return usage;
+  }
+
+  async incrementAgentUsage(userId: string, agentId: string): Promise<AgentUsageDB> {
+    const [updated] = await db
+      .insert(agentUsage)
+      .values({
+        userId,
+        messageCount: 1,
+        lastUsedAt: new Date(),
+        lastAgentId: agentId,
+      } satisfies InsertAgentUsage)
+      .onConflictDoUpdate({
+        target: agentUsage.userId,
+        set: {
+          messageCount: sql`${agentUsage.messageCount} + 1`,
+          lastUsedAt: new Date(),
+          lastAgentId: agentId,
+          updatedAt: new Date(),
+        },
+      })
+      .returning();
+
+    return updated;
+  }
+
+  async getLatestAgentConversation(userId: string, agentId: string): Promise<AgentConversationDB | undefined> {
+    const [conversation] = await db
+      .select()
+      .from(agentConversations)
+      .where(and(
+        eq(agentConversations.userId, userId),
+        eq(agentConversations.agentId, agentId),
+        eq(agentConversations.isArchived, false),
+      ))
+      .orderBy(desc(agentConversations.updatedAt))
+      .limit(1);
+    return conversation;
+  }
+
+  async getAgentConversationById(userId: string, conversationId: string): Promise<AgentConversationDB | undefined> {
+    const [conversation] = await db
+      .select()
+      .from(agentConversations)
+      .where(and(
+        eq(agentConversations.id, conversationId),
+        eq(agentConversations.userId, userId),
+      ))
+      .limit(1);
+    return conversation;
+  }
+
+  async getAgentConversationsByAgent(userId: string, agentId: string, limit: number = 20): Promise<AgentConversationDB[]> {
+    return await db
+      .select()
+      .from(agentConversations)
+      .where(and(
+        eq(agentConversations.userId, userId),
+        eq(agentConversations.agentId, agentId),
+      ))
+      .orderBy(desc(agentConversations.updatedAt))
+      .limit(limit);
+  }
+
+  async createAgentConversation(data: InsertAgentConversation): Promise<AgentConversationDB> {
+    const [conversation] = await db
+      .insert(agentConversations)
+      .values({
+        ...data,
+        messages: sql`${JSON.stringify(data.messages || [])}::jsonb`,
+        messageCount: data.messages?.length || 0,
+        lastMessageAt: data.messages?.length ? new Date() : null,
+      })
+      .returning();
+    return conversation;
+  }
+
+  async appendAgentConversationMessages(
+    userId: string,
+    conversationId: string,
+    messages: AgentConversationMessage[],
+  ): Promise<AgentConversationDB> {
+    const existing = await this.getAgentConversationById(userId, conversationId);
+    if (!existing) {
+      throw new Error("Conversation not found");
+    }
+
+    const existingMessages = Array.isArray(existing.messages) ? existing.messages : [];
+    const merged = normalizeAgentConversationMessages([...existingMessages, ...messages]);
+
+    const [updated] = await db
+      .update(agentConversations)
+      .set({
+        messages: sql`${JSON.stringify(merged)}::jsonb`,
+        messageCount: merged.length,
+        lastMessageAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(agentConversations.id, conversationId))
+      .returning();
+
+    return updated;
+  }
+
+  async createAgentEvent(data: InsertAgentEvent): Promise<AgentEventDB> {
+    const [event] = await db
+      .insert(agentEvents)
+      .values({
+        ...data,
+        metadata: sql`${JSON.stringify(data.metadata || {})}::jsonb`,
+      })
+      .returning();
+    return event;
   }
 
 }

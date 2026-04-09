@@ -2571,6 +2571,73 @@ export const insertQuizResponseSchema = createInsertSchema(quizResponses).omit({
 export type InsertQuizResponse = z.infer<typeof insertQuizResponseSchema>;
 export type QuizResponseDB = typeof quizResponses.$inferSelect;
 
+// ===== CONCIERGE AGENTS =====
+
+export type ConciergeAgentId = "aria" | "sage" | "nova" | "luna" | "bella" | "noor";
+
+export type AgentConversationMessage = {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: string;
+};
+
+export const agentUsage = pgTable("agent_usage", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  messageCount: integer("message_count").notNull().default(0),
+  lastUsedAt: timestamp("last_used_at").defaultNow(),
+  lastAgentId: varchar("last_agent_id"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_agent_usage_user").on(table.userId),
+  index("idx_agent_usage_last_used").on(table.lastUsedAt),
+]);
+
+export const insertAgentUsageSchema = createInsertSchema(agentUsage).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertAgentUsage = z.infer<typeof insertAgentUsageSchema>;
+export type AgentUsageDB = typeof agentUsage.$inferSelect;
+
+export const agentConversations = pgTable("agent_conversations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  agentId: varchar("agent_id").notNull(),
+  title: varchar("title").default("New conversation").notNull(),
+  messages: jsonb("messages").$type<AgentConversationMessage[]>().notNull().default(sql`'[]'::jsonb`),
+  messageCount: integer("message_count").notNull().default(0),
+  lastMessageAt: timestamp("last_message_at"),
+  isArchived: boolean("is_archived").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_agent_conversations_user").on(table.userId),
+  index("idx_agent_conversations_agent").on(table.agentId),
+  index("idx_agent_conversations_user_agent").on(table.userId, table.agentId),
+  index("idx_agent_conversations_updated").on(table.updatedAt),
+]);
+
+export const insertAgentConversationSchema = createInsertSchema(agentConversations).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertAgentConversation = z.infer<typeof insertAgentConversationSchema>;
+export type AgentConversationDB = typeof agentConversations.$inferSelect;
+
+export const agentEvents = pgTable("agent_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  agentId: varchar("agent_id").notNull(),
+  eventType: varchar("event_type").notNull(),
+  metadata: jsonb("metadata").$type<Record<string, unknown>>().default(sql`'{}'::jsonb`),
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_agent_events_user").on(table.userId),
+  index("idx_agent_events_agent").on(table.agentId),
+  index("idx_agent_events_type").on(table.eventType),
+  index("idx_agent_events_created").on(table.createdAt),
+]);
+
+export const insertAgentEventSchema = createInsertSchema(agentEvents).omit({ id: true, createdAt: true });
+export type InsertAgentEvent = z.infer<typeof insertAgentEventSchema>;
+export type AgentEventDB = typeof agentEvents.$inferSelect;
+
 // ===== AI MASTERY PROGRAM (Learning Hub) =====
 
 // AI Mastery enrollment table
@@ -3336,4 +3403,3 @@ export const blueprintApplications = pgTable("blueprint_applications", {
 export const insertBlueprintApplicationSchema = createInsertSchema(blueprintApplications).omit({ id: true, createdAt: true });
 export type InsertBlueprintApplication = z.infer<typeof insertBlueprintApplicationSchema>;
 export type BlueprintApplicationDB = typeof blueprintApplications.$inferSelect;
-

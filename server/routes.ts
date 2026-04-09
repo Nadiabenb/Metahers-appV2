@@ -8,6 +8,7 @@ import { asyncHandler, DatabaseError, OpenAIError, OpenAITimeoutError, Validatio
 import Stripe from "stripe";
 import { Resend } from "resend";
 import OpenAI from "openai";
+import Anthropic from "@anthropic-ai/sdk";
 import { generateJournalPrompt, analyzeJournalEntry, chatWithJournalCoach, generateThoughtLeadershipContent, chatWithAppAtelierCoach, generateRecommendations, type Recommendation, cacheMonitor } from "./aiService";
 import { fetchNewsByCategory, type NewsCategory } from "./rssNewsService";
 import { z } from "zod";
@@ -16,6 +17,7 @@ import { db } from "./db";
 import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema, toolReviews, toolReviewHelpful } from "@shared/schema";
 import { sql as drizzleSql, eq, desc, and, sql, gte } from "drizzle-orm";
 import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests, blueprintApplications } from "@shared/schema";
+import { AGENT_IDS, AGENT_DISPLAY_NAMES, buildAgentSystemPrompt, buildGreetingUserPrompt, canAccessAgent, getAnthropicAgentModel, toAgentQuizContext } from "./agentPrompts";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
@@ -331,6 +333,51 @@ console.log('🔄 Clearing all caches on startup to serve fresh content...');
 spacesCache = null;
 experiencesCache = null;
 recommendationCache.clear();
+
+const conciergeAgentIdSchema = z.enum(["aria", "sage", "nova", "luna", "bella", "noor"]);
+
+const conversationsParamsSchema = z.object({
+  agentId: conciergeAgentIdSchema,
+});
+
+const greetBodySchema = z.object({
+  agentId: conciergeAgentIdSchema,
+}).passthrough();
+
+const chatBodySchema = z.object({
+  agentId: conciergeAgentIdSchema,
+  message: z.string().trim().min(1).max(4000),
+  conversationId: z.string().uuid().optional(),
+  conversationMessages: z.array(
+    z.object({
+      role: z.enum(["user", "assistant"]),
+      content: z.string(),
+    })
+  ).optional(),
+  quizContext: z.record(z.any()).optional(),
+}).passthrough();
+
+const newConversationBodySchema = z.object({
+  title: z.string().trim().min(1).max(120).optional(),
+}).passthrough();
+
+function getAnthropicClient(): Anthropic {
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new OpenAIError("Anthropic API key is not configured");
+  }
+
+  return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+}
+
+function getAnthropicTextResponse(response: any): string {
+  const text = response.content
+    .map((block: any) => (block.type === "text" ? block.text : ""))
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+
+  return text || "I am here with you. Could you share a bit more detail so I can help precisely?";
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoints for deployment monitoring
@@ -4365,6 +4412,273 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     const userId = req.session!.userId as string;
     const result = await db.select().from(quizResponses).where(eq(quizResponses.userId, userId)).limit(1);
     res.json(result[0] || null);
+  }));
+
+  // ===== CONCIERGE AGENT ROUTES (Claude Beta Foundation) =====
+  app.get('/api/agents/usage', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    const user = await storage.getUser(userId);
+
+    if (!user) {
+      throw new NotFoundError("User");
+    }
+
+    const usage = await storage.getAgentUsage(userId);
+
+    const agents = AGENT_IDS.map((agentId) => {
+      return {
+        agentId,
+        name: AGENT_DISPLAY_NAMES[agentId],
+        hasAccess: canAccessAgent(agentId, user.subscriptionTier),
+      };
+    });
+
+    res.json({
+      usage: {
+        messageCount: usage?.messageCount || 0,
+        lastUsedAt: usage?.lastUsedAt || null,
+        lastAgentId: usage?.lastAgentId || null,
+      },
+      agents,
+    });
+  }));
+
+  app.get('/api/agents/conversations/:agentId', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const paramsValidation = conversationsParamsSchema.safeParse(req.params);
+    if (!paramsValidation.success) {
+      throw new ValidationError("Invalid agentId", paramsValidation.error.flatten());
+    }
+
+    const userId = req.session!.userId as string;
+    const { agentId } = paramsValidation.data;
+    const user = await storage.getUser(userId);
+
+    if (!user) {
+      throw new NotFoundError("User");
+    }
+
+    if (!canAccessAgent(agentId, user.subscriptionTier)) {
+      return res.status(403).json({
+        message: "This agent requires Private access",
+        requiredTier: "private_monthly",
+      });
+    }
+
+    const conversations = await storage.getAgentConversationsByAgent(userId, agentId);
+    res.json({ conversations });
+  }));
+
+  app.post('/api/agents/conversations/:agentId/new', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const paramsValidation = conversationsParamsSchema.safeParse(req.params);
+    if (!paramsValidation.success) {
+      throw new ValidationError("Invalid agentId", paramsValidation.error.flatten());
+    }
+
+    const bodyValidation = newConversationBodySchema.safeParse(req.body ?? {});
+    if (!bodyValidation.success) {
+      throw new ValidationError("Invalid request body", bodyValidation.error.flatten());
+    }
+
+    const userId = req.session!.userId as string;
+    const { agentId } = paramsValidation.data;
+    const user = await storage.getUser(userId);
+
+    if (!user) {
+      throw new NotFoundError("User");
+    }
+
+    if (!canAccessAgent(agentId, user.subscriptionTier)) {
+      return res.status(403).json({
+        message: "This agent requires Private access",
+        requiredTier: "private_monthly",
+      });
+    }
+
+    const conversation = await storage.createAgentConversation({
+      userId,
+      agentId,
+      title: bodyValidation.data.title || `New ${AGENT_DISPLAY_NAMES[agentId]} chat`,
+      messages: [],
+    });
+
+    await storage.createAgentEvent({
+      userId,
+      agentId,
+      eventType: "new_conversation",
+      metadata: { conversationId: conversation.id },
+    });
+
+    res.status(201).json(conversation);
+  }));
+
+  app.post('/api/agents/greet', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const bodyValidation = greetBodySchema.safeParse(req.body ?? {});
+    if (!bodyValidation.success) {
+      throw new ValidationError("Invalid request body", bodyValidation.error.flatten());
+    }
+
+    const userId = req.session!.userId as string;
+    const { agentId } = bodyValidation.data;
+    const user = await storage.getUser(userId);
+
+    if (!user) {
+      throw new NotFoundError("User");
+    }
+
+    if (!canAccessAgent(agentId, user.subscriptionTier)) {
+      return res.status(403).json({
+        message: "This agent requires Private access",
+        requiredTier: "private_monthly",
+      });
+    }
+
+    const quiz = await storage.getOnboardingQuizResponse(userId);
+    const systemPrompt = buildAgentSystemPrompt({
+      agentId,
+      firstName: user.firstName,
+      quizContext: toAgentQuizContext(quiz),
+    });
+
+    const anthropic = getAnthropicClient();
+    const response = await anthropic.messages.create({
+      model: getAnthropicAgentModel(),
+      max_tokens: 500,
+      system: systemPrompt,
+      messages: [{ role: "user", content: buildGreetingUserPrompt(agentId) }],
+    });
+
+    const greeting = getAnthropicTextResponse(response);
+    let conversation = await storage.getLatestAgentConversation(userId, agentId);
+    if (!conversation) {
+      conversation = await storage.createAgentConversation({
+        userId,
+        agentId,
+        title: `New ${AGENT_DISPLAY_NAMES[agentId]} chat`,
+        messages: [],
+      });
+    }
+
+    const updatedConversation = await storage.appendAgentConversationMessages(userId, conversation.id, [
+      {
+        role: "assistant",
+        content: greeting,
+        timestamp: new Date().toISOString(),
+      },
+    ]);
+
+    await storage.createAgentEvent({
+      userId,
+      agentId,
+      eventType: "greet",
+      metadata: { conversationId: updatedConversation.id },
+    });
+
+    res.json({
+      greeting,
+      conversation: updatedConversation,
+      model: getAnthropicAgentModel(),
+    });
+  }));
+
+  app.post('/api/agents/chat', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const bodyValidation = chatBodySchema.safeParse(req.body ?? {});
+    if (!bodyValidation.success) {
+      throw new ValidationError("Invalid request body", bodyValidation.error.flatten());
+    }
+
+    const userId = req.session!.userId as string;
+    const { agentId, message, conversationId } = bodyValidation.data;
+    const user = await storage.getUser(userId);
+
+    if (!user) {
+      throw new NotFoundError("User");
+    }
+
+    if (!canAccessAgent(agentId, user.subscriptionTier)) {
+      return res.status(403).json({
+        message: "This agent requires Private access",
+        requiredTier: "private_monthly",
+      });
+    }
+
+    const quiz = await storage.getOnboardingQuizResponse(userId);
+    const systemPrompt = buildAgentSystemPrompt({
+      agentId,
+      firstName: user.firstName,
+      quizContext: toAgentQuizContext(quiz),
+    });
+
+    let conversation = conversationId
+      ? await storage.getAgentConversationById(userId, conversationId)
+      : await storage.getLatestAgentConversation(userId, agentId);
+
+    if (conversation && conversation.agentId !== agentId) {
+      throw new ValidationError("Conversation does not belong to requested agent");
+    }
+
+    if (!conversation) {
+      conversation = await storage.createAgentConversation({
+        userId,
+        agentId,
+        title: `New ${AGENT_DISPLAY_NAMES[agentId]} chat`,
+        messages: [],
+      });
+    }
+
+    const persistedMessages = Array.isArray(conversation.messages) ? conversation.messages : [];
+    const anthropicMessages = [
+      ...persistedMessages.map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      })),
+      {
+        role: "user" as const,
+        content: message,
+      },
+    ];
+
+    const anthropic = getAnthropicClient();
+    let responseText: string;
+    try {
+      const response = await anthropic.messages.create({
+        model: getAnthropicAgentModel(),
+        max_tokens: 700,
+        system: systemPrompt,
+        messages: anthropicMessages,
+      });
+      responseText = getAnthropicTextResponse(response);
+    } catch (error) {
+      await storage.createAgentEvent({
+        userId,
+        agentId,
+        eventType: "chat_error",
+        metadata: {
+          conversationId: conversation.id,
+          message: error instanceof Error ? error.message : "Unknown Anthropic error",
+        },
+      });
+      throw error;
+    }
+
+    const nowIso = new Date().toISOString();
+    const updatedConversation = await storage.appendAgentConversationMessages(userId, conversation.id, [
+      { role: "user", content: message, timestamp: nowIso },
+      { role: "assistant", content: responseText, timestamp: nowIso },
+    ]);
+
+    await storage.incrementAgentUsage(userId, agentId);
+    await storage.createAgentEvent({
+      userId,
+      agentId,
+      eventType: "chat",
+      metadata: { conversationId: updatedConversation.id },
+    });
+
+    res.json({
+      response: responseText,
+      conversation: updatedConversation,
+      model: getAnthropicAgentModel(),
+    });
   }));
 
   // Get smart next experience recommendation based on progress
