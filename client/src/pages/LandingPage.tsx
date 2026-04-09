@@ -553,25 +553,29 @@ function TiersSection({ onNavigate }: { onNavigate: (p: string) => void }) {
 function FounderSection() {
   return (
     <section className="py-24 px-6" style={{ background: "#FEFEFE" }}>
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <FadeUp>
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-10">
-            <div
-              className="w-24 h-24 rounded-full flex items-center justify-center flex-shrink-0 text-3xl font-bold"
-              style={{
-                background: BLUSH,
-                border: `2px solid ${GOLD}`,
-                color: GOLD,
-                fontFamily: "Playfair Display, Georgia, serif",
-                minWidth: 96,
-              }}
-            >
-              N
+          <div className="flex flex-col md:flex-row items-center md:items-stretch gap-12 md:gap-16">
+            {/* Photo — full portrait */}
+            <div className="flex-shrink-0 w-full md:w-auto flex justify-center">
+              <img
+                src="/images/nadia-founder.jpg"
+                alt="Nadia, Founder and CEO of MetaHers"
+                className="object-cover object-top w-full"
+                style={{
+                  maxWidth: 360,
+                  borderRadius: "4px",
+                  border: "1px solid #E5D9CE",
+                  aspectRatio: "3 / 4",
+                }}
+              />
             </div>
-            <div>
+
+            {/* Text */}
+            <div className="flex flex-col justify-center">
               <GoldLabel>From the Founder</GoldLabel>
               <blockquote
-                className="text-xl leading-relaxed mb-4"
+                className="text-2xl md:text-3xl leading-relaxed mb-6 mt-3"
                 style={{
                   fontFamily: "Playfair Display, Georgia, serif",
                   fontStyle: "italic",
@@ -582,8 +586,12 @@ function FounderSection() {
                 best experiences feel personal. MetaHers brings that same
                 philosophy to AI."
               </blockquote>
-              <p className="text-sm font-semibold" style={{ color: MUTED }}>
-                Nadia, Founder and CEO
+              <div style={{ width: 40, height: 2, background: GOLD, marginBottom: 20 }} />
+              <p className="text-base font-semibold mb-1" style={{ color: NAVY }}>
+                Nadia Maazaoui
+              </p>
+              <p className="text-sm" style={{ color: MUTED }}>
+                Founder and CEO, MetaHers
               </p>
             </div>
           </div>
