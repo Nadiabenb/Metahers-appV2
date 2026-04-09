@@ -160,7 +160,17 @@ export default function ConciergePage() {
     },
     onError: (error) => {
       if (error instanceof APIError && error.status === 403) {
-        setGateMessage("Upgrade to Private to continue with this specialist.");
+        if (error.code === "CONCIERGE_FREE_LIMIT_REACHED") {
+          setGateMessage("You have reached the free concierge limit (10 total messages). Upgrade to continue.");
+          return;
+        }
+        if (error.code === "CONCIERGE_DAILY_LIMIT_REACHED") {
+          const resetsAt = error.details?.resetsAt as string | undefined;
+          const resetText = resetsAt ? ` Resets at ${new Date(resetsAt).toLocaleString()}.` : "";
+          setGateMessage(`Daily concierge limit reached.${resetText}`);
+          return;
+        }
+        setGateMessage(error.message || "Chat is temporarily unavailable.");
       }
     },
   });

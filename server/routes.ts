@@ -361,6 +361,29 @@ const newConversationBodySchema = z.object({
   title: z.string().trim().min(1).max(120).optional(),
 }).passthrough();
 
+const CONCIERGE_FREE_LIFETIME_LIMIT = 10;
+const CONCIERGE_SIGNATURE_DAILY_LIMIT = 40;
+const CONCIERGE_PRIVATE_DAILY_LIMIT = 150;
+
+function getNextDayResetAt(): string {
+  const resetAt = new Date();
+  resetAt.setHours(0, 0, 0, 0);
+  resetAt.setDate(resetAt.getDate() + 1);
+  return resetAt.toISOString();
+}
+
+function getDailyConciergeLimitByTier(tier: string): number | null {
+  if (tier === "private_monthly") {
+    return CONCIERGE_PRIVATE_DAILY_LIMIT;
+  }
+
+  if (tier === "signature_monthly" || tier === "ai_blueprint") {
+    return CONCIERGE_SIGNATURE_DAILY_LIMIT;
+  }
+
+  return null;
+}
+
 function getAnthropicClient(): Anthropic {
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new OpenAIError("Anthropic API key is not configured");
@@ -4599,6 +4622,41 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         message: "This agent requires Private access",
         requiredTier: "private_monthly",
       });
+    }
+
+    const usage = await storage.getAgentUsage(userId);
+    const totalUsage = usage?.messageCount || 0;
+    const dailyLimit = getDailyConciergeLimitByTier(user.subscriptionTier);
+
+    if (!dailyLimit && totalUsage >= CONCIERGE_FREE_LIFETIME_LIMIT) {
+      return res.status(403).json({
+        error: "Free concierge limit reached. Upgrade to continue chatting.",
+        code: "CONCIERGE_FREE_LIMIT_REACHED",
+        details: {
+          limitReached: true,
+          upgradeRequired: true,
+          freeLifetimeLimit: CONCIERGE_FREE_LIFETIME_LIMIT,
+          totalUsage,
+        },
+      });
+    }
+
+    if (dailyLimit) {
+      const todayUsage = await storage.getTodayAgentChatCount(userId);
+      if (todayUsage >= dailyLimit) {
+        return res.status(403).json({
+          error: "Daily concierge limit reached. Your limit resets tomorrow.",
+          code: "CONCIERGE_DAILY_LIMIT_REACHED",
+          details: {
+            limitReached: true,
+            upgradeRequired: false,
+            dailyLimitReached: true,
+            dailyLimit,
+            todayUsage,
+            resetsAt: getNextDayResetAt(),
+          },
+        });
+      }
     }
 
     const quiz = await storage.getOnboardingQuizResponse(userId);

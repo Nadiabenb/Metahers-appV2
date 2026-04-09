@@ -150,7 +150,7 @@ import type {
   AgentEventDB,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, sql, count } from "drizzle-orm";
+import { eq, and, desc, sql, count, gte, lt } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -365,6 +365,7 @@ export interface IStorage {
 
   // Concierge agent operations
   getAgentUsage(userId: string): Promise<AgentUsageDB | undefined>;
+  getTodayAgentChatCount(userId: string): Promise<number>;
   incrementAgentUsage(userId: string, agentId: string): Promise<AgentUsageDB>;
   getLatestAgentConversation(userId: string, agentId: string): Promise<AgentConversationDB | undefined>;
   getAgentConversationById(userId: string, conversationId: string): Promise<AgentConversationDB | undefined>;
@@ -2258,6 +2259,25 @@ export class DatabaseStorage implements IStorage {
       .where(eq(agentUsage.userId, userId))
       .limit(1);
     return usage;
+  }
+
+  async getTodayAgentChatCount(userId: string): Promise<number> {
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(startOfDay);
+    endOfDay.setDate(endOfDay.getDate() + 1);
+
+    const result = await db
+      .select({ value: count() })
+      .from(agentEvents)
+      .where(and(
+        eq(agentEvents.userId, userId),
+        eq(agentEvents.eventType, "chat"),
+        gte(agentEvents.createdAt, startOfDay),
+        lt(agentEvents.createdAt, endOfDay),
+      ));
+
+    return result[0]?.value || 0;
   }
 
   async incrementAgentUsage(userId: string, agentId: string): Promise<AgentUsageDB> {
