@@ -85,6 +85,20 @@ app.use((req, res, next) => {
     }
     logger.info('Environment variables validated');
 
+    // Verify Anthropic SDK is installed and API key is configured (required for Concierge)
+    try {
+      const { default: Anthropic } = await import('@anthropic-ai/sdk');
+      if (!process.env.ANTHROPIC_API_KEY) {
+        logger.warn('ANTHROPIC_API_KEY not set — Concierge agents will not respond');
+      } else {
+        // Verify SDK instantiates correctly with the key
+        new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+        logger.info('Anthropic SDK loaded — Concierge ready');
+      }
+    } catch (err: any) {
+      logger.error({ error: err?.message }, 'Anthropic SDK failed to load — install @anthropic-ai/sdk');
+    }
+
     const server = await registerRoutes(app);
     logger.info('Routes registered');
 
