@@ -1,8 +1,5 @@
-import { Crown, Sparkles } from "lucide-react";
+import { Crown } from "lucide-react";
 import { Link } from "wouter";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { motion } from "framer-motion";
 
 interface UpgradePromptProps {
   feature: string;
@@ -10,66 +7,59 @@ interface UpgradePromptProps {
   compact?: boolean;
 }
 
+const GOLD = "#C9A96E";
+const GOLD_STYLE = { background: GOLD, color: "#1A1A2E" };
+
 export function UpgradePrompt({ feature, description, compact = false }: UpgradePromptProps) {
   if (compact) {
     return (
       <div className="text-center py-6 px-4">
-        <Crown className="w-8 h-8 text-[hsl(var(--liquid-gold))] mx-auto mb-3" />
-        <p className="text-sm text-foreground mb-3">
-          {description || `${feature} is a Pro feature`}
+        <Crown className="w-7 h-7 mx-auto mb-3" style={{ color: GOLD }} />
+        <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
+          {description || `${feature} is available on Signature`}
         </p>
         <Link href="/upgrade">
-          <Button size="sm" className="gap-2" data-testid="button-upgrade-compact">
-            <Crown className="w-3 h-3" />
-            Upgrade to Pro
-          </Button>
+          <button
+            className="px-6 py-2 rounded font-semibold uppercase tracking-widest text-xs"
+            style={GOLD_STYLE}
+            data-testid="button-upgrade-compact"
+          >
+            Unlock Signature
+          </button>
         </Link>
       </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+    <div
+      className="p-8 text-center rounded-xl"
+      style={{ background: "#13111C", border: "1px solid rgba(201,169,110,0.20)" }}
     >
-      <Card className="editorial-card p-8 text-center relative overflow-hidden">
-        <div className="absolute inset-0 gradient-violet-fuchsia opacity-10" />
-        <div className="relative z-10 space-y-4">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--liquid-gold))]/30 to-[hsl(var(--cyber-fuchsia))]/20 mb-2">
-            <Crown className="w-8 h-8 text-[hsl(var(--liquid-gold))]" />
-          </div>
-          <div>
-            <h3 className="font-cormorant text-2xl font-bold metallic-text mb-2">
-              Unlock {feature}
-            </h3>
-            <p className="text-foreground max-w-md mx-auto">
-              {description || `Get access to ${feature} and all premium features with MetaHers Pro`}
-            </p>
-          </div>
-          <div className="flex flex-wrap gap-2 justify-center text-sm">
-            <div className="flex items-center gap-1.5 text-foreground/70">
-              <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--aurora-teal))]" />
-              <span>AI-Powered Insights</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-foreground/70">
-              <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--magenta-quartz))]" />
-              <span>Live Journal Coach</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-foreground/70">
-              <Sparkles className="w-3.5 h-3.5 text-[hsl(var(--cyber-fuchsia))]" />
-              <span>All 5 Rituals</span>
-            </div>
-          </div>
-          <Link href="/upgrade">
-            <Button size="lg" className="gap-2 mt-2" data-testid="button-upgrade-full">
-              <Crown className="w-4 h-4" />
-              Upgrade to Pro - $19.99/month
-            </Button>
-          </Link>
-        </div>
-      </Card>
-    </motion.div>
+      <div
+        className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-5"
+        style={{ background: "rgba(201,169,110,0.12)" }}
+      >
+        <Crown className="w-7 h-7" style={{ color: GOLD }} />
+      </div>
+      <h3
+        className="text-xl font-light text-white mb-2"
+        style={{ fontFamily: "'Playfair Display', serif" }}
+      >
+        Unlock {feature}
+      </h3>
+      <p className="text-sm leading-relaxed mb-6 max-w-sm mx-auto" style={{ color: "rgba(255,255,255,0.50)" }}>
+        {description || `${feature} is available to Signature and Private members. Upgrade to access the full MetaHers experience.`}
+      </p>
+      <Link href="/upgrade">
+        <button
+          className="px-8 py-3 rounded font-semibold uppercase tracking-widest text-xs"
+          style={GOLD_STYLE}
+          data-testid="button-upgrade-full"
+        >
+          Explore Signature — from $29/month
+        </button>
+      </Link>
+    </div>
   );
 }

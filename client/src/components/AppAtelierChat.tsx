@@ -309,45 +309,55 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
             onClick={() => setShowUpgradePrompt(false)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
+              exit={{ scale: 0.95, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="max-w-md w-full backdrop-blur-2xl bg-background/95 border-2 border-[hsl(var(--cyber-fuchsia))]/30 rounded-3xl p-8 shadow-2xl"
+              className="max-w-sm w-full p-8 shadow-2xl"
+              style={{
+                background: "#1A1610",
+                border: "1px solid rgba(201,169,110,0.35)",
+                borderRadius: "16px",
+              }}
             >
-              <div className="text-center space-y-6">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] flex items-center justify-center mx-auto shadow-lg">
-                  <Crown className="w-8 h-8 text-white" />
+              <div className="text-center space-y-5">
+                <div
+                  className="w-14 h-14 rounded-full flex items-center justify-center mx-auto"
+                  style={{ background: "rgba(201,169,110,0.15)" }}
+                >
+                  <Crown className="w-7 h-7" style={{ color: "#C9A96E" }} />
                 </div>
-                
+
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-serif font-bold bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] bg-clip-text text-transparent">
-                    Unlock Unlimited Coaching
+                  <h3
+                    className="text-xl font-light text-white"
+                    style={{ fontFamily: "'Playfair Display', serif" }}
+                  >
+                    Ready for more conversations?
                   </h3>
-                  <p className="text-foreground/70">
-                    You've used all your free messages! Join our Inner Circle or Executive Intensive to get unlimited AI coaching, personalized guidance, and exclusive access to premium features.
+                  <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
+                    You've used your 15 free messages. Signature members get unlimited access to all 6 agents — from $29/month.
                   </p>
                 </div>
 
-                <div className="space-y-3">
-                  <Link href="/upgrade">
-                    <Button 
-                      className="w-full bg-gradient-to-br from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--hyper-violet))] hover:opacity-90 transition-opacity"
+                <div className="space-y-3 pt-1">
+                  <Link href="/upgrade" onClick={() => setShowUpgradePrompt(false)}>
+                    <button
+                      className="w-full py-3 rounded font-semibold uppercase tracking-widest text-xs"
+                      style={{ background: "#C9A96E", color: "#1A1A2E" }}
                       data-testid="button-upgrade-now"
                     >
-                      <Crown className="w-4 h-4 mr-2" />
-                      Upgrade to Inner Circle
-                    </Button>
+                      Unlock Signature
+                    </button>
                   </Link>
-                  
-                  <Button 
-                    variant="outline" 
-                    className="w-full"
+                  <button
+                    className="w-full py-2.5 text-xs font-medium transition-colors"
+                    style={{ color: "rgba(255,255,255,0.35)" }}
                     onClick={() => setShowUpgradePrompt(false)}
                     data-testid="button-close-upgrade-prompt"
                   >
-                    Maybe Later
-                  </Button>
+                    Maybe later
+                  </button>
                 </div>
               </div>
             </motion.div>

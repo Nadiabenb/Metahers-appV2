@@ -42,11 +42,16 @@ const IMAGE_MAP: Record<string, string> = {
 
 const CATEGORY_COLORS: Record<string, string> = {
   "AI": "text-[hsl(var(--liquid-gold))] bg-[hsl(var(--liquid-gold))]/10",
-  "Web3": "text-[hsl(var(--hyper-violet))] bg-[hsl(var(--hyper-violet))]/10",
-  "Crypto": "text-[hsl(var(--cyber-fuchsia))] bg-[hsl(var(--cyber-fuchsia))]/10",
-  "NFT": "text-[hsl(var(--magenta-quartz))] bg-[hsl(var(--magenta-quartz))]/10",
-  "Metaverse": "text-[hsl(var(--aurora-teal))] bg-[hsl(var(--aurora-teal))]/10",
-  "Blockchain": "text-[hsl(var(--hyper-violet))] bg-[hsl(var(--hyper-violet))]/10",
+  "Business": "text-[hsl(var(--aurora-teal))] bg-[hsl(var(--aurora-teal))]/10",
+  "Branding": "text-[hsl(var(--magenta-quartz))] bg-[hsl(var(--magenta-quartz))]/10",
+  "Tools": "text-[hsl(var(--cyber-fuchsia))] bg-[hsl(var(--cyber-fuchsia))]/10",
+  "Productivity": "text-[hsl(var(--hyper-violet))] bg-[hsl(var(--hyper-violet))]/10",
+  // Legacy — keep so old articles don't break
+  "Web3": "text-[hsl(var(--liquid-gold))] bg-[hsl(var(--liquid-gold))]/10",
+  "Crypto": "text-[hsl(var(--liquid-gold))] bg-[hsl(var(--liquid-gold))]/10",
+  "NFT": "text-[hsl(var(--liquid-gold))] bg-[hsl(var(--liquid-gold))]/10",
+  "Metaverse": "text-[hsl(var(--liquid-gold))] bg-[hsl(var(--liquid-gold))]/10",
+  "Blockchain": "text-[hsl(var(--liquid-gold))] bg-[hsl(var(--liquid-gold))]/10",
 };
 
 function ArticleContent({ article }: { article: BlogArticle }) {
@@ -209,7 +214,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
             {!isAuthenticated ? (
               <>
                 <p className="text-lg text-foreground max-w-2xl mx-auto leading-relaxed">
-                  Get access to guided AI & Web3 rituals, an AI-powered journal, and exclusive content designed for women who want to lead in the digital age.
+                  Get access to guided AI learning experiences, six AI agents, and a curated toolkit — designed for women who want to lead with AI.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                   <Button 
@@ -221,20 +226,7 @@ function ArticleContent({ article }: { article: BlogArticle }) {
                     Start Your Journey
                     <ArrowRight className="w-4 h-4" />
                   </Button>
-                  <Button 
-                    size="lg"
-                    variant="outline"
-                    onClick={() => handleNavigation("/shop")}
-                    className="gap-2 min-w-[200px]"
-                    data-testid="button-cta-shop"
-                  >
-                    <ShoppingBag className="w-4 h-4" />
-                    Explore Drop 001
-                  </Button>
                 </div>
-                <p className="text-sm text-foreground/80">
-                  Drop 001 ritual bags include instant Pro membership + exclusive AI unlocks
-                </p>
               </>
             ) : (
               <>
@@ -307,9 +299,9 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-background pb-20">
       <SEO
-        title="MetaHers Daily - AI & Web3 Blog for Women"
-        description="AI prompts, Web3 careers, and blockchain tutorials for women. Daily expert insights, step-by-step guides, and success stories from women in tech."
-        keywords="AI blog, Web3 blog, women in tech, AI articles, blockchain guide, NFT news, crypto for women, metaverse updates"
+        title="MetaHers Daily — AI Blog for Ambitious Women"
+        description="Practical AI guides, business strategies, and insights for women who want to build, grow, and lead with AI. Written for solopreneurs and creatives."
+        keywords="AI blog for women, AI tools for entrepreneurs, AI business strategy, solopreneur AI, AI content creation, women in tech"
       />
       {/* Hero Header */}
       <div className="relative overflow-hidden">
@@ -325,7 +317,7 @@ export default function BlogPage() {
               MetaHers Daily
             </h1>
             <p className="text-xl md:text-2xl text-foreground font-light max-w-3xl mx-auto">
-              Your insider's guide to Web3, AI, crypto, and the digital frontier—written for women, by women
+              Practical AI strategies, tool guides, and business insights — written for ambitious women, by ambitious women.
             </p>
           </motion.div>
         </div>
