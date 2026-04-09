@@ -59,6 +59,7 @@ const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
 const AIPromptLibraryPage = lazy(() => import("@/pages/AIPromptLibraryPage"));
 const AppAtelierPage = lazy(() => import("@/pages/AppAtelier"));
 const AgentsPage = lazy(() => import("@/pages/AgentsPage"));
+const ConciergePage = lazy(() => import("@/pages/ConciergePage"));
 const FoundersSanctuaryPage = lazy(() => import("@/pages/FoundersSanctuary"));
 const RetreatPage = lazy(() => import("@/pages/RetreatPage"));
 const ProgressDashboardPage = lazy(() => import("@/pages/ProgressDashboardPage"));
@@ -156,6 +157,7 @@ function Router() {
 
         {/* AI Agents Directory */}
         <Route path="/agents" component={AgentsPage} />
+        <Route path="/concierge" component={ConciergePage} />
         <Route path="/companion" component={() => { window.location.replace('/agents'); return null; }} />
 
         {/* Newsletter & Waitlist - Public */}
