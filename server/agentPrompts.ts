@@ -73,7 +73,7 @@ export function canAccessAgent(agentId: ConciergeAgentId, tier: string): boolean
 }
 
 export function getAnthropicAgentModel(): string {
-  return process.env.CONCIERGE_ANTHROPIC_MODEL || process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
+  return process.env.CONCIERGE_ANTHROPIC_MODEL || process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5-20250929";
 }
 
 export function buildAgentSystemPrompt(params: {

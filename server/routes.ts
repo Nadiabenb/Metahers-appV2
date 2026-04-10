@@ -385,11 +385,11 @@ function getDailyConciergeLimitByTier(tier: string): number | null {
 }
 
 function getAnthropicClient(): Anthropic {
-  if (!process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.ANTHROPIC_API_KEY_METAHERS) {
     throw new OpenAIError("Anthropic API key is not configured");
   }
 
-  return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+  return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY_METAHERS, baseURL: 'https://api.anthropic.com' });
 }
 
 function getAnthropicTextResponse(response: any): string {
