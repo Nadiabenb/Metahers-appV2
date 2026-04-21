@@ -1592,7 +1592,9 @@ Return ONLY valid JSON:
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-      res.json(user);
+      const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
+      const isAdmin = adminEmails.includes(user.email.toLowerCase());
+      res.json({ ...user, isAdmin });
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });

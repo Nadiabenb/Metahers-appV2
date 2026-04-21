@@ -30,5 +30,6 @@ export function useAuth() {
     user: user ?? null,
     isLoading,
     isAuthenticated: !!user,
+    isAdmin: !!(user as any)?.isAdmin,
   };
 }

@@ -24,6 +24,7 @@ import ForgotPasswordPage from "@/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/ResetPasswordPage";
 
 // Admin Pages
+import { AdminRoute } from '@/components/AdminRoute';
 import AdminDashboardPage from "@/pages/admin/AdminDashboardPage";
 import AdminUsersPage from "@/pages/admin/AdminUsersPage";
 import AdminExperiencesPage from "@/pages/admin/AdminExperiencesPage";
@@ -205,16 +206,16 @@ function Router() {
             {/* Main Dashboard - Unified view */}
             <Route path="/dashboard" component={DashboardPage} />
 
-            {/* Admin Routes */}
-            <Route path="/admin" component={AdminDashboardPage} />
-            <Route path="/admin/users" component={AdminUsersPage} />
-            <Route path="/admin/experiences" component={AdminExperiencesPage} />
-            <Route path="/admin/voyages" component={AdminVoyagesPage} />
+            {/* Admin Routes — protected, only accessible to admin emails */}
+            <Route path="/admin" component={() => <AdminRoute component={AdminDashboardPage} />} />
+            <Route path="/admin/users" component={() => <AdminRoute component={AdminUsersPage} />} />
+            <Route path="/admin/experiences" component={() => <AdminRoute component={AdminExperiencesPage} />} />
+            <Route path="/admin/voyages" component={() => <AdminRoute component={AdminVoyagesPage} />} />
             <Route path="/admin/ai" component={() => {
               const AIDashboard = lazy(() => import('@/pages/admin/AIDashboardPage'));
-              return <AIDashboard />;
+              return <AdminRoute component={() => <AIDashboard />} />;
             }} />
-            <Route path="/admin/emails" component={AdminEmailSequencePage} />
+            <Route path="/admin/emails" component={() => <AdminRoute component={AdminEmailSequencePage} />} />
 
             {/* Redirect authenticated users to dashboard */}
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>
@@ -233,7 +234,7 @@ function Router() {
             <Route path="/glow-up/journal" component={GlowUpJournalPage} />
             <Route path="/glow-up/complete" component={GlowUpCompletePage} />
             <Route path="/thought-leadership" component={ThoughtLeadershipPage} />
-            <Route path="/admin/quiz-results" component={AdminQuizResultsPage} />
+            <Route path="/admin/quiz-results" component={() => <AdminRoute component={AdminQuizResultsPage} />} />
 
             {/* MetaHers Voyages */}
             <Route path="/voyages" component={VoyagesPage} />
