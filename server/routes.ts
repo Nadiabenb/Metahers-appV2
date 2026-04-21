@@ -936,6 +936,96 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }));
 
+  // Admin — email sequence tracker
+  app.get('/api/admin/email-sequence', isAuthenticated, isAdmin, asyncHandler(async (req: Request, res) => {
+    const { status, persona, search } = req.query as Record<string, string>;
+
+    const rows = await db
+      .select({
+        id: scheduledEmails.id,
+        userId: scheduledEmails.userId,
+        emailKey: scheduledEmails.emailKey,
+        scheduledFor: scheduledEmails.scheduledFor,
+        sentAt: scheduledEmails.sentAt,
+        persona: scheduledEmails.persona,
+        variant: scheduledEmails.variant,
+        createdAt: scheduledEmails.createdAt,
+        userEmail: users.email,
+        userFirstName: users.firstName,
+        userTier: users.subscriptionTier,
+      })
+      .from(scheduledEmails)
+      .leftJoin(users, eq(scheduledEmails.userId, users.id))
+      .orderBy(desc(scheduledEmails.createdAt), scheduledEmails.emailKey);
+
+    let filtered = rows;
+
+    if (status === 'sent') {
+      filtered = filtered.filter(r => r.sentAt !== null);
+    } else if (status === 'pending') {
+      filtered = filtered.filter(r => r.sentAt === null);
+    } else if (status === 'skipped') {
+      filtered = filtered.filter(r => r.persona === 'upgraded');
+    }
+
+    if (persona && persona !== 'all') {
+      filtered = filtered.filter(r => r.persona === persona);
+    }
+
+    if (search) {
+      const q = search.toLowerCase();
+      filtered = filtered.filter(r =>
+        r.userEmail?.toLowerCase().includes(q) ||
+        r.userFirstName?.toLowerCase().includes(q)
+      );
+    }
+
+    const userMap = new Map<string, {
+      userId: string;
+      email: string;
+      firstName: string | null;
+      tier: string | null;
+      persona: string | null;
+      emailsSent: number;
+      emailsPending: number;
+      emailsTotal: number;
+      emails: typeof filtered;
+    }>();
+
+    for (const row of filtered) {
+      if (!userMap.has(row.userId)) {
+        userMap.set(row.userId, {
+          userId: row.userId,
+          email: row.userEmail || '',
+          firstName: row.userFirstName,
+          tier: row.userTier,
+          persona: row.persona,
+          emailsSent: 0,
+          emailsPending: 0,
+          emailsTotal: 0,
+          emails: [],
+        });
+      }
+      const entry = userMap.get(row.userId)!;
+      entry.emails.push(row);
+      entry.emailsTotal++;
+      if (row.sentAt) entry.emailsSent++;
+      else entry.emailsPending++;
+      if (!entry.persona && row.persona) entry.persona = row.persona;
+    }
+
+    const allRows = await db.select({ id: scheduledEmails.id, sentAt: scheduledEmails.sentAt, userId: scheduledEmails.userId }).from(scheduledEmails);
+    const totalScheduled = allRows.length;
+    const totalSent = allRows.filter(r => r.sentAt !== null).length;
+    const totalPending = allRows.filter(r => r.sentAt === null).length;
+    const uniqueUsers = new Set(allRows.map(r => r.userId)).size;
+
+    res.json({
+      stats: { totalScheduled, totalSent, totalPending, uniqueUsers },
+      users: Array.from(userMap.values()),
+    });
+  }));
+
   // Test endpoint to check Resend configuration (admin only in production)
   app.get('/api/test-resend', async (req, res) => {
     try {

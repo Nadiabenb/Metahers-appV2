@@ -53,6 +53,7 @@ const AIBuilderRetreatPage = lazy(() => import("@/pages/AIBuilderRetreatPage"));
 const ThoughtLeadershipPage = lazy(() => import("@/pages/ThoughtLeadershipPage"));
 const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
 const AdminQuizResultsPage = lazy(() => import("@/pages/AdminQuizResultsPage"));
+const AdminEmailSequencePage = lazy(() => import('@/pages/admin/AdminEmailSequencePage'));
 const UpgradePage = lazy(() => import("@/pages/UpgradePage"));
 const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
@@ -213,6 +214,7 @@ function Router() {
               const AIDashboard = lazy(() => import('@/pages/admin/AIDashboardPage'));
               return <AIDashboard />;
             }} />
+            <Route path="/admin/emails" component={AdminEmailSequencePage} />
 
             {/* Redirect authenticated users to dashboard */}
             <Route path="/home">{() => <Redirect to="/dashboard" />}</Route>

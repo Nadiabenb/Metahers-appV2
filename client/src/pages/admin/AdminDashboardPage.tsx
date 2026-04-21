@@ -1,7 +1,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, BookOpen, CheckCircle, UserCheck, Crown, Star, Compass, Plus, TrendingUp, Activity, AlertCircle, Shield, BarChart3, Search, Filter, Download, RefreshCw, Settings, Zap } from 'lucide-react';
+import { Users, BookOpen, CheckCircle, UserCheck, Crown, Star, Compass, Plus, TrendingUp, Activity, AlertCircle, Shield, BarChart3, Search, Filter, Download, RefreshCw, Settings, Zap, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -331,6 +331,17 @@ export default function AdminDashboardPage() {
                 <div>
                   <div className="font-semibold">AI Usage Analytics</div>
                   <div className="text-xs text-gray-500">Monitor costs, performance, and usage</div>
+                </div>
+              </Button>
+              <Button
+                className="w-full justify-start text-left h-auto py-4 px-4"
+                variant="outline"
+                onClick={() => setLocation('/admin/emails')}
+              >
+                <Mail className="h-5 w-5 mr-3 text-pink-600" />
+                <div>
+                  <div className="font-semibold">Email Sequence Tracker</div>
+                  <div className="text-xs text-gray-500">Monitor onboarding emails across all members</div>
                 </div>
               </Button>
               <Button
