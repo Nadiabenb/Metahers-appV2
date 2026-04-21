@@ -55,6 +55,7 @@ const ThoughtLeadershipPage = lazy(() => import("@/pages/ThoughtLeadershipPage")
 const JourneyDayPage = lazy(() => import("@/pages/JourneyDayPage"));
 const AdminQuizResultsPage = lazy(() => import("@/pages/AdminQuizResultsPage"));
 const AdminEmailSequencePage = lazy(() => import('@/pages/admin/AdminEmailSequencePage'));
+const AIDashboardPage = lazy(() => import('@/pages/admin/AIDashboardPage'));
 const UpgradePage = lazy(() => import("@/pages/UpgradePage"));
 const PromptPlaygroundPage = lazy(() => import("@/pages/PromptPlaygroundPage"));
 const ExperienceDetailPage = lazy(() => import("@/pages/ExperienceDetailPage"));
@@ -211,10 +212,7 @@ function Router() {
             <Route path="/admin/users" component={() => <AdminRoute component={AdminUsersPage} />} />
             <Route path="/admin/experiences" component={() => <AdminRoute component={AdminExperiencesPage} />} />
             <Route path="/admin/voyages" component={() => <AdminRoute component={AdminVoyagesPage} />} />
-            <Route path="/admin/ai" component={() => {
-              const AIDashboard = lazy(() => import('@/pages/admin/AIDashboardPage'));
-              return <AdminRoute component={() => <AIDashboard />} />;
-            }} />
+            <Route path="/admin/ai" component={() => <AdminRoute component={AIDashboardPage} />} />
             <Route path="/admin/emails" component={() => <AdminRoute component={AdminEmailSequencePage} />} />
 
             {/* Redirect authenticated users to dashboard */}
