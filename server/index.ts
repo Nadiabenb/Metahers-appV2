@@ -1,6 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
 import compression from "compression";
-import { registerRoutes } from "./routes";
+import { registerRoutes, processScheduledEmails } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { setupSecurityHeaders, setupCORS, setupRateLimiting } from "./security";
 import { errorHandler } from "./middleware/errorHandler";
@@ -146,6 +146,16 @@ app.use((req, res, next) => {
     }, async () => {
       logger.info({ port, host: '0.0.0.0', env: app.get("env") }, 'Server successfully started');
       logger.info('Ready to accept traffic');
+
+      // Email sequence cron — runs every hour
+      setInterval(async () => {
+        await processScheduledEmails();
+      }, 60 * 60 * 1000);
+
+      // Run once shortly after startup to catch any missed emails
+      setTimeout(async () => {
+        await processScheduledEmails();
+      }, 30 * 1000);
 
       // Seed database in production only if needed (check if data exists first)
       if (app.get("env") === "production") {

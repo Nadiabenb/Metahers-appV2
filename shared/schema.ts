@@ -3403,3 +3403,21 @@ export const blueprintApplications = pgTable("blueprint_applications", {
 export const insertBlueprintApplicationSchema = createInsertSchema(blueprintApplications).omit({ id: true, createdAt: true });
 export type InsertBlueprintApplication = z.infer<typeof insertBlueprintApplicationSchema>;
 export type BlueprintApplicationDB = typeof blueprintApplications.$inferSelect;
+
+// ===== SCHEDULED EMAILS =====
+
+export const scheduledEmails = pgTable("scheduled_emails", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  emailKey: varchar("email_key").notNull(), // "day_1", "day_2", "day_3", "day_5", "day_8", "day_10", "day_14"
+  scheduledFor: timestamp("scheduled_for").notNull(),
+  sentAt: timestamp("sent_at"),
+  persona: varchar("persona"), // "builder", "creative", "mom" — resolved at send time
+  variant: varchar("variant"), // "active" | "inactive" — for day_5 only, resolved at send time
+  createdAt: timestamp("created_at").defaultNow(),
+}, (table) => [
+  index("idx_scheduled_emails_user").on(table.userId),
+  index("idx_scheduled_emails_due").on(table.scheduledFor, table.sentAt),
+]);
+
+export type ScheduledEmailDB = typeof scheduledEmails.$inferSelect;

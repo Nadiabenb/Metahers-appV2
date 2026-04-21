@@ -48,6 +48,7 @@ import {
   agentUsage,
   agentConversations,
   agentEvents,
+  scheduledEmails,
 } from "@shared/schema";
 import type {
   UpsertUser,
@@ -148,6 +149,7 @@ import type {
   AgentConversationMessage,
   InsertAgentEvent,
   AgentEventDB,
+  ScheduledEmailDB,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, count, gte, lt } from "drizzle-orm";
@@ -377,6 +379,11 @@ export interface IStorage {
     messages: AgentConversationMessage[],
   ): Promise<AgentConversationDB>;
   createAgentEvent(data: InsertAgentEvent): Promise<AgentEventDB>;
+
+  // Scheduled email operations
+  scheduleEmailSequence(userId: string, signupDate: Date): Promise<void>;
+  getDueScheduledEmails(): Promise<ScheduledEmailDB[]>;
+  markEmailSent(id: string, persona: string, variant: string | null): Promise<void>;
 }
 
 const MAX_AGENT_CONVERSATION_MESSAGES = 40;
@@ -2390,6 +2397,44 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return event;
+  }
+
+  async scheduleEmailSequence(userId: string, signupDate: Date): Promise<void> {
+    const days = [1, 2, 3, 5, 8, 10, 14];
+    const rows = days.map(day => {
+      const scheduledFor = new Date(signupDate);
+      scheduledFor.setDate(scheduledFor.getDate() + (day - 1));
+      if (day > 1) {
+        scheduledFor.setUTCHours(10, 0, 0, 0);
+      }
+      return {
+        userId,
+        emailKey: `day_${day}`,
+        scheduledFor,
+      };
+    });
+
+    await db.insert(scheduledEmails).values(rows);
+  }
+
+  async getDueScheduledEmails(): Promise<ScheduledEmailDB[]> {
+    return await db
+      .select()
+      .from(scheduledEmails)
+      .where(
+        and(
+          sql`${scheduledEmails.scheduledFor} <= NOW()`,
+          sql`${scheduledEmails.sentAt} IS NULL`
+        )
+      )
+      .limit(50);
+  }
+
+  async markEmailSent(id: string, persona: string, variant: string | null): Promise<void> {
+    await db
+      .update(scheduledEmails)
+      .set({ sentAt: new Date(), persona, variant: variant ?? undefined })
+      .where(eq(scheduledEmails.id, id));
   }
 
 }

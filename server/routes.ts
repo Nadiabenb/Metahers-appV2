@@ -16,7 +16,7 @@ import { CURRICULUM } from "@shared/curriculum";
 import { db } from "./db";
 import { spaces, transformationalExperiences, cohortCapacity, quizResponses, users, experienceProgress, aiMasteryEnrollment, aiMasteryModuleProgress, liveSessions, communityActivity, aiMasteryMessages, userEvents, sponsoredAds, visionBoards, visionTiles, visionSisters, insertVisionBoardSchema, insertVisionTileSchema, toolReviews, toolReviewHelpful } from "@shared/schema";
 import { sql as drizzleSql, eq, desc, and, sql, gte } from "drizzle-orm";
-import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests, blueprintApplications } from "@shared/schema";
+import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests, blueprintApplications, scheduledEmails } from "@shared/schema";
 import { AGENT_IDS, AGENT_DISPLAY_NAMES, buildAgentSystemPrompt, buildGreetingUserPrompt, canAccessAgent, getAnthropicAgentModel, toAgentQuizContext } from "./agentPrompts";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
@@ -79,6 +79,13 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 // Email configuration
 const FROM_EMAIL = 'MetaHers <notifications@app.metahers.ai>';
 const REPLY_TO_EMAIL = 'nadia@metahers.ai';
+
+const GOAL_LABELS: Record<string, string> = {
+  learn_ai: 'learning AI',
+  build_ai: 'building with AI',
+  monetize_ai: 'monetizing with AI',
+  brand_ai: 'building your brand with AI',
+};
 
 // Resend email client (using Replit-managed connection)
 let connectionSettings: any;
@@ -400,6 +407,481 @@ function getAnthropicTextResponse(response: any): string {
     .trim();
 
   return text || "I am here with you. Could you share a bit more detail so I can help precisely?";
+}
+
+// ===== SEQUENCE EMAIL SENDER =====
+
+function getPersona(role: string): 'builder' | 'creative' | 'mom' {
+  if (role === 'mom') return 'mom';
+  if (role === 'creative') return 'creative';
+  return 'builder';
+}
+
+async function sendSequenceEmail(
+  emailKey: string,
+  user: { email: string; firstName: string | null },
+  persona: 'builder' | 'creative' | 'mom',
+  variant: 'active' | 'inactive',
+  goalLabel: string,
+): Promise<void> {
+  const resend = await getUncachableResendClient();
+  if (!resend) {
+    console.warn('[SequenceEmail] Resend not configured — skipping');
+    return;
+  }
+
+  const name = user.firstName || 'there';
+  const appUrl = 'https://app.metahers.ai';
+  const upgradeUrl = `${appUrl}/upgrade`;
+
+  type EmailContent = { subject: string; html: string };
+
+  const emails: Record<string, Record<string, EmailContent>> = {
+    day_1: {
+      builder: {
+        subject: `You're in, ${name}. Let's get your business working smarter.`,
+        html: `
+          <p>Welcome to MetaHers, ${name}.</p>
+          <p>You joined because you're building something — and you already know AI should be part of how you do it. You just haven't had a space that speaks your language and actually meets you where you are. Until now.</p>
+          <p>You have access to ARIA and a team of five specialists who already know you're focused on ${goalLabel}. That context is baked into every conversation before you type a single word.</p>
+          <p>Your first move: open the app and tell ARIA the one thing in your business that's eating the most of your time right now. She'll route you to the right specialist immediately.</p>
+          <p><a href="${appUrl}/concierge?agent=aria&prompt=The+one+thing+eating+my+time+right+now+is" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Open the app — start with ARIA</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
+        `,
+      },
+      creative: {
+        subject: `You're in, ${name}. Your creative work just got a team behind it.`,
+        html: `
+          <p>Welcome to MetaHers, ${name}.</p>
+          <p>You're a creative — which means you already have the hardest part figured out. The ideas, the taste, the instinct for what's good. What AI gives you isn't creativity. It's capacity.</p>
+          <p>You have access to ARIA and five specialists who already know you're building a creative practice. They speak your language — not corporate, not generic, not robotic.</p>
+          <p>Your first move: tell ARIA what creative project is sitting half-finished right now. She'll point you straight to the specialist who can help you close it.</p>
+          <p><a href="${appUrl}/concierge?agent=aria&prompt=I+have+a+creative+project+that's+half-finished+and+I+need+help+moving+it+forward" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Open the app — talk to ARIA</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
+        `,
+      },
+      mom: {
+        subject: `You're in, ${name}. AI that actually works around your life.`,
+        html: `
+          <p>Welcome to MetaHers, ${name}.</p>
+          <p>You're building something real — around school runs, nap times, the mental load of a whole family, and whatever's left at the end of the day. That's not a small thing. That's actually the hardest version of this.</p>
+          <p>MetaHers was built to work the way your life works — in the pockets of time you actually have, not the uninterrupted hours that don't exist.</p>
+          <p>Your first move: tell ARIA what's taking up the most of your headspace right now. It can be for your family, your business idea, or just your own sanity.</p>
+          <p><a href="${appUrl}/concierge?agent=aria&prompt=Here's+what's+taking+up+most+of+my+headspace+right+now" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Open the app — talk to ARIA</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
+        `,
+      },
+    },
+    day_2: {
+      builder: {
+        subject: `${name}, here's what no one tells you about AI for your business`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>Most people use AI like a fancier Google. They type a question, get an answer, close the tab. That's not what MetaHers is built for.</p>
+          <p>Your specialists already know your goals and what you're building. So instead of spending five minutes explaining your context every single time — the way you would in ChatGPT — you walk in and go straight to the work.</p>
+          <p>Here's what that looks like in practice. Try one of these today:</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;">"Map out a 5-module course outline for my expertise."</li>
+            <li style="margin-bottom:8px;">"Write the sales page for my core offer."</li>
+            <li>"Draft my newsletter for this week — here's the topic: [your topic]."</li>
+          </ul>
+          <p>These aren't generic prompts. Your specialist knows you're a ${persona} — the output will reflect that from the first line.</p>
+          <p>
+            <a href="${appUrl}/concierge?agent=nova&prompt=Map+out+a+5-module+course+outline+for+my+expertise" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;margin-right:8px;">Try Nova — course outline</a>
+            <a href="${appUrl}/concierge?agent=noor&prompt=Write+the+sales+page+for+my+core+offer" style="display:inline-block;padding:10px 20px;background:#f9f5f2;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;border:1px solid #C9A96E;">Try Noor — sales page</a>
+          </p>
+          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">This week's challenge</strong>Ask Nova to map your course outline. Hit reply and tell me what she gave you. I read every response.</p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      creative: {
+        subject: `${name}, this is not ChatGPT. Here's the difference.`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>A generic AI tool is a blank page with autocomplete. You still have to do the thinking, the briefing, the context-setting — every single time.</p>
+          <p>Your MetaHers specialists already know you're a creative. So when Noor writes for you, she's writing with your voice goals in mind. When Bella works on a concept with you, she's not starting from zero.</p>
+          <p>Here's what to try today:</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;">"Write a pitch deck narrative for my next client proposal."</li>
+            <li style="margin-bottom:8px;">"Help me articulate my creative process in a way clients actually understand."</li>
+            <li>"Draft three options for my portfolio tagline."</li>
+          </ul>
+          <p>
+            <a href="${appUrl}/concierge?agent=noor&prompt=Write+a+pitch+deck+narrative+for+my+next+client+proposal" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;margin-right:8px;">Try Noor — pitch narrative</a>
+            <a href="${appUrl}/concierge?agent=bella&prompt=Help+me+articulate+my+creative+process+for+clients" style="display:inline-block;padding:10px 20px;background:#f9f5f2;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;border:1px solid #C9A96E;">Try Bella — creative process</a>
+          </p>
+          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">This week's challenge</strong>Ask Noor to write three versions of your portfolio tagline. Hit reply with your favourite. I genuinely want to see it.</p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      mom: {
+        subject: `${name}, five minutes. Here's what's possible.`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>The most valuable thing AI gives you isn't speed. It's mental space.</p>
+          <p>When you don't have to hold every detail in your head — the curriculum plan for your kids, the meal rotation that never gets decided, the business idea interrupting your thoughts at 2am — you get a different kind of free.</p>
+          <p>Try one of these today:</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;">"Build me a fun two-week learning plan for my [age] year old focused on [topic]."</li>
+            <li style="margin-bottom:8px;">"Create a month of dinner ideas my family will actually eat — quick, real ingredients."</li>
+            <li>"Help me outline the business idea I've been sitting on — here's the gist: [your idea]."</li>
+          </ul>
+          <p>
+            <a href="${appUrl}/concierge?agent=nova&prompt=Build+me+a+fun+two-week+learning+plan+for+my+child" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;margin-right:8px;">Try Nova — learning plan</a>
+            <a href="${appUrl}/concierge?agent=sage&prompt=Help+me+outline+a+business+idea+I've+been+sitting+on" style="display:inline-block;padding:10px 20px;background:#f9f5f2;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;border:1px solid #C9A96E;">Try Sage — business idea</a>
+          </p>
+          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">This week's challenge</strong>Ask Nova to build a learning activity plan for your kids this weekend. Hit reply and tell me what she created.</p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+    },
+    day_3: {
+      builder: {
+        subject: `${name}, meet the team that's already briefed on your business`,
+        html: `
+          <p>Hi ${name},</p>
+          <p>Behind ARIA, you have five specialists. None of them need a three-paragraph brief — they already have your context.</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;"><strong>Bella</strong> — visual concepts, creative direction, brand aesthetics.</li>
+            <li style="margin-bottom:8px;"><strong>Luna</strong> — launch strategy, campaign copy, positioning that converts.</li>
+            <li style="margin-bottom:8px;"><strong>Nova</strong> — course structures, automation workflows, AI tool setup — no code required.</li>
+            <li style="margin-bottom:8px;"><strong>Sage</strong> — offer clarity, business direction, decisions you've been sitting on too long.</li>
+            <li><strong>Noor</strong> — newsletters, sales emails, website copy — in your voice, not a generic AI voice.</li>
+          </ul>
+          <p>This is the team you never had the budget to hire. Now you do.</p>
+          <p><a href="${appUrl}/concierge?agent=sage&prompt=Help+me+get+clarity+on+my+next+offer" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Ask Sage about your next offer</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      creative: {
+        subject: `${name}, meet your creative team — no agency fee required`,
+        html: `
+          <p>Hi ${name},</p>
+          <p>Five specialists. All briefed on your creative practice before you say a word.</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;"><strong>Bella</strong> — creative direction, visual concepts, mood boarding, art direction briefs.</li>
+            <li style="margin-bottom:8px;"><strong>Luna</strong> — positioning your work, launch strategy, audience growth.</li>
+            <li style="margin-bottom:8px;"><strong>Nova</strong> — automating the admin that steals your creative hours. Onboarding flows, scheduling, systems.</li>
+            <li style="margin-bottom:8px;"><strong>Sage</strong> — pricing your work properly, pivoting your practice, the strategic decisions you've been circling.</li>
+            <li><strong>Noor</strong> — portfolio copy, artist statements, client emails, thought leadership. Your words, sharpened.</li>
+          </ul>
+          <p>The work you keep deprioritising because it doesn't feel creative enough? That's exactly what they're here for.</p>
+          <p><a href="${appUrl}/concierge?agent=sage&prompt=Help+me+think+through+how+to+price+my+creative+work" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Ask Sage about pricing</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      mom: {
+        subject: `${name}, meet the team that works around your schedule`,
+        html: `
+          <p>Hi ${name},</p>
+          <p>Five specialists, available whenever your window of time opens up. Even if that window is 11 minutes on a Tuesday.</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;"><strong>Bella</strong> — creative projects, kids' activity concepts, visual ideas for whatever you're building.</li>
+            <li style="margin-bottom:8px;"><strong>Luna</strong> — if you're building something on the side, she handles the marketing and messaging.</li>
+            <li style="margin-bottom:8px;"><strong>Nova</strong> — routines, schedules, educational plans, family organisation — the stuff that lives in your head, structured.</li>
+            <li style="margin-bottom:8px;"><strong>Sage</strong> — what to build, how to use your time, what actually makes sense for your life right now.</li>
+            <li><strong>Noor</strong> — your words when you need them. Pitch, bio, newsletter, or just something you want to say well.</li>
+          </ul>
+          <p>They already know you're building around real life. That matters in every response they give you.</p>
+          <p><a href="${appUrl}/concierge?agent=nova&prompt=Help+me+build+a+family+routine+that+actually+works" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Ask Nova to build your routine</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+    },
+    day_5: {
+      builder_active: {
+        subject: `${name}, you're already ahead. Here's what to build next.`,
+        html: `
+          <p>I see you've been in, ${name}. Good.</p>
+          <p>Here's something most people miss at this stage: the biggest leverage isn't using AI for the obvious tasks. It's using it for the things you've been quietly procrastinating on for months.</p>
+          <p>Things like: the course you have all the knowledge for but haven't structured. The newsletter you keep meaning to start. The website homepage that still says what your business was, not what it is now. The sales page you've been rewriting in your head for a year.</p>
+          <p>Your specialists can move all of those from your to-do list to done — this week. As a Signature member you get full daily access to all five, plus bi-weekly live calls and your 45-minute welcome call with me when you join.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what Signature includes</a></p>
+          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Challenge before you upgrade</strong>Ask Noor to rewrite your website homepage headline. Takes 3 minutes. If it's better than what you have, you'll know Signature is worth it.</p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      builder_inactive: {
+        subject: `${name}, the thing you've been putting off. Let's do it today.`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>There's always one thing. The task that keeps sliding to tomorrow because it feels too big, too vague, or like it needs more brain space than you currently have.</p>
+          <p>You don't need brain space for this. You need Nova or Noor and about ten minutes.</p>
+          <p>Open MetaHers and type exactly this to ARIA:</p>
+          <p style="background:#f9f5f2;padding:14px 18px;border-radius:4px;font-style:italic;">"I've been putting off [your task] and I need help getting it done today."</p>
+          <p>She'll route you to the right specialist. You'll have a first draft, an outline, or a plan before the hour is up.</p>
+          <p><a href="${appUrl}/concierge?agent=aria&prompt=I've+been+putting+off+a+task+and+need+help+getting+it+done+today" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Open ARIA — let's unblock this</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      creative_active: {
+        subject: `${name}, you've started. Here's what creatives build next.`,
+        html: `
+          <p>I see you've been in, ${name}.</p>
+          <p>Here's what I see ambitious creatives do once they find their rhythm in MetaHers: they stop leaving money in ideas that never launch. The course built from their methodology. The newsletter that turns their process into a following. The workshop they could run quarterly.</p>
+          <p>None of those require more talent than you already have. They just require a team to help you package and present what you've built.</p>
+          <p>As a Signature member, your specialists are available every day — plus your 45-minute welcome call with me and bi-weekly live calls.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what Signature includes</a></p>
+          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Challenge</strong>Ask Nova to outline a workshop you could run based on your creative expertise. You might surprise yourself.</p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      creative_inactive: {
+        subject: `${name}, I know why you haven't started yet.`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>Creatives are the most likely to feel like AI isn't really for them. Like it'll flatten their voice, water down their aesthetic, produce something generic.</p>
+          <p>That instinct makes sense — because most AI tools do exactly that.</p>
+          <p>MetaHers specialists are different because they're working with your context. Noor doesn't write like every other AI writer. She writes knowing you're a creative who cares about voice and craft.</p>
+          <p>Try this one thing. Open the app and ask Noor:</p>
+          <p style="background:#f9f5f2;padding:14px 18px;border-radius:4px;font-style:italic;">"Write my artist statement. Make it sound like me — direct, considered, no corporate fluff."</p>
+          <p>If it doesn't sound like you, tell her that. She'll adjust. That's the whole point.</p>
+          <p><a href="${appUrl}/concierge?agent=noor&prompt=Write+my+artist+statement.+Make+it+sound+like+me+%E2%80%94+direct,+considered,+no+corporate+fluff" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Open Noor — artist statement</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      mom_active: {
+        subject: `${name}, you're already using it. Here's what else is possible.`,
+        html: `
+          <p>I see you've been in, ${name}. That already puts you ahead.</p>
+          <p>Here's what I see moms doing once they settle into MetaHers: they start reclaiming the hours that used to disappear into planning. And some of them — the ones who've been quietly sitting on a business idea — finally start moving on it.</p>
+          <p>Because when the mental load of the family side has support, there's something left over for you.</p>
+          <p>As a Signature member you get full daily access to all five specialists, the Learning Hub, the AI Toolkit, and your 45-minute welcome call with me.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what Signature includes</a></p>
+          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Challenge</strong>Ask Sage one question you've been sitting on about your life or business direction. Just one. See what she gives you.</p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      mom_inactive: {
+        subject: `${name}, no pressure. But here's a two-minute start.`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>Life is full — and that's not a judgment, it's just Tuesday when you have kids.</p>
+          <p>Here's the lowest-possible-barrier way to start: open MetaHers, go to ARIA, and type one sentence about something on your plate right now.</p>
+          <p style="background:#f9f5f2;padding:14px 18px;border-radius:4px;font-style:italic;">"I need help with [one thing] and I only have about 10 minutes."</p>
+          <p>That's enough. She'll do the rest.</p>
+          <p><a href="${appUrl}/concierge?agent=aria&prompt=I+need+help+with+something+and+only+have+about+10+minutes" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Open ARIA — 10 minutes</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+    },
+    day_8: {
+      builder: {
+        subject: `${name}, what a real AI practice actually looks like`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>Picture this: a solopreneur who spent every Sunday writing content that sounded like everyone else's. Who had a course idea she'd been sitting on for two years. Who rewrote her about page in her head constantly but never found the right words.</p>
+          <p>She spent one week working with Nova and Noor. The course outline exists now. The about page is live. Sunday evenings are for something else.</p>
+          <p>That's not a transformation story. That's just what happens when you stop doing alone what a team can do with you.</p>
+          <p>You have the team. The only question is what you're going to move first.</p>
+          <p>
+            <a href="${appUrl}/concierge?agent=nova&prompt=Help+me+structure+my+course+idea" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;margin-right:8px;">Start with Nova</a>
+            <a href="${appUrl}/concierge?agent=noor&prompt=Rewrite+my+about+page" style="display:inline-block;padding:10px 20px;background:#f9f5f2;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;border:1px solid #C9A96E;">Start with Noor</a>
+          </p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      creative: {
+        subject: `${name}, what changes when your creative practice has real support`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>There's a version of your creative practice where the ideas you have actually get made. Where client proposals go out the same day you think of them. Where your newsletter exists and people read it.</p>
+          <p>That version doesn't require more hours. It requires less friction between the idea and the output.</p>
+          <p>That's what a real AI practice gives a creative — not a replacement for your instincts, but a team that handles the weight so your instincts can do what they're best at.</p>
+          <p><a href="${appUrl}/concierge" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Keep building</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      mom: {
+        subject: `${name}, what it looks like when the mental load has somewhere to go`,
+        html: `
+          <p>Hey ${name},</p>
+          <p>Imagine a week where the kids' activities are planned without three hours of research. Where the meal rotation is handled. Where the business idea you've been carrying for two years finally has an outline, a name, a first step.</p>
+          <p>Not because you found more hours. Because the thinking that used to live only in your head has somewhere else to go.</p>
+          <p>That's what I hear from moms who've built a real practice in MetaHers. Not that AI did everything — but that it took enough off the plate that there was something left for the things only they could do.</p>
+          <p>You deserve that kind of space.</p>
+          <p><a href="${appUrl}/concierge" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Keep going</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+    },
+    day_10: {
+      builder: {
+        subject: `${name}, here's the full picture`,
+        html: `
+          <p>Hi ${name},</p>
+          <p>You've had a taste of what the specialists can do. Here's what full access looks like as a Signature member:</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;">Full daily access to all five specialists — already briefed on your business</li>
+            <li style="margin-bottom:8px;">The complete Learning Hub and AI Toolkit</li>
+            <li style="margin-bottom:8px;">Bi-weekly live calls — real tool demos, workflow walkthroughs, and hot seats with me</li>
+            <li style="margin-bottom:8px;">A 45-minute welcome call with me when you join — your AI strategy, mapped specifically for your business</li>
+            <li>Unlimited unstuck sessions — whenever something stalls, you book a focused session with me directly. No extra charge.</li>
+          </ul>
+          <p>Most tools leave you to figure it out alone. I don't. All of that for $29 a month. One good sales page from Noor pays for six months.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to Signature</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      creative: {
+        subject: `${name}, here's the full picture`,
+        html: `
+          <p>Hi ${name},</p>
+          <p>Full access as a Signature member — here's what that means for your creative practice:</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;">Full daily access to Bella, Luna, Nova, Sage, and Noor</li>
+            <li style="margin-bottom:8px;">The complete Learning Hub and AI Toolkit — curated, not overwhelming</li>
+            <li style="margin-bottom:8px;">Bi-weekly live calls — real demos and hot seats with me</li>
+            <li style="margin-bottom:8px;">A 45-minute welcome call — we map your AI strategy around your creative work specifically</li>
+            <li>Unlimited unstuck sessions — stalled on a proposal, a pitch, a project? Book a session and we work through it.</li>
+          </ul>
+          <p>Your work deserves the support that makes it easier to exist in the world. $29 a month. One good client proposal from Noor covers three months.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to Signature</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+      mom: {
+        subject: `${name}, here's the full picture`,
+        html: `
+          <p>Hi ${name},</p>
+          <p>Here's what full access looks like as a Signature member:</p>
+          <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
+            <li style="margin-bottom:8px;">Full daily access to Nova, Sage, Noor, Bella, and Luna</li>
+            <li style="margin-bottom:8px;">The complete Learning Hub and AI Toolkit — practical, not overwhelming</li>
+            <li style="margin-bottom:8px;">Bi-weekly live calls — real demos, real questions, real answers from me</li>
+            <li style="margin-bottom:8px;">A 45-minute welcome call — to map out how AI fits your life and what you're building in it</li>
+            <li>Unlimited unstuck sessions — whenever something stalls, you book time with me and we work through it. No extra charge.</li>
+          </ul>
+          <p>You will never be left to figure this out alone. $29 a month. Less than a weekly coffee run.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to Signature</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
+        `,
+      },
+    },
+    day_14: {
+      builder: {
+        subject: `Two weeks in, ${name}. A note from me.`,
+        html: `
+          <p>Two weeks ago you joined MetaHers, ${name}.</p>
+          <p>I don't know exactly where you are — maybe you've been building, maybe life got loud, maybe you're still finding your way in. All of that is fine.</p>
+          <p>What I do know is that your business deserves more than you trying to figure out AI alone at 11pm. It deserves a team, a strategy, and someone who will sit down with you and actually work through the stuck parts.</p>
+          <p>That's what Signature is. $29 a month. Your welcome call is waiting to be scheduled. Your unstuck sessions have no limit. Your specialists know your business.</p>
+          <p>You will never be in this alone. That's the promise.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a Signature member</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
+        `,
+      },
+      creative: {
+        subject: `Two weeks in, ${name}. A note from me.`,
+        html: `
+          <p>Two weeks ago you joined MetaHers, ${name}.</p>
+          <p>I built this for women like you — creative, driven, and tired of feeling like the tools everyone talks about weren't really designed with you in mind.</p>
+          <p>Signature is $29 a month. Your 45-minute welcome call is waiting. Your specialists are briefed. And whenever your work hits a wall — creatively, strategically, or practically — you can book a session with me directly.</p>
+          <p>You deserve a practice that has real support behind it.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a Signature member</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
+        `,
+      },
+      mom: {
+        subject: `Two weeks in, ${name}. A note from me.`,
+        html: `
+          <p>Two weeks ago you joined MetaHers, ${name}.</p>
+          <p>I know your days are full. I know the gap between "I should use this" and actually opening the app can feel enormous when you're running on whatever's left after everyone else's needs are met.</p>
+          <p>That's exactly why Signature exists the way it does. Your welcome call is there so you're not starting from scratch. Your unstuck sessions mean that whenever you hit a wall, you have someone to sit down with you.</p>
+          <p>You're not doing this alone. That's the whole point.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a Signature member</a></p>
+          <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
+        `,
+      },
+    },
+  };
+
+  let content: EmailContent | undefined;
+
+  if (emailKey === 'day_5') {
+    const key = `${persona}_${variant}` as keyof typeof emails.day_5;
+    content = emails.day_5[key];
+  } else {
+    const dayEmails = emails[emailKey] as Record<string, EmailContent> | undefined;
+    content = dayEmails?.[persona];
+  }
+
+  if (!content) {
+    console.warn(`[SequenceEmail] No content found for ${emailKey}/${persona}/${variant}`);
+    return;
+  }
+
+  const baseHtml = `
+    <!DOCTYPE html>
+    <html>
+    <body style="font-family:Georgia,'Playfair Display',serif;max-width:600px;margin:0 auto;padding:32px 24px;color:#1A1A2E;line-height:1.75;">
+      ${content.html}
+      <hr style="border:none;border-top:1px solid #E0D5CC;margin:32px 0;">
+      <p style="font-size:12px;color:#aaa;">You're receiving this because you joined MetaHers Inner Circle.<br>
+      <a href="https://app.metahers.ai" style="color:#C9A96E;">app.metahers.ai</a></p>
+    </body>
+    </html>
+  `;
+
+  await resend.client.emails.send({
+    from: resend.fromEmail,
+    to: user.email,
+    subject: content.subject,
+    html: baseHtml,
+  });
+}
+
+// ===== EMAIL SEQUENCE CRON =====
+
+export async function processScheduledEmails(): Promise<void> {
+  try {
+    const due = await storage.getDueScheduledEmails();
+    if (due.length === 0) return;
+
+    console.log(`[EmailCron] Processing ${due.length} due emails`);
+
+    for (const scheduled of due) {
+      try {
+        const user = await storage.getUser(scheduled.userId);
+        if (!user) {
+          await storage.markEmailSent(scheduled.id, 'unknown', null);
+          continue;
+        }
+
+        if (user.subscriptionTier && user.subscriptionTier !== 'free') {
+          await storage.markEmailSent(scheduled.id, 'upgraded', null);
+          continue;
+        }
+
+        const quiz = await storage.getOnboardingQuizResponse(scheduled.userId);
+        const persona = getPersona(quiz?.role || 'solopreneur');
+
+        let variant: 'active' | 'inactive' = 'inactive';
+        if (scheduled.emailKey === 'day_5') {
+          const usage = await storage.getAgentUsage(scheduled.userId);
+          variant = (usage && usage.messageCount > 0) ? 'active' : 'inactive';
+        }
+
+        const goalLabel = GOAL_LABELS[quiz?.goal || 'learn_ai'] || 'learning AI';
+
+        await sendSequenceEmail(
+          scheduled.emailKey,
+          { email: user.email, firstName: user.firstName },
+          persona,
+          variant,
+          goalLabel,
+        );
+
+        await storage.markEmailSent(scheduled.id, persona, variant);
+        console.log(`[EmailCron] Sent ${scheduled.emailKey} to ${user.email} (${persona}/${variant})`);
+
+      } catch (err) {
+        console.error(`[EmailCron] Failed to send ${scheduled.emailKey} for user ${scheduled.userId}:`, err);
+      }
+    }
+  } catch (err) {
+    console.error('[EmailCron] Cron run failed:', err);
+  }
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -928,6 +1410,10 @@ Return ONLY valid JSON:
       memberEmail: user.email,
       memberName: user.firstName,
     }).catch(err => console.error('[Email] Membership email error:', err));
+
+    // Schedule 7-email onboarding sequence (fire-and-forget)
+    storage.scheduleEmailSequence(user.id, new Date())
+      .catch(err => console.error('[EmailSequence] Failed to schedule sequence:', err));
 
     // Set up session
     req.session!.userId = user.id;
