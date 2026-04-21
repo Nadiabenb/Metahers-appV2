@@ -36,12 +36,16 @@ import { Label } from '@/components/ui/label';
 interface User {
   id: string;
   email: string;
-  fullName: string | null;
+  firstName: string | null;
+  lastName: string | null;
   subscriptionTier: string;
-  isPro: boolean;
-  isAdmin: boolean;
   createdAt: string;
-  lastLogin: string | null;
+  role: string | null;
+  goal: string | null;
+  agentMessages: number | null;
+  lastAgentUsed: string | null;
+  emailsSent: number | null;
+  emailsTotal: number | null;
 }
 
 export default function AdminUsersPage() {
@@ -135,12 +139,10 @@ export default function AdminUsersPage() {
 
   const getTierBadge = (tier: string) => {
     const variants: Record<string, any> = {
-      free: { variant: 'outline', color: 'text-gray-600' },
-      pro: { variant: 'secondary', color: 'text-purple-600' },
-      vip: { variant: 'default', color: 'text-amber-600' },
-      sanctuary: { variant: 'default', color: 'text-blue-600' },
-      inner_circle: { variant: 'default', color: 'text-indigo-600' },
-      founders_circle: { variant: 'default', color: 'text-pink-600' },
+      free:              { label: 'Inner Circle', color: 'bg-gray-100 text-gray-600' },
+      signature_monthly: { label: 'Signature',    color: 'bg-amber-50 text-amber-700' },
+      private_monthly:   { label: 'Private',      color: 'bg-purple-50 text-purple-700' },
+      ai_blueprint:      { label: 'Blueprint',    color: 'bg-blue-50 text-blue-700' },
     };
     return variants[tier] || variants.free;
   };
@@ -264,12 +266,13 @@ export default function AdminUsersPage() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50">
-                  <TableHead className="font-semibold">User</TableHead>
+                  <TableHead className="font-semibold">Member</TableHead>
                   <TableHead className="font-semibold">Tier</TableHead>
-                  <TableHead className="font-semibold">Status</TableHead>
+                  <TableHead className="font-semibold">Persona</TableHead>
+                  <TableHead className="font-semibold">Agent msgs</TableHead>
+                  <TableHead className="font-semibold">Emails</TableHead>
                   <TableHead className="font-semibold">Joined</TableHead>
-                  <TableHead className="font-semibold">Last Login</TableHead>
-                  <TableHead className="text-right font-semibold">Actions</TableHead>
+                  <TableHead className="font-semibold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -289,60 +292,36 @@ export default function AdminUsersPage() {
                   </TableRow>
                 ) : (
                   users.map((user) => {
-                    const tierBadge = getTierBadge(user.subscriptionTier);
+                    const badge = getTierBadge(user.subscriptionTier);
                     return (
                       <TableRow key={user.id} className="hover:bg-gray-50">
                         <TableCell>
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center text-white font-semibold">
-                              {user.email[0].toUpperCase()}
-                            </div>
-                            <div>
-                              <div className="font-medium">{user.fullName || 'N/A'}</div>
-                              <div className="text-sm text-gray-500">{user.email}</div>
-                            </div>
-                          </div>
+                          <div className="font-medium text-sm">{user.firstName || ''} {user.lastName || ''}</div>
+                          <div className="text-xs text-gray-500">{user.email}</div>
                         </TableCell>
                         <TableCell>
-                          <Badge variant={tierBadge.variant} className={tierBadge.color}>
-                            {user.subscriptionTier.toUpperCase()}
-                          </Badge>
+                          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${badge.color}`}>{badge.label}</span>
                         </TableCell>
                         <TableCell>
-                          <div className="flex items-center gap-2">
-                            {user.isAdmin && (
-                              <Shield className="h-4 w-4 text-amber-500" />
-                            )}
-                            <Badge variant={user.lastLogin ? 'default' : 'outline'}>
-                              {user.lastLogin ? 'Active' : 'Inactive'}
-                            </Badge>
-                          </div>
+                          {user.role ? (
+                            <span className="text-xs text-gray-600 capitalize">{user.role}</span>
+                          ) : <span className="text-xs text-gray-300">—</span>}
                         </TableCell>
-                        <TableCell className="text-sm text-gray-600">
-                          {new Date(user.createdAt).toLocaleDateString()}
+                        <TableCell>
+                          <span className="text-sm font-medium">{user.agentMessages ?? '—'}</span>
                         </TableCell>
-                        <TableCell className="text-sm text-gray-600">
-                          {user.lastLogin
-                            ? new Date(user.lastLogin).toLocaleDateString()
-                            : 'Never'}
+                        <TableCell>
+                          {user.emailsTotal != null ? (
+                            <span className="text-sm">{user.emailsSent}/{user.emailsTotal}</span>
+                          ) : <span className="text-xs text-gray-300">—</span>}
                         </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex justify-end gap-2">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleEditUser(user)}
-                            >
-                              <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteUser(user)}
-                            >
-                              <Trash2 className="h-4 w-4 text-red-500" />
-                            </Button>
-                          </div>
+                        <TableCell className="text-sm text-gray-500">
+                          {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '—'}
+                        </TableCell>
+                        <TableCell>
+                          <Button variant="ghost" size="sm" onClick={() => handleEditUser(user)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     );

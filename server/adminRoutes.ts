@@ -12,6 +12,8 @@ import {
   voyageWaitlist,
   insertVoyageSchema,
   scheduledEmails,
+  agentUsage,
+  quizResponses,
 } from '@shared/schema';
 import { storage } from './storage';
 import { eq, sql, and, gte, desc, asc, like, or } from 'drizzle-orm';
@@ -52,40 +54,63 @@ async function logAdminAction(
 // ===== DASHBOARD STATS =====
 router.get('/stats', async (req, res) => {
   try {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const now = new Date();
+    const sevenDaysAgo = new Date(now); sevenDaysAgo.setDate(now.getDate() - 7);
+    const thirtyDaysAgo = new Date(now); thirtyDaysAgo.setDate(now.getDate() - 30);
 
-    // Get user counts by tier
-    const userStats = await db
-      .select({
-        total: sql<number>`count(*)::int`,
-        free: sql<number>`count(*) filter (where subscription_tier = 'free')::int`,
-        pro: sql<number>`count(*) filter (where subscription_tier = 'pro')::int`,
-        vip: sql<number>`count(*) filter (where subscription_tier = 'vip')::int`,
-        active: sql<number>`count(*) filter (where last_login >= ${sevenDaysAgo})::int`,
-      })
-      .from(users);
+    const [userStats] = await db.select({
+      total:        sql<number>`count(*)::int`,
+      free:         sql<number>`count(*) filter (where subscription_tier = 'free')::int`,
+      signature:    sql<number>`count(*) filter (where subscription_tier = 'signature_monthly')::int`,
+      private:      sql<number>`count(*) filter (where subscription_tier = 'private_monthly')::int`,
+      blueprint:    sql<number>`count(*) filter (where subscription_tier = 'ai_blueprint')::int`,
+      newThisWeek:  sql<number>`count(*) filter (where created_at >= ${sevenDaysAgo})::int`,
+      newThisMonth: sql<number>`count(*) filter (where created_at >= ${thirtyDaysAgo})::int`,
+    }).from(users);
 
-    // Get experience count
-    const experienceCount = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(transformationalExperiences)
-      .where(eq(transformationalExperiences.isActive, true));
+    const [agentStats] = await db.select({
+      totalMessages: sql<number>`coalesce(sum(message_count), 0)::int`,
+      activeUsers:   sql<number>`count(*) filter (where last_used_at >= ${sevenDaysAgo})::int`,
+    }).from(agentUsage);
 
-    // Get total completions
-    const completionCount = await db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(experienceProgress)
-      .where(sql`completed_at is not null`);
+    const [emailStats] = await db.select({
+      totalScheduled: sql<number>`count(*)::int`,
+      totalSent:      sql<number>`count(*) filter (where sent_at is not null)::int`,
+    }).from(scheduledEmails);
+
+    const signupsByDay = await db.select({
+      date:  sql<string>`date_trunc('day', created_at)::date::text`,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(users)
+    .where(gte(users.createdAt, new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000)))
+    .groupBy(sql`date_trunc('day', created_at)`)
+    .orderBy(sql`date_trunc('day', created_at)`);
+
+    const [completionStats] = await db.select({
+      total: sql<number>`count(*)::int`,
+    }).from(experienceProgress).where(sql`completed_at is not null`);
+
+    const paid = (userStats?.signature || 0) + (userStats?.private || 0) + (userStats?.blueprint || 0);
+    const total = userStats?.total || 1;
+    const conversionRate = Math.round((paid / total) * 100);
 
     res.json({
-      totalUsers: userStats[0]?.total || 0,
-      freeUsers: userStats[0]?.free || 0,
-      proUsers: userStats[0]?.pro || 0,
-      vipUsers: userStats[0]?.vip || 0,
-      activeUsers: userStats[0]?.active || 0,
-      totalExperiences: experienceCount[0]?.count || 0,
-      totalCompletions: completionCount[0]?.count || 0,
+      totalUsers:         userStats?.total || 0,
+      freeUsers:          userStats?.free || 0,
+      signatureUsers:     userStats?.signature || 0,
+      privateUsers:       userStats?.private || 0,
+      blueprintUsers:     userStats?.blueprint || 0,
+      paidUsers:          paid,
+      newThisWeek:        userStats?.newThisWeek || 0,
+      newThisMonth:       userStats?.newThisMonth || 0,
+      conversionRate,
+      totalAgentMessages: agentStats?.totalMessages || 0,
+      activeAgentUsers:   agentStats?.activeUsers || 0,
+      emailsSent:         emailStats?.totalSent || 0,
+      emailsScheduled:    emailStats?.totalScheduled || 0,
+      totalCompletions:   completionStats?.total || 0,
+      signupsByDay: signupsByDay.map(r => ({ date: r.date, count: r.count })),
     });
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch admin stats');
@@ -96,41 +121,80 @@ router.get('/stats', async (req, res) => {
 // ===== USER MANAGEMENT =====
 router.get('/users', async (req, res) => {
   try {
-    const { tier, search, active, page = '1', limit = '50' } = req.query;
+    const { tier, search, page = '1', limit = '50' } = req.query;
     const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
 
-    let query = db.select().from(users);
+    const baseQuery = db
+      .select({
+        id:               users.id,
+        email:            users.email,
+        firstName:        users.firstName,
+        lastName:         users.lastName,
+        subscriptionTier: users.subscriptionTier,
+        createdAt:        users.createdAt,
+        role:             quizResponses.role,
+        goal:             quizResponses.goal,
+        painPoint:        quizResponses.painPoint,
+        agentMessages:    agentUsage.messageCount,
+        lastAgentUsed:    agentUsage.lastUsedAt,
+      })
+      .from(users)
+      .leftJoin(quizResponses, eq(quizResponses.userId, users.id))
+      .leftJoin(agentUsage, eq(agentUsage.userId, users.id));
+
     const conditions: any[] = [];
 
-    if (tier) {
+    if (tier && tier !== 'all') {
       conditions.push(eq(users.subscriptionTier, tier as string));
     }
 
     if (search) {
+      const q = `%${search}%`;
       conditions.push(
         or(
-          like(users.email, `%${search}%`),
-          like(users.fullName, `%${search}%`)
+          sql`${users.email} ilike ${q}`,
+          sql`${users.firstName} ilike ${q}`,
+          sql`${users.lastName} ilike ${q}`,
         )
       );
     }
 
-    if (active === 'true') {
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-      conditions.push(gte(users.lastLogin, sevenDaysAgo));
-    }
+    const query = conditions.length > 0
+      ? baseQuery.where(and(...conditions))
+      : baseQuery;
 
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions)) as any;
-    }
-
-    const allUsers = await query
+    const allUsers = await (query as any)
       .orderBy(desc(users.createdAt))
       .limit(parseInt(limit as string))
       .offset(offset);
 
-    res.json(allUsers);
+    // Email sequence progress per user
+    const userIds: string[] = allUsers.map((u: any) => u.id);
+    const sequenceProgress: Record<string, { sent: number; total: number }> = {};
+
+    if (userIds.length > 0) {
+      const seqRows = await db
+        .select({ userId: scheduledEmails.userId, sentAt: scheduledEmails.sentAt })
+        .from(scheduledEmails)
+        .where(sql`${scheduledEmails.userId} = ANY(${sql.raw(`ARRAY[${userIds.map((id: string) => `'${id.replace(/'/g, "''")}'`).join(',')}]`)})`)
+        .catch(() => []);
+
+      for (const row of seqRows) {
+        if (!sequenceProgress[row.userId]) {
+          sequenceProgress[row.userId] = { sent: 0, total: 0 };
+        }
+        sequenceProgress[row.userId].total++;
+        if (row.sentAt) sequenceProgress[row.userId].sent++;
+      }
+    }
+
+    const result = allUsers.map((u: any) => ({
+      ...u,
+      emailsSent:  sequenceProgress[u.id]?.sent ?? null,
+      emailsTotal: sequenceProgress[u.id]?.total ?? null,
+    }));
+
+    res.json(result);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch users');
     res.status(500).json({ error: 'Failed to fetch users' });
@@ -178,7 +242,7 @@ router.put('/users/:id', async (req, res) => {
       .returning();
 
     await logAdminAction(
-      req.user!.id,
+      req.session!.userId as string,
       'update',
       'user',
       id,
@@ -197,14 +261,14 @@ router.delete('/users/:id', async (req, res) => {
     const { id } = req.params;
 
     // Prevent self-deletion
-    if (id === req.user!.id) {
+    if (id === req.session!.userId) {
       return res.status(400).json({ error: 'Cannot delete your own account' });
     }
 
     await db.delete(users).where(eq(users.id, id));
 
     await logAdminAction(
-      req.user!.id,
+      req.session!.userId as string,
       'delete',
       'user',
       id

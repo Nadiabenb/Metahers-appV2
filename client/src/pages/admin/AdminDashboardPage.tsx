@@ -15,11 +15,19 @@ import { Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Bar, BarCh
 interface AdminStats {
   totalUsers: number;
   freeUsers: number;
-  proUsers: number;
-  vipUsers: number;
-  activeUsers: number;
-  totalExperiences: number;
+  signatureUsers: number;
+  privateUsers: number;
+  blueprintUsers: number;
+  paidUsers: number;
+  newThisWeek: number;
+  newThisMonth: number;
+  conversionRate: number;
+  totalAgentMessages: number;
+  activeAgentUsers: number;
+  emailsSent: number;
+  emailsScheduled: number;
   totalCompletions: number;
+  signupsByDay: { date: string; count: number }[];
 }
 
 interface Activity {
@@ -70,58 +78,50 @@ export default function AdminDashboardPage() {
 
   const statCards = [
     {
-      title: 'Total Users',
+      title: 'Total Members',
       value: stats?.totalUsers || 0,
-      change: '+12%',
-      trend: 'up',
+      change: `+${stats?.newThisWeek || 0} this week`,
       icon: Users,
       color: 'text-blue-500',
       bgColor: 'bg-blue-50',
     },
     {
-      title: 'Active Users (7d)',
-      value: stats?.activeUsers || 0,
-      change: '+8%',
-      trend: 'up',
-      icon: UserCheck,
-      color: 'text-green-500',
-      bgColor: 'bg-green-50',
-    },
-    {
-      title: 'Pro Members',
-      value: stats?.proUsers || 0,
-      change: '+23%',
-      trend: 'up',
+      title: 'Paid Members',
+      value: stats?.paidUsers || 0,
+      change: `${stats?.conversionRate || 0}% conversion`,
       icon: Crown,
       color: 'text-purple-500',
       bgColor: 'bg-purple-50',
     },
     {
-      title: 'Experiences',
-      value: stats?.totalExperiences || 0,
-      change: '+6',
-      trend: 'up',
-      icon: BookOpen,
-      color: 'text-indigo-500',
-      bgColor: 'bg-indigo-50',
+      title: 'Agent Messages',
+      value: stats?.totalAgentMessages || 0,
+      change: `${stats?.activeAgentUsers || 0} active (7d)`,
+      icon: Zap,
+      color: 'text-amber-500',
+      bgColor: 'bg-amber-50',
+    },
+    {
+      title: 'Emails Sent',
+      value: stats?.emailsSent || 0,
+      change: `of ${stats?.emailsScheduled || 0} scheduled`,
+      icon: Activity,
+      color: 'text-green-500',
+      bgColor: 'bg-green-50',
     },
   ];
 
   const userDistribution = [
-    { name: 'Free', value: stats?.freeUsers || 0, color: COLORS[0] },
-    { name: 'Pro', value: stats?.proUsers || 0, color: COLORS[1] },
-    { name: 'VIP', value: stats?.vipUsers || 0, color: COLORS[2] },
+    { name: 'Inner Circle', value: stats?.freeUsers || 0,      color: COLORS[0] },
+    { name: 'Signature',    value: stats?.signatureUsers || 0, color: COLORS[1] },
+    { name: 'Private',      value: stats?.privateUsers || 0,   color: COLORS[2] },
+    { name: 'Blueprint',    value: stats?.blueprintUsers || 0, color: COLORS[3] },
   ];
 
-  const mockActivityData = [
-    { date: 'Mon', users: 12, completions: 45 },
-    { date: 'Tue', users: 19, completions: 52 },
-    { date: 'Wed', users: 15, completions: 48 },
-    { date: 'Thu', users: 22, completions: 61 },
-    { date: 'Fri', users: 18, completions: 55 },
-    { date: 'Sat', users: 25, completions: 68 },
-    { date: 'Sun', users: 21, completions: 59 },
-  ];
+  const activityData = (stats?.signupsByDay || []).map(d => ({
+    date: new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+    users: d.count,
+  }));
 
   if (isLoading) {
     return (
@@ -219,7 +219,7 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={mockActivityData}>
+                <LineChart data={activityData}>
                   <XAxis dataKey="date" stroke="#9CA3AF" />
                   <YAxis stroke="#9CA3AF" />
                   <Tooltip 
@@ -230,19 +230,12 @@ export default function AdminDashboardPage() {
                       color: '#fff'
                     }} 
                   />
-                  <Line 
-                    type="monotone" 
-                    dataKey="users" 
-                    stroke="#8B5CF6" 
+                  <Line
+                    type="monotone"
+                    dataKey="users"
+                    stroke="#8B5CF6"
                     strokeWidth={3}
-                    name="New Users"
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="completions" 
-                    stroke="#EC4899" 
-                    strokeWidth={3}
-                    name="Completions"
+                    name="New signups"
                   />
                 </LineChart>
               </ResponsiveContainer>
@@ -407,19 +400,13 @@ export default function AdminDashboardPage() {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-gray-700">Pro Conversion Rate</span>
                   <span className="text-sm font-bold text-purple-600">
-                    {stats && stats.totalUsers > 0
-                      ? Math.round(((stats.proUsers + stats.vipUsers) / stats.totalUsers) * 100)
-                      : 0}%
+                    {stats?.conversionRate || 0}%
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
+                  <div
                     className="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full transition-all"
-                    style={{ 
-                      width: `${stats && stats.totalUsers > 0 
-                        ? Math.round(((stats.proUsers + stats.vipUsers) / stats.totalUsers) * 100) 
-                        : 0}%` 
-                    }}
+                    style={{ width: `${stats?.conversionRate || 0}%` }}
                   />
                 </div>
               </div>
