@@ -392,7 +392,7 @@ export default function AdminUsersPage() {
   const [personaFilter, setPersonaFilter] = useState('all');
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
-  const { data: users = [], isLoading, refetch } = useQuery<MemberRow[]>({
+  const { data: users = [], isLoading, isError, error, refetch } = useQuery<MemberRow[]>({
     queryKey: ['admin-users', search, tierFilter, statusFilter, personaFilter],
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -489,6 +489,11 @@ export default function AdminUsersPage() {
           <CardContent className="p-0">
             {isLoading ? (
               <div className="p-8 text-center text-gray-400 text-sm">Loading members...</div>
+            ) : isError ? (
+              <div className="p-8 text-center">
+                <p className="text-red-500 text-sm font-medium mb-1">Failed to load members</p>
+                <p className="text-gray-400 text-xs font-mono">{(error as Error)?.message}</p>
+              </div>
             ) : users.length === 0 ? (
               <div className="p-8 text-center text-gray-400 text-sm">No members found</div>
             ) : (

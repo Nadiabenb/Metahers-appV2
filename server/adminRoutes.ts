@@ -168,17 +168,17 @@ router.get('/users', async (req, res) => {
     const idArray = sql.raw(`ARRAY[${idList}]`);
 
     const [quizData, agentData, emailData, journalData, notesData] = await Promise.all([
-      db.select().from(quizResponses).where(sql`${quizResponses.userId} = ANY(${idArray})`),
-      db.select().from(agentUsage).where(sql`${agentUsage.userId} = ANY(${idArray})`),
+      db.select().from(quizResponses).where(sql`${quizResponses.userId} = ANY(${idArray})`).catch(() => []),
+      db.select().from(agentUsage).where(sql`${agentUsage.userId} = ANY(${idArray})`).catch(() => []),
       db.select({ userId: scheduledEmails.userId, sentAt: scheduledEmails.sentAt, emailKey: scheduledEmails.emailKey })
-        .from(scheduledEmails).where(sql`${scheduledEmails.userId} = ANY(${idArray})`),
+        .from(scheduledEmails).where(sql`${scheduledEmails.userId} = ANY(${idArray})`).catch(() => []),
       db.select({
         userId: journalEntries.userId,
         count: sql<number>`count(*)::int`,
         lastEntry: sql<Date>`max(created_at)`,
-      }).from(journalEntries).where(sql`${journalEntries.userId} = ANY(${idArray})`).groupBy(journalEntries.userId),
+      }).from(journalEntries).where(sql`${journalEntries.userId} = ANY(${idArray})`).groupBy(journalEntries.userId).catch(() => []),
       db.select({ userId: memberNotes.userId, count: sql<number>`count(*)::int` })
-        .from(memberNotes).where(sql`${memberNotes.userId} = ANY(${idArray})`).groupBy(memberNotes.userId),
+        .from(memberNotes).where(sql`${memberNotes.userId} = ANY(${idArray})`).groupBy(memberNotes.userId).catch(() => []),
     ]);
 
     const quizMap = new Map(quizData.map(q => [q.userId, q]));
@@ -322,7 +322,7 @@ router.get('/users/:id/detail', async (req, res) => {
         lastEntry: sql<Date>`max(created_at)`,
         streak: sql<number>`max(streak)`,
       }).from(journalEntries).where(eq(journalEntries.userId, id)),
-      db.select().from(memberNotes).where(eq(memberNotes.userId, id)).orderBy(desc(memberNotes.createdAt)),
+      db.select().from(memberNotes).where(eq(memberNotes.userId, id)).orderBy(desc(memberNotes.createdAt)).catch(() => []),
     ]);
 
     res.json({
