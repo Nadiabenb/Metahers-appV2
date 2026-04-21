@@ -96,7 +96,7 @@ function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
             Join the Inner Circle
           </button>
           <button
-            onClick={() => onNavigate("/agents")}
+            onClick={() => onNavigate("/concierge")}
             className="px-8 py-3 rounded-sm font-semibold transition-colors"
             style={{
               border: `1.5px solid ${GOLD}`,
@@ -242,7 +242,7 @@ function AgentsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
               fontWeight: 700,
             }}
           >
-            Meet your agents.
+            Meet your AI team.
           </h2>
           <p className="mt-3 text-base" style={{ color: MUTED }}>
             Each one built for a different part of your world.
@@ -277,7 +277,7 @@ function AgentsSection({ onNavigate }: { onNavigate: (p: string) => void }) {
 
         <FadeUp className="text-center">
           <button
-            onClick={() => onNavigate("/agents")}
+            onClick={() => onNavigate("/concierge")}
             className="px-8 py-3 rounded-sm font-semibold"
             style={{
               border: `1.5px solid ${GOLD}`,
@@ -422,7 +422,7 @@ const TIERS = [
     priceNote: "/mo",
     highlight: true,
     features: [
-      "All 6 AI agents — unlimited",
+      "Full access to your AI concierge team",
       "Full learning curriculum",
       "Curated AI toolkit + reviews",
       "Monthly virtual gatherings",

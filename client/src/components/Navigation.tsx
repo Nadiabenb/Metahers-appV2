@@ -38,7 +38,7 @@ export function Navigation() {
   const authNavItems = [
     { label: "Dashboard", path: "/dashboard" },
     { label: "Learn", path: "/learning-hub" },
-    { label: "Agents", path: "/agents" },
+    { label: "AI Team", path: "/concierge" },
     { label: "Tools", path: "/toolkit" },
     { label: "Account", path: "/account" },
   ];

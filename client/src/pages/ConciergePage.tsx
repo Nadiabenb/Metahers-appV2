@@ -273,12 +273,6 @@ export default function ConciergePage() {
                 );
               })}
               <Separator className="bg-white/10" />
-              <Link href="/agents">
-                <Button variant="ghost" className="w-full justify-start text-white/80 hover:text-white">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Open Legacy GPT Agents
-                </Button>
-              </Link>
             </CardContent>
           </Card>
 

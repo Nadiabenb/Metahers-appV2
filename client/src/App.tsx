@@ -156,9 +156,9 @@ function Router() {
         <Route path="/ai-prompts" component={AIPromptLibraryPage} />
 
         {/* AI Agents Directory */}
-        <Route path="/agents" component={AgentsPage} />
+        <Route path="/agents" component={() => { window.location.replace('/concierge'); return null; }} />
         <Route path="/concierge" component={ConciergePage} />
-        <Route path="/companion" component={() => { window.location.replace('/agents'); return null; }} />
+        <Route path="/companion" component={() => { window.location.replace('/concierge'); return null; }} />
 
         {/* Newsletter & Waitlist - Public */}
         <Route path="/newsletter" component={NewsletterPage} />
