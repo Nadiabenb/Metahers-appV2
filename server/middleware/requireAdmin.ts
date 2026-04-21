@@ -1,36 +1,31 @@
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../lib/logger';
+import { storage } from '../storage';
 
-export function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const user = req.user;
-
-  if (!user) {
-    logger.warn({ path: req.path }, 'Unauthorized admin access attempt - no user');
-    return res.status(401).json({ 
-      error: 'Authentication required',
-      message: 'You must be logged in to access this resource'
-    });
+export async function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  if (!req.session || !req.session.userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
-  if (!user.isAdmin) {
-    logger.warn({ 
-      userId: user.id, 
-      email: user.email, 
-      path: req.path 
-    }, 'Forbidden admin access attempt - user is not admin');
+  try {
+    const user = await storage.getUser(req.session.userId as string);
+    if (!user) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
 
-    return res.status(403).json({ 
-      error: 'Forbidden',
-      message: 'You do not have permission to access this resource'
-    });
+    const adminEmails = (process.env.ADMIN_EMAILS || '')
+      .split(',')
+      .map(e => e.trim().toLowerCase());
+
+    if (!adminEmails.includes(user.email.toLowerCase())) {
+      logger.warn({ userId: user.id, email: user.email, path: req.path }, 'Admin access denied');
+      return res.status(403).json({ message: 'Admin access required' });
+    }
+
+    logger.info({ userId: user.id, email: user.email, path: req.path }, 'Admin access granted');
+    next();
+  } catch (err: any) {
+    logger.error({ error: err.message }, 'requireAdmin error');
+    return res.status(500).json({ message: 'Internal server error' });
   }
-
-  logger.info({ 
-    adminId: user.id, 
-    email: user.email, 
-    path: req.path,
-    method: req.method
-  }, 'Admin access granted');
-
-  next();
 }

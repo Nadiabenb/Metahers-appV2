@@ -10,8 +10,10 @@ import {
   voyages,
   voyageBookings,
   voyageWaitlist,
-  insertVoyageSchema
+  insertVoyageSchema,
+  scheduledEmails,
 } from '@shared/schema';
+import { storage } from './storage';
 import { eq, sql, and, gte, desc, asc, like, or } from 'drizzle-orm';
 import { isAuthenticated } from './auth';
 import { requireAdmin } from './middleware/requireAdmin';
@@ -876,6 +878,144 @@ router.get('/voyages-stats', async (req, res) => {
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch voyage stats');
     res.status(500).json({ error: 'Failed to fetch voyage stats' });
+  }
+});
+
+// ===== EMAIL SEQUENCE TRACKER =====
+
+router.get('/email-sequence', async (req, res) => {
+  try {
+    const { status, persona, search } = req.query as Record<string, string>;
+
+    const rows = await db
+      .select({
+        id: scheduledEmails.id,
+        userId: scheduledEmails.userId,
+        emailKey: scheduledEmails.emailKey,
+        scheduledFor: scheduledEmails.scheduledFor,
+        sentAt: scheduledEmails.sentAt,
+        persona: scheduledEmails.persona,
+        variant: scheduledEmails.variant,
+        createdAt: scheduledEmails.createdAt,
+        userEmail: users.email,
+        userFirstName: users.firstName,
+        userTier: users.subscriptionTier,
+      })
+      .from(scheduledEmails)
+      .leftJoin(users, eq(scheduledEmails.userId, users.id))
+      .orderBy(desc(scheduledEmails.createdAt), scheduledEmails.emailKey);
+
+    let filtered = rows;
+
+    if (status === 'sent') {
+      filtered = filtered.filter(r => r.sentAt !== null);
+    } else if (status === 'pending') {
+      filtered = filtered.filter(r => r.sentAt === null);
+    } else if (status === 'skipped') {
+      filtered = filtered.filter(r => r.persona === 'upgraded');
+    }
+
+    if (persona && persona !== 'all') {
+      filtered = filtered.filter(r => r.persona === persona);
+    }
+
+    if (search) {
+      const q = search.toLowerCase();
+      filtered = filtered.filter(r =>
+        r.userEmail?.toLowerCase().includes(q) ||
+        r.userFirstName?.toLowerCase().includes(q)
+      );
+    }
+
+    const userMap = new Map<string, {
+      userId: string;
+      email: string;
+      firstName: string | null;
+      tier: string | null;
+      persona: string | null;
+      emailsSent: number;
+      emailsPending: number;
+      emailsTotal: number;
+      emails: typeof filtered;
+    }>();
+
+    for (const row of filtered) {
+      if (!userMap.has(row.userId)) {
+        userMap.set(row.userId, {
+          userId: row.userId,
+          email: row.userEmail || '',
+          firstName: row.userFirstName,
+          tier: row.userTier,
+          persona: row.persona,
+          emailsSent: 0,
+          emailsPending: 0,
+          emailsTotal: 0,
+          emails: [],
+        });
+      }
+      const entry = userMap.get(row.userId)!;
+      entry.emails.push(row);
+      entry.emailsTotal++;
+      if (row.sentAt) entry.emailsSent++;
+      else entry.emailsPending++;
+      if (!entry.persona && row.persona) entry.persona = row.persona;
+    }
+
+    const allRows = await db
+      .select({ id: scheduledEmails.id, sentAt: scheduledEmails.sentAt, userId: scheduledEmails.userId })
+      .from(scheduledEmails);
+
+    const totalScheduled = allRows.length;
+    const totalSent = allRows.filter(r => r.sentAt !== null).length;
+    const totalPending = allRows.filter(r => r.sentAt === null).length;
+    const uniqueUsers = new Set(allRows.map(r => r.userId)).size;
+
+    res.json({
+      stats: { totalScheduled, totalSent, totalPending, uniqueUsers },
+      users: Array.from(userMap.values()),
+    });
+  } catch (err: any) {
+    logger.error({ error: err.message }, 'Failed to fetch email sequence data');
+    res.status(500).json({ message: 'Failed to fetch email sequence data' });
+  }
+});
+
+router.post('/email-sequence/backfill', async (req, res) => {
+  try {
+    const allFreeUsers = await db
+      .select({ id: users.id, email: users.email, createdAt: users.createdAt })
+      .from(users)
+      .where(eq(users.subscriptionTier, 'free'));
+
+    const alreadyScheduled = await db
+      .select({ userId: scheduledEmails.userId })
+      .from(scheduledEmails);
+
+    const scheduledUserIds = new Set(alreadyScheduled.map(r => r.userId));
+    const toBackfill = allFreeUsers.filter(u => !scheduledUserIds.has(u.id));
+
+    if (toBackfill.length === 0) {
+      return res.json({ message: 'All free users already in sequence', enrolled: 0 });
+    }
+
+    let enrolled = 0;
+    let failed = 0;
+
+    for (const user of toBackfill) {
+      try {
+        const signupDate = user.createdAt || new Date();
+        await storage.scheduleEmailSequence(user.id, signupDate);
+        enrolled++;
+      } catch (err: any) {
+        logger.error({ error: err.message, userId: user.id }, 'Backfill failed for user');
+        failed++;
+      }
+    }
+
+    res.json({ message: 'Backfill complete', enrolled, failed, total: toBackfill.length });
+  } catch (err: any) {
+    logger.error({ error: err.message }, 'Backfill endpoint error');
+    res.status(500).json({ message: 'Backfill failed' });
   }
 });
 
