@@ -3421,3 +3421,17 @@ export const scheduledEmails = pgTable("scheduled_emails", {
 ]);
 
 export type ScheduledEmailDB = typeof scheduledEmails.$inferSelect;
+
+// ===== MEMBER NOTES (Admin CRM) =====
+export const memberNotes = pgTable("member_notes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  note: text("note").notNull(),
+  createdBy: varchar("created_by").notNull(), // admin user id
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_member_notes_user").on(table.userId),
+]);
+
+export type MemberNoteDB = typeof memberNotes.$inferSelect;

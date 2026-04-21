@@ -14,6 +14,10 @@ import {
   scheduledEmails,
   agentUsage,
   quizResponses,
+  memberNotes,
+  agentConversations,
+  ritualProgress,
+  journalEntries,
 } from '@shared/schema';
 import { storage } from './storage';
 import { eq, sql, and, gte, desc, asc, like, or } from 'drizzle-orm';
@@ -121,106 +125,220 @@ router.get('/stats', async (req, res) => {
 // ===== USER MANAGEMENT =====
 router.get('/users', async (req, res) => {
   try {
-    const { tier, search, page = '1', limit = '50' } = req.query;
+    const { tier, status, persona, search, page = '1', limit = '50' } = req.query;
     const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
 
-    const baseQuery = db
-      .select({
-        id:               users.id,
-        email:            users.email,
-        firstName:        users.firstName,
-        lastName:         users.lastName,
-        subscriptionTier: users.subscriptionTier,
-        createdAt:        users.createdAt,
-        role:             quizResponses.role,
-        goal:             quizResponses.goal,
-        painPoint:        quizResponses.painPoint,
-        agentMessages:    agentUsage.messageCount,
-        lastAgentUsed:    agentUsage.lastUsedAt,
-      })
-      .from(users)
-      .leftJoin(quizResponses, eq(quizResponses.userId, users.id))
-      .leftJoin(agentUsage, eq(agentUsage.userId, users.id));
+    const now = new Date();
+    const sevenDaysAgo = new Date(now); sevenDaysAgo.setDate(now.getDate() - 7);
+    const fourteenDaysAgo = new Date(now); fourteenDaysAgo.setDate(now.getDate() - 14);
+    const threeDaysAgo = new Date(now); threeDaysAgo.setDate(now.getDate() - 3);
 
     const conditions: any[] = [];
-
-    if (tier && tier !== 'all') {
-      conditions.push(eq(users.subscriptionTier, tier as string));
-    }
-
+    if (tier && tier !== 'all') conditions.push(eq(users.subscriptionTier, tier as string));
     if (search) {
       const q = `%${search}%`;
-      conditions.push(
-        or(
-          sql`${users.email} ilike ${q}`,
-          sql`${users.firstName} ilike ${q}`,
-          sql`${users.lastName} ilike ${q}`,
-        )
-      );
+      conditions.push(or(
+        sql`${users.email} ilike ${q}`,
+        sql`${users.firstName} ilike ${q}`,
+        sql`${users.lastName} ilike ${q}`,
+      ));
     }
 
-    const query = conditions.length > 0
-      ? baseQuery.where(and(...conditions))
-      : baseQuery;
-
-    const allUsers = await (query as any)
+    const baseUsers = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        subscriptionTier: users.subscriptionTier,
+        createdAt: users.createdAt,
+        onboardingCompleted: users.onboardingCompleted,
+        stripeCustomerId: users.stripeCustomerId,
+      })
+      .from(users)
+      .where(conditions.length > 0 ? and(...conditions) : undefined)
       .orderBy(desc(users.createdAt))
       .limit(parseInt(limit as string))
       .offset(offset);
 
-    // Email sequence progress per user
-    const userIds: string[] = allUsers.map((u: any) => u.id);
-    const sequenceProgress: Record<string, { sent: number; total: number }> = {};
+    const userIds = baseUsers.map(u => u.id);
+    if (userIds.length === 0) return res.json([]);
 
-    if (userIds.length > 0) {
-      const seqRows = await db
-        .select({ userId: scheduledEmails.userId, sentAt: scheduledEmails.sentAt })
-        .from(scheduledEmails)
-        .where(sql`${scheduledEmails.userId} = ANY(${sql.raw(`ARRAY[${userIds.map((id: string) => `'${id.replace(/'/g, "''")}'`).join(',')}]`)})`)
-        .catch(() => []);
+    const idList = userIds.map(id => `'${id.replace(/'/g, "''")}'`).join(',');
+    const idArray = sql.raw(`ARRAY[${idList}]`);
 
-      for (const row of seqRows) {
-        if (!sequenceProgress[row.userId]) {
-          sequenceProgress[row.userId] = { sent: 0, total: 0 };
-        }
-        sequenceProgress[row.userId].total++;
-        if (row.sentAt) sequenceProgress[row.userId].sent++;
+    const [quizData, agentData, emailData, journalData, notesData] = await Promise.all([
+      db.select().from(quizResponses).where(sql`${quizResponses.userId} = ANY(${idArray})`),
+      db.select().from(agentUsage).where(sql`${agentUsage.userId} = ANY(${idArray})`),
+      db.select({ userId: scheduledEmails.userId, sentAt: scheduledEmails.sentAt, emailKey: scheduledEmails.emailKey })
+        .from(scheduledEmails).where(sql`${scheduledEmails.userId} = ANY(${idArray})`),
+      db.select({
+        userId: journalEntries.userId,
+        count: sql<number>`count(*)::int`,
+        lastEntry: sql<Date>`max(created_at)`,
+      }).from(journalEntries).where(sql`${journalEntries.userId} = ANY(${idArray})`).groupBy(journalEntries.userId),
+      db.select({ userId: memberNotes.userId, count: sql<number>`count(*)::int` })
+        .from(memberNotes).where(sql`${memberNotes.userId} = ANY(${idArray})`).groupBy(memberNotes.userId),
+    ]);
+
+    const quizMap = new Map(quizData.map(q => [q.userId, q]));
+    const agentMap = new Map(agentData.map(a => [a.userId, a]));
+    const journalMap = new Map(journalData.map(j => [j.userId, j]));
+    const notesMap = new Map(notesData.map(n => [n.userId, n.count]));
+
+    const emailMap = new Map<string, { sent: number; total: number; lastSentAt: Date | null }>();
+    for (const row of emailData) {
+      if (!emailMap.has(row.userId)) emailMap.set(row.userId, { sent: 0, total: 0, lastSentAt: null });
+      const e = emailMap.get(row.userId)!;
+      e.total++;
+      if (row.sentAt) {
+        e.sent++;
+        if (!e.lastSentAt || row.sentAt > e.lastSentAt) e.lastSentAt = row.sentAt;
       }
     }
 
-    const result = allUsers.map((u: any) => ({
-      ...u,
-      emailsSent:  sequenceProgress[u.id]?.sent ?? null,
-      emailsTotal: sequenceProgress[u.id]?.total ?? null,
-    }));
+    const result = baseUsers.map(u => {
+      const quiz = quizMap.get(u.id);
+      const agent = agentMap.get(u.id);
+      const email = emailMap.get(u.id);
+      const journal = journalMap.get(u.id);
 
-    res.json(result);
+      const isPaid = u.subscriptionTier !== 'free';
+      const lastAgentUse = agent?.lastUsedAt ? new Date(agent.lastUsedAt) : null;
+      const hasUsedAgents = (agent?.messageCount ?? 0) > 0;
+      const recentlyActive = lastAgentUse && lastAgentUse > sevenDaysAgo;
+      const wasActiveNotRecently = hasUsedAgents && lastAgentUse && lastAgentUse < sevenDaysAgo && lastAgentUse > fourteenDaysAgo;
+      const emailsReceived = email?.sent ?? 0;
+      const joinedMoreThan3DaysAgo = u.createdAt && new Date(u.createdAt) < threeDaysAgo;
+
+      let memberStatus: 'active' | 'at_risk' | 'silent' | 'converted';
+      if (isPaid) {
+        memberStatus = 'converted';
+      } else if (recentlyActive) {
+        memberStatus = 'active';
+      } else if (wasActiveNotRecently || (!hasUsedAgents && emailsReceived >= 3)) {
+        memberStatus = 'at_risk';
+      } else if (!hasUsedAgents && joinedMoreThan3DaysAgo) {
+        memberStatus = 'silent';
+      } else {
+        memberStatus = 'active';
+      }
+
+      const personaMap: Record<string, string> = {
+        solopreneur: 'builder', freelancer: 'builder',
+        creative: 'creative',
+        mom: 'mom',
+      };
+      const resolvedPersona = quiz?.role ? (personaMap[quiz.role] || quiz.role) : null;
+
+      const lastActive = [lastAgentUse, email?.lastSentAt]
+        .filter(Boolean)
+        .sort((a, b) => b!.getTime() - a!.getTime())[0] || null;
+
+      return {
+        id: u.id,
+        email: u.email,
+        firstName: u.firstName,
+        lastName: u.lastName,
+        subscriptionTier: u.subscriptionTier,
+        createdAt: u.createdAt,
+        onboardingCompleted: u.onboardingCompleted,
+        stripeCustomerId: u.stripeCustomerId,
+        persona: resolvedPersona,
+        quizRole: quiz?.role || null,
+        quizGoal: quiz?.goal || null,
+        quizExperienceLevel: quiz?.experienceLevel || null,
+        quizPainPoint: quiz?.painPoint || null,
+        quizCompletedAt: quiz?.completedAt || null,
+        agentMessages: agent?.messageCount || 0,
+        lastAgentUsed: agent?.lastUsedAt || null,
+        lastAgentId: agent?.lastAgentId || null,
+        emailsSent: email?.sent || 0,
+        emailsTotal: email?.total || 0,
+        journalEntries: journal?.count || 0,
+        lastJournalEntry: journal?.lastEntry || null,
+        notesCount: notesMap.get(u.id) || 0,
+        memberStatus,
+        lastActive,
+      };
+    });
+
+    const filtered = status && status !== 'all'
+      ? result.filter(u => u.memberStatus === status)
+      : result;
+
+    const personaFiltered = persona && persona !== 'all'
+      ? filtered.filter(u => u.persona === persona)
+      : filtered;
+
+    res.json(personaFiltered);
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch users');
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
 
-router.get('/users/:id', async (req, res) => {
+router.get('/users/:id/detail', async (req, res) => {
   try {
     const { id } = req.params;
 
     const [user] = await db.select().from(users).where(eq(users.id, id));
+    if (!user) return res.status(404).json({ error: 'User not found' });
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
+    const [
+      quiz,
+      agent,
+      conversations,
+      emails,
+      experiences,
+      rituals,
+      journals,
+      notes,
+    ] = await Promise.all([
+      db.select().from(quizResponses).where(eq(quizResponses.userId, id)).limit(1),
+      db.select().from(agentUsage).where(eq(agentUsage.userId, id)).limit(1),
+      db.select({
+        agentId: agentConversations.agentId,
+        messageCount: agentConversations.messageCount,
+        title: agentConversations.title,
+        lastMessageAt: agentConversations.lastMessageAt,
+        createdAt: agentConversations.createdAt,
+      }).from(agentConversations).where(eq(agentConversations.userId, id)).orderBy(desc(agentConversations.lastMessageAt)),
+      db.select().from(scheduledEmails).where(eq(scheduledEmails.userId, id)).orderBy(scheduledEmails.emailKey),
+      db.select({
+        experienceId: experienceProgress.experienceId,
+        completedSections: experienceProgress.completedSections,
+        completedAt: experienceProgress.completedAt,
+        startedAt: experienceProgress.startedAt,
+        confidenceScore: experienceProgress.confidenceScore,
+      }).from(experienceProgress).where(eq(experienceProgress.userId, id)),
+      db.select({
+        ritualSlug: ritualProgress.ritualSlug,
+        completedSteps: ritualProgress.completedSteps,
+        lastUpdated: ritualProgress.lastUpdated,
+      }).from(ritualProgress).where(eq(ritualProgress.userId, id)),
+      db.select({
+        count: sql<number>`count(*)::int`,
+        lastEntry: sql<Date>`max(created_at)`,
+        streak: sql<number>`max(streak)`,
+      }).from(journalEntries).where(eq(journalEntries.userId, id)),
+      db.select().from(memberNotes).where(eq(memberNotes.userId, id)).orderBy(desc(memberNotes.createdAt)),
+    ]);
 
-    // Get user's progress
-    const progress = await db
-      .select()
-      .from(experienceProgress)
-      .where(eq(experienceProgress.userId, id));
-
-    res.json({ user, progress });
+    res.json({
+      user,
+      quiz: quiz[0] || null,
+      agent: agent[0] || null,
+      conversations,
+      emails,
+      experiences,
+      rituals,
+      journal: journals[0] || null,
+      notes,
+    });
   } catch (error: any) {
-    logger.error({ error: error.message }, 'Failed to fetch user details');
-    res.status(500).json({ error: 'Failed to fetch user details' });
+    logger.error({ error: error.message }, 'Failed to fetch user detail');
+    res.status(500).json({ error: 'Failed to fetch user detail' });
   }
 });
 
@@ -278,6 +396,55 @@ router.delete('/users/:id', async (req, res) => {
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to delete user');
     res.status(500).json({ error: 'Failed to delete user' });
+  }
+});
+
+router.post('/users/:id/notes', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { note } = req.body;
+    if (!note?.trim()) return res.status(400).json({ error: 'Note is required' });
+
+    const [created] = await db.insert(memberNotes).values({
+      userId: id,
+      note: note.trim(),
+      createdBy: req.session!.userId as string,
+    }).returning();
+
+    res.json(created);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to create note');
+    res.status(500).json({ error: 'Failed to create note' });
+  }
+});
+
+router.delete('/users/:userId/notes/:noteId', async (req, res) => {
+  try {
+    const { noteId } = req.params;
+    await db.delete(memberNotes).where(eq(memberNotes.id, noteId));
+    res.json({ success: true });
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to delete note');
+    res.status(500).json({ error: 'Failed to delete note' });
+  }
+});
+
+router.patch('/users/:id/tier', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { subscriptionTier } = req.body;
+    const validTiers = ['free', 'signature_monthly', 'private_monthly', 'ai_blueprint'];
+    if (!validTiers.includes(subscriptionTier)) {
+      return res.status(400).json({ error: 'Invalid tier' });
+    }
+    const [updated] = await db.update(users)
+      .set({ subscriptionTier, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning({ id: users.id, subscriptionTier: users.subscriptionTier });
+    res.json(updated);
+  } catch (error: any) {
+    logger.error({ error: error.message }, 'Failed to update tier');
+    res.status(500).json({ error: 'Failed to update tier' });
   }
 });
 
