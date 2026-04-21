@@ -754,35 +754,101 @@ router.get('/audit-logs', async (req, res) => {
 // ===== AI USAGE ANALYTICS =====
 router.get('/ai/stats', async (req, res) => {
   try {
-    const { getMonthlyUsageStats } = await import('./lib/aiBudget');
-    const stats = await getMonthlyUsageStats();
-    res.json(stats);
+    const now = new Date();
+    const sevenDaysAgo = new Date(now); sevenDaysAgo.setDate(now.getDate() - 7);
+    const startOfToday = new Date(now); startOfToday.setHours(0, 0, 0, 0);
+
+    const [totals] = await db.select({
+      totalMessages: sql<number>`coalesce(sum(message_count), 0)::int`,
+      totalUsers:    sql<number>`count(distinct user_id)::int`,
+    }).from(agentUsage);
+
+    const [recentTotals] = await db.select({
+      messages7d:    sql<number>`coalesce(sum(message_count), 0)::int`,
+      activeUsers7d: sql<number>`count(distinct user_id)::int`,
+    }).from(agentConversations)
+      .where(sql`${agentConversations.updatedAt} >= ${sevenDaysAgo}`);
+
+    const [todayTotals] = await db.select({
+      messagesToday: sql<number>`coalesce(sum(message_count), 0)::int`,
+    }).from(agentConversations)
+      .where(sql`${agentConversations.updatedAt} >= ${startOfToday}`);
+
+    const agentBreakdown = await db.select({
+      agentId:            agentConversations.agentId,
+      totalMessages:      sql<number>`coalesce(sum(message_count), 0)::int`,
+      totalConversations: sql<number>`count(*)::int`,
+      uniqueUsers:        sql<number>`count(distinct user_id)::int`,
+    }).from(agentConversations)
+      .groupBy(agentConversations.agentId)
+      .orderBy(sql`coalesce(sum(message_count), 0) desc`);
+
+    const dailyVolume = await db.select({
+      date:        sql<string>`date_trunc('day', updated_at)::date::text`,
+      messages:    sql<number>`coalesce(sum(message_count), 0)::int`,
+      activeUsers: sql<number>`count(distinct user_id)::int`,
+    }).from(agentConversations)
+      .where(sql`${agentConversations.updatedAt} >= ${new Date(now.getTime() - 14 * 86400000)}`)
+      .groupBy(sql`date_trunc('day', updated_at)`)
+      .orderBy(sql`date_trunc('day', updated_at)`);
+
+    const tierSplit = await db.select({
+      tier:          users.subscriptionTier,
+      totalMessages: sql<number>`coalesce(sum(${agentUsage.messageCount}), 0)::int`,
+      userCount:     sql<number>`count(distinct ${agentUsage.userId})::int`,
+    }).from(agentUsage)
+      .leftJoin(users, eq(agentUsage.userId, users.id))
+      .groupBy(users.subscriptionTier);
+
+    const [limitHits] = await db.select({
+      count: sql<number>`count(*)::int`,
+    }).from(agentUsage)
+      .leftJoin(users, eq(agentUsage.userId, users.id))
+      .where(and(
+        eq(users.subscriptionTier, 'free'),
+        sql`${agentUsage.messageCount} >= 10`
+      ));
+
+    const topUsers = await db.select({
+      userId:           agentUsage.userId,
+      email:            users.email,
+      firstName:        users.firstName,
+      subscriptionTier: users.subscriptionTier,
+      messageCount:     agentUsage.messageCount,
+      lastUsedAt:       agentUsage.lastUsedAt,
+      lastAgentId:      agentUsage.lastAgentId,
+    }).from(agentUsage)
+      .leftJoin(users, eq(agentUsage.userId, users.id))
+      .orderBy(desc(agentUsage.messageCount))
+      .limit(10);
+
+    const [newConvos] = await db.select({
+      count: sql<number>`count(*)::int`,
+    }).from(agentConversations)
+      .where(sql`${agentConversations.createdAt} >= ${sevenDaysAgo}`);
+
+    res.json({
+      totals: {
+        totalMessages:      totals?.totalMessages || 0,
+        totalUsersEverUsed: totals?.totalUsers || 0,
+        messages7d:         recentTotals?.messages7d || 0,
+        activeUsers7d:      recentTotals?.activeUsers7d || 0,
+        messagesToday:      todayTotals?.messagesToday || 0,
+        newConversations7d: newConvos?.count || 0,
+        usersAtFreeLimit:   limitHits?.count || 0,
+      },
+      agentBreakdown,
+      dailyVolume: dailyVolume.map(d => ({
+        date:        new Date(d.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+        messages:    d.messages,
+        activeUsers: d.activeUsers,
+      })),
+      tierSplit,
+      topUsers,
+    });
   } catch (error: any) {
     logger.error({ error: error.message }, 'Failed to fetch AI stats');
     res.status(500).json({ error: 'Failed to fetch AI stats' });
-  }
-});
-
-router.get('/ai/usage-by-type', async (req, res) => {
-  try {
-    const { getUsageByPromptType } = await import('./lib/aiBudget');
-    const usage = await getUsageByPromptType();
-    res.json(usage);
-  } catch (error: any) {
-    logger.error({ error: error.message }, 'Failed to fetch AI usage by type');
-    res.status(500).json({ error: 'Failed to fetch AI usage by type' });
-  }
-});
-
-router.get('/ai/top-spenders', async (req, res) => {
-  try {
-    const { limit = '10' } = req.query;
-    const { getTopSpenders } = await import('./lib/aiBudget');
-    const spenders = await getTopSpenders(parseInt(limit as string));
-    res.json(spenders);
-  } catch (error: any) {
-    logger.error({ error: error.message }, 'Failed to fetch top spenders');
-    res.status(500).json({ error: 'Failed to fetch top spenders' });
   }
 });
 
