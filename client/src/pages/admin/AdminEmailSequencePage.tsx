@@ -175,7 +175,7 @@ export default function AdminEmailSequencePage() {
   const [statusFilter, setStatusFilter] = useState('all');
   const [personaFilter, setPersonaFilter] = useState('all');
 
-  const { data, isLoading, refetch } = useQuery<SequenceData>({
+  const { data, isLoading, isError, error, refetch } = useQuery<SequenceData>({
     queryKey: ['admin-email-sequence', search, statusFilter, personaFilter],
     queryFn: async () => {
       const params = new URLSearchParams();
@@ -183,9 +183,13 @@ export default function AdminEmailSequencePage() {
       if (statusFilter !== 'all') params.append('status', statusFilter);
       if (personaFilter !== 'all') params.append('persona', personaFilter);
       const res = await fetch(`/api/admin/email-sequence?${params}`, { credentials: 'include' });
-      if (!res.ok) throw new Error('Failed to fetch email sequence data');
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`${res.status}: ${text}`);
+      }
       return res.json();
     },
+    retry: false,
   });
 
   const backfillMutation = useMutation({
@@ -305,8 +309,17 @@ export default function AdminEmailSequencePage() {
           <CardContent className="p-0">
             {isLoading ? (
               <div className="p-8 text-center text-gray-400 text-sm">Loading...</div>
+            ) : isError ? (
+              <div className="p-8 text-center">
+                <p className="text-red-500 text-sm font-medium mb-1">Failed to load sequence data</p>
+                <p className="text-gray-400 text-xs font-mono">{(error as Error)?.message}</p>
+                <p className="text-gray-400 text-xs mt-2">Check that ADMIN_EMAILS is set in Replit Secrets and includes your email.</p>
+              </div>
             ) : users.length === 0 ? (
-              <div className="p-8 text-center text-gray-400 text-sm">No members in sequence yet. Sign up a test account to see data here.</div>
+              <div className="p-8 text-center text-gray-400 text-sm">
+                No members in sequence yet.<br/>
+                <span className="text-xs mt-1 block">Click "Enrol existing members" above to add current members, or sign up a new test account.</span>
+              </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
