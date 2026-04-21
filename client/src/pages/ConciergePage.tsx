@@ -64,6 +64,7 @@ type ChatResponse = {
 };
 
 const gold = "#C9A96E";
+const VALID_AGENT_IDS: ConciergeAgentId[] = ["aria", "sage", "nova", "luna", "bella", "noor"];
 
 export default function ConciergePage() {
   const queryClient = useQueryClient();
@@ -89,6 +90,25 @@ export default function ConciergePage() {
     const match = usageQuery.data?.agents.find((agent) => agent.agentId === selectedAgentId);
     return match?.hasAccess ?? false;
   }, [usageQuery.data?.agents, selectedAgentId]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const agentParam = params.get("agent");
+    const promptParam = params.get("prompt");
+
+    if (agentParam && VALID_AGENT_IDS.includes(agentParam as ConciergeAgentId)) {
+      setSelectedAgentId(agentParam as ConciergeAgentId);
+    }
+
+    if (promptParam) {
+      setDraft(decodeURIComponent(promptParam));
+    }
+
+    if (agentParam || promptParam) {
+      const cleanUrl = window.location.pathname;
+      window.history.replaceState({}, "", cleanUrl);
+    }
+  }, []);
 
   useEffect(() => {
     const list = conversationsQuery.data?.conversations || [];
