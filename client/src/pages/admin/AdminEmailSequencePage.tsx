@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { useLocation } from 'wouter';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -188,6 +188,24 @@ export default function AdminEmailSequencePage() {
     },
   });
 
+  const backfillMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch('/api/admin/email-sequence/backfill', {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Backfill failed');
+      return res.json();
+    },
+    onSuccess: (data) => {
+      refetch();
+      alert(`Backfill complete — ${data.enrolled} members enrolled${data.failed > 0 ? `, ${data.failed} failed` : ''}.`);
+    },
+    onError: () => {
+      alert('Backfill failed — check server logs.');
+    },
+  });
+
   const stats = data?.stats;
   const users = data?.users || [];
 
@@ -208,10 +226,19 @@ export default function AdminEmailSequencePage() {
               <p className="text-gray-500 mt-1 text-sm">Monitor onboarding sequence delivery across all members</p>
             </div>
           </div>
-          <Button variant="outline" onClick={() => refetch()}>
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => backfillMutation.mutate()}
+              disabled={backfillMutation.isPending}
+            >
+              {backfillMutation.isPending ? 'Enrolling...' : 'Enrol existing members'}
+            </Button>
+            <Button variant="outline" onClick={() => refetch()}>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Refresh
+            </Button>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

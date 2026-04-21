@@ -1026,6 +1026,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   }));
 
+  // Admin — backfill existing users into email sequence
+  app.post('/api/admin/email-sequence/backfill', isAuthenticated, isAdmin, asyncHandler(async (req: Request, res) => {
+    const allFreeUsers = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        createdAt: users.createdAt,
+        subscriptionTier: users.subscriptionTier,
+      })
+      .from(users)
+      .where(eq(users.subscriptionTier, 'free'));
+
+    const alreadyScheduled = await db
+      .select({ userId: scheduledEmails.userId })
+      .from(scheduledEmails);
+
+    const scheduledUserIds = new Set(alreadyScheduled.map(r => r.userId));
+
+    const toBackfill = allFreeUsers.filter(u => !scheduledUserIds.has(u.id));
+
+    if (toBackfill.length === 0) {
+      return res.json({ message: 'All free users are already in the sequence', enrolled: 0 });
+    }
+
+    let enrolled = 0;
+    let failed = 0;
+
+    for (const user of toBackfill) {
+      try {
+        const signupDate = user.createdAt || new Date();
+        await storage.scheduleEmailSequence(user.id, signupDate);
+        enrolled++;
+      } catch (err) {
+        console.error(`[Backfill] Failed to schedule sequence for user ${user.id}:`, err);
+        failed++;
+      }
+    }
+
+    console.log(`[Backfill] Enrolled ${enrolled} users, ${failed} failed`);
+    res.json({
+      message: 'Backfill complete',
+      enrolled,
+      failed,
+      total: toBackfill.length,
+    });
+  }));
+
   // Test endpoint to check Resend configuration (admin only in production)
   app.get('/api/test-resend', async (req, res) => {
     try {

@@ -2400,6 +2400,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async scheduleEmailSequence(userId: string, signupDate: Date): Promise<void> {
+    const existing = await db
+      .select({ id: scheduledEmails.id })
+      .from(scheduledEmails)
+      .where(eq(scheduledEmails.userId, userId))
+      .limit(1);
+
+    if (existing.length > 0) {
+      console.log(`[EmailSequence] Sequence already exists for user ${userId} — skipping`);
+      return;
+    }
+
     const days = [1, 2, 3, 5, 8, 10, 14];
     const rows = days.map(day => {
       const scheduledFor = new Date(signupDate);
@@ -2415,6 +2426,7 @@ export class DatabaseStorage implements IStorage {
     });
 
     await db.insert(scheduledEmails).values(rows);
+    console.log(`[EmailSequence] Scheduled 7 emails for user ${userId}`);
   }
 
   async getDueScheduledEmails(): Promise<ScheduledEmailDB[]> {
