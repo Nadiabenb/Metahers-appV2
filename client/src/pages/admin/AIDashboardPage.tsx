@@ -19,11 +19,21 @@ const AGENT_COLORS: Record<string, string> = {
 const TIER_LABELS: Record<string, string> = {
   free: 'Inner Circle', signature_monthly: 'Signature',
   private_monthly: 'Private', ai_blueprint: 'Blueprint',
+  // Legacy tier aliases
+  pro: 'Signature', pro_monthly: 'Signature', pro_annual: 'Signature',
+  vip: 'Private', sanctuary: 'Private',
+  inner_circle: 'Inner Circle', vip_cohort: 'Private',
+  founders_circle: 'Private', executive: 'Private',
 };
 
 const TIER_COLORS: Record<string, string> = {
   free: '#888780', signature_monthly: '#C9A96E',
   private_monthly: '#534AB7', ai_blueprint: '#378ADD',
+  // Legacy — map to their current equivalents
+  pro: '#C9A96E', pro_monthly: '#C9A96E', pro_annual: '#C9A96E',
+  vip: '#534AB7', sanctuary: '#534AB7',
+  inner_circle: '#888780', vip_cohort: '#534AB7',
+  founders_circle: '#534AB7', executive: '#534AB7',
 };
 
 function timeAgo(date: string | null): string {
