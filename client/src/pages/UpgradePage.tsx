@@ -70,7 +70,7 @@ export default function UpgradePage() {
           className="text-base max-w-xl mx-auto font-light"
           style={{ color: 'rgba(255,255,255,0.6)' }}
         >
-          From community access to white-glove 1:1 — pick what fits where you are right now.
+          Your AI team. Live calls. Nadia in your corner whenever you need her.
         </motion.p>
       </section>
 
@@ -166,6 +166,74 @@ export default function UpgradePage() {
               </motion.div>
             );
           })}
+        </div>
+      </section>
+
+      {/* Signature highlight — the offer in plain language */}
+      <section className="py-16 px-6" style={{ background: '#FAF6F3' }}>
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+          >
+            <p
+              className="text-xs font-mono uppercase tracking-[0.25em] mb-4"
+              style={{ color: GOLD }}
+            >
+              What Signature actually means
+            </p>
+            <h2
+              className="text-3xl sm:text-4xl font-light mb-6"
+              style={{ fontFamily: "Georgia, 'Playfair Display', serif", color: NAVY }}
+            >
+              You will never be stuck and alone in this.
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {[
+                {
+                  title: "Your welcome call",
+                  body: "When you join, we schedule a 45-minute 1:1 call. Just us — to map exactly how AI fits your business and what you're building.",
+                },
+                {
+                  title: "Bi-weekly live calls",
+                  body: "Every two weeks: real AI tool demos, workflow walkthroughs, and a hot seat where you can bring your actual questions to Nadia directly.",
+                },
+                {
+                  title: "Unlimited unstuck sessions",
+                  body: "Hit a wall on your launch, your content, your systems? Book a focused working session with Nadia. No extra charge. No waiting list.",
+                },
+                {
+                  title: "Your AI concierge team",
+                  body: "ARIA and five specialists — Bella, Luna, Nova, Sage, and Noor — already briefed on your goals before you type a word.",
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                  className="p-6 rounded-sm"
+                  style={{ background: '#FFFFFF', border: '1px solid #E0D5CC' }}
+                >
+                  <p
+                    className="text-sm font-semibold mb-2 uppercase tracking-wider"
+                    style={{ color: GOLD }}
+                  >
+                    {item.title}
+                  </p>
+                  <p className="text-sm font-light leading-relaxed" style={{ color: '#444' }}>
+                    {item.body}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+            <p className="text-sm mt-8 font-light" style={{ color: '#6B6B7B' }}>
+              All of this for $29 a month. One good piece of content from Noor covers the first three months.
+            </p>
+          </motion.div>
         </div>
       </section>
 
