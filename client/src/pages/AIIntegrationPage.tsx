@@ -67,7 +67,7 @@ const deliverables = [
 const outcomes = [
   {
     title: "Founder-Level AI Infrastructure",
-    desc: "A fully architected system you own, understand, and can build on \u2014 not a setup that depends on someone else to maintain.",
+    desc: "A fully architected system you own, understand, and can build on — not a setup that depends on someone else to maintain.",
   },
   {
     title: "Faster Execution, Deeper Output",
@@ -75,7 +75,7 @@ const outcomes = [
   },
   {
     title: "Elevated Brand Authority",
-    desc: "AI-amplified output aligned with your positioning \u2014 content and communications that consistently reflect your highest thinking.",
+    desc: "AI-amplified output aligned with your positioning — content and communications that consistently reflect your highest thinking.",
   },
   {
     title: "Strategic Clarity",
@@ -83,28 +83,28 @@ const outcomes = [
   },
   {
     title: "A Scalable Foundation",
-    desc: "Your AI Operating System is built to grow with your business \u2014 a living infrastructure, not a one-time fix.",
+    desc: "Your AI Operating System is built to grow with your business — a living infrastructure, not a one-time fix.",
   },
 ];
 
 const testimonials = [
   {
-    text: "I needed a reboot to learn all about the latest applications \u2014 and this was just what I needed. When you take your foot off the gas, you get left behind. This session got me back in the game.",
+    text: "I needed a reboot to learn all about the latest applications — and this was just what I needed. When you take your foot off the gas, you get left behind. This session got me back in the game.",
     author: "Lululuna",
     handle: "@LululunaThrive",
   },
   {
-    text: "MetaHers is poised to assist women understand and leverage new technology for their business. It\u2019s a busy and noisy space, and we need someone like Nadia to help make sense of how to apply these new tools in a real, structured way.",
+    text: "MetaHers is poised to assist women understand and leverage new technology for their business. It’s a busy and noisy space, and we need someone like Nadia to help make sense of how to apply these new tools in a real, structured way.",
     author: "Linda Rey",
     handle: "Founder, BizGlitch",
   },
   {
-    text: "Crazy awesome energy \u2014 and in just a few hours, a full tour of Nadia\u2019s entire methodology and space. What started as a conversation became the beginning of a very cool partnership.",
+    text: "Crazy awesome energy — and in just a few hours, a full tour of Nadia’s entire methodology and space. What started as a conversation became the beginning of a very cool partnership.",
     author: "Vicki",
     handle: "@Drapeta",
   },
   {
-    text: "Nadia helped me finally get my head wrapped around things I just couldn\u2019t figure out on my own. I left with real clarity and understanding. Thank you for letting me pick your brain \u2014 it made a real difference.",
+    text: "Nadia helped me finally get my head wrapped around things I just couldn’t figure out on my own. I left with real clarity and understanding. Thank you for letting me pick your brain — it made a real difference.",
     author: "sourpower.eth",
     handle: "@sourpowww3r",
   },
@@ -112,11 +112,11 @@ const testimonials = [
 
 const whoFitItems = [
   "You have tried AI tools but nothing has really stuck or integrated into how you actually work",
-  "You feel behind technologically and want to close that gap \u2014 without becoming a tech person",
+  "You feel behind technologically and want to close that gap — without becoming a tech person",
   "You value long-term authority and positioning, not quick hacks or surface-level shortcuts",
-  "You understand that leverage is a leadership decision \u2014 and you are ready to make it",
-  "You are launching, scaling, or already established \u2014 and you want AI to compound your advantage",
-  "You want to own your systems \u2014 not rent them from someone else or stay dependent on a course",
+  "You understand that leverage is a leadership decision — and you are ready to make it",
+  "You are launching, scaling, or already established — and you want AI to compound your advantage",
+  "You want to own your systems — not rent them from someone else or stay dependent on a course",
 ];
 
 const weeks = [
@@ -149,7 +149,7 @@ const weeks = [
 const faqs = [
   {
     q: "What exactly do I get at the end of the four weeks?",
-    a: "You leave with a fully built, personally calibrated AI Operating System \u2014 including custom prompt libraries, automated workflows, content intelligence tools, and decision-support frameworks. Everything is yours to own and evolve.",
+    a: "You leave with a fully built, personally calibrated AI Operating System — including custom prompt libraries, automated workflows, content intelligence tools, and decision-support frameworks. Everything is yours to own and evolve.",
   },
   {
     q: "Do I need to be technical to do this?",
@@ -157,19 +157,19 @@ const faqs = [
   },
   {
     q: "How is this different from an AI course?",
-    a: "Courses teach generic skills to large groups. This is private, 1:1 architecture work built around your specific business, leadership style, and goals. You don't learn about AI \u2014 you leave with a working system.",
+    a: "Courses teach generic skills to large groups. This is private, 1:1 architecture work built around your specific business, leadership style, and goals. You don't learn about AI — you leave with a working system.",
   },
   {
-    q: "What if I\u2019ve already tried using AI tools?",
-    a: "Most founders have. The difference is integration vs. experimentation. We take what you\u2019ve tried and build it into a cohesive system that actually works within your day-to-day operations.",
+    q: "What if I’ve already tried using AI tools?",
+    a: "Most founders have. The difference is integration vs. experimentation. We take what you’ve tried and build it into a cohesive system that actually works within your day-to-day operations.",
   },
   {
     q: "Can I continue getting support after the four weeks?",
-    a: "Yes. After the experience, you\u2019ll have the option to continue with ongoing strategic support. But the system you build is fully self-sustaining \u2014 you won\u2019t need me to keep it running.",
+    a: "Yes. After the experience, you’ll have the option to continue with ongoing strategic support. But the system you build is fully self-sustaining — you won’t need me to keep it running.",
   },
   {
     q: "How many people do you work with at a time?",
-    a: "This is intentionally limited. I only take a small number of private clients at any given time to ensure depth, presence, and quality. This is not scalable by design \u2014 and that\u2019s the point.",
+    a: "This is intentionally limited. I only take a small number of private clients at any given time to ensure depth, presence, and quality. This is not scalable by design — and that’s the point.",
   },
 ];
 
@@ -177,22 +177,22 @@ const credentials = [
   {
     icon: GraduationCap,
     title: "Education",
-    text: "Computer Science degree (2008) \u00B7 Bachelor\u2019s, Master\u2019s & MBA in Hospitality Management",
+    text: "Computer Science degree (2008) · Bachelor’s, Master’s & MBA in Hospitality Management",
   },
   {
     icon: Briefcase,
     title: "Leadership Background",
-    text: "Hotel General Manager, Los Angeles \u00B7 Career built on operational systems thinking and technical problem-solving",
+    text: "Hotel General Manager, Los Angeles · Career built on operational systems thinking and technical problem-solving",
   },
   {
     icon: Brain,
     title: "Approach",
-    text: "AI as infrastructure, not trend \u00B7 Systems designed around the individual founder\u2019s cognitive style and leadership",
+    text: "AI as infrastructure, not trend · Systems designed around the individual founder’s cognitive style and leadership",
   },
   {
     icon: Shield,
     title: "Mission",
-    text: "Ensuring visionary women are at the forefront of technological evolution \u2014 not consuming it passively, but integrating it structurally",
+    text: "Ensuring visionary women are at the forefront of technological evolution — not consuming it passively, but integrating it structurally",
   },
 ];
 
@@ -247,7 +247,7 @@ export default function AIIntegrationPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background" data-testid="page-ai-integration">
+    <div className="min-h-screen bg-[#FAF8F6]" data-testid="page-ai-integration">
       <SEO
         title="The AI Blueprint - 4-Week 1:1 with Nadia"
         description="4 weeks. 1:1 with Nadia. A complete AI system built around your business and life. $997 founding rate."
@@ -255,9 +255,9 @@ export default function AIIntegrationPage() {
       />
 
       {/* HERO */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden px-6 py-20" style={{ background: '#0D0B14' }}>
+      <section className="relative min-h-screen flex flex-col items-center justify-center text-center overflow-hidden px-6 py-20 bg-[#FAF8F6]">
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(139,92,246,0.15) 0%, transparent 70%), radial-gradient(ellipse 40% 30% at 80% 80%, rgba(139,92,246,0.08) 0%, transparent 60%)"
+          background: "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(201,169,110,0.10) 0%, transparent 70%), radial-gradient(ellipse 40% 30% at 80% 80%, rgba(201,169,110,0.06) 0%, transparent 60%)"
         }} />
 
         <motion.p
@@ -268,7 +268,7 @@ export default function AIIntegrationPage() {
           className="font-mono text-[11px] tracking-[0.22em] uppercase text-primary mb-8"
           data-testid="text-hero-eyebrow"
         >
-          MetaHers \u00B7 The AI Blueprint
+          MetaHers · The AI Blueprint
         </motion.p>
 
         <motion.h1
@@ -276,7 +276,7 @@ export default function AIIntegrationPage() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-white leading-[0.95] tracking-tight mb-3"
+          className="font-serif text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-light text-[#1A1A2E] leading-[0.95] tracking-tight mb-3"
           data-testid="text-hero-title"
         >
           META<em className="italic text-primary">HERS</em>
@@ -287,7 +287,7 @@ export default function AIIntegrationPage() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="font-serif text-xl sm:text-2xl md:text-3xl font-light text-white/55 tracking-wide mb-12"
+          className="font-serif text-xl sm:text-2xl md:text-3xl font-light text-[#4A4A5E] tracking-wide mb-12"
           data-testid="text-hero-subtitle"
         >
           The AI Blueprint
@@ -317,7 +317,7 @@ export default function AIIntegrationPage() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="font-serif text-xl sm:text-2xl md:text-3xl font-light italic text-white/75 max-w-2xl leading-relaxed mb-14"
+          className="font-serif text-xl sm:text-2xl md:text-3xl font-light italic text-[#4A4A5E] max-w-2xl leading-relaxed mb-14"
           data-testid="text-hero-hook"
         >
           Most founders are experimenting with AI.<br />
@@ -349,21 +349,21 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* PROBLEM */}
-      <section className="py-20 md:py-28 px-6 border-t border-b border-white/5" style={{ background: '#120E22' }}>
+      <section className="py-20 md:py-28 px-6 border-t border-b border-[#C9A96E]/20 bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>The Reality</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light leading-tight text-white mb-12 max-w-2xl" data-testid="text-problem-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light leading-tight text-[#1A1A2E] mb-12 max-w-2xl" data-testid="text-problem-headline">
               You know AI is important.<br />
-              But the noise, the tools, the <em className="italic text-primary">"just use ChatGPT"</em> advice {"\u2014"} none of it was built for how you actually lead.
+              But the noise, the tools, the <em className="italic text-primary">"just use ChatGPT"</em> advice {"—"} none of it was built for how you actually lead.
             </h2>
-            <div className="text-base md:text-lg text-white/70 max-w-2xl leading-relaxed space-y-5">
+            <div className="text-base md:text-lg text-[#4A4A5E] max-w-2xl leading-relaxed space-y-5">
               <p>The AI revolution is accelerating. But the way it is being taught is fragmented, overly technical, and completely disconnected from how visionary women actually build. You end up with a dozen tabs open, a graveyard of half-used tools, and no real system to show for it.</p>
-              <p>You are not behind because you are not technical enough. You are behind because no one has taken the time to architect AI around how <em className="italic text-white">you</em> think, lead, and grow.</p>
+              <p>You are not behind because you are not technical enough. You are behind because no one has taken the time to architect AI around how <em className="italic text-[#1A1A2E]">you</em> think, lead, and grow.</p>
               <p>That is what MetaHers exists to do.</p>
             </div>
             <div className="mt-12 pl-6 border-l-2 border-primary" data-testid="text-emphasis-line">
-              <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-white leading-snug">
+              <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-[#1A1A2E] leading-snug">
                 We do not replace the founder.<br />
                 We elevate her operating system.
               </p>
@@ -373,14 +373,14 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* WHAT WE BUILD */}
-      <section className="py-20 md:py-28 px-6 text-white" style={{ background: '#0D0B14' }}>
+      <section className="py-20 md:py-28 px-6 bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>What We Build Together</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light leading-tight text-white mb-5 max-w-2xl" data-testid="text-build-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light leading-tight text-[#1A1A2E] mb-5 max-w-2xl" data-testid="text-build-headline">
               Your Personal<br />AI Operating System
             </h2>
-            <p className="text-base md:text-lg text-white/55 max-w-xl mb-16 leading-relaxed">
+            <p className="text-base md:text-lg text-[#4A4A5E] max-w-xl mb-16 leading-relaxed">
               Over four private weeks, we architect and integrate a system built entirely around your business, your voice, and your leadership style.
             </p>
           </motion.div>
@@ -393,15 +393,15 @@ export default function AIIntegrationPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
-                className="bg-white/[0.03] border border-primary/10 p-7 group hover:bg-primary/[0.05] hover:border-primary/25 transition-colors"
+                className="bg-white border border-[#C9A96E]/20 shadow-sm p-7 group hover:bg-[#FAF8F6] hover:border-[#C9A96E]/40 transition-colors"
                 data-testid={`card-deliverable-${item.number}`}
               >
                 <div className="flex items-center gap-3 mb-3">
                   <item.icon className="w-4 h-4 text-primary/60" />
                   <span className="font-mono text-[11px] text-primary/60 tracking-wider">{item.number}</span>
                 </div>
-                <h3 className="font-serif text-xl font-medium text-white mb-2 leading-tight">{item.title}</h3>
-                <p className="text-sm text-white/45 leading-relaxed">{item.desc}</p>
+                <h3 className="font-serif text-xl font-medium text-[#1A1A2E] mb-2 leading-tight">{item.title}</h3>
+                <p className="text-sm text-[#9A8A7E] leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -420,8 +420,8 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* MID CTA */}
-      <div className="py-12 px-6 text-center border-t border-primary/10" style={{ background: '#0D0B14' }}>
-        <p className="font-serif text-lg md:text-xl italic font-light text-white/50 mb-6">
+      <div className="py-12 px-6 text-center border-t border-[#C9A96E]/10 bg-white">
+        <p className="font-serif text-lg md:text-xl italic font-light text-[#4A4A5E] mb-6">
           Ready to stop experimenting and start integrating?
         </p>
         <Button
@@ -435,11 +435,11 @@ export default function AIIntegrationPage() {
       </div>
 
       {/* OUTCOMES */}
-      <section className="py-20 md:py-28 px-6 bg-background">
+      <section className="py-20 md:py-28 px-6 bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>The Outcome</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-14 leading-tight max-w-xl" data-testid="text-outcomes-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-[#1A1A2E] mb-14 leading-tight max-w-xl" data-testid="text-outcomes-headline">
               What changes by the end of four weeks
             </h2>
           </motion.div>
@@ -457,15 +457,15 @@ export default function AIIntegrationPage() {
               >
                 <ArrowRight className="w-4 h-4 text-primary mt-1 flex-shrink-0" />
                 <div>
-                  <h3 className="font-serif text-xl font-medium text-white mb-1 leading-tight">{item.title}</h3>
-                  <p className="text-sm text-white/60">{item.desc}</p>
+                  <h3 className="font-serif text-xl font-medium text-[#1A1A2E] mb-1 leading-tight">{item.title}</h3>
+                  <p className="text-sm text-[#4A4A5E]">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
           </div>
 
           <div className="mt-14 pl-6 border-l-2 border-primary max-w-xl" data-testid="text-outcomes-close">
-            <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-white leading-snug">
+            <p className="font-serif text-xl sm:text-2xl md:text-3xl italic font-light text-[#1A1A2E] leading-snug">
               This is not surface-level productivity.<br />
               This is structural leverage.
             </p>
@@ -474,11 +474,11 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 md:py-28 px-6 border-t border-b border-white/5" style={{ background: '#120E22' }}>
+      <section className="py-20 md:py-28 px-6 border-t border-b border-[#C9A96E]/20 bg-white">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>What People Say</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-14 leading-tight" data-testid="text-testimonials-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-[#1A1A2E] mb-14 leading-tight" data-testid="text-testimonials-headline">
               Women who've experienced<br />Nadia's work firsthand
             </h2>
           </motion.div>
@@ -492,12 +492,12 @@ export default function AIIntegrationPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
               >
-                <Card className="relative h-full bg-white/5 border-white/10" data-testid={`card-testimonial-${i}`}>
+                <Card className="relative h-full bg-white border border-[#C9A96E]/20 shadow-sm" data-testid={`card-testimonial-${i}`}>
                   <CardContent className="p-8 pt-12">
                     <span className="absolute top-3 left-6 font-serif text-7xl text-primary/20 leading-none select-none" aria-hidden="true">"</span>
-                    <p className="font-serif text-lg italic font-light text-white/90 leading-relaxed mb-6">{t.text}</p>
+                    <p className="font-serif text-lg italic font-light text-[#4A4A5E] leading-relaxed mb-6">{t.text}</p>
                     <p className="font-mono text-[11px] tracking-wider uppercase text-primary">{t.author}</p>
-                    <p className="text-xs text-white/50 mt-1">{t.handle}</p>
+                    <p className="text-xs text-[#9A8A7E] mt-1">{t.handle}</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -507,19 +507,19 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* WHO THIS IS FOR */}
-      <section className="py-20 md:py-28 px-6 bg-background">
+      <section className="py-20 md:py-28 px-6 bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>Who This Is For</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-3 leading-tight max-w-xl" data-testid="text-who-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-[#1A1A2E] mb-3 leading-tight max-w-xl" data-testid="text-who-headline">
               You are the right fit if&hellip;
             </h2>
-            <p className="text-base md:text-lg text-white/60 max-w-xl mb-12 leading-relaxed">
-              You are a visionary woman founder who has built something real {"\u2014"} and you are ready to operate at a higher level with intelligent systems behind you.
+            <p className="text-base md:text-lg text-[#4A4A5E] max-w-xl mb-12 leading-relaxed">
+              You are a visionary woman founder who has built something real {"—"} and you are ready to operate at a higher level with intelligent systems behind you.
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 border border-white/10 rounded-md overflow-hidden mb-12">
+          <div className="grid sm:grid-cols-2 border border-[#C9A96E]/20 rounded-md overflow-hidden mb-12">
             {whoFitItems.map((item, i) => (
               <motion.div
                 key={i}
@@ -527,7 +527,7 @@ export default function AIIntegrationPage() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.06 }}
-                className={`flex items-start gap-3 p-5 text-sm text-white/70 leading-relaxed border-b border-white/10 ${i % 2 === 0 ? 'sm:border-r' : ''} ${i >= whoFitItems.length - 2 ? 'sm:border-b-0' : ''} ${i === whoFitItems.length - 1 ? 'border-b-0' : ''}`}
+                className={`flex items-start gap-3 p-5 text-sm text-[#4A4A5E] leading-relaxed border-b border-[#C9A96E]/20 ${i % 2 === 0 ? 'sm:border-r' : ''} ${i >= whoFitItems.length - 2 ? 'sm:border-b-0' : ''} ${i === whoFitItems.length - 1 ? 'border-b-0' : ''}`}
                 data-testid={`item-who-fit-${i}`}
               >
                 <CheckCircle className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
@@ -536,9 +536,9 @@ export default function AIIntegrationPage() {
             ))}
           </div>
 
-          <Card className="border-2 border-primary/30 max-w-xl rounded-sm bg-primary/5" data-testid="text-who-not">
+          <Card className="border-2 border-[#C9A96E]/30 max-w-xl rounded-sm bg-[#F2E0D6]/20" data-testid="text-who-not">
             <CardContent className="p-7">
-              <p className="font-serif text-lg md:text-xl italic font-light text-white/90 leading-relaxed">
+              <p className="font-serif text-lg md:text-xl italic font-light text-[#1A1A2E] leading-relaxed">
                 This is not for casual experimentation.<br />
                 This is for women who are ready to evolve how they operate.
               </p>
@@ -548,11 +548,11 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* STRUCTURE / 4 WEEKS */}
-      <section className="py-20 md:py-28 px-6 text-white" style={{ background: '#0D0B14' }}>
+      <section className="py-20 md:py-28 px-6 bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>The Experience</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-4 max-w-lg leading-tight" data-testid="text-structure-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-[#1A1A2E] mb-4 max-w-lg leading-tight" data-testid="text-structure-headline">
               Four weeks.<br />One complete system.
             </h2>
           </motion.div>
@@ -567,7 +567,7 @@ export default function AIIntegrationPage() {
             ].map((meta) => (
               <div key={meta.label} className="flex flex-col gap-1" data-testid={`meta-${meta.label.toLowerCase()}`}>
                 <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-primary/50">{meta.label}</span>
-                <span className="text-sm text-white/75">{meta.value}</span>
+                <span className="text-sm text-[#4A4A5E]">{meta.value}</span>
               </div>
             ))}
           </div>
@@ -585,8 +585,8 @@ export default function AIIntegrationPage() {
               >
                 <span className="font-serif text-5xl md:text-6xl font-light text-primary/20 leading-none">{week.number}</span>
                 <div>
-                  <h3 className="font-serif text-2xl font-medium text-white mb-2 leading-tight">{week.title}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed max-w-xl mb-4">{week.desc}</p>
+                  <h3 className="font-serif text-2xl font-medium text-[#1A1A2E] mb-2 leading-tight">{week.title}</h3>
+                  <p className="text-sm text-[#9A8A7E] leading-relaxed max-w-xl mb-4">{week.desc}</p>
                   <Badge
                     variant="outline"
                     className="bg-primary/[0.08] border-primary/20 text-primary font-mono text-[11px] tracking-wider rounded-sm no-default-hover-elevate no-default-active-elevate"
@@ -602,7 +602,7 @@ export default function AIIntegrationPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="font-serif text-xl md:text-2xl italic font-light text-white/60 text-center pt-14 border-t border-primary/10 leading-relaxed"
+            className="font-serif text-xl md:text-2xl italic font-light text-[#4A4A5E] text-center pt-14 border-t border-[#C9A96E]/10 leading-relaxed"
             data-testid="text-structure-close"
           >
             You do not leave dependent.<br />You leave integrated.
@@ -611,18 +611,18 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* ABOUT NADIA */}
-      <section className="py-20 md:py-28 px-6 bg-background">
+      <section className="py-20 md:py-28 px-6 bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>About Nadia</SectionLabel>
             <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
               <div>
-                <h2 className="font-serif text-3xl sm:text-4xl font-light text-white leading-tight mb-7" data-testid="text-about-headline">
+                <h2 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A2E] leading-tight mb-7" data-testid="text-about-headline">
                   Built by someone who thinks in systems.
                 </h2>
-                <div className="text-sm md:text-base text-white/60 leading-relaxed space-y-4">
-                  <p>I'm Nadia Ben Brahim {"\u2014"} founder of MetaHers. I studied Computer Science and graduated in 2008, then spent the next decade building a career in luxury hospitality, rising from Front Office Manager to <strong className="text-white font-semibold">Hotel General Manager in Los Angeles</strong>.</p>
-                  <p>Throughout that career, I became known for one thing above all else: <strong className="text-white font-semibold">systems thinking</strong>. I optimized operations, resolved complex technical problems independently, and integrated tools into real-world execution at the highest level.</p>
+                <div className="text-sm md:text-base text-[#4A4A5E] leading-relaxed space-y-4">
+                  <p>I'm Nadia Ben Brahim {"—"} founder of MetaHers. I studied Computer Science and graduated in 2008, then spent the next decade building a career in luxury hospitality, rising from Front Office Manager to <strong className="text-[#1A1A2E] font-semibold">Hotel General Manager in Los Angeles</strong>.</p>
+                  <p>Throughout that career, I became known for one thing above all else: <strong className="text-[#1A1A2E] font-semibold">systems thinking</strong>. I optimized operations, resolved complex technical problems independently, and integrated tools into real-world execution at the highest level.</p>
                   <p>When AI emerged, I did not approach it as a trend. I approached it as infrastructure.</p>
                   <p>MetaHers exists to translate advanced technology into structured, practical leverage for women founders who refuse to be left behind. I do not teach tools. I architect systems around how you think, lead, and grow.</p>
                 </div>
@@ -637,13 +637,13 @@ export default function AIIntegrationPage() {
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: i * 0.1 }}
                   >
-                    <Card className="border border-primary/20 rounded-sm bg-white/5" data-testid={`card-credential-${i}`}>
+                    <Card className="border border-[#C9A96E]/20 rounded-sm bg-white shadow-sm" data-testid={`card-credential-${i}`}>
                       <CardContent className="p-5">
                         <div className="flex items-center gap-2 mb-1">
                           <cred.icon className="w-3.5 h-3.5 text-primary" />
                           <span className="font-mono text-[10px] tracking-[0.2em] uppercase text-primary">{cred.title}</span>
                         </div>
-                        <p className="text-sm text-white/60 leading-relaxed">{cred.text}</p>
+                        <p className="text-sm text-[#4A4A5E] leading-relaxed">{cred.text}</p>
                       </CardContent>
                     </Card>
                   </motion.div>
@@ -655,37 +655,37 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* INVESTMENT */}
-      <section className="py-20 md:py-28 px-6 text-white text-center" id="apply" style={{ background: '#0D0B14' }}>
+      <section className="py-20 md:py-28 px-6 text-center bg-[#FAF8F6]" id="apply">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="flex items-center justify-center gap-3 mb-10">
               <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary">Investment</span>
             </div>
 
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-4 leading-tight" data-testid="text-investment-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-[#1A1A2E] mb-4 leading-tight" data-testid="text-investment-headline">
               What this represents
             </h2>
-            <p className="text-base text-white/50 max-w-xl mx-auto mb-12 leading-relaxed">
-              Hiring a dedicated AI operations consultant or systems strategist runs $5,000{"\u2013"}$15,000+ for comparable private, hands-on work. This is four weeks of private 1:1 architecture built around you, with a fully owned system as the deliverable.
+            <p className="text-base text-[#4A4A5E] max-w-xl mx-auto mb-12 leading-relaxed">
+              Hiring a dedicated AI operations consultant or systems strategist runs $5,000{"–"}$15,000+ for comparable private, hands-on work. This is four weeks of private 1:1 architecture built around you, with a fully owned system as the deliverable.
             </p>
 
-            <div className="inline-flex flex-col items-center bg-white/[0.03] border border-primary/25 px-12 sm:px-16 py-12 rounded-sm mb-4" data-testid="card-price-block">
+            <div className="inline-flex flex-col items-center bg-white border border-[#C9A96E]/25 shadow-sm px-12 sm:px-16 py-12 rounded-sm mb-4" data-testid="card-price-block">
               <span className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary mb-4">Founding Rate</span>
               <div className="flex items-baseline gap-4 mb-3">
                 <span className="font-serif text-6xl sm:text-7xl md:text-8xl font-light text-primary leading-none">$997</span>
-                <span className="font-serif text-3xl font-light line-through text-white/30">$1,997</span>
+                <span className="font-serif text-3xl font-light line-through text-[#9A8A7E]/50">$1,997</span>
               </div>
-              <div className="text-[13px] text-white/40 leading-relaxed text-center mb-3">
-                4 x 60-min 1:1 sessions {"\u00B7"} Async support between sessions<br />
-                Custom prompt library {"\u00B7"} Full system ownership
+              <div className="text-[13px] text-[#9A8A7E] leading-relaxed text-center mb-3">
+                4 x 60-min 1:1 sessions {"·"} Async support between sessions<br />
+                Custom prompt library {"·"} Full system ownership
               </div>
               <span className="font-mono text-[11px] tracking-wider uppercase text-primary/60">
                 Includes 3 months Signature membership
               </span>
             </div>
 
-            <p className="font-serif text-base md:text-lg italic font-light text-white/40 max-w-lg mx-auto mb-14 leading-relaxed">
-              This is not a course. It is not a subscription. It is a private engagement with a defined outcome {"\u2014"} designed for women who are serious about building real leverage.
+            <p className="font-serif text-base md:text-lg italic font-light text-[#4A4A5E]/70 max-w-lg mx-auto mb-14 leading-relaxed">
+              This is not a course. It is not a subscription. It is a private engagement with a defined outcome {"—"} designed for women who are serious about building real leverage.
             </p>
 
             <div className="flex flex-col items-center gap-4">
@@ -698,8 +698,8 @@ export default function AIIntegrationPage() {
                 <Calendar className="w-4 h-4 mr-2" />
                 Apply Now
               </Button>
-              <span className="font-mono text-[11px] tracking-wider uppercase text-white/30">
-                Application-based {"\u00B7"} Limited availability
+              <span className="font-mono text-[11px] tracking-wider uppercase text-[#9A8A7E]">
+                Application-based {"·"} Limited availability
               </span>
             </div>
           </motion.div>
@@ -707,11 +707,11 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-20 md:py-28 px-6 border-t border-white/5" style={{ background: '#120E22' }}>
+      <section className="py-20 md:py-28 px-6 border-t border-[#C9A96E]/20 bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <SectionLabel>Questions</SectionLabel>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-white mb-14 leading-tight" data-testid="text-faq-headline">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-[#1A1A2E] mb-14 leading-tight" data-testid="text-faq-headline">
               Common questions,<br />honest answers.
             </h2>
           </motion.div>
@@ -724,14 +724,14 @@ export default function AIIntegrationPage() {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="border-b border-white/10 first:border-t first:border-white/10"
+                className="border-b border-[#C9A96E]/15 first:border-t first:border-[#C9A96E]/15"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   className="w-full flex items-start justify-between gap-6 py-7 text-left group"
                   data-testid={`button-faq-${i}`}
                 >
-                  <span className={`font-serif text-lg md:text-xl font-medium leading-snug transition-colors ${openFaq === i ? 'text-primary' : 'text-white'}`}>
+                  <span className={`font-serif text-lg md:text-xl font-medium leading-snug transition-colors ${openFaq === i ? 'text-[#C9A96E]' : 'text-[#1A1A2E]'}`}>
                     {faq.q}
                   </span>
                   <ChevronDown className={`w-5 h-5 text-primary flex-shrink-0 mt-1 transition-transform duration-300 ${openFaq === i ? 'rotate-180' : ''}`} />
@@ -739,7 +739,7 @@ export default function AIIntegrationPage() {
                 <div
                   className={`overflow-hidden transition-all duration-400 ease-in-out ${openFaq === i ? 'max-h-60 pb-7' : 'max-h-0'}`}
                 >
-                  <p className="text-sm md:text-base text-white/50 leading-relaxed pr-10">{faq.a}</p>
+                  <p className="text-sm md:text-base text-[#4A4A5E] leading-relaxed pr-10">{faq.a}</p>
                 </div>
               </motion.div>
             ))}
@@ -748,19 +748,19 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* APPLICATION FORM */}
-      <section id="apply" className="relative py-24 md:py-32 px-6 text-white overflow-hidden" style={{ background: '#0D0B14' }}>
+      <section id="apply" className="relative py-24 md:py-32 px-6 overflow-hidden bg-[#FAF8F6]">
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(139,92,246,0.10) 0%, transparent 70%)"
+          background: "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(201,169,110,0.08) 0%, transparent 70%)"
         }} />
 
         <div className="relative z-10 max-w-2xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="text-center mb-12">
               <p className="font-mono text-[10px] tracking-[0.25em] uppercase text-primary mb-4">The AI Blueprint</p>
-              <h2 className="font-serif text-4xl sm:text-5xl font-light text-white leading-tight mb-4" data-testid="text-apply-headline">
+              <h2 className="font-serif text-4xl sm:text-5xl font-light text-[#1A1A2E] leading-tight mb-4" data-testid="text-apply-headline">
                 Apply for The AI Blueprint
               </h2>
-              <p className="text-base text-white/50 max-w-md mx-auto leading-relaxed">
+              <p className="text-base text-[#4A4A5E] max-w-md mx-auto leading-relaxed">
                 4 weeks. 1:1 with Nadia. Tell us about your business so we can determine if the Blueprint is the right fit.
               </p>
             </div>
@@ -768,8 +768,8 @@ export default function AIIntegrationPage() {
             {submitted ? (
               <div className="text-center py-16 border border-primary/20 rounded-sm" style={{ background: 'rgba(201,169,110,0.05)' }} data-testid="div-apply-confirmation">
                 <CheckCircle className="w-12 h-12 text-primary mx-auto mb-4" />
-                <h3 className="font-serif text-2xl font-light text-white mb-3">Application received.</h3>
-                <p className="text-white/50 text-sm max-w-sm mx-auto leading-relaxed">
+                <h3 className="font-serif text-2xl font-light text-[#1A1A2E] mb-3">Application received.</h3>
+                <p className="text-[#4A4A5E] text-sm max-w-sm mx-auto leading-relaxed">
                   Thank you for applying. Nadia will review your application and reach out within 48 hours.
                 </p>
               </div>
@@ -777,7 +777,7 @@ export default function AIIntegrationPage() {
               <form onSubmit={handleSubmit} className="space-y-6" data-testid="form-blueprint-apply">
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-sm text-white/70 font-mono tracking-wide">Full Name *</Label>
+                    <Label htmlFor="name" className="text-sm text-[#4A4A5E] font-mono tracking-wide">Full Name *</Label>
                     <Input
                       id="name"
                       name="name"
@@ -785,11 +785,11 @@ export default function AIIntegrationPage() {
                       onChange={handleChange}
                       required
                       placeholder="Your full name"
-                      className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50"
+                      className="bg-white border-[#C9A96E]/20 text-[#1A1A2E] placeholder:text-[#9A8A7E] focus:border-[#C9A96E]/50"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-sm text-white/70 font-mono tracking-wide">Email *</Label>
+                    <Label htmlFor="email" className="text-sm text-[#4A4A5E] font-mono tracking-wide">Email *</Label>
                     <Input
                       id="email"
                       name="email"
@@ -798,25 +798,25 @@ export default function AIIntegrationPage() {
                       onChange={handleChange}
                       required
                       placeholder="you@yourbusiness.com"
-                      className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50"
+                      className="bg-white border-[#C9A96E]/20 text-[#1A1A2E] placeholder:text-[#9A8A7E] focus:border-[#C9A96E]/50"
                     />
                   </div>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="businessName" className="text-sm text-white/70 font-mono tracking-wide">Business Name</Label>
+                  <Label htmlFor="businessName" className="text-sm text-[#4A4A5E] font-mono tracking-wide">Business Name</Label>
                   <Input
                     id="businessName"
                     name="businessName"
                     value={form.businessName}
                     onChange={handleChange}
                     placeholder="Your business or brand name"
-                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50"
+                    className="bg-white border-[#C9A96E]/20 text-[#1A1A2E] placeholder:text-[#9A8A7E] focus:border-[#C9A96E]/50"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="businessDescription" className="text-sm text-white/70 font-mono tracking-wide">What does your business do? *</Label>
+                  <Label htmlFor="businessDescription" className="text-sm text-[#4A4A5E] font-mono tracking-wide">What does your business do? *</Label>
                   <Textarea
                     id="businessDescription"
                     name="businessDescription"
@@ -825,12 +825,12 @@ export default function AIIntegrationPage() {
                     required
                     rows={3}
                     placeholder="Describe your business in 2-3 sentences"
-                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50 resize-none"
+                    className="bg-white border-[#C9A96E]/20 text-[#1A1A2E] placeholder:text-[#9A8A7E] focus:border-[#C9A96E]/50 resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="challenge" className="text-sm text-white/70 font-mono tracking-wide">What's your biggest challenge with AI right now? *</Label>
+                  <Label htmlFor="challenge" className="text-sm text-[#4A4A5E] font-mono tracking-wide">What's your biggest challenge with AI right now? *</Label>
                   <Textarea
                     id="challenge"
                     name="challenge"
@@ -839,12 +839,12 @@ export default function AIIntegrationPage() {
                     required
                     rows={3}
                     placeholder="Be specific — what's not working or what feels unclear?"
-                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50 resize-none"
+                    className="bg-white border-[#C9A96E]/20 text-[#1A1A2E] placeholder:text-[#9A8A7E] focus:border-[#C9A96E]/50 resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="successVision" className="text-sm text-white/70 font-mono tracking-wide">What would success look like after 4 weeks? *</Label>
+                  <Label htmlFor="successVision" className="text-sm text-[#4A4A5E] font-mono tracking-wide">What would success look like after 4 weeks? *</Label>
                   <Textarea
                     id="successVision"
                     name="successVision"
@@ -853,44 +853,44 @@ export default function AIIntegrationPage() {
                     required
                     rows={3}
                     placeholder="Describe the outcome you're hoping for"
-                    className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/25 focus:border-primary/50 resize-none"
+                    className="bg-white border-[#C9A96E]/20 text-[#1A1A2E] placeholder:text-[#9A8A7E] focus:border-[#C9A96E]/50 resize-none"
                   />
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="revenueRange" className="text-sm text-white/70 font-mono tracking-wide">Monthly Revenue Range</Label>
+                    <Label htmlFor="revenueRange" className="text-sm text-[#4A4A5E] font-mono tracking-wide">Monthly Revenue Range</Label>
                     <select
                       id="revenueRange"
                       name="revenueRange"
                       value={form.revenueRange}
                       onChange={handleChange}
-                      className="w-full h-10 px-3 rounded-md text-sm bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-primary/50"
+                      className="w-full h-10 px-3 rounded-md text-sm bg-white border border-[#C9A96E]/20 text-[#1A1A2E] focus:outline-none focus:border-[#C9A96E]/50"
                     >
-                      <option value="" className="bg-[#0D0B14]">Select range</option>
-                      <option value="pre-revenue" className="bg-[#0D0B14]">Pre-revenue</option>
-                      <option value="under-1k" className="bg-[#0D0B14]">Under $1K/mo</option>
-                      <option value="1k-5k" className="bg-[#0D0B14]">$1K – $5K/mo</option>
-                      <option value="5k-10k" className="bg-[#0D0B14]">$5K – $10K/mo</option>
-                      <option value="10k-plus" className="bg-[#0D0B14]">$10K+/mo</option>
+                      <option value="" className="bg-white">Select range</option>
+                      <option value="pre-revenue" className="bg-white">Pre-revenue</option>
+                      <option value="under-1k" className="bg-white">Under $1K/mo</option>
+                      <option value="1k-5k" className="bg-white">$1K – $5K/mo</option>
+                      <option value="5k-10k" className="bg-white">$5K – $10K/mo</option>
+                      <option value="10k-plus" className="bg-white">$10K+/mo</option>
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="source" className="text-sm text-white/70 font-mono tracking-wide">How did you hear about MetaHers?</Label>
+                    <Label htmlFor="source" className="text-sm text-[#4A4A5E] font-mono tracking-wide">How did you hear about MetaHers?</Label>
                     <select
                       id="source"
                       name="source"
                       value={form.source}
                       onChange={handleChange}
-                      className="w-full h-10 px-3 rounded-md text-sm bg-white/[0.04] border border-white/10 text-white focus:outline-none focus:border-primary/50"
+                      className="w-full h-10 px-3 rounded-md text-sm bg-white border border-[#C9A96E]/20 text-[#1A1A2E] focus:outline-none focus:border-[#C9A96E]/50"
                     >
-                      <option value="" className="bg-[#0D0B14]">Select source</option>
-                      <option value="instagram" className="bg-[#0D0B14]">Instagram</option>
-                      <option value="x-twitter" className="bg-[#0D0B14]">X / Twitter</option>
-                      <option value="google" className="bg-[#0D0B14]">Google</option>
-                      <option value="referral" className="bg-[#0D0B14]">Friend / Referral</option>
-                      <option value="newsletter" className="bg-[#0D0B14]">Newsletter</option>
-                      <option value="other" className="bg-[#0D0B14]">Other</option>
+                      <option value="" className="bg-white">Select source</option>
+                      <option value="instagram" className="bg-white">Instagram</option>
+                      <option value="x-twitter" className="bg-white">X / Twitter</option>
+                      <option value="google" className="bg-white">Google</option>
+                      <option value="referral" className="bg-white">Friend / Referral</option>
+                      <option value="newsletter" className="bg-white">Newsletter</option>
+                      <option value="other" className="bg-white">Other</option>
                     </select>
                   </div>
                 </div>
@@ -906,7 +906,7 @@ export default function AIIntegrationPage() {
                   >
                     {submitting ? "Submitting..." : "Submit Application"}
                   </Button>
-                  <p className="text-center text-white/25 font-mono text-[11px] tracking-wider mt-4">
+                  <p className="text-center text-[#9A8A7E] font-mono text-[11px] tracking-wider mt-4">
                     Application-based · Limited availability · No payment required to apply
                   </p>
                 </div>
@@ -917,8 +917,8 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* FOOTER NOTE */}
-      <div className="py-8 px-6 text-center border-t border-primary/10" style={{ background: '#0D0B14' }}>
-        <p className="font-mono text-[11px] tracking-wider text-white/20">
+      <div className="py-8 px-6 text-center border-t border-primary/10 bg-[#FAF8F6]">
+        <p className="font-mono text-[11px] tracking-wider text-[#9A8A7E]">
           MetaHers · The AI Blueprint · Private · By Application
         </p>
       </div>
