@@ -48,20 +48,20 @@ interface MemberDetail {
 
 // ── Constants ───────────────────────────────────────────────────────────
 const TIER_STYLES: Record<string, { label: string; cls: string }> = {
-  free:              { label: 'Inner Circle', cls: 'bg-gray-100 text-gray-600' },
-  signature_monthly: { label: 'Signature',    cls: 'bg-amber-50 text-amber-700' },
-  private_monthly:   { label: 'Private',      cls: 'bg-purple-50 text-purple-700' },
-  ai_blueprint:      { label: 'Blueprint',    cls: 'bg-blue-50 text-blue-700' },
+  free:              { label: 'AI Starter Kit', cls: 'bg-gray-100 text-gray-600' },
+  signature_monthly: { label: 'MetaHers Studio',    cls: 'bg-amber-50 text-amber-700' },
+  private_monthly:   { label: 'Private Advisory',      cls: 'bg-purple-50 text-purple-700' },
+  ai_blueprint:      { label: 'The AI Blueprint',    cls: 'bg-blue-50 text-blue-700' },
   // Legacy aliases
-  pro:               { label: 'Signature',    cls: 'bg-amber-50 text-amber-700' },
-  pro_monthly:       { label: 'Signature',    cls: 'bg-amber-50 text-amber-700' },
-  pro_annual:        { label: 'Signature',    cls: 'bg-amber-50 text-amber-700' },
-  vip:               { label: 'Private',      cls: 'bg-purple-50 text-purple-700' },
-  sanctuary:         { label: 'Private',      cls: 'bg-purple-50 text-purple-700' },
-  inner_circle:      { label: 'Inner Circle', cls: 'bg-gray-100 text-gray-600' },
-  vip_cohort:        { label: 'Private',      cls: 'bg-purple-50 text-purple-700' },
-  founders_circle:   { label: 'Private',      cls: 'bg-purple-50 text-purple-700' },
-  executive:         { label: 'Private',      cls: 'bg-purple-50 text-purple-700' },
+  pro:               { label: 'MetaHers Studio',    cls: 'bg-amber-50 text-amber-700' },
+  pro_monthly:       { label: 'MetaHers Studio',    cls: 'bg-amber-50 text-amber-700' },
+  pro_annual:        { label: 'MetaHers Studio',    cls: 'bg-amber-50 text-amber-700' },
+  vip:               { label: 'Private Advisory',      cls: 'bg-purple-50 text-purple-700' },
+  sanctuary:         { label: 'Private Advisory',      cls: 'bg-purple-50 text-purple-700' },
+  inner_circle:      { label: 'AI Starter Kit', cls: 'bg-gray-100 text-gray-600' },
+  vip_cohort:        { label: 'Private Advisory',      cls: 'bg-purple-50 text-purple-700' },
+  founders_circle:   { label: 'Private Advisory',      cls: 'bg-purple-50 text-purple-700' },
+  executive:         { label: 'Private Advisory',      cls: 'bg-purple-50 text-purple-700' },
 };
 
 const STATUS_STYLES: Record<string, { label: string; cls: string }> = {
@@ -215,10 +215,10 @@ function MemberDrawer({ userId, onClose }: { userId: string; onClose: () => void
                       <SelectValue placeholder="Change tier..." />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="free">Inner Circle</SelectItem>
-                      <SelectItem value="signature_monthly">Signature</SelectItem>
-                      <SelectItem value="private_monthly">Private</SelectItem>
-                      <SelectItem value="ai_blueprint">Blueprint</SelectItem>
+                      <SelectItem value="free">AI Starter Kit</SelectItem>
+                      <SelectItem value="signature_monthly">MetaHers Studio</SelectItem>
+                      <SelectItem value="private_monthly">Private Advisory</SelectItem>
+                      <SelectItem value="ai_blueprint">The AI Blueprint</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -475,10 +475,10 @@ export default function AdminUsersPage() {
                 <SelectTrigger className="w-40"><SelectValue placeholder="Tier" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All tiers</SelectItem>
-                  <SelectItem value="free">Inner Circle</SelectItem>
-                  <SelectItem value="signature_monthly">Signature</SelectItem>
-                  <SelectItem value="private_monthly">Private</SelectItem>
-                  <SelectItem value="ai_blueprint">Blueprint</SelectItem>
+                  <SelectItem value="free">AI Starter Kit</SelectItem>
+                  <SelectItem value="signature_monthly">MetaHers Studio</SelectItem>
+                  <SelectItem value="private_monthly">Private Advisory</SelectItem>
+                  <SelectItem value="ai_blueprint">The AI Blueprint</SelectItem>
                 </SelectContent>
               </Select>
               <Select value={personaFilter} onValueChange={setPersonaFilter}>

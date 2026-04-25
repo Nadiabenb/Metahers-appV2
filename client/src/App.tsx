@@ -171,7 +171,7 @@ function Router() {
         <Route path="/privacy" component={PrivacyPolicyPage} />
         <Route path="/terms" component={TermsOfServicePage} />
         <Route path="/checkout/:tier/:priceId" component={(props: any) => {
-          const tiers = { signature: { name: 'Signature', price: 29 }, private: { name: 'Private', price: 149 }, blueprint: { name: 'AI Blueprint', price: 997 } };
+          const tiers = { signature: { name: 'MetaHers Studio', price: 29 }, private: { name: 'Private Advisory', price: 149 }, blueprint: { name: 'The AI Blueprint', price: 997 } };
           const tier = tiers[props.tier as keyof typeof tiers];
           return tier ? <CheckoutPage tierName={tier.name} price={tier.price} priceId={props.priceId} /> : <NotFound />;
         }} />

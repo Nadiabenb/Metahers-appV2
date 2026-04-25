@@ -338,7 +338,7 @@ export default function AIPromptLibraryPage() {
         {hasMorePrompts && (
           <div className="mt-6">
             <UpgradeBanner
-              message={`${allFilteredPrompts.length - promptLimit} more prompts available with Signature membership`}
+              message={`${allFilteredPrompts.length - promptLimit} more prompts available with MetaHers Studio`}
               context="Upgrade to unlock the full prompt library"
             />
           </div>

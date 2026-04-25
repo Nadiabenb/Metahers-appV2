@@ -85,7 +85,7 @@ export const isSignatureOrAbove: RequestHandler = async (req, res, next) => {
   const { isSignatureTier } = await import("../shared/pricing");
 
   if (!user || (!user.isPro && !isSignatureTier(user.subscriptionTier as any))) {
-    return res.status(403).json({ message: "Signature subscription required" });
+    return res.status(403).json({ message: "MetaHers Studio subscription required" });
   }
 
   return next();

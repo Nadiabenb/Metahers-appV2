@@ -59,8 +59,8 @@ const deliverables = [
   {
     number: "06",
     icon: Cpu,
-    title: "3 Months Signature Membership",
-    desc: "Full access to all 54 rituals, agents, and the prompt library for three months after the Blueprint wraps.",
+    title: "3 Months MetaHers Studio",
+    desc: "Full access to the Learning Hub, AI concierge team, toolkit, and prompt library for three months after the Blueprint wraps.",
   },
 ];
 
@@ -680,7 +680,7 @@ export default function AIIntegrationPage() {
                 Custom prompt library {"·"} Full system ownership
               </div>
               <span className="font-mono text-[11px] tracking-wider uppercase text-primary/60">
-                Includes 3 months Signature membership
+                Includes 3 months MetaHers Studio
               </span>
             </div>
 

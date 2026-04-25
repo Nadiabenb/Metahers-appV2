@@ -93,7 +93,7 @@ function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
             }
             data-testid="button-join-inner-circle"
           >
-            Join the Inner Circle
+            Start Free
           </button>
           <button
             onClick={() => onNavigate("/concierge")}
@@ -391,7 +391,7 @@ function BlueprintSection({ onNavigate }: { onNavigate: (p: string) => void }) {
             Apply Now
           </button>
           <p className="mt-3 text-xs" style={{ color: MUTED }}>
-            Includes 3 months Signature membership
+            Includes 3 months MetaHers Studio
           </p>
         </FadeUp>
       </div>
@@ -402,45 +402,45 @@ function BlueprintSection({ onNavigate }: { onNavigate: (p: string) => void }) {
 // ── Section 6: Membership Tiers ──────────────────────────────────
 const TIERS = [
   {
-    name: "Inner Circle",
+    name: "AI Starter Kit",
     price: "Free",
     priceNote: "",
     highlight: false,
     features: [
-      "Weekly AI newsletter",
+      "Weekly MetaHers Signal",
       "Community access",
-      "1 AI agent matched to your goal",
+      "1 free AI concierge session",
       "Curated resources",
     ],
-    cta: "Join Free",
+    cta: "Start Free",
     ctaPath: "/signup",
     disabled: false,
   },
   {
-    name: "Signature",
+    name: "MetaHers Studio",
     price: "$29",
     priceNote: "/mo",
     highlight: true,
     features: [
-      "Full access to your AI concierge team",
-      "Full learning curriculum",
-      "Curated AI toolkit + reviews",
-      "Monthly virtual gatherings",
+      "Daily access to the AI concierge team",
+      "Complete Learning Hub",
+      "AI Toolkit + prompt library",
+      "Monthly live implementation lab",
     ],
-    cta: "Join Signature",
+    cta: "Join Studio",
     ctaPath: "/upgrade",
     disabled: false,
   },
   {
-    name: "Private",
+    name: "Private Advisory",
     price: "$149",
     priceNote: "/mo",
     highlight: false,
     features: [
-      "Everything in Signature",
-      "1:1 AI setup concierge",
-      "Priority founder access",
-      "Founding rate locked",
+      "Everything in MetaHers Studio",
+      "Priority question support",
+      "Monthly private strategy review",
+      "Concierge onboarding",
     ],
     cta: "Apply",
     ctaPath: "/signup",
@@ -466,7 +466,7 @@ function TiersSection({ onNavigate }: { onNavigate: (p: string) => void }) {
             Start free. Grow with us.
           </h2>
           <p style={{ color: MUTED }}>
-            Every MetaHers journey begins with the Inner Circle.
+            Every MetaHers journey begins with the AI Starter Kit.
           </p>
         </FadeUp>
 
@@ -626,7 +626,7 @@ function EmailCaptureSection({ onNavigate }: { onNavigate: (p: string) => void }
             Your AI journey starts here.
           </h2>
           <p className="mb-8 leading-relaxed" style={{ color: MUTED }}>
-            Join the Inner Circle. It&apos;s free, it&apos;s beautiful, and
+            Start with the AI Starter Kit. It&apos;s free, practical, and
             it&apos;s built for you.
           </p>
         </FadeUp>

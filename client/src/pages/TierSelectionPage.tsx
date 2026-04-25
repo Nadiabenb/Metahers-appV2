@@ -7,6 +7,7 @@ import { SEO } from "@/components/SEO";
 import { Crown, Sparkles, TrendingUp, ArrowRight, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
+import { PRICING_PLANS, formatPrice, type SubscriptionTier } from "@shared/pricing";
 
 const DARK_BG = "#0A0614";
 const DARK_CARD = "#1A1625";
@@ -19,69 +20,35 @@ export default function TierSelectionPage() {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const tiers = [
+  const tiers: Array<{
+    id: SubscriptionTier;
+    icon: typeof Sparkles;
+    highlighted: boolean;
+  }> = [
     {
       id: "free",
-      name: "Vision Discovery",
-      price: "Free",
-      description: "Your entry into the sanctuary",
-      features: [
-        "Vision Board ritual (2026)",
-        "7 life dimensions",
-        "AI-powered insights",
-        "Daily reflections",
-      ],
       icon: Sparkles,
-      cta: "Begin Free",
       highlighted: false,
     },
     {
-      id: "core",
-      name: "Core Membership",
-      price: "$79",
-      period: "/month",
-      description: "Transform with AI & community",
-      features: [
-        "Learning Hub (9 Worlds)",
-        "54 rituals & experiences",
-        "MetaMuse AI companion",
-        "Journal with streaks",
-        "Monthly community calls",
-        "Vision Board + unlimited updates",
-      ],
+      id: "signature_monthly",
       icon: Crown,
-      cta: "Join Membership",
       highlighted: true,
     },
     {
-      id: "premium",
-      name: "AI Mastery Cohort",
-      price: "$699",
-      period: "or 3×$233",
-      description: "Master AI like a founder",
-      features: [
-        "12-week intensive program",
-        "Weekly live labs",
-        "App Atelier sprints",
-        "Executive accountability groups",
-        "Direct Nadia access",
-        "Core Membership included",
-      ],
+      id: "ai_blueprint",
       icon: TrendingUp,
-      cta: "Apply to Cohort",
       highlighted: false,
     },
   ];
 
-  const handleSelectTier = async (tierId: string) => {
+  const handleSelectTier = async (tierId: SubscriptionTier) => {
+    setSelectedTier(tierId);
     if (tierId === "free") {
       // Free tier - just mark onboarding as complete and redirect to dashboard
       setIsLoading(true);
       try {
-        await apiRequest("/api/auth/complete-onboarding", {
-          method: "POST",
-          body: JSON.stringify({ tier: "free" }),
-        });
+        await apiRequest("POST", "/api/auth/complete-onboarding", { tier: "free" });
         queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
         navigate("/dashboard");
       } catch (error) {
@@ -92,12 +59,10 @@ export default function TierSelectionPage() {
         });
         setIsLoading(false);
       }
-    } else if (tierId === "core") {
-      // Core Membership - navigate to checkout with price ID
-      navigate("/checkout/core/price_core_monthly");
-    } else if (tierId === "premium") {
-      // Premium Cohort - navigate to checkout with price ID
-      navigate("/checkout/premium/price_premium_cohort");
+    } else if (tierId === "signature_monthly") {
+      navigate("/upgrade");
+    } else if (tierId === "ai_blueprint") {
+      navigate("/ai-integration");
     }
   };
 
@@ -105,7 +70,7 @@ export default function TierSelectionPage() {
     <>
       <SEO
         title="Choose Your Journey | MetaHers"
-        description="Select your learning path: Vision Discovery (free), Core Membership ($79/mo), or AI Mastery Cohort ($699)"
+        description="Select your MetaHers path: AI Starter Kit, MetaHers Studio, or The AI Blueprint."
       />
       <div
         className="min-h-screen py-16 px-4 lg:px-16"
@@ -123,7 +88,7 @@ export default function TierSelectionPage() {
               className="text-sm uppercase tracking-[0.3em] mb-6"
               style={{ color: PINK }}
             >
-              Your Transformation Awaits
+              Choose Your Starting Point
             </p>
             <h1
               className="text-5xl lg:text-6xl mb-6 leading-tight"
@@ -135,22 +100,23 @@ export default function TierSelectionPage() {
             >
               Choose Your{" "}
               <span className="italic" style={{ color: LAVENDER }}>
-                Sanctuary Level
+                AI Path
               </span>
             </h1>
             <p
               className="text-lg font-light max-w-2xl mx-auto"
               style={{ color: "rgba(255,255,255,0.6)" }}
             >
-              Start free with Vision Board. Grow with community. Master with
-              mentorship.
+              Start free, join the monthly Studio, or apply for the private AI Blueprint intensive.
             </p>
           </motion.div>
 
           {/* Tier Cards */}
           <div className="grid md:grid-cols-3 gap-8 mb-12">
             {tiers.map((tier, i) => {
+              const plan = PRICING_PLANS[tier.id];
               const IconComponent = tier.icon;
+              const price = formatPrice(plan.price, plan.interval);
               return (
                 <motion.div
                   key={tier.id}
@@ -203,13 +169,13 @@ export default function TierSelectionPage() {
                         className="text-2xl font-semibold mb-2"
                         style={{ color: "#FFFFFF" }}
                       >
-                        {tier.name}
+                        {plan.displayName}
                       </h3>
                       <p
                         className="text-sm"
                         style={{ color: "rgba(255,255,255,0.5)" }}
                       >
-                        {tier.description}
+                        {plan.description}
                       </p>
                     </div>
 
@@ -220,14 +186,14 @@ export default function TierSelectionPage() {
                           className="text-5xl font-light"
                           style={{ color: LAVENDER }}
                         >
-                          {tier.price}
+                          {price.replace("/mo", "")}
                         </span>
-                        {tier.period && (
+                        {plan.price > 0 && (
                           <span
                             className="text-sm"
                             style={{ color: "rgba(255,255,255,0.5)" }}
                           >
-                            {tier.period}
+                            {plan.interval === "one_time" ? "one-time" : "/month"}
                           </span>
                         )}
                       </div>
@@ -235,7 +201,7 @@ export default function TierSelectionPage() {
 
                     {/* Features */}
                     <div className="mb-8 space-y-3">
-                      {tier.features.map((feature, j) => (
+                      {plan.features.map((feature, j) => (
                         <motion.div
                           key={j}
                           initial={{ opacity: 0, x: -10 }}
@@ -280,7 +246,7 @@ export default function TierSelectionPage() {
                     >
                       {isLoading && selectedTier === tier.id
                         ? "Processing..."
-                        : tier.cta}
+                        : plan.buttonText}
                     </motion.button>
                   </Card>
                 </motion.div>
@@ -297,8 +263,7 @@ export default function TierSelectionPage() {
             style={{ color: "rgba(255,255,255,0.5)" }}
           >
             <p className="text-sm">
-              All plans include access to Vision Board. You can upgrade or
-              downgrade anytime.
+              Free users continue to the dashboard. Paid paths continue through the upgrade or application flow.
             </p>
           </motion.div>
         </div>

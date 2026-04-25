@@ -8,23 +8,17 @@ import { useToast } from "@/hooks/use-toast";
 import { SEO } from "@/components/SEO";
 import { useAuth } from "@/hooks/useAuth";
 import { useLocation } from "wouter";
-import { Sparkles, Crown, Shield, Zap, Users, CheckCircle, ArrowRight } from "lucide-react";
+import { Sparkles, Crown, Zap, Users, CheckCircle, ArrowRight, TrendingUp } from "lucide-react";
 
 export default function WaitlistPage() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
-  const [selectedTier, setSelectedTier] = useState<"pro" | "sanctuary" | "inner-circle">("pro");
+  const [selectedTier, setSelectedTier] = useState<"free" | "studio" | "blueprint">("studio");
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const { toast } = useToast();
   const { isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
-
-  const priceIds = {
-    pro: "price_1QgGgvQ8Fhg6rYZJ1K2L3M4N",
-    sanctuary: "price_1QgGgvQ8Fhg6rYZJ1K2L3M5O",
-    "inner-circle": "price_1QgGgvQ8Fhg6rYZJ1K2L3M6P",
-  };
 
   const handleJoinWaitlist = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +37,7 @@ export default function WaitlistPage() {
         setName("");
         toast({
           title: "Welcome to the Waitlist! 🚀",
-          description: `You're in line for ${selectedTier === 'pro' ? 'Pro' : selectedTier === 'sanctuary' ? 'Sanctuary' : 'Inner Circle'} access`,
+          description: `You're in line for ${selectedTier === 'free' ? 'AI Starter Kit' : selectedTier === 'studio' ? 'MetaHers Studio' : 'The AI Blueprint'} access`,
         });
         setTimeout(() => setIsSuccess(false), 5000);
       }
@@ -60,48 +54,46 @@ export default function WaitlistPage() {
 
   const tiers = [
     {
-      id: "pro",
-      name: "Pro",
-      price: "$29/mo",
+      id: "free",
+      name: "AI Starter Kit",
+      price: "Free",
       icon: Sparkles,
       color: "from-[hsl(var(--hyper-violet))]",
       features: [
-        "Unlimited profile listings",
-        "Priority visibility in Circle",
-        "Advanced search & filters",
-        "Direct messaging",
-        "Monthly group coaching",
+        "Weekly MetaHers Signal",
+        "1 free AI concierge session",
+        "10 starter prompts",
+        "Toolkit preview",
+        "Community access",
       ],
     },
     {
-      id: "sanctuary",
-      name: "Sanctuary",
-      price: "$99/mo",
-      icon: Shield,
+      id: "studio",
+      name: "MetaHers Studio",
+      price: "$29/mo",
+      icon: Crown,
       color: "from-[hsl(var(--magenta-quartz))]",
       highlight: true,
       features: [
-        "Everything in Pro +",
-        "AI-powered profile matching",
-        "Verified badge",
-        "1 group coaching session/week",
-        "Private networking events",
-        "Exclusive resource library",
+        "Daily AI concierge access",
+        "Monthly live implementation lab",
+        "Monthly group Q&A or office hours",
+        "Complete Learning Hub",
+        "AI Toolkit and prompt library",
       ],
     },
     {
-      id: "inner-circle",
-      name: "Inner Circle",
-      price: "$299/mo",
-      icon: Crown,
+      id: "blueprint",
+      name: "The AI Blueprint",
+      price: "$997",
+      icon: TrendingUp,
       color: "from-[hsl(var(--liquid-gold))]",
       features: [
-        "Everything in Sanctuary +",
-        "1:1 monthly mentoring sessions",
-        "VIP event access",
-        "Personalized AI career coaching",
-        "Direct access to founder",
-        "Custom partnership opportunities",
+        "4 private implementation sessions",
+        "AI workflow audit",
+        "Custom AI operating system map",
+        "Personalized prompt library",
+        "3 months MetaHers Studio included",
       ],
     },
   ];
@@ -109,8 +101,8 @@ export default function WaitlistPage() {
   return (
     <>
       <SEO 
-        title="Premium Membership | MetaHers"
-        description="Join MetaHers Premium - unlock AI-powered networking, exclusive coaching, and community access"
+        title="MetaHers Offers | MetaHers"
+        description="Join the MetaHers offer list for AI Starter Kit, MetaHers Studio, and The AI Blueprint."
       />
       <div className="min-h-screen bg-gradient-to-b from-white via-[hsl(var(--hyper-violet))]/5 to-white py-16 px-4">
         <div className="max-w-7xl mx-auto">
@@ -125,10 +117,10 @@ export default function WaitlistPage() {
               Limited Early Access
             </Badge>
             <h1 className="text-5xl sm:text-6xl font-bold mb-4 bg-gradient-to-r from-[hsl(var(--hyper-violet))] via-[hsl(var(--magenta-quartz))] to-[hsl(var(--cyber-fuchsia))] bg-clip-text text-transparent">
-              Elevate Your Career
+              Build Your AI Operating System
             </h1>
             <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-              Join elite women professionals accessing AI-powered networking, exclusive coaching, and billion-dollar opportunities
+              Start with practical AI support, join the monthly implementation Studio, or apply for the private Blueprint intensive.
             </p>
           </motion.div>
 
@@ -165,7 +157,9 @@ export default function WaitlistPage() {
                   </div>
 
                   <p className="text-3xl font-bold text-foreground mb-1">{tier.price}</p>
-                  <p className="text-sm text-foreground/60 mb-6">billed monthly</p>
+                  <p className="text-sm text-foreground/60 mb-6">
+                    {tier.id === "free" ? "start today" : tier.id === "blueprint" ? "one-time" : "billed monthly"}
+                  </p>
 
                   <ul className="space-y-3 mb-6">
                     {tier.features.map((feature, i) => (
@@ -230,7 +224,7 @@ export default function WaitlistPage() {
 
                     <div>
                       <label className="text-sm font-semibold text-foreground mb-2 block">
-                        Interested in {selectedTier === 'pro' ? 'Pro' : selectedTier === 'sanctuary' ? 'Sanctuary' : 'Inner Circle'} Tier
+                        Interested in {selectedTier === 'free' ? 'AI Starter Kit' : selectedTier === 'studio' ? 'MetaHers Studio' : 'The AI Blueprint'}
                       </label>
                       <div className="p-4 bg-[hsl(var(--hyper-violet))]/5 rounded-lg border border-[hsl(var(--hyper-violet))]/20">
                         <p className="text-sm text-foreground/70">

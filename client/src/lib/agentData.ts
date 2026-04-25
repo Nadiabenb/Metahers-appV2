@@ -126,5 +126,5 @@ export const FREE_AGENT_BY_GOAL: Record<string, AgentId> = {
   brand_ai: 'luna',
 };
 
-// Always Signature-only regardless of goal
+// Always MetaHers Studio-only regardless of goal
 export const SIGNATURE_ONLY_AGENTS: AgentId[] = ['noor', 'vita'];

@@ -23,7 +23,7 @@ export default function GlowUpCompletePage() {
     queryKey: ['/api/glow-up/progress'],
   });
 
-  // Check if user has Signature access
+  // Check if user has MetaHers Studio access
   if (user && !canAccessSignatureFeatures(user?.subscriptionTier)) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-background via-background to-primary/5">

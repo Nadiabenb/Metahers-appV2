@@ -16,7 +16,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
       <div className="text-center py-6 px-4">
         <Crown className="w-7 h-7 mx-auto mb-3" style={{ color: GOLD }} />
         <p className="text-sm mb-4" style={{ color: "rgba(255,255,255,0.55)" }}>
-          {description || `${feature} is available on Signature`}
+          {description || `${feature} is available in MetaHers Studio`}
         </p>
         <Link href="/upgrade">
           <button
@@ -24,7 +24,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
             style={GOLD_STYLE}
             data-testid="button-upgrade-compact"
           >
-            Unlock Signature
+            Unlock Studio
           </button>
         </Link>
       </div>
@@ -49,7 +49,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
         Unlock {feature}
       </h3>
       <p className="text-sm leading-relaxed mb-6 max-w-sm mx-auto" style={{ color: "rgba(255,255,255,0.50)" }}>
-        {description || `${feature} is available to Signature and Private members. Upgrade to access the full MetaHers experience.`}
+        {description || `${feature} is available to MetaHers Studio and Private Advisory members. Upgrade to access the full MetaHers experience.`}
       </p>
       <Link href="/upgrade">
         <button
@@ -57,7 +57,7 @@ export function UpgradePrompt({ feature, description, compact = false }: Upgrade
           style={GOLD_STYLE}
           data-testid="button-upgrade-full"
         >
-          Explore Signature — from $29/month
+          Explore MetaHers Studio — from $29/month
         </button>
       </Link>
     </div>

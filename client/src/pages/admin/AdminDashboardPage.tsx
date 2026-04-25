@@ -112,10 +112,10 @@ export default function AdminDashboardPage() {
   ];
 
   const userDistribution = [
-    { name: 'Inner Circle', value: stats?.freeUsers || 0,      color: COLORS[0] },
-    { name: 'Signature',    value: stats?.signatureUsers || 0, color: COLORS[1] },
-    { name: 'Private',      value: stats?.privateUsers || 0,   color: COLORS[2] },
-    { name: 'Blueprint',    value: stats?.blueprintUsers || 0, color: COLORS[3] },
+    { name: 'AI Starter Kit', value: stats?.freeUsers || 0,      color: COLORS[0] },
+    { name: 'MetaHers Studio',    value: stats?.signatureUsers || 0, color: COLORS[1] },
+    { name: 'Private Advisory',      value: stats?.privateUsers || 0,   color: COLORS[2] },
+    { name: 'The AI Blueprint',    value: stats?.blueprintUsers || 0, color: COLORS[3] },
   ];
 
   const activityData = (stats?.signupsByDay || []).map(d => ({

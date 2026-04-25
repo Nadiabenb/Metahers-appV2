@@ -132,7 +132,7 @@ export default function DownloadableResources({
               <div>
                 <p className="font-semibold mb-1">Unlock All Resources</p>
                 <p className="text-sm text-foreground">
-                  Upgrade to Signature to download premium templates and workbooks
+                  Upgrade to MetaHers Studio to download premium templates and workbooks
                 </p>
               </div>
               <Button variant="default" onClick={() => window.location.href = '/upgrade'} data-testid="button-upgrade-for-resources">

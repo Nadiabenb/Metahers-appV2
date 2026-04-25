@@ -14,7 +14,7 @@ export function PlanBadge({ tier }: PlanBadgeProps) {
         data-testid="badge-free"
       >
         <Sparkles className="w-3 h-3" />
-        Inner Circle
+        AI Starter Kit
       </Badge>
     );
   }
@@ -26,7 +26,7 @@ export function PlanBadge({ tier }: PlanBadgeProps) {
         data-testid="badge-signature"
       >
         <Crown className="w-3 h-3" />
-        Signature
+        MetaHers Studio
       </Badge>
     );
   }
@@ -38,7 +38,7 @@ export function PlanBadge({ tier }: PlanBadgeProps) {
         data-testid="badge-private"
       >
         <Sparkles className="w-3 h-3" />
-        Private
+        Private Advisory
       </Badge>
     );
   }
@@ -50,7 +50,7 @@ export function PlanBadge({ tier }: PlanBadgeProps) {
         data-testid="badge-ai-blueprint"
       >
         <Gem className="w-3 h-3" />
-        AI Blueprint
+        The AI Blueprint
       </Badge>
     );
   }

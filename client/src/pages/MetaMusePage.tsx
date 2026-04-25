@@ -73,7 +73,7 @@ export default function MetaMusePage() {
             <div className="mb-8 max-w-xl mx-auto">
               <UpgradeBanner
                 message="You've used your free MetaMuse session"
-                context="Upgrade to Signature for unlimited access to MetaMuse"
+                context="Upgrade to MetaHers Studio for daily access to MetaMuse"
               />
             </div>
           )}

@@ -9,11 +9,25 @@ import { Link } from "wouter";
 export function UserJourneyMap() {
   const { user } = useAuth();
   const tier = user?.subscriptionTier || 'free';
+  type JourneyAction = {
+    label: string;
+    href: string;
+    completed?: boolean;
+    locked?: boolean;
+  };
 
-  const stages = [
+  const stages: Array<{
+    id: number;
+    title: string;
+    subtitle: string;
+    icon: typeof Sparkles;
+    status: 'complete' | 'current' | 'locked';
+    actions: JourneyAction[];
+    color: string;
+  }> = [
     {
       id: 1,
-      title: "Vision Discovery",
+      title: "AI Starter Kit",
       subtitle: "Start Free",
       icon: Sparkles,
       status: user ? 'complete' : 'current',
@@ -26,8 +40,8 @@ export function UserJourneyMap() {
     },
     {
       id: 2,
-      title: "Core Membership",
-      subtitle: "$79/month",
+      title: "MetaHers Studio",
+      subtitle: "$29/month",
       icon: Crown,
       status: tier !== 'free' ? 'complete' : 'locked',
       actions: [
@@ -39,14 +53,14 @@ export function UserJourneyMap() {
     },
     {
       id: 3,
-      title: "Premium Experiences",
-      subtitle: "Voyages & Cohorts",
+      title: "The AI Blueprint",
+      subtitle: "$997 one-time",
       icon: Ship,
       status: 'locked',
       actions: [
-        { label: "Newport Voyages", href: "/voyages", locked: false },
-        { label: "AI Mastery Cohort", href: "/ai-mastery", locked: false },
-        { label: "1:1 Founder Session", href: "/executive", locked: false },
+        { label: "Apply for Blueprint", href: "/ai-integration", locked: false },
+        { label: "Workflow Audit", href: "/ai-integration", locked: false },
+        { label: "Private Implementation", href: "/ai-integration", locked: false },
       ],
       color: "from-amber-500 to-orange-500",
     },

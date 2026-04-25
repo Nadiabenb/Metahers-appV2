@@ -185,12 +185,12 @@ public/
 ### December 6, 2024 - 3-Tier Journey Reorganization
 1. ✅ **Navigation Restructured** - Simplified to show only the 3-tier path:
    - Your Journey (Vision Board - free entry)
-   - Core Membership (Learning Hub, MetaMuse, Journal - members only)
-   - Premium Cohort (AI Mastery, App Atelier - premium only)
+   - MetaHers Studio (Learning Hub, MetaMuse, Journal - members only)
+   - The AI Blueprint (private implementation intensive)
 2. ✅ **Landing Page Enhanced** - Added PricingTierSection with:
-   - Vision Discovery ($0) - AI-powered Vision Board ritual
-   - Core Membership ($79/mo) - Learning Hub + 9 Worlds + community
-   - AI Mastery Cohort ($699) - 12-week intensive + App Atelier
+   - AI Starter Kit ($0) - practical free AI entry point
+   - MetaHers Studio ($29/mo) - Learning Hub + AI Toolkit + prompt library + monthly support
+   - The AI Blueprint ($997) - 4-week private implementation intensive
 3. ✅ **Feature Consolidation** - 40+ scattered features mapped into cohesive 3-tier structure
 4. ✅ **Vision Board Fixed** - Database migration completed, feature now fully functional
 

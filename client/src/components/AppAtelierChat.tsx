@@ -336,7 +336,7 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
                     Ready for more conversations?
                   </h3>
                   <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.55)" }}>
-                    You've used your 15 free messages. Signature members get unlimited access to all 6 agents — from $29/month.
+                    You've used your 15 free messages. MetaHers Studio members get daily access to the full AI concierge team — from $29/month.
                   </p>
                 </div>
 
@@ -347,7 +347,7 @@ export function AppAtelierChat({ userProfile }: AppAtelierChatProps) {
                       style={{ background: "#C9A96E", color: "#1A1A2E" }}
                       data-testid="button-upgrade-now"
                     >
-                      Unlock Signature
+                      Unlock Studio
                     </button>
                   </Link>
                   <button

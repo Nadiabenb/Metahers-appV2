@@ -82,7 +82,7 @@ function AgentCard({
                   className="font-medium tracking-wider uppercase hidden sm:inline"
                   style={{ fontSize: "9px" }}
                 >
-                  Signature
+                  Studio
                 </span>
               </div>
             )}
@@ -183,7 +183,7 @@ function AgentCard({
                   }}
                 >
                   <Lock className="w-3 h-3 mr-2" />
-                  Unlock with Signature
+                  Unlock with Studio
                 </Button>
               </Link>
             )}
@@ -266,7 +266,7 @@ export default function AgentsPage() {
                     : "Complete your quiz to unlock your matched agent."}
                 </p>
                 <p className="text-white/35 text-xs">
-                  Signature members unlock all 6 agents — from $29/month.
+                  MetaHers Studio members unlock the full AI concierge team — from $29/month.
                 </p>
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
@@ -302,7 +302,7 @@ export default function AgentsPage() {
               }}
             >
               <Crown className="w-3 h-3" />
-              All 6 agents unlocked — Signature member
+              Full AI concierge team unlocked — Studio member
             </div>
           )}
         </div>
@@ -328,7 +328,7 @@ export default function AgentsPage() {
               Ready to work with your full team?
             </p>
             <p className="text-white/35 text-sm mb-7 max-w-md mx-auto leading-relaxed">
-              Signature unlocks all 6 agents, the full learning curriculum, and
+              MetaHers Studio unlocks the full AI concierge team, the complete Learning Hub, and
               the complete AI toolkit.
             </p>
             <Link href="/upgrade">
@@ -336,7 +336,7 @@ export default function AgentsPage() {
                 className={`${GOLD_BTN} px-10 py-3`}
                 style={GOLD_STYLE}
               >
-                Explore Signature — from $29/month
+                Explore MetaHers Studio — from $29/month
               </Button>
             </Link>
           </div>

@@ -590,7 +590,7 @@ export const insertSessionRegistrationSchema = createInsertSchema(sessionRegistr
 export type InsertSessionRegistration = z.infer<typeof insertSessionRegistrationSchema>;
 export type SessionRegistrationDB = typeof sessionRegistrations.$inferSelect;
 
-// MetaHers Membership - 1:1 Bookings table (for Inner Circle quarterly and Founder's Circle monthly)
+// MetaHers Membership - legacy 1:1 bookings table
 export const oneOnOneBookings = pgTable("one_on_one_bookings", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
@@ -615,7 +615,7 @@ export const insertOneOnOneBookingSchema = createInsertSchema(oneOnOneBookings).
 export type InsertOneOnOneBooking = z.infer<typeof insertOneOnOneBookingSchema>;
 export type OneOnOneBookingDB = typeof oneOnOneBookings.$inferSelect;
 
-// MetaHers Membership - Founder Insights table (exclusive content for Inner Circle and above)
+// MetaHers Membership - legacy founder insights table
 export const founderInsights = pgTable("founder_insights", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   title: varchar("title").notNull(),

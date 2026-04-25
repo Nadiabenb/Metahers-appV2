@@ -1,6 +1,6 @@
 import { useAuth } from "@/hooks/useAuth";
 import { useEffect } from "react";
-import { PRICING_PLANS, type SubscriptionTier } from "@shared/pricing";
+import { PRICING_PLANS, formatPrice, type SubscriptionTier } from "@shared/pricing";
 import { Check, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { trackCTAClick } from "@/lib/analytics";
@@ -9,14 +9,14 @@ const GOLD = "#C9A96E";
 const NAVY = "#1A1A2E";
 const BLUSH = "#F2E0D6";
 
-const TIER_ORDER: SubscriptionTier[] = ['free', 'signature_monthly', 'private_monthly'];
+const TIER_ORDER: SubscriptionTier[] = ['ai_blueprint', 'signature_monthly', 'private_monthly'];
 
 export default function UpgradePage() {
   const { user } = useAuth();
   const currentTier = (user?.subscriptionTier || 'free') as SubscriptionTier;
 
   useEffect(() => {
-    document.title = "Membership - MetaHers";
+    document.title = "Build Your AI Operating System - MetaHers";
   }, []);
 
   const handleUpgrade = (tier: SubscriptionTier) => {
@@ -52,7 +52,7 @@ export default function UpgradePage() {
           className="text-xs font-mono uppercase tracking-[0.25em] mb-4"
           style={{ color: GOLD }}
         >
-          Membership
+          MetaHers Offers
         </motion.p>
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
@@ -61,7 +61,7 @@ export default function UpgradePage() {
           className="text-4xl sm:text-5xl font-light mb-4 text-white"
           style={{ fontFamily: "Georgia, 'Playfair Display', serif" }}
         >
-          Choose your level
+          Build your AI operating system
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 12 }}
@@ -70,7 +70,7 @@ export default function UpgradePage() {
           className="text-base max-w-xl mx-auto font-light"
           style={{ color: 'rgba(255,255,255,0.6)' }}
         >
-          Your AI team. Live calls. Nadia in your corner whenever you need her.
+          Start with the path that fits your stage: a private AI Blueprint, a monthly Studio, or application-based advisory.
         </motion.p>
       </section>
 
@@ -80,7 +80,7 @@ export default function UpgradePage() {
           {TIER_ORDER.map((tier, index) => {
             const plan = PRICING_PLANS[tier];
             const isCurrentTier = tier === currentTier;
-            const isHighlighted = plan.highlighted;
+            const isHighlighted = tier === 'ai_blueprint' || plan.highlighted;
 
             return (
               <motion.div
@@ -113,16 +113,18 @@ export default function UpgradePage() {
                   >
                     {plan.displayName}
                   </h3>
-                  <p className="text-sm mb-6" style={{ color: '#6B6B7B' }}>
+                  <p className="text-sm mb-6 min-h-[60px]" style={{ color: '#6B6B7B' }}>
                     {plan.description}
                   </p>
 
                   <div className="mb-6">
                     <span className="text-4xl font-light" style={{ color: NAVY, fontFamily: "Georgia, serif" }}>
-                      {plan.price === 0 ? 'Free' : `$${plan.price}`}
+                      {formatPrice(plan.price, plan.interval).replace('/mo', '')}
                     </span>
                     {plan.price > 0 && (
-                      <span className="text-sm ml-1" style={{ color: '#6B6B7B' }}>/mo</span>
+                      <span className="text-sm ml-1" style={{ color: '#6B6B7B' }}>
+                        {plan.interval === 'one_time' ? 'one-time' : '/mo'}
+                      </span>
                     )}
                   </div>
 
@@ -169,7 +171,7 @@ export default function UpgradePage() {
         </div>
       </section>
 
-      {/* Signature highlight — the offer in plain language */}
+      {/* Studio highlight — the offer in plain language */}
       <section className="py-16 px-6" style={{ background: '#FAF6F3' }}>
         <div className="max-w-3xl mx-auto">
           <motion.div
@@ -182,31 +184,31 @@ export default function UpgradePage() {
               className="text-xs font-mono uppercase tracking-[0.25em] mb-4"
               style={{ color: GOLD }}
             >
-              What Signature actually means
+              What MetaHers Studio gives you
             </p>
             <h2
               className="text-3xl sm:text-4xl font-light mb-6"
               style={{ fontFamily: "Georgia, 'Playfair Display', serif", color: NAVY }}
             >
-              You will never be stuck and alone in this.
+              A practical monthly space for implementing AI with structure.
             </h2>
             <div className="grid sm:grid-cols-2 gap-6">
               {[
                 {
-                  title: "Your welcome call",
-                  body: "When you join, we schedule a 45-minute 1:1 call. Just us — to map exactly how AI fits your business and what you're building.",
+                  title: "Daily AI concierge access",
+                  body: "Use the MetaHers AI concierge team to plan content, clarify offers, organize workflows, and make faster implementation decisions.",
                 },
                 {
-                  title: "Bi-weekly live calls",
-                  body: "Every two weeks: real AI tool demos, workflow walkthroughs, and a hot seat where you can bring your actual questions to Nadia directly.",
+                  title: "Monthly implementation lab",
+                  body: "Join a guided live lab focused on applying AI to real founder workflows, not collecting more theory.",
                 },
                 {
-                  title: "Unlimited unstuck sessions",
-                  body: "Hit a wall on your launch, your content, your systems? Book a focused working session with Nadia. No extra charge. No waiting list.",
+                  title: "Group Q&A and office hours",
+                  body: "Bring questions to the monthly group support space and learn from other women founders implementing AI.",
                 },
                 {
-                  title: "Your AI concierge team",
-                  body: "ARIA and five specialists — Bella, Luna, Nova, Sage, and Noor — already briefed on your goals before you type a word.",
+                  title: "Tools, prompts, and learning",
+                  body: "Access the Learning Hub, AI Toolkit, prompt library, MetaHers Signal archive, and early product drops in one place.",
                 },
               ].map((item, i) => (
                 <motion.div
@@ -231,7 +233,7 @@ export default function UpgradePage() {
               ))}
             </div>
             <p className="text-sm mt-8 font-light" style={{ color: '#6B6B7B' }}>
-              All of this for $29 a month. One good piece of content from Noor covers the first three months.
+              MetaHers Studio is built for founders who want a steady monthly implementation rhythm without committing to private advisory.
             </p>
           </motion.div>
         </div>
@@ -259,7 +261,7 @@ export default function UpgradePage() {
               The AI Blueprint
             </h2>
             <p className="text-base font-light mb-2" style={{ color: 'rgba(255,255,255,0.65)' }}>
-              4 weeks. 1:1 with Nadia. A complete AI system built around your business and life.
+              {PRICING_PLANS.ai_blueprint.description}
             </p>
             <div className="flex items-baseline gap-3 mb-6">
               <span className="text-4xl font-light text-white" style={{ fontFamily: "Georgia, serif" }}>
@@ -284,7 +286,7 @@ export default function UpgradePage() {
             </ul>
 
             <p className="text-sm mb-8 italic" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              Includes 3 months Signature membership after completion.
+              Includes 3 months MetaHers Studio after completion.
             </p>
 
             <button
@@ -296,7 +298,7 @@ export default function UpgradePage() {
               style={{ background: GOLD, color: NAVY }}
               data-testid="button-upgrade-ai-blueprint"
             >
-              Apply Now
+              {PRICING_PLANS.ai_blueprint.buttonText}
               <ArrowRight className="w-4 h-4" />
             </button>
           </motion.div>

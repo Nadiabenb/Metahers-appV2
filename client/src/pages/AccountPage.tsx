@@ -322,13 +322,13 @@ export default function AccountPage() {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-serif text-lg font-semibold text-foreground mb-2">
-                          Upgrade to Signature
+                          Upgrade to MetaHers Studio
                         </h4>
                         <p className="text-sm text-foreground/80 mb-1">
                           Unlock all rituals, AI agents, and the full prompt library.
                         </p>
                         <p className="text-xs text-foreground/50 mb-4">
-                          Signature — $29/mo &nbsp;·&nbsp; Private — $149/mo
+                          MetaHers Studio — $29/mo &nbsp;·&nbsp; Private Advisory — $149/mo
                         </p>
                         <div className="flex gap-3">
                           <Button
@@ -337,7 +337,7 @@ export default function AccountPage() {
                             data-testid="button-upgrade-signature"
                           >
                             <Crown className="w-4 h-4" />
-                            Signature — $29/mo
+                            MetaHers Studio — $29/mo
                           </Button>
                           <Button
                             onClick={() => window.open("https://buy.stripe.com/14A5kE7GP6E493kcX63Nm0b", "_blank")}
@@ -345,7 +345,7 @@ export default function AccountPage() {
                             className="gap-2"
                             data-testid="button-upgrade-private"
                           >
-                            Private — $149/mo
+                            Private Advisory — $149/mo
                           </Button>
                         </div>
                       </div>

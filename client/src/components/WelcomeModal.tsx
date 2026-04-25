@@ -136,7 +136,7 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
                 </Button>
               </div>
 
-              {/* Signature CTA on last step — soft, not pushy */}
+              {/* MetaHers Studio CTA on last step — soft, not pushy */}
               {isLastStep && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -151,7 +151,7 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
                     <button className="text-xs flex items-center gap-1 mx-auto transition-colors"
                       style={{ color: "#C9A96E" }}>
                       <Crown className="w-3 h-3" />
-                      Explore Signature — from $29/month
+                      Explore Studio — from $29/month
                     </button>
                   </Link>
                 </motion.div>

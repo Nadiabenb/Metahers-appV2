@@ -165,16 +165,16 @@ async function sendMembershipEmails(params: {
 
   const tierConfig = {
     free: {
-      memberSubject: 'Welcome to MetaHers Inner Circle ✨',
+      memberSubject: 'Welcome to MetaHers AI Starter Kit ✨',
       memberBody: `
         <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #2d2d2d;">
           <div style="background: linear-gradient(135deg, #f9f3ee 0%, #fdf8f4 100%); padding: 40px 32px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: 2px solid #C9A96E;">
             <h1 style="font-family: 'Georgia', serif; color: #C9A96E; font-size: 28px; margin: 0 0 8px;">MetaHers</h1>
-            <p style="color: #8a7560; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Inner Circle</p>
+            <p style="color: #8a7560; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">AI Starter Kit</p>
           </div>
           <div style="background: #ffffff; padding: 40px 32px;">
             <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">Welcome, ${displayName} ✨</h2>
-            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">You're officially part of the MetaHers Inner Circle — a community of ambitious women building businesses and careers powered by AI.</p>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">You're officially part of the MetaHers AI Starter Kit — a community of ambitious women building businesses and careers powered by AI.</p>
             <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 24px;">Here's how to get started:</p>
             <table style="width: 100%; border-collapse: collapse; margin: 0 0 28px;">
               <tr>
@@ -198,38 +198,38 @@ async function sendMembershipEmails(params: {
             <div style="text-align: center; margin: 32px 0;">
               <a href="https://app.metahers.ai/dashboard" style="background: #C9A96E; color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 6px; font-size: 15px; font-weight: 600; letter-spacing: 0.5px;">Enter Your Dashboard →</a>
             </div>
-            <p style="line-height: 1.7; color: #4a4a4a; margin: 28px 0 0; font-size: 13px;">Ready to accelerate? Our <strong>Signature membership</strong> unlocks the full learning curriculum, all six AI agents, and our private community. <a href="https://app.metahers.ai/upgrade" style="color: #C9A96E;">Explore Signature →</a></p>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 28px 0 0; font-size: 13px;">Ready to accelerate? Our <strong>MetaHers Studio</strong> unlocks the full learning curriculum, all six AI agents, and our private community. <a href="https://app.metahers.ai/upgrade" style="color: #C9A96E;">Explore Studio →</a></p>
           </div>
           <div style="background: #f9f3ee; padding: 24px 32px; border-radius: 0 0 12px 12px; text-align: center;">
             <p style="color: #8a7560; font-size: 12px; margin: 0;">MetaHers · <a href="https://metahers.ai" style="color: #C9A96E; text-decoration: none;">metahers.ai</a></p>
           </div>
         </div>
       `,
-      nadiaSubject: `🌸 New Inner Circle Member: ${memberEmail}`,
+      nadiaSubject: `🌸 New AI Starter Kit Member: ${memberEmail}`,
       nadiaBody: `
-        <h2>New Inner Circle Signup</h2>
+        <h2>New AI Starter Kit Signup</h2>
         <p><strong>Name:</strong> ${memberName || 'Not provided'}</p>
         <p><strong>Email:</strong> ${memberEmail}</p>
-        <p><strong>Tier:</strong> Inner Circle (Free)</p>
+        <p><strong>Tier:</strong> AI Starter Kit (Free)</p>
         <p><strong>Time:</strong> ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })} PT</p>
       `,
     },
     signature: {
-      memberSubject: "Welcome to MetaHers Signature — You're In 🌟",
+      memberSubject: "Welcome to MetaHers Studio — You're In 🌟",
       memberBody: `
         <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #2d2d2d;">
           <div style="background: linear-gradient(135deg, #f9f3ee 0%, #fdf8f4 100%); padding: 40px 32px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: 2px solid #C9A96E;">
             <h1 style="font-family: 'Georgia', serif; color: #C9A96E; font-size: 28px; margin: 0 0 8px;">MetaHers</h1>
-            <p style="color: #8a7560; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Signature Member</p>
+            <p style="color: #8a7560; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">MetaHers Studio Member</p>
           </div>
           <div style="background: #ffffff; padding: 40px 32px;">
-            <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">You're a Signature Member, ${displayName} 🌟</h2>
+            <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">You're a MetaHers Studio Member, ${displayName} 🌟</h2>
             <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">Your membership is now active. You have full access to everything MetaHers has to offer.</p>
             <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 24px;"><strong>What's unlocked for you:</strong></p>
             <table style="width: 100%; border-collapse: collapse; margin: 0 0 28px;">
               <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Full AI learning curriculum — all four pillars (Learn, Build, Monetize, Brand with AI)</td></tr>
               <tr><td style="height: 8px;"></td></tr>
-              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; All six AI agents — Bella, Nova, Luna, Sage, Noor &amp; Vita — unlimited access</td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Daily access to the MetaHers AI concierge team</td></tr>
               <tr><td style="height: 8px;"></td></tr>
               <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Curated AI Tools Library with editorial picks and how-to guides</td></tr>
               <tr><td style="height: 8px;"></td></tr>
@@ -245,29 +245,29 @@ async function sendMembershipEmails(params: {
           </div>
         </div>
       `,
-      nadiaSubject: `💛 New Signature Member: ${memberEmail}`,
+      nadiaSubject: `💛 New MetaHers Studio Member: ${memberEmail}`,
       nadiaBody: `
-        <h2>New Signature Subscription</h2>
+        <h2>New MetaHers Studio Subscription</h2>
         <p><strong>Name:</strong> ${memberName || 'Not provided'}</p>
         <p><strong>Email:</strong> ${memberEmail}</p>
-        <p><strong>Tier:</strong> Signature (~$29/month)</p>
+        <p><strong>Tier:</strong> MetaHers Studio (/month)</p>
         <p><strong>Time:</strong> ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })} PT</p>
       `,
     },
     private: {
-      memberSubject: 'Welcome to MetaHers Private — Your Exclusive Access Awaits 🔑',
+      memberSubject: 'Welcome to MetaHers Private Advisory — Your Exclusive Access Awaits 🔑',
       memberBody: `
         <div style="font-family: 'Georgia', serif; max-width: 600px; margin: 0 auto; color: #2d2d2d;">
           <div style="background: linear-gradient(135deg, #2d2520 0%, #3d2f28 100%); padding: 40px 32px; border-radius: 12px 12px 0 0; text-align: center; border-bottom: 2px solid #C9A96E;">
             <h1 style="font-family: 'Georgia', serif; color: #C9A96E; font-size: 28px; margin: 0 0 8px;">MetaHers</h1>
-            <p style="color: #d4b896; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Private Member</p>
+            <p style="color: #d4b896; margin: 0; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;">Private Advisory Member</p>
           </div>
           <div style="background: #ffffff; padding: 40px 32px;">
-            <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">Welcome to Private, ${displayName} 🔑</h2>
-            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">You've joined our most exclusive tier. Everything in Signature, plus priority access, advanced experiences, and direct support from Nadia's team.</p>
+            <h2 style="font-family: 'Georgia', serif; color: #2d2d2d; font-size: 24px; margin: 0 0 20px;">Welcome to Private Advisory, ${displayName} 🔑</h2>
+            <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 16px;">You've joined our most exclusive tier. Everything in MetaHers Studio, plus priority access, advanced experiences, and direct support from Nadia's team.</p>
             <p style="line-height: 1.7; color: #4a4a4a; margin: 0 0 24px;"><strong>Your Private benefits:</strong></p>
             <table style="width: 100%; border-collapse: collapse; margin: 0 0 28px;">
-              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Everything in Signature, fully unlocked</td></tr>
+              <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Everything in MetaHers Studio, fully unlocked</td></tr>
               <tr><td style="height: 8px;"></td></tr>
               <tr><td style="padding: 10px 16px; background: #fdf8f4; border-radius: 8px; border-left: 3px solid #C9A96E; display: block;"><strong style="color: #C9A96E;">✦</strong>&nbsp; Priority support and direct access to Nadia's team</td></tr>
               <tr><td style="height: 8px;"></td></tr>
@@ -595,9 +595,9 @@ async function sendSequenceEmail(
           <p>I see you've been in, ${name}. Good.</p>
           <p>Here's something most people miss at this stage: the biggest leverage isn't using AI for the obvious tasks. It's using it for the things you've been quietly procrastinating on for months.</p>
           <p>Things like: the course you have all the knowledge for but haven't structured. The newsletter you keep meaning to start. The website homepage that still says what your business was, not what it is now. The sales page you've been rewriting in your head for a year.</p>
-          <p>Your specialists can move all of those from your to-do list to done — this week. As a Signature member you get full daily access to all five, plus bi-weekly live calls and your 45-minute welcome call with me when you join.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what Signature includes</a></p>
-          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Challenge before you upgrade</strong>Ask Noor to rewrite your website homepage headline. Takes 3 minutes. If it's better than what you have, you'll know Signature is worth it.</p>
+          <p>Your specialists can move all of those from your to-do list to done — this week. MetaHers Studio gives you daily access to the AI concierge team, the complete Learning Hub, the AI Toolkit, and monthly implementation support.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what MetaHers Studio includes</a></p>
+          <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Challenge before you upgrade</strong>Ask Noor to rewrite your website homepage headline. Takes 3 minutes. If it's better than what you have, you'll know MetaHers Studio is worth it.</p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
         `,
       },
@@ -620,8 +620,8 @@ async function sendSequenceEmail(
           <p>I see you've been in, ${name}.</p>
           <p>Here's what I see ambitious creatives do once they find their rhythm in MetaHers: they stop leaving money in ideas that never launch. The course built from their methodology. The newsletter that turns their process into a following. The workshop they could run quarterly.</p>
           <p>None of those require more talent than you already have. They just require a team to help you package and present what you've built.</p>
-          <p>As a Signature member, your specialists are available every day — plus your 45-minute welcome call with me and bi-weekly live calls.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what Signature includes</a></p>
+          <p>MetaHers Studio gives you daily access to the AI concierge team, the Learning Hub, the AI Toolkit, and monthly implementation support.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what MetaHers Studio includes</a></p>
           <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Challenge</strong>Ask Nova to outline a workshop you could run based on your creative expertise. You might surprise yourself.</p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
         `,
@@ -646,8 +646,8 @@ async function sendSequenceEmail(
           <p>I see you've been in, ${name}. That already puts you ahead.</p>
           <p>Here's what I see moms doing once they settle into MetaHers: they start reclaiming the hours that used to disappear into planning. And some of them — the ones who've been quietly sitting on a business idea — finally start moving on it.</p>
           <p>Because when the mental load of the family side has support, there's something left over for you.</p>
-          <p>As a Signature member you get full daily access to all five specialists, the Learning Hub, the AI Toolkit, and your 45-minute welcome call with me.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what Signature includes</a></p>
+          <p>MetaHers Studio gives you daily access to the AI concierge team, the Learning Hub, the AI Toolkit, and monthly implementation support.</p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">See what MetaHers Studio includes</a></p>
           <p style="border-left:2px solid #D4537E;padding:10px 14px;background:#fdf5f7;margin-top:20px;font-size:13px;"><strong style="color:#D4537E;display:block;margin-bottom:4px;font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Challenge</strong>Ask Sage one question you've been sitting on about your life or business direction. Just one. See what she gives you.</p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
         `,
@@ -710,16 +710,16 @@ async function sendSequenceEmail(
         subject: `${name}, here's the full picture`,
         html: `
           <p>Hi ${name},</p>
-          <p>You've had a taste of what the specialists can do. Here's what full access looks like as a Signature member:</p>
+          <p>You've had a taste of what the specialists can do. Here's what full access looks like as a MetaHers Studio member:</p>
           <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
             <li style="margin-bottom:8px;">Full daily access to all five specialists — already briefed on your business</li>
             <li style="margin-bottom:8px;">The complete Learning Hub and AI Toolkit</li>
-            <li style="margin-bottom:8px;">Bi-weekly live calls — real tool demos, workflow walkthroughs, and hot seats with me</li>
-            <li style="margin-bottom:8px;">A 45-minute welcome call with me when you join — your AI strategy, mapped specifically for your business</li>
-            <li>Unlimited unstuck sessions — whenever something stalls, you book a focused session with me directly. No extra charge.</li>
+            <li style="margin-bottom:8px;">Monthly live implementation lab</li>
+            <li style="margin-bottom:8px;">Monthly group Q&A or office hours for practical implementation questions</li>
+            <li>Prompt library, MetaHers Signal archive, community access, and early product drops</li>
           </ul>
           <p>Most tools leave you to figure it out alone. I don't. All of that for $29 a month. One good sales page from Noor pays for six months.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to Signature</a></p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to MetaHers Studio</a></p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
         `,
       },
@@ -727,16 +727,16 @@ async function sendSequenceEmail(
         subject: `${name}, here's the full picture`,
         html: `
           <p>Hi ${name},</p>
-          <p>Full access as a Signature member — here's what that means for your creative practice:</p>
+          <p>Full access as a MetaHers Studio member — here's what that means for your creative practice:</p>
           <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
             <li style="margin-bottom:8px;">Full daily access to Bella, Luna, Nova, Sage, and Noor</li>
             <li style="margin-bottom:8px;">The complete Learning Hub and AI Toolkit — curated, not overwhelming</li>
-            <li style="margin-bottom:8px;">Bi-weekly live calls — real demos and hot seats with me</li>
-            <li style="margin-bottom:8px;">A 45-minute welcome call — we map your AI strategy around your creative work specifically</li>
-            <li>Unlimited unstuck sessions — stalled on a proposal, a pitch, a project? Book a session and we work through it.</li>
+            <li style="margin-bottom:8px;">Monthly live implementation lab</li>
+            <li style="margin-bottom:8px;">Monthly group Q&A or office hours for practical implementation questions</li>
+            <li>Prompt library, MetaHers Signal archive, community access, and early product drops</li>
           </ul>
           <p>Your work deserves the support that makes it easier to exist in the world. $29 a month. One good client proposal from Noor covers three months.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to Signature</a></p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to MetaHers Studio</a></p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
         `,
       },
@@ -744,16 +744,16 @@ async function sendSequenceEmail(
         subject: `${name}, here's the full picture`,
         html: `
           <p>Hi ${name},</p>
-          <p>Here's what full access looks like as a Signature member:</p>
+          <p>Here's what full access looks like as a MetaHers Studio member:</p>
           <ul style="background:#f9f5f2;padding:16px 20px;border-radius:4px;list-style:none;margin:0 0 16px;">
             <li style="margin-bottom:8px;">Full daily access to Nova, Sage, Noor, Bella, and Luna</li>
             <li style="margin-bottom:8px;">The complete Learning Hub and AI Toolkit — practical, not overwhelming</li>
-            <li style="margin-bottom:8px;">Bi-weekly live calls — real demos, real questions, real answers from me</li>
-            <li style="margin-bottom:8px;">A 45-minute welcome call — to map out how AI fits your life and what you're building in it</li>
-            <li>Unlimited unstuck sessions — whenever something stalls, you book time with me and we work through it. No extra charge.</li>
+            <li style="margin-bottom:8px;">Monthly live implementation lab</li>
+            <li style="margin-bottom:8px;">Monthly group Q&A or office hours for practical implementation questions</li>
+            <li>Prompt library, MetaHers Signal archive, community access, and early product drops</li>
           </ul>
           <p>You will never be left to figure this out alone. $29 a month. Less than a weekly coffee run.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to Signature</a></p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Upgrade to MetaHers Studio</a></p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia</p>
         `,
       },
@@ -765,9 +765,9 @@ async function sendSequenceEmail(
           <p>Two weeks ago you joined MetaHers, ${name}.</p>
           <p>I don't know exactly where you are — maybe you've been building, maybe life got loud, maybe you're still finding your way in. All of that is fine.</p>
           <p>What I do know is that your business deserves more than you trying to figure out AI alone at 11pm. It deserves a team, a strategy, and someone who will sit down with you and actually work through the stuck parts.</p>
-          <p>That's what Signature is. $29 a month. Your welcome call is waiting to be scheduled. Your unstuck sessions have no limit. Your specialists know your business.</p>
+          <p>That is what MetaHers Studio is: a  monthly implementation space with daily AI concierge access, guided learning, prompts, tools, and monthly support.</p>
           <p>You will never be in this alone. That's the promise.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a Signature member</a></p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a MetaHers Studio member</a></p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
         `,
       },
@@ -776,9 +776,9 @@ async function sendSequenceEmail(
         html: `
           <p>Two weeks ago you joined MetaHers, ${name}.</p>
           <p>I built this for women like you — creative, driven, and tired of feeling like the tools everyone talks about weren't really designed with you in mind.</p>
-          <p>Signature is $29 a month. Your 45-minute welcome call is waiting. Your specialists are briefed. And whenever your work hits a wall — creatively, strategically, or practically — you can book a session with me directly.</p>
+          <p>MetaHers Studio is  a month. Your specialists are available daily, with guided learning, prompts, tools, and monthly implementation support.</p>
           <p>You deserve a practice that has real support behind it.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a Signature member</a></p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a MetaHers Studio member</a></p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
         `,
       },
@@ -787,9 +787,9 @@ async function sendSequenceEmail(
         html: `
           <p>Two weeks ago you joined MetaHers, ${name}.</p>
           <p>I know your days are full. I know the gap between "I should use this" and actually opening the app can feel enormous when you're running on whatever's left after everyone else's needs are met.</p>
-          <p>That's exactly why Signature exists the way it does. Your welcome call is there so you're not starting from scratch. Your unstuck sessions mean that whenever you hit a wall, you have someone to sit down with you.</p>
+          <p>That is why MetaHers Studio exists: you get a practical monthly implementation rhythm, daily AI concierge access, and guided support without starting from scratch.</p>
           <p>You're not doing this alone. That's the whole point.</p>
-          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a Signature member</a></p>
+          <p><a href="${upgradeUrl}" style="display:inline-block;padding:10px 20px;background:#C9A96E;color:#1A1A2E;text-decoration:none;font-weight:600;border-radius:4px;">Join as a MetaHers Studio member</a></p>
           <p style="color:#888;font-size:13px;margin-top:20px;">Nadia<br>Founder, MetaHers</p>
         `,
       },
@@ -817,7 +817,7 @@ async function sendSequenceEmail(
     <body style="font-family:Georgia,'Playfair Display',serif;max-width:600px;margin:0 auto;padding:32px 24px;color:#1A1A2E;line-height:1.75;">
       ${content.html}
       <hr style="border:none;border-top:1px solid #E0D5CC;margin:32px 0;">
-      <p style="font-size:12px;color:#aaa;">You're receiving this because you joined MetaHers Inner Circle.<br>
+      <p style="font-size:12px;color:#aaa;">You're receiving this because you joined MetaHers AI Starter Kit.<br>
       <a href="https://app.metahers.ai" style="color:#C9A96E;">app.metahers.ai</a></p>
     </body>
     </html>
@@ -1404,7 +1404,7 @@ Return ONLY valid JSON:
       quizCompletedAt: quizSubmission ? new Date() : null,
     });
 
-    // Send welcome email to new Inner Circle member (fire-and-forget)
+    // Send welcome email to new AI Starter Kit member (fire-and-forget)
     sendMembershipEmails({
       type: 'free',
       memberEmail: user.email,
@@ -2759,7 +2759,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   }));
 
   // ===== JOURNAL ROUTES =====
-  // Tier check for AI-only journal features (Signature+ required)
+  // Tier check for AI-only journal features (MetaHers Studio+ required)
   const requiresSignatureForJournal: RequestHandler = async (req, res, next) => {
     if (!req.session || !req.session.userId) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -2767,7 +2767,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     const { isSignatureTier } = await import("../shared/pricing");
     const user = await storage.getUser(req.session.userId);
     if (!user || !isSignatureTier(user.subscriptionTier as any)) {
-      return res.status(403).json({ message: "AI journal features require Signature membership or higher.", requiredTier: "signature_monthly" });
+      return res.status(403).json({ message: "AI journal features require MetaHers Studio or higher.", requiredTier: "signature_monthly" });
     }
     return next();
   };
@@ -2875,7 +2875,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         ? 0 
         : finalContent.trim().split(/\s+/).filter(w => w.length > 0).length;
 
-      // Generate AI insights if content is substantial (Signature+ only)
+      // Generate AI insights if content is substantial (MetaHers Studio+ only)
       let aiInsights = undefined;
       const { isSignatureTier } = await import("../shared/pricing");
       const user = await storage.getUser(userId);
@@ -2917,7 +2917,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // AI Journal Prompt Generation (Signature+ only)
+  // AI Journal Prompt Generation (MetaHers Studio+ only)
   app.get('/api/journal/prompt', isAuthenticated, requiresSignatureForJournal, asyncHandler(async (req: Request, res) => {
     const userId = req.session!.userId as string;
     const user = await storage.getUser(userId);
@@ -2939,7 +2939,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   }));
 
-  // AI Journal Analysis (Signature+ only)
+  // AI Journal Analysis (MetaHers Studio+ only)
   app.post('/api/journal/analyze', isAuthenticated, requiresSignatureForJournal, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
@@ -2965,7 +2965,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // AI Journal Coach Chat (Signature+ only)
+  // AI Journal Coach Chat (MetaHers Studio+ only)
   app.post('/api/journal/chat', isAuthenticated, requiresSignatureForJournal, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
@@ -4365,7 +4365,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // ONE-ON-ONE BOOKINGS (Inner Circle and above)
+  // ONE-ON-ONE BOOKINGS (legacy paid tiers)
   app.post('/api/bookings', isInnerCircleMember, async (req: Request, res) => {
     try {
       const userId = req.session!.userId!;
@@ -4450,7 +4450,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     }
   });
 
-  // FOUNDER INSIGHTS (Inner Circle and above)
+  // FOUNDER INSIGHTS (legacy paid tiers)
   app.get('/api/insights', isInnerCircleMember, async (req: Request, res) => {
     try {
       const limit = parseInt(req.query.limit as string) || 20;

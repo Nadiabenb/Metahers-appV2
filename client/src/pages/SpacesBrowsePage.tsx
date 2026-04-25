@@ -348,7 +348,7 @@ export default function SpacesBrowsePage() {
                 Unlock Every Space
               </h2>
               <p className="text-sm mb-6" style={{ color: "rgba(255,255,255,0.6)" }}>
-                Signature members get unlimited access to all 10 spaces, 54+ rituals, and live workshops.
+                MetaHers Studio members get the complete Learning Hub, AI concierge team, toolkit, and monthly implementation support.
               </p>
               <Button
                 onClick={() => setLocation("/upgrade")}
@@ -356,7 +356,7 @@ export default function SpacesBrowsePage() {
                 style={{ background: GOLD, color: "#1A1A2E" }}
                 data-testid="button-upgrade-spaces"
               >
-                Explore Signature
+                Explore Studio
               </Button>
             </div>
           </div>

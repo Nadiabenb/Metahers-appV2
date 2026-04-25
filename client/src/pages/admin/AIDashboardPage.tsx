@@ -17,13 +17,13 @@ const AGENT_COLORS: Record<string, string> = {
 };
 
 const TIER_LABELS: Record<string, string> = {
-  free: 'Inner Circle', signature_monthly: 'Signature',
-  private_monthly: 'Private', ai_blueprint: 'Blueprint',
+  free: 'AI Starter Kit', signature_monthly: 'MetaHers Studio',
+  private_monthly: 'Private Advisory', ai_blueprint: 'The AI Blueprint',
   // Legacy tier aliases
-  pro: 'Signature', pro_monthly: 'Signature', pro_annual: 'Signature',
-  vip: 'Private', sanctuary: 'Private',
-  inner_circle: 'Inner Circle', vip_cohort: 'Private',
-  founders_circle: 'Private', executive: 'Private',
+  pro: 'MetaHers Studio', pro_monthly: 'MetaHers Studio', pro_annual: 'MetaHers Studio',
+  vip: 'Private Advisory', sanctuary: 'Private Advisory',
+  inner_circle: 'AI Starter Kit', vip_cohort: 'Private Advisory',
+  founders_circle: 'Private Advisory', executive: 'Private Advisory',
 };
 
 const TIER_COLORS: Record<string, string> = {

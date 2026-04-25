@@ -255,7 +255,7 @@ export default function DashboardPage() {
                   style={{ background: "#C9A96E22", color: "#C9A96E", border: "1px solid #C9A96E44" }}
                 >
                   <Crown className="w-3 h-3" />
-                  Signature
+                  Studio
                 </span>
               )}
             </div>
@@ -273,7 +273,7 @@ export default function DashboardPage() {
                       That puts you ahead of most people who say they want to learn AI.
                     </p>
                     <p className="text-white/40 text-sm mb-5">
-                      Signature unlocks all 54 rituals, unlimited agent access, and the full AI toolkit — from $29/month.
+                      MetaHers Studio unlocks the complete Learning Hub, daily AI concierge access, and the full AI Toolkit — from $29/month.
                     </p>
                     <div className="flex flex-wrap gap-3">
                       <Link href="/upgrade">
@@ -413,7 +413,7 @@ export default function DashboardPage() {
                               {isLocked && (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-1" style={{ background: "rgba(13,11,20,0.82)" }}>
                                   <Crown className="w-4 h-4" style={{ color: "#C9A96E" }} />
-                                  <span className="text-xs font-medium tracking-widest uppercase" style={{ color: "#C9A96E", fontSize: "9px" }}>Signature</span>
+                                  <span className="text-xs font-medium tracking-widest uppercase" style={{ color: "#C9A96E", fontSize: "9px" }}>Studio</span>
                                 </div>
                               )}
                               <p className="absolute bottom-2 left-2 right-2 text-white text-xs font-medium leading-tight truncate">
@@ -466,7 +466,7 @@ export default function DashboardPage() {
                   <div>
                     <p className="text-white font-medium mb-1">Ready for more?</p>
                     <p className="text-white/50 text-sm">
-                      Signature members get unlimited access to all 54 rituals, all 6 AI agents, and monthly live workshops.
+                      MetaHers Studio members get the complete Learning Hub, daily AI concierge access, the AI Toolkit, and monthly implementation support.
                     </p>
                   </div>
                   <Link href="/upgrade" className="shrink-0">
@@ -474,7 +474,7 @@ export default function DashboardPage() {
                       className={`${GOLD_BTN} whitespace-nowrap`}
                       style={GOLD_STYLE}
                     >
-                      Explore Signature
+                      Explore Studio
                     </Button>
                   </Link>
                 </CardContent>

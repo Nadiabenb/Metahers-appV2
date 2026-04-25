@@ -70,6 +70,9 @@ export default function MemberWorkspacePage() {
 
   const tierBadgeColors = {
     free: 'bg-muted text-foreground',
+    signature_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
+    private_monthly: 'bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] text-white',
+    ai_blueprint: 'bg-gradient-to-r from-[hsl(var(--liquid-gold))] via-[hsl(var(--magenta-quartz))] to-[hsl(var(--hyper-violet))] text-white',
     pro_monthly: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     pro_annual: 'bg-gradient-to-r from-[hsl(var(--hyper-violet))] to-[hsl(var(--magenta-quartz))] text-white',
     sanctuary: 'bg-gradient-to-r from-[hsl(var(--cyber-fuchsia))] to-[hsl(var(--aurora-teal))] text-white',
@@ -111,7 +114,7 @@ export default function MemberWorkspacePage() {
                 {plan.badge && <Sparkles className="w-4 h-4 mr-2" />}
                 {plan.displayName}
               </Badge>
-              {tier !== 'founders_circle' && (
+              {tier !== 'ai_blueprint' && (
                 <Link href="/upgrade">
                   <Button variant="ghost" size="sm" data-testid="button-upgrade">
                     Upgrade
@@ -212,7 +215,7 @@ export default function MemberWorkspacePage() {
                 </Card>
               )}
 
-              {/* Upcoming 1:1 Bookings - Inner Circle+ */}
+              {/* Upcoming 1:1 Bookings - legacy paid tiers */}
               {hasInnerCircleAccess && (
                 <Card className="editorial-card" data-testid="card-upcoming-bookings">
                   <CardHeader>
@@ -337,11 +340,11 @@ export default function MemberWorkspacePage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-foreground mb-6">
-                      Upgrade to The Inner Circle for quarterly 1:1 check-ins, founder insights, and intimate bi-weekly sessions.
+                      Upgrade to MetaHers Studio for the complete Learning Hub, AI Toolkit, prompt library, and monthly implementation support.
                     </p>
                     <Button variant="default" asChild data-testid="button-upgrade-inner-circle">
                       <Link href="/account">
-                        Join Inner Circle
+                        Explore MetaHers Studio
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Link>
                     </Button>
@@ -369,7 +372,7 @@ export default function MemberWorkspacePage() {
                 </CardContent>
               </Card>
 
-              {/* Founder Insights - Inner Circle+ */}
+              {/* Founder Insights - legacy paid tiers */}
               {hasInnerCircleAccess && (
                 <Card className="editorial-card" data-testid="card-founder-insights">
                   <CardHeader>

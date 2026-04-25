@@ -65,11 +65,11 @@ Quiz Result → Unlocked Ritual → Complete Experience → Journal Prompt → U
 ---
 
 ### Stage 3: CONVERSION (Paid Membership)
-**Goal:** Convert to Core Membership ($79/mo)
+**Goal:** Convert to MetaHers Studio ($29/mo) or The AI Blueprint ($997 one-time)
 
 **Primary Path:**
 ```
-Upgrade Prompt → Pricing Page → Core Membership → Onboarding Flow
+Upgrade Prompt → Pricing Page → MetaHers Studio or The AI Blueprint → Onboarding Flow
 ```
 
 **Features to Prioritize:**
@@ -77,11 +77,11 @@ Upgrade Prompt → Pricing Page → Core Membership → Onboarding Flow
    - After quiz completion: "Unlock all 54 rituals"
    - After 1st ritual: "Continue your journey with 53 more"
    - Journal: "Upgrade for AI-powered insights"
-   - MetaMuse: "Unlock unlimited coaching"
+   - MetaMuse: "Unlock daily AI concierge access"
 
 2. **Pricing Page** (`/upgrade`)
    - Clear 3-tier structure
-   - Vision Discovery (Free) vs Core ($79) vs Cohort ($699)
+   - AI Starter Kit (Free) vs MetaHers Studio ($29/mo) vs The AI Blueprint ($997)
    - Social proof testimonials
    - Money-back guarantee
 
@@ -149,17 +149,17 @@ Dashboard → Voyages Page → Voyage Detail → Request Invitation → Booking
    - Invitation-only exclusivity
    - Countdown timers
 
-**Premium Path B: Cohorts**
+**Premium Path B: Private Intensive**
 ```
-Dashboard → AI Mastery Page → Application → Cohort Enrollment
+Dashboard → AI Blueprint Page → Application → Blueprint Enrollment
 ```
 
 **Features to Prioritize:**
-1. **AI Mastery Cohort** (`/ai-mastery`)
-   - 12-week intensive program
-   - Live weekly labs
-   - App Atelier sprints
-   - Direct founder access
+1. **The AI Blueprint** (`/ai-integration`)
+   - 4-week private implementation intensive
+   - AI workflow audit
+   - Custom AI operating system map
+   - 3 months MetaHers Studio included
    - $699 or 3×$233
 
 **Key Metrics:**
@@ -263,4 +263,3 @@ Track these religiously:
 - Limited-time offers (Cyber Monday banner)
 - Progress bars (gamification)
 - Community testimonials
-

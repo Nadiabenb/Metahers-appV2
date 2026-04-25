@@ -231,7 +231,7 @@ function RitualCard({
               className="text-xs px-2 py-0.5 rounded"
               style={{ background: "#FFFFFF0F", color: "#FFFFFF50" }}
             >
-              Signature
+              Studio
             </span>
           ) : isCompleted ? (
             <span className="text-xs" style={{ color: GOLD }}>
@@ -263,11 +263,11 @@ function LockedModal({ onClose }: { onClose: () => void }) {
           className="text-white text-lg font-medium mb-2"
           style={{ fontFamily: "'Playfair Display', serif" }}
         >
-          Signature Access Required
+          MetaHers Studio Access Required
         </h2>
         <p className="text-white/50 text-sm mb-6">
-          This ritual is available with Signature. Unlock all 54 rituals, all 6 AI
-          agents, and monthly live workshops for $29/month.
+          This lesson is available with MetaHers Studio. Unlock the complete Learning Hub,
+          AI concierge team, toolkit, and monthly implementation support for $29/month.
         </p>
         <div className="flex flex-col gap-3">
           <Link href="/upgrade">
@@ -275,7 +275,7 @@ function LockedModal({ onClose }: { onClose: () => void }) {
               className="w-full font-semibold uppercase tracking-widest text-xs"
               style={{ background: GOLD, color: "#1A1A2E" }}
             >
-              See Signature
+              See Studio
             </Button>
           </Link>
           <button
@@ -464,8 +464,8 @@ export default function LearningHubPage() {
                 You have access to {FREE_RITUAL_LIMIT} rituals.
               </p>
               <p className="text-white/50 text-sm">
-                Upgrade to Signature to unlock all {totalCount || 54} rituals, every AI
-                agent, and live workshops.
+                Upgrade to MetaHers Studio to unlock all {totalCount || 54} lessons, the AI
+                concierge team, and monthly implementation support.
               </p>
             </div>
             <Link href="/upgrade" className="shrink-0">
@@ -473,7 +473,7 @@ export default function LearningHubPage() {
                 className="font-semibold uppercase tracking-widest text-xs px-6 whitespace-nowrap"
                 style={{ background: GOLD, color: "#1A1A2E" }}
               >
-                Explore Signature
+                Explore Studio
               </Button>
             </Link>
           </div>

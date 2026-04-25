@@ -243,7 +243,7 @@ export function RitualStepper({
               Upgrade to unlock all steps
             </h3>
             <p className="text-foreground/80 mb-4">
-              Upgrade to Signature for $29/month to unlock all rituals and premium features.
+              Upgrade to MetaHers Studio for $29/month to unlock all rituals and premium features.
             </p>
             <Button
               onClick={() => window.open("https://buy.stripe.com/8x28wQaT11jK5R8cX63Nm0a", "_blank")}

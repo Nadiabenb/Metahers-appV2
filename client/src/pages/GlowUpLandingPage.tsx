@@ -109,7 +109,7 @@ export default function GlowUpLandingPage() {
               data-testid="button-get-started"
             >
               <TrendingUp className="w-5 h-5" />
-              {isAuthenticated ? (isSignature ? "Start Program" : "Upgrade to Signature") : "Get Started Free"}
+              {isAuthenticated ? (isSignature ? "Start Program" : "Upgrade to MetaHers Studio") : "Get Started Free"}
               <ArrowRight className="w-5 h-5" />
             </Button>
           </motion.div>
@@ -228,7 +228,7 @@ export default function GlowUpLandingPage() {
               data-testid="button-cta-bottom"
             >
               <Crown className="w-5 h-5" />
-              {isAuthenticated ? (isSignature ? "Start Your Glow-Up" : "Upgrade to Signature") : "Get Started Now"}
+              {isAuthenticated ? (isSignature ? "Start Your Glow-Up" : "Upgrade to MetaHers Studio") : "Get Started Now"}
             </Button>
 
             {!isSignature && (

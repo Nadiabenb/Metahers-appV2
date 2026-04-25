@@ -179,7 +179,7 @@ export default function ExperienceDetailPage() {
               border: `1px solid ${experience.tier === "free" ? "#C9A96E44" : "#FFFFFF15"}`,
             }}
           >
-            {experience.tier === "free" ? "Free" : "Signature"}
+            {experience.tier === "free" ? "Free" : "Studio"}
           </span>
         </div>
 
@@ -246,7 +246,7 @@ export default function ExperienceDetailPage() {
               data-testid="button-upgrade-to-unlock"
             >
               <Lock className="w-4 h-4 mr-2" />
-              Unlock with Signature
+              Unlock with Studio
             </Button>
           </Link>
         )}
