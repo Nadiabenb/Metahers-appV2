@@ -4,9 +4,9 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Wrench, Users } from "lucide-react";
+import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Wrench, Users, Mail, CalendarDays } from "lucide-react";
 import { Link } from "wouter";
-import { isSignatureTier } from "@shared/pricing";
+import { getPricingPlan, isSignatureTier, type SubscriptionTier } from "@shared/pricing";
 import { spaceImages } from "@/lib/imageManifest";
 
 type Space = {
@@ -40,6 +40,15 @@ function greeting(name: string) {
   const hour = new Date().getHours();
   const time = hour < 12 ? "Good morning" : hour < 18 ? "Good afternoon" : "Good evening";
   return `${time}, ${name}.`;
+}
+
+function formatMemberSince(createdAt?: string | Date | null) {
+  if (!createdAt) return "Recently joined";
+
+  return new Intl.DateTimeFormat("en", {
+    month: "long",
+    year: "numeric",
+  }).format(new Date(createdAt));
 }
 
 const GOLD_BTN = "font-semibold uppercase tracking-widest text-xs px-6";
@@ -82,6 +91,7 @@ export default function DashboardPage() {
   const currentTier = (user?.subscriptionTier as any) || "free";
   const isPaid = isSignatureTier(currentTier);
   const isFreeStarterTier = currentTier === "free";
+  const currentPlan = getPricingPlan(currentTier as SubscriptionTier);
   const isNewMember = !user?.onboardingCompleted;
   const firstName = user?.firstName || "Member";
 
@@ -423,6 +433,61 @@ export default function DashboardPage() {
                 )}
               </div>
             </div>
+
+            {/* Membership summary */}
+            <Card className="bg-[#13111C] border-white/10">
+              <CardContent className="pt-6 pb-6 px-7">
+                <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+                  <div>
+                    <p className="text-white/40 text-xs uppercase tracking-widest mb-3">Membership</p>
+                    <div className="flex flex-wrap items-center gap-3 mb-4">
+                      <h2 className="text-white text-xl font-light" style={{ fontFamily: "'Playfair Display', serif" }}>
+                        {currentPlan.displayName}
+                      </h2>
+                      <span
+                        className="inline-flex items-center px-3 py-1 rounded text-xs font-medium"
+                        style={isPaid
+                          ? { background: "#C9A96E22", color: "#C9A96E", border: "1px solid #C9A96E44" }
+                          : { background: "#FFFFFF0A", color: "rgba(255,255,255,0.58)", border: "1px solid rgba(255,255,255,0.08)" }}
+                      >
+                        {isPaid ? "Active" : "Free"}
+                      </span>
+                    </div>
+                    <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="flex items-start gap-3">
+                        <Mail className="w-4 h-4 text-[#C9A96E] mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-white/35 text-xs uppercase tracking-widest mb-1">Email</p>
+                          <p className="text-white/65 text-sm break-all">{user?.email || "Not available"}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <CalendarDays className="w-4 h-4 text-[#C9A96E] mt-0.5 shrink-0" />
+                        <div>
+                          <p className="text-white/35 text-xs uppercase tracking-widest mb-1">Member since</p>
+                          <p className="text-white/65 text-sm">{formatMemberSince(user?.createdAt as any)}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row lg:flex-col gap-3 lg:min-w-[210px]">
+                    <Link href="/upgrade">
+                      <Button className={`${GOLD_BTN} w-full`} style={GOLD_STYLE}>
+                        {isPaid ? "View Plans" : "Join Studio"}
+                      </Button>
+                    </Link>
+                    <Link href="/ai-integration">
+                      <Button
+                        variant="outline"
+                        className="w-full border-white/15 bg-white/[0.03] text-white/70 hover:bg-white/[0.06] hover:text-white text-xs uppercase tracking-widest font-semibold"
+                      >
+                        AI Blueprint
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* Explore Spaces */}
             {spaces.length > 0 && (

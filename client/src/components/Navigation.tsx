@@ -40,7 +40,6 @@ export function Navigation() {
     { label: "Learn", path: "/learning-hub" },
     { label: "AI Team", path: "/concierge" },
     { label: "Tools", path: "/toolkit" },
-    { label: "Account", path: "/account" },
   ];
 
   const publicNavItems = [
