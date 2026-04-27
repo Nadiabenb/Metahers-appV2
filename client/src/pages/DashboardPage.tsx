@@ -348,7 +348,7 @@ export default function DashboardPage() {
                       <Progress value={progressPercent} className="h-1.5 flex-1" />
                       <span className="text-white/40 text-xs whitespace-nowrap">{completedSections}/{totalSections} sections</span>
                     </div>
-                    <Link href={`/learning-hub/${inProgressExperience.slug}`}>
+                    <Link href={`/experiences/${inProgressExperience.slug}`}>
                       <Button className={GOLD_BTN} style={GOLD_STYLE}>Continue</Button>
                     </Link>
                   </div>
@@ -360,7 +360,7 @@ export default function DashboardPage() {
                     <h2 className="text-white text-lg font-medium mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>
                       {nextExperience.title}
                     </h2>
-                    <Link href={`/learning-hub/${nextExperience.slug}`}>
+                    <Link href={`/experiences/${nextExperience.slug}`}>
                       <Button className={GOLD_BTN} style={GOLD_STYLE}>Begin</Button>
                     </Link>
                   </div>
