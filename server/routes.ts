@@ -6647,11 +6647,12 @@ Respond in JSON format:
           from: resendClient.fromEmail,
           to: email,
           reply_to: REPLY_TO_EMAIL,
-          subject: 'Your AI Blueprint Application — MetaHers',
+          subject: 'Thank you for applying to The AI Blueprint',
           html: `
-            <h2>Thank you for applying, ${name}.</h2>
+            <p>Thank you for applying.</p>
             <p>We've received your application for The AI Blueprint.</p>
-            <p>Nadia will personally review your submission and reach out within 48 hours to discuss next steps.</p>
+            <p>Nadia will personally review your submission. To move faster, you can book your AI Blueprint discovery call here:</p>
+            <p><a href="https://calendly.com/nadia-metahers/discovery-call">https://calendly.com/nadia-metahers/discovery-call</a></p>
             <p>In the meantime, explore the platform at <a href="https://app.metahers.ai">app.metahers.ai</a>.</p>
             <br/>
             <p>The MetaHers Team</p>
