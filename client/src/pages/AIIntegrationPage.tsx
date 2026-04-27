@@ -224,8 +224,8 @@ export default function AIIntegrationPage() {
   });
 
   const handleCTA = (source: string) => {
-    trackCTAClick(`ai_integration_${source}`, '#apply', 'ai_integration');
-    document.getElementById('apply')?.scrollIntoView({ behavior: 'smooth' });
+    trackCTAClick(`ai_integration_${source}`, '#blueprint-application', 'ai_integration');
+    document.getElementById('blueprint-application')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -655,7 +655,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* INVESTMENT */}
-      <section className="py-20 md:py-28 px-6 text-center bg-[#FAF8F6]" id="apply">
+      <section className="py-20 md:py-28 px-6 text-center bg-[#FAF8F6]">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="flex items-center justify-center gap-3 mb-10">
@@ -748,7 +748,7 @@ export default function AIIntegrationPage() {
       </section>
 
       {/* APPLICATION FORM */}
-      <section id="apply" className="relative py-24 md:py-32 px-6 overflow-hidden bg-[#FAF8F6]">
+      <section id="blueprint-application" className="relative py-24 md:py-32 px-6 overflow-hidden bg-[#FAF8F6]">
         <div className="absolute inset-0 pointer-events-none" style={{
           background: "radial-gradient(ellipse 50% 60% at 50% 100%, rgba(201,169,110,0.08) 0%, transparent 70%)"
         }} />
