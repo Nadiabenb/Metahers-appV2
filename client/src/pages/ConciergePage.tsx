@@ -66,6 +66,36 @@ type ChatResponse = {
 const gold = "#C9A96E";
 const VALID_AGENT_IDS: ConciergeAgentId[] = ["aria", "sage", "nova", "luna", "bella", "noor"];
 
+function ConciergeUpgradePrompt() {
+  return (
+    <div className="max-w-[90%] rounded-xl border border-[rgba(201,169,110,0.28)] bg-[rgba(201,169,110,0.08)] px-4 py-4 shadow-[0_14px_40px_rgba(0,0,0,0.18)]">
+      <p className="text-sm font-medium text-white mb-1">You’re using the AI Starter Kit</p>
+      <p className="text-xs leading-relaxed text-white/60 mb-4">
+        To keep building your AI system, upgrade to MetaHers Studio or apply for the AI Blueprint.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Link href="/upgrade">
+          <Button
+            size="sm"
+            className="w-full sm:w-auto bg-[rgba(201,169,110,1)] text-[#1A1A2E] hover:opacity-90 text-[11px] uppercase tracking-widest font-semibold"
+          >
+            Join Studio
+          </Button>
+        </Link>
+        <Link href="/ai-integration">
+          <Button
+            size="sm"
+            variant="outline"
+            className="w-full sm:w-auto border-white/15 bg-white/[0.03] text-white/75 hover:bg-white/[0.07] hover:text-white text-[11px] uppercase tracking-widest font-semibold"
+          >
+            Apply for The AI Blueprint
+          </Button>
+        </Link>
+      </div>
+    </div>
+  );
+}
+
 export default function ConciergePage() {
   const queryClient = useQueryClient();
   const { isAuthenticated, user } = useAuth();
@@ -73,6 +103,8 @@ export default function ConciergePage() {
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [draft, setDraft] = useState("");
   const [gateMessage, setGateMessage] = useState<string | null>(null);
+  const currentTier = user?.subscriptionTier || "free";
+  const isFreeStarterTier = currentTier === "free";
 
   const usageQuery = useQuery<UsageResponse>({
     queryKey: ["/api/agents/usage"],
@@ -126,6 +158,25 @@ export default function ConciergePage() {
     const list = conversationsQuery.data?.conversations || [];
     return list.find((item) => item.id === selectedConversationId) || list[0] || null;
   }, [conversationsQuery.data?.conversations, selectedConversationId]);
+
+  const latestAssistantResponseIndex = useMemo(() => {
+    const messages = activeConversation?.messages || [];
+    const hasUserMessage = messages.some((msg) => msg.role === "user");
+
+    if (!hasUserMessage) {
+      return -1;
+    }
+
+    for (let index = messages.length - 1; index >= 0; index -= 1) {
+      if (messages[index].role === "assistant") {
+        return index;
+      }
+    }
+
+    return -1;
+  }, [activeConversation?.messages]);
+
+  const showInlineUpgradePrompt = isFreeStarterTier && latestAssistantResponseIndex >= 0;
 
   const refreshAgentData = async () => {
     await Promise.all([
@@ -359,15 +410,19 @@ export default function ConciergePage() {
                       <div className="p-4 space-y-3">
                         {activeConversation?.messages?.length ? (
                           activeConversation.messages.map((msg, index) => (
-                            <div
-                              key={`${msg.timestamp}-${index}`}
-                              className={`max-w-[90%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
-                                msg.role === "user"
-                                  ? "ml-auto bg-white text-black"
-                                  : "bg-white/10 text-white"
-                              }`}
-                            >
-                              {msg.content}
+                            <div key={`${msg.timestamp}-${index}`} className="space-y-2">
+                              <div
+                                className={`max-w-[90%] rounded-xl px-3 py-2 text-sm leading-relaxed ${
+                                  msg.role === "user"
+                                    ? "ml-auto bg-white text-black"
+                                    : "bg-white/10 text-white"
+                                }`}
+                              >
+                                {msg.content}
+                              </div>
+                              {showInlineUpgradePrompt && index === latestAssistantResponseIndex ? (
+                                <ConciergeUpgradePrompt />
+                              ) : null}
                             </div>
                           ))
                         ) : (
