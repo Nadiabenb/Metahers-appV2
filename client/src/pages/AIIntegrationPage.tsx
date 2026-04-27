@@ -238,7 +238,10 @@ export default function AIIntegrationPage() {
     try {
       await apiRequest('POST', '/api/blueprint/apply', form);
       setSubmitted(true);
-      toast({ title: "Application submitted", description: "Nadia will be in touch within 48 hours." });
+      toast({
+        title: "Application submitted",
+        description: "Your next step is to book your AI Blueprint discovery call.",
+      });
     } catch (err: any) {
       toast({ title: "Submission failed", description: err.message || "Please try again.", variant: "destructive" });
     } finally {
@@ -766,11 +769,25 @@ export default function AIIntegrationPage() {
             </div>
 
             {submitted ? (
-              <div className="text-center py-16 border border-primary/20 rounded-sm" style={{ background: 'rgba(201,169,110,0.05)' }} data-testid="div-apply-confirmation">
+              <div className="text-center py-14 px-6 border border-primary/20 rounded-sm" style={{ background: 'rgba(201,169,110,0.05)' }} data-testid="div-apply-confirmation">
                 <CheckCircle className="w-12 h-12 text-primary mx-auto mb-4" />
-                <h3 className="font-serif text-2xl font-light text-[#1A1A2E] mb-3">Application received.</h3>
-                <p className="text-[#4A4A5E] text-sm max-w-sm mx-auto leading-relaxed">
-                  Thank you for applying. Nadia will review your application and reach out within 48 hours.
+                <h3 className="font-serif text-3xl sm:text-4xl font-light text-[#1A1A2E] mb-4">Application submitted</h3>
+                <p className="text-[#4A4A5E] text-sm md:text-base max-w-md mx-auto leading-relaxed mb-8">
+                  Nadia will personally review your answers. To move faster, book your AI Blueprint discovery call now.
+                </p>
+                <Button
+                  size="lg"
+                  asChild
+                  className="font-mono text-xs tracking-[0.18em] uppercase"
+                  data-testid="button-book-discovery-call"
+                >
+                  <a href="https://calendly.com/nadia-metahers/discovery-call" target="_blank" rel="noreferrer">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Book Discovery Call
+                  </a>
+                </Button>
+                <p className="text-[#9A8A7E] font-mono text-[11px] tracking-wider mt-5">
+                  You’ll also receive a confirmation email.
                 </p>
               </div>
             ) : (
