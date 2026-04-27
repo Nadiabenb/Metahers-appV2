@@ -79,7 +79,9 @@ function QuickAction({
 
 export default function DashboardPage() {
   const { user } = useAuth();
-  const isPaid = isSignatureTier((user?.subscriptionTier as any) || "free");
+  const currentTier = (user?.subscriptionTier as any) || "free";
+  const isPaid = isSignatureTier(currentTier);
+  const isFreeStarterTier = currentTier === "free";
   const isNewMember = !user?.onboardingCompleted;
   const firstName = user?.firstName || "Member";
 
@@ -259,6 +261,56 @@ export default function DashboardPage() {
                 </span>
               )}
             </div>
+
+            {isFreeStarterTier && (
+              <Card className="overflow-hidden bg-[#13111C] border-[#C9A96E]/25 shadow-[0_18px_60px_rgba(0,0,0,0.28)]">
+                <CardContent className="relative pt-7 pb-7 px-7">
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#C9A96E]/70 to-transparent" />
+                  <div className="grid gap-7 md:grid-cols-[1.25fr_0.75fr] md:items-center">
+                    <div>
+                      <p className="text-[#C9A96E] text-xs uppercase tracking-widest mb-3">AI Starter Kit</p>
+                      <h2 className="text-white text-2xl sm:text-3xl font-light mb-3" style={{ fontFamily: "'Playfair Display', serif" }}>
+                        You’re using the AI Starter Kit
+                      </h2>
+                      <p className="text-white/60 text-sm leading-relaxed max-w-2xl mb-6">
+                        You’ve unlocked the basics. To build a real AI system for your business, upgrade to MetaHers Studio or apply for The AI Blueprint.
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                        <Link href="/upgrade">
+                          <Button className={`${GOLD_BTN} w-full sm:w-auto`} style={GOLD_STYLE}>
+                            Join Studio
+                          </Button>
+                        </Link>
+                        <Link href="/ai-integration">
+                          <Button
+                            variant="outline"
+                            className="w-full sm:w-auto border-white/15 bg-white/[0.03] text-white/75 hover:bg-white/[0.06] hover:text-white text-xs uppercase tracking-widest font-semibold px-6"
+                          >
+                            Apply for The AI Blueprint
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                    <div className="rounded border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-white/40 text-xs uppercase tracking-widest mb-4">Upgrade unlocks</p>
+                      <ul className="space-y-3">
+                        {[
+                          "Full AI concierge access",
+                          "Prompt library and workflows",
+                          "Monthly implementation lab",
+                          "Personalized AI system (Blueprint)",
+                        ].map((feature) => (
+                          <li key={feature} className="flex items-start gap-3 text-sm text-white/70">
+                            <span className="mt-2 h-1.5 w-1.5 rounded-full bg-[#C9A96E] shrink-0" />
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Continue Learning card */}
             <Card className="bg-[#13111C] border-white/10">
