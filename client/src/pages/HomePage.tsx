@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, CheckCircle2, Lock, BookOpen, Bot, Globe, Gem, Compass as CompassIcon, Palette, Heart, Code2, Crown, ShoppingCart, Star, TrendingUp, Users, Ship, Anchor, MapPin, Calendar, UsersRound } from "lucide-react";
 import { CTAButton } from "@/components/CTAButton";
 import { WelcomeModal } from "@/components/WelcomeModal";
+import { PaidWelcomeModal } from "@/components/PaidWelcomeModal";
 import { SEO } from "@/components/SEO";
 import { lazy, Suspense } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -103,6 +104,7 @@ export default function HomePage() {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
   const [showWelcome, setShowWelcome] = useState(false);
+  const [showPaidWelcome, setShowPaidWelcome] = useState(false);
 
   const { data: spaces = [], isLoading: spacesLoading } = useQuery<Space[]>({
     queryKey: ["/api/spaces"],
@@ -115,7 +117,9 @@ export default function HomePage() {
   const isProUser = canAccessSignatureFeatures(user?.subscriptionTier);
 
   useEffect(() => {
-    if (user && !user.onboardingCompleted) {
+    if (user && user.isPro && !user.paidWelcomeShown) {
+      setShowPaidWelcome(true);
+    } else if (user && !user.onboardingCompleted && !user.isPro) {
       setShowWelcome(true);
     }
   }, [user]);
@@ -129,6 +133,16 @@ export default function HomePage() {
       console.error('Error completing onboarding:', error);
       setShowWelcome(false);
     }
+  };
+
+  const handleCompletePaidWelcome = async () => {
+    try {
+      await apiRequest('POST', '/api/auth/complete-paid-welcome', {});
+      queryClient.invalidateQueries({ queryKey: ['/api/auth/user'] });
+    } catch (error) {
+      console.error('Error completing paid welcome:', error);
+    }
+    setShowPaidWelcome(false);
   };
 
   return (
@@ -231,8 +245,16 @@ export default function HomePage() {
         </div>
       </section>
 
+      {showPaidWelcome && user && (
+        <PaidWelcomeModal
+          onComplete={handleCompletePaidWelcome}
+          userName={user.firstName || undefined}
+          tier={user.subscriptionTier}
+        />
+      )}
+
       {showWelcome && (
-        <WelcomeModal 
+        <WelcomeModal
           onComplete={handleCompleteOnboarding}
           userName={user?.firstName || undefined}
         />

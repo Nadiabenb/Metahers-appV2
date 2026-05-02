@@ -844,6 +844,533 @@ async function sendSequenceEmail(
   });
 }
 
+// ===== PAID SEQUENCE EMAIL SENDER =====
+
+async function sendPaidSequenceEmail(
+  emailKey: string,
+  user: { email: string; firstName?: string | null },
+  persona: 'builder' | 'creative' | 'mom',
+  tier: string,
+  variant: string | null
+): Promise<void> {
+  const resend = await getUncachableResendClient();
+  if (!resend) {
+    console.warn('[PaidEmail] Resend not configured — skipping');
+    return;
+  }
+  const firstName = user.firstName || 'Founder';
+  const tierLabel = tier.includes('private') ? 'Private Advisory' : 'MetaHers Studio';
+  const isPrivate = tier.includes('private');
+  const appUrl = 'https://app.metahers.ai';
+
+  const personaContext = {
+    builder: {
+      role: 'builder',
+      focus: 'launch your next project',
+      prompt: 'Help me build a launch plan for my new offer',
+      agent: 'nova',
+      win: 'a full launch strategy mapped out',
+    },
+    creative: {
+      role: 'creative',
+      focus: 'bring your vision to life',
+      prompt: 'Help me develop my signature creative direction',
+      agent: 'bella',
+      win: 'your brand voice and creative direction defined',
+    },
+    mom: {
+      role: 'mom founder',
+      focus: 'build on your own terms',
+      prompt: 'Help me find high-impact actions I can do in 30 minutes',
+      agent: 'aria',
+      win: 'a 30-minute power plan that fits your life',
+    },
+  }[persona];
+
+  const headerBg = isPrivate
+    ? 'background: linear-gradient(135deg, #2d2520 0%, #3d2f28 100%);'
+    : 'background: #1A1A2E;';
+  const footerTierLabel = isPrivate ? 'Private Advisory' : 'Studio';
+
+  const wrap = (content: string, subject: string) => `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${subject}</title>
+</head>
+<body style="margin:0; padding:0; background:#f4f1ec; font-family: Georgia, 'Playfair Display', serif;">
+  <div style="max-width:600px; margin:0 auto; background:#fff;">
+    <div style="${headerBg} padding:28px 32px; text-align:center;">
+      <div style="color:#C9A96E; font-size:22px; font-weight:700; letter-spacing:2px;">METAHERS</div>
+      <div style="color:rgba(255,255,255,0.6); font-size:11px; letter-spacing:3px; margin-top:4px; text-transform:uppercase;">${tierLabel}</div>
+    </div>
+    <div style="padding:40px 40px 32px; color:#1A1A2E; font-size:16px; line-height:1.7;">
+      ${content}
+    </div>
+    <div style="padding:20px 40px; border-top:1px solid #f0ece6; font-size:12px; color:#aaa; text-align:center;">
+      <p style="margin:0 0 6px;">You're receiving this as a MetaHers ${footerTierLabel} member.</p>
+      <p style="margin:0;"><a href="${appUrl}" style="color:#C9A96E; text-decoration:none;">app.metahers.ai</a></p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  const ctaButton = (text: string, url: string) =>
+    `<a href="${url}" style="display:inline-block; background:#C9A96E; color:#1A1A2E; padding:12px 28px; border-radius:4px; font-weight:700; text-decoration:none; font-size:15px; margin-top:20px;">${text}</a>`;
+
+  const featureBox = (items: string[]) =>
+    `<ul style="background:#f9f5f2; padding:20px 24px; border-radius:4px; list-style:none; margin:20px 0 0;">
+      ${items.map(i => `<li style="margin-bottom:10px; padding-left:20px; position:relative;"><span style="position:absolute; left:0; color:#C9A96E;">→</span> ${i}</li>`).join('')}
+    </ul>`;
+
+  const pinkCallout = (text: string) =>
+    `<div style="background:#fdf5f7; border-left:3px solid #D4537E; padding:16px 20px; border-radius:0 4px 4px 0; margin:20px 0; color:#3a2030; font-size:15px;">${text}</div>`;
+
+  type EmailContent = { subject: string; html: string };
+
+  const emails: Record<string, EmailContent> = {
+
+    [`paid_studio_day_0`]: {
+      subject: `You're in, ${firstName}. Welcome to MetaHers Studio.`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">You just did something most people only think about. You invested in yourself and in building something real.</p>
+        <p style="margin:0 0 20px;">Welcome to MetaHers Studio. I'm genuinely glad you're here.</p>
+        <p style="margin:0 0 20px;">Your Studio membership gives you daily access to our full AI concierge team — ARIA, your intelligent guide, plus Bella, Nova, Luna, Sage, and Noor. Up to 40 messages a day, any agent, any topic that moves your business forward.</p>
+        <p style="margin:0 0 4px; font-weight:700;">Your first move:</p>
+        <p style="margin:0 0 20px;">Open the concierge and tell ARIA what you're working on right now. She'll route you to the right specialist and help you get a real result — not a generic answer.</p>
+        ${ctaButton(`Open your Studio →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I just joined Studio. I'm a ${personaContext.role} and I want to ${personaContext.focus}. Where should I start?`)}`)}
+        <p style="margin:32px 0 0;">Talk soon,<br><strong>Nadia</strong><br><span style="color:#aaa; font-size:14px;">Founder, MetaHers</span></p>
+      `, `You're in, ${firstName}. Welcome to MetaHers Studio.`),
+    },
+
+    [`paid_private_day_0`]: {
+      subject: `Your Private Advisory is live, ${firstName}.`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Private Advisory is our most intimate offering — and you chose it. That tells me a lot about where you're going.</p>
+        <p style="margin:0 0 20px;">Your access is live. You have 150 daily messages across the full concierge team, plus a monthly private strategy review with my team, priority support, and early access to every template and workflow we build.</p>
+        ${pinkCallout(`This is not automation. When you message us, a real strategy layer sits behind every response. We treat your business like it matters — because it does.`)}
+        <p style="margin:0 0 4px; font-weight:700;">Start here:</p>
+        <p style="margin:0 0 20px;">Open your concierge and give ARIA the real picture — what you're building, where you're stuck, what you want to accomplish in the next 90 days. Your first strategy review starts with this conversation.</p>
+        ${ctaButton(`Open your Private Advisory →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I just joined Private Advisory. I'm a ${personaContext.role}. Here's where I am and where I want to go in the next 90 days: [fill this in]`)}`)}
+        <p style="margin:32px 0 0;">I'm looking forward to this,<br><strong>Nadia</strong><br><span style="color:#aaa; font-size:14px;">Founder, MetaHers</span></p>
+      `, `Your Private Advisory is live, ${firstName}.`),
+    },
+
+    [`paid_studio_day_1`]: {
+      subject: `Meet your Studio team, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Yesterday you unlocked the door. Today I want you to meet the team behind it.</p>
+        <p style="margin:0 0 16px;">Your Studio concierge includes six specialists, each trained for a different part of your business:</p>
+        ${featureBox([
+          '<strong>ARIA</strong> — Your intelligent front door. Tell her what you need and she routes you to the right expert.',
+          '<strong>Nova</strong> — Build & Automation. Systems, tech setup, AI workflows, scaling operations.',
+          '<strong>Luna</strong> — Marketing Maestro. Positioning, campaigns, copy that converts.',
+          '<strong>Bella</strong> — Digital Artist. Brand direction, visual concepts, creative briefs.',
+          '<strong>Sage</strong> — AI Strategy & Learning. Skill-building, AI literacy, building your AI-powered edge.',
+          '<strong>Noor</strong> — Creative Ghostwriter. Content, voice, storytelling that sounds like you.',
+        ])}
+        <p style="margin:24px 0 20px;">As a Studio member you have 40 messages per day — enough to go deep on a project, get multiple things done, or explore something new.</p>
+        <p style="margin:0 0 20px;">Today's move: pick the specialist who matches what you're working on right now and start a real conversation.</p>
+        ${ctaButton(`Meet the team →`, `${appUrl}/concierge`)}
+        <p style="margin:32px 0 0;">Building with you,<br><strong>Nadia</strong></p>
+      `, `Meet your Studio team, ${firstName}`),
+    },
+
+    [`paid_private_day_1`]: {
+      subject: `Your Private Advisory team, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Private Advisory gives you access to the same concierge team as Studio — but at a different depth.</p>
+        <p style="margin:0 0 16px;">With 150 messages a day, you can go further: multi-step strategy sessions, full content builds, research + synthesis + implementation all in one conversation.</p>
+        ${featureBox([
+          '<strong>ARIA</strong> — Your intelligent guide and strategist. She knows your context and directs accordingly.',
+          '<strong>Nova</strong> — Systems and automation. Build the infrastructure your business needs to scale.',
+          '<strong>Luna</strong> — Full marketing strategy, not just copy. Campaigns, positioning, audience intelligence.',
+          '<strong>Bella</strong> — Creative direction at a brand level. Cohesion, identity, visual storytelling.',
+          '<strong>Sage</strong> — Your AI learning strategist. Build skills that give you a durable competitive edge.',
+          '<strong>Noor</strong> — Ghostwriting and thought leadership. Your voice, elevated.',
+        ])}
+        ${pinkCallout(`Private Advisory also includes your monthly strategy review — a structured 1:1 with my team where we look at your goals, your blockers, and your next 30 days. More on how to book that in tomorrow's email.`)}
+        ${ctaButton(`Open your concierge →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`As a Private Advisory member, I want to set up my first strategy session. Here's what I'm working on: [describe your business and goals]`)}`)}
+        <p style="margin:32px 0 0;">In your corner,<br><strong>Nadia</strong></p>
+      `, `Your Private Advisory team, ${firstName}`),
+    },
+
+    [`paid_studio_day_3`]: {
+      subject: `Your first Studio win, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Three days in. Time to get a real win on the board.</p>
+        <p style="margin:0 0 20px;">Here's a prompt built for you as a ${personaContext.role}. Copy it, paste it into ${personaContext.agent === 'nova' ? 'Nova' : personaContext.agent === 'bella' ? 'Bella' : 'ARIA'}, and watch what comes out:</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:20px 24px; margin:20px 0; font-style:italic; color:#3a3030; font-size:15px;">
+          "${personaContext.prompt}. Be specific and give me three options I can act on this week."
+        </div>
+        <p style="margin:0 0 20px;">Ten minutes from now you could have ${personaContext.win}. That's what Studio is for.</p>
+        ${ctaButton(`Get your first win →`, `${appUrl}/concierge?agent=${personaContext.agent}&prompt=${encodeURIComponent(`${personaContext.prompt}. Be specific and give me three options I can act on this week.`)}`)}
+        <p style="margin:32px 0 0;">Rooting for you,<br><strong>Nadia</strong></p>
+      `, `Your first Studio win, ${firstName}`),
+    },
+
+    [`paid_private_day_3`]: {
+      subject: `Your first Private Advisory win, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Three days in. Let's make something real happen.</p>
+        <p style="margin:0 0 20px;">Private Advisory is built for founders who want depth, not surface-level answers. Here's a prompt designed for where you are as a ${personaContext.role}:</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:20px 24px; margin:20px 0; font-style:italic; color:#3a3030; font-size:15px;">
+          "${personaContext.prompt}. Give me a 90-day strategic view, then break it into the three most important actions this month."
+        </div>
+        ${pinkCallout(`Private Advisory tip: paste your actual numbers, your real constraints, and your honest fears into this prompt. The more context you give, the more the concierge functions like a real strategic advisor.`)}
+        ${ctaButton(`Start your strategy session →`, `${appUrl}/concierge?agent=${personaContext.agent}&prompt=${encodeURIComponent(`${personaContext.prompt}. Give me a 90-day strategic view, then break it into the three most important actions this month.`)}`)}
+        <p style="margin:32px 0 0;">Building with you,<br><strong>Nadia</strong></p>
+      `, `Your first Private Advisory win, ${firstName}`),
+    },
+
+    [`paid_studio_day_5`]: {
+      subject: `Your Studio toolkit — what's actually in here`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Beyond the concierge, Studio includes a full toolkit built for women founders who are serious about using AI strategically. Here's what's waiting for you:</p>
+        ${featureBox([
+          "<strong>AI Toolkit</strong> — Curated resources, frameworks, and how-tos organized by what you're trying to build.",
+          '<strong>Prompt Library</strong> — Hundreds of tested prompts for marketing, content, operations, and strategy. Plug in, customize, run.',
+          '<strong>Learning Hub</strong> — Courses and lessons designed to build your AI fluency at your own pace.',
+          '<strong>MetaHers Signal Archive</strong> — Every issue of our weekly editorial on AI, business, and culture.',
+          '<strong>Monthly Implementation Lab</strong> — Live session where we actually build things together.',
+          '<strong>Monthly Office Hours</strong> — Bring your questions, get real answers.',
+        ])}
+        <p style="margin:24px 0 20px;">Start with the Prompt Library — pick any prompt in your area of focus and use it in the concierge today. It's the fastest way to feel the difference between generic AI and Studio-level output.</p>
+        ${ctaButton(`Explore the toolkit →`, `${appUrl}/toolkit`)}
+        <p style="margin:32px 0 0;">All yours,<br><strong>Nadia</strong></p>
+      `, `Your Studio toolkit — what's actually in here`),
+    },
+
+    [`paid_private_day_5`]: {
+      subject: `Your Private Advisory resources — the full picture`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Private Advisory includes everything in Studio plus resources built specifically for your tier. Here's the full picture:</p>
+        ${featureBox([
+          "<strong>Private Templates & Workflows</strong> — Built for complex business needs: revenue modeling, client delivery, hiring frameworks, brand architecture.",
+          "<strong>Monthly Private Strategy Review</strong> — A structured session with Nadia's team. You bring your goals; we bring analysis, recommendations, and next steps.",
+          '<strong>AI Toolkit & Prompt Library</strong> — Full access, including advanced prompts not in the standard library.',
+          '<strong>Learning Hub</strong> — Complete curriculum for building AI into your business at every level.',
+          '<strong>MetaHers Signal Archive</strong> — All issues, including members-only commentary.',
+          '<strong>Priority Concierge Access</strong> — 150 messages/day means you can go deep without hitting a wall.',
+        ])}
+        ${pinkCallout(`Your strategy review is one of the most valuable things you have access to. To book your first one, message ARIA in the concierge and say "I'd like to book my first Private Advisory strategy review."`)}
+        ${ctaButton(`Access your private resources →`, `${appUrl}/toolkit`)}
+        <p style="margin:32px 0 0;">Here for your success,<br><strong>Nadia</strong></p>
+      `, `Your Private Advisory resources — the full picture`),
+    },
+
+    [`paid_studio_day_7`]: {
+      subject: persona === 'builder'
+        ? `How Sarah launched her AI-powered service in 3 weeks`
+        : persona === 'creative'
+        ? `How Maya built a consistent brand voice with AI`
+        : `How Rina scaled her business without sacrificing her family`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">${
+          persona === 'builder'
+            ? `Sarah came to MetaHers Studio with a half-built offer, no clear positioning, and a launch date she'd already pushed back twice. Within three weeks, she used Nova to map her full tech stack, Luna to nail her positioning and sales page, and Noor to write her launch emails. She launched. It worked.`
+            : persona === 'creative'
+            ? `Maya had a portfolio full of beautiful work and no idea how to talk about it. She used Bella to define her signature creative direction, Noor to develop her brand voice, and Luna to build her content strategy. Six weeks later she had a waitlist.`
+            : `Rina is a mom of two, building a coaching business in the hours between school drop-off and pickup. She used ARIA to find her highest-leverage moves, Nova to automate her client onboarding, and Noor to batch-create a month of content in an afternoon. She didn't hustle harder. She worked smarter.`
+        }</p>
+        <p style="margin:0 0 20px;">This is what Studio access looks like when you use it fully. The concierge isn't a shortcut — it's a team.</p>
+        <p style="margin:0 0 20px;">What's your version of this story? Start it today.</p>
+        ${ctaButton(`Open your concierge →`, `${appUrl}/concierge`)}
+        <p style="margin:32px 0 0;">Believing in you,<br><strong>Nadia</strong></p>
+      `, persona === 'builder' ? `How Sarah launched her AI-powered service in 3 weeks` : persona === 'creative' ? `How Maya built a consistent brand voice with AI` : `How Rina scaled her business without sacrificing her family`),
+    },
+
+    [`paid_private_day_7`]: {
+      subject: persona === 'builder'
+        ? `How one founder used Private Advisory to close her first $20K month`
+        : persona === 'creative'
+        ? `How a creative director built a scalable offer with Private Advisory`
+        : `How a mom founder used Private Advisory to finally get unstuck`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">${
+          persona === 'builder'
+            ? `One of our Private Advisory members came in with revenue — but no system. Every month felt like starting over. Over three months, we used her strategy reviews to build a repeatable client acquisition system. She restructured her offers, automated her onboarding, and closed her first $20K month. The work didn't get easier — it got leveraged.`
+            : persona === 'creative'
+            ? `A creative director joined Private Advisory feeling burned out by project-based income. In her strategy reviews we identified her expertise, packaged it into a scalable offer, and used the concierge to build the content engine behind it. She moved from hourly to retainer. Her income stabilized. Her work got better because she had breathing room.`
+            : `A mom founder came into Private Advisory feeling like she was running her business in five-minute windows and never getting anywhere. We used her strategy reviews to redesign her workflow from scratch — automation, batching, and ruthless prioritization. She didn't work more hours. She reclaimed her energy and doubled her output.`
+        }</p>
+        ${pinkCallout(`Private Advisory isn't about having all the answers. It's about having a team that helps you find yours — and holds you accountable to acting on them.`)}
+        ${ctaButton(`Open your concierge →`, `${appUrl}/concierge`)}
+        <p style="margin:32px 0 0;">In your corner,<br><strong>Nadia</strong></p>
+      `, persona === 'builder' ? `How one founder used Private Advisory to close her first $20K month` : persona === 'creative' ? `How a creative director built a scalable offer with Private Advisory` : `How a mom founder used Private Advisory to finally get unstuck`),
+    },
+
+    [`paid_studio_day_10`]: {
+      subject: `3 power prompts for Studio members`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Ten days in. Here are three prompts that Studio members use to get their best work done — tested, refined, and ready for you to run:</p>
+        <p style="margin:20px 0 8px; font-weight:700;">1. The Offer Clarity Prompt → Nova</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:0 0 20px; font-style:italic; color:#3a3030; font-size:15px;">
+          "Audit my current offer. Here's what it is: [describe]. Tell me what's unclear, what's missing, and how to make it irresistible to [your ideal client]."
+        </div>
+        <a href="${appUrl}/concierge?agent=nova&prompt=${encodeURIComponent(`Audit my current offer. Here's what it is: [describe your offer]. Tell me what's unclear, what's missing, and how to make it irresistible to [your ideal client].`)}" style="color:#C9A96E; font-size:14px;">→ Run this with Nova</a>
+        <p style="margin:24px 0 8px; font-weight:700;">2. The Content Engine Prompt → Noor</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:0 0 20px; font-style:italic; color:#3a3030; font-size:15px;">
+          "Create a 2-week content plan for [platform] based on my business [describe briefly]. Include hooks, angles, and one lead magnet post."
+        </div>
+        <a href="${appUrl}/concierge?agent=noor&prompt=${encodeURIComponent(`Create a 2-week content plan for [platform] based on my business [describe briefly]. Include hooks, angles, and one lead magnet post.`)}" style="color:#C9A96E; font-size:14px;">→ Run this with Noor</a>
+        <p style="margin:24px 0 8px; font-weight:700;">3. The Strategy Clarity Prompt → Sage</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:0 0 20px; font-style:italic; color:#3a3030; font-size:15px;">
+          "I feel like I'm doing a lot but not moving forward. Here's what's on my plate: [list]. Help me identify what to stop, what to systemize, and what to double down on."
+        </div>
+        <a href="${appUrl}/concierge?agent=sage&prompt=${encodeURIComponent(`I feel like I'm doing a lot but not moving forward. Here's what's on my plate: [list your current work]. Help me identify what to stop, what to systemize, and what to double down on.`)}" style="color:#C9A96E; font-size:14px;">→ Run this with Sage</a>
+        <p style="margin:28px 0 0;">Pick one. Run it. Reply and tell me what you got.</p>
+        <p style="margin:20px 0 0;"><strong>Nadia</strong></p>
+      `, `3 power prompts for Studio members`),
+    },
+
+    [`paid_private_day_10`]: {
+      subject: `Advanced prompts for Private Advisory members`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">These are the prompts our Private Advisory members come back to again and again. They're designed for founders who want strategic depth, not surface answers:</p>
+        <p style="margin:20px 0 8px; font-weight:700;">1. The Revenue Architecture Prompt → Nova</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:0 0 20px; font-style:italic; color:#3a3030; font-size:15px;">
+          "Map my current revenue model: [describe]. Identify the three highest-leverage changes I could make in the next 90 days. Include what to build, what to automate, and what to cut."
+        </div>
+        <a href="${appUrl}/concierge?agent=nova&prompt=${encodeURIComponent(`Map my current revenue model: [describe your income streams]. Identify the three highest-leverage changes I could make in the next 90 days. Include what to build, what to automate, and what to cut.`)}" style="color:#C9A96E; font-size:14px;">→ Run this with Nova</a>
+        <p style="margin:24px 0 8px; font-weight:700;">2. The Market Position Audit → Luna</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:0 0 20px; font-style:italic; color:#3a3030; font-size:15px;">
+          "Analyze my positioning: [describe your offer, audience, and differentiator]. Where am I generic? Where am I distinctive? What would make my market say 'only she does this'?"
+        </div>
+        <a href="${appUrl}/concierge?agent=luna&prompt=${encodeURIComponent(`Analyze my positioning: [describe your offer, audience, and what makes you different]. Where am I generic? Where am I distinctive? What would make my market say 'only she does this'?`)}" style="color:#C9A96E; font-size:14px;">→ Run this with Luna</a>
+        <p style="margin:24px 0 8px; font-weight:700;">3. The Thought Leadership Foundation → Noor</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:0 0 20px; font-style:italic; color:#3a3030; font-size:15px;">
+          "Build my thought leadership framework: I believe [your core belief about your industry]. My audience is [describe]. My voice is [adjectives]. Give me 5 signature ideas I could become known for and 3 content angles for each."
+        </div>
+        <a href="${appUrl}/concierge?agent=noor&prompt=${encodeURIComponent(`Build my thought leadership framework: I believe [your core belief]. My audience is [describe]. My voice is [adjectives]. Give me 5 signature ideas I could become known for and 3 content angles for each.`)}" style="color:#C9A96E; font-size:14px;">→ Run this with Noor</a>
+        ${pinkCallout(`Private Advisory tip: bring your answers to these prompts to your next strategy review. They'll give my team the context to go even deeper with you.`)}
+        <p style="margin:28px 0 0;"><strong>Nadia</strong></p>
+      `, `Advanced prompts for Private Advisory members`),
+    },
+
+    [`paid_studio_day_14`]: {
+      subject: `You're invited to the Lab, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Two weeks in. This is the part where most people start to feel the difference between a tool they use and a community they belong to.</p>
+        <p style="margin:0 0 20px;">As a Studio member you have two community touchpoints every month:</p>
+        ${featureBox([
+          '<strong>Monthly Implementation Lab</strong> — A live session where we actually build things together. Bring a project, a problem, or just curiosity. We ship something real.',
+          '<strong>Monthly Office Hours</strong> — Open Q&A with me or my team. No agenda, no pitch. Just real answers to your real questions.',
+        ])}
+        <p style="margin:24px 0 20px;">These aren't webinars. They're working sessions. Members who show up consistently get further faster — not because they're more talented, but because they stay connected to a community that holds the standard high.</p>
+        <p style="margin:0 0 20px;">Details for the next Lab and Office Hours are in the app. Check your dashboard for the schedule.</p>
+        ${ctaButton(`View upcoming events →`, `${appUrl}/community`)}
+        <p style="margin:32px 0 0;">See you there,<br><strong>Nadia</strong></p>
+      `, `You're invited to the Lab, ${firstName}`),
+    },
+
+    [`paid_private_day_14`]: {
+      subject: `Your Private Advisory circle, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Two weeks in. I want to make sure you know everything that's available to you — including the parts that feel less visible.</p>
+        <p style="margin:0 0 20px;">Private Advisory members get access to everything in Studio, plus:</p>
+        ${featureBox([
+          "<strong>Monthly Private Strategy Review</strong> — A structured session with my team. We look at your goals, analyze your blockers, and give you a clear 30-day plan. Not generic advice. Specific to you.",
+          "<strong>VIP-First Access</strong> — Every new template, workflow, and resource comes to Private Advisory members first, before it reaches Studio or the wider community.",
+          "<strong>Priority Concierge</strong> — When you message us, you're not in a queue. You get depth and speed.",
+        ])}
+        ${pinkCallout(`If you haven't booked your first strategy review yet, now is the time. Message ARIA and say: "I'd like to schedule my Private Advisory strategy review." My team will take it from there.`)}
+        ${ctaButton(`Book your strategy review →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I'd like to schedule my first Private Advisory strategy review. Here's a brief on where I am and what I want to accomplish: [fill this in]`)}`)}
+        <p style="margin:32px 0 0;">Here for you,<br><strong>Nadia</strong></p>
+      `, `Your Private Advisory circle, ${firstName}`),
+    },
+
+    [`paid_studio_day_17`]: {
+      subject: `The Studio features you probably haven't tried yet`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Most Studio members discover these features weeks in and wish they'd found them sooner. Consider this your shortcut:</p>
+        ${featureBox([
+          "<strong>MetaHers Signal Archive</strong> — Every issue of our weekly AI + business editorial. Search by topic, read in sequence, or dip in for a specific insight. The Signal covers what's actually happening in AI so you don't have to chase it yourself.",
+          '<strong>Prompt Library</strong> — Not just prompts, but prompts with context — why they work, when to use them, how to modify them for your situation. Filter by goal or agent.',
+          '<strong>Learning Hub Modules</strong> — Short, focused lessons on using AI for specific business outcomes. Built for founders, not tech people.',
+          '<strong>Agent deep-linking</strong> — You can start any concierge conversation with a pre-filled prompt from the Prompt Library. One click, straight into a working session.',
+        ])}
+        <p style="margin:24px 0 20px;">Pick one you haven't used. Spend 15 minutes with it. You'll find something useful — I promise.</p>
+        ${ctaButton(`Explore the full toolkit →`, `${appUrl}/toolkit`)}
+        <p style="margin:32px 0 0;">Always building,<br><strong>Nadia</strong></p>
+      `, `The Studio features you probably haven't tried yet`),
+    },
+
+    [`paid_private_day_17`]: {
+      subject: `What most Private Advisory members discover at week 3`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Three weeks in is usually when something shifts. The concierge stops feeling new and starts feeling like infrastructure — a real part of how you work.</p>
+        <p style="margin:0 0 20px;">Here's what Private Advisory members tend to discover at this stage:</p>
+        ${featureBox([
+          '<strong>Private Templates</strong> — Built for complex business needs: revenue modeling, client delivery SOPs, brand architecture frameworks, hiring templates. These live in your toolkit and are updated regularly.',
+          "<strong>The Signal Archive</strong> — Our weekly editorial on AI, business, and culture. Private Advisory members see early commentary before public release.",
+          '<strong>Advanced Prompt Combinations</strong> — Using two agents in sequence (e.g., Sage to build a framework, Noor to write the content) produces results that are qualitatively different from single-agent sessions.',
+          '<strong>Strategy Review Preparation</strong> — The members who get the most from their reviews are the ones who come prepared. Use the concierge to synthesize your last 30 days before each session.',
+        ])}
+        ${pinkCallout(`Your next strategy review is available to book now. Use your last 30 days to prepare — and bring your most important unsolved problem.`)}
+        ${ctaButton(`Access your private templates →`, `${appUrl}/toolkit`)}
+        <p style="margin:32px 0 0;">Growing with you,<br><strong>Nadia</strong></p>
+      `, `What most Private Advisory members discover at week 3`),
+    },
+
+    [`paid_studio_day_21_active`]: {
+      subject: `Look at what you've built, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Three weeks. You've been showing up.</p>
+        <p style="margin:0 0 20px;">I can see you've been using Studio and making it work for you. That's not nothing — most people buy things and don't use them. You're using this.</p>
+        <p style="margin:0 0 20px;">Now let's make sure the next 30 days build on what you've started. Ask yourself: what's the one thing I haven't gotten to yet that would make the biggest difference?</p>
+        <p style="margin:0 0 20px;">That's your next session in the concierge. Go do that thing.</p>
+        ${ctaButton(`Keep building →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I've been using Studio for 3 weeks. Here's what I've accomplished: [list]. Here's what I still want to tackle: [list]. Help me prioritize and plan my next 30 days.`)}`)}
+        <p style="margin:32px 0 0;">Proud of you,<br><strong>Nadia</strong></p>
+      `, `Look at what you've built, ${firstName}`),
+    },
+
+    [`paid_studio_day_21_inactive`]: {
+      subject: `Still here for you, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Three weeks in and I want to check in — not to push, but because I know life is full and sometimes tools we genuinely want to use sit waiting.</p>
+        <p style="margin:0 0 20px;">Your Studio access is still here. The concierge is ready. Nothing has expired, nothing has changed.</p>
+        <p style="margin:0 0 20px;">If you're stuck on where to start, here's the simplest possible entry point: open the concierge, type exactly this, and see what comes back:</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:20px 0; font-style:italic; color:#3a3030; font-size:15px;">
+          "I'm a ${personaContext.role} and I want to ${personaContext.focus}. I have 20 minutes. What's the most useful thing I could do right now?"
+        </div>
+        <p style="margin:0 0 20px;">Twenty minutes. That's all. Let's see what happens.</p>
+        ${ctaButton(`Start your 20-minute session →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I'm a ${personaContext.role} and I want to ${personaContext.focus}. I have 20 minutes. What's the most useful thing I could do right now?`)}`)}
+        <p style="margin:32px 0 0;">Still rooting for you,<br><strong>Nadia</strong></p>
+      `, `Still here for you, ${firstName}`),
+    },
+
+    [`paid_private_day_21_active`]: {
+      subject: `Three weeks in, ${firstName} — here's what I'm seeing`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Three weeks into Private Advisory and you're doing the work. That matters.</p>
+        <p style="margin:0 0 20px;">This is the point where we want to make sure you're getting value from the full depth of what's available — not just the daily concierge, but the strategic layer underneath it.</p>
+        ${pinkCallout(`If you haven't had your first strategy review yet — now is the moment. Three weeks of context makes for a much richer conversation than day one. My team can work with what you've built so far.`)}
+        <p style="margin:0 0 20px;">Book your review, bring your three biggest questions, and let's map your next 30 days together.</p>
+        ${ctaButton(`Book your strategy review →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I'd like to book my Private Advisory strategy review. Here's what I've been working on for the last 3 weeks and where I want to go next: [describe]`)}`)}
+        <p style="margin:32px 0 0;">Invested in your success,<br><strong>Nadia</strong></p>
+      `, `Three weeks in, ${firstName} — here's what I'm seeing`),
+    },
+
+    [`paid_private_day_21_inactive`]: {
+      subject: `Checking in personally, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Three weeks in and I want to check in directly — not with automation, but as someone who genuinely cares about whether Private Advisory is working for you.</p>
+        <p style="margin:0 0 20px;">Sometimes the value of a membership isn't immediately obvious. Sometimes life gets in the way. And sometimes a tool sits unused because the entry point isn't clear.</p>
+        <p style="margin:0 0 20px;">If any of that is true for you, I want to fix it. Message ARIA right now and tell her honestly where you are:</p>
+        <div style="background:#f9f5f2; border-radius:4px; padding:16px 20px; margin:20px 0; font-style:italic; color:#3a3030; font-size:15px;">
+          "I joined Private Advisory but I haven't been using it. Here's what's going on: [be honest]. Help me figure out where to start."
+        </div>
+        ${pinkCallout(`That's also a valid use of Private Advisory. We'll meet you exactly where you are.`)}
+        ${ctaButton(`Tell us where you are →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I joined Private Advisory but I haven't been using it much. Here's what's going on: [describe honestly]. Help me figure out where to start and how to make this actually useful for me.`)}`)}
+        <p style="margin:32px 0 0;">Here for you,<br><strong>Nadia</strong></p>
+      `, `Checking in personally, ${firstName}`),
+    },
+
+    [`paid_studio_day_25`]: {
+      subject: `What's coming to Studio next`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">I want to give you a window into what we're building — because members who know what's coming tend to use what's here more fully while they wait.</p>
+        <p style="margin:0 0 20px;">Here's what Studio members can look forward to:</p>
+        ${featureBox([
+          "New Prompt Library packs — topic-specific prompt collections dropping monthly, starting with offers, content, and client delivery.",
+          "Expanded Learning Hub — new modules on AI automation, revenue systems, and building a one-person media presence.",
+          "Implementation Lab themes — each month's Lab will have a focused theme so you can plan ahead and show up prepared.",
+          'Agent updates — we\'re continuously improving how each specialist responds and what context they hold.',
+        ])}
+        <p style="margin:24px 0 20px;">Studio members get these as they land — no extra cost, no upgrades required.</p>
+        <p style="margin:0 0 20px;">While you're waiting for what's next, there's plenty here now. The Prompt Library alone has more than most people explore in the first month.</p>
+        ${ctaButton(`Explore what's here now →`, `${appUrl}/toolkit`)}
+        <p style="margin:32px 0 0;">Building this for you,<br><strong>Nadia</strong></p>
+      `, `What's coming to Studio next`),
+    },
+
+    [`paid_private_day_25`]: {
+      subject: `What's ahead for Private Advisory, ${firstName}`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Private Advisory evolves with its members. Here's what's on the horizon — and what you'll get first:</p>
+        ${featureBox([
+          "<strong>New Private Template Packs</strong> — Revenue modeling, partnership frameworks, team hiring SOPs. Built for founders at your level.",
+          "<strong>Enhanced Strategy Reviews</strong> — We're adding structured pre-session frameworks to make each review more actionable and easier to prepare for.",
+          '<strong>VIP Event Access</strong> — Private Advisory members get first access to any live intensives, workshops, or invitation-only sessions we run.',
+          '<strong>Expanded Concierge Depth</strong> — Agent updates that improve strategic synthesis across multi-session projects.',
+        ])}
+        ${pinkCallout(`You'll have early access to all of this before Studio or the wider community. That's part of what Private Advisory means.`)}
+        <p style="margin:24px 0 20px;">If there's something you wish existed in Private Advisory — a template, a resource, a type of support — tell me. We build based on what members actually need.</p>
+        ${ctaButton(`Tell us what you need →`, `${appUrl}/concierge?agent=aria&prompt=${encodeURIComponent(`I'm a Private Advisory member and I have a suggestion or request for a resource I'd love to see built: [describe]`)}`)}
+        <p style="margin:32px 0 0;">Building this with you,<br><strong>Nadia</strong></p>
+      `, `What's ahead for Private Advisory, ${firstName}`),
+    },
+
+    [`paid_studio_day_30`]: {
+      subject: `A note from me — 30 days in`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Thirty days.</p>
+        <p style="margin:0 0 20px;">I started MetaHers because I kept watching brilliant women sit on the sidelines of AI — not because they couldn't use it, but because nothing was built for them. Not in their voice, not for their business model, not with their constraints in mind.</p>
+        <p style="margin:0 0 20px;">I built Studio for founders like you — the ones who are serious, resourceful, and building something real. And I'm glad you're here.</p>
+        <p style="margin:0 0 20px;">I have one question for you: what would make MetaHers Studio better for you?</p>
+        <p style="margin:0 0 20px;">Not a survey. Not a form. Just reply to this email and tell me. I read them.</p>
+        <p style="margin:0 0 20px;">Whatever you've built in the last 30 days — even if it's small, even if it's just clarity — that's real. Keep going.</p>
+        <p style="margin:32px 0 0;">With genuine care,<br><strong>Nadia</strong><br><span style="color:#aaa; font-size:14px;">Founder, MetaHers</span></p>
+      `, `A note from me — 30 days in`),
+    },
+
+    [`paid_private_day_30`]: {
+      subject: `30 days in — a personal note`,
+      html: wrap(`
+        <p style="margin:0 0 20px;">Hi ${firstName},</p>
+        <p style="margin:0 0 20px;">Thirty days of Private Advisory.</p>
+        <p style="margin:0 0 20px;">I want to be honest with you: Private Advisory is the thing I'm most proud of at MetaHers. Not because of what it costs, but because of what it does. It's the closest thing I've built to genuine strategic partnership — and the members who use it fully tend to have their businesses look meaningfully different six months later.</p>
+        <p style="margin:0 0 20px;">I hope the last 30 days have been useful. I hope the concierge has saved you hours and given you clarity. I hope the strategy layer has made some things easier.</p>
+        <p style="margin:0 0 20px;">And I want to know: what do you wish were different? What's missing? What would make Private Advisory genuinely transformational for you?</p>
+        <p style="margin:0 0 20px;">Reply to this email. I read them personally.</p>
+        ${pinkCallout(`Your next strategy review is available whenever you're ready. Message ARIA to book it. Come with your biggest question — that's what these reviews are for.`)}
+        <p style="margin:32px 0 0;">With real investment in your success,<br><strong>Nadia</strong><br><span style="color:#aaa; font-size:14px;">Founder, MetaHers</span></p>
+      `, `30 days in — a personal note`),
+    },
+  };
+
+  const emailContent = emails[emailKey];
+  if (!emailContent) {
+    console.error(`[PaidEmail] Unknown emailKey: ${emailKey}`);
+    return;
+  }
+
+  await resend.client.emails.send({
+    from: resend.fromEmail,
+    to: user.email,
+    subject: emailContent.subject,
+    html: emailContent.html,
+  });
+
+  console.log(`[PaidEmail] Sent ${emailKey} to ${user.email}`);
+}
+
 // ===== EMAIL SEQUENCE CRON =====
 
 export async function processScheduledEmails(): Promise<void> {
@@ -861,32 +1388,71 @@ export async function processScheduledEmails(): Promise<void> {
           continue;
         }
 
-        if (user.subscriptionTier && user.subscriptionTier !== 'free') {
-          await storage.markEmailSent(scheduled.id, 'upgraded', null);
-          continue;
+        const isPaidSequence = scheduled.emailKey.startsWith('paid_');
+
+        if (!isPaidSequence) {
+          // FREE sequence: skip if user upgraded
+          if (user.subscriptionTier && user.subscriptionTier !== 'free') {
+            await storage.markEmailSent(scheduled.id, 'upgraded', null);
+            continue;
+          }
+
+          const quiz = await storage.getOnboardingQuizResponse(scheduled.userId);
+          const persona = getPersona(quiz?.role || 'solopreneur');
+
+          let variant: 'active' | 'inactive' = 'inactive';
+          if (scheduled.emailKey === 'day_5') {
+            const usage = await storage.getAgentUsage(scheduled.userId);
+            variant = (usage && usage.messageCount > 0) ? 'active' : 'inactive';
+          }
+
+          const goalLabel = GOAL_LABELS[quiz?.goal || 'learn_ai'] || 'learning AI';
+
+          await sendSequenceEmail(
+            scheduled.emailKey,
+            { email: user.email, firstName: user.firstName },
+            persona,
+            variant,
+            goalLabel,
+          );
+
+          await storage.markEmailSent(scheduled.id, persona, variant);
+          console.log(`[EmailCron] Sent ${scheduled.emailKey} to ${user.email} (${persona}/${variant})`);
+
+        } else {
+          // PAID sequence: skip if user downgraded back to free
+          if (!user.subscriptionTier || user.subscriptionTier === 'free') {
+            await storage.markEmailSent(scheduled.id, 'downgraded', null);
+            continue;
+          }
+
+          let persona: 'builder' | 'creative' | 'mom' = 'builder';
+          try {
+            const quiz = await storage.getOnboardingQuizResponse(user.id);
+            if (quiz?.role === 'creative') persona = 'creative';
+            else if (quiz?.role === 'mom') persona = 'mom';
+          } catch { /* default to builder */ }
+
+          const tier = user.subscriptionTier;
+
+          // Day 21 resolves to active/inactive variant at send time
+          let finalEmailKey = scheduled.emailKey;
+          if (scheduled.emailKey.includes('day_21')) {
+            try {
+              const usage = await storage.getAgentUsage(user.id);
+              const isActive = usage && usage.messageCount > 5;
+              const tierShort = tier.includes('private') ? 'private' : 'studio';
+              finalEmailKey = `paid_${tierShort}_day_21_${isActive ? 'active' : 'inactive'}`;
+            } catch {
+              const tierShort = tier.includes('private') ? 'private' : 'studio';
+              finalEmailKey = `paid_${tierShort}_day_21_inactive`;
+            }
+          }
+
+          await sendPaidSequenceEmail(finalEmailKey, user, persona, tier, null);
+          await storage.markEmailSent(scheduled.id, persona, null);
+          console.log(`[EmailCron] Sent ${finalEmailKey} to ${user.email} (${persona})`);
         }
-
-        const quiz = await storage.getOnboardingQuizResponse(scheduled.userId);
-        const persona = getPersona(quiz?.role || 'solopreneur');
-
-        let variant: 'active' | 'inactive' = 'inactive';
-        if (scheduled.emailKey === 'day_5') {
-          const usage = await storage.getAgentUsage(scheduled.userId);
-          variant = (usage && usage.messageCount > 0) ? 'active' : 'inactive';
-        }
-
-        const goalLabel = GOAL_LABELS[quiz?.goal || 'learn_ai'] || 'learning AI';
-
-        await sendSequenceEmail(
-          scheduled.emailKey,
-          { email: user.email, firstName: user.firstName },
-          persona,
-          variant,
-          goalLabel,
-        );
-
-        await storage.markEmailSent(scheduled.id, persona, variant);
-        console.log(`[EmailCron] Sent ${scheduled.emailKey} to ${user.email} (${persona}/${variant})`);
 
       } catch (err) {
         console.error(`[EmailCron] Failed to send ${scheduled.emailKey} for user ${scheduled.userId}:`, err);
@@ -1541,6 +2107,13 @@ Return ONLY valid JSON:
       res.status(500).json({ message: "Failed to complete onboarding" });
     }
   });
+
+  // Mark paid welcome modal as shown
+  app.post('/api/auth/complete-paid-welcome', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const userId = req.session!.userId as string;
+    await storage.markPaidWelcomeShown(userId);
+    res.json({ success: true });
+  }));
 
   // Submit email for beta access (public endpoint)
   app.post('/api/email-leads', async (req: Request, res) => {
@@ -3823,6 +4396,16 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
                   }).catch(err => console.error('[Email] Paid welcome email error:', err));
                 }
               }).catch(err => console.error('[Email] Failed to fetch user for welcome email:', err));
+
+              // Schedule paid onboarding email sequence
+              storage.schedulePaidEmailSequence(userId, tier, new Date())
+                .catch(err => console.error('[EmailSequence] Failed to schedule paid sequence:', err));
+            }
+
+            // For re-subscriptions — reset the welcome modal flag so it shows again
+            if (event.type === 'customer.subscription.updated' && isActive && tier) {
+              storage.resetPaidWelcomeShown(userId)
+                .catch(err => console.error('[PaidWelcome] Failed to reset paidWelcomeShown:', err));
             }
           }
           break;

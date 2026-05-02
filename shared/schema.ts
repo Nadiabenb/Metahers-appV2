@@ -42,6 +42,7 @@ export const users = pgTable("users", {
   quizCompletedAt: timestamp("quiz_completed_at"), // When they completed the quiz
   stripeCustomerId: varchar("stripe_customer_id"), // Stripe customer ID for payments
   stripeSubscriptionId: varchar("stripe_subscription_id"), // Current subscription ID
+  paidWelcomeShown: boolean("paid_welcome_shown").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -3414,6 +3415,7 @@ export const scheduledEmails = pgTable("scheduled_emails", {
   sentAt: timestamp("sent_at"),
   persona: varchar("persona"), // "builder", "creative", "mom" — resolved at send time
   variant: varchar("variant"), // "active" | "inactive" — for day_5 only, resolved at send time
+  sequenceType: varchar("sequence_type").default("free_onboarding").notNull(), // "free_onboarding" | "paid_onboarding"
   createdAt: timestamp("created_at").defaultNow(),
 }, (table) => [
   index("idx_scheduled_emails_user").on(table.userId),

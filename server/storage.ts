@@ -152,7 +152,7 @@ import type {
   ScheduledEmailDB,
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and, desc, sql, count, gte, lt } from "drizzle-orm";
+import { eq, and, desc, sql, count, gte, lt, like, isNull } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -382,8 +382,11 @@ export interface IStorage {
 
   // Scheduled email operations
   scheduleEmailSequence(userId: string, signupDate: Date): Promise<void>;
+  schedulePaidEmailSequence(userId: string, tier: string, upgradeDate: Date): Promise<void>;
   getDueScheduledEmails(): Promise<ScheduledEmailDB[]>;
   markEmailSent(id: string, persona: string, variant: string | null): Promise<void>;
+  markPaidWelcomeShown(userId: string): Promise<void>;
+  resetPaidWelcomeShown(userId: string): Promise<void>;
 }
 
 const MAX_AGENT_CONVERSATION_MESSAGES = 40;
@@ -2427,6 +2430,73 @@ export class DatabaseStorage implements IStorage {
 
     await db.insert(scheduledEmails).values(rows);
     console.log(`[EmailSequence] Scheduled 7 emails for user ${userId}`);
+  }
+
+  async schedulePaidEmailSequence(userId: string, tier: string, upgradeDate: Date): Promise<void> {
+    const existing = await db
+      .select()
+      .from(scheduledEmails)
+      .where(
+        and(
+          eq(scheduledEmails.userId, userId),
+          like(scheduledEmails.emailKey, 'paid_%'),
+          isNull(scheduledEmails.sentAt)
+        )
+      );
+
+    if (existing.length > 0) {
+      console.log(`[EmailSequence] Paid sequence already exists for user ${userId}, skipping`);
+      return;
+    }
+
+    const tierShort = tier.includes('private') ? 'private' : 'studio';
+
+    const scheduleDay = (daysOffset: number): Date => {
+      if (daysOffset === 0) return new Date();
+      const d = new Date(upgradeDate);
+      d.setDate(d.getDate() + daysOffset);
+      d.setUTCHours(10, 0, 0, 0);
+      return d;
+    };
+
+    const emailSchedule = [
+      { key: `paid_${tierShort}_day_0`,  daysOffset: 0  },
+      { key: `paid_${tierShort}_day_1`,  daysOffset: 1  },
+      { key: `paid_${tierShort}_day_3`,  daysOffset: 3  },
+      { key: `paid_${tierShort}_day_5`,  daysOffset: 5  },
+      { key: `paid_${tierShort}_day_7`,  daysOffset: 7  },
+      { key: `paid_${tierShort}_day_10`, daysOffset: 10 },
+      { key: `paid_${tierShort}_day_14`, daysOffset: 14 },
+      { key: `paid_${tierShort}_day_17`, daysOffset: 17 },
+      { key: `paid_${tierShort}_day_21`, daysOffset: 21 },
+      { key: `paid_${tierShort}_day_25`, daysOffset: 25 },
+      { key: `paid_${tierShort}_day_30`, daysOffset: 30 },
+    ];
+
+    for (const { key, daysOffset } of emailSchedule) {
+      await db.insert(scheduledEmails).values({
+        userId,
+        emailKey: key,
+        scheduledFor: scheduleDay(daysOffset),
+        sequenceType: 'paid_onboarding',
+      });
+    }
+
+    console.log(`[EmailSequence] Scheduled ${emailSchedule.length} paid emails for user ${userId} (tier: ${tierShort})`);
+  }
+
+  async markPaidWelcomeShown(userId: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ paidWelcomeShown: true })
+      .where(eq(users.id, userId));
+  }
+
+  async resetPaidWelcomeShown(userId: string): Promise<void> {
+    await db
+      .update(users)
+      .set({ paidWelcomeShown: false })
+      .where(eq(users.id, userId));
   }
 
   async getDueScheduledEmails(): Promise<ScheduledEmailDB[]> {
