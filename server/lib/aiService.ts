@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import crypto from 'crypto';
 import { db } from '../db';
 import { aiUsage, users } from '@shared/schema';
-import { promptTemplates, PromptType } from './prompts/templates';
+import { promptTemplates, PromptType, type PromptVersions } from './prompts/templates';
 import { getPromptVersion, interpolatePrompt } from './prompts/versions';
 import { logger } from './logger';
 import { cacheGet, cacheSet, hashInput } from './cache';
@@ -185,7 +185,8 @@ export class AIService {
   ): Promise<string> {
     const startTime = Date.now();
     const version = getPromptVersion(promptType, options.userId, options.version);
-    const template = promptTemplates[promptType][version];
+    const templates = promptTemplates[promptType] as PromptVersions;
+    const template = templates[version];
 
     if (!template) {
       throw new Error(`Template not found: ${promptType} ${version}`);
@@ -280,7 +281,8 @@ export class AIService {
       await cacheSet(redisCacheKey, content, ttl);
       
       // Memory cache (fallback)
-      this.setCachedResponse(cacheKey, content, ttl);
+      const memCacheKey = this.generateCacheKey(promptType, variables, version);
+      this.setCachedResponse(memCacheKey, content, ttl);
 
       logger.info({ promptType, version, latencyMs, tokens: usage }, 'AI generation successful');
 

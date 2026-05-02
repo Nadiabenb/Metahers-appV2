@@ -1651,7 +1651,7 @@ export class DatabaseStorage implements IStorage {
     // Deduplicate completedSections array (case-insensitive, normalized to strings)
     const deduplicatedSections = Array.from(
       new Set(
-        progressData.completedSections.map(id => String(id).toLowerCase())
+        (progressData.completedSections ?? []).map(id => String(id).toLowerCase())
       )
     );
 
@@ -2004,7 +2004,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async searchProfiles(searchTerm?: string, visibility?: string): Promise<WomenProfileDB[]> {
-    let query = db.select().from(womenProfiles);
+    let query = db.select().from(womenProfiles).$dynamic();
     if (visibility) {
       query = query.where(eq(womenProfiles.visibility, visibility));
     } else {
@@ -2251,7 +2251,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getBusinessAnalytics(businessId: string, platform?: string): Promise<AgencyAnalyticsDB[]> {
-    let query = db.select().from(agencyAnalytics).where(eq(agencyAnalytics.businessId, businessId));
+    let query = db.select().from(agencyAnalytics).where(eq(agencyAnalytics.businessId, businessId)).$dynamic();
     if (platform) {
       query = query.where(and(eq(agencyAnalytics.businessId, businessId), eq(agencyAnalytics.platform, platform)));
     }

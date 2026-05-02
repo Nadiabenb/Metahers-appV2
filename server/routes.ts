@@ -1,4 +1,4 @@
-import type { Express, Request, RequestHandler } from "express";
+import type { Express, Request, RequestHandler, Response } from "express";
 import { createServer, type Server } from "http";
 import { randomBytes } from "crypto";
 import { storage } from "./storage";
@@ -22,6 +22,7 @@ import { AGENT_IDS, AGENT_DISPLAY_NAMES, buildAgentSystemPrompt, buildGreetingUs
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
 import adminRoutes from "./adminRoutes";
+import { logger } from "./lib/logger";
 
 // City search endpoint function
 async function searchCities(query: string) {
@@ -1031,6 +1032,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
       // 🔒 PROTECTION LAYER 1: Require explicit confirmation
       const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
@@ -1228,6 +1232,9 @@ Return ONLY valid JSON:
     try {
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
 
       // 🔒 PROTECTION: Require explicit confirmation
       const today = new Date().toISOString().split('T')[0];
@@ -1641,7 +1648,7 @@ Return ONLY valid JSON:
           const result = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: email,
-          reply_to: REPLY_TO_EMAIL,
+          replyTo: REPLY_TO_EMAIL,
           subject: 'Reset Your MetaHers Password',
           html: `
 <!DOCTYPE html>
@@ -4614,7 +4621,6 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       ];
 
       const experiencesData = EXPERIENCES.map(exp => ({
-        id: exp.id,
         spaceId: exp.spaceId,
         title: exp.title,
         slug: exp.slug,
@@ -4664,7 +4670,6 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       for (const expData of experiencesData) {
         await db.insert(transformationalExperiences)
           .values({
-            id: expData.id,
             spaceId: expData.spaceId,
             title: expData.title,
             slug: expData.slug,
@@ -6252,7 +6257,7 @@ Respond in JSON format:
         await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: 'melissa@metahers.ai', // Admin email
-          reply_to: REPLY_TO_EMAIL,
+          replyTo: REPLY_TO_EMAIL,
           subject: `New Voyage Invitation Request: ${voyage[0].title}`,
           html: `
             <div style="font-family: Inter, system-ui, sans-serif; max-width: 600px; margin: 0 auto; background: #0D0B14; color: #fff; padding: 32px; border-radius: 16px;">
@@ -6645,7 +6650,7 @@ Respond in JSON format:
         const { data: nadiaData, error: nadiaError } = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: 'nadia@metahers.ai',
-          reply_to: REPLY_TO_EMAIL,
+          replyTo: REPLY_TO_EMAIL,
           subject: `New Blueprint Application: ${name}`,
           html: `
             <h2>New AI Blueprint Application</h2>
@@ -6675,7 +6680,7 @@ Respond in JSON format:
         const { data: applicantData, error: applicantError } = await resendClient.client.emails.send({
           from: resendClient.fromEmail,
           to: email,
-          reply_to: REPLY_TO_EMAIL,
+          replyTo: REPLY_TO_EMAIL,
           subject: 'Thank you for applying to The AI Blueprint',
           html: `
             <p>Thank you for applying.</p>

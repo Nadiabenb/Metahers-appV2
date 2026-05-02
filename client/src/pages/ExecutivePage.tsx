@@ -11,8 +11,12 @@ import { useQuery } from "@tanstack/react-query";
 import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/Executive_woman_in_luxury_tech_office_8ad88ef4.png";
 
+type CohortCapacity = {
+  spotsRemaining?: number;
+};
+
 export default function ExecutivePage() {
-  const { data: capacity, isLoading } = useQuery({
+  const { data: capacity, isLoading } = useQuery<CohortCapacity>({
     queryKey: ['/api/cohort-capacity/executive'],
   });
 

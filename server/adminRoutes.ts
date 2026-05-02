@@ -32,6 +32,14 @@ const router = Router();
 router.use(isAuthenticated);
 router.use(requireAdmin);
 
+function toExperiencePayload(data: any) {
+  const { difficulty, isPublished, ...payload } = data;
+  if (typeof isPublished === 'boolean' && typeof payload.isActive === 'undefined') {
+    payload.isActive = isPublished;
+  }
+  return payload;
+}
+
 // Helper function to log admin actions
 async function logAdminAction(
   userId: string,
@@ -465,16 +473,15 @@ router.get('/spaces', async (req, res) => {
 
 router.post('/spaces', async (req, res) => {
   try {
-    const { name, slug, description, iconName, color, requiredTier, sortOrder } = req.body;
+    const { name, slug, description, iconName, icon, color, sortOrder } = req.body;
 
     const [newSpace] = await db.insert(spaces).values({
       id: crypto.randomUUID(),
       name,
       slug,
       description,
-      iconName,
+      icon: icon || iconName,
       color,
-      requiredTier: requiredTier || 'free',
       sortOrder: sortOrder || 999,
       isActive: true,
       createdAt: new Date(),
@@ -502,15 +509,14 @@ router.post('/spaces', async (req, res) => {
 router.put('/spaces/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, iconName, color, requiredTier, sortOrder, isActive } = req.body;
+    const { name, description, iconName, icon, color, sortOrder, isActive } = req.body;
 
     const updateData: any = { updatedAt: new Date() };
 
     if (name) updateData.name = name;
     if (description) updateData.description = description;
-    if (iconName) updateData.iconName = iconName;
+    if (icon || iconName) updateData.icon = icon || iconName;
     if (color) updateData.color = color;
-    if (requiredTier) updateData.requiredTier = requiredTier;
     if (typeof sortOrder === 'number') updateData.sortOrder = sortOrder;
     if (typeof isActive === 'boolean') updateData.isActive = isActive;
 
@@ -558,7 +564,7 @@ router.delete('/spaces/:id', async (req, res) => {
 // ===== EXPERIENCE MANAGEMENT =====
 router.get('/experiences', async (req, res) => {
   try {
-    const { spaceId, difficulty, status } = req.query;
+    const { spaceId, status } = req.query;
 
     let query = db.select().from(transformationalExperiences);
     const conditions: any[] = [];
@@ -567,14 +573,10 @@ router.get('/experiences', async (req, res) => {
       conditions.push(eq(transformationalExperiences.spaceId, spaceId as string));
     }
 
-    if (difficulty) {
-      conditions.push(eq(transformationalExperiences.difficulty, difficulty as string));
-    }
-
     if (status === 'published') {
-      conditions.push(eq(transformationalExperiences.isPublished, true));
+      conditions.push(eq(transformationalExperiences.isActive, true));
     } else if (status === 'draft') {
-      conditions.push(eq(transformationalExperiences.isPublished, false));
+      conditions.push(eq(transformationalExperiences.isActive, false));
     }
 
     if (conditions.length > 0) {
@@ -592,7 +594,7 @@ router.get('/experiences', async (req, res) => {
 
 router.post('/experiences', async (req, res) => {
   try {
-    const experienceData = req.body;
+    const experienceData = toExperiencePayload(req.body);
 
     const [experience] = await db
       .insert(transformationalExperiences)
@@ -621,7 +623,7 @@ router.post('/experiences', async (req, res) => {
 router.put('/experiences/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const experienceData = req.body;
+    const experienceData = toExperiencePayload(req.body);
 
     const [updated] = await db
       .update(transformationalExperiences)
@@ -689,14 +691,15 @@ router.post('/experiences/:id/duplicate', async (req, res) => {
       return res.status(404).json({ error: 'Experience not found' });
     }
 
+    const { id: _originalId, ...duplicateData } = original;
+
     const [duplicate] = await db
       .insert(transformationalExperiences)
       .values({
-        ...original,
-        id: undefined,
+        ...duplicateData,
         title: `${original.title} (Copy)`,
         slug: `${original.slug}-copy`,
-        isPublished: false,
+        isActive: false,
         createdAt: new Date(),
         updatedAt: new Date(),
       })

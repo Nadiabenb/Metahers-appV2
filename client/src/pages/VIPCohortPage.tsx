@@ -11,8 +11,12 @@ import { useQuery } from "@tanstack/react-query";
 import { trackCTAClick } from "@/lib/analytics";
 import heroImage from "@assets/generated_images/VIP_Cohort_hero_background_d42d4ea1.png";
 
+type CohortCapacity = {
+  spotsRemaining?: number;
+};
+
 export default function VIPCohortPage() {
-  const { data: capacity, isLoading } = useQuery({
+  const { data: capacity, isLoading } = useQuery<CohortCapacity>({
     queryKey: ['/api/cohort-capacity/vip_cohort'],
   });
 

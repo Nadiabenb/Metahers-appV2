@@ -1,6 +1,5 @@
 
 import rateLimit from 'express-rate-limit';
-import RedisStore from 'rate-limit-redis';
 
 // In-memory store for development
 export const authLimiter = rateLimit({
@@ -27,7 +26,7 @@ export const aiLimiter = rateLimit({
   legacyHeaders: false,
   keyGenerator: (req) => {
     // Use user ID if authenticated, otherwise IP
-    return req.user?.id?.toString() || req.ip || 'unknown';
+    return req.session?.userId || req.ip || 'unknown';
   },
 });
 

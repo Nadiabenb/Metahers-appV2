@@ -12,22 +12,46 @@ import { SEO } from "@/components/SEO";
 import { ArrowLeft, CheckCircle, Sparkles, Lock, Globe, Star } from "lucide-react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
-import type { WomenProfileDB } from "@shared/schema";
+import type { InsertWomenProfile, WomenProfileDB } from "@shared/schema";
+
+type CircleProfileFormData = {
+  headline: string;
+  bio: string;
+  location: string;
+  lookingFor: string;
+  availability: string;
+  skills: string;
+  visibility: string;
+};
+
+const toLookingForText = (lookingFor: WomenProfileDB["lookingFor"]) =>
+  Array.isArray(lookingFor) ? lookingFor.join(", ") : "";
+
+const toProfilePayload = (data: CircleProfileFormData): Partial<InsertWomenProfile> => ({
+  headline: data.headline,
+  bio: data.bio,
+  location: data.location,
+  lookingFor: data.lookingFor
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean),
+  availability: data.availability,
+  visibility: data.visibility,
+});
 
 export default function CircleProfilePage() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const { user } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CircleProfileFormData>({
     headline: "",
     bio: "",
     location: "",
     lookingFor: "",
-    availability: "passive" as const,
+    availability: "passive",
     skills: "",
-    website: "",
-    visibility: "public" as const,
+    visibility: "public",
   });
 
   const { data: profile, isLoading } = useQuery<WomenProfileDB | null>({
@@ -41,21 +65,20 @@ export default function CircleProfilePage() {
         headline: profile.headline || "",
         bio: profile.bio || "",
         location: profile.location || "",
-        lookingFor: profile.lookingFor || "",
+        lookingFor: toLookingForText(profile.lookingFor),
         availability: profile.availability || "passive",
-        skills: profile.skills || "",
-        website: profile.website || "",
+        skills: "",
         visibility: profile.visibility || "public",
       });
     }
   }, [profile]);
 
   const createMutation = useMutation({
-    mutationFn: async (data: typeof formData) => {
+    mutationFn: async (data: CircleProfileFormData) => {
       const response = await fetch("/api/circle/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(toProfilePayload(data)),
       });
       if (!response.ok) throw new Error("Failed to save profile");
       return response.json();
@@ -332,7 +355,7 @@ export default function CircleProfilePage() {
                     </label>
                     <select
                       value={formData.availability}
-                      onChange={(e) => setFormData({ ...formData, availability: e.target.value as any })}
+                      onChange={(e) => setFormData({ ...formData, availability: e.target.value })}
                       className="w-full px-4 py-2 rounded-lg border border-input bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--hyper-violet))]/20"
                       data-testid="select-availability"
                     >
@@ -348,7 +371,7 @@ export default function CircleProfilePage() {
                     </label>
                     <select
                       value={formData.visibility}
-                      onChange={(e) => setFormData({ ...formData, visibility: e.target.value as any })}
+                      onChange={(e) => setFormData({ ...formData, visibility: e.target.value })}
                       className="w-full px-4 py-2 rounded-lg border border-input bg-white focus:outline-none focus:ring-2 focus:ring-[hsl(var(--hyper-violet))]/20"
                       data-testid="select-visibility"
                     >

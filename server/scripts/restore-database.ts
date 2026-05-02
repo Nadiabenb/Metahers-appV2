@@ -135,10 +135,10 @@ async function restoreDatabase() {
   }
 
   console.log('\n✅ Confirmation received. Starting restore...\n');
-  logger.warn('Database restore initiated', { 
+  logger.warn({ 
     backupFile: path.basename(backupPath),
     database 
-  });
+  }, 'Database restore initiated');
 
   try {
     // Extract connection details
@@ -168,12 +168,12 @@ async function restoreDatabase() {
       -d ${database} \
       -f "${decompressedPath}"`;
 
-    logger.info('Starting database restore', { filename: path.basename(backupPath) });
+    logger.info({ filename: path.basename(backupPath) }, 'Starting database restore');
 
     const { stdout, stderr } = await execAsync(psqlCommand);
 
     if (stderr && !stderr.includes('NOTICE') && !stderr.includes('already exists')) {
-      logger.warn('psql warnings during restore', { stderr });
+      logger.warn({ stderr }, 'psql warnings during restore');
     }
 
     console.log('✅ Database restored\n');
@@ -195,11 +195,11 @@ async function restoreDatabase() {
     console.log(`⏱️  Duration: ${duration}s`);
     console.log(`🎯 Database: ${database}\n`);
 
-    logger.info('Database restore completed', {
+    logger.info({
       backupFile: path.basename(backupPath),
       duration: parseFloat(duration),
       database
-    });
+    }, 'Database restore completed');
 
     console.log('✅ Next steps:');
     console.log('   1. Restart your application');

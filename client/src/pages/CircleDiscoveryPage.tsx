@@ -418,12 +418,12 @@ export default function CircleDiscoveryPage() {
                         </p>
 
                         {/* Skills Tags */}
-                        {profile.lookingFor && typeof profile.lookingFor === 'string' && (
+                        {Array.isArray(profile.lookingFor) && profile.lookingFor.length > 0 && (
                           <div className="flex gap-2 mb-5 flex-wrap">
-                            {profile.lookingFor.split(',').slice(0, 3).map((tag, i) => (
+                            {profile.lookingFor.slice(0, 3).map((tag: string, i: number) => (
                               <motion.div key={i} whileHover={{ scale: 1.08 }}>
                                 <Badge className="bg-gradient-to-r from-[hsl(var(--hyper-violet))]/15 to-[hsl(var(--cyber-fuchsia))]/15 text-foreground font-medium border border-[hsl(var(--hyper-violet))]/30 text-xs px-2.5 py-1">
-                                  {tag.trim().substring(0, 12)}
+                                  {tag.substring(0, 12)}
                                 </Badge>
                               </motion.div>
                             ))}

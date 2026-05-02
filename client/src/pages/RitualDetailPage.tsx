@@ -43,20 +43,20 @@ export default function RitualDetailPage() {
   const seoDescription = `${ritual.summary} Learn through ${ritual.steps.length} guided steps in ${ritual.duration_min} minutes.`;
   const slug = params?.slug;
 
-  const seoKeywords = `${ritual.title}, ${ritual.category}, AI learning, Web3 education, women in tech, ${ritual.title.toLowerCase()} course`;
+  const seoKeywords = `${ritual.title}, AI learning, Web3 education, women in tech, ${ritual.title.toLowerCase()} course`;
 
   const courseSchema = {
     "@context": "https://schema.org",
     "@type": "Course",
     "name": ritual.title,
-    "description": ritual.description,
+    "description": ritual.summary,
     "provider": {
       "@type": "Organization",
       "name": "MetaHers",
       "url": "https://metahers.ai"
     },
     "educationalLevel": "Beginner",
-    "timeRequired": `PT${ritual.duration}M`,
+    "timeRequired": `PT${ritual.duration_min}M`,
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -66,7 +66,7 @@ export default function RitualDetailPage() {
     "hasCourseInstance": {
       "@type": "CourseInstance",
       "courseMode": "online",
-      "courseWorkload": `PT${ritual.duration}M`
+      "courseWorkload": `PT${ritual.duration_min}M`
     }
   };
 
@@ -87,7 +87,7 @@ export default function RitualDetailPage() {
         "name": "How long does this ritual take?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `This ritual takes approximately ${ritual.duration} minutes to complete at your own pace.`
+          "text": `This ritual takes approximately ${ritual.duration_min} minutes to complete at your own pace.`
         }
       },
       {
@@ -95,7 +95,7 @@ export default function RitualDetailPage() {
         "name": "What will I learn?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": ritual.description
+          "text": ritual.summary
         }
       },
       {

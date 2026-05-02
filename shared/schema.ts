@@ -393,7 +393,7 @@ export const companions = pgTable("companions", {
 ]);
 
 export const insertCompanionSchema = createInsertSchema(companions).omit({ id: true, createdAt: true, updatedAt: true });
-export type InsertCompanion = z.infer<typeof insertCompanionSchema>;
+export type InsertCompanion = typeof companions.$inferInsert;
 export type CompanionDB = typeof companions.$inferSelect;
 
 // Companion activity log
@@ -761,7 +761,7 @@ export const experienceProgress = pgTable("experience_progress", {
 ]);
 
 export const insertExperienceProgressSchema = createInsertSchema(experienceProgress).omit({ id: true, startedAt: true, lastUpdated: true });
-export type InsertExperienceProgress = z.infer<typeof insertExperienceProgressSchema>;
+export type InsertExperienceProgress = typeof experienceProgress.$inferInsert;
 export type ExperienceProgressDB = typeof experienceProgress.$inferSelect;
 
 // Personalization Questions table (AI-powered adaptive questions)
@@ -2443,7 +2443,7 @@ export const womenProfiles = pgTable("women_profiles", {
 ]);
 
 export const insertWomenProfileSchema = createInsertSchema(womenProfiles).omit({ id: true, createdAt: true, updatedAt: true });
-export type InsertWomenProfile = z.infer<typeof insertWomenProfileSchema>;
+export type InsertWomenProfile = typeof womenProfiles.$inferInsert;
 export type WomenProfileDB = typeof womenProfiles.$inferSelect;
 
 // Profile skills table
@@ -2899,7 +2899,7 @@ export const agencyBusinesses = pgTable("agency_businesses", {
 ]);
 
 export const insertAgencyBusinessSchema = createInsertSchema(agencyBusinesses).omit({ id: true, createdAt: true, updatedAt: true });
-export type InsertAgencyBusiness = z.infer<typeof insertAgencyBusinessSchema>;
+export type InsertAgencyBusiness = typeof agencyBusinesses.$inferInsert;
 export type AgencyBusinessDB = typeof agencyBusinesses.$inferSelect;
 
 // Agency Strategy Packages - generated brand strategies
@@ -2926,7 +2926,7 @@ export const agencyStrategies = pgTable("agency_strategies", {
 ]);
 
 export const insertAgencyStrategySchema = createInsertSchema(agencyStrategies).omit({ id: true, createdAt: true });
-export type InsertAgencyStrategy = z.infer<typeof insertAgencyStrategySchema>;
+export type InsertAgencyStrategy = typeof agencyStrategies.$inferInsert;
 export type AgencyStrategyDB = typeof agencyStrategies.$inferSelect;
 
 // Agency Sessions - tracks multi-agent orchestration runs
@@ -3013,7 +3013,7 @@ export const agencyAssets = pgTable("agency_assets", {
 ]);
 
 export const insertAgencyAssetSchema = createInsertSchema(agencyAssets).omit({ id: true, createdAt: true, updatedAt: true });
-export type InsertAgencyAsset = z.infer<typeof insertAgencyAssetSchema>;
+export type InsertAgencyAsset = typeof agencyAssets.$inferInsert;
 export type AgencyAssetDB = typeof agencyAssets.$inferSelect;
 
 // Agency Visual Packages - brand visual identity kits
@@ -3045,7 +3045,7 @@ export const agencyVisualPackages = pgTable("agency_visual_packages", {
 ]);
 
 export const insertAgencyVisualPackageSchema = createInsertSchema(agencyVisualPackages).omit({ id: true, createdAt: true });
-export type InsertAgencyVisualPackage = z.infer<typeof insertAgencyVisualPackageSchema>;
+export type InsertAgencyVisualPackage = typeof agencyVisualPackages.$inferInsert;
 export type AgencyVisualPackageDB = typeof agencyVisualPackages.$inferSelect;
 
 // Agency Automation Schedules - content posting calendars
@@ -3093,7 +3093,7 @@ export const agencyAnalytics = pgTable("agency_analytics", {
 ])
 
 export const insertAgencyAnalyticsSchema = createInsertSchema(agencyAnalytics).omit({ id: true, createdAt: true });
-export type InsertAgencyAnalytics = z.infer<typeof insertAgencyAnalyticsSchema>;
+export type InsertAgencyAnalytics = typeof agencyAnalytics.$inferInsert;
 export type AgencyAnalyticsDB = typeof agencyAnalytics.$inferSelect;
 
 // ===== METAHERS VOYAGES - LUXURY TECH EDUCATION BOOKING =====

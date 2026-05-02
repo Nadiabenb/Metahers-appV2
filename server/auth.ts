@@ -4,10 +4,7 @@ import connectPg from "connect-pg-simple";
 import { RedisStore } from "connect-redis";
 import { pool } from "./db";
 import { getRedisClient } from "./lib/redis";
-import { users, passwordResetTokens, type User, type InsertUser, type InsertPasswordResetToken } from "@shared/schema";
-import { eq } from "drizzle-orm";
 import type { Express, RequestHandler } from "express";
-import { storage } from "./storage";
 import { logger } from "./lib/logger";
 
 const SALT_ROUNDS = 12;

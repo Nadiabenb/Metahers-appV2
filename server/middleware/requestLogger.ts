@@ -5,6 +5,10 @@ import { logger } from '../lib/logger';
 
 declare global {
   namespace Express {
+    interface User {
+      id: string;
+    }
+
     interface Request {
       requestId?: string;
       startTime?: number;

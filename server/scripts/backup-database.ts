@@ -33,7 +33,7 @@ async function backupDatabase() {
   const backupsDir = path.join(process.cwd(), 'backups');
   try {
     await fs.mkdir(backupsDir, { recursive: true });
-    logger.info('Backups directory ready', { path: backupsDir });
+    logger.info({ path: backupsDir }, 'Backups directory ready');
   } catch (error) {
     logger.error({ error }, 'Failed to create backups directory');
     console.error('❌ Error creating backups directory:', error);
@@ -76,12 +76,12 @@ async function backupDatabase() {
       --if-exists \
       -f "${backupPath}"`;
 
-    logger.info('Starting pg_dump', { filename: backupFilename });
+    logger.info({ filename: backupFilename }, 'Starting pg_dump');
     
     const { stdout, stderr } = await execAsync(pgDumpCommand);
     
     if (stderr && !stderr.includes('NOTICE')) {
-      logger.warn('pg_dump warnings', { stderr });
+      logger.warn({ stderr }, 'pg_dump warnings');
     }
 
     // Verify backup file was created
@@ -97,7 +97,7 @@ async function backupDatabase() {
     const gzipCommand = `gzip "${backupPath}"`;
     await execAsync(gzipCommand);
     
-    logger.info('Backup compressed', { filename: compressedFilename });
+    logger.info({ filename: compressedFilename }, 'Backup compressed');
 
     // Verify compressed file
     const compressedStats = await fs.stat(compressedPath);
@@ -119,12 +119,12 @@ async function backupDatabase() {
     console.log(`⏱️  Duration: ${duration}s`);
     console.log(`💾 Size: ${compressedSizeInMB} MB\n`);
 
-    logger.info('Database backup completed', {
+    logger.info({
       filename: compressedFilename,
       size: compressedStats.size,
       duration: parseFloat(duration),
       compressionRatio: parseFloat(compressionRatio)
-    });
+    }, 'Database backup completed');
 
     console.log('💡 To restore this backup:');
     console.log(`   npm run restore:db backups/${compressedFilename}\n`);

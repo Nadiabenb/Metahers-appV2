@@ -1,5 +1,5 @@
 
-import { promptTemplates, PromptType } from './templates';
+import { promptTemplates, PromptType, type PromptVersions } from './templates';
 
 export interface PromptExperiment {
   promptType: PromptType;
@@ -27,8 +27,10 @@ export function getPromptVersion(
   userId?: string,
   preferredVersion?: string
 ): string {
+  const templates = promptTemplates[promptType] as PromptVersions;
+
   // If a specific version is requested, use it
-  if (preferredVersion && promptTemplates[promptType][preferredVersion]) {
+  if (preferredVersion && templates[preferredVersion]) {
     return preferredVersion;
   }
 
@@ -51,7 +53,7 @@ export function getPromptVersion(
   }
 
   // Default to latest version (highest version number)
-  const versions = Object.keys(promptTemplates[promptType]);
+  const versions = Object.keys(templates);
   return versions[versions.length - 1];
 }
 
