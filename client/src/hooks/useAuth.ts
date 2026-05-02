@@ -14,6 +14,11 @@ async function fetchUser(): Promise<User | null> {
     throw new Error(`${res.status}: ${res.statusText}`);
   }
 
+  const contentType = res.headers.get("content-type");
+  if (!contentType?.includes("application/json")) {
+    return null;
+  }
+
   return res.json();
 }
 

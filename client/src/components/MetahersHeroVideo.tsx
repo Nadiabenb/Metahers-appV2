@@ -308,7 +308,7 @@ function Scene0BrandReveal() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 1, ease: 'easeOut' }}
         >
-          A community for the modern digital era
+          AI implementation for ambitious women founders
         </motion.p>
       </div>
     </motion.div>

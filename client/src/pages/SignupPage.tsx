@@ -68,6 +68,12 @@ export default function SignupPage() {
        "quiz_email", "quiz_name", "quiz_matched_ritual"].forEach((k) => localStorage.removeItem(k));
 
       queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+      const postSignupUpgradeTier = localStorage.getItem("post_signup_upgrade_tier");
+      if (postSignupUpgradeTier) {
+        localStorage.removeItem("post_signup_upgrade_tier");
+        setLocation("/upgrade");
+        return;
+      }
       setLocation("/onboarding/quiz");
     } catch (error: any) {
       toast({

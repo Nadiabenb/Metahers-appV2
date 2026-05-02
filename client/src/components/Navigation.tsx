@@ -8,6 +8,12 @@ import { trackCTAClick } from "@/lib/analytics";
 
 const COMMUNITY_URL = "https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=gi_t";
 
+type NavItem = {
+  label: string;
+  path: string;
+  external?: boolean;
+};
+
 export function Navigation() {
   const [location, setLocation] = useLocation();
   const { isAuthenticated, isLoading } = useAuth();
@@ -35,14 +41,14 @@ export function Navigation() {
   const isActive = (path: string) =>
     location === path || (path !== "/" && location.startsWith(path));
 
-  const authNavItems = [
+  const authNavItems: NavItem[] = [
     { label: "Dashboard", path: "/dashboard" },
     { label: "Learn", path: "/learning-hub" },
     { label: "AI Team", path: "/concierge" },
     { label: "Tools", path: "/toolkit" },
   ];
 
-  const publicNavItems = [
+  const publicNavItems: NavItem[] = [
     { label: "Home", path: "/" },
     { label: "Learn", path: "/learning-hub" },
     { label: "Blog", path: "/blog" },

@@ -3,7 +3,8 @@ import { useEffect } from "react";
 import { PRICING_PLANS, formatPrice, type SubscriptionTier } from "@shared/pricing";
 import { Check, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { trackCTAClick } from "@/lib/analytics";
+import { trackCheckout, trackCTAClick } from "@/lib/analytics";
+import { apiRequestJson } from "@/lib/queryClient";
 
 const GOLD = "#C9A96E";
 const NAVY = "#1A1A2E";
@@ -19,18 +20,27 @@ export default function UpgradePage() {
     document.title = "Build Your AI Operating System - MetaHers";
   }, []);
 
-  const handleUpgrade = (tier: SubscriptionTier) => {
+  const handleUpgrade = async (tier: SubscriptionTier) => {
     if (tier === 'free') return;
 
+    if (!user) {
+      localStorage.setItem("post_signup_upgrade_tier", tier);
+      trackCTAClick(`upgrade_${tier}_signup_required`, "/signup", tier);
+      window.location.href = "/signup";
+      return;
+    }
+
     if (tier === 'signature_monthly') {
-      trackCTAClick('upgrade_signature', 'stripe_payment_link');
-      window.open('https://buy.stripe.com/8x28wQaT11jK5R8cX63Nm0a', '_blank');
+      trackCheckout('signature_monthly', PRICING_PLANS.signature_monthly.price);
+      const checkout = await apiRequestJson<{ url?: string }>("POST", "/api/create-checkout-session", { tier });
+      if (checkout.url) window.location.href = checkout.url;
       return;
     }
 
     if (tier === 'private_monthly') {
-      trackCTAClick('upgrade_private', 'stripe_payment_link');
-      window.open('https://buy.stripe.com/14A5kE7GP6E493kcX63Nm0b', '_blank');
+      trackCheckout('private_monthly', PRICING_PLANS.private_monthly.price);
+      const checkout = await apiRequestJson<{ url?: string }>("POST", "/api/create-checkout-session", { tier });
+      if (checkout.url) window.location.href = checkout.url;
       return;
     }
 

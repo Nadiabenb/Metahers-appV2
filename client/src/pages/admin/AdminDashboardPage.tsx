@@ -385,13 +385,13 @@ export default function AdminDashboardPage() {
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-gray-700">User Engagement</span>
                   <span className="text-sm font-bold text-green-600">
-                    {stats ? Math.round((stats.activeUsers / stats.totalUsers) * 100) : 0}%
+                    {stats ? Math.round((stats.activeAgentUsers / stats.totalUsers) * 100) : 0}%
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
                     className="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full transition-all"
-                    style={{ width: `${stats ? Math.round((stats.activeUsers / stats.totalUsers) * 100) : 0}%` }}
+                    style={{ width: `${stats ? Math.round((stats.activeAgentUsers / stats.totalUsers) * 100) : 0}%` }}
                   />
                 </div>
               </div>

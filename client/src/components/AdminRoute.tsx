@@ -1,7 +1,8 @@
 import { useAuth } from '@/hooks/useAuth';
 import { Redirect } from 'wouter';
+import type { ComponentType } from 'react';
 
-export function AdminRoute({ component: Component }: { component: () => JSX.Element }) {
+export function AdminRoute({ component: Component }: { component: ComponentType }) {
   const { isAuthenticated, isAdmin, isLoading } = useAuth();
 
   if (isLoading) {

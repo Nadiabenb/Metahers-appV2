@@ -55,25 +55,42 @@ function GoldLabel({ children }: { children: React.ReactNode }) {
 // ── Section 1: Hero ──────────────────────────────────────────────
 function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
   return (
-    <>
-      {/* Animated video — full viewport */}
+    <section
+      className="relative overflow-hidden"
+      style={{
+        width: "100%",
+        height: "calc(100vh - 64px)",
+        minHeight: 560,
+        maxHeight: 780,
+        background: "#FEFEFE",
+      }}
+      data-testid="section-hero"
+    >
       <section
-        style={{ width: "100%", height: "100vh" }}
-        data-testid="section-hero"
+        aria-hidden="true"
+        style={{ position: "absolute", inset: 0 }}
       >
         <MetahersHeroVideo />
       </section>
 
-      {/* CTA strip directly below the video */}
-      <section
-        className="flex flex-col items-center gap-4 py-14 px-6 text-center"
-        style={{ background: "#FEFEFE" }}
+      <div
+        className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-5 pb-10 text-center sm:pb-14"
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(254,254,254,0) 0%, rgba(254,254,254,0.94) 42%, #FEFEFE 100%)",
+        }}
       >
         <p
-          className="mb-2 text-lg"
+          className="mb-2 text-xs font-semibold uppercase"
+          style={{ color: GOLD, letterSpacing: "0.12em" }}
+        >
+          AI implementation for ambitious women founders
+        </p>
+        <p
+          className="mb-2 max-w-2xl text-base sm:text-lg"
           style={{ color: MUTED, fontFamily: "Inter, sans-serif", fontWeight: 300 }}
         >
-          MetaHers is where ambitious women learn AI, build with AI, and grow with AI.
+          Get your free AI Starter Kit, agent match, and curated toolkit.
         </p>
         <div className="flex flex-wrap gap-4 justify-center">
           <button
@@ -110,8 +127,8 @@ function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
             Try an Agent Free
           </button>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
 

@@ -115,7 +115,7 @@ export function OptimizedImage({
             className={`${className} ${objectFitClass} relative z-10`}
             loading={priority ? "eager" : "lazy"}
             onLoad={handleLoad}
-            fetchpriority={fetchPriority || (priority ? 'high' : 'auto')}
+            fetchPriority={fetchPriority || (priority ? 'high' : 'auto')}
           />
         </motion.picture>
       </div>

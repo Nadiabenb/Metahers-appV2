@@ -70,11 +70,23 @@ async function searchCities(query: string) {
   }
 }
 
-// Initialize Stripe
-if (!process.env.STRIPE_SECRET_KEY) {
+// Initialize Stripe. Production should always have Stripe configured, while
+// local development can still boot for non-payment flows like signup.
+if (!process.env.STRIPE_SECRET_KEY && process.env.NODE_ENV === 'production') {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
 }
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.warn('STRIPE_SECRET_KEY is not set — payment routes will return 503');
+}
+const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SECRET_KEY) : null;
+
+function getStripeOrUnavailable(res: any): Stripe | null {
+  if (!stripe) {
+    res.status(503).json({ message: 'Stripe is not configured' });
+    return null;
+  }
+  return stripe;
+}
 
 // Email configuration
 const FROM_EMAIL = 'MetaHers <notifications@app.metahers.ai>';
@@ -3270,6 +3282,9 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   // ===== STRIPE SUBSCRIPTION ROUTES =====
   app.post('/api/create-subscription', isAuthenticated, async (req: Request, res) => {
     try {
+      const stripeClient = getStripeOrUnavailable(res);
+      if (!stripeClient) return;
+
       const userId = req.session!.userId as string;
       const user = await storage.getUser(userId);
 
@@ -3292,7 +3307,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       }
 
       // Create Stripe customer
-      const customer = await stripe.customers.create({
+      const customer = await stripeClient.customers.create({
         email: user.email,
         name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.firstName || undefined,
         metadata: {
@@ -3301,7 +3316,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       });
 
       // Create subscription
-      const subscription = await stripe.subscriptions.create({
+      const subscription = await stripeClient.subscriptions.create({
         customer: customer.id,
         items: [{
           price: process.env.STRIPE_PRICE_ID!,
@@ -3336,6 +3351,9 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
   // Create Stripe checkout session for tier subscription/upgrade
   app.post('/api/create-checkout-session', isAuthenticated, async (req: Request, res) => {
     try {
+      const stripeClient = getStripeOrUnavailable(res);
+      if (!stripeClient) return;
+
       const userId = req.session!.userId as string;
       const { tier } = req.body as { tier: string };
 
@@ -3354,6 +3372,8 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
 
       // Map tier to Stripe price ID from environment
       const tierPriceMap: Record<string, string | undefined> = {
+        'signature_monthly': process.env.STRIPE_PRICE_ID_SIGNATURE || process.env.STRIPE_PRICE_ID,
+        'private_monthly': process.env.STRIPE_PRICE_ID_PRIVATE,
         'pro_monthly': process.env.STRIPE_PRICE_ID,
         'pro_annual': process.env.STRIPE_PRICE_ID_ANNUAL,
         'sanctuary': process.env.STRIPE_PRICE_ID_SANCTUARY,
@@ -3374,10 +3394,10 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       // If user has active subscription, upgrade it directly (not via checkout)
       if (existingSubscription?.status === 'active' && existingSubscription.stripeSubscriptionId) {
         // Get current subscription from Stripe
-        const subscription = await stripe.subscriptions.retrieve(existingSubscription.stripeSubscriptionId);
+        const subscription = await stripeClient.subscriptions.retrieve(existingSubscription.stripeSubscriptionId);
 
         // Update subscription with new price (proration automatic)
-        const updatedSubscription = await stripe.subscriptions.update(
+        const updatedSubscription = await stripeClient.subscriptions.update(
           existingSubscription.stripeSubscriptionId,
           {
             items: [{
@@ -3417,7 +3437,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       let customerId = existingSubscription?.stripeCustomerId;
 
       if (!customerId) {
-        const customer = await stripe.customers.create({
+        const customer = await stripeClient.customers.create({
           email: user.email,
           name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.firstName || undefined,
           metadata: { userId: user.id },
@@ -3426,7 +3446,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
       }
 
       // Create checkout session for new subscription
-      const session = await stripe.checkout.sessions.create({
+      const session = await stripeClient.checkout.sessions.create({
         customer: customerId,
         mode: 'subscription',
         payment_method_types: ['card'],
@@ -3722,6 +3742,9 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
 
   // Stripe webhook handler
   app.post('/api/webhooks/stripe', async (req, res) => {
+    const stripeClient = getStripeOrUnavailable(res);
+    if (!stripeClient) return;
+
     const sig = req.headers['stripe-signature'];
 
     if (!sig) {
@@ -3731,7 +3754,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
     let event: Stripe.Event;
 
     try {
-      event = stripe.webhooks.constructEvent(
+      event = stripeClient.webhooks.constructEvent(
         req.body,
         sig,
         process.env.STRIPE_WEBHOOK_SECRET!
@@ -3748,7 +3771,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         case 'customer.subscription.updated': {
           const subscription = event.data.object as Stripe.Subscription;
           const userId = subscription.metadata?.userId ||
-            (await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer).metadata?.userId;
+            (await stripeClient.customers.retrieve(subscription.customer as string) as Stripe.Customer).metadata?.userId;
 
           if (userId) {
             const priceId = subscription.items.data[0].price.id;
@@ -3801,7 +3824,7 @@ Make it empowering, specific, and actionable. Reference MetaHers programs where 
         case 'customer.subscription.deleted': {
           const subscription = event.data.object as Stripe.Subscription;
           const userId = subscription.metadata?.userId ||
-            (await stripe.customers.retrieve(subscription.customer as string) as Stripe.Customer).metadata?.userId;
+            (await stripeClient.customers.retrieve(subscription.customer as string) as Stripe.Customer).metadata?.userId;
 
           if (userId) {
             await storage.upsertSubscription({
@@ -5987,6 +6010,9 @@ Respond in JSON format:
 
   // Create Stripe checkout session for voyage booking
   app.post('/api/voyages/checkout', isAuthenticated, asyncHandler(async (req: Request, res) => {
+    const stripeClient = getStripeOrUnavailable(res);
+    if (!stripeClient) return;
+
     const userId = req.session!.userId as string;
     const { voyageId, promoCode } = req.body;
     
@@ -6017,7 +6043,7 @@ Respond in JSON format:
     const confirmationCode = `MHV-${randomBytes(3).toString('hex').toUpperCase()}`;
     
     // Create Stripe checkout session
-    const session = await stripe.checkout.sessions.create({
+    const session = await stripeClient.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       customer_email: user.email,
@@ -6062,11 +6088,14 @@ Respond in JSON format:
 
   // Stripe webhook for voyage bookings
   app.post('/api/voyages/webhook', asyncHandler(async (req: Request, res) => {
+    const stripeClient = getStripeOrUnavailable(res);
+    if (!stripeClient) return;
+
     const sig = req.headers['stripe-signature'] as string;
     let event: Stripe.Event;
     
     try {
-      event = stripe.webhooks.constructEvent(
+      event = stripeClient.webhooks.constructEvent(
         req.body,
         sig,
         process.env.STRIPE_WEBHOOK_SECRET || ''

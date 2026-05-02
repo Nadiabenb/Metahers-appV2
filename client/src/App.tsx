@@ -5,7 +5,7 @@ import { queryClient } from "./lib/queryClient";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useAuth } from "@/hooks/useAuth";
-import { trackPageView } from "@/lib/analytics";
+import { initializeAnalytics, trackPageView } from "@/lib/analytics";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { NetworkErrorBoundary } from "@/components/NetworkErrorBoundary";
@@ -262,6 +262,7 @@ function Router() {
 function App() {
   useEffect(() => {
     initializeApp();
+    initializeAnalytics();
 
     // Disabled service worker for now to avoid issues in development
     // if ('serviceWorker' in navigator) {
