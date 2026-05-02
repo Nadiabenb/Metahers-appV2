@@ -74,7 +74,8 @@ export default function SignupPage() {
         setLocation("/upgrade");
         return;
       }
-      setLocation("/onboarding/quiz");
+      sessionStorage.setItem("metahers_signup_welcome", "true");
+      setLocation("/dashboard");
     } catch (error: any) {
       toast({
         title: "Signup failed",
@@ -281,6 +282,9 @@ export default function SignupPage() {
               </div>
 
               {/* Submit */}
+              <p className="rounded-sm px-3 py-2 text-center text-xs font-medium" style={{ color: NAVY, background: `${GOLD}18`, border: `1px solid ${GOLD}30` }}>
+                Get your free AI Starter Kit instantly after signup.
+              </p>
               <button
                 type="submit"
                 disabled={isLoading}

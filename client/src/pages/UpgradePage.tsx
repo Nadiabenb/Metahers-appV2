@@ -80,7 +80,7 @@ export default function UpgradePage() {
           className="text-base max-w-xl mx-auto font-light"
           style={{ color: 'rgba(255,255,255,0.6)' }}
         >
-          Start with the path that fits your stage: a private AI Blueprint, a monthly Studio, or application-based advisory.
+          Choose the path that fits your stage: a private AI Blueprint, a monthly Studio, or application-based advisory.
         </motion.p>
       </section>
 

@@ -84,7 +84,7 @@ function HeroSection({ onNavigate }: { onNavigate: (p: string) => void }) {
           className="mb-2 text-xs font-semibold uppercase"
           style={{ color: GOLD, letterSpacing: "0.12em" }}
         >
-          AI implementation for ambitious women founders
+          Free AI Starter Kit
         </p>
         <p
           className="mb-2 max-w-2xl text-base sm:text-lg"

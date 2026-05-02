@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Wrench, Users, Mail, CalendarDays } from "lucide-react";
+import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Wrench, Users, Mail, CalendarDays, CheckCircle } from "lucide-react";
 import { Link } from "wouter";
 import { getPricingPlan, isSignatureTier, type SubscriptionTier } from "@shared/pricing";
 import { spaceImages } from "@/lib/imageManifest";
@@ -158,29 +158,37 @@ export default function DashboardPage() {
         {isNewMember && (
           <div className="space-y-8">
             <div>
+              <p className="text-[#C9A96E] text-xs uppercase tracking-widest mb-3">Your AI Starter Kit is unlocked</p>
               <h1
                 className="font-light text-4xl sm:text-5xl text-white mb-3"
                 style={{ fontFamily: "'Playfair Display', serif" }}
               >
                 Welcome to MetaHers, {firstName}.
               </h1>
+              <p className="max-w-2xl text-white/55 text-sm leading-relaxed">
+                Start with your agent match, curated toolkit, and a 2-minute quiz that personalizes the best next step for your business.
+              </p>
             </div>
 
             {/* Onboarding CTA */}
             <Card className="bg-[#13111C] border-[#C9A96E]/20">
               <CardContent className="pt-8 pb-8 px-8">
+                <div className="mb-5 inline-flex items-center gap-2 rounded-sm border border-[#C9A96E]/25 bg-[#C9A96E]/10 px-3 py-2 text-xs font-medium text-[#C9A96E]">
+                  <CheckCircle className="h-4 w-4" />
+                  Free access confirmed
+                </div>
                 <h2 className="text-white text-xl font-medium mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>
-                  Let's personalize your experience.
+                  Your first step is ready.
                 </h2>
                 <p className="text-white/60 text-sm mb-6">
-                  Take a 2-minute quiz so we can recommend the right starting point for you.
+                  Take the 2-minute quiz so MetaHers can recommend your best agent, tools, and learning path.
                 </p>
                 <Link href="/onboarding/quiz">
                   <Button
                     className={`${GOLD_BTN} px-8 py-3`}
                     style={GOLD_STYLE}
                   >
-                    Start Your Quiz
+                    Personalize My Starter Kit
                   </Button>
                 </Link>
               </CardContent>
