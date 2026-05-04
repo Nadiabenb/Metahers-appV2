@@ -472,7 +472,8 @@ export default function KidsLearningPage() {
   }
 
   // ── Tier gate ──
-  if (!canAccessSignatureFeatures(user?.subscriptionTier)) {
+  const isAdmin = !!(user as any)?.isAdmin;
+  if (!isAdmin && !canAccessSignatureFeatures(user?.subscriptionTier)) {
     return <UpgradeGate />;
   }
 
