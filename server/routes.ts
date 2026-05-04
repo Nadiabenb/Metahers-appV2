@@ -18,6 +18,7 @@ import { spaces, transformationalExperiences, cohortCapacity, quizResponses, use
 import { sql as drizzleSql, eq, desc, and, sql, gte } from "drizzle-orm";
 import { voyages, voyageBookings, voyageWaitlist, voyageQuestionnaires, voyagePreparation, voyageReferrals, voyageTestimonials, voyageInvitationRequests, blueprintApplications, scheduledEmails } from "@shared/schema";
 import { AGENT_IDS, AGENT_DISPLAY_NAMES, buildAgentSystemPrompt, buildGreetingUserPrompt, canAccessAgent, getAnthropicAgentModel, toAgentQuizContext } from "./agentPrompts";
+import { isSignatureTier } from "@shared/pricing";
 // Import all 54 experiences from seed file
 import { EXPERIENCES } from "./seedExperiences";
 // Import admin routes
@@ -99,6 +100,71 @@ const GOAL_LABELS: Record<string, string> = {
   monetize_ai: 'monetizing with AI',
   brand_ai: 'building your brand with AI',
 };
+
+const KIDS_LAUNCH_WEEKS = 4;
+const KIDS_SESSION_COUNT = 2;
+const KIDS_AI_PROMPT_MAX_LENGTH = 1200;
+
+function isAdminEmail(email: string | undefined | null): boolean {
+  if (!email) return false;
+  return (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map(e => e.trim().toLowerCase())
+    .filter(Boolean)
+    .includes(email.toLowerCase());
+}
+
+async function getKidsLearningMember(req: Request, res: Response) {
+  const userId = req.session!.userId as string;
+  const user = await storage.getUser(userId);
+  const hasAccess = !!user && (isAdminEmail(user.email) || user.isPro || isSignatureTier(user.subscriptionTier as any));
+
+  if (!user || !hasAccess) {
+    res.status(403).json({ message: "MetaHers Studio subscription required" });
+    return null;
+  }
+
+  return user;
+}
+
+function uniqueLaunchNumbers(value: unknown, max: number): number[] {
+  if (!Array.isArray(value)) return [];
+  return Array.from(new Set(value
+    .map((item) => Number(item))
+    .filter((item) => Number.isInteger(item) && item >= 1 && item <= max)));
+}
+
+function sanitizeKidsNotes(value: unknown): Record<string, string> {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+  return Object.fromEntries(
+    Object.entries(value as Record<string, unknown>).map(([key, note]) => [
+      key.slice(0, 40),
+      sanitizeText(String(note ?? "")).slice(0, 4000),
+    ])
+  );
+}
+
+function sanitizeKidsProgressPayload(body: any, userId: string) {
+  const confidence = Number(body?.reflections?.confidence ?? 3);
+
+  return {
+    userId,
+    completedWeeks: uniqueLaunchNumbers(body?.completedWeeks, KIDS_LAUNCH_WEEKS),
+    badges: Array.isArray(body?.badges)
+      ? Array.from(new Set<string>(body.badges.map((badge: unknown) => sanitizeText(String(badge ?? "")).slice(0, 80)).filter(Boolean))).slice(0, KIDS_LAUNCH_WEEKS)
+      : [],
+    completedProjects: uniqueLaunchNumbers(body?.completedProjects, 10),
+    notes: sanitizeKidsNotes(body?.notes),
+    reflections: {
+      confidence: Number.isInteger(confidence) ? Math.min(5, Math.max(1, confidence)) : 3,
+      favActivity: sanitizeText(String(body?.reflections?.favActivity ?? "")).slice(0, 1000),
+      whatWasHard: sanitizeText(String(body?.reflections?.whatWasHard ?? "")).slice(0, 1000),
+      nextPractice: sanitizeText(String(body?.reflections?.nextPractice ?? "")).slice(0, 1000),
+    },
+    selectedWeek: Math.min(KIDS_LAUNCH_WEEKS, Math.max(1, Number(body?.selectedWeek) || 1)),
+    selectedSession: Math.min(KIDS_SESSION_COUNT - 1, Math.max(0, Number(body?.selectedSession) || 0)),
+  };
+}
 
 // Resend email client (using Replit-managed connection)
 let connectionSettings: any;
@@ -2115,21 +2181,59 @@ Return ONLY valid JSON:
     }
   });
 
+  // Kids Learning Program — persistent progress for the Weeks 1-4 launch edition
+  app.get('/api/kids/progress', isAuthenticated, async (req: Request, res) => {
+    try {
+      const user = await getKidsLearningMember(req, res);
+      if (!user) return;
+
+      const progress = await storage.getKidsLearningProgress(user.id);
+      res.json(progress || null);
+    } catch (error) {
+      console.error("Error fetching kids learning progress:", error);
+      res.status(500).json({ message: "Failed to fetch kids learning progress" });
+    }
+  });
+
+  app.patch('/api/kids/progress', isAuthenticated, async (req: Request, res) => {
+    try {
+      const user = await getKidsLearningMember(req, res);
+      if (!user) return;
+
+      const progress = await storage.upsertKidsLearningProgress(
+        sanitizeKidsProgressPayload(req.body, user.id)
+      );
+      res.json(progress);
+    } catch (error) {
+      console.error("Error saving kids learning progress:", error);
+      res.status(500).json({ message: "Failed to save kids learning progress" });
+    }
+  });
+
   // Kids Learning Program — AI prompt proxy (keeps API key server-side)
   app.post('/api/kids/ai-prompt', isAuthenticated, async (req: Request, res) => {
     try {
-      const { prompt, childName } = req.body;
+      const user = await getKidsLearningMember(req, res);
+      if (!user) return;
+
+      const { prompt } = req.body;
       if (!prompt || typeof prompt !== 'string') {
         return res.status(400).json({ message: "Prompt is required" });
       }
-      const name = (childName && typeof childName === 'string') ? childName : "your child";
+
+      const sanitizedPrompt = sanitizeText(prompt).trim();
+      if (!sanitizedPrompt || sanitizedPrompt.length > KIDS_AI_PROMPT_MAX_LENGTH) {
+        return res.status(400).json({ message: "Prompt must be between 1 and 1200 characters" });
+      }
+
+      const name = sanitizeText(user.childName || "your child").slice(0, 80);
       const anthropic = getAnthropicClient();
       const response = await anthropic.messages.create({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 300,
         messages: [{
           role: "user",
-          content: `You are a warm, encouraging assistant helping a mom teach her young child named ${name} about technology. ${prompt} Keep your response fun, short, and perfectly age-appropriate. Use emojis. Max 150 words.`
+          content: `You are a warm, encouraging assistant helping a parent teach a young child named ${name} about beginner computers, creativity, and AI safety. Follow child-safety rules: no requests for personal data, no private contact, no adult themes, no links unless the parent explicitly asks for a general resource, and no unsafe instructions. Parent request: ${sanitizedPrompt} Keep your response fun, short, and age-appropriate. Max 150 words.`
         }]
       });
       const text = getAnthropicTextResponse(response);

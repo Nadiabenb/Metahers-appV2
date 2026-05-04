@@ -129,6 +129,34 @@ export const insertRitualProgressSchema = createInsertSchema(ritualProgress).omi
 export type InsertRitualProgress = z.infer<typeof insertRitualProgressSchema>;
 export type RitualProgressDB = typeof ritualProgress.$inferSelect;
 
+// Kids Learning Program progress table
+export type KidsLearningReflections = {
+  confidence: number;
+  favActivity: string;
+  whatWasHard: string;
+  nextPractice: string;
+};
+
+export const kidsLearningProgress = pgTable("kids_learning_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull().references(() => users.id, { onDelete: "cascade" }).unique(),
+  completedWeeks: jsonb("completed_weeks").$type<number[]>().notNull().default(sql`'[]'::jsonb`),
+  badges: jsonb("badges").$type<string[]>().notNull().default(sql`'[]'::jsonb`),
+  completedProjects: jsonb("completed_projects").$type<number[]>().notNull().default(sql`'[]'::jsonb`),
+  notes: jsonb("notes").$type<Record<string, string>>().notNull().default(sql`'{}'::jsonb`),
+  reflections: jsonb("reflections").$type<KidsLearningReflections>().notNull().default(sql`'{"confidence":3,"favActivity":"","whatWasHard":"","nextPractice":""}'::jsonb`),
+  selectedWeek: integer("selected_week").default(1).notNull(),
+  selectedSession: integer("selected_session").default(0).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+}, (table) => [
+  index("idx_kids_learning_progress_user").on(table.userId),
+]);
+
+export const insertKidsLearningProgressSchema = createInsertSchema(kidsLearningProgress).omit({ id: true, createdAt: true, updatedAt: true });
+export type InsertKidsLearningProgress = z.infer<typeof insertKidsLearningProgressSchema>;
+export type KidsLearningProgressDB = typeof kidsLearningProgress.$inferSelect;
+
 // Structured journal entry types
 export type JournalTodoItem = {
   id: string;

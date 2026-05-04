@@ -19,6 +19,7 @@
     "backup:db": "tsx server/scripts/backup-database.ts",
     "restore:db": "tsx server/scripts/restore-database.ts",
     "migrate:normalize-sections": "tsx server/migrations/normalize-sections.ts",
+    "migrate:kids-learning": "tsx server/scripts/apply-kids-learning-migration.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",

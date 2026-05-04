@@ -1,9 +1,36 @@
 import { useState, useEffect, useRef } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { canAccessSignatureFeatures } from "@/lib/tierAccess";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, apiRequestJson } from "@/lib/queryClient";
+
+const LAUNCH_WEEK_COUNT = 4;
+
+type KidsProgress = {
+  completedWeeks: number[];
+  badges: string[];
+  completedProjects: number[];
+  notes: Record<string, string>;
+  reflections: {
+    confidence: number;
+    favActivity: string;
+    whatWasHard: string;
+    nextPractice: string;
+  };
+  selectedWeek: number;
+  selectedSession: number;
+};
+
+const DEFAULT_KIDS_PROGRESS: KidsProgress = {
+  completedWeeks: [],
+  badges: [],
+  completedProjects: [],
+  notes: {},
+  reflections: { confidence: 3, favActivity: "", whatWasHard: "", nextPractice: "" },
+  selectedWeek: 1,
+  selectedSession: 0,
+};
 
 // ── CURRICULUM DATA ──────────────────────────────────────────────────────────
 const WEEKS_DATA = [
@@ -307,7 +334,7 @@ function SetupGate({ onSave }: { onSave: (name: string) => void }) {
         <div style={{ fontSize: 64, marginBottom: 16 }}>🌟</div>
         <h1 style={{ fontSize: 28, fontWeight: 900, color: "#333", marginBottom: 8 }}>Welcome to Kids Learning!</h1>
         <p style={{ fontSize: 16, color: "#888", lineHeight: 1.7, marginBottom: 32 }}>
-          This is a 12-week beginner computer program designed for curious kids. Let's personalize the dashboard — what's your child's name?
+          This launch edition includes the first 4 weeks of the 12-week beginner computer program. Let's personalize the dashboard — what's your child's name?
         </p>
         <input
           value={input}
@@ -347,7 +374,7 @@ function UpgradeGate() {
         <div style={{ fontSize: 64, marginBottom: 16 }}>🔒</div>
         <h1 style={{ fontSize: 28, fontWeight: 900, color: "#333", marginBottom: 8 }}>Studio Members Only</h1>
         <p style={{ fontSize: 16, color: "#888", lineHeight: 1.7, marginBottom: 32 }}>
-          The Kids Learning Program is included with the MetaHers Studio membership and above.
+          The Kids Learning Program launch edition is included with the MetaHers Studio membership and above.
         </p>
         <button
           onClick={() => navigate("/upgrade")}
@@ -376,25 +403,37 @@ export default function KidsLearningPage() {
   const { user, isLoading } = useAuth();
   const queryClient = useQueryClient();
   const [childNameLocal, setChildNameLocal] = useState<string | null>(null);
+  const hasHydratedProgress = useRef(false);
+  const skipNextProgressSave = useRef(false);
 
   // Resolved child name: prefer local override (after setup gate saves), then server value
   const childName: string = childNameLocal ?? (user?.childName || "");
+  const isAdmin = !!(user as any)?.isAdmin;
+  const hasKidsAccess = isAdmin || canAccessSignatureFeatures(user?.subscriptionTier);
+
+  const { data: savedProgress, isLoading: progressLoading } = useQuery<KidsProgress | null>({
+    queryKey: ["/api/kids/progress"],
+    queryFn: () => apiRequestJson<KidsProgress | null>("GET", "/api/kids/progress"),
+    enabled: !!user && hasKidsAccess,
+    staleTime: 30_000,
+  });
 
   const [mode, setMode] = useState<"parent" | "child">("parent");
   const [tab, setTab] = useState("home");
-  const [selectedWeek, setSelectedWeek] = useState(1);
-  const [selectedSession, setSelectedSession] = useState(0);
+  const [selectedWeek, setSelectedWeek] = useState(DEFAULT_KIDS_PROGRESS.selectedWeek);
+  const [selectedSession, setSelectedSession] = useState(DEFAULT_KIDS_PROGRESS.selectedSession);
   const [timerActive, setTimerActive] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [segmentIdx, setSegmentIdx] = useState(0);
-  const [completedWeeks, setCompletedWeeks] = useState<number[]>([]);
-  const [badges, setBadges] = useState<string[]>([]);
-  const [completedProjects, setCompletedProjects] = useState<number[]>([]);
-  const [notes, setNotes] = useState<Record<string, string>>({});
-  const [progress, setProgress] = useState({ confidence: 3, favActivity: "", whatWasHard: "", nextPractice: "" });
+  const [completedWeeks, setCompletedWeeks] = useState<number[]>(DEFAULT_KIDS_PROGRESS.completedWeeks);
+  const [badges, setBadges] = useState<string[]>(DEFAULT_KIDS_PROGRESS.badges);
+  const [completedProjects, setCompletedProjects] = useState<number[]>(DEFAULT_KIDS_PROGRESS.completedProjects);
+  const [notes, setNotes] = useState<Record<string, string>>(DEFAULT_KIDS_PROGRESS.notes);
+  const [progress, setProgress] = useState(DEFAULT_KIDS_PROGRESS.reflections);
   const [aiContent, setAiContent] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [showBadgeModal, setShowBadgeModal] = useState<string | null>(null);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const currentWeekData = WEEKS_DATA[selectedWeek - 1];
@@ -425,13 +464,69 @@ export default function KidsLearningPage() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [timerActive, segmentIdx, segmentMaxSeconds]);
 
+  useEffect(() => {
+    if (hasHydratedProgress.current || savedProgress === undefined) return;
+
+    const nextProgress = savedProgress ?? DEFAULT_KIDS_PROGRESS;
+    setCompletedWeeks(nextProgress.completedWeeks ?? []);
+    setBadges(nextProgress.badges ?? []);
+    setCompletedProjects(nextProgress.completedProjects ?? []);
+    setNotes(nextProgress.notes ?? {});
+    setProgress(nextProgress.reflections ?? DEFAULT_KIDS_PROGRESS.reflections);
+    setSelectedWeek(Math.min(LAUNCH_WEEK_COUNT, Math.max(1, nextProgress.selectedWeek || 1)));
+    setSelectedSession(Math.min(1, Math.max(0, nextProgress.selectedSession || 0)));
+    hasHydratedProgress.current = true;
+    skipNextProgressSave.current = true;
+  }, [savedProgress]);
+
+  useEffect(() => {
+    if (!hasHydratedProgress.current || !user || !hasKidsAccess || !childName) return;
+    if (skipNextProgressSave.current) {
+      skipNextProgressSave.current = false;
+      return;
+    }
+
+    setSaveStatus("saving");
+    const timeout = window.setTimeout(async () => {
+      try {
+        await apiRequest("PATCH", "/api/kids/progress", {
+          completedWeeks,
+          badges,
+          completedProjects,
+          notes,
+          reflections: progress,
+          selectedWeek,
+          selectedSession,
+        });
+        setSaveStatus("saved");
+        queryClient.invalidateQueries({ queryKey: ["/api/kids/progress"] });
+      } catch {
+        setSaveStatus("error");
+      }
+    }, 700);
+
+    return () => window.clearTimeout(timeout);
+  }, [
+    user,
+    hasKidsAccess,
+    childName,
+    completedWeeks,
+    badges,
+    completedProjects,
+    notes,
+    progress,
+    selectedWeek,
+    selectedSession,
+    queryClient,
+  ]);
+
   const resetTimer = () => { setTimerActive(false); setTimerSeconds(0); setSegmentIdx(0); };
 
   const generateAIContent = async (prompt: string) => {
     setAiLoading(true);
     setAiContent(null);
     try {
-      const res = await apiRequest("POST", "/api/kids/ai-prompt", { prompt, childName });
+      const res = await apiRequest("POST", "/api/kids/ai-prompt", { prompt });
       const data = await res.json();
       setAiContent(data.text || "Something magical is coming! ✨");
     } catch {
@@ -460,10 +555,12 @@ export default function KidsLearningPage() {
     setChildNameLocal(name);
     // Refresh user query so childName is up-to-date everywhere
     await queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
+    hasHydratedProgress.current = false;
+    await queryClient.invalidateQueries({ queryKey: ["/api/kids/progress"] });
   };
 
   // ── Loading ──
-  if (isLoading) {
+  if (isLoading || (!!user && hasKidsAccess && progressLoading && !hasHydratedProgress.current)) {
     return (
       <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg, #FFF5FB 0%, #F5F8FF 50%, #F8FFF5 100%)" }}>
         <div style={{ fontSize: 48 }}>✨</div>
@@ -472,8 +569,7 @@ export default function KidsLearningPage() {
   }
 
   // ── Tier gate ──
-  const isAdmin = !!(user as any)?.isAdmin;
-  if (!isAdmin && !canAccessSignatureFeatures(user?.subscriptionTier)) {
+  if (!hasKidsAccess) {
     return <UpgradeGate />;
   }
 
@@ -564,12 +660,15 @@ export default function KidsLearningPage() {
           <div style={{ fontSize: 32 }}>🌟</div>
           <div>
             <div style={{ fontSize: 20, fontWeight: 900, color: "#FF6B9D", lineHeight: 1.2 }}>{childName}'s Junior AI Studio</div>
-            <div style={{ fontSize: 12, color: "#888" }}>Parent Dashboard • Week {selectedWeek}</div>
+            <div style={{ fontSize: 12, color: "#888" }}>Weeks 1-4 Launch Edition • Week {selectedWeek}</div>
           </div>
         </div>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <div style={{ background: "#FFF0F7", borderRadius: 20, padding: "6px 14px", fontSize: 13, fontWeight: 700, color: "#FF6B9D" }}>
             🏆 {badges.length} badges
+          </div>
+          <div style={{ background: saveStatus === "error" ? "#FFE8E8" : "#F5F5F5", borderRadius: 20, padding: "6px 14px", fontSize: 12, fontWeight: 700, color: saveStatus === "error" ? "#D94A4A" : "#888" }}>
+            {saveStatus === "saving" ? "Saving..." : saveStatus === "error" ? "Save failed" : "Saved"}
           </div>
           <button onClick={() => setMode("child")} style={{ background: "linear-gradient(135deg, #FFB5C8, #FF6B9D)", border: "none", borderRadius: 20, padding: "8px 18px", fontSize: 14, fontWeight: 700, color: "white", cursor: "pointer" }}>
             👧 {childName}'s View
@@ -592,7 +691,7 @@ export default function KidsLearningPage() {
           ))}
           <div style={{ marginTop: "auto", borderTop: "2px solid #FFE8F5", paddingTop: 16 }}>
             <div style={{ fontSize: 11, color: "#bbb", textAlign: "center", lineHeight: 1.6 }}>
-              12-Week Program<br />{childName} ✨
+              Weeks 1-4 Live<br />{childName} ✨
             </div>
           </div>
         </div>
@@ -607,7 +706,7 @@ export default function KidsLearningPage() {
               <p style={{ color: "#888", fontSize: 16, marginBottom: 40 }}>{childName}'s learning dashboard. Here's your overview.</p>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 40 }}>
                 {[
-                  { label: "Weeks Completed", value: `${completedWeeks.length}/12`, color: "#FFB5C8", icon: "📅" },
+                  { label: "Weeks Completed", value: `${completedWeeks.length}/${LAUNCH_WEEK_COUNT}`, color: "#FFB5C8", icon: "📅" },
                   { label: "Badges Earned", value: badges.length, color: "#B5D5FF", icon: "🏆" },
                   { label: "Projects Made", value: `${completedProjects.length}/10`, color: "#C8F5B5", icon: "🎨" },
                 ].map(s => (
@@ -647,7 +746,8 @@ export default function KidsLearningPage() {
                 </div>
               )}
               <div style={{ background: "white", borderRadius: 24, padding: 28, boxShadow: "0 4px 20px rgba(0,0,0,0.06)" }}>
-                <div style={{ fontSize: 16, fontWeight: 700, color: "#333", marginBottom: 20 }}>12-Week Journey</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: "#333", marginBottom: 4 }}>Weeks 1-4 Launch Journey</div>
+                <div style={{ fontSize: 13, color: "#888", marginBottom: 20 }}>The next 8 weeks are being added over the next two weeks.</div>
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   {Array.from({ length: 12 }, (_, i) => i + 1).map(w => {
                     const wd = WEEKS_DATA[w - 1];
@@ -674,8 +774,8 @@ export default function KidsLearningPage() {
           {/* ── CURRICULUM TAB ── */}
           {tab === "curriculum" && (
             <div>
-              <h1 style={{ fontSize: 32, fontWeight: 900, color: "#333", marginBottom: 8 }}>📅 12-Week Curriculum</h1>
-              <p style={{ color: "#888", marginBottom: 32 }}>Select a week to see the full plan, sessions, and materials.</p>
+              <h1 style={{ fontSize: 32, fontWeight: 900, color: "#333", marginBottom: 8 }}>📅 Weeks 1-4 Curriculum</h1>
+              <p style={{ color: "#888", marginBottom: 32 }}>The first 4 weeks are live for launch. Weeks 5-12 are coming next.</p>
               <div style={{ display: "flex", gap: 8, marginBottom: 32, flexWrap: "wrap" }}>
                 {WEEKS_DATA.map((w, i) => (
                   <button key={i} onClick={() => setSelectedWeek(w.week)} style={{
@@ -689,7 +789,7 @@ export default function KidsLearningPage() {
                 ))}
                 {Array.from({ length: 8 }, (_, i) => (
                   <div key={i + 5} style={{ background: "#f5f5f5", borderRadius: 16, padding: "8px 16px", fontSize: 13, color: "#ccc", fontWeight: 600 }}>
-                    W{i + 5} 🔒
+                    W{i + 5} Soon
                   </div>
                 ))}
               </div>
@@ -1060,7 +1160,7 @@ export default function KidsLearningPage() {
           {tab === "projects" && (
             <div>
               <h1 style={{ fontSize: 32, fontWeight: 900, color: "#333", marginBottom: 8 }}>🎨 Project Library</h1>
-              <p style={{ color: "#888", marginBottom: 32 }}>10 age-appropriate projects across the 12-week program.</p>
+              <p style={{ color: "#888", marginBottom: 32 }}>10 age-appropriate projects across the full roadmap. Launch projects support Weeks 1-4.</p>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20 }}>
                 {PROJECTS.map(p => {
                   const done = completedProjects.includes(p.id);

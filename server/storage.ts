@@ -1,5 +1,6 @@
 import {
   users,
+  kidsLearningProgress,
   ritualProgress,
   journalEntries,
   subscriptions,
@@ -53,6 +54,8 @@ import {
 import type {
   UpsertUser,
   User,
+  InsertKidsLearningProgress,
+  KidsLearningProgressDB,
   InsertRitualProgress,
   RitualProgressDB,
   InsertJournalEntry,
@@ -180,6 +183,8 @@ export interface IStorage {
   updateUserProStatus(userId: string, isPro: boolean): Promise<User>;
   updateUserSubscriptionTier(userId: string, tier: string): Promise<User>;
   updateChildName(userId: string, childName: string): Promise<User>;
+  getKidsLearningProgress(userId: string): Promise<KidsLearningProgressDB | undefined>;
+  upsertKidsLearningProgress(progress: InsertKidsLearningProgress): Promise<KidsLearningProgressDB>;
 
   // Journal analytics operations
   getJournalStats(userId: string): Promise<any>;
@@ -637,6 +642,52 @@ export class DatabaseStorage implements IStorage {
       .where(eq(users.id, userId))
       .returning();
     return user;
+  }
+
+  async getKidsLearningProgress(userId: string): Promise<KidsLearningProgressDB | undefined> {
+    const [progress] = await db
+      .select()
+      .from(kidsLearningProgress)
+      .where(eq(kidsLearningProgress.userId, userId))
+      .limit(1);
+    return progress;
+  }
+
+  async upsertKidsLearningProgress(progressData: InsertKidsLearningProgress): Promise<KidsLearningProgressDB> {
+    const existing = await this.getKidsLearningProgress(progressData.userId);
+    const values = {
+      completedWeeks: sql`${JSON.stringify(progressData.completedWeeks ?? [])}::jsonb`,
+      badges: sql`${JSON.stringify(progressData.badges ?? [])}::jsonb`,
+      completedProjects: sql`${JSON.stringify(progressData.completedProjects ?? [])}::jsonb`,
+      notes: sql`${JSON.stringify(progressData.notes ?? {})}::jsonb`,
+      reflections: sql`${JSON.stringify(progressData.reflections ?? {
+        confidence: 3,
+        favActivity: "",
+        whatWasHard: "",
+        nextPractice: "",
+      })}::jsonb`,
+      selectedWeek: progressData.selectedWeek ?? 1,
+      selectedSession: progressData.selectedSession ?? 0,
+      updatedAt: new Date(),
+    };
+
+    if (existing) {
+      const [updated] = await db
+        .update(kidsLearningProgress)
+        .set(values)
+        .where(eq(kidsLearningProgress.userId, progressData.userId))
+        .returning();
+      return updated;
+    }
+
+    const [created] = await db
+      .insert(kidsLearningProgress)
+      .values({
+        userId: progressData.userId,
+        ...values,
+      })
+      .returning();
+    return created;
   }
 
   // Journal analytics operations
