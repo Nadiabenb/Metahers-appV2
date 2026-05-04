@@ -179,6 +179,7 @@ export interface IStorage {
   upsertSubscription(subscription: InsertSubscription): Promise<SubscriptionDB>;
   updateUserProStatus(userId: string, isPro: boolean): Promise<User>;
   updateUserSubscriptionTier(userId: string, tier: string): Promise<User>;
+  updateChildName(userId: string, childName: string): Promise<User>;
 
   // Journal analytics operations
   getJournalStats(userId: string): Promise<any>;
@@ -624,6 +625,15 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .update(users)
       .set({ subscriptionTier: tier, updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async updateChildName(userId: string, childName: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ childName: childName.trim(), updatedAt: new Date() })
       .where(eq(users.id, userId))
       .returning();
     return user;

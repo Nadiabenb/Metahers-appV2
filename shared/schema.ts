@@ -43,6 +43,7 @@ export const users = pgTable("users", {
   stripeCustomerId: varchar("stripe_customer_id"), // Stripe customer ID for payments
   stripeSubscriptionId: varchar("stripe_subscription_id"), // Current subscription ID
   paidWelcomeShown: boolean("paid_welcome_shown").default(false).notNull(),
+  childName: varchar("child_name"), // Optional: child's name for Kids Learning program
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Wrench, Users, Mail, CalendarDays, CheckCircle } from "lucide-react";
+import { BookOpen, MessageSquare, FileText, FlaskConical, Crown, ArrowRight, Wrench, Users, Mail, CalendarDays, CheckCircle, GraduationCap } from "lucide-react";
 import { Link } from "wouter";
 import { getPricingPlan, isSignatureTier, type SubscriptionTier } from "@shared/pricing";
 import { spaceImages } from "@/lib/imageManifest";
@@ -437,6 +437,14 @@ export default function DashboardPage() {
                     title="Playground"
                     description="Experiment with AI tools"
                     href="/playground"
+                  />
+                )}
+                {isPaid && (
+                  <QuickAction
+                    icon={GraduationCap}
+                    title="Kids Learning"
+                    description="12-week beginner computer program for your child"
+                    href="/kids-learning"
                   />
                 )}
               </div>

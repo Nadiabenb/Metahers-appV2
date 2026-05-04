@@ -2096,6 +2096,50 @@ Return ONLY valid JSON:
     }
   });
 
+  // Update user profile fields (e.g. childName)
+  app.patch('/api/user/profile', isAuthenticated, async (req: Request, res) => {
+    try {
+      const userId = req.session!.userId as string;
+      const { childName } = req.body;
+      if (childName !== undefined) {
+        if (typeof childName !== 'string' || childName.trim().length === 0) {
+          return res.status(400).json({ message: "Invalid child name" });
+        }
+        await storage.updateChildName(userId, childName);
+      }
+      const updatedUser = await storage.getUser(userId);
+      res.json({ success: true, user: updatedUser });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      res.status(500).json({ message: "Failed to update profile" });
+    }
+  });
+
+  // Kids Learning Program — AI prompt proxy (keeps API key server-side)
+  app.post('/api/kids/ai-prompt', isAuthenticated, async (req: Request, res) => {
+    try {
+      const { prompt, childName } = req.body;
+      if (!prompt || typeof prompt !== 'string') {
+        return res.status(400).json({ message: "Prompt is required" });
+      }
+      const name = (childName && typeof childName === 'string') ? childName : "your child";
+      const anthropic = getAnthropicClient();
+      const response = await anthropic.messages.create({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 300,
+        messages: [{
+          role: "user",
+          content: `You are a warm, encouraging assistant helping a mom teach her young child named ${name} about technology. ${prompt} Keep your response fun, short, and perfectly age-appropriate. Use emojis. Max 150 words.`
+        }]
+      });
+      const text = getAnthropicTextResponse(response);
+      res.json({ text });
+    } catch (error) {
+      console.error("Error in kids AI prompt:", error);
+      res.status(500).json({ message: "AI response failed" });
+    }
+  });
+
   // Mark onboarding as completed
   app.post('/api/auth/complete-onboarding', isAuthenticated, async (req: Request, res) => {
     try {

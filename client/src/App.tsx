@@ -86,6 +86,7 @@ const VoyageSuccessPage = lazy(() => import("@/pages/VoyageSuccessPage"));
 const AIIntegrationPage = lazy(() => import("@/pages/AIIntegrationPage"));
 const ToolkitPage = lazy(() => import("@/pages/ToolkitPage"));
 const NotFound = lazy(() => import("@/pages/not-found"));
+const KidsLearningPage = lazy(() => import("@/pages/KidsLearningPage"));
 
 function LoadingFallback() {
   return (
@@ -206,6 +207,9 @@ function Router() {
 
             {/* Main Dashboard - Unified view */}
             <Route path="/dashboard" component={DashboardPage} />
+
+            {/* Kids Learning Program — Studio members+ */}
+            <Route path="/kids-learning" component={KidsLearningPage} />
 
             {/* Admin Routes — protected, only accessible to admin emails */}
             <Route path="/admin" component={() => <AdminRoute component={AdminDashboardPage} />} />
