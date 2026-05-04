@@ -604,7 +604,7 @@ export default function DashboardPage() {
                   <div>
                     <p className="text-white font-medium mb-1">Ready for more?</p>
                     <p className="text-white/50 text-sm">
-                      MetaHers Studio members get the complete Learning Hub, daily AI concierge access, the AI Toolkit, and monthly implementation support.
+                      MetaHers Studio members get the complete Learning Hub, Kids Learning launch edition, daily AI concierge access, the AI Toolkit, and monthly implementation support.
                     </p>
                   </div>
                   <Link href="/upgrade" className="shrink-0">

@@ -217,8 +217,8 @@ export default function UpgradePage() {
                   body: "Bring questions to the monthly group support space and learn from other women founders implementing AI.",
                 },
                 {
-                  title: "Tools, prompts, and learning",
-                  body: "Access the Learning Hub, AI Toolkit, prompt library, MetaHers Signal archive, and early product drops in one place.",
+                  title: "Tools, prompts, and Kids Learning",
+                  body: "Access the Learning Hub, AI Toolkit, prompt library, MetaHers Signal archive, and the Kids Learning launch edition for families in one place.",
                 },
               ].map((item, i) => (
                 <motion.div
@@ -296,7 +296,7 @@ export default function UpgradePage() {
             </ul>
 
             <p className="text-sm mb-8 italic" style={{ color: 'rgba(255,255,255,0.5)' }}>
-              Includes 3 months MetaHers Studio after completion.
+              Includes 3 months MetaHers Studio after completion, including Kids Learning access.
             </p>
 
             <button

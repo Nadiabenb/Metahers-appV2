@@ -408,7 +408,7 @@ function BlueprintSection({ onNavigate }: { onNavigate: (p: string) => void }) {
             Apply Now
           </button>
           <p className="mt-3 text-xs" style={{ color: MUTED }}>
-            Includes 3 months MetaHers Studio
+            Includes 3 months MetaHers Studio, with Kids Learning access
           </p>
         </FadeUp>
       </div>
@@ -441,6 +441,7 @@ const TIERS = [
     features: [
       "Daily access to the AI concierge team",
       "Complete Learning Hub",
+      "Kids Learning launch edition for families",
       "AI Toolkit + prompt library",
       "Monthly live implementation lab",
     ],

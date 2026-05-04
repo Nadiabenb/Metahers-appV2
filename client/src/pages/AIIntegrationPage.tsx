@@ -60,7 +60,7 @@ const deliverables = [
     number: "06",
     icon: Cpu,
     title: "3 Months MetaHers Studio",
-    desc: "Full access to the Learning Hub, AI concierge team, toolkit, and prompt library for three months after the Blueprint wraps.",
+    desc: "Full access to the Learning Hub, Kids Learning launch edition, AI concierge team, toolkit, and prompt library for three months after the Blueprint wraps.",
   },
 ];
 

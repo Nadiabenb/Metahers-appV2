@@ -241,6 +241,10 @@ export default function HomePage() {
               <CheckCircle2 className="w-4 h-4 text-purple-500" />
               No credit card required
             </span>
+            <span className="flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-purple-500" />
+              Kids Learning included with paid plans
+            </span>
           </motion.div>
         </div>
       </section>
