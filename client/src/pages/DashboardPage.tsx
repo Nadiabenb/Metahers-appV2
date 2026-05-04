@@ -440,14 +440,18 @@ export default function DashboardPage() {
                     href="/playground"
                   />
                 )}
-                {isPaid && (
-                  <QuickAction
-                    icon={GraduationCap}
-                    title={hasActivatedKidsLearning ? "Kids Learning" : "Activate Kids Learning"}
-                    description={hasActivatedKidsLearning ? "Continue your child's computer learning path" : "Optional first 4 weeks for Studio families"}
-                    href="/kids-learning"
-                  />
-                )}
+                <QuickAction
+                  icon={GraduationCap}
+                  title={hasActivatedKidsLearning ? "Kids Learning" : "Kids Learning"}
+                  description={
+                    hasActivatedKidsLearning
+                      ? "Continue your child's computer learning path"
+                      : isPaid
+                        ? "Optional first 4 weeks for Studio families"
+                        : "Included with Studio, Private Advisory, and AI Blueprint"
+                  }
+                  href="/kids-learning"
+                />
               </div>
             </div>
 
