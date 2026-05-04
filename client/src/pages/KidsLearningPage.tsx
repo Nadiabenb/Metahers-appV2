@@ -308,19 +308,25 @@ function resolve(val: string | ((n: string) => string), name: string): string {
 }
 
 // ── SETUP GATE ───────────────────────────────────────────────────────────────
-function SetupGate({ onSave }: { onSave: (name: string) => void }) {
+function SetupGate({ onSave }: { onSave: (name: string, age: number) => void }) {
   const [input, setInput] = useState("");
+  const [age, setAge] = useState("");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   const handleSave = async () => {
     const trimmed = input.trim();
     if (!trimmed) { setError("Please enter your child's name!"); return; }
+    const parsedAge = Number(age);
+    if (!Number.isInteger(parsedAge) || parsedAge < 3 || parsedAge > 17) {
+      setError("Please choose an age between 3 and 17.");
+      return;
+    }
     setSaving(true);
     setError("");
     try {
-      await apiRequest("PATCH", "/api/user/profile", { childName: trimmed });
-      onSave(trimmed);
+      await apiRequest("PATCH", "/api/user/profile", { childName: trimmed, childAge: parsedAge });
+      onSave(trimmed, parsedAge);
     } catch {
       setError("Couldn't save — please try again.");
     } finally {
@@ -334,7 +340,7 @@ function SetupGate({ onSave }: { onSave: (name: string) => void }) {
         <div style={{ fontSize: 64, marginBottom: 16 }}>🌟</div>
         <h1 style={{ fontSize: 28, fontWeight: 900, color: "#333", marginBottom: 8 }}>Welcome to Kids Learning!</h1>
         <p style={{ fontSize: 16, color: "#888", lineHeight: 1.7, marginBottom: 32 }}>
-          This launch edition includes the first 4 weeks of the 12-week beginner computer program. Let's personalize the dashboard — what's your child's name?
+          This launch edition includes the first 4 weeks of the 12-week beginner computer program. Let's personalize the dashboard for your child.
         </p>
         <input
           value={input}
@@ -347,6 +353,21 @@ function SetupGate({ onSave }: { onSave: (name: string) => void }) {
             marginBottom: 8, boxSizing: "border-box", color: "#333",
           }}
         />
+        <select
+          value={age}
+          onChange={e => { setAge(e.target.value); setError(""); }}
+          style={{
+            width: "100%", border: "2px solid #B5D5FF", borderRadius: 16, padding: "14px 18px",
+            fontSize: 18, fontFamily: "inherit", outline: "none", textAlign: "center",
+            marginBottom: 8, boxSizing: "border-box", color: age ? "#333" : "#999",
+            background: "white",
+          }}
+        >
+          <option value="">Choose age</option>
+          {Array.from({ length: 15 }, (_, i) => i + 3).map((childAge) => (
+            <option key={childAge} value={childAge}>{childAge} years old</option>
+          ))}
+        </select>
         {error && <p style={{ color: "#FF6B9D", fontSize: 14, marginBottom: 8 }}>{error}</p>}
         <button
           onClick={handleSave}
@@ -403,11 +424,13 @@ export default function KidsLearningPage() {
   const { user, isLoading } = useAuth();
   const queryClient = useQueryClient();
   const [childNameLocal, setChildNameLocal] = useState<string | null>(null);
+  const [childAgeLocal, setChildAgeLocal] = useState<number | null>(null);
   const hasHydratedProgress = useRef(false);
   const skipNextProgressSave = useRef(false);
 
   // Resolved child name: prefer local override (after setup gate saves), then server value
   const childName: string = childNameLocal ?? (user?.childName || "");
+  const childAge: number | null = childAgeLocal ?? (user?.childAge || null);
   const isAdmin = !!(user as any)?.isAdmin;
   const hasKidsAccess = isAdmin || canAccessSignatureFeatures(user?.subscriptionTier);
 
@@ -551,8 +574,9 @@ export default function KidsLearningPage() {
     }
   };
 
-  const handleChildNameSave = async (name: string) => {
+  const handleChildNameSave = async (name: string, age: number) => {
     setChildNameLocal(name);
+    setChildAgeLocal(age);
     // Refresh user query so childName is up-to-date everywhere
     await queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
     hasHydratedProgress.current = false;
@@ -574,7 +598,7 @@ export default function KidsLearningPage() {
   }
 
   // ── Setup gate: no child name yet ──
-  if (!childName) {
+  if (!childName || !childAge) {
     return <SetupGate onSave={handleChildNameSave} />;
   }
 
@@ -1221,19 +1245,31 @@ export default function KidsLearningPage() {
               {/* Change child name */}
               <div style={{ background: "white", borderRadius: 24, padding: 28, boxShadow: "0 4px 20px rgba(0,0,0,0.06)", marginBottom: 24 }}>
                 <div style={{ fontSize: 18, fontWeight: 900, color: "#333", marginBottom: 8 }}>✏️ Update Child's Name</div>
-                <div style={{ fontSize: 14, color: "#888", marginBottom: 16 }}>Currently set to: <strong>{childName}</strong></div>
-                <div style={{ display: "flex", gap: 12 }}>
+                <div style={{ fontSize: 14, color: "#888", marginBottom: 16 }}>Currently set to: <strong>{childName}</strong>{childAge ? `, age ${childAge}` : ""}</div>
+                <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   <input
                     id="childNameInput"
                     defaultValue={childName}
                     placeholder="Enter child's name"
                     style={{ flex: 1, border: "2px solid #FFB5C8", borderRadius: 12, padding: "10px 16px", fontSize: 15, fontFamily: "inherit", outline: "none" }}
                   />
+                  <select
+                    id="childAgeInput"
+                    defaultValue={childAge ?? ""}
+                    style={{ width: 150, border: "2px solid #B5D5FF", borderRadius: 12, padding: "10px 16px", fontSize: 15, fontFamily: "inherit", outline: "none", background: "white" }}
+                  >
+                    <option value="">Age</option>
+                    {Array.from({ length: 15 }, (_, i) => i + 3).map((ageOption) => (
+                      <option key={ageOption} value={ageOption}>{ageOption}</option>
+                    ))}
+                  </select>
                   <button onClick={async () => {
                     const input = (document.getElementById("childNameInput") as HTMLInputElement)?.value?.trim();
-                    if (!input) return;
-                    await apiRequest("PATCH", "/api/user/profile", { childName: input });
+                    const ageInput = Number((document.getElementById("childAgeInput") as HTMLSelectElement)?.value);
+                    if (!input || !Number.isInteger(ageInput)) return;
+                    await apiRequest("PATCH", "/api/user/profile", { childName: input, childAge: ageInput });
                     setChildNameLocal(input);
+                    setChildAgeLocal(ageInput);
                     await queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
                   }} style={{ background: "linear-gradient(135deg, #FFB5C8, #FF6B9D)", border: "none", borderRadius: 12, padding: "10px 20px", color: "white", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>
                     Save

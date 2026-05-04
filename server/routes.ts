@@ -2162,16 +2162,20 @@ Return ONLY valid JSON:
     }
   });
 
-  // Update user profile fields (e.g. childName)
+  // Update user profile fields (e.g. childName / childAge for Kids Learning)
   app.patch('/api/user/profile', isAuthenticated, async (req: Request, res) => {
     try {
       const userId = req.session!.userId as string;
-      const { childName } = req.body;
-      if (childName !== undefined) {
+      const { childName, childAge } = req.body;
+      if (childName !== undefined || childAge !== undefined) {
         if (typeof childName !== 'string' || childName.trim().length === 0) {
           return res.status(400).json({ message: "Invalid child name" });
         }
-        await storage.updateChildName(userId, childName);
+        const age = Number(childAge);
+        if (!Number.isInteger(age) || age < 3 || age > 17) {
+          return res.status(400).json({ message: "Child age must be between 3 and 17" });
+        }
+        await storage.updateChildProfile(userId, childName, age);
       }
       const updatedUser = await storage.getUser(userId);
       res.json({ success: true, user: updatedUser });
@@ -2227,13 +2231,14 @@ Return ONLY valid JSON:
       }
 
       const name = sanitizeText(user.childName || "your child").slice(0, 80);
+      const ageContext = user.childAge ? ` The child is ${user.childAge} years old.` : "";
       const anthropic = getAnthropicClient();
       const response = await anthropic.messages.create({
         model: "claude-haiku-4-5-20251001",
         max_tokens: 300,
         messages: [{
           role: "user",
-          content: `You are a warm, encouraging assistant helping a parent teach a young child named ${name} about beginner computers, creativity, and AI safety. Follow child-safety rules: no requests for personal data, no private contact, no adult themes, no links unless the parent explicitly asks for a general resource, and no unsafe instructions. Parent request: ${sanitizedPrompt} Keep your response fun, short, and age-appropriate. Max 150 words.`
+          content: `You are a warm, encouraging assistant helping a parent teach a child named ${name} about beginner computers, creativity, and AI safety.${ageContext} Follow child-safety rules: no requests for personal data, no private contact, no adult themes, no links unless the parent explicitly asks for a general resource, and no unsafe instructions. Parent request: ${sanitizedPrompt} Keep your response fun, short, and age-appropriate for the child's age. Max 150 words.`
         }]
       });
       const text = getAnthropicTextResponse(response);

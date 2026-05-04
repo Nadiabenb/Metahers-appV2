@@ -183,6 +183,7 @@ export interface IStorage {
   updateUserProStatus(userId: string, isPro: boolean): Promise<User>;
   updateUserSubscriptionTier(userId: string, tier: string): Promise<User>;
   updateChildName(userId: string, childName: string): Promise<User>;
+  updateChildProfile(userId: string, childName: string, childAge: number): Promise<User>;
   getKidsLearningProgress(userId: string): Promise<KidsLearningProgressDB | undefined>;
   upsertKidsLearningProgress(progress: InsertKidsLearningProgress): Promise<KidsLearningProgressDB>;
 
@@ -639,6 +640,15 @@ export class DatabaseStorage implements IStorage {
     const [user] = await db
       .update(users)
       .set({ childName: childName.trim(), updatedAt: new Date() })
+      .where(eq(users.id, userId))
+      .returning();
+    return user;
+  }
+
+  async updateChildProfile(userId: string, childName: string, childAge: number): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ childName: childName.trim(), childAge, updatedAt: new Date() })
       .where(eq(users.id, userId))
       .returning();
     return user;
