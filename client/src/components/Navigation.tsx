@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "@/hooks/useAuth";
 import { trackCTAClick } from "@/lib/analytics";
+import { canAccessSignatureFeatures } from "@/lib/tierAccess";
 
 const COMMUNITY_URL = "https://chat.whatsapp.com/H4i0qBv7WGZDse1QNQPJdc?mode=gi_t";
 
@@ -16,8 +17,9 @@ type NavItem = {
 
 export function Navigation() {
   const [location, setLocation] = useLocation();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const showKidsLearningNav = isAuthenticated && canAccessSignatureFeatures(user?.subscriptionTier) && !!user?.childName;
 
   const handleNavClick = (path: string) => {
     setLocation(path);
@@ -46,7 +48,7 @@ export function Navigation() {
     { label: "Learn", path: "/learning-hub" },
     { label: "AI Team", path: "/concierge" },
     { label: "Tools", path: "/toolkit" },
-    { label: "Kids Learning", path: "/kids-learning" },
+    ...(showKidsLearningNav ? [{ label: "Kids Learning", path: "/kids-learning" }] : []),
   ];
 
   const publicNavItems: NavItem[] = [

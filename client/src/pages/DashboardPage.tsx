@@ -94,6 +94,7 @@ export default function DashboardPage() {
   const currentPlan = getPricingPlan(currentTier as SubscriptionTier);
   const isNewMember = !user?.onboardingCompleted;
   const firstName = user?.firstName || "Member";
+  const hasActivatedKidsLearning = !!user?.childName;
 
   const { data: allProgress = [] } = useQuery<ExperienceProgress[]>({
     queryKey: ["/api/progress/all"],
@@ -442,8 +443,8 @@ export default function DashboardPage() {
                 {isPaid && (
                   <QuickAction
                     icon={GraduationCap}
-                    title="Kids Learning"
-                    description="12-week beginner computer program for your child"
+                    title={hasActivatedKidsLearning ? "Kids Learning" : "Activate Kids Learning"}
+                    description={hasActivatedKidsLearning ? "Continue your child's computer learning path" : "Optional first 4 weeks for Studio families"}
                     href="/kids-learning"
                   />
                 )}
