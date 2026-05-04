@@ -477,6 +477,10 @@ export default function KidsLearningPage() {
     return <UpgradeGate />;
   }
 
+  if (user?.email === "nadia@metahers.ai" && !childName) {
+    return null;
+  }
+
   // ── Setup gate: no child name yet ──
   if (!childName) {
     return <SetupGate onSave={handleChildNameSave} />;
