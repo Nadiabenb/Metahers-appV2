@@ -47,7 +47,7 @@ const deliverables = [
   {
     number: "04",
     icon: Target,
-    title: "Custom Prompt Library for Your Business",
+    title: "Custom Prompt Studio for Your Business",
     desc: "A library of prompts written specifically for your voice, workflows, and outputs — not generic templates.",
   },
   {
@@ -60,7 +60,7 @@ const deliverables = [
     number: "06",
     icon: Cpu,
     title: "3 Months MetaHers Studio",
-    desc: "Full access to the Learning Hub, Kids Learning launch edition, AI concierge team, toolkit, and prompt library for three months after the Blueprint wraps.",
+    desc: "Full access to the Learning Hub, Kids Learning launch edition, AI concierge team, toolkit, and Prompt Studio for three months after the Blueprint wraps.",
   },
 ];
 
@@ -130,7 +130,7 @@ const weeks = [
     number: "02",
     title: "Build Your AI Stack",
     desc: "We design and build your custom prompt systems and tool stack — calibrated to your voice, your positioning, and the specific outputs that matter most in your business. AI starts responding like an extension of you, not a generic assistant.",
-    outcome: "Prompt library + AI stack configured",
+    outcome: "Prompt Studio + AI stack configured",
   },
   {
     number: "03",
@@ -680,7 +680,7 @@ export default function AIIntegrationPage() {
               </div>
               <div className="text-[13px] text-[#9A8A7E] leading-relaxed text-center mb-3">
                 4 x 60-min 1:1 sessions {"·"} Async support between sessions<br />
-                Custom prompt library {"·"} Full system ownership
+                Custom Prompt Studio {"·"} Full system ownership
               </div>
               <span className="font-mono text-[11px] tracking-wider uppercase text-primary/60">
                 Includes 3 months MetaHers Studio

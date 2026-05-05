@@ -218,7 +218,7 @@ export default function UpgradePage() {
                 },
                 {
                   title: "Tools, prompts, and Kids Learning",
-                  body: "Access the Learning Hub, AI Toolkit, prompt library, MetaHers Signal archive, and the Kids Learning launch edition for families in one place.",
+                  body: "Access the Learning Hub, AI Toolkit, Prompt Studio, MetaHers Signal archive, and the Kids Learning launch edition for families in one place.",
                 },
               ].map((item, i) => (
                 <motion.div

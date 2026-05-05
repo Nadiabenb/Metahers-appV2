@@ -29,7 +29,7 @@ export function WelcomeModal({ onComplete, userName }: WelcomeModalProps) {
     {
       title: "Learn by doing.",
       description:
-        "Start with a 2-minute quiz and we'll recommend your first learning experience based on your goals. Free members get access to rituals, the AI tools library, agent conversations, and the prompt library.",
+        "Start with a 2-minute quiz and we'll recommend your first learning experience based on your goals. Free members get access to rituals, the AI tools library, agent conversations, and a Prompt Studio preview.",
       icon: Wrench,
     },
   ];

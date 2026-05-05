@@ -30,7 +30,7 @@ export function PaidWelcomeModal({ onComplete, userName, tier }: PaidWelcomeModa
       body: null as null | string,
       list: [
         { icon: <Star className="w-4 h-4" style={{ color: '#C9A96E' }} />, text: "Open the concierge and tell ARIA what you're working on right now" },
-        { icon: <BookOpen className="w-4 h-4" style={{ color: '#6b8fd4' }} />, text: "Explore the Prompt Library — pick one prompt and run it today" },
+        { icon: <BookOpen className="w-4 h-4" style={{ color: '#6b8fd4' }} />, text: "Explore Prompt Studio — customize one prompt and send it to an agent today" },
         { icon: <Users className="w-4 h-4" style={{ color: '#6dbf91' }} />, text: "Check the schedule for the next Implementation Lab or Office Hours" },
       ],
       cta: "Got it — next",
@@ -39,7 +39,7 @@ export function PaidWelcomeModal({ onComplete, userName, tier }: PaidWelcomeModa
       icon: <CheckCircle className="w-10 h-10" style={{ color: '#C9A96E' }} />,
       title: "Your team is ready when you are.",
       subtitle: null as null | string,
-      body: "Six specialists. 40 messages a day. A prompt library, learning hub, and live community sessions. You have everything you need. The only move left is to use it.",
+      body: "Six specialists. 40 messages a day. Prompt Studio, the learning hub, and live community sessions. You have everything you need. The only move left is to use it.",
       list: null as null | { icon: React.ReactNode; text: string }[],
       cta: "Take me to Studio →",
     },

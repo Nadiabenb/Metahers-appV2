@@ -245,7 +245,7 @@ export default function DashboardPage() {
                 {[
                   { label: "54 Learning Rituals", icon: BookOpen },
                   { label: "AI-Powered Journal", icon: FileText },
-                  { label: "Prompt Library", icon: MessageSquare },
+                  { label: "Prompt Studio", icon: MessageSquare },
                 ].map(({ label, icon: Icon }) => (
                   <Card key={label} className="bg-[#13111C] border-white/5 opacity-60 select-none">
                     <CardContent className="pt-5 pb-5 px-4 text-center">
@@ -315,7 +315,7 @@ export default function DashboardPage() {
                       <ul className="space-y-3">
                         {[
                           "Full AI concierge access",
-                          "Prompt library and workflows",
+                          "Prompt Studio and workflows",
                           "Monthly implementation lab",
                           "Personalized AI system (Blueprint)",
                         ].map((feature) => (
@@ -421,8 +421,8 @@ export default function DashboardPage() {
                 />
                 <QuickAction
                   icon={FileText}
-                  title="Prompt Library"
-                  description="Browse AI prompts for your business"
+                  title="Prompt Studio"
+                  description={isPaid ? "Run curated prompt packs with your AI team" : "Preview starter prompts for your business"}
                   href="/ai-prompts"
                 />
                 <QuickAction

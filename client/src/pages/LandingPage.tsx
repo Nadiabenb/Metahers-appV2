@@ -442,7 +442,7 @@ const TIERS = [
       "Daily access to the AI concierge team",
       "Complete Learning Hub",
       "Kids Learning launch edition for families",
-      "AI Toolkit + prompt library",
+      "AI Toolkit + Prompt Studio",
       "Monthly live implementation lab",
     ],
     cta: "Join Studio",

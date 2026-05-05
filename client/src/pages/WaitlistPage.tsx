@@ -80,7 +80,7 @@ export default function WaitlistPage() {
         "Monthly group Q&A or office hours",
         "Complete Learning Hub",
         "Kids Learning launch edition for families",
-        "AI Toolkit and prompt library",
+        "AI Toolkit and Prompt Studio",
       ],
     },
     {
@@ -93,7 +93,7 @@ export default function WaitlistPage() {
         "4 private implementation sessions",
         "AI workflow audit",
         "Custom AI operating system map",
-        "Personalized prompt library",
+        "Personalized Prompt Studio",
         "3 months MetaHers Studio included, with Kids Learning access",
       ],
     },

@@ -156,7 +156,7 @@ function Router() {
         {/* Experience Detail Pages - Public */}
         <Route path="/experiences/:slug" component={ExperienceDetailPage} />
 
-        {/* AI Prompt Library - Public resource */}
+        {/* Prompt Studio - free preview, Studio packs, and agent handoff */}
         <Route path="/ai-prompts" component={AIPromptLibraryPage} />
 
         {/* AI Agents Directory */}

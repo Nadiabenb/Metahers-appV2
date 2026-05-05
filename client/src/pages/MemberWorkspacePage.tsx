@@ -340,7 +340,7 @@ export default function MemberWorkspacePage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-foreground mb-6">
-                      Upgrade to MetaHers Studio for the complete Learning Hub, AI Toolkit, prompt library, and monthly implementation support.
+                      Upgrade to MetaHers Studio for the complete Learning Hub, AI Toolkit, Prompt Studio, and monthly implementation support.
                     </p>
                     <Button variant="default" asChild data-testid="button-upgrade-inner-circle">
                       <Link href="/account">
